@@ -1,0 +1,36 @@
+{
+  "name": "Labs Dev",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "..",
+    "args": {
+      "bundler_version": "2.2.4"
+    }
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/code,type=bind,consistency=default",
+  "workspaceFolder": "/code",
+  "extensions": [
+    "rebornix.Ruby",
+    // "MS-vsliveshare.vsliveshare-pack"
+  ],
+  "settings": {
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "[ruby]": {
+      "editor.insertSpaces": true,
+      "editor.tabSize": 2,
+    },
+    "ruby.lint": {
+      "rubocop": {
+        "useBundler": true // enable rubocop via bundler
+      },
+    },
+    "ruby.format": "rubocop", // use rubocop for formatting
+    "ruby.useLanguageServer": true,
+    "ruby.rubocop.executePath": "/usr/local/bundle/bin/",
+    "ruby.rubocop.onSave": true,
+    "ruby.rubocop.configFilePath": "/code/.rubocop.yml",
+    "terminal.integrated.scrollback": 100000
+  }
+}

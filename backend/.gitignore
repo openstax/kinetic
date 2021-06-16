@@ -1,0 +1,21 @@
+/vendor/bundle/*
+/public/cache/*
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+/config/secrets.yml
+
+# Ignore bundler config.
+/.bundle
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+/coverage/*
+
+/.env
+
+/.DS_Store

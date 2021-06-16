@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# set -x
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+from="${1:-main}"
+to="${2:-HEAD}"
+
+echo "Checking from $from to $to"
+
+# https://dev.to/scienta/get-changed-files-in-github-actions-1p36
+changed_ruby_files=$(git diff --name-only --diff-filter=ACMRT $from $to | grep -E "(lib\/|spec\/)*.rb$" | xargs)
+
+if [[ -z "${changed_ruby_files// }" ]]; then
+  echo "No files to lint with Rubocop"
+else
+  docker run -v $DIR/..:/code \
+             -w /code \
+             openstax/labs.backend.ci:latest \
+             /bin/bash -c "bundle config path vendor/bundle; bundle install; bundle exec rubocop $changed_ruby_files --disable-pending-cops"
+fi
