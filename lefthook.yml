@@ -1,6 +1,6 @@
 pre-push:
   commands:
     rubocop:
-      files: git diff --name-only main
+      files: git diff --relative --name-only main -- /code/backend
       glob: "*.rb"
-      run: cd backend && bundle exec rubocop {files} --disable-pending-cops
+      run: BUNDLE_GEMFILE=/code/backend/Gemfile bundle exec rubocop {files} --disable-pending-cops
