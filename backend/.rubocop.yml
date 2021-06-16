@@ -1,0 +1,62 @@
+AllCops:
+  TargetRubyVersion: 2.6
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 100
+  IgnoredPatterns: ['(\A|\s)#']
+
+Metrics/AbcSize:
+  Max: 50
+
+Naming/PredicateName:
+  Enabled: false
+
+Metrics/ClassLength:
+  Max: 300
+  CountAsOne: ['heredoc']
+
+Metrics/MethodLength:
+  Max: 50
+  CountAsOne: ['heredoc']
+
+Metrics/BlockLength:
+  CountAsOne: ['heredoc']
+  Max: 30
+
+Metrics/ModuleLength:
+  CountAsOne: ['heredoc']
+
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
+
+Style/StringLiterals:
+  ConsistentQuotesInMultiline: true
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+Style/AccessorGrouping:
+  EnforcedStyle: separated
+
+Style/SingleLineMethods:
+  Enabled: false # don't abuse it, but sometimes it is right
+
+Style/RegexpLiteral:
+  AllowInnerSlashes: true
+
+Style/SymbolProc:
+  IgnoredMethods:
+    - respond_to
+    - define_method
+
+Layout/ClosingParenthesisIndentation:
+  Enabled: false # when true hanging parens look weird
+
+Layout/MultilineMethodCallBraceLayout:
+  Enabled: false
