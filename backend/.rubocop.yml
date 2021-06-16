@@ -35,6 +35,9 @@ Metrics/ModuleLength:
 Style/Alias:
   EnforcedStyle: prefer_alias_method
 
+Style/Documentation:
+  Enabled: false
+
 Style/StringLiterals:
   ConsistentQuotesInMultiline: true
 
