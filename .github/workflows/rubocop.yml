@@ -1,0 +1,25 @@
+name: Rubocop
+
+on:
+  pull_request:
+
+jobs:
+  lint:
+    timeout-minutes: 10
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Build docker image and run rubocop within it
+        # See https://docs.codecov.io/docs/testing-with-docker
+        run: |
+          ./backend/docker/build --ci
+          ./backend/docker/rubocop ${{ github.event.pull_request.base.sha }} ${{ github.sha }}

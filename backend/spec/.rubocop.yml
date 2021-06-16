@@ -1,0 +1,47 @@
+inherit_from: ../.rubocop.yml
+require: rubocop-rspec
+
+Metrics/BlockLength:
+  Enabled: false
+
+Layout/LineLength:
+  Enabled: false
+
+Layout/FirstHashElementIndentation:
+  Enabled: false
+
+Style/BlockDelimiters:
+  IgnoredMethods:
+    - expect
+
+Style/Semicolon:
+  Enabled: false
+
+Style/SymbolProc:
+  Enabled: false
+
+RSpec/FilePath:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+# JP likes to say `expect().to receive(:blah)` before things happen rather than
+# doing things and saying `expect().to have_received(:blah)` afterwards
+RSpec/MessageSpies:
+  EnforcedStyle: receive
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/DescribeClass:
+  Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 4
+
+RSpec/MultipleExpectations:
+  Max: 4

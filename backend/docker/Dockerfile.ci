@@ -1,0 +1,10 @@
+# Use non-slim to have git and build tools installed (faster for lots of runs
+# on CI)
+FROM ruby:2.6.7
+
+ARG bundler_version
+
+RUN gem install bundler --no-document --version $bundler_version
+
+WORKDIR /code
+COPY . /code/
