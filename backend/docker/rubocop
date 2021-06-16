@@ -12,14 +12,13 @@ fi
 echo "Checking $commit_range"
 
 # https://dev.to/scienta/get-changed-files-in-github-actions-1p36
-changed_ruby_files=$(git diff --name-only --diff-filter=ACMRT $commit_range | grep -E "(lib\/|spec\/)*.rb$" | xargs)
+changed_ruby_files=$(cd backend && git diff --relative --name-only --diff-filter=ACMRT $commit_range | grep -E ".*\.rb$" | xargs)
 
 if [[ -z "${changed_ruby_files// }" ]]; then
   echo "No files to lint with Rubocop"
 else
-  echo "$changed_ruby_files"
   docker run -v $DIR/..:/code \
              -w /code \
              openstax/labs.backend.ci:latest \
-             /bin/bash -c "bundle config path vendor/bundle; bundle install; bundle exec rubocop $changed_ruby_files --disable-pending-cops"
+             /bin/bash -c "cd backend; bundle config path vendor/bundle; bundle install; bundle exec rubocop $changed_ruby_files --disable-pending-cops"
 fi
