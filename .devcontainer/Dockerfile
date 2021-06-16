@@ -1,4 +1,4 @@
-FROM ruby:2.6-slim
+FROM ruby:2.6.7-slim
 
 ARG bundler_version
 
