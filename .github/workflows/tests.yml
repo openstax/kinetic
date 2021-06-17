@@ -10,21 +10,6 @@ jobs:
   rspec:
     timeout-minutes: 10
     runs-on: ubuntu-18.04
-    services:
-      postgres:
-        image: postgres:11
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_DB: labs_test
-          POSTGRES_PASSWORD: postgres
-
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -34,7 +19,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: Build docker image and run specs within it
-        # See https://docs.codecov.io/docs/testing-with-docker
         run: |
-          ./backend/docker/build --ci
-          CI_ENV=`bash <(curl -s https://codecov.io/env)` ./backend/docker/ci
+          CI_ENV=`bash <(curl -s https://codecov.io/env)`
+          docker-compose up --build -d
+          docker-compose exec -T -e CI_ENV="$CI_ENV" api rspec
+      - name: Stop containers
+        if: always()
+        run: docker-compose down

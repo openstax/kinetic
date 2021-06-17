@@ -3,7 +3,7 @@ services:
   api:
     build:
       context: ./backend
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile${API_DOCKERFILE_EXT}
       args:
         bundler_version: 2.2.4
     networks:
