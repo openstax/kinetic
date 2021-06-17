@@ -2,6 +2,10 @@
 
 ## Backend
 
+If you want your Git config and SSH keys available inside running docker containers,
+copy the `docker-compose.override.yml.example` file to `docker-compose.override.yml` and
+modify its contents as necessary for your configuration.
+
 ```bash
 $> docker-compose build
 $> docker-compose up
