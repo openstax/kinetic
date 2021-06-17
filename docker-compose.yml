@@ -1,0 +1,47 @@
+version: "3.7"
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: docker/Dockerfile
+      args:
+        bundler_version: 2.2.4
+    networks:
+      - labs
+    ports:
+      - "4006:4006"
+    command: bash -c "rake about && bin/rails server -b '0.0.0.0' -p 4006"
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=labs
+      - DB_PASS=labs
+      - DB_NAME=labs_development
+      - TEST_DB_HOST=postgres_test
+      - TEST_DB_NAME=labs_test
+      - TEST_DB_USER=labs
+      - TEST_DB_PASS=labs
+    volumes:
+      - .:/code
+  postgres:
+    image: "postgres:11"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - labs
+    environment:
+      - POSTGRES_USER=labs
+      - POSTGRES_PASSWORD=labs
+      - POSTGRES_DB=labs_development
+  postgres_test:
+    image: "postgres:11"
+    networks:
+      - labs
+    environment:
+      - POSTGRES_USER=labs
+      - POSTGRES_PASSWORD=labs
+      - POSTGRES_DB=labs_test
+
+networks:
+  labs:
+volumes:
+  pgdata:
