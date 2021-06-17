@@ -1,4 +1,4 @@
-FROM ruby:2.6.7-slim
+FROM ruby:2.6.7
 
 ARG bundler_version
 
@@ -29,3 +29,16 @@ RUN gem install bundler --no-document --version $bundler_version && \
     bundle config set no-cache 'true' && \
     bundle config set silence_root_warning 'true' && \
     bundle install
+
+### java
+
+RUN apt-get update && \
+  apt-get install -y openjdk-11-jre-headless && \
+  rm -rf /var/lib/apt/lists/*
+
+### swagger-codegen
+
+RUN mkdir /usr/lib/swagger-codegen && \
+  wget -q https://repo1.maven.org/maven2/io/swagger/swagger-codegen-cli/2.4.13/swagger-codegen-cli-2.4.13.jar -O /usr/lib/swagger-codegen/swagger-codegen-cli.jar && \
+  echo "java -jar /usr/lib/swagger-codegen/swagger-codegen-cli.jar \$@" > /usr/bin/swagger-codegen && \
+  chmod a+x /usr/bin/swagger-codegen
