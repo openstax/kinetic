@@ -36,8 +36,9 @@ jobs:
       - name: Build docker image and run specs within it
         # See https://docs.codecov.io/docs/testing-with-docker
         run: |
+          CI_ENV=`bash <(curl -s https://codecov.io/env)`
           docker-compose up --build -d
-          docker-compose exec -T api rspec
+          docker-compose exec -T -e CI_ENV="$CI_ENV" api rspec
 
       # docker-compose exec -e CI_ENV=`bash <(curl -s https://codecov.io/env)` api rspec
       # - name: Stop containers
