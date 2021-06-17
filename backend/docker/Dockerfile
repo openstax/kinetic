@@ -21,11 +21,11 @@ RUN git clone https://github.com/nojhan/liquidprompt.git ~/liquidprompt && \
     sed -i "/color=auto/"' s/# //' ~/.bashrc && \
     sed -i "/alias ls/,/lA/"' s/# //' ~/.bashrc
 
-WORKDIR /code
-COPY . /code/
+WORKDIR /code/backend
+COPY . /code
 
 RUN gem install bundler --no-document --version $bundler_version && \
     gem install lefthook && \
     bundle config set no-cache 'true' && \
     bundle config set silence_root_warning 'true' && \
-    cd backend && bundle install
+    bundle install
