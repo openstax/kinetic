@@ -3,7 +3,7 @@ services:
   api:
     build:
       context: ./backend
-      dockerfile: docker/Dockerfile${API_DOCKERFILE_EXT}
+      dockerfile: docker/Dockerfile${API_DOCKERFILE_EXT:-}
       args:
         bundler_version: 2.2.4
     networks:
@@ -20,6 +20,9 @@ services:
       - TEST_DB_NAME=labs_test
       - TEST_DB_USER=labs
       - TEST_DB_PASS=labs
+    depends_on:
+      - postgres
+      - postgres_test
     volumes:
       - .:/code
   postgres:
