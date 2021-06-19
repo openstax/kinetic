@@ -41,3 +41,7 @@ A rake script is provided to generate client libraries.  Call
 `rake openstax_swagger:generate_client[X,lang]` to generate the major version X client for the given language, e.g.
 `rake openstax_swagger:generate_client[0,ruby]` will generate the Ruby client for the latest version 0 API.  This
 will generate code in the baseline, so if you don't want it committed move it elsewhere.
+
+## TODOs
+
+* [] Don't delete studies

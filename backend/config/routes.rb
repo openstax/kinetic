@@ -8,13 +8,20 @@ Rails.application.routes.draw do
       defaults: { format: :json }
     ) do
 
-      # resources :highlights do
-      #   get :summary, on: :collection
-      # end
+      namespace :researcher do
+        resources :studies do
+          resources :researchers, shallow: true, except: [:update]
+        end
+      end
+
+      namespace :participant do
+        resources :studies, only: [:index, :show] do
+          get :start
+          delete :opt_out
+        end
+      end
 
       get :swagger, to: 'swagger#json'
-
-      # get :info, to: 'info#info'
 
       scope :diagnostics, controller: :diagnostics do
         get :exception
