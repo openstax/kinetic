@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class Api::V0::Researcher::StudiesSwagger
   include Swagger::Blocks
   include OpenStax::Swagger::SwaggerBlocksExtensions
 
   COMMON_REQUIRED_STUDY_FIELDS = [
     :name_for_participants, :description_for_participants
-  ]
+  ].freeze
 
   swagger_schema :Study do
     key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
@@ -40,7 +42,7 @@ class Api::V0::Researcher::StudiesSwagger
     end
     property :category do
       key :type, :string
-      key :enum, ['research_study', 'cognitive_task', 'survey']
+      key :enum, %w[research_study cognitive_task survey]
       key :description, 'The category of the study object, used for grouping.'
     end
     property :duration_minutes do

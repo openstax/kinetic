@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V0::Researcher::StudiesController < Api::V0::Researcher::BaseController
 
   def create

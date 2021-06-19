@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'aws-sdk-ssm'
 
 desc <<-DESC.strip_heredoc
@@ -35,52 +37,52 @@ task :install_secrets, [] do
   num_ignored_key_levels = [env_name, namespace].join('/').split('/').count
 
   client = Aws::SSM::Client.new(region: region)
-  client.get_parameters_by_path({path: "/#{env_name}/#{namespace}/",
-                                 recursive: true,
-                                 with_decryption: true}).each do |response|
+  client.get_parameters_by_path({ path: "/#{env_name}/#{namespace}/",
+                                  recursive: true,
+                                  with_decryption: true }).each do |response|
     response.parameters.each do |parameter|
       # break out the flattened keys and ignore the env name and namespace
-      keys = parameter.name.split('/').reject(&:blank?)[num_ignored_key_levels..-1]
+      keys = parameter.name.split('/').reject(&:blank?)[num_ignored_key_levels..]
       deep_populate(secrets, keys, parameter.value)
     end
   end
 
   database_secrets = secrets.delete(:database)
-  write_yaml_file("config/database.yml", {
-    production: {
-      database: database_secrets[:name],
-      host: database_secrets[:url],
-      port: database_secrets[:port],
-      username: database_secrets[:username],
-      password: database_secrets[:password],
-      adapter: "postgresql",
-      encoding: "unicode",
-      pool: '<%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>'
-    }
-  })
+  write_yaml_file('config/database.yml', {
+                    production: {
+                      database: database_secrets[:name],
+                      host: database_secrets[:url],
+                      port: database_secrets[:port],
+                      username: database_secrets[:username],
+                      password: database_secrets[:password],
+                      adapter: 'postgresql',
+                      encoding: 'unicode',
+                      pool: '<%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>'
+                    }
+                  })
 
   scout_secrets = secrets.delete('scout')
-  write_yaml_file("config/scout_apm.yml", {
-    production: {
-      key: scout_secrets[:license_key],
-      name: "highlights (#{env_name})",
-      # crude way to disable scout by environment
-      monitor: !/noscout/.match?(env_name),
-      ignore: %w(/ping)
-    }
-  })
+  write_yaml_file('config/scout_apm.yml', {
+                    production: {
+                      key: scout_secrets[:license_key],
+                      name: "highlights (#{env_name})",
+                      # crude way to disable scout by environment
+                      monitor: !/noscout/.match?(env_name),
+                      ignore: %w[/ping]
+                    }
+                  })
 
-  secrets[:loadtesting_active] = (/loadtesting/.match?(env_name)).to_s
+  secrets[:loadtesting_active] = /loadtesting/.match?(env_name).to_s
 
-  write_yaml_file("config/secrets.yml", {
-    production: secrets
-  })
+  write_yaml_file('config/secrets.yml', {
+                    production: secrets
+                  })
 end
 
 def write_yaml_file(filename, hash)
-  File.open(File.expand_path(filename), "w") do |file|
+  File.open(File.expand_path(filename), 'w') do |file|
     # write the hash as yaml, getting rid of the "---\n" at the front
-    file.write(hash.deep_stringify_keys.to_yaml[4..-1])
+    file.write(hash.deep_stringify_keys.to_yaml[4..])
   end
 end
 
@@ -95,6 +97,6 @@ def deep_populate(hash, keys, value)
     hash[keys[0]] = value
   else
     hash[keys[0]] ||= {}
-    deep_populate(hash[keys[0]], keys[1..-1], value)
+    deep_populate(hash[keys[0]], keys[1..], value)
   end
 end

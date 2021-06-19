@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class Api::V0::DiagnosticsController < Api::V0::BaseController
   before_action :validate_not_production
 
   # Forcing an exception
   def exception
-    raise "An exception for diagnostic purposes"
+    raise 'An exception for diagnostic purposes'
   end
 
   # Forcing a status code response

@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 desc <<-DESC.strip_heredoc
   Writes Swagger JSON files to /tmp/swagger/vX.json for each major API version X
 DESC
 task write_swagger_json: :environment do
-  API_MAJOR_VERSIONS = [0]
+  API_MAJOR_VERSIONS = [0].freeze
 
   directory = Rails.root.join('tmp', 'swagger')
-  FileUtils::mkdir_p(directory)
+  FileUtils.mkdir_p(directory)
 
   API_MAJOR_VERSIONS.each do |api_major_version|
     swagger_data = OpenStax::Swagger.configuration.json_proc.call(api_major_version)

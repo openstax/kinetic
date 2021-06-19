@@ -38,10 +38,13 @@ Rails.application.config.to_prepare do
         return invalid_properties
       end
 
-      invalid_properties.push('Empty or invalid strategy detected') if location_strategies.any?(&:nil?)
+      if location_strategies.any?(&:nil?)
+        invalid_properties.push('Empty or invalid strategy detected')
+      end
 
       location_strategies.each do |strategy|
         next if strategy.nil?
+
         strategy.list_invalid_properties.each do |strategy_invalid_property|
           invalid_properties.push("invalid value for location strategy #{strategy.type}: #{strategy_invalid_property}")
         end
@@ -97,7 +100,9 @@ Rails.application.config.to_prepare do
           hash[source_id] = index
         end
 
-        highlights.sort_by!{ |highlight| [source_id_order[highlight.source_id], highlight.order_in_source] }
+        highlights.sort_by! do |highlight|
+          [source_id_order[highlight.source_id], highlight.order_in_source]
+        end
       else
         # Have to sort by something for pagination to be sensible, choose created_at
         highlights.order(created_at: :desc)
@@ -142,10 +147,8 @@ Rails.application.config.to_prepare do
         if (sets.blank? || sets.include?('user:me')) && user_id.present?
           filters[:user].push(user_id)
         end
-        
-        if (sets.blank? || sets.include?('user:me')) && !user_id.present?
-          raise NotAuthorized
-        end
+
+        raise NotAuthorized if (sets.blank? || sets.include?('user:me')) && !user_id.present?
 
         if sets.present? && sets.include?('curated:openstax') && scope_id.present?
           curator_scope = CuratorScope.find_by(scope_id: scope_id)
@@ -155,9 +158,7 @@ Rails.application.config.to_prepare do
         # if there is no curator, or user is logged out, its possible to not
         # have this filter, and if we don't handle it specially all highlights
         # will be returned
-        if filters[:user].empty?
-          return ::Highlight.none
-        end
+        return ::Highlight.none if filters[:user].empty?
 
         results = ::Highlight
 

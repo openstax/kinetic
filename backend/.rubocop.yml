@@ -73,3 +73,6 @@ Layout/MultilineMethodCallBraceLayout:
 
 Style/ClassAndModuleChildren:
   Enabled: false
+
+Style/SymbolArray:
+  EnforcedStyle: brackets

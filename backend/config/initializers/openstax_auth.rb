@@ -1,6 +1,8 @@
-secrets = Rails.application.secrets.accounts&[:sso]
+# frozen_string_literal: true
 
-if !secrets
+secrets = Rails.application.secrets.accounts & [:sso]
+
+unless secrets
   warn 'No auth secrets provided; not configuring OpenStax::Auth!'
   return
 end

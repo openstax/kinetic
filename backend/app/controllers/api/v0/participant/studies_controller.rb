@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V0::Participant::StudiesController < Api::V0::BaseController
   before_action :render_unauthorized_if_no_current_user
 

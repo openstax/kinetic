@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 OpenStax::Swagger.configure do |config|
-  config.json_proc = -> (api_major_version) {
+  config.json_proc = lambda { |api_major_version|
     Swagger::Blocks.build_root_json(
       "Api::V#{api_major_version}::SwaggerController::SWAGGERED_CLASSES".constantize
     )
@@ -10,8 +12,8 @@ OpenStax::Swagger.configure do |config|
         gemName: 'labs-ruby',
         gemHomepage: 'https://github.com/openstax/labs/backend/clients/ruby',
         gemRequiredRubyVersion: '>= 2.4',
-        moduleName: "OpenStax::Labs",
-        gemVersion: version,
+        moduleName: 'OpenStax::Labs',
+        gemVersion: version
       }
     end
   }

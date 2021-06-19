@@ -1,5 +1,6 @@
-module RescueFromUnlessLocal
+# frozen_string_literal: true
 
+module RescueFromUnlessLocal
   class << self
     def included(base)
       base.extend ClassMethods
@@ -22,8 +23,8 @@ module RescueFromUnlessLocal
           case with
           when Symbol
             mm = method(with)
-            if mm.arity == 0
-              -> e { mm.call }
+            if mm.arity.zero?
+              ->(_e) { mm.call }
             else
               mm
             end
@@ -33,7 +34,7 @@ module RescueFromUnlessLocal
             if block.present?
               block
             else
-              raise ArgumentError, "Need a handler"
+              raise ArgumentError, 'Need a handler'
             end
           end
 
@@ -47,5 +48,4 @@ module RescueFromUnlessLocal
       end
     end
   end
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api::V0::SwaggerResponses
   include Swagger::Blocks
   include OpenStax::Swagger::SwaggerBlocksExtensions
@@ -5,11 +7,11 @@ module Api::V0::SwaggerResponses
   swagger_schema :Error do
     property :status_code do
       key :type, :integer
-      key :description, "The HTTP status code"
+      key :description, 'The HTTP status code'
     end
     property :messages do
       key :type, :array
-      key :description, "The error messages, if any"
+      key :description, 'The error messages, if any'
       items do
         key :type, :string
       end

@@ -2,11 +2,11 @@
 
 class ApplicationController < ActionController::API
   def error_404
-    render json: "Bad Request", status: 404
+    render json: 'Bad Request', status: 404
   end
 
   def current_researcher
-    raise "nyi"
+    raise 'nyi'
   end
 
   protected

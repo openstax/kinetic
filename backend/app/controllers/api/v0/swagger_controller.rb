@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'uri'
 
 class Api::V0::SwaggerController < ApplicationController
@@ -41,7 +43,7 @@ class Api::V0::SwaggerController < ApplicationController
     Api::V0::SwaggerResponses,
     Api::V0::Researcher::StudiesSwagger,
     Api::V0::Participant::StudiesSwagger,
-    self,
+    self
   ].freeze
 
   def json
