@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
-  def error_404
+  def error404
     render json: 'Bad Request', status: 404
   end
 

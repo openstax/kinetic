@@ -2,6 +2,10 @@
 
 # Monkey patch the generated Bindings for the swagger Highlight model
 
+# rubocop:disable Metrics/BlockLength
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/PerceivedComplexity
+
 require 'will_paginate/array'
 
 Rails.application.config.to_prepare do
@@ -34,7 +38,8 @@ Rails.application.config.to_prepare do
       invalid_properties = old_list_invalid_properties
 
       if location_strategies.blank?
-        invalid_properties.push('invalid value for "location_strategies", location_strategies cannot be empty.')
+        invalid_properties.push('invalid value for "location_strategies", location_strategies ' \
+                                'cannot be empty.')
         return invalid_properties
       end
 
@@ -215,3 +220,7 @@ Rails.application.config.to_prepare do
   end
 
 end
+
+# rubocop:enable Metrics/BlockLength
+# rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Metrics/PerceivedComplexity

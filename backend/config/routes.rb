@@ -31,5 +31,5 @@ Rails.application.routes.draw do
     end
   end
 
-  match '*path', via: :all, to: 'application#error_404'
+  match '*path', via: :all, to: 'application#error404'
 end

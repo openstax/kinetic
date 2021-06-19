@@ -35,6 +35,9 @@ Metrics/MethodLength:
 Metrics/BlockLength:
   CountAsOne: ['heredoc']
   Max: 30
+  Exclude:
+    - '**/*_swagger.rb'
+    - '**/*.rake'
 
 Metrics/ModuleLength:
   CountAsOne: ['heredoc']

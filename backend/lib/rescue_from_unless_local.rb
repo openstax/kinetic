@@ -31,18 +31,14 @@ module RescueFromUnlessLocal
           when Proc
             with
           else
-            if block.present?
-              block
-            else
-              raise ArgumentError, 'Need a handler'
-            end
+            raise ArgumentError, 'Need a handler' unless block.present?
+
+            block
           end
 
-        if Rails.application.config.consider_all_requests_local
-          raise exception
-        elsif send_to_sentry
-          Raven.capture_exception(exception)
-        end
+        raise exception if Rails.application.config.consider_all_requests_local
+
+        Raven.capture_exception(exception) if send_to_sentry
 
         instance_exec exception, &new_block
       end
