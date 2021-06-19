@@ -1,5 +1,12 @@
 AllCops:
   TargetRubyVersion: 2.6
+  Exclude:
+    - 'db/**/*.rb'
+    - 'app/bindings/**/*.rb'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - '.git/**/*'
 
 Layout/EmptyLinesAroundClassBody:
   Enabled: false
@@ -62,4 +69,7 @@ Layout/ClosingParenthesisIndentation:
   Enabled: false # when true hanging parens look weird
 
 Layout/MultilineMethodCallBraceLayout:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
   Enabled: false
