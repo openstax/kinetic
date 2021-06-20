@@ -10,7 +10,8 @@ Rails.application.routes.draw do
 
       namespace :researcher do
         resources :studies do
-          resources :researchers, shallow: true, except: [:update]
+          post 'researcher/:user_id', to: 'study_researchers#create'
+          delete 'researcher/:user_id', to: 'study_researchers#delete'
         end
       end
 

@@ -13,7 +13,7 @@ Swagger Codegen version: 2.4.13
 require 'date'
 
 module Api::V0::Bindings
-  class Study
+  class StudyUpdate
     # The study ID.
     attr_accessor :id
 
@@ -40,9 +40,6 @@ module Api::V0::Bindings
 
     # When the study closes for participation; null means does not close.
     attr_accessor :closes_at
-
-    # The study's researchers.
-    attr_accessor :researchers
 
     class EnumAttributeValidator
       attr_reader :datatype
@@ -77,8 +74,7 @@ module Api::V0::Bindings
         :'category' => :'category',
         :'duration_minutes' => :'duration_minutes',
         :'opens_at' => :'opens_at',
-        :'closes_at' => :'closes_at',
-        :'researchers' => :'researchers'
+        :'closes_at' => :'closes_at'
       }
     end
 
@@ -93,8 +89,7 @@ module Api::V0::Bindings
         :'category' => :'String',
         :'duration_minutes' => :'Integer',
         :'opens_at' => :'DateTime',
-        :'closes_at' => :'DateTime',
-        :'researchers' => :'Array<Researcher>'
+        :'closes_at' => :'DateTime'
       }
     end
 
@@ -141,36 +136,18 @@ module Api::V0::Bindings
       if attributes.has_key?(:'closes_at')
         self.closes_at = attributes[:'closes_at']
       end
-
-      if attributes.has_key?(:'researchers')
-        if (value = attributes[:'researchers']).is_a?(Array)
-          self.researchers = value
-        end
-      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @id.nil?
-        invalid_properties.push('invalid value for "id", id cannot be nil.')
-      end
-
-      if @name_for_participants.nil?
-        invalid_properties.push('invalid value for "name_for_participants", name_for_participants cannot be nil.')
-      end
-
-      if @name_for_participants.to_s.length < 1
+      if !@name_for_participants.nil? && @name_for_participants.to_s.length < 1
         invalid_properties.push('invalid value for "name_for_participants", the character length must be great than or equal to 1.')
       end
 
       if !@name_for_researchers.nil? && @name_for_researchers.to_s.length < 1
         invalid_properties.push('invalid value for "name_for_researchers", the character length must be great than or equal to 1.')
-      end
-
-      if @description_for_participants.nil?
-        invalid_properties.push('invalid value for "description_for_participants", description_for_participants cannot be nil.')
       end
 
       invalid_properties
@@ -179,11 +156,8 @@ module Api::V0::Bindings
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @id.nil?
-      return false if @name_for_participants.nil?
-      return false if @name_for_participants.to_s.length < 1
+      return false if !@name_for_participants.nil? && @name_for_participants.to_s.length < 1
       return false if !@name_for_researchers.nil? && @name_for_researchers.to_s.length < 1
-      return false if @description_for_participants.nil?
       category_validator = EnumAttributeValidator.new('String', ['research_study', 'cognitive_task', 'survey'])
       return false unless category_validator.valid?(@category)
       true
@@ -192,11 +166,7 @@ module Api::V0::Bindings
     # Custom attribute writer method with validation
     # @param [Object] name_for_participants Value to be assigned
     def name_for_participants=(name_for_participants)
-      if name_for_participants.nil?
-        fail ArgumentError, 'name_for_participants cannot be nil'
-      end
-
-      if name_for_participants.to_s.length < 1
+      if !name_for_participants.nil? && name_for_participants.to_s.length < 1
         fail ArgumentError, 'invalid value for "name_for_participants", the character length must be great than or equal to 1.'
       end
 
@@ -236,8 +206,7 @@ module Api::V0::Bindings
           category == o.category &&
           duration_minutes == o.duration_minutes &&
           opens_at == o.opens_at &&
-          closes_at == o.closes_at &&
-          researchers == o.researchers
+          closes_at == o.closes_at
     end
 
     # @see the `==` method
@@ -249,7 +218,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [id, name_for_participants, name_for_researchers, description_for_participants, description_for_researchers, category, duration_minutes, opens_at, closes_at, researchers].hash
+      [id, name_for_participants, name_for_researchers, description_for_participants, description_for_researchers, category, duration_minutes, opens_at, closes_at].hash
     end
 
     # Builds the object from hash

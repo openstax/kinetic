@@ -16,21 +16,25 @@ class Api::V0::Researcher::StudiesSwagger
     key :required, COMMON_REQUIRED_STUDY_FIELDS
   end
 
-  add_properties(:Study) do
+  swagger_schema :StudyUpdate
+
+  add_properties(:Study, :StudyUpdate) do
     property :id do
       key :type, :integer
       key :description, 'The study ID.'
     end
   end
 
-  add_properties(:Study, :NewStudy) do
+  add_properties(:Study, :NewStudy, :StudyUpdate) do
     property :name_for_participants do
       key :type, :string
       key :description, 'The study name that participants see.'
+      key :minLength, 1
     end
     property :name_for_researchers do
       key :type, :string
       key :description, 'An study name that only researchers see.'
+      key :minLength, 1
     end
     property :description_for_participants do
       key :type, :string
@@ -58,6 +62,33 @@ class Api::V0::Researcher::StudiesSwagger
       key :type, :string
       key :format, 'date-time'
       key :description, 'When the study closes for participation; null means does not close.'
+    end
+  end
+
+  add_properties(:Study) do
+    property :researchers do
+      key :type, :array
+      key :description, 'The study\'s researchers.'
+      items do
+        key :'$ref', :Researcher
+      end
+    end
+  end
+
+  swagger_schema :Researcher do
+    key :required, [:user_id]
+    property :user_id do
+      key :type, :string
+      key :format, 'uuid'
+      key :description, 'The researcher\'s user ID.'
+    end
+    property :first_name do
+      key :type, :string
+      key :description, 'The researcher\'s first name.'
+    end
+    property :last_name do
+      key :type, :string
+      key :description, 'The researcher\'s last name.'
     end
   end
 
@@ -143,6 +174,46 @@ class Api::V0::Researcher::StudiesSwagger
         end
       end
       extend Api::V0::SwaggerResponses::AuthenticationError
+      extend Api::V0::SwaggerResponses::UnprocessableEntityError
+      extend Api::V0::SwaggerResponses::ServerError
+    end
+  end
+
+  swagger_path '/research/studies/{id}' do
+    operation :put do
+      key :summary, 'Update a study'
+      key :description, 'Update a study'
+      key :operationId, 'updateStudy'
+      key :produces, [
+        'application/json'
+      ]
+      key :tags, [
+        'Studies'
+      ]
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'ID of the study to update.'
+        key :required, true
+        key :type, :string
+      end
+      parameter do
+        key :name, :study
+        key :in, :body
+        key :description, 'The study updates.'
+        key :required, true
+        schema do
+          key :'$ref', :StudyUpdate
+        end
+      end
+      response 200 do
+        key :description, 'Success.  Returns the updated study.'
+        schema do
+          key :'$ref', :Study
+        end
+      end
+      extend Api::V0::SwaggerResponses::AuthenticationError
+      extend Api::V0::SwaggerResponses::ForbiddenError
       extend Api::V0::SwaggerResponses::UnprocessableEntityError
       extend Api::V0::SwaggerResponses::ServerError
     end

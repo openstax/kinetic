@@ -137,6 +137,14 @@ module Api::V0::Bindings
         invalid_properties.push('invalid value for "name_for_participants", name_for_participants cannot be nil.')
       end
 
+      if @name_for_participants.to_s.length < 1
+        invalid_properties.push('invalid value for "name_for_participants", the character length must be great than or equal to 1.')
+      end
+
+      if !@name_for_researchers.nil? && @name_for_researchers.to_s.length < 1
+        invalid_properties.push('invalid value for "name_for_researchers", the character length must be great than or equal to 1.')
+      end
+
       if @description_for_participants.nil?
         invalid_properties.push('invalid value for "description_for_participants", description_for_participants cannot be nil.')
       end
@@ -148,10 +156,36 @@ module Api::V0::Bindings
     # @return true if the model is valid
     def valid?
       return false if @name_for_participants.nil?
+      return false if @name_for_participants.to_s.length < 1
+      return false if !@name_for_researchers.nil? && @name_for_researchers.to_s.length < 1
       return false if @description_for_participants.nil?
       category_validator = EnumAttributeValidator.new('String', ['research_study', 'cognitive_task', 'survey'])
       return false unless category_validator.valid?(@category)
       true
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] name_for_participants Value to be assigned
+    def name_for_participants=(name_for_participants)
+      if name_for_participants.nil?
+        fail ArgumentError, 'name_for_participants cannot be nil'
+      end
+
+      if name_for_participants.to_s.length < 1
+        fail ArgumentError, 'invalid value for "name_for_participants", the character length must be great than or equal to 1.'
+      end
+
+      @name_for_participants = name_for_participants
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] name_for_researchers Value to be assigned
+    def name_for_researchers=(name_for_researchers)
+      if !name_for_researchers.nil? && name_for_researchers.to_s.length < 1
+        fail ArgumentError, 'invalid value for "name_for_researchers", the character length must be great than or equal to 1.'
+      end
+
+      @name_for_researchers = name_for_researchers
     end
 
     # Custom attribute writer method checking allowed values (enum).
