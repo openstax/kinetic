@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
+require 'openstax/auth/strategy_2'
+
 class ApplicationController < ActionController::API
   def error404
     render json: 'Bad Request', status: 404
-  end
-
-  def current_researcher
-    raise 'nyi'
   end
 
   protected
@@ -15,10 +13,6 @@ class ApplicationController < ActionController::API
 
   def current_user_uuid
     @current_user_uuid ||= begin
-      if Rails.application.load_testing? && request.headers['HTTP_LOADTEST_CLIENT_UUID']
-        return request.headers['HTTP_LOADTEST_CLIENT_UUID']
-      end
-
       if Rails.env.development? && ENV['STUBBED_USER_UUID']
         ENV['STUBBED_USER_UUID']
       else
@@ -32,7 +26,7 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def render_unauthorized_if_no_current_user
+  def render_unauthorized_unless_signed_in!
     head :unauthorized if current_user_uuid.nil?
   end
 end

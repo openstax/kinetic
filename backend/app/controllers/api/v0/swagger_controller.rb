@@ -18,7 +18,7 @@ class Api::V0::SwaggerController < ApplicationController
 
         Requests to this API should include `#{ACCEPT_HEADER}` in the `Accept` header.
 
-        The desired API version is specified in the request URL, e.g. `[domain]#{BASE_PATH}/highlights`. \
+        The desired API version is specified in the request URL, e.g. `[domain]#{BASE_PATH}/researcher/studies`. \
         While the API does support a default version, that version will change over \
         time and therefore should not be used in production code!
       DESC

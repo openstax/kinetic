@@ -24,10 +24,6 @@ class Api::V0::BaseController < ApplicationController
     head :forbidden
   end
 
-  rescue_from_unless_local ServiceLimits::ServiceLimitsError, send_to_sentry: true do |ex|
-    render json: binding_error(status_code: 403, messages: [ex.message]), status: 403
-  end
-
   protected
 
   def validate_not_production

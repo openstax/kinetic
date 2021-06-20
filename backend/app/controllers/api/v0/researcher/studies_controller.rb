@@ -3,12 +3,12 @@
 class Api::V0::Researcher::StudiesController < Api::V0::Researcher::BaseController
 
   def create
-    inbound_binding, error = bind(params.require(:study), Api::V0::Bindings::Researcher::NewStudy)
+    inbound_binding, error = bind(params.require(:study), Api::V0::Bindings::NewStudy)
     render(json: error, status: error.status_code) and return if error
 
     created_study = inbound_binding.create_model!(researcher: current_researcher)
 
-    response_binding = Api::V0::Bindings::Researcher::Study.create_from_model(created_study)
+    response_binding = Api::V0::Bindings::Study.create_from_model(created_study)
     render json: response_binding, status: :created
   end
 

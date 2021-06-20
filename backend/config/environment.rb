@@ -5,7 +5,7 @@ require_relative 'application'
 
 require 'errors'
 require 'rescue_from_unless_local'
-# require 'v0_bindings_extensions'
+Dir[Rails.root.join('lib', 'patches', '**', '*.rb')].sort.each { |f| require f }
 
 # Initialize the Rails application.
 Rails.application.initialize!

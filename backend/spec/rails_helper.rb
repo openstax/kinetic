@@ -80,4 +80,11 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.include ApiV0Helpers, api: :v0
+  ApiV0Helpers.more_rspec_config(config)
+
+  config.include UserHelpers, type: :request
+
+  config.include FactoryBot::Syntax::Methods
 end
