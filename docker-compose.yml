@@ -43,6 +43,17 @@ services:
       - POSTGRES_USER=labs
       - POSTGRES_PASSWORD=labs
       - POSTGRES_DB=labs_test
+  petstore:
+    image: "swaggerapi/petstore"
+    networks:
+      - "labs"
+    environment:
+      - SWAGGER_HOST=http://0.0.0.0:4008
+      - SWAGGER_BASE_PATH=/api/v0
+      - SWAGGER_URL=http://0.0.0.0:4006
+    ports:
+      - "4008:8080"
+
 
 networks:
   labs:

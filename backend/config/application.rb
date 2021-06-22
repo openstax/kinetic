@@ -26,7 +26,7 @@ module Labs
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
-        resource '/api/v0/swagger', headers: :any, methods: [:get, :options, :head]
+        resource '/api/v0/swagger*', headers: :any, methods: [:get, :options, :head]
       end
     end
 

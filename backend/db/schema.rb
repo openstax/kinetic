@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2021_06_18_183842) do
     t.string "labs_return_url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["order"], name: "index_stages_on_order", unique: true
     t.index ["study_id"], name: "index_stages_on_study_id"
   end
 

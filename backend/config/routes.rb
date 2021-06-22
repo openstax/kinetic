@@ -22,7 +22,7 @@ Rails.application.routes.draw do
         end
       end
 
-      get :swagger, to: 'swagger#json'
+      get :swagger, to: 'swagger#json', constraints: { format: :json }
 
       scope :diagnostics, controller: :diagnostics do
         get :exception
