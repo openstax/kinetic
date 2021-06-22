@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :researcher do
     user_id { SecureRandom.uuid }

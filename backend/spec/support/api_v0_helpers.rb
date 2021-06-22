@@ -1,5 +1,6 @@
-module ApiV0Helpers
+# frozen_string_literal: true
 
+module ApiV0Helpers
   def self.included(base)
     base.extend(ClassMethods)
   end
@@ -15,11 +16,7 @@ module ApiV0Helpers
   end
 
   def set_bad_admin_api_token
-    set_api_token("intentionally_bad_value")
-  end
-
-  def set_bad_api_id
-    set_api_id("intentionally_bad_value")
+    set_api_token('intentionally_bad_value')
   end
 
   def controller_spec?
@@ -34,16 +31,12 @@ module ApiV0Helpers
     set_authorization_header("Token #{value}")
   end
 
-  def set_api_id(value)
-    set_authorization_header("ID #{value}")
-  end
-
   def clear_api_token
-    header_hash.delete('Authorization') if header_hash['Authorization'].try(:starts_with?, "Token")
+    header_hash.delete('Authorization') if header_hash['Authorization'].try(:starts_with?, 'Token')
   end
 
   def clear_api_id
-    header_hash.delete('Authorization') if header_hash['Authorization'].try(:starts_with?, "ID")
+    header_hash.delete('Authorization') if header_hash['Authorization'].try(:starts_with?, 'ID')
   end
 
   def clear_origin
@@ -95,7 +88,7 @@ module ApiV0Helpers
   end
 
   def add_path_prefix(args)
-    args.dup.tap {|copy| copy[0] = "/api/v0/#{copy[0]}"}
+    args.dup.tap { |copy| copy[0] = "/api/v0/#{copy[0]}" }
   end
 
   def prep_request_args(args)
@@ -103,17 +96,15 @@ module ApiV0Helpers
       copy[0] = "/api/v0/#{copy[0]}"
 
       # Add the headers on to the end or merge them with existing hash
-      headers['CONTENT_TYPE'] = "application/json"
+      headers['CONTENT_TYPE'] = 'application/json'
 
       if copy.length == 1
-        copy.push({headers: headers})
+        copy.push({ headers: headers })
+      elsif copy[1].is_a?(Hash)
+        copy[1][:params] = copy[1][:params].to_json if copy[1][:params]
+        copy[1][:headers] = headers.merge(copy[1][:headers] || {})
       else
-        if copy[1].is_a?(Hash)
-          copy[1][:params] = copy[1][:params].to_json if copy[1][:params]
-          copy[1][:headers] = headers.merge(copy[1][:headers] || {})
-        else
-          raise "Don't know what to do with this case"
-        end
+        raise "Don't know what to do with this case"
       end
     end
   end
@@ -142,12 +133,11 @@ module ApiV0Helpers
     end
 
     def test_crud_request_status(spec, route_prefix, status, actions)
-      test_request_status(spec, :post, "#{route_prefix}", status) if create?(actions)
+      test_request_status(spec, :post, route_prefix.to_s, status) if create?(actions)
       test_request_status(spec, :get, "#{route_prefix}/42", status) if show?(actions)
-      test_request_status(spec, :get, "#{route_prefix}", status) if index?(actions)
+      test_request_status(spec, :get, route_prefix.to_s, status) if index?(actions)
       test_request_status(spec, :put, "#{route_prefix}/42", status) if update?(actions)
       test_request_status(spec, :delete, "#{route_prefix}/42", status) if destroy?(actions)
     end
   end
-
 end

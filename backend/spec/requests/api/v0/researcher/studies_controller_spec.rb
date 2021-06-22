@@ -10,9 +10,9 @@ RSpec.describe Api::V0::Researcher::StudiesController, type: :request, api: :v0 
   describe 'POST researcher/studies' do
     let(:valid_new_study_attributes) do
       {
-        name_for_participants: "Participant study name",
-        name_for_researchers: "Researcher study name",
-        description_for_participants: "Participant study description",
+        name_for_participants: 'Participant study name',
+        name_for_researchers: 'Researcher study name',
+        description_for_participants: 'Participant study description',
         description_for_researchers: 'Researcher study description',
         category: 'research_study',
         duration_minutes: 10
@@ -41,14 +41,16 @@ RSpec.describe Api::V0::Researcher::StudiesController, type: :request, api: :v0 
       it 'works' do
         api_post 'researcher/studies', params: { study: valid_new_study_attributes }
         expect(response).to have_http_status(:created)
-        expect(response_hash).to match(a_hash_including(
-          name_for_participants: "Participant study name",
-          researchers: a_collection_including(
-            a_hash_including(
-              user_id: researcher1.user_id
+        expect(response_hash).to match(
+          a_hash_including(
+            name_for_participants: 'Participant study name',
+            researchers: a_collection_including(
+              a_hash_including(
+                user_id: researcher1.user_id
+              )
             )
           )
-        ))
+        )
       end
     end
   end
@@ -71,9 +73,11 @@ RSpec.describe Api::V0::Researcher::StudiesController, type: :request, api: :v0 
     end
 
     context 'when signed in as a researcher' do
-      let!(:study1) { create(:study, researchers: researcher1) }
-      let!(:study2) { create(:study, researchers: researcher2) }
-      before { stub_current_user(researcher1) }
+      before do
+        create(:study, researchers: researcher1)
+        create(:study, researchers: researcher2)
+        stub_current_user(researcher1)
+      end
 
       it 'returns only the studies owned by the calling researcher' do
         api_get 'researcher/studies'
@@ -105,7 +109,7 @@ RSpec.describe Api::V0::Researcher::StudiesController, type: :request, api: :v0 
       before { stub_random_user }
 
       it 'gives forbidden' do
-        expect{
+        expect {
           api_put "researcher/studies/#{study1.id}", params: { study: { duration_minutes: 2 } }
         }.not_to change { study1.reload; study1.duration_minutes }
         expect(response).to have_http_status(:forbidden)
@@ -124,18 +128,18 @@ RSpec.describe Api::V0::Researcher::StudiesController, type: :request, api: :v0 
       end
 
       it 'cannot blank required fields' do
-        expect{
+        expect {
           api_put "researcher/studies/#{study1.id}",
                   params: { study: { name_for_participants: '' } }
-        }.not_to change{ study1.name_for_participants }
+        }.not_to change(study1, :name_for_participants)
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'cannot set funky category' do
-        expect{
+        expect {
           api_put "researcher/studies/#{study1.id}",
                   params: { study: { category: 'howdy' } }
-        }.not_to change{ study1.reload; study1.category }
+        }.not_to change { study1.reload; study1.category }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end

@@ -93,6 +93,7 @@ RSpec.describe 'Study Researchers', type: :request, api: :v0 do
 
     context 'when there is only one researcher left' do
       let(:original_researchers) { [original_researcher] }
+
       before { stub_current_user(original_researcher) }
 
       it 'does not allow deletion' do

@@ -2,7 +2,7 @@
 
 class Api::V0::Researcher::StudyResearchersController < Api::V0::Researcher::BaseController
 
-  before_action :get_study
+  before_action :set_study
 
   def create
     added_researcher = Researcher.find_or_create_by!(user_id: params[:user_id])
@@ -24,7 +24,7 @@ class Api::V0::Researcher::StudyResearchersController < Api::V0::Researcher::Bas
 
   protected
 
-  def get_study
+  def set_study
     @study = Study.find(params[:study_id])
     raise SecurityTransgression unless @study.researchers.include?(current_researcher)
   end

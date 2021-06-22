@@ -12,7 +12,7 @@ class ApplicationController < ActionController::API
   include RescueFromUnlessLocal
 
   def current_user_uuid
-    @current_user_uuid ||= begin
+    @current_user_uuid ||=
       if Rails.env.development? && ENV['STUBBED_USER_UUID']
         ENV['STUBBED_USER_UUID']
       else
@@ -23,7 +23,6 @@ class ApplicationController < ActionController::API
 
         OpenStax::Auth::Strategy2.user_uuid(request)
       end
-    end
   end
 
   def render_unauthorized_unless_signed_in!

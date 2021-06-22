@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :study do
     name_for_researchers { 'Name for researchers' }

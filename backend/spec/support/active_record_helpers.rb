@@ -1,11 +1,12 @@
-module ActiveRecordHelpers
+# frozen_string_literal: true
 
-  RSpec::Matchers.define :be_destroyed do |expected|
+module ActiveRecordHelpers
+  RSpec::Matchers.define :be_destroyed do |_expected|
     match do |actual|
-      expect{ actual.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { actual.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
     match_when_negated do |actual|
-      expect{ actual.reload }.not_to raise_error
+      expect { actual.reload }.not_to raise_error
     end
     failure_message do |actual|
       "expected that #{actual} would be destroyed"
@@ -14,5 +15,4 @@ module ActiveRecordHelpers
       "expected that #{actual} would be not destroyed"
     end
   end
-
 end

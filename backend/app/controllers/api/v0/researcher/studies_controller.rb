@@ -2,7 +2,7 @@
 
 class Api::V0::Researcher::StudiesController < Api::V0::Researcher::BaseController
 
-  before_action :get_study, only: [:update, :destroy, :show]
+  before_action :set_study, only: [:update, :destroy, :show]
 
   def create
     inbound_binding, error = bind(params.require(:study), Api::V0::Bindings::NewStudy)
@@ -46,7 +46,7 @@ class Api::V0::Researcher::StudiesController < Api::V0::Researcher::BaseControll
 
   protected
 
-  def get_study
+  def set_study
     @study = Study.find(params[:id])
     raise SecurityTransgression unless @study.researchers.include?(current_researcher)
   end
