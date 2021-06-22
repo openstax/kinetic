@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 2021_06_18_183842) do
   end
 
   create_table "researchers", force: :cascade do |t|
-    t.uuid "user_id"
+    t.uuid "user_id", null: false
     t.string "first_name"
     t.string "last_name"
     t.datetime "created_at", precision: 6, null: false

@@ -127,7 +127,7 @@ RSpec.describe Api::V0::Researcher::StudiesController, type: :request, api: :v0 
         expect{
           api_put "researcher/studies/#{study1.id}",
                   params: { study: { name_for_participants: '' } }
-        }.not_to change{ study1.reload; study1.name_for_participants }
+        }.not_to change{ study1.name_for_participants }
         expect(response).to have_http_status(:unprocessable_entity)
       end
 

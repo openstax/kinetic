@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       namespace :researcher do
         resources :studies do
           post 'researcher/:user_id', to: 'study_researchers#create'
-          delete 'researcher/:user_id', to: 'study_researchers#delete'
+          delete 'researcher/:user_id', to: 'study_researchers#destroy'
         end
       end
 
