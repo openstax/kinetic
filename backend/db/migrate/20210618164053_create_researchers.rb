@@ -2,8 +2,9 @@ class CreateResearchers < ActiveRecord::Migration[6.1]
   def change
     create_table :researchers do |t|
       t.uuid :user_id, null: false
-      t.string :first_name
-      t.string :last_name
+      t.string :name
+      t.string :institution
+      t.text :bio
 
       t.timestamps
     end
