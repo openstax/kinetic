@@ -20,7 +20,7 @@ module Api::V0::Bindings
     # The Qualtrics URL that this stage launches to
     attr_accessor :url
 
-    # The Qualtrics survey secret used to encrypt information we send to Qualtrics
+    # The survey secret used to encrypt information we send to Qualtrics
     attr_accessor :secret_key
 
     class EnumAttributeValidator

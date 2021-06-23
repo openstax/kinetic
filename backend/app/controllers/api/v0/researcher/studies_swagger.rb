@@ -5,7 +5,7 @@ class Api::V0::Researcher::StudiesSwagger
   include OpenStax::Swagger::SwaggerBlocksExtensions
 
   COMMON_REQUIRED_STUDY_FIELDS = [
-    :name_for_participants, :description_for_participants
+    :title_for_participants, :description_for_participants
   ].freeze
 
   swagger_schema :Study do
@@ -27,23 +27,23 @@ class Api::V0::Researcher::StudiesSwagger
   end
 
   add_properties(:Study, :NewStudy, :StudyUpdate) do
-    property :name_for_participants do
+    property :title_for_participants do
       key :type, :string
       key :description, 'The study name that participants see.'
       key :minLength, 1
     end
-    property :name_for_researchers do
+    property :title_for_researchers do
       key :type, :string
       key :description, 'An study name that only researchers see.'
       key :minLength, 1
     end
-    property :description_for_participants do
+    property :short_description do
       key :type, :string
-      key :description, 'The study description that participants see.'
+      key :description, 'A short study description.'
     end
-    property :description_for_researchers do
+    property :long_description do
       key :type, :string
-      key :description, 'A study description that only researchers see.'
+      key :description, 'A long study description.'
     end
     property :category do
       key :type, :string

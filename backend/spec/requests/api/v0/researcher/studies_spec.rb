@@ -10,10 +10,10 @@ RSpec.describe 'Studies', type: :request, api: :v0 do
   describe 'POST researcher/studies' do
     let(:valid_new_study_attributes) do
       {
-        name_for_participants: 'Participant study name',
-        name_for_researchers: 'Researcher study name',
-        description_for_participants: 'Participant study description',
-        description_for_researchers: 'Researcher study description',
+        title_for_participants: 'Participant study title',
+        title_for_researchers: 'Researcher study title',
+        short_description: 'A short description',
+        long_description: 'A longer description',
         category: 'research_study',
         duration_minutes: 10
       }
@@ -43,7 +43,7 @@ RSpec.describe 'Studies', type: :request, api: :v0 do
         expect(response).to have_http_status(:created)
         expect(response_hash).to match(
           a_hash_including(
-            name_for_participants: 'Participant study name',
+            title_for_participants: 'Participant study title',
             researchers: a_collection_including(
               a_hash_including(
                 user_id: researcher1.user_id
@@ -130,8 +130,8 @@ RSpec.describe 'Studies', type: :request, api: :v0 do
       it 'cannot blank required fields' do
         expect {
           api_put "researcher/studies/#{study1.id}",
-                  params: { study: { name_for_participants: '' } }
-        }.not_to change(study1, :name_for_participants)
+                  params: { study: { title_for_participants: '' } }
+        }.not_to change(study1, :title_for_participants)
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
