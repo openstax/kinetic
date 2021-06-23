@@ -15,5 +15,10 @@
     "noEmit": true,
     "jsx": "react"
   },
-  "include": ["./src"]
+    "include": ["./src"],
+    "files": [
+        "./global.d.ts",
+        "node_modules/jest-playwright-preset/types/global.d.ts",
+        "node_modules/expect-playwright/global.d.ts"
+    ]
 }

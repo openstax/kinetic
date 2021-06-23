@@ -1,5 +1,12 @@
 import { React } from '../common'
+import { PageHeader } from '../PageHeader'
 
 export const Home = () => {
-    return <p>hello world</p>
+    return (
+        <div className="">
+            <PageHeader />
+
+        </div>
+    )
+    
 }

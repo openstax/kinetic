@@ -6,18 +6,26 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
+    "testserver": "vite --strictPort",
     "build": "tsc && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "test": "jest"
   },
   "dependencies": {
     "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "boxible": "1.0.0",
+    "jest": "^27.0.4",
+    "jest-playwright": "^0.0.1",
+    "jest-playwright-preset": "^1.6.1",
     "modeled-mobx": "^0.6.3",
+    "playwright-chromium": "^1.12.2",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "sass": "^1.35.1",
+    "ts-node": "^10.0.0"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",
