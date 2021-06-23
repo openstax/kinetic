@@ -64,10 +64,10 @@ ActiveRecord::Schema.define(version: 2021_06_18_183842) do
   end
 
   create_table "studies", force: :cascade do |t|
-    t.string "name_for_researchers"
-    t.string "name_for_participants", null: false
-    t.text "description_for_researchers"
-    t.text "description_for_participants", null: false
+    t.string "title_for_researchers"
+    t.string "title_for_participants", null: false
+    t.text "short_description", null: false
+    t.text "long_description", null: false
     t.string "category", null: false
     t.integer "duration_minutes"
     t.datetime "opens_at"

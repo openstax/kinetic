@@ -2,10 +2,10 @@
 
 FactoryBot.define do
   factory :study do
-    name_for_researchers { 'Name for researchers' }
-    name_for_participants { 'Name for participants' }
-    description_for_researchers { 'Description for researchers' }
-    description_for_participants { 'Description for participants' }
+    title_for_researchers { 'Title for researchers' }
+    title_for_participants { 'Title for participants' }
+    short_description { 'A short description' }
+    long_description { 'A long description' }
     duration_minutes { 15 }
     category { 'research_study' }
 

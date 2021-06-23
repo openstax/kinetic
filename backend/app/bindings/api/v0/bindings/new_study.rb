@@ -15,16 +15,16 @@ require 'date'
 module Api::V0::Bindings
   class NewStudy
     # The study name that participants see.
-    attr_accessor :name_for_participants
+    attr_accessor :title_for_participants
 
     # An study name that only researchers see.
-    attr_accessor :name_for_researchers
+    attr_accessor :title_for_researchers
 
-    # The study description that participants see.
-    attr_accessor :description_for_participants
+    # A short study description.
+    attr_accessor :short_description
 
-    # A study description that only researchers see.
-    attr_accessor :description_for_researchers
+    # A long study description.
+    attr_accessor :long_description
 
     # The category of the study object, used for grouping.
     attr_accessor :category
@@ -63,10 +63,10 @@ module Api::V0::Bindings
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'name_for_participants' => :'name_for_participants',
-        :'name_for_researchers' => :'name_for_researchers',
-        :'description_for_participants' => :'description_for_participants',
-        :'description_for_researchers' => :'description_for_researchers',
+        :'title_for_participants' => :'title_for_participants',
+        :'title_for_researchers' => :'title_for_researchers',
+        :'short_description' => :'short_description',
+        :'long_description' => :'long_description',
         :'category' => :'category',
         :'duration_minutes' => :'duration_minutes',
         :'opens_at' => :'opens_at',
@@ -77,10 +77,10 @@ module Api::V0::Bindings
     # Attribute type mapping.
     def self.swagger_types
       {
-        :'name_for_participants' => :'String',
-        :'name_for_researchers' => :'String',
-        :'description_for_participants' => :'String',
-        :'description_for_researchers' => :'String',
+        :'title_for_participants' => :'String',
+        :'title_for_researchers' => :'String',
+        :'short_description' => :'String',
+        :'long_description' => :'String',
         :'category' => :'String',
         :'duration_minutes' => :'Integer',
         :'opens_at' => :'DateTime',
@@ -96,20 +96,20 @@ module Api::V0::Bindings
       # convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h| h[k.to_sym] = v }
 
-      if attributes.has_key?(:'name_for_participants')
-        self.name_for_participants = attributes[:'name_for_participants']
+      if attributes.has_key?(:'title_for_participants')
+        self.title_for_participants = attributes[:'title_for_participants']
       end
 
-      if attributes.has_key?(:'name_for_researchers')
-        self.name_for_researchers = attributes[:'name_for_researchers']
+      if attributes.has_key?(:'title_for_researchers')
+        self.title_for_researchers = attributes[:'title_for_researchers']
       end
 
-      if attributes.has_key?(:'description_for_participants')
-        self.description_for_participants = attributes[:'description_for_participants']
+      if attributes.has_key?(:'short_description')
+        self.short_description = attributes[:'short_description']
       end
 
-      if attributes.has_key?(:'description_for_researchers')
-        self.description_for_researchers = attributes[:'description_for_researchers']
+      if attributes.has_key?(:'long_description')
+        self.long_description = attributes[:'long_description']
       end
 
       if attributes.has_key?(:'category')
@@ -133,20 +133,16 @@ module Api::V0::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @name_for_participants.nil?
-        invalid_properties.push('invalid value for "name_for_participants", name_for_participants cannot be nil.')
+      if @title_for_participants.nil?
+        invalid_properties.push('invalid value for "title_for_participants", title_for_participants cannot be nil.')
       end
 
-      if @name_for_participants.to_s.length < 1
-        invalid_properties.push('invalid value for "name_for_participants", the character length must be great than or equal to 1.')
+      if @title_for_participants.to_s.length < 1
+        invalid_properties.push('invalid value for "title_for_participants", the character length must be great than or equal to 1.')
       end
 
-      if !@name_for_researchers.nil? && @name_for_researchers.to_s.length < 1
-        invalid_properties.push('invalid value for "name_for_researchers", the character length must be great than or equal to 1.')
-      end
-
-      if @description_for_participants.nil?
-        invalid_properties.push('invalid value for "description_for_participants", description_for_participants cannot be nil.')
+      if !@title_for_researchers.nil? && @title_for_researchers.to_s.length < 1
+        invalid_properties.push('invalid value for "title_for_researchers", the character length must be great than or equal to 1.')
       end
 
       invalid_properties
@@ -155,37 +151,36 @@ module Api::V0::Bindings
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @name_for_participants.nil?
-      return false if @name_for_participants.to_s.length < 1
-      return false if !@name_for_researchers.nil? && @name_for_researchers.to_s.length < 1
-      return false if @description_for_participants.nil?
+      return false if @title_for_participants.nil?
+      return false if @title_for_participants.to_s.length < 1
+      return false if !@title_for_researchers.nil? && @title_for_researchers.to_s.length < 1
       category_validator = EnumAttributeValidator.new('String', ['research_study', 'cognitive_task', 'survey'])
       return false unless category_validator.valid?(@category)
       true
     end
 
     # Custom attribute writer method with validation
-    # @param [Object] name_for_participants Value to be assigned
-    def name_for_participants=(name_for_participants)
-      if name_for_participants.nil?
-        fail ArgumentError, 'name_for_participants cannot be nil'
+    # @param [Object] title_for_participants Value to be assigned
+    def title_for_participants=(title_for_participants)
+      if title_for_participants.nil?
+        fail ArgumentError, 'title_for_participants cannot be nil'
       end
 
-      if name_for_participants.to_s.length < 1
-        fail ArgumentError, 'invalid value for "name_for_participants", the character length must be great than or equal to 1.'
+      if title_for_participants.to_s.length < 1
+        fail ArgumentError, 'invalid value for "title_for_participants", the character length must be great than or equal to 1.'
       end
 
-      @name_for_participants = name_for_participants
+      @title_for_participants = title_for_participants
     end
 
     # Custom attribute writer method with validation
-    # @param [Object] name_for_researchers Value to be assigned
-    def name_for_researchers=(name_for_researchers)
-      if !name_for_researchers.nil? && name_for_researchers.to_s.length < 1
-        fail ArgumentError, 'invalid value for "name_for_researchers", the character length must be great than or equal to 1.'
+    # @param [Object] title_for_researchers Value to be assigned
+    def title_for_researchers=(title_for_researchers)
+      if !title_for_researchers.nil? && title_for_researchers.to_s.length < 1
+        fail ArgumentError, 'invalid value for "title_for_researchers", the character length must be great than or equal to 1.'
       end
 
-      @name_for_researchers = name_for_researchers
+      @title_for_researchers = title_for_researchers
     end
 
     # Custom attribute writer method checking allowed values (enum).
@@ -203,10 +198,10 @@ module Api::V0::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          name_for_participants == o.name_for_participants &&
-          name_for_researchers == o.name_for_researchers &&
-          description_for_participants == o.description_for_participants &&
-          description_for_researchers == o.description_for_researchers &&
+          title_for_participants == o.title_for_participants &&
+          title_for_researchers == o.title_for_researchers &&
+          short_description == o.short_description &&
+          long_description == o.long_description &&
           category == o.category &&
           duration_minutes == o.duration_minutes &&
           opens_at == o.opens_at &&
@@ -222,7 +217,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [name_for_participants, name_for_researchers, description_for_participants, description_for_researchers, category, duration_minutes, opens_at, closes_at].hash
+      [title_for_participants, title_for_researchers, short_description, long_description, category, duration_minutes, opens_at, closes_at].hash
     end
 
     # Builds the object from hash
