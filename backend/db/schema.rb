@@ -53,11 +53,12 @@ ActiveRecord::Schema.define(version: 2021_06_18_183842) do
   create_table "stages", force: :cascade do |t|
     t.bigint "study_id", null: false
     t.integer "order", null: false
-    t.jsonb "config"
-    t.string "labs_return_url"
+    t.jsonb "config", null: false
+    t.string "return_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["order"], name: "index_stages_on_order", unique: true
+    t.index ["return_id"], name: "index_stages_on_return_id", unique: true
     t.index ["study_id"], name: "index_stages_on_study_id"
   end
 

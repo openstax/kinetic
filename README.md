@@ -11,7 +11,7 @@ $> docker-compose build
 $> docker-compose up
 ```
 
-Which will start hosting the Rails app at http://0.0.0.0:4006
+Which will start hosting the Rails app at http://0.0.0.0:4006.  A PetStore app showing the Rails app API runs at http://0.0.0.0:4008.
 
 Get into a backend terminal with
 

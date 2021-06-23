@@ -15,7 +15,8 @@ FactoryBot.define do
 
     after(:create) do |study, evaluator|
       researchers = [evaluator.researchers].flatten.compact
-      study.researchers << researchers unless researchers.empty?
+      researchers = [create(:researcher)] if researchers.empty?
+      study.researchers << researchers
     end
   end
 end

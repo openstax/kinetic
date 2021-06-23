@@ -10,7 +10,7 @@ services:
       - labs
     ports:
       - "4006:4006"
-    command: bash -c "rake about && bin/rails server -b '0.0.0.0' -p 4006"
+    command: bash -c "bundle exec rake about && bundle exec rails server -b '0.0.0.0' -p 4006"
     environment:
       - DB_HOST=postgres
       - DB_USER=labs
@@ -25,6 +25,7 @@ services:
       - postgres_test
     volumes:
       - .:/code
+      - gems:/gems
   postgres:
     image: "postgres:11"
     volumes:
@@ -59,3 +60,4 @@ networks:
   labs:
 volumes:
   pgdata:
+  gems:

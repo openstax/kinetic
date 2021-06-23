@@ -44,6 +44,9 @@ module Api::V0::Bindings
     # The study's researchers.
     attr_accessor :researchers
 
+    # The study's stages.
+    attr_accessor :stages
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -78,7 +81,8 @@ module Api::V0::Bindings
         :'duration_minutes' => :'duration_minutes',
         :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
-        :'researchers' => :'researchers'
+        :'researchers' => :'researchers',
+        :'stages' => :'stages'
       }
     end
 
@@ -94,7 +98,8 @@ module Api::V0::Bindings
         :'duration_minutes' => :'Integer',
         :'opens_at' => :'DateTime',
         :'closes_at' => :'DateTime',
-        :'researchers' => :'Array<Researcher>'
+        :'researchers' => :'Array<Researcher>',
+        :'stages' => :'Array<Stage>'
       }
     end
 
@@ -145,6 +150,12 @@ module Api::V0::Bindings
       if attributes.has_key?(:'researchers')
         if (value = attributes[:'researchers']).is_a?(Array)
           self.researchers = value
+        end
+      end
+
+      if attributes.has_key?(:'stages')
+        if (value = attributes[:'stages']).is_a?(Array)
+          self.stages = value
         end
       end
     end
@@ -237,7 +248,8 @@ module Api::V0::Bindings
           duration_minutes == o.duration_minutes &&
           opens_at == o.opens_at &&
           closes_at == o.closes_at &&
-          researchers == o.researchers
+          researchers == o.researchers &&
+          stages == o.stages
     end
 
     # @see the `==` method
@@ -249,7 +261,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [id, name_for_participants, name_for_researchers, description_for_participants, description_for_researchers, category, duration_minutes, opens_at, closes_at, researchers].hash
+      [id, name_for_participants, name_for_researchers, description_for_participants, description_for_researchers, category, duration_minutes, opens_at, closes_at, researchers, stages].hash
     end
 
     # Builds the object from hash

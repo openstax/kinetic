@@ -12,6 +12,8 @@ Rails.application.routes.draw do
         resources :studies do
           post 'researcher/:user_id', to: 'study_researchers#create'
           delete 'researcher/:user_id', to: 'study_researchers#destroy'
+
+          resources :stages, shallow: true, only: [:create, :show, :update, :destroy]
         end
       end
 
@@ -31,6 +33,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  get 'returning/:id', to: 'returning#index', as: 'returning'
 
   match '*path', via: :all, to: 'application#error404'
 end

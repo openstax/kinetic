@@ -5,6 +5,8 @@ class Api::V0::BaseController < ApplicationController
   include OpenStax::Swagger::Bind
 
   rescue_from_unless_local StandardError, send_to_sentry: true do |ex|
+    raise if Rails.env.test? # we should never be expecting a 500 in a test
+
     render json: binding_error(status_code: 500, messages: [ex.message]), status: 500
   end
 

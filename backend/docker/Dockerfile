@@ -10,6 +10,8 @@ RUN apt-get update && \
     openssh-server \
     build-essential \
     wget \
+    # for swagger
+    openjdk-11-jre-headless \
     && rm -rf /var/lib/apt/lists/*
 
 # Install a quick colorized prompt and turn on ls coloring
@@ -26,15 +28,12 @@ COPY . /code
 
 RUN gem install bundler --no-document --version $bundler_version && \
     gem install lefthook && \
+    bundle config set path /gems && \
     bundle config set no-cache 'true' && \
     bundle config set silence_root_warning 'true' && \
-    bundle install
-
-### java
-
-RUN apt-get update && \
-  apt-get install -y openjdk-11-jre-headless && \
-  rm -rf /var/lib/apt/lists/*
+    bundle install && \
+    bundle binstubs --all && \
+    echo 'export PATH=/code/backend/bin:$PATH' >> ~/.bashrc
 
 ### swagger-codegen
 
