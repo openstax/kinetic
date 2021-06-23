@@ -47,6 +47,7 @@ class Api::V0::Researcher::StagesController < Api::V0::Researcher::BaseControlle
   end
 
   def verify_access!
-    raise SecurityTransgression unless @study.researchers.include?(current_researcher)
+    raise SecurityTransgression unless @study.researchers.include?(current_researcher) ||
+                                       current_user_is_admin?
   end
 end

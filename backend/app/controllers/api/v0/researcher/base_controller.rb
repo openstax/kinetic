@@ -7,7 +7,7 @@ class Api::V0::Researcher::BaseController < Api::V0::BaseController
   protected
 
   def render_forbidden_unless_researcher!
-    head :forbidden unless current_researcher
+    head :forbidden unless current_researcher || current_user_is_admin?
   end
 
   def current_researcher

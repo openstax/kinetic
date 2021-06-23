@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   namespace :api do
     api_version(
@@ -36,5 +37,16 @@ Rails.application.routes.draw do
 
   get 'returning/:id', to: 'returning#index', as: 'returning'
 
+  if Rails.env.development? || Rails.env.test?
+    namespace :development do
+      resources :users, only: [:index] do
+        put :log_in
+        put :ensure_an_admin_exists, on: :collection
+        get :whoami, on: :collection
+      end
+    end
+  end
+
   match '*path', via: :all, to: 'application#error404'
 end
+# rubocop:enable Metrics/BlockLength

@@ -42,6 +42,38 @@ A rake script is provided to generate client libraries.  Call
 `rake openstax_swagger:generate_client[0,ruby]` will generate the Ruby client for the latest version 0 API.  This
 will generate code in the baseline, so if you don't want it committed move it elsewhere.
 
+### Stubbing Authentication
+
+In the development environment, there are some extra endpoints available to faking your logged-in user.  Your logged-in user is set via a special development-environment-only cookie.  Here are the APIs:
+
+```GET    /development/users```
+
+Gets you a hash of research and admin users so you can know who you want to log in as, e.g.
+
+```json
+{
+  'researchers': [
+    { 'some-uuid': { name: 'Captain Ron' } }
+  ],
+  'admins': [
+    'some-other-uuid'
+  ]
+}
+```
+
+```PUT    /development/users/:user_id/log_in```
+
+Logs in as the user UUID provided in the path.
+
+```PUT    /development/users/ensure_an_admin_exists```
+
+Call this to make sure an admin exists.  After calling this you can call the `/development/users` endpoint to get the admin's UUID.
+
+```GET    /development/users/whoami```
+
+Call this to see who you are logged in as.
+
+
 ## TODOs
 
 * [] Don't delete studies
