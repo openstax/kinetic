@@ -1,4 +1,4 @@
-FROM ruby:2.6.7-slim
+FROM ruby:2.6.7
 
 ARG bundler_version
 
@@ -10,6 +10,8 @@ RUN apt-get update && \
     openssh-server \
     build-essential \
     wget \
+    # for swagger
+    openjdk-11-jre-headless \
     && rm -rf /var/lib/apt/lists/*
 
 # Install a quick colorized prompt and turn on ls coloring
@@ -26,6 +28,16 @@ COPY . /code
 
 RUN gem install bundler --no-document --version $bundler_version && \
     gem install lefthook && \
+    bundle config set path /gems && \
     bundle config set no-cache 'true' && \
     bundle config set silence_root_warning 'true' && \
-    bundle install
+    bundle install && \
+    bundle binstubs --all && \
+    echo 'export PATH=/code/backend/bin:$PATH' >> ~/.bashrc
+
+### swagger-codegen
+
+RUN mkdir /usr/lib/swagger-codegen && \
+  wget -q https://repo1.maven.org/maven2/io/swagger/swagger-codegen-cli/2.4.13/swagger-codegen-cli-2.4.13.jar -O /usr/lib/swagger-codegen/swagger-codegen-cli.jar && \
+  echo "java -jar /usr/lib/swagger-codegen/swagger-codegen-cli.jar \$@" > /usr/bin/swagger-codegen && \
+  chmod a+x /usr/bin/swagger-codegen

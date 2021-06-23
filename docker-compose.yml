@@ -10,7 +10,7 @@ services:
       - labs
     ports:
       - "4006:4006"
-    command: bash -c "rake about && bin/rails server -b '0.0.0.0' -p 4006"
+    command: bash -c "bundle exec rake about && bundle exec rails server -b '0.0.0.0' -p 4006"
     environment:
       - DB_HOST=postgres
       - DB_USER=labs
@@ -25,6 +25,7 @@ services:
       - postgres_test
     volumes:
       - .:/code
+      - gems:/gems
   postgres:
     image: "postgres:11"
     volumes:
@@ -43,8 +44,20 @@ services:
       - POSTGRES_USER=labs
       - POSTGRES_PASSWORD=labs
       - POSTGRES_DB=labs_test
+  petstore:
+    image: "swaggerapi/petstore"
+    networks:
+      - "labs"
+    environment:
+      - SWAGGER_HOST=http://0.0.0.0:4008
+      - SWAGGER_BASE_PATH=/api/v0
+      - SWAGGER_URL=http://0.0.0.0:4006
+    ports:
+      - "4008:8080"
+
 
 networks:
   labs:
 volumes:
   pgdata:
+  gems:

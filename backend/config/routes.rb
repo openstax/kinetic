@@ -1,5 +1,40 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  namespace :api do
+    api_version(
+      module: 'V0',
+      path: { value: 'v0' },
+      defaults: { format: :json }
+    ) do
+
+      namespace :researcher do
+        resources :studies do
+          post 'researcher/:user_id', to: 'study_researchers#create'
+          delete 'researcher/:user_id', to: 'study_researchers#destroy'
+
+          resources :stages, shallow: true, only: [:create, :show, :update, :destroy]
+        end
+      end
+
+      namespace :participant do
+        resources :studies, only: [:index, :show] do
+          get :start
+          delete :opt_out
+        end
+      end
+
+      get :swagger, to: 'swagger#json', constraints: { format: :json }
+
+      scope :diagnostics, controller: :diagnostics do
+        get :exception
+        get 'status_code/:status_code', action: :status_code
+        get :me
+      end
+    end
+  end
+
+  get 'returning/:id', to: 'returning#index', as: 'returning'
+
+  match '*path', via: :all, to: 'application#error404'
 end

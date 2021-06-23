@@ -18,9 +18,44 @@ gem 'bootsnap', '>= 1.4.4', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 
+# Versioned API tools
+gem 'versionist'
+
+# More concise, one-liner logs (better for production)
+gem 'lograge'
+
+# Gives 200 OK from /ping
+gem 'openstax_healthcheck'
+
+# For installing secrets on deploy
+gem 'aws-sdk-ssm'
+
+gem 'dotenv-rails'
+
+gem 'will_paginate', '~> 3.1.7'
+
+gem 'openstax_swagger', github: 'openstax/swagger-rails',
+                        ref: '1df972b4bae1ea1ae7dd2ecac4804b4bf2642ee9'
+
+gem 'openstax_auth', github: 'openstax/auth-rails', ref: 'ed2d7da86ca226b93376955b9474c4cf115c611f'
+
+# Exception reporting
+gem 'sentry-raven'
+
+# CORS
+gem 'rack-cors'
+
+group :test do
+  # Code Climate integration
+  gem 'codecov', require: false
+  gem 'simplecov', require: false
+end
+
 group :development, :test do
+  gem 'factory_bot_rails'
+  gem 'faker'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails', '~> 5.0.0'
   gem 'rubocop'
   gem 'rubocop-rails'

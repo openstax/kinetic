@@ -1,5 +1,19 @@
 # frozen_string_literal: true
 
+if ENV['ENABLE_CODECOV']
+  require 'simplecov'
+  SimpleCov.start 'rails' do
+    add_filter(/^\/app\/bindings\//)
+    add_filter { |src| src.filename =~ /swagger/ }
+    add_filter { |src| src.filename =~ /scout/ }
+  end
+
+  if ENV['CI'] == 'true'
+    require 'codecov'
+    SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  end
+end
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
@@ -32,6 +46,9 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
+
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f unless f.ends_with?('_spec.rb') }
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -63,4 +80,12 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.include ApiV0Helpers, api: :v0
+  ApiV0Helpers.more_rspec_config(config)
+
+  config.include UserHelpers, type: :request
+
+  config.include FactoryBot::Syntax::Methods
+  config.include ResponseHelpers
 end

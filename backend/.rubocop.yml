@@ -1,5 +1,12 @@
 AllCops:
   TargetRubyVersion: 2.6
+  Exclude:
+    - 'db/**/*.rb'
+    - 'app/bindings/**/*.rb'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - '.git/**/*'
 
 Layout/EmptyLinesAroundClassBody:
   Enabled: false
@@ -28,6 +35,9 @@ Metrics/MethodLength:
 Metrics/BlockLength:
   CountAsOne: ['heredoc']
   Max: 30
+  Exclude:
+    - '**/*_swagger.rb'
+    - '**/*.rake'
 
 Metrics/ModuleLength:
   CountAsOne: ['heredoc']
@@ -63,3 +73,9 @@ Layout/ClosingParenthesisIndentation:
 
 Layout/MultilineMethodCallBraceLayout:
   Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/SymbolArray:
+  EnforcedStyle: brackets

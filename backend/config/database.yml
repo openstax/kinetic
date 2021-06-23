@@ -6,17 +6,17 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
   host: <%= ENV['DB_HOST'] || 'localhost' %>
-  username: <%= ENV['DB_USER'] || 'highlights' %>
-  password: <%= ENV['DB_PASS'] || 'highlights' %>
+  username: <%= ENV['DB_USER'] || 'labs' %>
+  password: <%= ENV['DB_PASS'] || 'labs' %>
   port: <%= ENV['DB_PORT'] || 5432 %>
 
 development:
   <<: *default
-  database: <%= ENV['DB_NAME'] || 'highlights_development' %>
+  database: <%= ENV['DB_NAME'] || 'labs_development' %>
 
 test:
   <<: *default
   host: <%= ENV['TEST_DB_HOST'] || 'localhost' %>
-  database: <%= ENV['TEST_DB_NAME'] || 'highlights_test' %>
+  database: <%= ENV['TEST_DB_NAME'] || 'labs_test' %>
   username: <%= ENV['TEST_DB_USER'] || 'postgres' %>
   password: <%= ENV['TEST_DB_PASS'] || '' %>
