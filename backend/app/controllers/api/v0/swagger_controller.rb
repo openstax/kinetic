@@ -41,7 +41,9 @@ class Api::V0::SwaggerController < ApplicationController
 
   SWAGGERED_CLASSES = [
     Api::V0::SwaggerResponses,
-    Api::V0::Researcher::Swagger,
+    Api::V0::Researcher::StudiesSwagger,
+    Api::V0::Researcher::StudyResearchersSwagger,
+    Api::V0::Researcher::StagesSwagger,
     Api::V0::Participant::StudiesSwagger,
     self
   ].freeze

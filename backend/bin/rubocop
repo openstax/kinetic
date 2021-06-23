@@ -1,1 +1,1 @@
-rubocop --disable-pending-cops
+bundle exec rubocop --disable-pending-cops
