@@ -52,7 +52,7 @@ RSpec.describe 'Stages', type: :request, api: :v0 do
     context 'when signed in as a researcher on the study' do
       before { stub_current_user(original_researcher) }
 
-      it 'works' do
+      it 'works for the first stage' do
         api_post path, params: { stage: valid_new_stage_attributes }
         expect(response).to have_http_status(:created)
         expect(study.stages.reload).not_to be_empty
@@ -63,6 +63,14 @@ RSpec.describe 'Stages', type: :request, api: :v0 do
             return_url: kind_of(String)
           )
         )
+      end
+
+      it 'disallows a second stage for the moment' do
+        api_post path, params: { stage: valid_new_stage_attributes }
+        expect(response).to have_http_status(:created)
+        api_post path, params: { stage: valid_new_stage_attributes }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(study.stages.reload.count).to eq 1
       end
     end
   end
@@ -154,7 +162,7 @@ RSpec.describe 'Stages', type: :request, api: :v0 do
     context 'when signed in as a researcher on the study' do
       before { stub_current_user(original_researcher) }
 
-      it 'works' do
+      it 'works with good data' do
         api_put path, params: { stage: valid_changes }
         expect(response).to have_http_status(:ok)
         expect(response_hash).to match(
@@ -164,6 +172,13 @@ RSpec.describe 'Stages', type: :request, api: :v0 do
             return_url: kind_of(String)
           )
         )
+      end
+
+      it 'fails when try to update read-only fields' do
+        expect {
+          api_put path, params: { stage: { return_id: 'blah' } }
+        }.not_to change { stage.reload.return_id }
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
