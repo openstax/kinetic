@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+CMD=$1
+
+docker run -it \
+    -p 3008:3008/tcp \
+    -v $DIR/../dist:/app/dist \
+    openstax/labs.frontend:latest \
+    yarn run $CMD

@@ -1,0 +1,14 @@
+FROM mcr.microsoft.com/playwright:focal
+
+WORKDIR /app
+
+COPY package.json ./
+COPY yarn.lock ./
+
+RUN yarn install
+
+COPY . .
+
+EXPOSE 3008
+
+CMD [ "yarn" "run" "docker:dev" ]

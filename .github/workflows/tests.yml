@@ -7,6 +7,14 @@ on:
       - main
 
 jobs:
+  front-end:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build docker image
+        run: ./frontend/docker/build --ci
+      - name: Run specs within Docker image
+        run: ./frontend/docker/ci
   rspec:
     timeout-minutes: 10
     runs-on: ubuntu-18.04
