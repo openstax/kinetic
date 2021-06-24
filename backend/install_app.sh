@@ -16,12 +16,12 @@ source /home/ubuntu/rbenv-init && rbenv install -s $ruby_version
 echo Installing bundler
 # Get specific version of bundler used in the Gemfile.lock
 BUNDLER_VERSION=`grep -A 2 "BUNDLED WITH" Gemfile.lock | tail -1`
-gem install --conservative bundler -v $BUNDLER_VERSION
+gem install --no-document --conservative bundler -v $BUNDLER_VERSION
 
 echo Installing gems
 # After install do an rbenv rehash to make sure newly installed executables
 # have shims available
-bundle install --without development test
+bundle install --jobs=2 --without development test
 rbenv rehash
 
 echo Done!
