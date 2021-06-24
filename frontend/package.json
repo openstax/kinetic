@@ -11,7 +11,9 @@
     "testserver": "bin/env vite --strictPort",
     "serve": "bin/env vite preview",
     "test:ci": "bin/env playwright test --config playwright.ci.ts",
-    "test": "bin/env playwright test"
+    "test": "bin/env playwright test",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@emotion/core": "^11.0.0",
@@ -19,7 +21,11 @@
     "@emotion/styled": "^11.3.0",
     "@playwright/test": "^1.12.2",
     "@types/react-router-dom": "^5.1.7",
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
     "boxible": "1.0.0",
+    "eslint": "^7.29.0",
+    "eslint-plugin-react": "^7.24.0",
     "modeled-mobx": "^0.6.4",
     "playwright-chromium": "^1.12.2",
     "react": "^17.0.2",
