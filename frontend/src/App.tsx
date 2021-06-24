@@ -5,7 +5,6 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import "./App.css"
 import { Home } from './screens/homepage'
 
 function App() {
