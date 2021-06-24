@@ -26,6 +26,19 @@ services:
     volumes:
       - .:/code
       - gems:/gems
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: docker/Dockerfile${API_DOCKERFILE_EXT:-}
+    networks:
+      - labs
+    ports:
+      - "4000:4000"
+    command: yarn run docker:dev
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://localhost:4006
   postgres:
     image: "postgres:11"
     volumes:

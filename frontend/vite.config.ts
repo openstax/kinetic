@@ -9,7 +9,7 @@ export default defineConfig({
     },
     plugins: [reactRefresh()],
     server: {
-        port: 3008,
+        port: Number(process.env.PORT || 4000),
     },
     build: {
         manifest: true,

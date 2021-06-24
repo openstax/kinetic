@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
+set -eo pipefail
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-export PACKAGE=openstax/labs.frontend.ci:latest
+echo VITE_API_URL=$API_URL > $DIR/../.env.local
 
-$DIR/run test:ci
+$(npm bin)/$1 "${@:2}"
