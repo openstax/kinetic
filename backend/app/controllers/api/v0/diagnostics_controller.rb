@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V0::DiagnosticsController < Api::V0::BaseController
-  before_action :validate_not_production
+  before_action :validate_not_real_production
 
   # Forcing an exception
   def exception

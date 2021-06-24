@@ -61,19 +61,6 @@ task :install_secrets, [] do
                     }
                   })
 
-  scout_secrets = secrets.delete('scout')
-  write_yaml_file('config/scout_apm.yml', {
-                    production: {
-                      key: scout_secrets[:license_key],
-                      name: "highlights (#{env_name})",
-                      # crude way to disable scout by environment
-                      monitor: !/noscout/.match?(env_name),
-                      ignore: %w[/ping]
-                    }
-                  })
-
-  secrets[:loadtesting_active] = /loadtesting/.match?(env_name).to_s
-
   write_yaml_file('config/secrets.yml', {
                     production: secrets
                   })
