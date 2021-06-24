@@ -3,6 +3,8 @@
 return unless Rails.env.development? || Rails.env.test?
 
 class Development::UsersController < ApplicationController
+  before_action :validate_not_real_production # belt and suspenders
+
   include ActionController::Cookies
 
   def log_in

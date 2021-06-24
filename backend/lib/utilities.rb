@@ -3,7 +3,7 @@
 module Utilities
   module_function
 
-  def production_deployment?
+  def real_production_deployment?
     ENV['ENV_NAME']&.downcase == 'production'
   end
 end
