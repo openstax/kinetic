@@ -9,6 +9,6 @@ RUN yarn install
 
 COPY . .
 
-EXPOSE 3008
+EXPOSE 4000
 
 CMD [ "yarn" "run" "docker:dev" ]

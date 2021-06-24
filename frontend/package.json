@@ -4,14 +4,14 @@
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
-    "start": "vite",
-    "dev": "vite",
-    "docker:dev": "vite --host 0.0.0.0",
-    "build": "tsc && vite build",
-    "testserver": "vite --strictPort",
-    "serve": "vite preview",
-    "test:ci": "playwright test --config playwright.ci.ts",
-    "test": "playwright test"
+    "start": "bin/vite",
+    "dev": "bin/vite",
+    "docker:dev": "bin/env vite --host 0.0.0.0",
+    "build": "tsc && bin/env vite build",
+    "testserver": "bin/env vite --strictPort",
+    "serve": "bin/env vite preview",
+    "test:ci": "bin/env playwright test --config playwright.ci.ts",
+    "test": "bin/env playwright test"
   },
   "dependencies": {
     "@emotion/core": "^11.0.0",
