@@ -21,6 +21,8 @@ require 'action_controller/railtie'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+Dotenv.load('/etc/.env', '.env')
+
 module Labs
   class Application < Rails::Application
     config.middleware.insert_before 0, Rack::Cors do
