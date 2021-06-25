@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Define an empty class for production so that the autoloader does not complain
+class Development::UsersController < ApplicationController; end
+
 return unless Rails.env.development? || Rails.env.test?
 
 class Development::UsersController < ApplicationController
