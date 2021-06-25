@@ -21,9 +21,13 @@ class Api::V0::Participant::StudiesSwagger
       key :type, :string
       key :description, 'The study name that participants see.'
     end
-    property :description do
+    property :short_description do
       key :type, :string
-      key :description, 'The study description that participants see.'
+      key :description, 'The shorty study description that participants see.'
+    end
+    property :long_description do
+      key :type, :string
+      key :description, 'The long study description that participants see.'
     end
     property :category do
       key :type, :string

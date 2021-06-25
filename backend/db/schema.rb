@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 2021_06_18_183842) do
 
   create_table "participant_studies", force: :cascade do |t|
     t.bigint "study_id", null: false
-    t.uuid "user_id"
+    t.uuid "user_id", null: false
     t.datetime "opted_out_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
