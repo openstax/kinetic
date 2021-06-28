@@ -77,6 +77,13 @@ class Api::V0::Researcher::StagesSwagger
         'Studies'
       ]
       parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'The study ID'
+        key :required, true
+        key :type, :number
+      end
+      parameter do
         key :name, :stage
         key :in, :body
         key :description, 'The stage data'
