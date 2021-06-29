@@ -16,7 +16,7 @@ OpenStax::Swagger.configure do |config|
         gemVersion: version
       }
     end,
-    "typescript-fetch" => lambda do |version|
+    'typescript-fetch' => lambda do
       {
 
       }

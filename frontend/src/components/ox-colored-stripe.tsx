@@ -1,3 +1,4 @@
+import { React } from '../common'
 import { colors } from '../theme'
 
 export const OXColoredStripe = () => (

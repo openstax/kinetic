@@ -3,6 +3,10 @@
     "files": [
         "./global.d.ts"
     ],
+     "exclude": [
+         "node_modules",
+         "src/api"
+     ],
     "compilerOptions": {
         "target": "ESNext",
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
@@ -18,8 +22,7 @@
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "react",
-        "jsxImportSource": "@emotion/react",
-        "types": ["@emotion/react/types/css-prop"],
+        "types": ["@emotion/react/types/css-prop", "@emotion/react"],
         "experimentalDecorators": true,
         "useDefineForClassFields": true
     }

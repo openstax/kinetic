@@ -8,6 +8,7 @@ module.exports = {
         'eslint:recommended',
         //  "plugin:react/recommended", // TODO: enable once
     ],
+    "ignorePatterns": ["**/api/**/*.js"],
     'parserOptions': {
         'ecmaFeatures': {
             'experimentalObjectRestSpread': true,

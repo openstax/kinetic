@@ -1,4 +1,4 @@
-import { styled, css, keyframes, cx } from '../common'
+import { React, styled, css, keyframes, cx } from '../common'
 import { useDelay } from '../lib/hooks';
 
 const Inner = styled.div`
