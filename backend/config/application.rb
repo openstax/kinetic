@@ -38,6 +38,14 @@ module Labs
           methods: [:get, :options, :head, :put]
         }
       end
+      allow do
+        origins ['localhost:4000', '*.openstax.org']
+        resource '/api/*', {
+          headers: :any,
+          credentials: true,
+          methods: [:get, :options, :head, :put]
+        }
+      end
     end
 
     # Initialize configuration defaults for originally generated Rails version.
