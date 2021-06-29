@@ -32,6 +32,8 @@ services:
       dockerfile: docker/Dockerfile${API_DOCKERFILE_EXT:-}
     networks:
       - labs
+    volumes:
+      - ./frontend/src:/app/src
     ports:
       - "4000:4000"
     command: yarn run docker:dev
