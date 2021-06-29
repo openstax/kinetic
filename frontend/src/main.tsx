@@ -1,10 +1,26 @@
 import './index.css'
 import { React, ReactDOM } from './common'
-import App from './App'
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { loadAsync } from './components/async'
+import './styles/main.scss'
+
+const Home = loadAsync('Homepage', () => import('./screens/homepage'))
+const Dev = loadAsync('Dev', () => import('./screens/dev'))
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <div className="openstax-labs">
+            <Router>
+                <Route exact path="/">
+                    <Home />
+                </Route>
+
+                <Route path="/dev">
+                    <Dev />
+                </Route>
+            </Router>
+        </div>
+
     </React.StrictMode>,
     document.getElementById('root')
 )
