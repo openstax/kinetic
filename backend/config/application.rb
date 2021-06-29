@@ -32,7 +32,11 @@ module Labs
       end
       allow do
         origins 'localhost:4000'
-        resource '/development/*', headers: :any, credentials: true, methods: [:get, :options, :head, :put]
+        resource '/development/*', {
+          headers: :any,
+          credentials: true,
+          methods: [:get, :options, :head, :put]
+        }
       end
     end
 
