@@ -43,7 +43,7 @@ module Labs
         resource '/api/*', {
           headers: :any,
           credentials: true,
-          methods: [:get, :options, :head, :put]
+          methods: [:get, :options, :head, :put, :delete, :post]
         }
       end
     end
