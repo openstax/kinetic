@@ -2,7 +2,7 @@ import { React } from '../common'
 import { PageHeader } from '../PageHeader'
 import { ENV } from '../lib/env'
 
-export const Home = () => {
+export default function Homepage() {
     return (
         <div className="">
             <PageHeader />
@@ -10,5 +10,5 @@ export const Home = () => {
             <p>Api is: {ENV.API_URL}</p>
         </div>
     )
-    
+
 }
