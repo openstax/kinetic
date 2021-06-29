@@ -30,6 +30,10 @@ module Labs
         origins '*'
         resource '/api/v0/swagger*', headers: :any, methods: [:get, :options, :head]
       end
+      allow do
+        origins 'localhost:4000'
+        resource '/development/*', headers: :any, credentials: true, methods: [:get, :options, :head, :put]
+      end
     end
 
     # Initialize configuration defaults for originally generated Rails version.
