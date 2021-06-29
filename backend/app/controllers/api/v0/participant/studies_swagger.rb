@@ -4,8 +4,23 @@ class Api::V0::Participant::StudiesSwagger
   include Swagger::Blocks
   include OpenStax::Swagger::SwaggerBlocksExtensions
 
+  swagger_schema :PublicResearcher do
+    property :name do
+      key :type, :string
+      key :description, 'The researcher\'s name.'
+    end
+    property :institution do
+      key :type, :string
+      key :description, 'The researcher\'s institution.'
+    end
+    property :bio do
+      key :type, :string
+      key :description, 'The researcher\'s bio.'
+    end
+  end
+
   COMMON_REQUIRED_STUDY_FIELDS = [
-    :name, :description
+    :title, :short_description, :category
   ].freeze
 
   swagger_schema :ParticipantStudy do
@@ -17,9 +32,9 @@ class Api::V0::Participant::StudiesSwagger
       key :type, :integer
       key :description, 'The study ID.'
     end
-    property :name do
+    property :title do
       key :type, :string
-      key :description, 'The study name that participants see.'
+      key :description, 'The study title that participants see.'
     end
     property :short_description do
       key :type, :string
@@ -38,13 +53,27 @@ class Api::V0::Participant::StudiesSwagger
       key :type, :integer
       key :description, 'The expected study duration in minutes.'
     end
-    property :is_started do
-      key :type, :boolean
-      key :description, 'True if has been started'
+    property :first_launched_at do
+      key :type, :string
+      key :format, 'date-time'
+      key :description, 'When the study was launched; null means not launched'
     end
-    property :is_completed do
-      key :type, :boolean
-      key :description, 'True if has been completed'
+    property :completed_at do
+      key :type, :string
+      key :format, 'date-time'
+      key :description, 'When the study was completed; null means not completed.'
+    end
+    property :opted_out_at do
+      key :type, :string
+      key :format, 'date-time'
+      key :description, 'When the study was opted-out of; null means not opted out.'
+    end
+    property :researchers do
+      key :type, :array
+      key :description, 'The study\'s researchers.'
+      items do
+        key :'$ref', :PublicResearcher
+      end
     end
   end
 

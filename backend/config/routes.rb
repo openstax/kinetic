@@ -20,7 +20,6 @@ Rails.application.routes.draw do
 
       namespace :participant do
         resources :studies, only: [:index, :show] do
-          get :start
           delete :opt_out
         end
       end
@@ -35,7 +34,8 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'returning/:id', to: 'returning#index', as: 'returning'
+  get 'launch/:id', to: 'launchpad#launch', as: 'launch'
+  get 'returning/:id', to: 'launchpad#return', as: 'returning'
 
   if Rails.env.development? || Rails.env.test?
     namespace :development do

@@ -22,23 +22,27 @@ ActiveRecord::Schema.define(version: 2021_06_18_183842) do
     t.index ["user_id"], name: "index_admins_on_user_id"
   end
 
-  create_table "participant_stages", force: :cascade do |t|
+  create_table "launched_stages", force: :cascade do |t|
     t.bigint "stage_id", null: false
     t.uuid "user_id"
     t.datetime "first_launched_at"
     t.datetime "completed_at"
-    t.index ["stage_id"], name: "index_participant_stages_on_stage_id"
-    t.index ["user_id"], name: "index_participant_stages_on_user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["stage_id"], name: "index_launched_stages_on_stage_id"
+    t.index ["user_id"], name: "index_launched_stages_on_user_id"
   end
 
-  create_table "participant_studies", force: :cascade do |t|
+  create_table "launched_studies", force: :cascade do |t|
     t.bigint "study_id", null: false
     t.uuid "user_id", null: false
+    t.datetime "first_launched_at"
+    t.datetime "completed_at"
     t.datetime "opted_out_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["study_id"], name: "index_participant_studies_on_study_id"
-    t.index ["user_id"], name: "index_participant_studies_on_user_id"
+    t.index ["study_id"], name: "index_launched_studies_on_study_id"
+    t.index ["user_id"], name: "index_launched_studies_on_user_id"
   end
 
   create_table "researchers", force: :cascade do |t|
@@ -85,8 +89,8 @@ ActiveRecord::Schema.define(version: 2021_06_18_183842) do
     t.index ["study_id"], name: "index_study_researchers_on_study_id"
   end
 
-  add_foreign_key "participant_stages", "stages"
-  add_foreign_key "participant_studies", "studies"
+  add_foreign_key "launched_stages", "stages"
+  add_foreign_key "launched_studies", "studies"
   add_foreign_key "stages", "studies"
   add_foreign_key "study_researchers", "researchers"
   add_foreign_key "study_researchers", "studies"

@@ -15,6 +15,16 @@ RSpec.describe Study, type: :model do
     end
   end
 
+  describe '#open?' do
+    it 'works' do
+      expect(opens_and_closes_study).to be_open
+      expect(opens_and_closes_before_study).not_to be_open
+      expect(opens_only_study).to be_open
+      expect(opens_later_only_study).not_to be_open
+      expect(no_times_study).not_to be_open
+    end
+  end
+
   def expect_query_results(query, results)
     expect(query.all.map(&:title_for_researchers)).to contain_exactly(
       *results.map(&:title_for_researchers)

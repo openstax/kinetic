@@ -11,13 +11,17 @@ class Api::V0::Researcher::StudyResearchersSwagger
       key :format, 'uuid'
       key :description, 'The researcher\'s user ID.'
     end
-    property :first_name do
+    property :name do
       key :type, :string
-      key :description, 'The researcher\'s first name.'
+      key :description, 'The researcher\'s name.'
     end
-    property :last_name do
+    property :institution do
       key :type, :string
-      key :description, 'The researcher\'s last name.'
+      key :description, 'The researcher\'s institution.'
+    end
+    property :bio do
+      key :type, :string
+      key :description, 'The researcher\'s bio.'
     end
   end
 
