@@ -13,36 +13,21 @@ Swagger Codegen version: 2.4.13
 require 'date'
 
 module Api::V0::Bindings
-  class Researcher
-    # The researcher's user ID.
-    attr_accessor :user_id
-
-    # The researcher's name.
-    attr_accessor :name
-
-    # The researcher's institution.
-    attr_accessor :institution
-
-    # The researcher's bio.
-    attr_accessor :bio
+  class Launch
+    # The URL to send a user to to start a study stage
+    attr_accessor :url
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'user_id' => :'user_id',
-        :'name' => :'name',
-        :'institution' => :'institution',
-        :'bio' => :'bio'
+        :'url' => :'url'
       }
     end
 
     # Attribute type mapping.
     def self.swagger_types
       {
-        :'user_id' => :'String',
-        :'name' => :'String',
-        :'institution' => :'String',
-        :'bio' => :'String'
+        :'url' => :'String'
       }
     end
 
@@ -54,20 +39,8 @@ module Api::V0::Bindings
       # convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h| h[k.to_sym] = v }
 
-      if attributes.has_key?(:'user_id')
-        self.user_id = attributes[:'user_id']
-      end
-
-      if attributes.has_key?(:'name')
-        self.name = attributes[:'name']
-      end
-
-      if attributes.has_key?(:'institution')
-        self.institution = attributes[:'institution']
-      end
-
-      if attributes.has_key?(:'bio')
-        self.bio = attributes[:'bio']
+      if attributes.has_key?(:'url')
+        self.url = attributes[:'url']
       end
     end
 
@@ -75,17 +48,12 @@ module Api::V0::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @user_id.nil?
-        invalid_properties.push('invalid value for "user_id", user_id cannot be nil.')
-      end
-
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @user_id.nil?
       true
     end
 
@@ -94,10 +62,7 @@ module Api::V0::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          user_id == o.user_id &&
-          name == o.name &&
-          institution == o.institution &&
-          bio == o.bio
+          url == o.url
     end
 
     # @see the `==` method
@@ -109,7 +74,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [user_id, name, institution, bio].hash
+      [url].hash
     end
 
     # Builds the object from hash

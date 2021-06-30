@@ -41,6 +41,9 @@ module Api::V0::Bindings
     # When the study closes for participation; null means does not close.
     attr_accessor :closes_at
 
+    # The URL to which stages should return after completing
+    attr_accessor :return_url
+
     # The study's researchers.
     attr_accessor :researchers
 
@@ -81,6 +84,7 @@ module Api::V0::Bindings
         :'duration_minutes' => :'duration_minutes',
         :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
+        :'return_url' => :'return_url',
         :'researchers' => :'researchers',
         :'stages' => :'stages'
       }
@@ -98,6 +102,7 @@ module Api::V0::Bindings
         :'duration_minutes' => :'Integer',
         :'opens_at' => :'DateTime',
         :'closes_at' => :'DateTime',
+        :'return_url' => :'String',
         :'researchers' => :'Array<Researcher>',
         :'stages' => :'Array<Stage>'
       }
@@ -145,6 +150,10 @@ module Api::V0::Bindings
 
       if attributes.has_key?(:'closes_at')
         self.closes_at = attributes[:'closes_at']
+      end
+
+      if attributes.has_key?(:'return_url')
+        self.return_url = attributes[:'return_url']
       end
 
       if attributes.has_key?(:'researchers')
@@ -243,6 +252,7 @@ module Api::V0::Bindings
           duration_minutes == o.duration_minutes &&
           opens_at == o.opens_at &&
           closes_at == o.closes_at &&
+          return_url == o.return_url &&
           researchers == o.researchers &&
           stages == o.stages
     end
@@ -256,7 +266,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, category, duration_minutes, opens_at, closes_at, researchers, stages].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, category, duration_minutes, opens_at, closes_at, return_url, researchers, stages].hash
     end
 
     # Builds the object from hash

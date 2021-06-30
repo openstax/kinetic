@@ -17,11 +17,14 @@ module Api::V0::Bindings
     # The study ID.
     attr_accessor :id
 
-    # The study name that participants see.
-    attr_accessor :name
+    # The study title that participants see.
+    attr_accessor :title
 
-    # The study description that participants see.
-    attr_accessor :description
+    # The shorty study description that participants see.
+    attr_accessor :short_description
+
+    # The long study description that participants see.
+    attr_accessor :long_description
 
     # The category of the study object, used for grouping.
     attr_accessor :category
@@ -29,11 +32,17 @@ module Api::V0::Bindings
     # The expected study duration in minutes.
     attr_accessor :duration_minutes
 
-    # True if has been started
-    attr_accessor :is_started
+    # When the study was launched; null means not launched
+    attr_accessor :first_launched_at
 
-    # True if has been completed
-    attr_accessor :is_completed
+    # When the study was completed; null means not completed.
+    attr_accessor :completed_at
+
+    # When the study was opted-out of; null means not opted out.
+    attr_accessor :opted_out_at
+
+    # The study's researchers.
+    attr_accessor :researchers
 
     class EnumAttributeValidator
       attr_reader :datatype
@@ -61,12 +70,15 @@ module Api::V0::Bindings
     def self.attribute_map
       {
         :'id' => :'id',
-        :'name' => :'name',
-        :'description' => :'description',
+        :'title' => :'title',
+        :'short_description' => :'short_description',
+        :'long_description' => :'long_description',
         :'category' => :'category',
         :'duration_minutes' => :'duration_minutes',
-        :'is_started' => :'is_started',
-        :'is_completed' => :'is_completed'
+        :'first_launched_at' => :'first_launched_at',
+        :'completed_at' => :'completed_at',
+        :'opted_out_at' => :'opted_out_at',
+        :'researchers' => :'researchers'
       }
     end
 
@@ -74,12 +86,15 @@ module Api::V0::Bindings
     def self.swagger_types
       {
         :'id' => :'Integer',
-        :'name' => :'String',
-        :'description' => :'String',
+        :'title' => :'String',
+        :'short_description' => :'String',
+        :'long_description' => :'String',
         :'category' => :'String',
         :'duration_minutes' => :'Integer',
-        :'is_started' => :'BOOLEAN',
-        :'is_completed' => :'BOOLEAN'
+        :'first_launched_at' => :'DateTime',
+        :'completed_at' => :'DateTime',
+        :'opted_out_at' => :'DateTime',
+        :'researchers' => :'Array<PublicResearcher>'
       }
     end
 
@@ -95,12 +110,16 @@ module Api::V0::Bindings
         self.id = attributes[:'id']
       end
 
-      if attributes.has_key?(:'name')
-        self.name = attributes[:'name']
+      if attributes.has_key?(:'title')
+        self.title = attributes[:'title']
       end
 
-      if attributes.has_key?(:'description')
-        self.description = attributes[:'description']
+      if attributes.has_key?(:'short_description')
+        self.short_description = attributes[:'short_description']
+      end
+
+      if attributes.has_key?(:'long_description')
+        self.long_description = attributes[:'long_description']
       end
 
       if attributes.has_key?(:'category')
@@ -111,12 +130,22 @@ module Api::V0::Bindings
         self.duration_minutes = attributes[:'duration_minutes']
       end
 
-      if attributes.has_key?(:'is_started')
-        self.is_started = attributes[:'is_started']
+      if attributes.has_key?(:'first_launched_at')
+        self.first_launched_at = attributes[:'first_launched_at']
       end
 
-      if attributes.has_key?(:'is_completed')
-        self.is_completed = attributes[:'is_completed']
+      if attributes.has_key?(:'completed_at')
+        self.completed_at = attributes[:'completed_at']
+      end
+
+      if attributes.has_key?(:'opted_out_at')
+        self.opted_out_at = attributes[:'opted_out_at']
+      end
+
+      if attributes.has_key?(:'researchers')
+        if (value = attributes[:'researchers']).is_a?(Array)
+          self.researchers = value
+        end
       end
     end
 
@@ -128,12 +157,16 @@ module Api::V0::Bindings
         invalid_properties.push('invalid value for "id", id cannot be nil.')
       end
 
-      if @name.nil?
-        invalid_properties.push('invalid value for "name", name cannot be nil.')
+      if @title.nil?
+        invalid_properties.push('invalid value for "title", title cannot be nil.')
       end
 
-      if @description.nil?
-        invalid_properties.push('invalid value for "description", description cannot be nil.')
+      if @short_description.nil?
+        invalid_properties.push('invalid value for "short_description", short_description cannot be nil.')
+      end
+
+      if @category.nil?
+        invalid_properties.push('invalid value for "category", category cannot be nil.')
       end
 
       invalid_properties
@@ -143,8 +176,9 @@ module Api::V0::Bindings
     # @return true if the model is valid
     def valid?
       return false if @id.nil?
-      return false if @name.nil?
-      return false if @description.nil?
+      return false if @title.nil?
+      return false if @short_description.nil?
+      return false if @category.nil?
       category_validator = EnumAttributeValidator.new('String', ['research_study', 'cognitive_task', 'survey'])
       return false unless category_validator.valid?(@category)
       true
@@ -166,12 +200,15 @@ module Api::V0::Bindings
       return true if self.equal?(o)
       self.class == o.class &&
           id == o.id &&
-          name == o.name &&
-          description == o.description &&
+          title == o.title &&
+          short_description == o.short_description &&
+          long_description == o.long_description &&
           category == o.category &&
           duration_minutes == o.duration_minutes &&
-          is_started == o.is_started &&
-          is_completed == o.is_completed
+          first_launched_at == o.first_launched_at &&
+          completed_at == o.completed_at &&
+          opted_out_at == o.opted_out_at &&
+          researchers == o.researchers
     end
 
     # @see the `==` method
@@ -183,7 +220,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [id, name, description, category, duration_minutes, is_started, is_completed].hash
+      [id, title, short_description, long_description, category, duration_minutes, first_launched_at, completed_at, opted_out_at, researchers].hash
     end
 
     # Builds the object from hash

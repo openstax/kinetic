@@ -33,6 +33,10 @@ class ApplicationController < ActionController::API
       end
   end
 
+  def current_user
+    @current_user ||= current_user_uuid ? User.new(current_user_uuid) : nil
+  end
+
   def render_unauthorized_unless_signed_in!
     head :unauthorized if current_user_uuid.nil?
   end

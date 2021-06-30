@@ -18,7 +18,10 @@ class Api::V0::BaseController < ApplicationController
     head :not_found
   end
 
-  rescue_from_unless_local ActiveRecord::RecordInvalid, ActionController::ParameterMissing do |ex|
+  rescue_from_unless_local ActiveRecord::RecordInvalid,
+                           ActionController::ParameterMissing,
+                           LaunchError,
+                           LandError do |ex|
     render json: binding_error(status_code: 422, messages: [ex.message]), status: 422
   end
 

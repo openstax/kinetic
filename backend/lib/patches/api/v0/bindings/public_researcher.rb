@@ -2,10 +2,9 @@
 
 Rails.application.config.to_prepare do
 
-  Api::V0::Bindings::Stage.class_exec do
+  Api::V0::Bindings::PublicResearcher.class_exec do
     def self.create_from_model(model)
-      attributes = model.attributes.with_indifferent_access
-      new(attributes)
+      new(model.attributes)
     end
   end
 

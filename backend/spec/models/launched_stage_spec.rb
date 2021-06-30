@@ -2,6 +2,6 @@
 
 require 'rails_helper'
 
-RSpec.describe ParticipantStudy, type: :model do
+RSpec.describe LaunchedStage, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"
 end
