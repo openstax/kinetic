@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LaunchPad
 
   def initialize(study_id:, user_id:)
@@ -57,7 +59,8 @@ class LaunchPad
 
   protected
 
-  attr_reader :study_id, :user_id
+  attr_reader :study_id
+  attr_reader :user_id
 
   def study
     @study ||= Study.find(study_id)

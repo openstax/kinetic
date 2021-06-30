@@ -1,4 +1,6 @@
-require "openssl"
+# frozen_string_literal: true
+
+require 'openssl'
 
 class QualtricsLauncher
 
@@ -15,18 +17,21 @@ class QualtricsLauncher
 
   protected
 
-  attr_reader :config, :user_id
+  attr_reader :config
+  attr_reader :user_id
 
   def secret_key
     config[:secret_key]
   end
 
   def sso_token
-    raw_query = URI.encode_www_form([
-      ['timestamp', Time.now.utc.iso8601],
-      ['expiration', 1.hour.from_now.utc.iso8601],
-      ['research_id', user_id]
-    ])
+    raw_query = URI.encode_www_form(
+      [
+        ['timestamp', Time.now.utc.iso8601],
+        ['expiration', 1.hour.from_now.utc.iso8601],
+        ['research_id', user_id]
+      ]
+    )
 
     hash = md5_hash(raw_query)
     unecrypted_token = "#{raw_query}&mac=#{hash}"

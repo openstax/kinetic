@@ -16,7 +16,7 @@ class LaunchedStudy < ApplicationRecord
   end
 
   def launched_stages
-    raise "NYI"
+    raise 'NYI'
     # LaunchedStage.where()
   end
 end

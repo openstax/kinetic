@@ -15,7 +15,7 @@ class Api::V0::Participant::StudiesController < Api::V0::BaseController
   end
 
   def show
-
+    raise 'nyi'
   end
 
   def launch

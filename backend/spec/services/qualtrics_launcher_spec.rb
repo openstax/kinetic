@@ -12,10 +12,10 @@ RSpec.describe QualtricsLauncher do
     }.with_indifferent_access
   end
 
-  let(:known_valid_ssotoken) {
+  let(:known_valid_ssotoken) do
     # Generated using "Generate test token" button on Qualtrics survey
-    "FL3ghD3UzMZs0aNasdKlvFkHi3uATPks3wGueHQZ4VXJfR7mKM%2FMV5byH3mJVnHD2Z2Yrn5H0sSNJzdC71TyVv%2FufFVwm%2BQmrBF89IwqnU5RegPUyU7zOzgU78bImEtgE0GFtrZ9R40JPlRiqiZamw%3D%3D"
-  }
+    'FL3ghD3UzMZs0aNasdKlvFkHi3uATPks3wGueHQZ4VXJfR7mKM%2FMV5byH3mJVnHD2Z2Yrn5H0sSNJzdC71TyVv%2FufFVwm%2BQmrBF89IwqnU5RegPUyU7zOzgU78bImEtgE0GFtrZ9R40JPlRiqiZamw%3D%3D'
+  end
 
   let(:user_id) { SecureRandom.uuid }
 
@@ -39,8 +39,7 @@ RSpec.describe QualtricsLauncher do
     aes = OpenSSL::Cipher.new('AES-128-ECB')
     aes.decrypt
     aes.key = key
-    url_decoded = URI::decode(token_value)
-    unencrypted_query = aes.update(Base64.strict_decode64(url_decoded)) + aes.final
+    aes.update(Base64.strict_decode64(token_value)) + aes.final
   end
 
 end

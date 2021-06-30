@@ -133,7 +133,7 @@ RSpec.describe 'Studies', type: :request, api: :v0 do
         expect {
           api_put "researcher/studies/#{study1.id}",
                   params: { study: { title_for_participants: '' } }
-        }.not_to change(study1, :title_for_participants)
+        }.not_to change { study1.title_for_participants }
         expect(response).to have_http_status(:unprocessable_entity)
       end
 

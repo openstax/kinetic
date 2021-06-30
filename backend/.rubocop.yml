@@ -38,6 +38,7 @@ Metrics/BlockLength:
   Exclude:
     - '**/*_swagger.rb'
     - '**/*.rake'
+    - 'lib/patches/api/**/*.rb'
 
 Metrics/ModuleLength:
   CountAsOne: ['heredoc']
@@ -79,3 +80,6 @@ Style/ClassAndModuleChildren:
 
 Style/SymbolArray:
   EnforcedStyle: brackets
+
+Style/Lambda:
+  Enabled: false

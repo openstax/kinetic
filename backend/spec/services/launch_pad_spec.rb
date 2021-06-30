@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe LaunchPad do
 
-  around(:each) do |example|
+  around do |example|
     ENV['ALLOW_MULTIPLE_STAGES'] = 'true'
     example.run
     ENV['ALLOW_MULTIPLE_STAGES'] = 'false'
@@ -20,10 +20,9 @@ RSpec.describe LaunchPad do
   let(:user1_id) { SecureRandom.uuid }
   let(:user2_id) { SecureRandom.uuid }
 
-  let(:user1_study1_launch_pad) { LaunchPad.new(study_id: study1.id, user_id: user1_id) }
-  let(:user1_study2_launch_pad) { LaunchPad.new(study_id: study2.id, user_id: user1_id) }
-  let(:user2_study2_launch_pad) { LaunchPad.new(study_id: study2.id, user_id: user2_id) }
-
+  let(:user1_study1_launch_pad) { described_class.new(study_id: study1.id, user_id: user1_id) }
+  let(:user1_study2_launch_pad) { described_class.new(study_id: study2.id, user_id: user1_id) }
+  let(:user2_study2_launch_pad) { described_class.new(study_id: study2.id, user_id: user2_id) }
 
   before do
     # Start another studies with our user of interest and another user to test our queries

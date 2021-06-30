@@ -24,7 +24,7 @@ FactoryBot.define do
     end
 
     after(:create) do |study, evaluator|
-      study.stages << evaluator.num_stages.times.map{ create(:stage, study: study) }
+      study.stages << evaluator.num_stages.times.map { create(:stage, study: study) }
     end
   end
 end

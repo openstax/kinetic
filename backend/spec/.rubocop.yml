@@ -47,10 +47,16 @@ RSpec/NestedGroups:
   Max: 4
 
 RSpec/MultipleExpectations:
-  Max: 4
+  Max: 7
 
 Naming/AccessorMethodName:
   Enabled: false
 
 Lint/AmbiguousBlockAssociation:
   Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
+RSpec/ExpectChange:
+  EnforcedStyle: block

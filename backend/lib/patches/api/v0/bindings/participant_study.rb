@@ -21,9 +21,13 @@ Rails.application.config.to_prepare do
 
     def self.attributes_from_launched_study(model)
       attributes_from_study_model(model.study).tap do |attributes|
-        attributes.merge!(model.attributes.slice(
-          :first_launched_at, :completed_at, :opted_out_at
-        ))
+        attributes.merge!(
+          model.attributes.slice(
+            :first_launched_at,
+            :completed_at,
+            :opted_out_at
+          )
+        )
       end
     end
 

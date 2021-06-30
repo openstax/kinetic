@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User
 
   attr_reader :id
@@ -11,7 +13,7 @@ class User
   end
 
   def launched_stages(study:)
-    LaunchedStage.where(user_id: id).joins(:stage).where(stage: {study_id: study.id})
+    LaunchedStage.where(user_id: id).joins(:stage).where(stage: { study_id: study.id })
   end
 
   def eligible_studies
