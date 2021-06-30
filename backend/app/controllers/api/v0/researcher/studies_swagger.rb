@@ -67,6 +67,11 @@ class Api::V0::Researcher::StudiesSwagger
   end
 
   add_properties(:Study) do
+    property :return_url do
+      key :type, :string
+      key :description, 'The URL to which stages should return after completing'
+      key :readOnly, true
+    end
     property :researchers do
       key :type, :array
       key :description, 'The study\'s researchers.'

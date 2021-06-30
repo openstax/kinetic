@@ -6,5 +6,6 @@ class CreateStudyResearchers < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
+    add_index :study_researchers, [:researcher_id, :study_id], unique: true
   end
 end

@@ -44,6 +44,7 @@ RSpec.describe 'Studies', type: :request, api: :v0 do
         expect(response_hash).to match(
           a_hash_including(
             title_for_participants: 'Participant study title',
+            return_url: kind_of(String),
             researchers: a_collection_including(
               a_hash_including(
                 user_id: researcher1.user_id
@@ -84,6 +85,7 @@ RSpec.describe 'Studies', type: :request, api: :v0 do
         expect(response).to have_http_status(:success)
         expect(response_hash[:data]).to match a_collection_containing_exactly(
           a_hash_including(
+            return_url: kind_of(String),
             researchers: a_collection_including(
               a_hash_including(
                 user_id: researcher1.user_id

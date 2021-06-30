@@ -5,8 +5,14 @@ class LaunchedStudy < ApplicationRecord
 
   before_create { self.first_launched_at ||= Time.now }
 
+  scope :complete, -> { where.not(completed_at: nil) }
+
   def completed?
     completed_at.present?
+  end
+
+  def completed!
+    update!(completed_at: Time.now)
   end
 
   def launched_stages

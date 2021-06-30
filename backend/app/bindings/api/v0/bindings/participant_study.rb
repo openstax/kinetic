@@ -41,6 +41,9 @@ module Api::V0::Bindings
     # When the study was opted-out of; null means not opted out.
     attr_accessor :opted_out_at
 
+    # The study's researchers.
+    attr_accessor :researchers
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -74,7 +77,8 @@ module Api::V0::Bindings
         :'duration_minutes' => :'duration_minutes',
         :'first_launched_at' => :'first_launched_at',
         :'completed_at' => :'completed_at',
-        :'opted_out_at' => :'opted_out_at'
+        :'opted_out_at' => :'opted_out_at',
+        :'researchers' => :'researchers'
       }
     end
 
@@ -89,7 +93,8 @@ module Api::V0::Bindings
         :'duration_minutes' => :'Integer',
         :'first_launched_at' => :'DateTime',
         :'completed_at' => :'DateTime',
-        :'opted_out_at' => :'DateTime'
+        :'opted_out_at' => :'DateTime',
+        :'researchers' => :'Array<PublicResearcher>'
       }
     end
 
@@ -135,6 +140,12 @@ module Api::V0::Bindings
 
       if attributes.has_key?(:'opted_out_at')
         self.opted_out_at = attributes[:'opted_out_at']
+      end
+
+      if attributes.has_key?(:'researchers')
+        if (value = attributes[:'researchers']).is_a?(Array)
+          self.researchers = value
+        end
       end
     end
 
@@ -196,7 +207,8 @@ module Api::V0::Bindings
           duration_minutes == o.duration_minutes &&
           first_launched_at == o.first_launched_at &&
           completed_at == o.completed_at &&
-          opted_out_at == o.opted_out_at
+          opted_out_at == o.opted_out_at &&
+          researchers == o.researchers
     end
 
     # @see the `==` method
@@ -208,7 +220,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [id, title, short_description, long_description, category, duration_minutes, first_launched_at, completed_at, opted_out_at].hash
+      [id, title, short_description, long_description, category, duration_minutes, first_launched_at, completed_at, opted_out_at, researchers].hash
     end
 
     # Builds the object from hash

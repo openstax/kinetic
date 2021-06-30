@@ -30,12 +30,6 @@ class Api::V0::Researcher::StagesSwagger
       key :description, 'An integer that describes the sort order for this stage'
       key :readOnly, true
     end
-    property :return_url do
-      key :type, :string
-      key :description, 'The URL to which external study apps should return after completing to ' \
-                        'end this stage'
-      key :readOnly, true
-    end
   end
 
   add_properties(:Stage, :NewStage, :StageUpdate) do

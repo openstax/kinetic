@@ -59,8 +59,7 @@ RSpec.describe 'Stages', type: :request, api: :v0 do
         expect(response_hash).to match(
           a_hash_including(
             order: 0,
-            config: valid_new_stage_attributes[:config],
-            return_url: kind_of(String)
+            config: valid_new_stage_attributes[:config]
           )
         )
       end
@@ -113,8 +112,7 @@ RSpec.describe 'Stages', type: :request, api: :v0 do
         expect(response_hash).to match(
           a_hash_including(
             order: 0,
-            config: a_hash_including(type: 'qualtrics'),
-            return_url: kind_of(String)
+            config: a_hash_including(type: 'qualtrics')
           )
         )
       end
@@ -168,16 +166,15 @@ RSpec.describe 'Stages', type: :request, api: :v0 do
         expect(response_hash).to match(
           a_hash_including(
             order: 0,
-            config: valid_changes[:config],
-            return_url: kind_of(String)
+            config: valid_changes[:config]
           )
         )
       end
 
       it 'fails when try to update read-only fields' do
         expect {
-          api_put path, params: { stage: { return_id: 'blah' } }
-        }.not_to change { stage.reload.return_id }
+          api_put path, params: { stage: { order: 42 } }
+        }.not_to change { stage.reload.order }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end

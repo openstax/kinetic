@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2021_06_18_183842) do
     t.uuid "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_admins_on_user_id"
+    t.index ["user_id"], name: "index_admins_on_user_id", unique: true
   end
 
   create_table "launched_stages", force: :cascade do |t|
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 2021_06_18_183842) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["stage_id"], name: "index_launched_stages_on_stage_id"
-    t.index ["user_id"], name: "index_launched_stages_on_user_id"
+    t.index ["user_id", "stage_id"], name: "index_launched_stages_on_user_id_and_stage_id", unique: true
   end
 
   create_table "launched_studies", force: :cascade do |t|
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 2021_06_18_183842) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["study_id"], name: "index_launched_studies_on_study_id"
-    t.index ["user_id"], name: "index_launched_studies_on_user_id"
+    t.index ["user_id", "study_id"], name: "index_launched_studies_on_user_id_and_study_id", unique: true
   end
 
   create_table "researchers", force: :cascade do |t|
@@ -52,18 +52,17 @@ ActiveRecord::Schema.define(version: 2021_06_18_183842) do
     t.text "bio"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_researchers_on_user_id"
+    t.index ["user_id"], name: "index_researchers_on_user_id", unique: true
   end
 
   create_table "stages", force: :cascade do |t|
     t.bigint "study_id", null: false
     t.integer "order", null: false
     t.jsonb "config", null: false
-    t.string "return_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["order", "study_id"], name: "index_stages_on_order_and_study_id", unique: true
     t.index ["order"], name: "index_stages_on_order", unique: true
-    t.index ["return_id"], name: "index_stages_on_return_id", unique: true
     t.index ["study_id"], name: "index_stages_on_study_id"
   end
 
@@ -85,6 +84,7 @@ ActiveRecord::Schema.define(version: 2021_06_18_183842) do
     t.bigint "researcher_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["researcher_id", "study_id"], name: "index_study_researchers_on_researcher_id_and_study_id", unique: true
     t.index ["researcher_id"], name: "index_study_researchers_on_researcher_id"
     t.index ["study_id"], name: "index_study_researchers_on_study_id"
   end

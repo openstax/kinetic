@@ -5,7 +5,7 @@ class Stage < ApplicationRecord
   has_many :launched_stages
 
   validate :only_one_stage_per_study_for_now, on: :create
-  before_create :set_return_id, :set_order
+  before_create :set_order
 
   def config
     self[:config]&.with_indifferent_access
@@ -15,10 +15,6 @@ class Stage < ApplicationRecord
 
   def set_order
     self.order = (Stage.maximum(:order) || -1) + 1
-  end
-
-  def set_return_id
-    self.return_id = SecureRandom.alphanumeric
   end
 
   def only_one_stage_per_study_for_now

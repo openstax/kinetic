@@ -9,6 +9,6 @@ class CreateLaunchedStudies < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
-    add_index :launched_studies, :user_id
+    add_index :launched_studies, [:user_id, :study_id], unique: true
   end
 end

@@ -10,8 +10,8 @@ class User
     LaunchedStudy.where(user_id: id)
   end
 
-  def launched_stages
-    LaunchedStage.where(user_id: id)
+  def launched_stages(study:)
+    LaunchedStage.where(user_id: id).joins(:stage).where(stage: {study_id: study.id})
   end
 
   def eligible_studies

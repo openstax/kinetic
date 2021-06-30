@@ -20,9 +20,6 @@ module Api::V0::Bindings
     # An integer that describes the sort order for this stage
     attr_accessor :order
 
-    # The URL to which external study apps should return after completing to end this stage
-    attr_accessor :return_url
-
     # The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
     attr_accessor :config
 
@@ -31,7 +28,6 @@ module Api::V0::Bindings
       {
         :'id' => :'id',
         :'order' => :'order',
-        :'return_url' => :'return_url',
         :'config' => :'config'
       }
     end
@@ -41,7 +37,6 @@ module Api::V0::Bindings
       {
         :'id' => :'Integer',
         :'order' => :'Integer',
-        :'return_url' => :'String',
         :'config' => :'Object'
       }
     end
@@ -62,10 +57,6 @@ module Api::V0::Bindings
         self.order = attributes[:'order']
       end
 
-      if attributes.has_key?(:'return_url')
-        self.return_url = attributes[:'return_url']
-      end
-
       if attributes.has_key?(:'config')
         self.config = attributes[:'config']
       end
@@ -83,10 +74,6 @@ module Api::V0::Bindings
         invalid_properties.push('invalid value for "order", order cannot be nil.')
       end
 
-      if @return_url.nil?
-        invalid_properties.push('invalid value for "return_url", return_url cannot be nil.')
-      end
-
       if @config.nil?
         invalid_properties.push('invalid value for "config", config cannot be nil.')
       end
@@ -99,7 +86,6 @@ module Api::V0::Bindings
     def valid?
       return false if @id.nil?
       return false if @order.nil?
-      return false if @return_url.nil?
       return false if @config.nil?
       true
     end
@@ -111,7 +97,6 @@ module Api::V0::Bindings
       self.class == o.class &&
           id == o.id &&
           order == o.order &&
-          return_url == o.return_url &&
           config == o.config
     end
 
@@ -124,7 +109,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [id, order, return_url, config].hash
+      [id, order, config].hash
     end
 
     # Builds the object from hash

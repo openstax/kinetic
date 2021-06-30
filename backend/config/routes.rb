@@ -20,6 +20,8 @@ Rails.application.routes.draw do
 
       namespace :participant do
         resources :studies, only: [:index, :show] do
+          put :launch
+          put :land
           delete :opt_out
         end
       end
@@ -34,9 +36,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'launch/:id', to: 'launchpad#launch', as: 'launch'
-  get 'returning/:id', to: 'launchpad#return', as: 'returning'
-
   if Rails.env.development? || Rails.env.test?
     namespace :development do
       resources :users, only: [:index] do
@@ -45,6 +44,11 @@ Rails.application.routes.draw do
         get :whoami, on: :collection
       end
     end
+  end
+
+  # Some routes to give us url and path helpers for the frontend app
+  scope as: :frontend do
+    get 'returning/:id', as: :returning, to: 'none#none'
   end
 
   match '*path', via: :all, to: 'application#error404'

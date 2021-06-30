@@ -8,6 +8,6 @@ class CreateLaunchedStages < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
-    add_index :launched_stages, :user_id
+    add_index :launched_stages, [:user_id, :stage_id], unique: true
   end
 end
