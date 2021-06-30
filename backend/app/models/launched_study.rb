@@ -14,9 +14,4 @@ class LaunchedStudy < ApplicationRecord
   def completed!
     update!(completed_at: Time.now)
   end
-
-  def launched_stages
-    raise 'NYI'
-    # LaunchedStage.where()
-  end
 end
