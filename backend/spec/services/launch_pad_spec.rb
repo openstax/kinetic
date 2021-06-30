@@ -2,13 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe LaunchPad do
-
-  around do |example|
-    ENV['ALLOW_MULTIPLE_STAGES'] = 'true'
-    example.run
-    ENV['ALLOW_MULTIPLE_STAGES'] = 'false'
-  end
+RSpec.describe LaunchPad, multi_stage: true do
 
   let(:study1) { create(:study, num_stages: 2) }
   let(:stage1a) { study1.stages.order(:order)[0] }

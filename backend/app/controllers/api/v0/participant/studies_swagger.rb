@@ -4,6 +4,14 @@ class Api::V0::Participant::StudiesSwagger
   include Swagger::Blocks
   include OpenStax::Swagger::SwaggerBlocksExtensions
 
+  swagger_schema :Launch do
+    key :required, :url
+    property :url do
+      key :type, :string
+      key :description, 'The URL to send a user to to start a study stage'
+    end
+  end
+
   swagger_schema :PublicResearcher do
     property :name do
       key :type, :string
@@ -106,38 +114,95 @@ class Api::V0::Participant::StudiesSwagger
     end
   end
 
-  # swagger_path '/participant/studies/:id/start' do
-  #   operation :post do
-  #     key :summary, 'Add a study'
-  #     key :description, 'Add a study'
-  #     key :operationId, 'addStudy'
-  #     key :produces, [
-  #       'application/json'
-  #     ]
-  #     key :tags, [
-  #       'Studies'
-  #     ]
-  #     parameter do
-  #       key :name, :study
-  #       key :in, :body
-  #       key :description, 'The study data'
-  #       key :required, true
-  #       schema do
-  #         key :'$ref', :NewStudy
-  #       end
-  #     end
-  #     response 201 do
-  #       key :description, 'Created.  Returns the created study.'
-  #       schema do
-  #         key :'$ref', :Study
-  #       end
-  #     end
-  #     extend Api::V0::SwaggerResponses::AuthenticationError
-  #     extend Api::V0::SwaggerResponses::ForbiddenError
-  #     extend Api::V0::SwaggerResponses::UnprocessableEntityError
-  #     extend Api::V0::SwaggerResponses::ServerError
-  #   end
-  # end
+  swagger_path '/participant/studies/:id' do
+    operation :put do
+      key :summary, 'Get participant-visible info for a study'
+      key :description, 'Get participant-visible info for a study'
+      key :operationId, 'getParticipantStudy'
+      key :produces, [
+        'application/json'
+      ]
+      key :tags, [
+        'Studies'
+      ]
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'ID of the study to get.'
+        key :required, true
+        key :type, :string
+      end
+      response 200 do
+        key :description, 'Success.  Returns participant-visible data for the study.'
+        schema do
+          key :'$ref', :ParticipantStudy
+        end
+      end
+      extend Api::V0::SwaggerResponses::AuthenticationError
+      extend Api::V0::SwaggerResponses::ForbiddenError
+      extend Api::V0::SwaggerResponses::UnprocessableEntityError
+      extend Api::V0::SwaggerResponses::ServerError
+    end
+  end
+
+  swagger_path '/participant/studies/:id/launch' do
+    operation :put do
+      key :summary, 'Launch the next available study stage'
+      key :description, 'Launch the next available study stage'
+      key :operationId, 'launchStudy'
+      key :produces, [
+        'application/json'
+      ]
+      key :tags, [
+        'Studies'
+      ]
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'ID of the study to launch.'
+        key :required, true
+        key :type, :string
+      end
+      response 200 do
+        key :description, 'Success.  Returns info on how to launch the user.'
+        schema do
+          key :'$ref', :Launch
+        end
+      end
+      extend Api::V0::SwaggerResponses::AuthenticationError
+      extend Api::V0::SwaggerResponses::ForbiddenError
+      extend Api::V0::SwaggerResponses::UnprocessableEntityError
+      extend Api::V0::SwaggerResponses::ServerError
+    end
+  end
+
+  swagger_path '/participant/studies/:id/land' do
+    operation :put do
+      key :summary, 'Land a study stage'
+      key :description, 'Land a study stage'
+      key :operationId, 'landStudy'
+      key :produces, [
+        'application/json'
+      ]
+      key :tags, [
+        'Studies'
+      ]
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'ID of the study to land.'
+        key :required, true
+        key :type, :string
+      end
+      response 200 do
+        key :description, 'Success.  Returns no data.'
+      end
+      extend Api::V0::SwaggerResponses::AuthenticationError
+      extend Api::V0::SwaggerResponses::ForbiddenError
+      extend Api::V0::SwaggerResponses::UnprocessableEntityError
+      extend Api::V0::SwaggerResponses::ServerError
+    end
+  end
 
   swagger_path '/participant/studies' do
     operation :get do
@@ -159,7 +224,6 @@ class Api::V0::Participant::StudiesSwagger
         end
       end
       extend Api::V0::SwaggerResponses::AuthenticationError
-      extend Api::V0::SwaggerResponses::UnprocessableEntityError
       extend Api::V0::SwaggerResponses::ServerError
     end
   end

@@ -12,17 +12,13 @@ Rails.application.config.to_prepare do
           attributes_from_study_model(model)
         end
 
-      attributes[:researchers] = model.researchers.map do |researcher_model|
-        Api::V0::Bindings::PublicResearcher.create_from_model(researcher_model)
-      end
-
       new(attributes)
     end
 
     def self.attributes_from_launched_study(model)
       attributes_from_study_model(model.study).tap do |attributes|
         attributes.merge!(
-          model.attributes.slice(
+          model.attributes.with_indifferent_access.slice(
             :first_launched_at,
             :completed_at,
             :opted_out_at
@@ -33,7 +29,10 @@ Rails.application.config.to_prepare do
 
     def self.attributes_from_study_model(model)
       model.attributes.tap do |attributes|
-        attributes.title = model.title_for_participants
+        attributes[:title] = model.title_for_participants
+        attributes[:researchers] = model.researchers.map do |researcher_model|
+          Api::V0::Bindings::PublicResearcher.create_from_model(researcher_model)
+        end
       end
     end
   end

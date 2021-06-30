@@ -1,26 +1,35 @@
 # frozen_string_literal: true
 
 class Api::V0::Participant::StudiesController < Api::V0::BaseController
-  before_action :render_unauthorized_if_no_current_user
-  before_action :set_study, only: [:show, :launch, :land]
+  before_action :render_unauthorized_unless_signed_in!
+  before_action :set_study, only: [:launch, :land]
 
   def index
-    studies = current_user.eligible_studies + current_user.launched_studies
+    launched_studies = current_user.launched_studies
+    unlaunched_studies = current_user.eligible_studies
+                                     .where.not(id: launched_studies.map(&:study_id))
+
+    studies = launched_studies + unlaunched_studies
+
     response_binding = Api::V0::Bindings::ParticipantStudies.new(
       data: studies.map do |study|
-              Api::V0::Bindings::Participant::Study.create_from_model(study)
+              Api::V0::Bindings::ParticipantStudy.create_from_model(study)
             end
     )
     render json: response_binding, status: :ok
   end
 
   def show
-    raise 'nyi'
+    model =
+      current_user.launched_studies.where(study_id: params[:id]).first ||
+      Study.open.find(params[:id])
+    response_binding = Api::V0::Bindings::ParticipantStudy.create_from_model(model)
+    render json: response_binding, status: :ok
   end
 
   def launch
     url = launch_pad.launch
-    response_binding = Api::Vo::Bindings::Launch.new(url: url)
+    response_binding = Api::V0::Bindings::Launch.new(url: url)
     render json: response_binding, status: :ok
   end
 
@@ -32,7 +41,7 @@ class Api::V0::Participant::StudiesController < Api::V0::BaseController
   protected
 
   def set_study
-    @study = Study.find(params[:id])
+    @study = Study.find(params[:study_id])
   end
 
   def launch_pad

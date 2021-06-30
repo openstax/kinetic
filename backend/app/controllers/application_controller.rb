@@ -34,7 +34,7 @@ class ApplicationController < ActionController::API
   end
 
   def current_user
-    @current_user ||= current_user_uuid ? User.new(id: current_user_uuid) : nil
+    @current_user ||= current_user_uuid ? User.new(current_user_uuid) : nil
   end
 
   def render_unauthorized_unless_signed_in!

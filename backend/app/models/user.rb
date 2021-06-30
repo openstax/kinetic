@@ -5,6 +5,8 @@ class User
   attr_reader :id
 
   def initialize(id)
+    raise 'id must be a string' unless id.is_a?(String)
+
     @id = id
   end
 
@@ -17,7 +19,7 @@ class User
   end
 
   def eligible_studies
-    Study.open.all
+    Study.open
   end
 
 end

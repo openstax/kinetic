@@ -14,7 +14,7 @@ class Stage < ApplicationRecord
   protected
 
   def set_order
-    self.order = (Stage.maximum(:order) || -1) + 1
+    self.order = (Stage.where(study_id: study_id).maximum(:order) || -1) + 1
   end
 
   def only_one_stage_per_study_for_now
