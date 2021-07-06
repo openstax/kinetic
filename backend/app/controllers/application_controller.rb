@@ -3,6 +3,8 @@
 require 'openstax/auth/strategy_2'
 
 class ApplicationController < ActionController::API
+  include ActionController::Cookies
+
   def error404
     render json: 'Bad Request', status: 404
   end
