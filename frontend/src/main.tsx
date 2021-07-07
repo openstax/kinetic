@@ -6,6 +6,7 @@ import './styles/main.scss'
 
 const Home = loadAsync('Homepage', () => import('./screens/homepage'))
 const Dev = loadAsync('Dev', () => import('./screens/dev'))
+const Studies = loadAsync('Studies', () => import('./screens/studies'))
 
 ReactDOM.render(
     <React.StrictMode>
@@ -14,9 +15,11 @@ ReactDOM.render(
                 <Route exact path="/">
                     <Home />
                 </Route>
-
                 <Route path="/dev">
                     <Dev />
+                </Route>
+                <Route path="/studies">
+                    <Studies />
                 </Route>
             </Router>
         </div>

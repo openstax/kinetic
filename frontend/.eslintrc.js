@@ -36,10 +36,11 @@ module.exports = {
         'comma-dangle': ['error', 'always-multiline'],
         'no-console':  'error',
         'no-debugger': 'error',
-        'no-unused-vars': [2, { 'varsIgnorePattern': '_+', 'argsIgnorePattern': '^_' }],
+        //'no-unused-vars': [0, { 'ignoreRestSiblings': true,'args': 'none', 'varsIgnorePattern': '_+', 'argsIgnorePattern': '^_' }],
         'consistent-return': [0, { 'treatUndefinedAsUnspecified': true }],
         'object-curly-spacing': ['error', 'always'],
         'quotes': ['error', 'double'],
+        'no-empty': ["error", { "allowEmptyCatch": true }],
         'no-multiple-empty-lines': [2, { 'max': 2, 'maxEOF': 0, 'maxEOF': 0 }],
         'no-multi-spaces': [2, {
             'exceptions': {
@@ -94,7 +95,7 @@ module.exports = {
             'rules': {
                 'react/prop-types': 0,
                 'no-unused-vars': 'off',
-                '@typescript-eslint/no-unused-vars': 'error',
+                '@typescript-eslint/no-unused-vars': [2, { 'ignoreRestSiblings': true, 'varsIgnorePattern': '_+', 'argsIgnorePattern': '^_' }],
             },
         },
     ],

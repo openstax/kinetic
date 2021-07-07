@@ -1,4 +1,4 @@
-import { omit } from '../../lib/util'
+import { omit } from '../lib'
 
 export interface BSVariants {
     primary?: boolean

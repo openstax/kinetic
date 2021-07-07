@@ -9,7 +9,8 @@ export default function Homepage() {
             <PageHeader />
             <h3>hello world</h3>
             <p>Api is: {ENV.API_URL}</p>
-            {ENV.IS_LOCAL && <Link className="btn btn-primary" to="/dev">Development Console</Link>}
+            <Link className="btn" to="/studies">Studies</Link>
+            {ENV.IS_LOCAL && <Link className="btn btn-primary" to="/dev">Development Login</Link>}
         </div>
     )
 

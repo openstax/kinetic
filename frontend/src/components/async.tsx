@@ -1,6 +1,6 @@
 import { React, Component, useEffect } from '../common'
 import { ErrorInfo, ReactNode } from 'react'
-import { Button } from './primitives'
+import { Button } from './button'
 import { OXColoredStripe } from './ox-colored-stripe'
 import LoadingAnimation from './loading-animation'
 import { reloadOnce, forceReload } from '../lib/reload';
@@ -12,11 +12,13 @@ const AsyncLoadError:React.FC<{ error: any }> = ({ error }) => {
     return (
         <div className="invalid-page">
             <OXColoredStripe />
-            <h1>
-                Uh-oh, the page failed to load
-            </h1>
-            <p>{String(error)}</p>
-            <Button primary onClick={() => forceReload()}>Retry</Button>
+            <div className="container pt-2">
+                <h1>
+                    Uh-oh, the page failed to load
+                </h1>
+                <p>{String(error)}</p>
+                <Button primary onClick={() => forceReload()}>Retry</Button>
+            </div>
         </div>
     );
 }

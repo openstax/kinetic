@@ -23,16 +23,12 @@ class Development::UsersController < ApplicationController
     users = {}
     Researcher.all.each do |researcher|
       users[:researchers] ||= []
-      users[:researchers].push({
-                                 researcher.user_id => {
-                                   name: researcher.name
-                                 }
-                               })
+      users[:researchers].push(researcher.slice('user_id', 'name'))
     end
 
     Admin.all.each do |admin|
       users[:admins] ||= []
-      users[:admins].push(admin.user_id)
+      users[:admins].push({ user_id: admin.user_id, name: 'admin' })
     end
 
     render json: users, status: :ok

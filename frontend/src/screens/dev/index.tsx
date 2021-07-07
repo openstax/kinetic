@@ -1,8 +1,41 @@
 import { useEffect, useState } from 'react'
 import { React } from '../../common'
+import { capitalize } from '../../lib/string'
 import { User, AvailableUsers } from './users'
 import { ChevronDoubleLeft } from '@emotion-icons/bootstrap'
-import { LinkButton } from '../../components/primitives'
+import { LinkButton } from '../../components'
+
+interface UserCardProps {
+    users: AvailableUsers
+    type: 'admins' | 'researchers'
+    becomeUser: (ev: React.MouseEvent<HTMLAnchorElement>) => void
+}
+
+const UserCard:React.FC<UserCardProps> = ({ users, type, becomeUser }) => {
+    if (!users[type] || !users[type].length) return null
+
+    return (
+        <div className="col-6">
+            <div className="card">
+                <h5 className="card-header">{capitalize(type)}</h5>
+                <div className="list-group list-group-flush">
+                    {users[type].map(u => (
+                        <a
+                            key={u.id}
+                            href='#'
+                            data-user-id={u.id}
+                            onClick={becomeUser}
+                            className="list-group-item"
+                        >
+                            <b>{u.name}</b> ({u.id})
+                        </a>
+                    ))}
+                </div>
+            </div>
+        </div>
+    )
+}
+
 
 export default function Dev() {
     const [users, setUsers] = useState<AvailableUsers>(new AvailableUsers())
@@ -18,7 +51,7 @@ export default function Dev() {
     const becomeUser = async (ev: React.MouseEvent<HTMLAnchorElement>) => {
         const userId = ev.currentTarget.dataset.userId
         if (userId) {
-            const user = await AvailableUsers.become(userId)
+            const user = await AvailableUsers.become(userId, 'unknown user')
             setCurrentUser(user)
         }
     }
@@ -37,24 +70,8 @@ export default function Dev() {
 
                 {currentUser?.isValid && <h3>Logged in as: {currentUser.id}</h3>}
                 <div className="row">
-                    <div className="col-8">
-                        <div className="card">
-                            <h5 className="card-header">Admins</h5>
-                            <ul className="list-group list-group-flush">
-                                {users.admins.map(u => (
-                                    <a
-                                        key={u.id}
-                                        href='#'
-                                        data-user-id={u.id}
-                                        onClick={becomeUser}
-                                        className="list-group-item"
-                                    >
-                                        {u.id}
-                                    </a>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
+                    <UserCard users={users} type="admins" becomeUser={becomeUser} />
+                    <UserCard users={users} type="researchers" becomeUser={becomeUser} />
                 </div>
             </div>
         </div>
