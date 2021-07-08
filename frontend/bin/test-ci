@@ -3,6 +3,4 @@ set -euo pipefail
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-yarn run generate-local-bindings
-
 $DIR/../bin/env playwright test --config playwright.ci.ts

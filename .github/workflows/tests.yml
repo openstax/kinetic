@@ -28,17 +28,20 @@ jobs:
           curl -i http://localhost:4006/api/v0/swagger.json
           docker logs labs_api_1
       - name: Wait for api to boot
-        run: cd frontend && $(npm bin)/wait-on http://localhost:4006/api/v0/swagger.json
+        working-directory: frontend
+        run: $(npm bin)/wait-on http://localhost:4006/api/v0/swagger.json
       - name: Generate bindings
-        run: cd frontend && yarn run generate-local-bindings
+        working-directory: frontend
+        run: yarn run generate-local-bindings
       - name: Run lint
-        run: cd frontend && yarn run lint
+        working-directory: frontend
+        run: yarn run lint
       - name: Run typecheck
-        run: cd frontend && yarn run typecheck
-      - name: Build docker image
-        run: ./frontend/docker/build --ci
+        working-directory: frontend
+        run: yarn run typecheck
       - name: Run specs
-        run: cd frontend && yarn run test:ci
+        working-directory: frontend
+        run: yarn run test:ci
       - name: Shutdown docker compose
         if: always()
         run: docker-compose down
