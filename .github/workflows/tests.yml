@@ -18,7 +18,6 @@ jobs:
         run: ./frontend/docker/build
       - name: Build and run backend docker
         run: |
-          cp docker-compose.fe-ci.yml docker-compose.override.yml
           docker-compose run api bundle exec rake db:migrate
           docker-compose up -d
       - name: log docker status
@@ -38,8 +37,8 @@ jobs:
         run: ./frontend/docker/run typecheck
       - name: Build docker image
         run: ./frontend/docker/build --ci
-      - name: Run specs within Docker image
-        run: ./frontend/docker/ci
+      - name: Run specs
+        run: cd frontend && yarn run test:ci
       - name: Shutdown docker compose
         if: always()
         run: docker-compose down
