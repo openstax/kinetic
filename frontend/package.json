@@ -9,7 +9,8 @@
     "build": "tsc && bin/env vite build",
     "testserver": "bin/env vite --strictPort",
     "serve": "bin/env vite preview",
-    "test:ci": "bin/env playwright test --config playwright.ci.ts",
+    "generate-local-bindings": "SECURE=false API_HOST=localhost:4006 ./bin/generate-api-bindings",
+    "test:ci": "bin/test-ci",
     "test": "bin/env playwright test",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit"
