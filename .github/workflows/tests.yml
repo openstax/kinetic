@@ -19,7 +19,17 @@ jobs:
       - name: Build and run backend docker
         run: |
           cp docker-compose.fe-ci.yml docker-compose.override.yml
+          docker-compose run api bundle exec rake db:migrate
           docker-compose up -d
+      - name: log docker status
+        run: |
+          sleep 30
+          docker ps -a
+          docker logs labs_api_1
+          curl -i http://localhost:4006/api/v0/swagger.json
+          docker logs labs_api_1
+      - name: Wait for api to boot
+        run: cd frontend && $(npm bin)/wait-on http://localhost:4006/api/v0/swagger.json
       - name: Generate bindings
         run: cd frontend && yarn run generate-local-bindings
       - name: Run lint

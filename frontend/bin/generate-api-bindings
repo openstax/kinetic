@@ -30,13 +30,9 @@ temp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
 
 echo "getting swagger json from: $json_url saving to: $temp_dir/swagger.json"
 
-$(npm bin)/wait-on $json_url
-
 curl -s $json_url \
   | docker run --rm -i stedolan/jq --arg host "$api_host" --arg protocol "$protocol" '. + {host: $host, schemes: [$protocol]}' \
   > "$temp_dir/swagger.json"
-
-cat "$temp_dir/swagger.json"
 
 echo "building swagger into: $temp_dir/src" > /dev/stderr;
 
