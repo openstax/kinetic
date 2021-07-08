@@ -19,7 +19,7 @@ jobs:
       - name: Build and run backend docker
         run: |
           cp docker-compose.fe-ci.yml docker-compose.override.yml
-          docker-compose up -d --build
+          docker-compose up -d
           cd frontend && yarn run wait-on http://localhost:4006/api/v0/swagger.json
       - name: Generate bindings
         run: ./frontend/docker/run generate-local-bindings
@@ -31,6 +31,10 @@ jobs:
         run: ./frontend/docker/build --ci
       - name: Run specs within Docker image
         run: ./frontend/docker/ci
+      - name: Shutdown docker compose
+        if: always()
+        run: docker-compose down
+
   rspec:
     timeout-minutes: 10
     runs-on: ubuntu-18.04
