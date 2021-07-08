@@ -18,15 +18,11 @@ class ApplicationController < ActionController::API
   end
 
   def current_user_uuid
-          Rails.logger.warn '*-'*80
-    Rails.logger.warn Rails.env.development?
     @current_user_uuid ||=
       if Rails.env.development?
         if ENV['STUBBED_USER_UUID']
           ENV['STUBBED_USER_UUID']
         elsif cookies[:stubbed_user_uuid]
-          Rails.logger.warn '*'*80
-          Rails.logger.warn cookies
           cookies[:stubbed_user_uuid]
         end
       else
