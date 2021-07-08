@@ -11,6 +11,22 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: frontend
+      - name: Build docker image
+        run: ./frontend/docker/build
+      - name: Build and run backend docker
+        run: |
+          cp docker-compose.fe-ci.yml docker-compose.override.yml
+          docker-compose up -d --build
+          cd frontend && yarn run waiton http://localhost:4006/api/v0/swagger.json
+      - name: Generate bindings
+        run: ./frontend/docker/run generate-local-bindings
+      - name: Run lint
+        run: ./frontend/docker/run lint
+      - name: Run typecheck
+        run: ./frontend/docker/run typecheck
       - name: Build docker image
         run: ./frontend/docker/build --ci
       - name: Run specs within Docker image

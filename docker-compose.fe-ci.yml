@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  frontend:
+    entrypoint: ["echo", "Service frontend disabled"]
+  petstore:
+    entrypoint: ["echo", "Service petstore disabled"]
