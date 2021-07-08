@@ -35,10 +35,12 @@ RSpec.describe 'Development Users', type: :request do
       expect(response).to have_http_status(:ok)
       expect(response_hash.with_indifferent_access).to match(
         a_hash_including(
-          researchers: a_collection_containing_exactly(
-            { researcher.user_id => { name: researcher.name } }
+          'researchers' => a_collection_containing_exactly(
+            { 'user_id' => researcher.user_id, name: researcher.name }
           ),
-          admins: [admin.user_id]
+          'admins' => a_collection_containing_exactly(
+            { 'user_id' => admin.user_id, 'name' => 'admin' }
+          )
         )
       )
     end
