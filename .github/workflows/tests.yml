@@ -32,9 +32,9 @@ jobs:
       - name: Generate bindings
         run: cd frontend && yarn run generate-local-bindings
       - name: Run lint
-        run: ./frontend/docker/run lint
+        run: cd frontend && yarn run lint
       - name: Run typecheck
-        run: ./frontend/docker/run typecheck
+        run: cd frontend && yarn run typecheck
       - name: Build docker image
         run: ./frontend/docker/build --ci
       - name: Run specs
