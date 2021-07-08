@@ -20,7 +20,7 @@ jobs:
         run: |
           cp docker-compose.fe-ci.yml docker-compose.override.yml
           docker-compose up -d --build
-          cd frontend && yarn run waiton http://localhost:4006/api/v0/swagger.json
+          cd frontend && yarn run wait-on http://localhost:4006/api/v0/swagger.json
       - name: Generate bindings
         run: ./frontend/docker/run generate-local-bindings
       - name: Run lint
