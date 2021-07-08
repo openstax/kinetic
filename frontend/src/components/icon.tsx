@@ -3,9 +3,11 @@ import * as React from 'react'
 import { Icon as IconifyIconComponent, IconifyIcon } from '@iconify/react'
 import plusCircle from '@iconify-icons/bi/plus-circle'
 import close from '@iconify-icons/bi/x-square'
+import back from '@iconify-icons/bi/chevron-double-left'
 
 export const ICONS = {
     close,
+    back,
     plusCircle,
 }
 

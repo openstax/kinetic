@@ -10,7 +10,7 @@ const Studies = loadAsync('Studies', () => import('./screens/studies'))
 
 ReactDOM.render(
     <React.StrictMode>
-        <div className="openstax-labs">
+        <div className="openstax-labs ">
             <Router>
                 <Route exact path="/">
                     <Home />

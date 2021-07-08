@@ -81,7 +81,7 @@ const SaveCancelBtn: React.FC<SaveCancelBtnProps> = ({ onCancel, showControls })
         ev.preventDefault() // stop form from submit
         await fc.submitForm()
     }
-console.log({ isSubmitting })
+
     const onFormCancel = () => {
         resetForm()
         onCancel && onCancel()

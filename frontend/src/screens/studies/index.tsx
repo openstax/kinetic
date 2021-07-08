@@ -1,25 +1,30 @@
 import { useEffect, useState } from 'react'
 import { React } from '../../common'
-import { NewStudy, NewStudyCategoryEnum } from '../../api'
+import { NewStudy, Studies, NewStudyCategoryEnum, Study } from '../../api'
 import {
-    Icon, Alert, Modal, EditingForm as Form, InputField, SelectField, FormHelpers,
+    Box, LinkButton, Icon, Alert, Modal, EditingForm as Form, InputField, SelectField, FormHelpers,
 } from '../../components'
 import { useStudyApi, errorToString } from '../../lib'
 
 
-const AddModalIcon = () => {
+interface AddModalIconProps {
+    onSuccess: () => void
+}
+
+const AddModalIcon:React.FC<AddModalIconProps> = ({ onSuccess }) => {
     const api = useStudyApi()
     const [isShowingModal, setShowingModal] = useState(false)
     const [error, setError] = useState('')
     const addNewStudy = () => {
         setShowingModal(true)
     }
-
+    const onHide = () => setShowingModal(false)
     const saveStudy = async (study: NewStudy, helpers: FormHelpers<NewStudy>) => {
         try {
             await api.addStudy({ study })
             helpers.resetForm()
             setShowingModal(false)
+            onSuccess()
         }
         catch(err) {
             setError(await errorToString(err))
@@ -28,11 +33,12 @@ const AddModalIcon = () => {
     }
     return (
         <React.Fragment>
-            <Modal title="Add Study" show={isShowingModal} onHide={() => setShowingModal(false)}>
+            <Modal title="Add Study" show={isShowingModal} onHide={onHide}>
                 <Modal.Body>
                     <Form<NewStudy>
                         onSubmit={saveStudy}
                         showControls
+                        onCancel={onHide}
                         initialValues={{
                             titleForParticipants: '',
                             shortDescription: '',
@@ -56,26 +62,61 @@ const AddModalIcon = () => {
                 </Modal.Body>
             </Modal>
 
-            <Icon icon="plusCircle" onClick={addNewStudy} />
+            <Icon height="1.5rem" icon="plusCircle" onClick={addNewStudy} />
         </React.Fragment>
     )
 }
 
-export default function Studies() {
-    const api = useStudyApi()
-
-    useEffect(() => {
-        api.getStudies().then((s) => {
-            console.log(s)
-        })
-    }, [])
-
+const StudyRow:React.FC<{ study: Study }> = ({ study }) => {
 
     return (
-        <div className="container studies mt-4">
-            <h1>studies</h1>
-            <AddModalIcon />
+        <tr>
+            <td>{study.titleForParticipants}</td>
+            <td>{study.shortDescription}</td>
+        </tr>
+    )
+}
 
+const StudiesTable:React.FC<{ studies: Study[] }> = ({ studies }) => {
+    if (!studies.length) return null
+
+    return (
+        <table className="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {studies.map((study) => <StudyRow key={study.id} study={study} />)}
+            </tbody>
+        </table>
+    )
+}
+
+export default function AvailableStudies() {
+    const api = useStudyApi()
+    const [studies, setStudies] = useState<Studies>()
+    const fetchStudies = () => {
+        api.getStudies().then(setStudies)
+    }
+    useEffect(fetchStudies, [])
+
+    return (
+        <div className="container studies mt-8">
+            <nav className="navbar fixed-top navbar-light py-1 bg-light">
+                <div className="container-fluid">
+                    <LinkButton icon="back" secondary to="/">
+                        Home
+                    </LinkButton>
+                </div>
+            </nav>
+            <Box align="center" justify="between">
+                <h1>studies</h1>
+                <AddModalIcon onSuccess={fetchStudies} />
+            </Box>
+            <StudiesTable studies={studies?.data || []} />
         </div>
     )
 
