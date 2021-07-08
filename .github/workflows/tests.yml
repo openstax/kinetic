@@ -21,7 +21,7 @@ jobs:
           cp docker-compose.fe-ci.yml docker-compose.override.yml
           docker-compose up -d
       - name: Generate bindings
-        run: ./frontend/docker/run generate-local-bindings
+        run: cd frontend && yarn run generate-local-bindings
       - name: Run lint
         run: ./frontend/docker/run lint
       - name: Run typecheck
