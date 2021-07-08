@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
+set -eo pipefail
+
 # liberally copied from the event capture project.  Thanks Tom!
 # https://github.com/openstax/event-capture-client/blob/master/script/build-swagger-client.bash
 
-set -e; if [ -n "$DEBUG" ]; then set -x; fi
+if [ -n "$DEBUG" ]; then set -x; fi
 
 if [ -z "$(which docker)" ]; then
   echo "docker is required to build swagger" > /dev/stderr;
@@ -26,12 +28,15 @@ json_url="$protocol://$api_host$swagger_path"
 project_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )"
 temp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
 
-echo "getting swagger json from: $json_url"
-echo "wrangling swagger file: $temp_dir/swagger.json" > /dev/stderr;
+echo "getting swagger json from: $json_url saving to: $temp_dir/swagger.json"
+
+$(npm bin)/wait-on $json_url
 
 curl -s $json_url \
   | docker run --rm -i stedolan/jq --arg host "$api_host" --arg protocol "$protocol" '. + {host: $host, schemes: [$protocol]}' \
   > "$temp_dir/swagger.json"
+
+cat "$temp_dir/swagger.json"
 
 echo "building swagger into: $temp_dir/src" > /dev/stderr;
 
