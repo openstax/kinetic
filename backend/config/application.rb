@@ -24,7 +24,7 @@ Bundler.require(*Rails.groups)
 Dotenv.load('/etc/.env', '.env')
 
 module Labs
-  def self.use_cookie_authentication?
+  def self.allow_stubbed_authentication?
     Rails.env.development? || Rails.env.test?
   end
 
@@ -68,6 +68,6 @@ module Labs
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    config.middleware.use ActionDispatch::Cookies if Labs.use_cookie_authentication?
+    config.middleware.use ActionDispatch::Cookies if Labs.allow_stubbed_authentication?
   end
 end
