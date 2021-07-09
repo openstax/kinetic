@@ -25,7 +25,7 @@ class Api::V0::Researcher::StudyResearchersSwagger
     end
   end
 
-  swagger_path '/research/studies/{study_id}/researcher/{user_id}' do
+  swagger_path '/researcher/studies/{study_id}/researcher/{user_id}' do
     operation :post do
       key :summary, 'Add a researcher to a study'
       key :description, 'Add a researcher to a study'
@@ -61,7 +61,7 @@ class Api::V0::Researcher::StudyResearchersSwagger
     end
   end
 
-  swagger_path '/research/studies/{study_id}/researcher/{user_id}' do
+  swagger_path '/researcher/studies/{study_id}/researcher/{user_id}' do
     operation :delete do
       key :summary, 'Remove a researcher from a study'
       key :description, 'Remove a researcher from a study.  Cannot remove the last researcher.'

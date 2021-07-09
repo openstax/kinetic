@@ -5,7 +5,8 @@ class Api::V0::Researcher::StudiesSwagger
   include OpenStax::Swagger::SwaggerBlocksExtensions
 
   COMMON_REQUIRED_STUDY_FIELDS = [
-    :title_for_participants, :description_for_participants
+    :title_for_participants, :description_for_participants,
+    :short_description, :long_description, :category
   ].freeze
 
   swagger_schema :Study do
@@ -117,7 +118,7 @@ class Api::V0::Researcher::StudiesSwagger
     end
   end
 
-  swagger_path '/research/studies' do
+  swagger_path '/researcher/studies' do
     operation :post do
       key :summary, 'Add a study'
       key :description, 'Add a study'
@@ -150,7 +151,7 @@ class Api::V0::Researcher::StudiesSwagger
     end
   end
 
-  swagger_path '/research/studies' do
+  swagger_path '/researcher/studies' do
     operation :get do
       key :summary, 'Get studies for the calling researcher'
       key :description, <<~DESC
@@ -175,7 +176,7 @@ class Api::V0::Researcher::StudiesSwagger
     end
   end
 
-  swagger_path '/research/studies/{id}' do
+  swagger_path '/researcher/studies/{id}' do
     operation :put do
       key :summary, 'Update a study'
       key :description, 'Update a study'

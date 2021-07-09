@@ -1,10 +1,18 @@
 import { useEffect, useState } from '../common'
 
-export const useDelay = (delay = 300): boolean => {
-    const [expired, setExpired] = useState(false)
+export const usePendingState = (isEnabled = true, delay = 150) => {
+    const [isPending, setPending] = useState<boolean>(false)
     useEffect(() => {
-        let id = setTimeout(() => setExpired(true), delay);
-        return () => clearTimeout(id)
-    }, [delay]);
-    return expired
+        if (isEnabled) {
+            const timer = setTimeout(() => {
+                setPending(true)
+            }, delay)
+            return () => {
+                clearTimeout(timer)
+            }
+        } else {
+            setPending(false)
+        }
+    }, [isEnabled, delay])
+    return isPending
 };

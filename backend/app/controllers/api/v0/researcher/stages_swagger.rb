@@ -59,7 +59,7 @@ class Api::V0::Researcher::StagesSwagger
     end
   end
 
-  swagger_path '/research/studies/{id}/stages' do
+  swagger_path '/researcher/studies/{id}/stages' do
     operation :post do
       key :summary, 'Add a stage to a study'
       key :description, 'Add a stage to study'
@@ -99,7 +99,7 @@ class Api::V0::Researcher::StagesSwagger
     end
   end
 
-  swagger_path '/research/stages/{id}' do
+  swagger_path '/researcher/stages/{id}' do
     operation :get do
       key :summary, 'Get a stage'
       key :description, 'Get a stage'
@@ -130,7 +130,7 @@ class Api::V0::Researcher::StagesSwagger
     end
   end
 
-  swagger_path '/research/stages/{id}' do
+  swagger_path '/researcher/stages/{id}' do
     operation :put do
       key :summary, 'Update a stage'
       key :description, 'Update a stage'
@@ -170,7 +170,7 @@ class Api::V0::Researcher::StagesSwagger
     end
   end
 
-  swagger_path '/research/stages/{id}' do
+  swagger_path '/researcher/stages/{id}' do
     operation :delete do
       key :summary, 'Delete a stage'
       key :description, 'Delete a stage'

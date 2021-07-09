@@ -3,6 +3,8 @@
 require 'openstax/auth/strategy_2'
 
 class ApplicationController < ActionController::API
+  include ActionController::Cookies if Labs.allow_stubbed_authentication?
+
   def error404
     render json: 'Bad Request', status: 404
   end
@@ -17,7 +19,7 @@ class ApplicationController < ActionController::API
 
   def current_user_uuid
     @current_user_uuid ||=
-      if Rails.env.development?
+      if Labs.allow_stubbed_authentication?
         if ENV['STUBBED_USER_UUID']
           ENV['STUBBED_USER_UUID']
         elsif cookies[:stubbed_user_uuid]

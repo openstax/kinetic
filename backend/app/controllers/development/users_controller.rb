@@ -3,7 +3,7 @@
 # Define an empty class for production so that the autoloader does not complain
 class Development::UsersController < ApplicationController; end
 
-return unless Rails.env.development? || Rails.env.test?
+return unless Labs.allow_stubbed_authentication?
 
 class Development::UsersController < ApplicationController
   before_action :validate_not_real_production # belt and suspenders
@@ -23,16 +23,12 @@ class Development::UsersController < ApplicationController
     users = {}
     Researcher.all.each do |researcher|
       users[:researchers] ||= []
-      users[:researchers].push({
-                                 researcher.user_id => {
-                                   name: researcher.name
-                                 }
-                               })
+      users[:researchers].push(researcher.slice('user_id', 'name'))
     end
 
     Admin.all.each do |admin|
       users[:admins] ||= []
-      users[:admins].push(admin.user_id)
+      users[:admins].push({ user_id: admin.user_id, name: 'admin' })
     end
 
     render json: users, status: :ok

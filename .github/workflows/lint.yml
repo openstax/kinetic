@@ -4,16 +4,6 @@ on:
   pull_request:
 
 jobs:
-  js:
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build docker image
-        run: ./frontend/docker/build
-      - name: Run lint
-        run: ./frontend/docker/run lint
-      - name: Run typecheck
-        run: ./frontend/docker/run typecheck
   ruby:
     timeout-minutes: 10
     runs-on: ubuntu-18.04

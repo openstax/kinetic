@@ -1,5 +1,5 @@
 import { React, styled, css, keyframes, cx } from '../common'
-import { useDelay } from '../lib/hooks';
+import { usePendingState } from '../lib/hooks';
 
 const Inner = styled.div`
   margin: auto;
@@ -183,7 +183,7 @@ interface LoadingAnimationProps {
 
 
 export default function LoadingAnimation({ className, message = 'Loading…' }: LoadingAnimationProps) {
-    const shouldDisplay = useDelay()
+    const shouldDisplay = usePendingState(true)
     if (!shouldDisplay) return null
 
     return (

@@ -11,10 +11,41 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: frontend
       - name: Build docker image
-        run: ./frontend/docker/build --ci
-      - name: Run specs within Docker image
-        run: ./frontend/docker/ci
+        run: ./frontend/docker/build
+      - name: Build and run backend docker
+        run: |
+          docker-compose run api bundle exec rake db:migrate
+          docker-compose up -d
+      - name: log docker status
+        run: |
+          sleep 30
+          docker ps -a
+          docker logs labs_api_1
+          curl -i http://localhost:4006/api/v0/swagger.json
+          docker logs labs_api_1
+      - name: Wait for api to boot
+        working-directory: frontend
+        run: $(npm bin)/wait-on http://localhost:4006/api/v0/swagger.json
+      - name: Generate bindings
+        working-directory: frontend
+        run: yarn run generate-local-bindings
+      - name: Run lint
+        working-directory: frontend
+        run: yarn run lint
+      - name: Run typecheck
+        working-directory: frontend
+        run: yarn run typecheck
+      - name: Run specs
+        working-directory: frontend
+        run: yarn run test:ci
+      - name: Shutdown docker compose
+        if: always()
+        run: docker-compose down
+
   rspec:
     timeout-minutes: 10
     runs-on: ubuntu-18.04
