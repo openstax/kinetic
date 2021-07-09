@@ -24,6 +24,10 @@ Bundler.require(*Rails.groups)
 Dotenv.load('/etc/.env', '.env')
 
 module Labs
+  def self.use_cookie_authentication?
+    Rails.env.development? || Rails.env.test?
+  end
+
   class Application < Rails::Application
     config.middleware.insert_before 0, Rack::Cors do
       allow do
@@ -64,6 +68,6 @@ module Labs
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    config.middleware.use ActionDispatch::Cookies if Rails.env.development? || Rails.env.test?
+    config.middleware.use ActionDispatch::Cookies if Labs.use_cookie_authentication?
   end
 end
