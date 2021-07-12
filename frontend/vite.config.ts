@@ -24,10 +24,5 @@ export default defineConfig({
     build: {
         manifest: true,
         emptyOutDir: true,
-        rollupOptions: {
-            input: [
-                'src/main.tsx',
-            ],
-        },
     },
 })
