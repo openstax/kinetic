@@ -178,11 +178,11 @@ const Message = styled.h3`
 
 interface LoadingAnimationProps {
     className?: string
-    message: string
+    message?: string
 }
 
 
-export default function LoadingAnimation({ className, message = 'Loading…' }: LoadingAnimationProps) {
+export function LoadingAnimation({ className, message = 'Loading…' }: LoadingAnimationProps) {
     const shouldDisplay = usePendingState(true)
     if (!shouldDisplay) return null
 

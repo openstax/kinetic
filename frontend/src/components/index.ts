@@ -7,4 +7,7 @@ export * from './select'
 export * from './select-field'
 export * from './alert'
 export * from './ox-colored-stripe'
+export * from './loading-animation'
+export * from './ui-states'
+
 export { Box } from 'boxible'

@@ -1,27 +1,7 @@
-import { React, Component, useEffect } from '../common'
+import { React, Component } from '@common'
 import { ErrorInfo, ReactNode } from 'react'
-import { Button } from './button'
-import { OXColoredStripe } from './ox-colored-stripe'
-import LoadingAnimation from './loading-animation'
-import { reloadOnce, forceReload } from '../lib/reload';
-//import { Raven } from '../../models';
-
-const AsyncLoadError:React.FC<{ error: any }> = ({ error }) => {
-    useEffect(reloadOnce, [])
-
-    return (
-        <div className="invalid-page">
-            <OXColoredStripe />
-            <div className="container pt-2">
-                <h1>
-                    Uh-oh, the page failed to load
-                </h1>
-                <p>{String(error)}</p>
-                <Button primary onClick={() => forceReload()}>Retry</Button>
-            </div>
-        </div>
-    );
-}
+import { LoadingAnimation } from './loading-animation'
+import { ErrorPage } from './ui-states'
 
 
 interface ErrorBoundaryProps {
@@ -49,7 +29,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
     public render() {
         if (this.state.error) {
-            return <AsyncLoadError error={this.state.error} />;
+            return <ErrorPage error={this.state.error} />;
         }
         return this.props.children;
     }

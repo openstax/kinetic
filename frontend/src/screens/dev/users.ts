@@ -1,43 +1,9 @@
-import { ENV } from '../../lib/env'
-import { modelize, field, hydrateModel } from '../../common'
-import { computed } from 'mobx'
-
-interface UserPayload {
-    name: string
-    user_id: string
-    role?: string
-}
+import { ENV } from '../../lib'
+import { User, UserPayload } from '@models'
 
 interface UsersPayload {
     admins: UserPayload[]
     researchers?: UserPayload[]
-}
-
-
-export class User {
-
-    static async fetchCurrentUser() {
-        const reply = await fetch(`${ENV.API_URL}/development/users/whoami`, {
-            credentials: 'include',
-        })
-        return hydrateModel(User, await reply.json())
-    }
-
-    @field id: string
-    @field role: string
-    @field name: string
-
-    constructor({ user_id, name, role }: UserPayload) {
-        this.id = user_id
-        this.name = name
-        this.role = role || 'unknown'
-        modelize(this)
-    }
-
-    @computed get isValid() {
-        return Boolean(this.id)
-    }
-
 }
 
 
