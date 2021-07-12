@@ -8,6 +8,13 @@
          "src/api"
      ],
     "compilerOptions": {
+        "baseUrl": "./src",
+        "paths": {
+            "@lib": ["./lib/index.ts"],
+            "@common": ["./common.ts"],
+            "@components": ["./components/index.ts"],
+            "@models": ["./models/index.ts"]
+        },
         "target": "ESNext",
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
         "allowJs": false,

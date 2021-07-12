@@ -1,11 +1,7 @@
-import  { createServer } from 'vite'
-
-export async function globalSetup() {
-    const server = await createServer({
-        logLevel: 'silent',
-    })
-    await server.listen()
-    return async () => server.close()
+// nothing to do but seemed like there should be a general config that ci overrides
+async function globalSetup() {
+    return async () => {  }
 }
+
 
 export default globalSetup

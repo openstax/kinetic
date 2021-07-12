@@ -24,3 +24,12 @@ export const isError = tagTester<Error>('Error')
 export const isSymbol = tagTester<symbol>('Symbol')
 export const isArrayBuffer = tagTester<ArrayBuffer>('ArrayBuffer')
 export const isFunction = tagTester<Function>('Function')
+
+
+export const whenDomReady = (): Promise<void> => {
+    if (document.readyState != 'loading'){
+        return Promise.resolve()
+    } else {
+        return new Promise(r => document.addEventListener('DOMContentLoaded', () => r()));
+    }
+}

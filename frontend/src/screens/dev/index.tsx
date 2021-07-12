@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
-import { React } from '../../common'
-import { capitalize } from '../../lib/string'
-import { User, AvailableUsers } from './users'
+import { React, useEffect, useState, useHistory } from '@common'
+import { capitalize } from '@lib'
+import { useCurrentUser } from '@lib'
+import { AvailableUsers } from './users'
 import { ChevronDoubleLeft } from '@emotion-icons/bootstrap'
-import { LinkButton } from '../../components'
+import { LinkButton } from '@components'
 
 interface UserCardProps {
     users: AvailableUsers
@@ -36,23 +36,19 @@ const UserCard:React.FC<UserCardProps> = ({ users, type, becomeUser }) => {
     )
 }
 
-
 export default function Dev() {
     const [users, setUsers] = useState<AvailableUsers>(new AvailableUsers())
-    const [currentUser, setCurrentUser] = useState<User|null>(null)
-
+    const currentUser = useCurrentUser()
+    const history = useHistory()
     useEffect(() => {
-        User.fetchCurrentUser().then((u) => {
-            if (u.isValid) { setCurrentUser(u) }
-        })
         AvailableUsers.fetch().then(setUsers)
     }, [])
 
     const becomeUser = async (ev: React.MouseEvent<HTMLAnchorElement>) => {
         const userId = ev.currentTarget.dataset.userId
         if (userId) {
-            const user = await AvailableUsers.become(userId, 'unknown user')
-            setCurrentUser(user)
+            currentUser.become(userId)
+            history.push('/')
         }
     }
 
