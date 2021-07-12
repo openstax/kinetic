@@ -3,6 +3,6 @@ set -eo pipefail
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-echo VITE_API_URL=${API_URL:-"http://localhost:4006/"} > $DIR/../.env.local
+echo VITE_API_ADDRESS=${API_ADDRESS:-"http://localhost:4006"} > $DIR/../.env.local
 
 $(npm bin)/$1 "${@:2}"
