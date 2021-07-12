@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 
-test('it shows list of users to login as', async ({ page }) => {
+test('it can login as admin', async ({ page }) => {
     await page.goto('http://localhost:4000/')
     await page.waitForSelector('[data-test-id="login-link"]')
     await page.click('[data-test-id="login-link"]')
