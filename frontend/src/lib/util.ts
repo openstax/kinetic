@@ -30,6 +30,6 @@ export const whenDomReady = (): Promise<void> => {
     if (document.readyState != 'loading'){
         return Promise.resolve()
     } else {
-        return new Promise(r => document.addEventListener('DOMContentLoaded', r));
+        return new Promise(r => document.addEventListener('DOMContentLoaded', () => r()));
     }
 }
