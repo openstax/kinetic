@@ -29,17 +29,17 @@ export function StudyDetails() {
     if (!study) {
         return <LoadingAnimation message="Loading study" />
     }
+    const onCancel = () => history.push('/studies')
 
     const saveStudy = async (study: StudyUpdate) => {
         try {
             await api.updateStudy({ id, study })
-            study
+            onCancel()
         }
         catch(err) {
             setError(await errorToString(err))
         }
     }
-    const onCancel = () => history.push('/studies')
 
     return (
         <div>

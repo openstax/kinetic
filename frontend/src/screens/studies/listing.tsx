@@ -77,7 +77,7 @@ const StudyRow:React.FC<{ study: Study }> = ({ study }) => {
                 backgroundColor: 'white',
                 marginBottom: '1.5rem',
             }}>
-            <Col sm={7}>{study.shortDescription}</Col>
+            <Col sm={7}>{study.titleForResearchers || study.titleForParticipants}</Col>
             <Col sm={2}>{formatDate(study.opensAt)}</Col>
             <Col sm={2}>{getStatusName(study)}</Col>
             <Col sm={1}><Icon icon="tripleDot" onClick={() => history.push(`/studies/${study.id}`)}/></Col>
