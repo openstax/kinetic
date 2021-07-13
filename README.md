@@ -65,9 +65,9 @@ Gets you a hash of research and admin users so you can know who you want to log 
 
 Logs in as the user UUID provided in the path.
 
-```PUT    /development/users/ensure_an_admin_exists```
+```PUT    /development/users/ensure_users_exist```
 
-Call this to make sure an admin exists.  After calling this you can call the `/development/users` endpoint to get the admin's UUID.
+Call this to make sure an admin and researcher user exists.  After calling this you can call the `/development/users` endpoint to get the admin's UUID.
 
 ```GET    /development/users/whoami```
 

@@ -40,7 +40,7 @@ services:
     depends_on:
       - api
     environment:
-      - API_URL=http://localhost:4006
+      - API_ADDRESS=http://localhost:4006
   postgres:
     image: "postgres:11"
     volumes:

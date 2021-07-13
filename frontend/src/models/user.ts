@@ -10,7 +10,7 @@ export interface UserPayload {
 export class User {
 
     static async fetchCurrentUser() {
-        const reply = await fetch(`${ENV.API_URL}/development/users/whoami`, {
+        const reply = await fetch(`${ENV.API_ADDRESS}/development/users/whoami`, {
             credentials: 'include',
         })
         return new User(await reply.json())
@@ -30,7 +30,12 @@ export class User {
         return Boolean(this.id)
     }
 
-    become(id: string) {
-        this.id = id
+    async become(id: string) {
+        const result = await fetch(`${ENV.API_ADDRESS}/development/users/${id}/log_in`, {
+            method: 'PUT', credentials: 'include',
+        })
+        if (result.ok) {
+            this.id = id
+        }
     }
 }

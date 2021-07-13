@@ -34,8 +34,9 @@ class Development::UsersController < ApplicationController
     render json: users, status: :ok
   end
 
-  def ensure_an_admin_exists
+  def ensure_users_exist
     Admin.find_or_create_by(user_id: '00000000-0000-0000-0000-000000000000')
+    Researcher.find_or_create_by(user_id: '00000000-0000-0000-0000-000000000001')
     head :ok
   end
 

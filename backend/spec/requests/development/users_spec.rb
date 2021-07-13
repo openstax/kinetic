@@ -11,16 +11,17 @@ RSpec.describe 'Development Users', type: :request do
 
   let(:uuid) { SecureRandom.uuid }
 
-  describe 'ensure_an_admin_exists' do
-    it 'adds an admin' do
-      put '/development/users/ensure_an_admin_exists'
+  describe 'ensure_users_exist' do
+    it 'adds an admin and researcher' do
+      put '/development/users/ensure_users_exist'
       expect(response).to have_http_status(:ok)
       expect(Admin.count).to eq 1
+      expect(Researcher.count).to eq 1
     end
 
-    it 'does not add more than one admin' do
-      put '/development/users/ensure_an_admin_exists'
-      put '/development/users/ensure_an_admin_exists'
+    it 'does not add more than one user' do
+      put '/development/users/ensure_users_exist'
+      put '/development/users/ensure_users_exist'
       expect(response).to have_http_status(:ok)
       expect(Admin.count).to eq 1
     end
