@@ -10,7 +10,7 @@ interface UsersPayload {
 export class AvailableUsers {
 
     static async fetch() {
-        await fetch(`${ENV.API_ADDRESS}/development/users/ensure_an_admin_exists`, { method: 'PUT', credentials: 'include' })
+        await fetch(`${ENV.API_ADDRESS}/development/users/ensure_users_exist`, { method: 'PUT', credentials: 'include' })
         const reply = await fetch(`${ENV.API_ADDRESS}/development/users`)
         if (reply.ok) {
             return new AvailableUsers(await reply.json())
