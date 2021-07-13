@@ -3,8 +3,8 @@ import { useField } from 'formik'
 import { isNil } from '../lib/util'
 import { FloatingField } from './floating-field'
 import { useFormContext } from './form'
-
 import { FloatingFieldProps } from './floating-field'
+
 const toggleStyle = {
     padding: 0,
     width: '25px',

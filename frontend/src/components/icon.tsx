@@ -4,11 +4,14 @@ import { Icon as IconifyIconComponent, IconifyIcon } from '@iconify/react'
 import plusCircle from '@iconify-icons/bi/plus-circle'
 import close from '@iconify-icons/bi/x-square'
 import back from '@iconify-icons/bi/chevron-double-left'
-
+import tripleDot from '@iconify-icons/bi/three-dots'
+import cancel from '@iconify-icons/bi/x-circle'
 export const ICONS = {
     close,
     back,
     plusCircle,
+    cancel,
+    tripleDot,
 }
 
 export type IconKey = keyof typeof ICONS

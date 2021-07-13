@@ -6,7 +6,7 @@ CMD=$1
 
 docker run \
     -p 4000:4000/tcp \
-    -v $DIR/../dist:/app/dist \
+    -it \
     -v $DIR/../src:/app/src \
     "${PACKAGE:=openstax/labs.frontend:latest}" \
-    yarn run $CMD
+    /bin/bash
