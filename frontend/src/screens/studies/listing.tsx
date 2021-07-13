@@ -20,6 +20,7 @@ const AddModalIcon:React.FC<AddModalIconProps> = ({ onSuccess }) => {
     }
     const onHide = () => setShowingModal(false)
     const saveStudy = async (study: NewStudy, helpers: FormHelpers<NewStudy>) => {
+        setError('')
         try {
             await api.addStudy({ study })
             helpers.resetForm()
@@ -29,7 +30,6 @@ const AddModalIcon:React.FC<AddModalIconProps> = ({ onSuccess }) => {
         catch(err) {
             setError(await errorToString(err))
         }
-
     }
     return (
         <React.Fragment>
@@ -63,7 +63,7 @@ const AddModalIcon:React.FC<AddModalIconProps> = ({ onSuccess }) => {
                 </Modal.Body>
             </Modal>
 
-            <Icon height="1.5rem" icon="plusCircle" onClick={addNewStudy} />
+            <Icon height="1.5rem" icon="plusCircle" data-test-id="add-study" onClick={addNewStudy} />
         </React.Fragment>
     )
 }
@@ -80,7 +80,7 @@ const StudyRow:React.FC<{ study: Study }> = ({ study }) => {
             <Col sm={7}>{study.titleForResearchers || study.titleForParticipants}</Col>
             <Col sm={2}>{formatDate(study.opensAt)}</Col>
             <Col sm={2}>{getStatusName(study)}</Col>
-            <Col sm={1}><Icon icon="tripleDot" onClick={() => history.push(`/studies/${study.id}`)}/></Col>
+            <Col sm={1}><Icon icon="tripleDot" data-test-id="edit-study" onClick={() => history.push(`/studies/${study.id}`)}/></Col>
         </Row>
     )
 }

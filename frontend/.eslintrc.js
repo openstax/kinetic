@@ -63,10 +63,7 @@ module.exports = {
             'error',
             'unix',
         ],
-        'quotes': [
-            'error',
-            'single',
-        ],
+        'quotes': [ 'error', 'single', { "avoidEscape": true, "allowTemplateLiterals": true } ],
         'semi': [0, 'always'],
         'react/prefer-stateless-function': [2, {
             'ignorePureComponents': true,
