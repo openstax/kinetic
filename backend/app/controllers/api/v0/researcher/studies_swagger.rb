@@ -192,7 +192,7 @@ class Api::V0::Researcher::StudiesSwagger
         key :in, :path
         key :description, 'ID of the study to update.'
         key :required, true
-        key :type, :string
+        key :type, :number
       end
       parameter do
         key :name, :study
