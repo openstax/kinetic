@@ -47,7 +47,7 @@ const AddModalIcon:React.FC<AddModalIconProps> = ({ onSuccess }) => {
                             category: NewStudyCategoryEnum.ResearchStudy,
                         }}
                     >
-                        <Alert warning={true} onDismiss={() => setError('')} message={error}>on</Alert>
+                        <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
                         <InputField name="titleForParticipants" id="title" label="Title for participants"/>
                         <SelectField
                             name="category" id="category" label="Category"

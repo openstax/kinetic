@@ -5,8 +5,23 @@ export function omit<T extends object = {}>(obj: T, ...keys: string[]): Partial<
     }, obj);
 }
 
+export function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K> {
+    const ret: any = {};
+    keys.forEach(key => {
+        ret[key] = obj[key];
+    })
+    return ret;
+}
+
 export function isNil(n: any) {
     return n == null
+}
+
+export function remove<T>(el: T, array: T[]): void {
+    const index = array.indexOf(el, 0);
+    if (index > -1) {
+        array.splice(index, 1);
+    }
 }
 
 function tagTester<T>(name: string) {
