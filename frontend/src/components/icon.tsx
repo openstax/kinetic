@@ -6,11 +6,14 @@ import close from '@iconify-icons/bi/x-square'
 import back from '@iconify-icons/bi/chevron-double-left'
 import tripleDot from '@iconify-icons/bi/three-dots'
 import cancel from '@iconify-icons/bi/x-circle'
+import trash from '@iconify-icons/bi/trash'
+
 export const ICONS = {
     close,
     back,
     plusCircle,
     cancel,
+    trash,
     tripleDot,
 }
 

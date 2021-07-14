@@ -25,7 +25,7 @@ const CheckWrapper = styled(FloatingField)({
 })
 
 export interface InputProps extends FloatingFieldProps {
-    type?: 'checkbox' | 'radio' | 'textarea' | 'text' | 'password' | 'email' | 'number' | 'tel'
+    type?: 'checkbox' | 'radio' | 'textarea' | 'text' | 'password' | 'email' | 'number' | 'tel' | 'url'
     autoComplete?: string
     readOnly?: boolean
     onBlur?: any

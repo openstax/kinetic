@@ -75,7 +75,7 @@ class Api::V0::Researcher::StagesSwagger
         key :in, :path
         key :description, 'The study ID'
         key :required, true
-        key :type, :number
+        key :type, :integer
       end
       parameter do
         key :name, :stage
@@ -115,7 +115,7 @@ class Api::V0::Researcher::StagesSwagger
         key :in, :path
         key :description, 'ID of the stage to get.'
         key :required, true
-        key :type, :string
+        key :type, :integer
       end
       response 200 do
         key :description, 'Success.  Returns the stage.'
@@ -146,7 +146,7 @@ class Api::V0::Researcher::StagesSwagger
         key :in, :path
         key :description, 'ID of the stage to update.'
         key :required, true
-        key :type, :string
+        key :type, :integer
       end
       parameter do
         key :name, :stage
@@ -186,7 +186,7 @@ class Api::V0::Researcher::StagesSwagger
         key :in, :path
         key :description, 'ID of the stage to delete.'
         key :required, true
-        key :type, :string
+        key :type, :integer
       end
       response 200 do
         key :description, 'Success.'

@@ -9,4 +9,4 @@ docker run \
     -it \
     -v $DIR/../src:/app/src \
     "${PACKAGE:=openstax/labs.frontend:latest}" \
-    /bin/bash
+    yarn run $CMD

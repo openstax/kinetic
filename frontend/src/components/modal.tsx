@@ -1,12 +1,12 @@
 import { React, cx } from '../common'
-import OverlayModal from 'react-overlays/Modal'
+import OverlayModal, { ModalProps as OverlayModalProps } from 'react-overlays/Modal'
 import { Icon } from './icon'
 
 const renderBackdrop = (props: any) => {
     return <div className="modal-backdrop fade show" {...props} />
 }
 
-interface ModalProps {
+interface ModalProps extends OverlayModalProps {
     className?: string
     title?: React.ReactNode
     header?: React.ReactNode

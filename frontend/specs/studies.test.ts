@@ -18,7 +18,15 @@ test('it can create and edit a study', async ({ page }) => {
     await page.click('testId=studies-table >> css=.row:last-child >> testId=edit-study')
     expect(await page.getAttribute('[name=titleForParticipants]', 'value')).toBe(title)
     await page.fill('[name=titleForParticipants]', `${title} - UPDATED`)
+
+    await page.click('testId=add-stage')
+    await page.fill('[name=url]', 'http://cnx.org/study-this')
+    await page.fill('[name=secret_key]', '1234')
+    await page.click('testId=add-stage-modal >> testId=form-save-btn')
+    expect(await page.textContent('.row.stage')).toContain('qualtrics')
+
     await page.click('testId=form-save-btn')
     await page.waitForLoadState('networkidle')
+
     expect(await page.textContent('testId=studies-table')).toContain(`${title} - UPDATED`)
 });

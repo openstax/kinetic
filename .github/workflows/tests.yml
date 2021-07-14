@@ -33,6 +33,16 @@ jobs:
       - name: Generate bindings
         working-directory: frontend
         run: yarn run generate-local-bindings
+      - name: Check bindings did not change
+        run: |
+          num_diff_files=$(git status --porcelain src/api | wc -l | tr -s ' ' | cut -d ' ' -f 2)
+          if [ "0" = $num_diff_files ]; then
+            echo "Swagger is up to date!"
+            exit 0
+          else
+            echo "Swagger is out of date! Regenerate it and commit it."
+            exit 1
+          fi
       - name: Run lint
         working-directory: frontend
         run: yarn run lint
