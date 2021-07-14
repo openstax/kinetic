@@ -132,7 +132,7 @@ export function StudyDetails() {
     const [error, setError] = useState('')
     const reRender = useForceUpdate()
     const [ study, setStudy ] = useState<Study|null>()
-    const { id } = useParams<{ id: string }>()
+    const id = Number(useParams<{ id: string }>().id)
 
     const fetchStudy = () => {
         api.getStudies().then(studies => {
