@@ -30,4 +30,53 @@ class Api::V0::MiscSwagger
       key :readOnly, true
     end
   end
+
+  swagger_path '/whoami' do
+    operation :get do
+      key :summary, 'Get info about the current user'
+      key :description, <<~DESC
+        Get info about the current user
+      DESC
+      key :operationId, 'getWhoami'
+      key :produces, [
+        'application/json'
+      ]
+      key :tags, [
+        'Misc'
+      ]
+      response 200 do
+        key :description, 'Success.'
+        schema do
+          key :'$ref', :Whoami
+        end
+      end
+      extend Api::V0::SwaggerResponses::UnprocessableEntityError
+      extend Api::V0::SwaggerResponses::ServerError
+    end
+  end
+
+  swagger_path '/environment' do
+    operation :get do
+      key :summary, 'Get info about the deployment environment'
+      key :description, <<~DESC
+        Get info about the deployment environment
+      DESC
+      key :operationId, 'getEnvironment'
+      key :produces, [
+        'application/json'
+      ]
+      key :tags, [
+        'Misc'
+      ]
+      response 200 do
+        key :description, 'Success.'
+        schema do
+          key :'$ref', :Environment
+        end
+      end
+      extend Api::V0::SwaggerResponses::UnprocessableEntityError
+      extend Api::V0::SwaggerResponses::ServerError
+    end
+  end
+
 end
