@@ -39,9 +39,4 @@ class Development::UsersController < ApplicationController
     Researcher.find_or_create_by(user_id: '00000000-0000-0000-0000-000000000001')
     head :ok
   end
-
-  def whoami
-    render json: { user_id: current_user_uuid }, status: :ok
-  end
-
 end

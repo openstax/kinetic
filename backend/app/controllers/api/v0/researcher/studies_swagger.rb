@@ -6,7 +6,7 @@ class Api::V0::Researcher::StudiesSwagger
 
   COMMON_REQUIRED_STUDY_FIELDS = [
     :title_for_participants, :description_for_participants,
-    :short_description, :long_description, :category
+    :short_description, :category
   ].freeze
 
   swagger_schema :Study do

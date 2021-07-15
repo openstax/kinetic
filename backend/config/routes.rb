@@ -28,6 +28,11 @@ Rails.application.routes.draw do
 
       get :swagger, to: 'swagger#json', constraints: { format: :json }
 
+      controller :misc do
+        get :whoami
+        get :environment
+      end
+
       scope :diagnostics, controller: :diagnostics do
         get :exception
         get 'status_code/:status_code', action: :status_code
@@ -41,7 +46,6 @@ Rails.application.routes.draw do
       resources :users, only: [:index] do
         put :log_in
         put :ensure_users_exist, on: :collection
-        get :whoami, on: :collection
       end
     end
   end

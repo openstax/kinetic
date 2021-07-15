@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 module UserHelpers
-  def stub_current_user(uuid_or_researcher)
+  def stub_current_user(uuid_or_object)
     uuid =
-      case uuid_or_researcher
+      case uuid_or_object
       when String
-        uuid_or_researcher
-      when Researcher
-        uuid_or_researcher.user_id
+        uuid_or_object
+      when Researcher, Admin
+        uuid_or_object.user_id
       else
         raise 'Unsupported argument'
       end
