@@ -47,11 +47,10 @@ RSpec.describe 'Development Users', type: :request do
     end
   end
 
-  describe 'log_in & whomai' do
+  describe 'log_in' do
     it 'allows log in' do
       put "/development/users/#{uuid}/log_in"
-      get '/api/v0/whoami'
-      expect(response_hash).to match a_hash_including(user_id: uuid)
+      expect(response).to have_http_status(:ok)
     end
   end
 end
