@@ -47,16 +47,10 @@ RSpec.describe 'Development Users', type: :request do
     end
   end
 
-  describe 'log_in & whomai' do
-    it 'whoami logged out gives nil' do
-      get '/development/users/whoami'
-      expect(response_hash).to eq({ user_id: nil })
-    end
-
+  describe 'log_in' do
     it 'allows log in' do
       put "/development/users/#{uuid}/log_in"
-      get '/development/users/whoami'
-      expect(response_hash).to eq({ user_id: uuid })
+      expect(response).to have_http_status(:ok)
     end
   end
 end

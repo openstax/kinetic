@@ -10,7 +10,7 @@ export interface UserPayload {
 export class User {
 
     static async fetchCurrentUser() {
-        const reply = await fetch(`${ENV.API_ADDRESS}/development/users/whoami`, {
+        const reply = await fetch(`${ENV.API_PATH}/whoami`, {
             credentials: 'include',
         })
         return new User(await reply.json())

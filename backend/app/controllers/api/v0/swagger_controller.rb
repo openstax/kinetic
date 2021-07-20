@@ -45,6 +45,7 @@ class Api::V0::SwaggerController < ApplicationController
     Api::V0::Researcher::StudyResearchersSwagger,
     Api::V0::Researcher::StagesSwagger,
     Api::V0::Participant::StudiesSwagger,
+    Api::V0::MiscSwagger,
     self
   ].freeze
 

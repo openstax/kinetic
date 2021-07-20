@@ -40,8 +40,4 @@ class Development::UsersController < ApplicationController
     head :ok
   end
 
-  def whoami
-    render json: { user_id: current_user_uuid }, status: :ok
-  end
-
 end
