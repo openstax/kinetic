@@ -11,7 +11,6 @@ export const ENV = {
     IS_PROD_MODE: import.meta.env.MODE == 'production',
     API_ADDRESS,
     API_PATH: `${API_ADDRESS}/api/v${API_VERSION}`,
-    ACCOUNTS_URL: 'https://accounts-dev.openstax.org/',
 }
 
 Object.freeze(ENV)

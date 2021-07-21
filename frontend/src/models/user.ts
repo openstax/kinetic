@@ -1,10 +1,10 @@
 import { ENV } from '@lib'
-import { useEffect, useState } from '@common'
 
 export interface UserPayload {
     name: string
     user_id: string
-    role?: string
+    is_admin: boolean
+    is_researcher: boolean
 }
 
 export class User {
@@ -17,13 +17,15 @@ export class User {
     }
 
     id: string
-    role: string
+    is_admin: boolean = false
+    is_researcher: boolean = false
     name: string
 
-    constructor({ user_id, name, role }: UserPayload) {
-        this.id = user_id
-        this.name = name
-        this.role = role || 'unknown'
+    constructor(attrs: UserPayload) {
+        this.id = attrs.user_id
+        this.name = attrs.name
+        this.is_admin = attrs.is_admin || false
+        this.is_researcher = attrs.is_researcher || false
     }
 
     get isValid() {
@@ -34,8 +36,10 @@ export class User {
         const result = await fetch(`${ENV.API_ADDRESS}/development/users/${id}/log_in`, {
             method: 'PUT', credentials: 'include',
         })
+        const payload = await result.json()
         if (result.ok) {
-            this.id = id
+            this.id = payload.user_id
+            Object.assign(this, payload)
         }
     }
 }
