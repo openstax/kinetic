@@ -14,19 +14,19 @@ require 'date'
 
 module Api::V0::Bindings
   class Environment
-    attr_accessor :accounts_env
+    attr_accessor :accounts_env_name
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'accounts_env' => :'accounts_env'
+        :'accounts_env_name' => :'accounts_env_name'
       }
     end
 
     # Attribute type mapping.
     def self.swagger_types
       {
-        :'accounts_env' => :'String'
+        :'accounts_env_name' => :'String'
       }
     end
 
@@ -38,8 +38,8 @@ module Api::V0::Bindings
       # convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h| h[k.to_sym] = v }
 
-      if attributes.has_key?(:'accounts_env')
-        self.accounts_env = attributes[:'accounts_env']
+      if attributes.has_key?(:'accounts_env_name')
+        self.accounts_env_name = attributes[:'accounts_env_name']
       end
     end
 
@@ -61,7 +61,7 @@ module Api::V0::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          accounts_env == o.accounts_env
+          accounts_env_name == o.accounts_env_name
     end
 
     # @see the `==` method
@@ -73,7 +73,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [accounts_env].hash
+      [accounts_env_name].hash
     end
 
     # Builds the object from hash
