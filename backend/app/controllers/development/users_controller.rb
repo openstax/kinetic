@@ -12,8 +12,13 @@ class Development::UsersController < ApplicationController
 
   def log_in
     if params[:user_id] =~ /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/i
-      cookies[:stubbed_user_uuid] = params[:user_id]
-      head :ok
+      uuid = params[:user_id]
+      cookies[:stubbed_user_uuid] = uuid
+      render status: :ok, json: Api::V0::Bindings::Whoami.new(
+        user_id: uuid,
+        is_administrator: Admin.where(user_id: uuid).any?,
+        is_researcher: Researcher.where(user_id: uuid).any?
+      )
     else
       head :unprocessable_entity
     end
