@@ -14,7 +14,7 @@ export const IncorrectUser:React.FC<IncorrectUserProps> = ({ desiredRole }) => {
     if (!env) return <LoadingAnimation />
 
     return (
-        <div className="incorrect-user">
+        <div className="incorrect-user" data-test-id="incorrect-user-panel">
             <OXColoredStripe />
             <div className="container mt-4">
                 <h1>Looks like you‘re not  logged in{desiredRole ? ` as a ${desiredRole}` : ''}.</h1>
