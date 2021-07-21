@@ -22,9 +22,9 @@ export class AvailableUsers {
     researchers: User[] = []
 
     constructor({ admins, researchers }: UsersPayload = { admins: [], researchers: [] }) {
-        this.admins = admins.map(u => new User({ ...u, role: 'admin' }))
+        this.admins = admins.map(u => new User({ ...u, is_admin: true }))
         if (researchers) {
-            this.researchers = researchers.map(u => new User({ ...u, role: 'researcher' }))
+            this.researchers = researchers.map(u => new User({ ...u, is_researcher: true }))
         }
     }
 
