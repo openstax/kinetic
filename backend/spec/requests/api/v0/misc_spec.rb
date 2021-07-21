@@ -48,7 +48,7 @@ RSpec.describe 'Misc', type: :request, api: :v0 do
     it 'returns the environment' do
       allow(ENV).to receive(:[]).with('ACCOUNTS_ENV_NAME').and_return 'foo'
       get '/api/v0/environment'
-      expect(response_hash).to match(accounts_env: 'foo')
+      expect(response_hash).to match(accounts_env_name: 'foo')
     end
   end
 

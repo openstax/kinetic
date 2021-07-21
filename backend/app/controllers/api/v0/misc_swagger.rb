@@ -25,7 +25,7 @@ class Api::V0::MiscSwagger
   end
 
   swagger_schema :Environment do
-    property :accounts_env do
+    property :accounts_env_name do
       key :type, :string
       key :readOnly, true
     end
