@@ -20,6 +20,7 @@ services:
       - TEST_DB_NAME=labs_test
       - TEST_DB_USER=labs
       - TEST_DB_PASS=labs
+      - ACCOUNTS_ENV_NAME=dev
     depends_on:
       - postgres
       - postgres_test
