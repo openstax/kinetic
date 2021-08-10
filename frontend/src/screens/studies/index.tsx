@@ -2,10 +2,16 @@ import { useRouteMatch, Route, Switch } from 'react-router-dom'
 import { React } from '@common'
 import { StudiesListing } from './listing'
 import { StudyDetails } from './details'
-import { LinkButton } from '@components'
+import { LinkButton, IncorrectUser } from '@components'
+import { useCurrentUser } from '@lib'
 
 export default function UsersStudies() {
     let { path } = useRouteMatch();
+    const user = useCurrentUser()
+
+    if (!user.is_researcher) {
+        return <IncorrectUser desiredRole="researcher" />
+    }
 
     return (
         <div className="container studies mt-8">

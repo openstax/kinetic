@@ -1,23 +1,10 @@
 import { React, useEffect } from '@common'
 import { User } from '@models'
-import { LoadingAnimation, OXColoredStripe } from '@components'
+import { LoadingAnimation, IncorrectUser } from '@components'
 import { useLocation } from 'react-router-dom'
 import { ENV } from './env'
 
 export const CurrentUserContext = React.createContext<User | null>(null)
-
-
-const LoginURL = ENV.IS_DEV_MODE ? '/dev/user' : ENV.ACCOUNTS_URL
-
-const Unauthenticated = () => (
-    <div className="homepage unauthenticated">
-        <OXColoredStripe />
-        <div className="container mt-4">
-            <h1>Looks like you‘re not logged in.</h1>
-            <p>Please <a data-test-id="login-link" href={LoginURL}>login</a> before using this site</p>
-        </div>
-    </div>
-)
 
 
 export const CurrentUserProvider:React.FC = ({ children }) => {
@@ -30,7 +17,7 @@ export const CurrentUserProvider:React.FC = ({ children }) => {
     if (
         currentUser?.isValid == false && (ENV.IS_PROD_MODE || !location.pathname.startsWith('/dev/user'))
     ) {
-        return <Unauthenticated />
+        return <IncorrectUser />
     }
 
     return (
