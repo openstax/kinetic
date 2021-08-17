@@ -113,12 +113,12 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
-  routes.default_url_options.merge!(
-    {
-      host: ENV.fetch('HOST'),
-      protocol: 'https'
-    }
-  )
+  # routes.default_url_options.merge!(
+  #   {
+  #     host: ENV.fetch('HOST'),
+  #     protocol: 'https'
+  #   }
+  # )
 
   config.hosts << 'labs-web.herokuapp.com'
 
