@@ -1,0 +1,36 @@
+FROM ruby:2.6.7 as rails
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/* && \
+    gem install bundler --no-document && \
+    bundle config set no-cache 'true' && \
+    bundle config set silence_root_warning 'true'
+
+WORKDIR /code/backend
+
+COPY backend/Gemfile Gemfile
+COPY backend/Gemfile.lock Gemfile.lock
+RUN bundle install
+
+FROM node:14-slim as node
+
+WORKDIR /code/frontend
+
+COPY frontend/package.json ./
+COPY frontend/yarn.lock ./
+RUN yarn install
+
+COPY frontend ./
+
+RUN yarn run build
+
+FROM rails as rails2
+
+WORKDIR /code/backend
+COPY backend ./
+
+COPY --from=node /code/frontend/dist/ ./public/
+
+CMD bundle exec rake about && bundle exec rails server -b '0.0.0.0' -p $PORT
