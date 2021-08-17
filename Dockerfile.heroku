@@ -12,7 +12,7 @@ WORKDIR /code/backend
 
 COPY backend/Gemfile Gemfile
 COPY backend/Gemfile.lock Gemfile.lock
-RUN bundle install
+RUN bundle install --deployment
 
 FROM node:14-slim as node
 
@@ -30,7 +30,8 @@ FROM rails as rails2
 
 WORKDIR /code/backend
 COPY backend ./
-
+ENV RAILS_ENV=production
+ENV RAILS_SERVE_STATIC_FILES=true
 COPY --from=node /code/frontend/dist/ ./public/
 
 CMD bundle exec rake about && bundle exec rails server -b '0.0.0.0' -p $PORT

@@ -119,4 +119,7 @@ Rails.application.configure do
       protocol: 'https'
     }
   )
+
+  config.hosts << 'labs-web.herokuapp.com'
+
 end
