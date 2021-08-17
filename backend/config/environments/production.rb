@@ -122,4 +122,5 @@ Rails.application.configure do
 
   config.hosts << 'labs-web.herokuapp.com'
 
+
 end

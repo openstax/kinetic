@@ -1,3 +1,10 @@
 build:
   docker:
     web: Dockerfile.heroku
+run:
+    web: bundle exec puma
+
+release:
+  image: web
+  command:
+    - bundle exec rake db:migrate
