@@ -1,3 +1,7 @@
+setup:
+  config:
+    SENTRY_RAILS_DSN: $SENTRY_RAILS_DSN
+
 build:
   docker:
     web: Dockerfile.heroku

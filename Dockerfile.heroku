@@ -34,4 +34,6 @@ ENV RAILS_ENV=production
 ENV RAILS_SERVE_STATIC_FILES=true
 COPY --from=node /code/frontend/dist/ ./public/
 
+ARG SENTRY_RAILS_DSN
+
 CMD bundle exec rake about && bundle exec rails server -b '0.0.0.0' -p $PORT
