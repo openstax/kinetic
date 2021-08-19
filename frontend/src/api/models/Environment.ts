@@ -24,7 +24,7 @@ export interface Environment {
      * @type {string}
      * @memberof Environment
      */
-    readonly accountsEnv?: string;
+    readonly accountsEnvName?: string;
 }
 
 export function EnvironmentFromJSON(json: any): Environment {
@@ -37,7 +37,7 @@ export function EnvironmentFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'accountsEnv': !exists(json, 'accounts_env') ? undefined : json['accounts_env'],
+        'accountsEnvName': !exists(json, 'accounts_env_name') ? undefined : json['accounts_env_name'],
     };
 }
 
