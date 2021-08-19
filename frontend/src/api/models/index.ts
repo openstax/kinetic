@@ -1,3 +1,4 @@
+export * from './Environment';
 export * from './Launch';
 export * from './ModelError';
 export * from './NewStage';
@@ -12,3 +13,4 @@ export * from './StageUpdate';
 export * from './Studies';
 export * from './Study';
 export * from './StudyUpdate';
+export * from './Whoami';

@@ -59,7 +59,7 @@ export interface Study {
      * @type {string}
      * @memberof Study
      */
-    longDescription: string;
+    longDescription?: string;
     /**
      * The category of the study object, used for grouping.
      * @type {string}
@@ -128,7 +128,7 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'titleForParticipants': json['title_for_participants'],
         'titleForResearchers': !exists(json, 'title_for_researchers') ? undefined : json['title_for_researchers'],
         'shortDescription': json['short_description'],
-        'longDescription': json['long_description'],
+        'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
         'category': json['category'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
         'opensAt': !exists(json, 'opens_at') ? undefined : (new Date(json['opens_at'])),
