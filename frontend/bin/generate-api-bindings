@@ -34,7 +34,9 @@ curl -s $json_url > "$temp_dir/swagger.json"
 
 echo "building swagger into: $temp_dir/src" > /dev/stderr;
 
-docker run --rm -v "$temp_dir:/shared" openapitools/openapi-generator-cli generate \
+# version locked to 5.1.1 because v5.2.0 generates incorrect TS code
+# https://github.com/swagger-api/swagger-codegen/issues/9459
+docker run --rm -v "$temp_dir:/shared" openapitools/openapi-generator-cli:v5.1.1 generate \
   -i /shared/swagger.json \
   -g typescript-fetch \
   --additional-properties=typescriptThreePlus=true \
