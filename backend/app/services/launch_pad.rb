@@ -20,7 +20,9 @@ class LaunchPad
       else
         completed_stage_ids = user.launched_stages(study: study).map(&:stage_id)
         stage_to_launch = study.stages.where.not(id: completed_stage_ids).order(:order).first
-
+        if stage_to_launch.nil?
+          raise 'No stage to launch exists'
+        end
         LaunchedStage.create!(stage_id: stage_to_launch.id, user_id: user_id)
       end
 

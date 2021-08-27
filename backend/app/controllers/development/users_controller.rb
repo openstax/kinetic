@@ -24,6 +24,11 @@ class Development::UsersController < ApplicationController
     end
   end
 
+  def log_out
+    cookies.delete :stubbed_user_uuid
+    head :ok
+  end
+
   def index
     users = {}
     Researcher.all.each do |researcher|
@@ -35,7 +40,12 @@ class Development::UsersController < ApplicationController
       users[:admins] ||= []
       users[:admins].push({ user_id: admin.user_id, name: 'admin' })
     end
-
+    users[:users] = [
+      { user_id: '00000000-0000-0000-0000-000000000002' },
+      { user_id: '00000000-0000-0000-0000-000000000003' },
+      { user_id: '00000000-0000-0000-0000-000000000004' },
+      { user_id: '00000000-0000-0000-0000-000000000005' }
+    ]
     render json: users, status: :ok
   end
 

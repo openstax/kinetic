@@ -66,7 +66,7 @@ export interface DeleteStageRequest {
 }
 
 export interface GetParticipantStudyRequest {
-    id: string;
+    id: number;
 }
 
 export interface GetStageRequest {
@@ -74,11 +74,11 @@ export interface GetStageRequest {
 }
 
 export interface LandStudyRequest {
-    id: string;
+    id: number;
 }
 
 export interface LaunchStudyRequest {
-    id: string;
+    id: number;
 }
 
 export interface RemoveResearcherFromStudyRequest {
@@ -283,7 +283,7 @@ export class StudiesApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/participant/studies/:id`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/participant/studies/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -375,7 +375,7 @@ export class StudiesApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/participant/studies/:id/land`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/participant/studies/{id}/land`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -406,7 +406,7 @@ export class StudiesApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/participant/studies/:id/launch`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/participant/studies/{id}/launch`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,

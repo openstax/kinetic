@@ -61,7 +61,13 @@ export interface ParticipantStudy {
      * @type {number}
      * @memberof ParticipantStudy
      */
-    durationMinutes?: number;
+    durationMinutes: number;
+    /**
+     * How many points will be awarded for participation in the study
+     * @type {number}
+     * @memberof ParticipantStudy
+     */
+    participationPoints?: number;
     /**
      * When the study was launched; null means not launched
      * @type {Date}
@@ -86,6 +92,12 @@ export interface ParticipantStudy {
      * @memberof ParticipantStudy
      */
     researchers?: Array<PublicResearcher>;
+    /**
+     * Mandatory studies must be completed by all users
+     * @type {boolean}
+     * @memberof ParticipantStudy
+     */
+    isMandatory?: boolean;
 }
 
 /**
@@ -113,11 +125,13 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'shortDescription': json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
         'category': json['category'],
-        'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
+        'durationMinutes': json['duration_minutes'],
+        'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
         'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
         'optedOutAt': !exists(json, 'opted_out_at') ? undefined : (new Date(json['opted_out_at'])),
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(PublicResearcherFromJSON)),
+        'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
     };
 }
 
@@ -136,10 +150,12 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'long_description': value.longDescription,
         'category': value.category,
         'duration_minutes': value.durationMinutes,
+        'participation_points': value.participationPoints,
         'first_launched_at': value.firstLaunchedAt === undefined ? undefined : (value.firstLaunchedAt.toISOString()),
         'completed_at': value.completedAt === undefined ? undefined : (value.completedAt.toISOString()),
         'opted_out_at': value.optedOutAt === undefined ? undefined : (value.optedOutAt.toISOString()),
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(PublicResearcherToJSON)),
+        'is_mandatory': value.isMandatory,
     };
 }
 

@@ -85,6 +85,18 @@ export interface Study {
      */
     closesAt?: Date;
     /**
+     * Mandatory studies must be completed by all users
+     * @type {boolean}
+     * @memberof Study
+     */
+    isMandatory: boolean;
+    /**
+     * How many points will be awarded for participation in the study
+     * @type {number}
+     * @memberof Study
+     */
+    participationPoints?: number;
+    /**
      * The URL to which stages should return after completing
      * @type {string}
      * @memberof Study
@@ -133,6 +145,8 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
         'opensAt': !exists(json, 'opens_at') ? undefined : (new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (new Date(json['closes_at'])),
+        'isMandatory': json['is_mandatory'],
+        'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
         'returnUrl': !exists(json, 'return_url') ? undefined : json['return_url'],
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
@@ -156,6 +170,8 @@ export function StudyToJSON(value?: Study | null): any {
         'duration_minutes': value.durationMinutes,
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt.toISOString()),
+        'is_mandatory': value.isMandatory,
+        'participation_points': value.participationPoints,
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(ResearcherToJSON)),
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),
     };

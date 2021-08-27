@@ -41,6 +41,12 @@ module Api::V0::Bindings
     # When the study closes for participation; null means does not close.
     attr_accessor :closes_at
 
+    # Mandatory studies must be completed by all users
+    attr_accessor :is_mandatory
+
+    # How many points will be awarded for participation in the study
+    attr_accessor :participation_points
+
     # The URL to which stages should return after completing
     attr_accessor :return_url
 
@@ -84,6 +90,8 @@ module Api::V0::Bindings
         :'duration_minutes' => :'duration_minutes',
         :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
+        :'is_mandatory' => :'is_mandatory',
+        :'participation_points' => :'participation_points',
         :'return_url' => :'return_url',
         :'researchers' => :'researchers',
         :'stages' => :'stages'
@@ -102,6 +110,8 @@ module Api::V0::Bindings
         :'duration_minutes' => :'Integer',
         :'opens_at' => :'DateTime',
         :'closes_at' => :'DateTime',
+        :'is_mandatory' => :'BOOLEAN',
+        :'participation_points' => :'Float',
         :'return_url' => :'String',
         :'researchers' => :'Array<Researcher>',
         :'stages' => :'Array<Stage>'
@@ -152,6 +162,14 @@ module Api::V0::Bindings
         self.closes_at = attributes[:'closes_at']
       end
 
+      if attributes.has_key?(:'is_mandatory')
+        self.is_mandatory = attributes[:'is_mandatory']
+      end
+
+      if attributes.has_key?(:'participation_points')
+        self.participation_points = attributes[:'participation_points']
+      end
+
       if attributes.has_key?(:'return_url')
         self.return_url = attributes[:'return_url']
       end
@@ -197,6 +215,10 @@ module Api::V0::Bindings
         invalid_properties.push('invalid value for "category", category cannot be nil.')
       end
 
+      if @is_mandatory.nil?
+        invalid_properties.push('invalid value for "is_mandatory", is_mandatory cannot be nil.')
+      end
+
       invalid_properties
     end
 
@@ -211,6 +233,7 @@ module Api::V0::Bindings
       return false if @category.nil?
       category_validator = EnumAttributeValidator.new('String', ['research_study', 'cognitive_task', 'survey'])
       return false unless category_validator.valid?(@category)
+      return false if @is_mandatory.nil?
       true
     end
 
@@ -262,6 +285,8 @@ module Api::V0::Bindings
           duration_minutes == o.duration_minutes &&
           opens_at == o.opens_at &&
           closes_at == o.closes_at &&
+          is_mandatory == o.is_mandatory &&
+          participation_points == o.participation_points &&
           return_url == o.return_url &&
           researchers == o.researchers &&
           stages == o.stages
@@ -276,7 +301,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, category, duration_minutes, opens_at, closes_at, return_url, researchers, stages].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, category, duration_minutes, opens_at, closes_at, is_mandatory, participation_points, return_url, researchers, stages].hash
     end
 
     # Builds the object from hash

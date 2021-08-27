@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     namespace :development do
       resources :users, only: [:index] do
         put :log_in
+        delete :log_out, on: :collection
         put :ensure_users_exist, on: :collection
         get :whoami, on: :collection
       end

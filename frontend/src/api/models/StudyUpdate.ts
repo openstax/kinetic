@@ -73,6 +73,18 @@ export interface StudyUpdate {
      * @memberof StudyUpdate
      */
     closesAt?: Date;
+    /**
+     * Mandatory studies must be completed by all users
+     * @type {boolean}
+     * @memberof StudyUpdate
+     */
+    isMandatory?: boolean;
+    /**
+     * How many points will be awarded for participation in the study
+     * @type {number}
+     * @memberof StudyUpdate
+     */
+    participationPoints?: number;
 }
 
 /**
@@ -104,6 +116,8 @@ export function StudyUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
         'opensAt': !exists(json, 'opens_at') ? undefined : (new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (new Date(json['closes_at'])),
+        'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
+        'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
     };
 }
 
@@ -124,6 +138,8 @@ export function StudyUpdateToJSON(value?: StudyUpdate | null): any {
         'duration_minutes': value.durationMinutes,
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt.toISOString()),
+        'is_mandatory': value.isMandatory,
+        'participation_points': value.participationPoints,
     };
 }
 

@@ -32,6 +32,9 @@ module Api::V0::Bindings
     # The expected study duration in minutes.
     attr_accessor :duration_minutes
 
+    # How many points will be awarded for participation in the study
+    attr_accessor :participation_points
+
     # When the study was launched; null means not launched
     attr_accessor :first_launched_at
 
@@ -43,6 +46,9 @@ module Api::V0::Bindings
 
     # The study's researchers.
     attr_accessor :researchers
+
+    # Mandatory studies must be completed by all users
+    attr_accessor :is_mandatory
 
     class EnumAttributeValidator
       attr_reader :datatype
@@ -75,10 +81,12 @@ module Api::V0::Bindings
         :'long_description' => :'long_description',
         :'category' => :'category',
         :'duration_minutes' => :'duration_minutes',
+        :'participation_points' => :'participation_points',
         :'first_launched_at' => :'first_launched_at',
         :'completed_at' => :'completed_at',
         :'opted_out_at' => :'opted_out_at',
-        :'researchers' => :'researchers'
+        :'researchers' => :'researchers',
+        :'is_mandatory' => :'is_mandatory'
       }
     end
 
@@ -91,10 +99,12 @@ module Api::V0::Bindings
         :'long_description' => :'String',
         :'category' => :'String',
         :'duration_minutes' => :'Integer',
+        :'participation_points' => :'Float',
         :'first_launched_at' => :'DateTime',
         :'completed_at' => :'DateTime',
         :'opted_out_at' => :'DateTime',
-        :'researchers' => :'Array<PublicResearcher>'
+        :'researchers' => :'Array<PublicResearcher>',
+        :'is_mandatory' => :'BOOLEAN'
       }
     end
 
@@ -130,6 +140,10 @@ module Api::V0::Bindings
         self.duration_minutes = attributes[:'duration_minutes']
       end
 
+      if attributes.has_key?(:'participation_points')
+        self.participation_points = attributes[:'participation_points']
+      end
+
       if attributes.has_key?(:'first_launched_at')
         self.first_launched_at = attributes[:'first_launched_at']
       end
@@ -146,6 +160,10 @@ module Api::V0::Bindings
         if (value = attributes[:'researchers']).is_a?(Array)
           self.researchers = value
         end
+      end
+
+      if attributes.has_key?(:'is_mandatory')
+        self.is_mandatory = attributes[:'is_mandatory']
       end
     end
 
@@ -169,6 +187,10 @@ module Api::V0::Bindings
         invalid_properties.push('invalid value for "category", category cannot be nil.')
       end
 
+      if @duration_minutes.nil?
+        invalid_properties.push('invalid value for "duration_minutes", duration_minutes cannot be nil.')
+      end
+
       invalid_properties
     end
 
@@ -181,6 +203,7 @@ module Api::V0::Bindings
       return false if @category.nil?
       category_validator = EnumAttributeValidator.new('String', ['research_study', 'cognitive_task', 'survey'])
       return false unless category_validator.valid?(@category)
+      return false if @duration_minutes.nil?
       true
     end
 
@@ -205,10 +228,12 @@ module Api::V0::Bindings
           long_description == o.long_description &&
           category == o.category &&
           duration_minutes == o.duration_minutes &&
+          participation_points == o.participation_points &&
           first_launched_at == o.first_launched_at &&
           completed_at == o.completed_at &&
           opted_out_at == o.opted_out_at &&
-          researchers == o.researchers
+          researchers == o.researchers &&
+          is_mandatory == o.is_mandatory
     end
 
     # @see the `==` method
@@ -220,7 +245,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [id, title, short_description, long_description, category, duration_minutes, first_launched_at, completed_at, opted_out_at, researchers].hash
+      [id, title, short_description, long_description, category, duration_minutes, participation_points, first_launched_at, completed_at, opted_out_at, researchers, is_mandatory].hash
     end
 
     # Builds the object from hash

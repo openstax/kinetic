@@ -15,7 +15,7 @@ class Api::V0::Researcher::StudiesController < Api::V0::Researcher::BaseControll
   end
 
   def index
-    studies = current_researcher.studies
+    studies = current_researcher.studies.includes(:researchers, :stages)
     response_binding = Api::V0::Bindings::Studies.new(
       data: studies.map do |study|
               Api::V0::Bindings::Study.create_from_model(study)
