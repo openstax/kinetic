@@ -258,8 +258,16 @@ GEM
       rubocop-ast (>= 1.1.0)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
-    sentry-raven (3.1.2)
+    sentry-rails (4.6.5)
+      railties (>= 5.0)
+      sentry-ruby-core (~> 4.6.0)
+    sentry-ruby (4.6.5)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
       faraday (>= 1.0)
+      sentry-ruby-core (= 4.6.5)
+    sentry-ruby-core (4.6.5)
+      concurrent-ruby
+      faraday
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -314,7 +322,8 @@ DEPENDENCIES
   rubocop
   rubocop-rails
   rubocop-rspec
-  sentry-raven
+  sentry-rails
+  sentry-ruby
   simplecov
   spring
   versionist
