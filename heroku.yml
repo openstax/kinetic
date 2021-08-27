@@ -1,0 +1,14 @@
+setup:
+  config:
+    SENTRY_RAILS_DSN: $SENTRY_RAILS_DSN
+
+build:
+  docker:
+    web: Dockerfile.heroku
+run:
+    web: bundle exec puma
+
+release:
+  image: web
+  command:
+    - bundle exec rake db:migrate
