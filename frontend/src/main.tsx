@@ -10,6 +10,7 @@ import './styles/main.scss'
 const Home = loadAsync('Homepage', () => import('./screens/homepage'))
 const Dev = loadAsync('Dev', () => import('./screens/dev'))
 const Studies = loadAsync('Studies', () => import('./screens/studies'))
+const StudyLanding = loadAsync('Study Landing Page', () => import('./screens/study-landing'))
 
 const AppRoutes = () => {
     const user = useCurrentUser()
@@ -24,6 +25,9 @@ const AppRoutes = () => {
                 </Route>
                 <Route path="/studies">
                     <Studies />
+                </Route>
+                <Route path="/study/land/:studyId">
+                    <StudyLanding />
                 </Route>
                 <Route path="*">
                     <PageNotFound />
