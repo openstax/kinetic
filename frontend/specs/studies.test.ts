@@ -1,3 +1,4 @@
+import { closeStudy, getIdFromUrl } from './helpers';
 import { test, expect, loginAs, faker } from './test'
 
 test('it can create and edit a study', async ({ page }) => {
@@ -21,11 +22,10 @@ test('it can create and edit a study', async ({ page }) => {
     await page.click('testId=form-save-btn')
     await expect(page).not.toHaveSelector('.is-invalid', { timeout: 100 })
 
+
     await page.waitForSelector('.stages-listing')
 
-    expect(
-        await page.evaluate(() => document.location.pathname)
-    ).toMatch(/\d+$/)
+    const studyId = await getIdFromUrl(page)
 
     expect(await page.getAttribute('[name=titleForParticipants]', 'value')).toBe(title)
     await page.fill('[name=titleForParticipants]', `${title} - UPDATED`)
@@ -39,5 +39,11 @@ test('it can create and edit a study', async ({ page }) => {
     await page.click('testId=form-save-btn')
     await page.waitForLoadState('networkidle')
 
-    expect(await page.textContent('testId=studies-table')).toContain(`${title} - UPDATED`)
-});
+    await page.click('testId=back-to-studies')
+    // await page.click('[data-status="Completed"]')
+    await page.waitForLoadState('networkidle')
+    await expect(page).toMatchText('testId=studies-table', RegExp(title))
+
+    await closeStudy({ page, studyId })
+
+})

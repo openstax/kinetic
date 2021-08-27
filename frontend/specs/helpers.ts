@@ -17,6 +17,8 @@ export const TC = {
     },
 }
 
+type TestingLogin = keyof typeof TC.USERS
+
 type TestConfig = typeof TC
 
 export type { TestConfig }
@@ -24,19 +26,17 @@ export type { TestConfig }
 interface goToPageArgs {
     page: Page
     path: string
-    loginAs?: keyof typeof TC.USERS
+    loginAs?: TestingLogin
 }
-export const goToPage = async ({ page, path, loginAs }: goToPageArgs) => {
+export const goToPage = async ({ page, path, loginAs: login }: goToPageArgs) => {
     const url = TC.ORIGIN + path
-    const user = TC.USERS[loginAs || 'researcher']
     await page.goto(url)
-    await page.waitForTimeout(100)
-
+    await page.waitForTimeout(100) // wait for user fetch to complete
     if (await page.$('testId=incorrect-user-panel')) {
-        await page.click('testId=login-link')
-        await page.click(`a[data-user-id="${user}"]`)
+        await loginAs({ page, login: login || 'researcher' })
         await page.goto(url)
     }
+
 }
 
 export const logout = async ({ page }: { page: Page }) => {
@@ -47,24 +47,14 @@ export const logout = async ({ page }: { page: Page }) => {
     })
     await page.goto(TC.ORIGIN)
     await page.waitForSelector('testId=login-link')
-    // await page.waitForTimeout(500)
-
-
-
-    // await page.waitForTimeout(500)
-
-    // const s = await page.$()
-    // if (!s) {
-    //     console.log(s)
-    //     await page.pause()
-    // }
 }
 
-export const loginAs = async ({ page, login }: { page: Page, login: keyof typeof TC.USERS }) => {
+export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin }) => {
     await logout({ page })
     await page.goto('http://localhost:4000/')
     await page.click('testId=login-link')
     await page.click(`[data-user-id="${TC.USERS[login]}"]`)
+    await page.waitForNavigation()
 }
 
 interface createStudyArgs {
@@ -75,17 +65,24 @@ interface createStudyArgs {
 }
 
 export const closeStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
-    loginAs({ page, login: 'researcher' })
+    await loginAs({ page, login: 'researcher' })
     await goToPage({ page, path: `/studies/${studyId}` })
     await setFlatpickrDate({ selector: '[data-field-name=closesAt]', page, date: dayjs().subtract(1, 'day') })
     await page.click('testId=form-save-btn')
 }
 
+export const getIdFromUrl = async (page): Promise<number | undefined> => {
+    const id = await page.evaluate(() => {
+        return window.location.href.match(/\/(\d+)$/)[1]
+    })
+    if (id) {
+        return Number(id)
+    }
+}
+
 export const createStudy = async ({
     page, name, opensAt, isMandatory,
 }: createStudyArgs) => {
-//    await logout({ page })
-
     await goToPage({ page, path: '/studies/new', loginAs: 'researcher' })
     await page.fill('[name=titleForParticipants]', name)
     await setFlatpickrDate({ selector: '[data-field-name=opensAt]', page, date: opensAt })
@@ -105,9 +102,7 @@ export const createStudy = async ({
     await page.click('testId=form-save-btn')
 
     await page.waitForLoadState('networkidle')
-    const studyId = await page.evaluate(() => {
-        return window.location.href.match(/studies\/(\d+)$/)[1]
-    })
+    const studyId = await getIdFromUrl(page)
 
     await logout({ page })
     return studyId

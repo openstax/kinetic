@@ -210,7 +210,6 @@ export function EditStudy() {
                 history.push(`/studies/${savedStudy.id}`)
             } else {
                 await api.updateStudy({ id: Number(id), study: study as any as StudyUpdate })
-                onCancel()
             }
         }
         catch(err) {
@@ -230,7 +229,7 @@ export function EditStudy() {
 
             <nav className="navbar fixed-top navbar-light py-1 bg-dark">
                 <div className="container-fluid d-flex justify-content-between">
-                    <LinkButton icon="back" secondary to="/studies">
+                    <LinkButton icon="back" data-test-id="back-to-studies" secondary to="/studies">
                         Studies
                     </LinkButton>
                     <LaunchStudyButton study={study} />

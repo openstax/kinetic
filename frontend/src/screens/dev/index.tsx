@@ -47,6 +47,7 @@ export default function Dev() {
 
     const becomeUser = async (ev: React.MouseEvent<HTMLAnchorElement>) => {
         const userId = ev.currentTarget.dataset.userId
+        ev.preventDefault()
         if (userId) {
             await currentUser.become(userId)
             history.push('/')
