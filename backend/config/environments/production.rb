@@ -120,6 +120,6 @@ Rails.application.configure do
   #   }
   # )
 
-  config.hosts << 'labs-web.herokuapp.com'
+  config.hosts << 'dev.labs.openstax.org'
 
 end
