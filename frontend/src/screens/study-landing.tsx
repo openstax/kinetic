@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 
 
 export default function UsersStudies() {
-    const { params: { studyId } } = useRouteMatch();
+    const { params: { studyId } } = useRouteMatch<{ studyId: string }>();
     const api = useStudyApi()
     const user = useCurrentUser()
 
@@ -16,7 +16,7 @@ export default function UsersStudies() {
     }
 
     useEffect(() => {
-        api.landStudy({ id: studyId })
+        api.landStudy({ id: Number(studyId) })
     }, [ studyId ])
 
     return (
