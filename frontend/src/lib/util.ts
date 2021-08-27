@@ -48,3 +48,34 @@ export const whenDomReady = (): Promise<void> => {
         return new Promise(r => document.addEventListener('DOMContentLoaded', () => r()));
     }
 }
+
+interface RetryOptions {
+    times?: number
+    interval?: number
+    exponentialBackoff?: boolean
+}
+
+// https://github.com/gregberge/loadable-components/issues/667
+export function retry<T>(
+    fn: () => Promise<T>,
+    { times = 3, interval = 500, exponentialBackoff = true }: RetryOptions = {},
+) {
+    return new Promise<T>((resolve, reject) => {
+        fn()
+            .then(resolve)
+            .catch((error) => {
+                setTimeout(() => {
+                    if (times === 1) {
+                        reject(error)
+                        return
+                    }
+
+                    // Passing on "reject" is the important part
+                    retry(fn, {
+                        times: times - 1,
+                        interval: exponentialBackoff ? interval * 2 : interval,
+                    }).then(resolve, reject)
+                }, interval)
+            })
+    })
+}
