@@ -13,13 +13,14 @@
             "@lib": ["./lib/index.ts"],
             "@common": ["./common.ts"],
             "@components": ["./components/index.ts"],
-            "@models": ["./models/index.ts"]
+            "@models": ["./models/index.ts"],
+            "@api": ["./api/index.ts"]
         },
         "target": "ESNext",
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
         "allowJs": false,
         "skipLibCheck": false,
-        "esModuleInterop": false,
+        "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "strict": true,
         "forceConsistentCasingInFileNames": true,

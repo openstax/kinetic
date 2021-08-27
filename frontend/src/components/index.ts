@@ -12,5 +12,6 @@ export * from './loading-animation'
 export * from './ui-states'
 export * from './col'
 export * from './incorrect-user'
+export * from './logout-button'
 
 export { Box } from 'boxible'

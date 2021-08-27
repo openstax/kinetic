@@ -1,11 +1,20 @@
 import { React, useEffect, useParams, useHistory, useState } from '@common'
-import { Stage, Study, StudyUpdate } from '../../api'
+import * as Yup from 'yup'
+import { useField } from 'formik'
 import {
     LoadingAnimation, Alert, EditingForm as Form, Modal,
     InputField, SelectField, DateField, Row, Col, Icon,
+    LinkButton, Button,
 } from '@components'
-import { StudyValidationSchema } from '@models'
-import { useStudyApi, errorToString, useForceUpdate, pick, remove } from '@lib'
+import { StudyValidationSchema, LaunchStudy } from '@models'
+import { NewStudy, Study, Stage, StudyUpdate, NewStudyCategoryEnum } from '@api'
+import { useStudyApi, errorToString, useForceUpdate, pick, remove, isNil } from '@lib'
+
+type EditingStudy = NewStudy | Study
+
+function isNewStudy(study: EditingStudy): study is NewStudy {
+    return isNil((study as Study).id)
+}
 
 const QualtricsFields = () => (
     <React.Fragment>
@@ -21,6 +30,18 @@ const AvailableStageFields = {
             return { type: 'qualtrics', ...pick(fields, 'url', 'secret_key') }
         },
     },
+}
+
+const LaunchStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
+    const api = useStudyApi()
+    if (isNewStudy(study) || !study.stages?.length) {
+        return null
+    }
+    return (
+        <Button secondary onClick={() => LaunchStudy(api, study)}>
+            Test Launch
+        </Button>
+    )
 }
 
 
@@ -67,8 +88,14 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate():void }> = ({ study,
                         onSubmit={saveStage}
                         showControls
                         onCancel={onHide}
+                        validationSchema={Yup.object().shape({
+                            url: Yup.string().url().required(),
+                            secret_key: Yup.string().required(),
+                        })}
                         initialValues={{
                             type: stageType,
+                            url: '',
+                            secret_key: '',
                         }}
                     >
                         <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
@@ -92,7 +119,9 @@ const StageRow:React.FC<{stage: Stage, onDelete(s: Stage): void}> = ({ stage, on
         <Row className="my-2 stage">
             <Col sm={1}>{stage.order}</Col>
             <Col sm={2}>{(stage.config as any)?.type }</Col>
-            <Col sm={8}>{JSON.stringify(stage.config)}</Col>
+            <Col sm={8}
+                css={{ overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}
+            >{JSON.stringify(stage.config)}</Col>
             <Col sm={1}><Icon icon="trash" onClick={(ev) => {
                 ev.preventDefault()
                 onDelete(stage)
@@ -102,8 +131,16 @@ const StageRow:React.FC<{stage: Stage, onDelete(s: Stage): void}> = ({ stage, on
     )
 }
 
-export const StudyStages: React.FC<{ study: Study, onUpdate(): void }> = ({ study, onUpdate }) => {
+export const StudyStages: React.FC<{ study: EditingStudy, onUpdate(): void }> = ({ study, onUpdate }) => {
     const api = useStudyApi()
+    const [, meta] = useField({
+        type: 'array',
+        name: 'stages',
+        value: !isNewStudy(study) ? (study?.stages || []).map(s => String(s.id)) : [],
+    })
+
+    if (isNewStudy(study)) { return null }
+
     const deleteStage = async (stage: Stage) => {
         await api.deleteStage({ id: stage.id })
         remove(stage, study.stages || [])
@@ -117,8 +154,10 @@ export const StudyStages: React.FC<{ study: Study, onUpdate(): void }> = ({ stud
                     <AddStageModalIcon onCreate={onUpdate} study={study} />
                 </Col>
             </Row>
-            <Row className="mb-2">
-                {!study.stages?.length && <Col as="b">No stages have been defined</Col>}
+            <Row className="mb-2 stages-listing">
+                {!study.stages?.length && (
+                    <Col css={{ fontWeight: 'bold', color: meta.error ? 'red': 'unset' }}>No stages have been defined</Col>
+                )}
                 {(study.stages || [])?.map(stage => <StageRow onDelete={deleteStage} key={stage.id} stage={stage} />)}
             </Row>
         </React.Fragment>
@@ -126,24 +165,36 @@ export const StudyStages: React.FC<{ study: Study, onUpdate(): void }> = ({ stud
 }
 
 
-export function StudyDetails() {
+export function EditStudy() {
     const history = useHistory()
     const api = useStudyApi()
     const [error, setError] = useState('')
     const reRender = useForceUpdate()
-    const [ study, setStudy ] = useState<Study|null>()
-    const id = Number(useParams<{ id: string }>().id)
-
-    const fetchStudy = () => {
+    const [ study, setStudy ] = useState<EditingStudy|null>()
+    const id = useParams<{ id: string }>().id
+    const isNew = 'new' === id
+    useEffect(() => {
+        if (isNew) {
+            setStudy({
+                titleForParticipants: '',
+                isMandatory: false,
+                shortDescription: '',
+                longDescription: '',
+                durationMinutes: '' as any,
+                category: NewStudyCategoryEnum.ResearchStudy as any,
+            })
+            setTimeout(() => { document.querySelector<HTMLInputElement>('#participants-title')?.focus() }, 100)
+            return
+        }
         api.getStudies().then(studies => {
             const study = studies.data?.find(s => s.id == Number(id))
-            if (study) { setStudy(study) }
+            if (study) {
+                setStudy(study) }
             else {
                 setError('study was not found')
             }
         })
-    }
-    useEffect(fetchStudy, [id])
+    }, [id])
 
     if (!study) {
         return <LoadingAnimation message="Loading study" />
@@ -151,30 +202,53 @@ export function StudyDetails() {
     const onCancel = () => {
         history.push('/studies')
     }
-    const saveStudy = async (study: Study) => {
+    const saveStudy = async (study: EditingStudy) => {
         try {
-            await api.updateStudy({ id, study: study as any as StudyUpdate })
-            onCancel()
+            if (isNew) {
+                const savedStudy = await api.addStudy({ study: study as any as NewStudy })
+                setStudy(savedStudy)
+                history.push(`/studies/${savedStudy.id}`)
+            } else {
+                await api.updateStudy({ id: Number(id), study: study as any as StudyUpdate })
+                onCancel()
+            }
         }
         catch(err) {
             setError(await errorToString(err))
         }
     }
 
-    return (
-        <div>
+    const editingValidationSchema = isNewStudy(study) ? StudyValidationSchema.clone() : StudyValidationSchema.concat(
+        Yup.object().shape({
+            stages: Yup.array().min(1).required(),
+        })
+    )
 
-            <Form<Study>
+
+    return (
+        <div className="container studies mt-8">
+
+            <nav className="navbar fixed-top navbar-light py-1 bg-dark">
+                <div className="container-fluid d-flex justify-content-between">
+                    <LinkButton icon="back" secondary to="/studies">
+                        Studies
+                    </LinkButton>
+                    <LaunchStudyButton study={study} />
+                </div>
+            </nav>
+
+            <Form<EditingStudy>
                 onSubmit={saveStudy}
                 showControls
                 onCancel={onCancel}
                 initialValues={study}
-                validationSchema={StudyValidationSchema}
+                validationSchema={editingValidationSchema}
             >
                 <Alert warning={true} onDismiss={() => setError('')} message={error}>on</Alert>
                 <InputField name="titleForParticipants" id="participants-title" label="Title for participants" />
                 <InputField name="titleForResearchers" id="researchers-title" label="Title for researchers" />
                 <InputField name="durationMinutes" id="duration-mins" label="Duration Minutes" type="number" />
+                <InputField name="isMandatory" id="is-mandatory" label="Mandatory study" hint="(must be completed before any others)" type="checkbox" />
                 <StudyStages study={study} onUpdate={reRender} />
                 <SelectField
                     name="category" id="category" label="Category"

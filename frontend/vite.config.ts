@@ -16,6 +16,7 @@ export default defineConfig({
             { find: '@lib', replacement: '/src/lib' },
             { find: '@components', replacement: '/src/components' },
             { find: '@models', replacement: '/src/models' },
+            { find: '@api', replacement: '/src/api' },
         ],
     },
     server: {
