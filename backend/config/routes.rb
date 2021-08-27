@@ -57,6 +57,7 @@ Rails.application.routes.draw do
     get 'returning/:id', as: :returning, to: 'none#none'
   end
 
-  match '*path', via: :all, to: 'application#error404'
+  match '*path', via: :get, to: 'static#catchall'
+  match '*path', via: :all, to: 'static#error404'
 end
 # rubocop:enable Metrics/BlockLength
