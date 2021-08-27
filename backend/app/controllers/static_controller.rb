@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StaticController < ActionController::Base
   def catchall
     render file: 'public/index.html'

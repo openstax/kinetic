@@ -5,7 +5,6 @@ require 'openstax/auth/strategy_2'
 class ApplicationController < ActionController::API
   include ActionController::Cookies if Labs.allow_stubbed_authentication?
 
-
   protected
 
   include RescueFromUnlessLocal
