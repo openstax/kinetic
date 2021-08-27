@@ -171,10 +171,6 @@ module Api::V0::Bindings
         invalid_properties.push('invalid value for "category", category cannot be nil.')
       end
 
-      if @is_mandatory.nil?
-        invalid_properties.push('invalid value for "is_mandatory", is_mandatory cannot be nil.')
-      end
-
       invalid_properties
     end
 
@@ -188,7 +184,6 @@ module Api::V0::Bindings
       return false if @category.nil?
       category_validator = EnumAttributeValidator.new('String', ['research_study', 'cognitive_task', 'survey'])
       return false unless category_validator.valid?(@category)
-      return false if @is_mandatory.nil?
       true
     end
 

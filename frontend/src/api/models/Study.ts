@@ -89,7 +89,7 @@ export interface Study {
      * @type {boolean}
      * @memberof Study
      */
-    isMandatory: boolean;
+    isMandatory?: boolean;
     /**
      * How many points will be awarded for participation in the study
      * @type {number}
@@ -145,7 +145,7 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
         'opensAt': !exists(json, 'opens_at') ? undefined : (new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (new Date(json['closes_at'])),
-        'isMandatory': json['is_mandatory'],
+        'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
         'returnUrl': !exists(json, 'return_url') ? undefined : json['return_url'],
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
