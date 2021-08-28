@@ -41,6 +41,9 @@ module Api::V0::Bindings
     # When the study was completed; null means not completed.
     attr_accessor :completed_at
 
+    # When the study ends; null means open indefinitely.
+    attr_accessor :closes_at
+
     # When the study was opted-out of; null means not opted out.
     attr_accessor :opted_out_at
 
@@ -84,6 +87,7 @@ module Api::V0::Bindings
         :'participation_points' => :'participation_points',
         :'first_launched_at' => :'first_launched_at',
         :'completed_at' => :'completed_at',
+        :'closes_at' => :'closes_at',
         :'opted_out_at' => :'opted_out_at',
         :'researchers' => :'researchers',
         :'is_mandatory' => :'is_mandatory'
@@ -102,6 +106,7 @@ module Api::V0::Bindings
         :'participation_points' => :'Float',
         :'first_launched_at' => :'DateTime',
         :'completed_at' => :'DateTime',
+        :'closes_at' => :'DateTime',
         :'opted_out_at' => :'DateTime',
         :'researchers' => :'Array<PublicResearcher>',
         :'is_mandatory' => :'BOOLEAN'
@@ -150,6 +155,10 @@ module Api::V0::Bindings
 
       if attributes.has_key?(:'completed_at')
         self.completed_at = attributes[:'completed_at']
+      end
+
+      if attributes.has_key?(:'closes_at')
+        self.closes_at = attributes[:'closes_at']
       end
 
       if attributes.has_key?(:'opted_out_at')
@@ -231,6 +240,7 @@ module Api::V0::Bindings
           participation_points == o.participation_points &&
           first_launched_at == o.first_launched_at &&
           completed_at == o.completed_at &&
+          closes_at == o.closes_at &&
           opted_out_at == o.opted_out_at &&
           researchers == o.researchers &&
           is_mandatory == o.is_mandatory
@@ -245,7 +255,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [id, title, short_description, long_description, category, duration_minutes, participation_points, first_launched_at, completed_at, opted_out_at, researchers, is_mandatory].hash
+      [id, title, short_description, long_description, category, duration_minutes, participation_points, first_launched_at, completed_at, closes_at, opted_out_at, researchers, is_mandatory].hash
     end
 
     # Builds the object from hash

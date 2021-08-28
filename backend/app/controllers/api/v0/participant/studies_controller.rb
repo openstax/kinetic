@@ -6,6 +6,7 @@ class Api::V0::Participant::StudiesController < Api::V0::BaseController
 
   def index
     launched_studies = current_user.launched_studies
+
     unlaunched_studies = current_user.eligible_studies
                                      .where.not(id: launched_studies.map(&:study_id))
 

@@ -75,6 +75,11 @@ class Api::V0::Participant::StudiesSwagger
       key :format, 'date-time'
       key :description, 'When the study was completed; null means not completed.'
     end
+    property :closes_at do
+      key :type, :string
+      key :format, 'date-time'
+      key :description, 'When the study ends; null means open indefinitely.'
+    end
     property :opted_out_at do
       key :type, :string
       key :format, 'date-time'
