@@ -1,8 +1,8 @@
-import { React, useEffect, useState } from '@common'
+import { React, cx, useEffect, useState } from '@common'
 import { ParticipantStudies } from '@api'
 import { Box, Col, LinkButton, LoadingAnimation, Row, Icon } from '@components'
 import { useStudyApi } from '@lib'
-import { LaunchStudy } from '@models'
+import { isStudyLaunchable, LaunchStudy } from '@models'
 
 
 export enum StudyTypes {
@@ -25,16 +25,24 @@ const StudyTypeBlock:React.FC<StudyBlockProps> = ({ type, studies: allStudies })
     return (
         <div>
             <h3>{StudyTypes[type]}</h3>
-            <Row>
+            <Row css={{ marginBottom: '3rem' }}>
                 {studies.map(s => (
                     <Col key={s.id} sm={12} md={6} align="stretch">
                         <Box
                             flex
-                            className="card raise-on-hover"
-                            onClick={() => LaunchStudy(api, s)}
+                            className={cx('card', {
+                                'raise-on-hover': !s.completedAt,
+                            })}
+                            css={{
+                                opacity: s.completedAt ? 0.7 : 1.0,
+                            }}
+                            onClick={s.completedAt ? undefined : () => LaunchStudy(api, s)}
                         >
                             <Box className="card-body" direction="column">
-                                <h5 className="card-title">{s.title}</h5>
+                                <Box justify="between">
+                                    <h5 className="card-title">{s.title}</h5>
+                                    {s.completedAt && <Icon icon="checkCircle" width="30px" color="green" />}
+                                </Box>
                                 <p>{s.shortDescription}</p>
                                 <Box flex />
                                 <Box css={{ fontSize: '14px' }} justify="between">
@@ -59,7 +67,7 @@ export const UserListing = () => {
     const [studies, setStudies] = useState<ParticipantStudies>()
     useEffect(() => {
         api.getParticipantStudies().then((studies) => {
-            const mandatory = studies.data?.find(s => s.isMandatory)
+            const mandatory = studies.data?.find(s => isStudyLaunchable(s) && s.isMandatory)
             if (mandatory) {
                 LaunchStudy(api, mandatory)
             } else {
