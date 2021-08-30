@@ -1,4 +1,4 @@
-import { React, useEffect, useParams, useHistory, useState } from '@common'
+import { React, useEffect, useParams, useState } from '@common'
 import {
     LoadingAnimation, Row, Col, LinkButton, Button, Box,
 } from '@components'
@@ -25,7 +25,6 @@ const LaunchStudyButton: React.FC<{ study: ParticipantStudy }> = ({ study }) => 
 
 export const StudyDetails:React.FC = () => {
     const api = useStudyApi()
-    const [error, setError] = useState('')
 
     const [ study, setStudy ] = useState<ParticipantStudy|null>()
     const id = useParams<{ id: string }>().id
@@ -42,7 +41,7 @@ export const StudyDetails:React.FC = () => {
     }
 
     const category = titleize(study.category)
-    const researcher = study.researchers[0]
+    const researcher = (study.researchers || [])[0] || {}
 
     return (
         <div className="studies mt-6">
@@ -71,36 +70,36 @@ export const StudyDetails:React.FC = () => {
                         </Box>
                     </Box>
                 </div>
-        </div>
-        <div className="container mt-4 d-flex flex-row">
-            <Row css={{width: '100%'}}>
-                <Col md={8} sm={8} direction="column">
-                    <h5>{category} details</h5>
-                    <p>{study.longDescription}</p>
-                    {study.closesAt && (
-                        <Box gap direction="column">
-                            <h5>Close Date</h5>
-                            <span>{dayjs(study.closesAt).format('LL')}</span>
-                        </Box>
-                    )}
-                </Col>
+            </div>
+            <div className="container mt-4 d-flex flex-row">
+                <Row css={{ width: '100%' }}>
+                    <Col md={8} sm={8} direction="column">
+                        <h5>{category} details</h5>
+                        <p>{study.longDescription}</p>
+                        {study.closesAt && (
+                            <Box gap direction="column">
+                                <h5>Close Date</h5>
+                                <span>{dayjs(study.closesAt).format('LL')}</span>
+                            </Box>
+                        )}
+                    </Col>
 
-                <Col sm={4} direction="column">
-                    <h5>
-                        About the researcher
-                    </h5>
-                    <b>
-                        {researcher.name}
-                    </b>
-                    <b className="text-black-50 mt-1">
-                        {researcher.institution}
-                    </b>
-                    <p className="mt-2">
-                        {researcher.bio}
-                    </p>
-                </Col>
-            </Row>
-        </div>
+                    <Col sm={4} direction="column">
+                        <h5>
+                            About the researcher
+                        </h5>
+                        <b>
+                            {researcher.name}
+                        </b>
+                        <b className="text-black-50 mt-1">
+                            {researcher.institution}
+                        </b>
+                        <p className="mt-2">
+                            {researcher.bio}
+                        </p>
+                    </Col>
+                </Row>
+            </div>
         </div>
     )
 

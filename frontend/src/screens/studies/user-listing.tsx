@@ -1,4 +1,4 @@
-import { React, cx, useEffect, useState, useHistory } from '@common'
+import { React, useEffect, useState, useHistory } from '@common'
 import { ParticipantStudies } from '@api'
 import { Box, Col, LinkButton, LoadingAnimation, Row, Icon } from '@components'
 import { useStudyApi } from '@lib'
