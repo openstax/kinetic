@@ -2,7 +2,8 @@ import { useRouteMatch, Route, Switch } from 'react-router-dom'
 import { React } from '@common'
 import { StudiesListing } from './listing'
 import { EditStudy } from './edit'
-import { IncorrectUser } from '@components'
+import { StudyDetails } from './details'
+import { IncorrectUser, PageNotFound } from '@components'
 import { useCurrentUser } from '@lib'
 
 
@@ -15,13 +16,19 @@ export default function UsersStudies() {
     }
 
     return (
-        <div className="container studies mt-8">
+        <div className="studies">
             <Switch>
                 <Route exact path={path}>
                     <StudiesListing />
                 </Route>
-                <Route path={`${path}/:id`} exact>
+                <Route path={'/study/edit/:id'} exact>
                     <EditStudy />
+                </Route>
+                <Route path={'/study/details/:id'} exact>
+                    <StudyDetails />
+                </Route>
+                <Route path="*">
+                    <PageNotFound />
                 </Route>
             </Switch>
         </div>

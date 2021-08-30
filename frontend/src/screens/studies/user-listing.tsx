@@ -1,4 +1,4 @@
-import { React, cx, useEffect, useState } from '@common'
+import { React, cx, useEffect, useState, useHistory } from '@common'
 import { ParticipantStudies } from '@api'
 import { Box, Col, LinkButton, LoadingAnimation, Row, Icon } from '@components'
 import { useStudyApi } from '@lib'
@@ -17,10 +17,9 @@ interface StudyBlockProps {
 }
 
 const StudyTypeBlock:React.FC<StudyBlockProps> = ({ type, studies: allStudies }) => {
-    const api = useStudyApi()
+    const history = useHistory()
     const studies = (allStudies.data || []).filter(st => st.category == type)
     if (!studies.length) { return null }
-
 
     return (
         <div>
@@ -30,18 +29,17 @@ const StudyTypeBlock:React.FC<StudyBlockProps> = ({ type, studies: allStudies })
                     <Col key={s.id} sm={12} md={6} align="stretch">
                         <Box
                             flex
-                            className={cx('card', {
-                                'raise-on-hover': !s.completedAt,
-                            })}
+                            className="card raise-on-hover"
                             css={{
                                 opacity: s.completedAt ? 0.7 : 1.0,
                             }}
-                            onClick={s.completedAt ? undefined : () => LaunchStudy(api, s)}
+                            data-study-id={s.id}
+                            onClick={() => history.push(`/study/details/${s.id}`)}
                         >
                             <Box className="card-body" direction="column">
                                 <Box justify="between">
                                     <h5 className="card-title">{s.title}</h5>
-                                    {s.completedAt && <Icon icon="checkCircle" width="30px" color="green" />}
+                                    {s.completedAt && <Icon icon="checkCircle" css={{ flex: '0 0 25px' }} color="green" />}
                                 </Box>
                                 <p>{s.shortDescription}</p>
                                 <Box flex />

@@ -7,6 +7,8 @@ test('displays studies', async ({ page }) => {
     await goToPage({ page, path: '/studies', loginAs: 'user' })
     await page.waitForTimeout(100)
     await expect(page).toMatchText(RegExp(studyName))
+    await page.click(`[data-study-id="${studyId}"]`)
+
     await closeStudy({ page, studyId })
 })
 

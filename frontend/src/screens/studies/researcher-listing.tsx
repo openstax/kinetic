@@ -18,7 +18,7 @@ const StudyRow:React.FC<{ study: Study }> = ({ study }) => {
             <Col sm={7}>{study.titleForResearchers || study.titleForParticipants}</Col>
             <Col sm={2}>{formatDate(study.opensAt)}</Col>
             <Col sm={2}>{getStatusName(study)}</Col>
-            <Col sm={1}><Icon icon="tripleDot" data-test-id="edit-study" onClick={() => history.push(`/studies/${study.id}`)}/></Col>
+            <Col sm={1}><Icon icon="tripleDot" data-test-id="edit-study" onClick={() => history.push(`/study/edit/${study.id}`)}/></Col>
         </Row>
     )
 }
@@ -75,7 +75,7 @@ export const ResearcherListing = () => {
                     height="1.5rem"
                     icon="plusCircle"
                     data-test-id="add-study"
-                    onClick={() => history.push('/studies/new')}
+                    onClick={() => history.push('/study/edit/new')}
                 />
             </Box>
             <ul className="nav nav-tabs">

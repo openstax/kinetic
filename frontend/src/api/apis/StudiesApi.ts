@@ -284,7 +284,7 @@ export class StudiesApi extends runtime.BaseAPI {
 
         const response = await this.request({
             path: `/participant/studies/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'PUT',
+            method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         });

@@ -132,7 +132,7 @@ class Api::V0::Participant::StudiesSwagger
   end
 
   swagger_path '/participant/studies/{id}' do
-    operation :put do
+    operation :get do
       key :summary, 'Get participant-visible info for a study'
       key :description, 'Get participant-visible info for a study'
       key :operationId, 'getParticipantStudy'

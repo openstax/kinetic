@@ -13,3 +13,7 @@ export function toSentence(arry: string | string[], join = 'and') {
         return arry[0];
     }
 }
+
+export const titleize = (input: string) => {
+    return input.toLowerCase().replace('_', ' ').replace(/(?:^|\s|-)\S/g, x => x.toUpperCase())
+}

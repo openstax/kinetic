@@ -66,7 +66,7 @@ interface createStudyArgs {
 
 export const closeStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
     await loginAs({ page, login: 'researcher' })
-    await goToPage({ page, path: `/studies/${studyId}` })
+    await goToPage({ page, path: `/study/edit/${studyId}` })
     await setFlatpickrDate({ selector: '[data-field-name=closesAt]', page, date: dayjs().subtract(1, 'day') })
     await page.click('testId=form-save-btn')
 }
@@ -83,7 +83,7 @@ export const getIdFromUrl = async (page): Promise<number | undefined> => {
 export const createStudy = async ({
     page, name, opensAt, isMandatory,
 }: createStudyArgs) => {
-    await goToPage({ page, path: '/studies/new', loginAs: 'researcher' })
+    await goToPage({ page, path: '/study/edit/new', loginAs: 'researcher' })
     await page.fill('[name=titleForParticipants]', name)
     await setFlatpickrDate({ selector: '[data-field-name=opensAt]', page, date: opensAt })
     if (isMandatory) {

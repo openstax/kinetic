@@ -207,7 +207,7 @@ export function EditStudy() {
             if (isNew) {
                 const savedStudy = await api.addStudy({ study: study as any as NewStudy })
                 setStudy(savedStudy)
-                history.push(`/studies/${savedStudy.id}`)
+                history.push(`/study/edit/${savedStudy.id}`)
             } else {
                 await api.updateStudy({ id: Number(id), study: study as any as StudyUpdate })
             }
