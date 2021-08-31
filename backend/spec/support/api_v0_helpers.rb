@@ -72,19 +72,23 @@ module ApiV0Helpers
   end
 
   def api_post(*args, &block)
-    post(*prep_request_args(args), &block)
+    url, opts = prep_request_args(args)
+    post(url, **opts, &block)
   end
 
   def api_get(*args, &block)
-    get(*prep_request_args(args), &block)
+    url, opts = prep_request_args(args)
+    get(url, **opts, &block)
   end
 
   def api_put(*args, &block)
-    put(*prep_request_args(args), &block)
+    url, opts = prep_request_args(args)
+    put(url, **opts, &block)
   end
 
   def api_delete(*args, &block)
-    delete(*prep_request_args(args), &block)
+    url, opts = prep_request_args(args)
+    delete(url, **opts, &block)
   end
 
   def add_path_prefix(args)
