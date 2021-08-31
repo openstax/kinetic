@@ -1,4 +1,4 @@
-FROM ruby:2.6.8
+FROM ruby:3.0.1
 
 ARG bundler_version
 
