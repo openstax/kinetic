@@ -1,4 +1,4 @@
-FROM ruby:2.6.7 as rails
+FROM ruby:3.0.1 as ruby
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -26,14 +26,14 @@ COPY frontend ./
 
 RUN yarn run build
 
-FROM rails as rails2
+FROM ruby as ruby2
 
 WORKDIR /code/backend
 COPY backend ./
-ENV RAILS_ENV=production
-ENV RAILS_SERVE_STATIC_FILES=true
+ENV RUBY_ENV=production
+ENV RUBY_SERVE_STATIC_FILES=true
 COPY --from=node /code/frontend/dist/ ./public/
 
-ARG SENTRY_RAILS_DSN
-
+ARG SENTRY_RUBY_DSN
+ENV RAILS_ENV=production
 CMD bundle exec rake about && bundle exec rails server -b '0.0.0.0' -p $PORT

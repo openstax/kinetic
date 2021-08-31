@@ -20,7 +20,7 @@ test('it can create and edit a study', async ({ page }) => {
 
 
     await page.click('testId=form-save-btn')
-    await expect(page).not.toHaveSelector('.is-invalid', { timeout: 100 })
+    await expect(page).not.toHaveSelector('.is-invalid', { timeout: 500 })
 
 
     await page.waitForSelector('.stages-listing')
