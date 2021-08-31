@@ -1,12 +1,14 @@
 
 import * as Yup from 'yup';
-import { Study, NewStudyCategoryEnum } from '../api'
+import { Study, NewStudyCategoryEnum, StudiesApi, ParticipantStudies, ParticipantStudy } from '../api'
+import dayjs from 'dayjs'
 
 export enum StudyStatus {
     Active = 'Active', // eslint-disable-line no-unused-vars
     Scheduled = 'Scheduled', // eslint-disable-line no-unused-vars
     Completed = 'Completed', // eslint-disable-line no-unused-vars
 }
+
 
 export const getStatus = (study: Study):StudyStatus => {
     const now = new Date()
@@ -31,9 +33,24 @@ export const StudyValidationSchema = Yup.object().shape({
     titleForParticipants: Yup.string().required('Required'),
     shortDescription: Yup.string().required('Required'),
     longDescription: Yup.string().required('Required'),
+    durationMinutes: Yup.number().required('Required'),
     category: Yup.string().required('Required').oneOf([
         NewStudyCategoryEnum.CognitiveTask,
         NewStudyCategoryEnum.ResearchStudy,
         NewStudyCategoryEnum.Survey,
     ]),
 });
+
+
+export const LaunchStudy = async (api: StudiesApi, study: {id: number}) => {
+    const launch = await api.launchStudy({ id: study.id })
+    window.location.href = launch.url!
+    return launch
+}
+
+export const isStudyLaunchable = (study: ParticipantStudy) => {
+    return Boolean(
+        !study.completedAt &&
+            (!study.closesAt || dayjs(study.closesAt).isAfter(dayjs()))
+    )
+}

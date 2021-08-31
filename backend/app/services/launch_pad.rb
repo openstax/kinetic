@@ -13,19 +13,8 @@ class LaunchPad
     url = ActiveRecord::Base.transaction do
       raise(LaunchError, 'You have already completed this study.') if launched_study.completed?
 
-      incomplete_launched_stage = user.launched_stages(study: study).incomplete.first
-
-      if incomplete_launched_stage
-        stage_to_launch = incomplete_launched_stage.stage
-      else
-        completed_stage_ids = user.launched_stages(study: study).map(&:stage_id)
-        stage_to_launch = study.stages.where.not(id: completed_stage_ids).order(:order).first
-
-        LaunchedStage.create!(stage_id: stage_to_launch.id, user_id: user_id)
-      end
-
-      launch_config = stage_to_launch.config
-
+      launch = user.launch_next_stage!(study)
+      launch_config = launch.stage.config
       launcher =
         case launch_config[:type]
         when 'qualtrics'

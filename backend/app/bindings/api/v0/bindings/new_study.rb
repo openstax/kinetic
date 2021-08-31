@@ -38,6 +38,12 @@ module Api::V0::Bindings
     # When the study closes for participation; null means does not close.
     attr_accessor :closes_at
 
+    # Mandatory studies must be completed by all users
+    attr_accessor :is_mandatory
+
+    # How many points will be awarded for participation in the study
+    attr_accessor :participation_points
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -70,7 +76,9 @@ module Api::V0::Bindings
         :'category' => :'category',
         :'duration_minutes' => :'duration_minutes',
         :'opens_at' => :'opens_at',
-        :'closes_at' => :'closes_at'
+        :'closes_at' => :'closes_at',
+        :'is_mandatory' => :'is_mandatory',
+        :'participation_points' => :'participation_points'
       }
     end
 
@@ -84,7 +92,9 @@ module Api::V0::Bindings
         :'category' => :'String',
         :'duration_minutes' => :'Integer',
         :'opens_at' => :'DateTime',
-        :'closes_at' => :'DateTime'
+        :'closes_at' => :'DateTime',
+        :'is_mandatory' => :'BOOLEAN',
+        :'participation_points' => :'Float'
       }
     end
 
@@ -126,6 +136,14 @@ module Api::V0::Bindings
 
       if attributes.has_key?(:'closes_at')
         self.closes_at = attributes[:'closes_at']
+      end
+
+      if attributes.has_key?(:'is_mandatory')
+        self.is_mandatory = attributes[:'is_mandatory']
+      end
+
+      if attributes.has_key?(:'participation_points')
+        self.participation_points = attributes[:'participation_points']
       end
     end
 
@@ -215,7 +233,9 @@ module Api::V0::Bindings
           category == o.category &&
           duration_minutes == o.duration_minutes &&
           opens_at == o.opens_at &&
-          closes_at == o.closes_at
+          closes_at == o.closes_at &&
+          is_mandatory == o.is_mandatory &&
+          participation_points == o.participation_points
     end
 
     # @see the `==` method
@@ -227,7 +247,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [title_for_participants, title_for_researchers, short_description, long_description, category, duration_minutes, opens_at, closes_at].hash
+      [title_for_participants, title_for_researchers, short_description, long_description, category, duration_minutes, opens_at, closes_at, is_mandatory, participation_points].hash
     end
 
     # Builds the object from hash

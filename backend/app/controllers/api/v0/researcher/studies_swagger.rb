@@ -65,6 +65,14 @@ class Api::V0::Researcher::StudiesSwagger
       key :format, 'date-time'
       key :description, 'When the study closes for participation; null means does not close.'
     end
+    property :is_mandatory do
+      key :type, :boolean
+      key :description, 'Mandatory studies must be completed by all users'
+    end
+    property :participation_points do
+      key :type, :number
+      key :description, 'How many points will be awarded for participation in the study'
+    end
   end
 
   add_properties(:Study) do

@@ -4,6 +4,7 @@ import { User, UserPayload } from '@models'
 interface UsersPayload {
     admins: UserPayload[]
     researchers?: UserPayload[]
+    users: UserPayload[]
 }
 
 
@@ -19,10 +20,12 @@ export class AvailableUsers {
     }
 
     admins: User[] = []
+    users: User[] = []
     researchers: User[] = []
 
-    constructor({ admins, researchers }: UsersPayload = { admins: [], researchers: [] }) {
+    constructor({ admins, users, researchers }: UsersPayload = { admins: [], users: [], researchers: [] }) {
         this.admins = admins.map(u => new User({ ...u, is_admin: true }))
+        this.users = users.map(u => new User({ ...u }))
         if (researchers) {
             this.researchers = researchers.map(u => new User({ ...u, is_researcher: true }))
         }

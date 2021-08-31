@@ -7,12 +7,13 @@ import { LinkButton } from '@components'
 
 interface UserCardProps {
     users: AvailableUsers
-    type: 'admins' | 'researchers'
+    type: 'admins' | 'researchers' | 'users'
     becomeUser: (ev: React.MouseEvent<HTMLAnchorElement>) => void
 }
 
 const UserCard:React.FC<UserCardProps> = ({ users, type, becomeUser }) => {
-    if (!users[type] || !users[type].length) return null
+
+    if (!users[type]?.length) return null
 
     return (
         <div className="col-6">
@@ -46,6 +47,7 @@ export default function Dev() {
 
     const becomeUser = async (ev: React.MouseEvent<HTMLAnchorElement>) => {
         const userId = ev.currentTarget.dataset.userId
+        ev.preventDefault()
         if (userId) {
             await currentUser.become(userId)
             history.push('/')
@@ -68,6 +70,7 @@ export default function Dev() {
                 <div className="row">
                     <UserCard users={users} type="admins" becomeUser={becomeUser} />
                     <UserCard users={users} type="researchers" becomeUser={becomeUser} />
+                    <UserCard users={users} type="users" becomeUser={becomeUser} />
                 </div>
             </div>
         </div>

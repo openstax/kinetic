@@ -40,8 +40,8 @@ gem 'openstax_swagger', github: 'openstax/swagger-rails',
 gem 'openstax_auth', github: 'openstax/auth-rails', ref: 'ed2d7da86ca226b93376955b9474c4cf115c611f'
 
 # Exception reporting
-gem 'sentry-ruby'
 gem 'sentry-rails'
+gem 'sentry-ruby'
 
 # CORS
 gem 'rack-cors'

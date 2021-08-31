@@ -71,9 +71,11 @@ ActiveRecord::Schema.define(version: 2021_06_18_183842) do
     t.text "short_description", null: false
     t.text "long_description", null: false
     t.string "category", null: false
-    t.integer "duration_minutes"
+    t.integer "duration_minutes", null: false
+    t.integer "participation_points"
     t.datetime "opens_at"
     t.datetime "closes_at"
+    t.boolean "is_mandatory", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

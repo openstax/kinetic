@@ -53,6 +53,12 @@ jobs:
       - name: Run specs
         working-directory: frontend
         run: yarn run test:ci
+      - name: Save test-results of failures
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: test-results
+          path: ./frontend/test-results
       - name: Shutdown docker compose
         if: always()
         run: docker-compose down

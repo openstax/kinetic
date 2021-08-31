@@ -28,7 +28,7 @@ class Api::V0::Participant::StudiesSwagger
   end
 
   COMMON_REQUIRED_STUDY_FIELDS = [
-    :title, :short_description, :category
+    :title, :short_description, :category, :duration_minutes
   ].freeze
 
   swagger_schema :ParticipantStudy do
@@ -61,6 +61,10 @@ class Api::V0::Participant::StudiesSwagger
       key :type, :integer
       key :description, 'The expected study duration in minutes.'
     end
+    property :participation_points do
+      key :type, :integer
+      key :description, 'How many points a participant will earn upon completion'
+    end
     property :first_launched_at do
       key :type, :string
       key :format, 'date-time'
@@ -70,6 +74,11 @@ class Api::V0::Participant::StudiesSwagger
       key :type, :string
       key :format, 'date-time'
       key :description, 'When the study was completed; null means not completed.'
+    end
+    property :closes_at do
+      key :type, :string
+      key :format, 'date-time'
+      key :description, 'When the study ends; null means open indefinitely.'
     end
     property :opted_out_at do
       key :type, :string
@@ -82,6 +91,14 @@ class Api::V0::Participant::StudiesSwagger
       items do
         key :'$ref', :PublicResearcher
       end
+    end
+    property :is_mandatory do
+      key :type, :boolean
+      key :description, 'Mandatory studies must be completed by all users'
+    end
+    property :participation_points do
+      key :type, :number
+      key :description, 'How many points will be awarded for participation in the study'
     end
   end
 
@@ -114,8 +131,8 @@ class Api::V0::Participant::StudiesSwagger
     end
   end
 
-  swagger_path '/participant/studies/:id' do
-    operation :put do
+  swagger_path '/participant/studies/{id}' do
+    operation :get do
       key :summary, 'Get participant-visible info for a study'
       key :description, 'Get participant-visible info for a study'
       key :operationId, 'getParticipantStudy'
@@ -130,7 +147,7 @@ class Api::V0::Participant::StudiesSwagger
         key :in, :path
         key :description, 'ID of the study to get.'
         key :required, true
-        key :type, :string
+        key :type, :number
       end
       response 200 do
         key :description, 'Success.  Returns participant-visible data for the study.'
@@ -145,7 +162,7 @@ class Api::V0::Participant::StudiesSwagger
     end
   end
 
-  swagger_path '/participant/studies/:id/launch' do
+  swagger_path '/participant/studies/{id}/launch' do
     operation :put do
       key :summary, 'Launch the next available study stage'
       key :description, 'Launch the next available study stage'
@@ -161,7 +178,7 @@ class Api::V0::Participant::StudiesSwagger
         key :in, :path
         key :description, 'ID of the study to launch.'
         key :required, true
-        key :type, :string
+        key :type, :number
       end
       response 200 do
         key :description, 'Success.  Returns info on how to launch the user.'
@@ -176,7 +193,7 @@ class Api::V0::Participant::StudiesSwagger
     end
   end
 
-  swagger_path '/participant/studies/:id/land' do
+  swagger_path '/participant/studies/{id}/land' do
     operation :put do
       key :summary, 'Land a study stage'
       key :description, 'Land a study stage'
@@ -192,7 +209,7 @@ class Api::V0::Participant::StudiesSwagger
         key :in, :path
         key :description, 'ID of the study to land.'
         key :required, true
-        key :type, :string
+        key :type, :number
       end
       response 200 do
         key :description, 'Success.  Returns no data.'

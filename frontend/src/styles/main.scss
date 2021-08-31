@@ -1,2 +1,16 @@
+$body-bg: #E5E5E5;
+
+$primary: #F36B32;
+$primary-bg: #fff;
+
 @import "./bootstrap";
 @import "flatpickr/dist/flatpickr.css";
+@import "./effects";
+
+
+.btn-primary {
+    color: $white;
+    &:hover {
+        color: $gray-200;
+    }
+}

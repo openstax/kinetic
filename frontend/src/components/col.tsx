@@ -1,7 +1,7 @@
 import { React, cx } from '../common'
+import { Box, BoxProps } from 'boxible'
 
-export interface ColProps {
-    as?: React.ElementType | string
+export interface ColProps extends BoxProps {
     className?: string
     sm?: number
     md?: number
@@ -20,7 +20,6 @@ export interface ColProps {
 
 export const Col:React.FC<ColProps> = ({
     children,
-    as: As = 'div',
     sm,
     md,
     lg,
@@ -32,7 +31,7 @@ export const Col:React.FC<ColProps> = ({
     ...props
 }) => {
     return (
-        <As className={cx(className, {
+        <Box className={cx(className, {
             [`col-sm-${sm}`]: sm,
             [`col-md-${md}`]: md,
             [`col-lg-${lg}`]: lg,
@@ -46,7 +45,7 @@ export const Col:React.FC<ColProps> = ({
             [`offset-xxl-${offset.xxl}`]: offset.xxl,
         } as any)} {...props}>
             {children}
-        </As>
+        </Box>
     )
 }
 

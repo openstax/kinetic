@@ -22,6 +22,11 @@ const CheckWrapper = styled(FloatingField)({
     display: 'flex',
     alignItems: 'center',
     height: '100%',
+    padding: '0.375rem 0.75rem', // styles mimic form-control
+    color: '#212529',
+    backgroundColor: '#fff',
+    border: '1px solid #ced4da',
+    borderRadius: '0.25rem',
 })
 
 export interface InputProps extends FloatingFieldProps {

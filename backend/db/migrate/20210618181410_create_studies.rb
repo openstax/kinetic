@@ -6,10 +6,11 @@ class CreateStudies < ActiveRecord::Migration[6.1]
       t.text :short_description, null: false
       t.text :long_description, null: false
       t.string :category, null: false
-      t.integer :duration_minutes
+      t.integer :duration_minutes, null: false
+      t.integer :participation_points
       t.datetime :opens_at
       t.datetime :closes_at
-
+      t.boolean :is_mandatory, default: false, null: false
       t.timestamps
     end
   end

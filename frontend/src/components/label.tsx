@@ -42,7 +42,7 @@ export const ExtraInfo = styled.div({
     '.hint': {
         color: '#6c757d',
         fontStyle: 'italic',
-        marginBottom: '-2px',
+        marginBottom: '0px',
     },
 })
 

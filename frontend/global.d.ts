@@ -1,8 +1,13 @@
+import type { User } from './src/models/user'
+
 declare global {
     interface Window {
         config: {
             url: string;
-        };
+        }
+        _MODELS?: {
+            user?: User
+        }
     }
 
     interface ImportMeta {

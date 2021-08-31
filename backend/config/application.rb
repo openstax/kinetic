@@ -39,7 +39,7 @@ module Labs
         resource '/development/*', {
           headers: :any,
           credentials: true,
-          methods: [:get, :options, :head, :put]
+          methods: [:get, :options, :head, :put, :delete]
         }
       end
       allow do

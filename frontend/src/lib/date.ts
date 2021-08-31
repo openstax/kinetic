@@ -1,5 +1,6 @@
 import { isDate, isString, isNumber } from './util'
 import dayjs from 'dayjs'
+
 export type DateTimeInputs = Date | string | number | dayjs.Dayjs
 
 export const toDateTime = (dateThing: DateTimeInputs): Date => {

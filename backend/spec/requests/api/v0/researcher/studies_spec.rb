@@ -14,6 +14,7 @@ RSpec.describe 'Studies', type: :request, api: :v0 do
         title_for_researchers: 'Researcher study title',
         short_description: 'A short description',
         long_description: 'A longer description',
+        is_mandatory: false,
         category: 'research_study',
         duration_minutes: 10
       }

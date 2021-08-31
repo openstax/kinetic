@@ -11,7 +11,7 @@ if Rails.env.production? || ENV['FORCE_ENABLE_SENTRY'] == 'true'
     config.breadcrumbs_logger = [:active_support_logger, :http_logger]
 
     config.enabled_environments = %w[production]
-    config.environment = ENV['ENV_NAME'] || config.current_environment
+    config.environment = ENV['ENV_NAME'] || Rails.application.secrets.accounts[:env_name]
 
     # for performance, to see only 50% of all errors
     # config.traces_sample_rate = 0.5
