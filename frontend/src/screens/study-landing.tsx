@@ -1,7 +1,7 @@
 
 import { useRouteMatch } from 'react-router-dom'
 import { React } from '@common'
-import { IncorrectUser } from '@components'
+import { LinkButton, IncorrectUser } from '@components'
 import { useCurrentUser, useStudyApi } from '@lib'
 import { useEffect } from 'react'
 
@@ -24,7 +24,7 @@ export default function UsersStudies() {
         <div className="container studies mt-8">
             <h3>Thank you for completing the study</h3>
             <h5>your response has been recorded</h5>
-            <a href="https://openstax.org/">Return to OpenStax</a>
+            <LinkButton link to="/">Return to view other studies</LinkButton>
         </div>
     )
 

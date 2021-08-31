@@ -1,8 +1,8 @@
 import { React, useEffect, useState, useHistory } from '@common'
-import { ParticipantStudies } from '@api'
-import { Box, Col, LinkButton, LoadingAnimation, Row, Icon } from '@components'
+import { ParticipantStudies, ParticipantStudy } from '@api'
+import { Box, Col, LinkButton, LoadingAnimation, Row, Icon, Modal } from '@components'
 import { useStudyApi } from '@lib'
-import { isStudyLaunchable, LaunchStudy } from '@models'
+import { isStudyLaunchable } from '@models'
 
 
 export enum StudyTypes {
@@ -26,7 +26,7 @@ const StudyTypeBlock:React.FC<StudyBlockProps> = ({ type, studies: allStudies })
             <h3>{StudyTypes[type]}</h3>
             <Row css={{ marginBottom: '3rem' }}>
                 {studies.map(s => (
-                    <Col key={s.id} sm={12} md={6} align="stretch">
+                    <Col key={s.id} sm={12} md={6} align="stretch" className="mb-2">
                         <Box
                             flex
                             className="card raise-on-hover"
@@ -60,17 +60,38 @@ const StudyTypeBlock:React.FC<StudyBlockProps> = ({ type, studies: allStudies })
     )
 }
 
+
+const MandatoryModal:React.FC<{ study?: ParticipantStudy }> = ({ study }) => {
+    const api = useStudyApi()
+    const [studyUrl, setStudyUrl] = useState('')
+    useEffect(() => {
+        if (!study) return
+        api.launchStudy({ id: study.id }).then((launch) => setStudyUrl(launch.url!))
+    }, [study?.id])
+    if (!study) { return null }
+
+
+    return (
+        <Modal large show={true} closeBtn={false} title={study.title}>
+            <Modal.Body>
+                {!studyUrl && <LoadingAnimation />}
+                {studyUrl && <iframe css={{ height: 525, width: '100%' }} src={studyUrl} />}
+            </Modal.Body>
+        </Modal>
+    )
+}
+
 export const UserListing = () => {
     const api = useStudyApi()
+    const [mandatoryStudy, setMandatoryStudy] = useState<ParticipantStudy>()
     const [studies, setStudies] = useState<ParticipantStudies>()
     useEffect(() => {
         api.getParticipantStudies().then((studies) => {
             const mandatory = studies.data?.find(s => isStudyLaunchable(s) && s.isMandatory)
             if (mandatory) {
-                LaunchStudy(api, mandatory)
-            } else {
-                setStudies(studies)
+                setMandatoryStudy(mandatory)
             }
+            setStudies(studies)
         })
     }, [])
 
@@ -87,6 +108,7 @@ export const UserListing = () => {
                     </LinkButton>
                 </div>
             </nav>
+            <MandatoryModal study={mandatoryStudy} />
             <div>
                 <StudyTypeBlock studies={studies} type="research_study" />
                 <StudyTypeBlock studies={studies} type="cognitive_task" />
