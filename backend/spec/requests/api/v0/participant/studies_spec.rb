@@ -27,8 +27,8 @@ RSpec.describe 'Participant Studies', type: :request, api: :v0, multi_stage: tru
     responses_not_exceptions!
 
     # One new study (#1), one in progress (#2), one complete (#3)
-    user1_study2_launch_pad.launch
-    user1_study3_launch_pad.launch
+    user1_study2_launch_pad.launch_url
+    user1_study3_launch_pad.launch_url
     user1_study3_launch_pad.land
   end
 
