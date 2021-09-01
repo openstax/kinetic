@@ -26,11 +26,11 @@ const AppRoutes = () => {
                 <Route path="/studies">
                     <Studies />
                 </Route>
+                <Route path="/study/land/:studyId" exact>
+                    <StudyLanding />
+                </Route>
                 <Route path="/study">
                     <Studies />
-                </Route>
-                <Route path="/study/land/:studyId">
-                    <StudyLanding />
                 </Route>
                 <Route path="*">
                     <PageNotFound />

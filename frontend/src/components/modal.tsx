@@ -11,7 +11,7 @@ interface ModalProps extends OverlayModalProps {
     title?: React.ReactNode
     header?: React.ReactNode
     show?: boolean
-    onHide: () => void
+    onHide?: () => void
     xlarge?: boolean
     scrollable?: boolean
     large?: boolean

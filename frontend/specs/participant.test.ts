@@ -22,11 +22,7 @@ test('it auto-launches mandatory studies', async ({ page }) => {
     })
     await goToPage({ page, path: '/studies', loginAs: 'user' })
 
-    await page.waitForFunction(
-        () => document.location.origin.match(/openstax.org/),
-        null,
-        { timeout: 5000 },
-    )
+    await expect(page).toMatchText('.modal-header', studyName)
 
     await closeStudy({ page, studyId })
 })
