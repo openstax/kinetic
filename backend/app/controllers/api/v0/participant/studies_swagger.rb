@@ -180,6 +180,13 @@ class Api::V0::Participant::StudiesSwagger
         key :required, true
         key :type, :number
       end
+      parameter do
+        key :name, :preview
+        key :in, :query
+        key :description, 'Whether the launch is a preview'
+        key :required, false
+        key :type, :boolean
+      end
       response 200 do
         key :description, 'Success.  Returns info on how to launch the user.'
         schema do

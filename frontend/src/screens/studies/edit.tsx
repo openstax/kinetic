@@ -8,7 +8,7 @@ import {
 } from '@components'
 import { StudyValidationSchema, LaunchStudy } from '@models'
 import { NewStudy, Study, Stage, StudyUpdate, NewStudyCategoryEnum } from '@api'
-import { useStudyApi, errorToString, useForceUpdate, pick, remove, isNil } from '@lib'
+import { useStudyApi, errorToString, useForceUpdate, pick, remove, isNil, titleize } from '@lib'
 
 type EditingStudy = NewStudy | Study
 
@@ -37,9 +37,13 @@ const LaunchStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
     if (isNewStudy(study) || !study.stages?.length) {
         return null
     }
+    const category = titleize(study.category)
     return (
-        <Button secondary onClick={() => LaunchStudy(api, study)}>
-            Test Launch
+        <Button
+            secondary data-test-id="preview-study-btn"
+            onClick={() => LaunchStudy(api, study, { preview: true })}
+        >
+            Preview {category}
         </Button>
     )
 }

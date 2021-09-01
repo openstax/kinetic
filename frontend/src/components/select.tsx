@@ -70,7 +70,7 @@ const smallStyles = {
     }),
 }
 
-type ValueT = Array<string | number> | string | number
+export type ValueT = Array<string | number> | string | number
 export type OptionT = { label: string, value: string | number } | null
 export type OptionsT = Array<OptionT>
 

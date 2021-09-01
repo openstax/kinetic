@@ -79,6 +79,7 @@ export interface LandStudyRequest {
 
 export interface LaunchStudyRequest {
     id: number;
+    preview?: boolean;
 }
 
 export interface RemoveResearcherFromStudyRequest {
@@ -402,6 +403,10 @@ export class StudiesApi extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.preview !== undefined) {
+            queryParameters['preview'] = requestParameters.preview;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

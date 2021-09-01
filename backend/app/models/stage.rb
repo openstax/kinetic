@@ -11,6 +11,16 @@ class Stage < ApplicationRecord
     self[:config]&.with_indifferent_access
   end
 
+  def launcher(user_id)
+    launcher = case config[:type]
+    when 'qualtrics'
+      QualtricsLauncher
+    else
+      raise "Unsupported stage type: '#{config[:type]}'"
+    end
+    launcher.new(config: config, user_id: user_id)
+  end
+
   protected
 
   def set_order

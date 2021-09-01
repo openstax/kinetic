@@ -1,7 +1,9 @@
-import { closeStudy, getIdFromUrl } from './helpers';
-import { test, expect, loginAs, faker } from './test'
+import {
+    test, expect, loginAs, faker, closeStudy, getIdFromUrl,
+    createStudy, goToPage,
+} from './test'
 
-test('it can create and edit a study', async ({ page }) => {
+test('can create and edit a study', async ({ page }) => {
     const title = faker.company.catchPhrase()
     await loginAs({ page, login: 'researcher' })
     expect(await page.textContent('.studies')).toContain('Studies')
@@ -22,7 +24,6 @@ test('it can create and edit a study', async ({ page }) => {
     await page.click('testId=form-save-btn')
     await expect(page).not.toHaveSelector('.is-invalid', { timeout: 500 })
 
-
     await page.waitForSelector('.stages-listing')
 
     const studyId = await getIdFromUrl(page)
@@ -40,10 +41,22 @@ test('it can create and edit a study', async ({ page }) => {
     await page.waitForLoadState('networkidle')
 
     await page.click('testId=back-to-studies')
-    // await page.click('[data-status="Completed"]')
+
     await page.waitForLoadState('networkidle')
     await expect(page).toMatchText('testId=studies-table', RegExp(title))
 
     await closeStudy({ page, studyId })
+})
 
+
+test('can preview a study', async ({ page }) => {
+    const studyName = faker.commerce.productDescription()
+    const studyId = await createStudy({ page, name: studyName })
+    await goToPage({ page, path: `/study/edit/${studyId}`, loginAs: 'researcher' })
+    await page.click('testId=preview-study-btn')
+    await page.waitForNavigation()
+    expect(
+        await page.evaluate(() => document.location.search)
+    ).toMatch(/Q_CHL=preview/)
+    await closeStudy({ page, studyId })
 })

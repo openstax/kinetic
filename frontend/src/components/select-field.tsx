@@ -3,7 +3,7 @@ import { useField } from 'formik'
 import { FloatingFieldProps, FloatingField } from './floating-field'
 import { FloatingLabel } from './label'
 import { useFormContext } from './form'
-import { Select, SelectProps } from './select'
+import { Select, SelectProps, ValueT } from './select'
 
 
 export interface SelectFieldProps extends SelectProps, FloatingFieldProps {
@@ -44,6 +44,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
     isClearable,
     menuPlacement,
     noOptionsMessage,
+    onChange: propsOnChange,
     onCreateOption,
     options = [],
     ...props
@@ -71,6 +72,10 @@ export const SelectField: React.FC<SelectFieldProps> = ({
             {label}
         </FloatingLabel>
     )
+    const onChange = (value: ValueT, meta: any) => {
+        field.onChange({ target: { ...field, value } })
+        propsOnChange?.(value, meta)
+    }
 
     return (
         <SelectWrapper
@@ -100,7 +105,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
                 onFocus={onFocus}
                 onBlur={onBlur}
                 className={cx('select-field', { 'is-invalid': hasError })}
-                onChange={value => field.onChange({ target: { ...field, value } })}
+                onChange={onChange}
                 options={options}
             />
         </SelectWrapper>
