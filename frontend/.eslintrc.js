@@ -8,7 +8,7 @@ module.exports = {
         'eslint:recommended',
         //  "plugin:react/recommended", // TODO: enable once
     ],
-    "ignorePatterns": ["**/api/**/*.js"],
+    'ignorePatterns': ['**/api/**/*.js'],
     'parserOptions': {
         'ecmaFeatures': {
             'experimentalObjectRestSpread': true,
@@ -25,10 +25,12 @@ module.exports = {
         'process': false,
         'require': false,
         'module': false,
+        'jsx': 'readonly',
+        jsdom: true,
     },
     'settings': {
         'react': {
-            'pragma': 'React',  // Pragma to use, default to "React"
+            'pragma': 'React',  // Pragma to use, default to 'React'
             'version': '16.0', // React version, default to the latest React stable release
         },
     },
@@ -39,9 +41,8 @@ module.exports = {
         //'no-unused-vars': [0, { 'ignoreRestSiblings': true,'args': 'none', 'varsIgnorePattern': '_+', 'argsIgnorePattern': '^_' }],
         'consistent-return': [0, { 'treatUndefinedAsUnspecified': true }],
         'object-curly-spacing': ['error', 'always'],
-        'quotes': ['error', 'double'],
-        'no-empty': ["error", { "allowEmptyCatch": true }],
-        'no-multiple-empty-lines': [2, { 'max': 2, 'maxEOF': 0, 'maxEOF': 0 }],
+        'no-empty': ['error', { 'allowEmptyCatch': true }],
+        'no-multiple-empty-lines': [2, { 'max': 2, 'maxEOF': 0 }],
         'no-multi-spaces': [2, {
             'exceptions': {
                 'Identifier': true,
@@ -63,7 +64,7 @@ module.exports = {
             'error',
             'unix',
         ],
-        'quotes': [ 'error', 'single', { "avoidEscape": true, "allowTemplateLiterals": true } ],
+        'quotes': [ 'error', 'single', { avoidEscape: true, 'allowTemplateLiterals': true } ],
         'semi': [0, 'always'],
         'react/prefer-stateless-function': [2, {
             'ignorePureComponents': true,
@@ -88,9 +89,10 @@ module.exports = {
     },
     'overrides': [
         {
-            'files': '*.tsx',
+            'files': '*.ts?',
             'rules': {
                 'react/prop-types': 0,
+                'no-undef': 'off',
                 'no-unused-vars': 'off',
                 '@typescript-eslint/no-unused-vars': [2, { 'ignoreRestSiblings': true, 'varsIgnorePattern': '_+', 'argsIgnorePattern': '^_' }],
             },

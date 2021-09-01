@@ -77,14 +77,14 @@ const SaveCancelBtn: React.FC<SaveCancelBtnProps> = ({ onCancel, showControls })
     const { isSubmitting, resetForm, dirty } = fc
     if (!showControls && !dirty) { return null }
 
-    const onSubmit = async (ev) => {
+    const onSubmit = async (ev: React.MouseEvent<HTMLButtonElement>) => {
         ev.preventDefault() // stop form from submit
         await fc.submitForm()
     }
 
     const onFormCancel = async () => {
-        await resetForm()
-        onCancel && onCancel()
+        resetForm()
+        onCancel?.()
     }
 
     return (

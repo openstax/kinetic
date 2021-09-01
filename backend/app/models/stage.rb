@@ -13,11 +13,11 @@ class Stage < ApplicationRecord
 
   def launcher(user_id)
     launcher = case config[:type]
-    when 'qualtrics'
-      QualtricsLauncher
-    else
-      raise "Unsupported stage type: '#{config[:type]}'"
-    end
+               when 'qualtrics'
+                 QualtricsLauncher
+               else
+                 raise "Unsupported stage type: '#{config[:type]}'"
+               end
     launcher.new(config: config, user_id: user_id)
   end
 

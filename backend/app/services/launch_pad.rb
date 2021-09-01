@@ -9,11 +9,14 @@ class LaunchPad
 
   def launch_url(preview: false)
     raise(LaunchError, 'This study is not open.') unless study.open?
+
     if preview
-      study.stages.order(:order).first.launcher(user_id).url + '&Q_CHL=preview&Q_SurveyVersionID=current'
+      url = study.stages.order(:order).first.launcher(user_id).url
+      "#{url}&Q_CHL=preview&Q_SurveyVersionID=current"
     else
       ActiveRecord::Base.transaction do
         raise(LaunchError, 'You have already completed this study.') if launched_study.completed?
+
         launch = user.launch_next_stage!(study)
         launch.stage.launcher(user_id).url
       end
