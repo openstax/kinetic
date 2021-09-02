@@ -42,8 +42,9 @@ export const StudyValidationSchema = Yup.object().shape({
 });
 
 
-export const LaunchStudy = async (api: StudiesApi, study: {id: number}) => {
-    const launch = await api.launchStudy({ id: study.id })
+export const LaunchStudy = async (api: StudiesApi, study: {id: number}, options: { preview?: boolean } = {}) => {
+    const launch = await api.launchStudy({ id: study.id, preview: options.preview || false})
+
     window.location.href = launch.url!
     return launch
 }

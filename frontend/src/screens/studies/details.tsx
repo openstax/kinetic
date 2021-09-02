@@ -53,8 +53,6 @@ export const StudyDetails:React.FC = () => {
                     <LaunchStudyButton study={study} />
                 </div>
             </nav>
-
-
             <div className="border-bottom bg-white py-2">
                 <div className="container">
                     <Box justify="between" align="end">

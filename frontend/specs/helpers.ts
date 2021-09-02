@@ -31,12 +31,11 @@ interface goToPageArgs {
 export const goToPage = async ({ page, path, loginAs: login }: goToPageArgs) => {
     const url = TC.ORIGIN + path
     await page.goto(url)
-    await page.waitForTimeout(100) // wait for user fetch to complete
+    await page.waitForTimeout(200) // wait for user fetch to complete
     if (await page.$('testId=incorrect-user-panel')) {
         await loginAs({ page, login: login || 'researcher' })
         await page.goto(url)
     }
-
 }
 
 export const logout = async ({ page }: { page: Page }) => {
@@ -57,13 +56,6 @@ export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin
     await page.waitForNavigation()
 }
 
-interface createStudyArgs {
-    page: Page
-    name: string
-    isMandatory?: boolean
-    opensAt: dayjsImport.Dayjs,
-}
-
 export const closeStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
     await loginAs({ page, login: 'researcher' })
     await goToPage({ page, path: `/study/edit/${studyId}` })
@@ -80,8 +72,17 @@ export const getIdFromUrl = async (page): Promise<number | undefined> => {
     }
 }
 
+interface createStudyArgs {
+    page: Page
+    name: string
+    isMandatory?: boolean
+    opensAt?: dayjsImport.Dayjs,
+}
+
 export const createStudy = async ({
-    page, name, opensAt, isMandatory,
+    page, name,
+    isMandatory = false,
+    opensAt = dayjs().subtract(1, 'day'),
 }: createStudyArgs) => {
     await goToPage({ page, path: '/study/edit/new', loginAs: 'researcher' })
     await page.fill('[name=titleForParticipants]', name)

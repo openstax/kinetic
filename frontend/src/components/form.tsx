@@ -1,10 +1,9 @@
 import {
     React, cx, useContext,
 } from '../common'
-import { ReactElement } from 'react'
-import { Formik, Form as FormikForm } from 'formik'
-import type { FormikHelpers } from 'formik'
-import { useFormikContext, FormikConfig, FormikProps } from 'formik'
+import {
+    Formik, Form as FormikForm, FormikHelpers, useFormikContext, FormikConfig, FormikProps,
+} from 'formik'
 import { Button, ButtonProps } from './button'
 import { Footer } from './footer'
 
@@ -12,8 +11,8 @@ interface FormContextI {
     readOnly?: boolean
 }
 
-export type { FormikHelpers as FormHelpers }
 export const FormContext = React.createContext<FormContextI>({})
+
 export function useFormContext<T>(): (FormContextI & FormikProps<T>) {
     return useContext(FormContext) as (FormContextI & FormikProps<T>)
 }
@@ -23,18 +22,19 @@ interface FormProps<T> extends FormikConfig<T> {
     readOnly?: boolean
     onCancel?(): void
     showControls?: boolean
+    action?: string
 }
 
 export type FormSubmitHandler<T> = (values: T, helpers: FormikHelpers<T>) => Promise<void>
 
-export function Form<T>(props: React.PropsWithChildren<FormProps<T>>): ReactElement {
-    const { readOnly, className, children, ...formProps } = props
+export function Form<T>(props: React.PropsWithChildren<FormProps<T>>): JSX.Element {
+    const { readOnly, className, children, action, ...formProps } = props
     return (
         <Formik
             {...formProps}
         >
             {(formState) => (
-                <FormikForm method="POST" className={className}>
+                <FormikForm method="POST" className={className} action={action}>
                     <FormContext.Provider value={{ ...formState, readOnly }}>
                         {children}
 
@@ -82,9 +82,9 @@ const SaveCancelBtn: React.FC<SaveCancelBtnProps> = ({ onCancel, showControls })
         await fc.submitForm()
     }
 
-    const onFormCancel = () => {
+    const onFormCancel = async () => {
         resetForm()
-        onCancel && onCancel()
+        onCancel?.()
     }
 
     return (
@@ -107,7 +107,7 @@ const SaveCancelBtn: React.FC<SaveCancelBtnProps> = ({ onCancel, showControls })
 
 export function EditingForm<T>({
     children, showControls, className, onCancel, ...props
-}: FormProps<T>): ReactElement {
+}: FormProps<T>): JSX.Element {
     return (
         <Form {...props} className={cx('editing', 'row', className)}>
             {children}

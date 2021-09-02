@@ -20,15 +20,30 @@ RSpec.describe LaunchPad, multi_stage: true do
 
   before do
     # Start another studies with our user of interest and another user to test our queries
-    user1_study2_launch_pad.launch
-    user2_study2_launch_pad.launch
+    user1_study2_launch_pad.launch_url
+    user2_study2_launch_pad.launch_url
+  end
+
+  context 'when a researcher previews a study' do
+    let(:url) { user1_study1_launch_pad.launch_url(preview: true) }
+
+    it 'appends preview query params' do
+      expect(url).to match(/Q_CHL=preview/)
+    end
+
+    it 'does not record launch' do
+      expect {
+        user1_study1_launch_pad.launch_url(preview: true)
+      }.to change { LaunchedStudy.count }.by(0)
+       .and change { LaunchedStage.count }.by(0)
+    end
   end
 
   context 'when a user has done no stages' do
     it 'launches the first stage' do
       url = nil
       expect {
-        url = user1_study1_launch_pad.launch
+        url = user1_study1_launch_pad.launch_url
       }.to change { LaunchedStudy.count }.by(1)
        .and change { LaunchedStage.count }.by(1)
 
@@ -41,12 +56,12 @@ RSpec.describe LaunchPad, multi_stage: true do
   end
 
   context 'when a user has launched the first stage' do
-    before { user1_study1_launch_pad.launch }
+    before { user1_study1_launch_pad.launch_url }
 
     it 'will launch the first stage again' do
       url = nil
       expect {
-        url = user1_study1_launch_pad.launch
+        url = user1_study1_launch_pad.launch_url
       }.to change { LaunchedStudy.count }.by(0)
        .and change { LaunchedStage.count }.by(0)
 
@@ -63,14 +78,14 @@ RSpec.describe LaunchPad, multi_stage: true do
 
   context 'when a user has done one stage' do
     before do
-      user1_study1_launch_pad.launch
+      user1_study1_launch_pad.launch_url
       user1_study1_launch_pad.land
     end
 
     it 'launches the second stage' do
       url = nil
       expect {
-        url = user1_study1_launch_pad.launch
+        url = user1_study1_launch_pad.launch_url
       }.to change { LaunchedStudy.count }.by(0)
        .and change { LaunchedStage.count }.by(1)
 
@@ -80,15 +95,15 @@ RSpec.describe LaunchPad, multi_stage: true do
 
   context 'when a user has completed a study' do
     before do
-      user1_study1_launch_pad.launch
+      user1_study1_launch_pad.launch_url
       user1_study1_launch_pad.land
-      user1_study1_launch_pad.launch
+      user1_study1_launch_pad.launch_url
       user1_study1_launch_pad.land
     end
 
     it 'raises an error on launch' do
       expect {
-        user1_study1_launch_pad.launch
+        user1_study1_launch_pad.launch_url
       }.to raise_error(LaunchError)
     end
   end

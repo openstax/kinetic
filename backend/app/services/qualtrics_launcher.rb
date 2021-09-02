@@ -15,6 +15,10 @@ class QualtricsLauncher
     uri.to_s
   end
 
+  def preview_url
+    "#{url}&Q_CHL=preview&Q_SurveyVersionID=current"
+  end
+
   protected
 
   attr_reader :config

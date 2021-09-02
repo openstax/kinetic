@@ -29,7 +29,7 @@ class Api::V0::Participant::StudiesController < Api::V0::BaseController
   end
 
   def launch
-    url = launch_pad.launch
+    url = launch_pad.launch_url(preview: params[:preview] == 'true')
     response_binding = Api::V0::Bindings::Launch.new(url: url)
     render json: response_binding, status: :ok
   end

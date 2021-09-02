@@ -7,26 +7,19 @@ class LaunchPad
     @user_id = user_id
   end
 
-  def launch
-    raise(LaunchError, 'This study is not open.') unless study.open?
+  def launch_url(preview: false)
+    if preview
+      study.stages.order(:order).first.launcher(user_id).preview_url
+    else
+      raise(LaunchError, 'This study is not open.') unless study.open?
 
-    url = ActiveRecord::Base.transaction do
-      raise(LaunchError, 'You have already completed this study.') if launched_study.completed?
+      ActiveRecord::Base.transaction do
+        raise(LaunchError, 'You have already completed this study.') if launched_study.completed?
 
-      launch = user.launch_next_stage!(study)
-      launch_config = launch.stage.config
-      launcher =
-        case launch_config[:type]
-        when 'qualtrics'
-          QualtricsLauncher
-        else
-          raise "Unsupported stage type: '#{launch_config[:type]}'"
-        end
-
-      launcher.new(config: launch_config, user_id: user_id).url
-    end
-
-    url || raise('An error occurred when building a launch url')
+        launch = user.launch_next_stage!(study)
+        launch.stage.launcher(user_id).url
+      end
+    end || raise('An error occurred when building a launch url')
   end
 
   def land

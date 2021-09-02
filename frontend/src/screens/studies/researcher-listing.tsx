@@ -1,7 +1,7 @@
 import { React, cx, useEffect, useState, useHistory } from '@common'
 import { Studies, Study } from '@api'
 import {
-    Row, Col, Box, LinkButton, Icon, LogoutButton,
+    Row, Col, Box, Icon, LogoutButton,
 } from '@components'
 import { useStudyApi, formatDate } from '@lib'
 import { StudyStatus, getStatus, getStatusName } from '@models'
@@ -61,10 +61,7 @@ export const ResearcherListing = () => {
     return (
         <div className="container studies mt-8">
             <nav className="navbar fixed-top navbar-light py-1 bg-dark">
-                <div className="container-fluid d-flex justify-content-between">
-                    <LinkButton icon="back" secondary to="/">
-                        Home
-                    </LinkButton>
+                <div className="container-fluid d-flex justify-content-end">
                     <LogoutButton />
                 </div>
             </nav>
