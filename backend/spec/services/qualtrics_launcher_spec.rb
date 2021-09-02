@@ -31,7 +31,7 @@ RSpec.describe QualtricsLauncher do
   it 'previews' do
     expect(described_class.new(config: config, user_id: user_id).preview_url).to match(/Q_CHL=preview/)
   end
-  
+
   def decrypt_research_id(url:, key:)
     url = URI(url)
     hash = URI.decode_www_form(url.query).to_h
