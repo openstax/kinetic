@@ -28,6 +28,10 @@ RSpec.describe QualtricsLauncher do
     expect(decrypt_research_id(url: launcher.url, key: config[:secret_key])).to eq user_id
   end
 
+  it 'previews' do
+    expect(described_class.new(config: config, user_id: user_id).preview_url).to match(/Q_CHL=preview/)
+  end
+  
   def decrypt_research_id(url:, key:)
     url = URI(url)
     hash = URI.decode_www_form(url.query).to_h
