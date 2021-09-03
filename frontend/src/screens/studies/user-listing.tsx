@@ -88,7 +88,7 @@ export const UserListing = () => {
                     </LinkButton>
                 </div>
             </nav>
-            <StudyModal study={mandatoryStudy} />
+            <StudyModal study={mandatoryStudy} onHide={() => setMandatoryStudy(undefined)} />
             <div>
                 <StudyTypeBlock studies={studies} type="research_study" />
                 <StudyTypeBlock studies={studies} type="cognitive_task" />

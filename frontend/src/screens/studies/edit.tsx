@@ -12,7 +12,6 @@ import { useStudyApi, errorToString, useForceUpdate, pick, remove, titleize } fr
 import { StudyModal } from './modal'
 
 
-
 const QualtricsFields = () => (
     <React.Fragment>
         <InputField name="url" id="url" label="URL" type="url" />
