@@ -65,6 +65,6 @@ export function isNewStudy(study: EditingStudy): study is NewStudy {
     return isNil((study as Study).id)
 }
 
-export function isParticipantStudy(study: any): study is ParticipantStudy {
-    return !isNil((study).id) && !isNil((study).title)
+export function isParticipantStudy(study?: any): study is ParticipantStudy {
+    return study && !isNil((study).id) && !isNil((study).title)
 }
