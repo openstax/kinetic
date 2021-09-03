@@ -6,15 +6,12 @@ import {
     InputField, SelectField, DateField, Row, Col, Icon,
     LinkButton, Button,
 } from '@components'
-import { StudyValidationSchema, LaunchStudy } from '@models'
+import { StudyValidationSchema, isNewStudy, EditingStudy } from '@models'
 import { NewStudy, Study, Stage, StudyUpdate, NewStudyCategoryEnum } from '@api'
-import { useStudyApi, errorToString, useForceUpdate, pick, remove, isNil, titleize } from '@lib'
+import { useStudyApi, errorToString, useForceUpdate, pick, remove, titleize } from '@lib'
+import { StudyModal } from './modal'
 
-type EditingStudy = NewStudy | Study
 
-function isNewStudy(study: EditingStudy): study is NewStudy {
-    return isNil((study as Study).id)
-}
 
 const QualtricsFields = () => (
     <React.Fragment>
@@ -33,18 +30,21 @@ const AvailableStageFields = {
 }
 
 const LaunchStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
-    const api = useStudyApi()
+    const [showingModal, setShowing] = useState(false)
     if (isNewStudy(study) || !study.stages?.length) {
         return null
     }
     const category = titleize(study.category)
     return (
-        <Button
-            secondary data-test-id="preview-study-btn"
-            onClick={() => LaunchStudy(api, study, { preview: true })}
-        >
-            Preview {category}
-        </Button>
+        <>
+            {showingModal && <StudyModal onHide={() => setShowing(false)} study={study} />}
+            <Button
+                secondary data-test-id="preview-study-btn"
+                onClick={() => setShowing(true)}
+            >
+                Preview {category}
+            </Button>
+        </>
     )
 }
 

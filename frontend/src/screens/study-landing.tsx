@@ -16,7 +16,9 @@ export default function UsersStudies() {
     }
 
     useEffect(() => {
-        api.landStudy({ id: Number(studyId) })
+        api.landStudy({ id: Number(studyId) }).then(() => {
+            debugger
+        })
     }, [ studyId ])
 
     return (

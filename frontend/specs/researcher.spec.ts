@@ -54,9 +54,8 @@ test('can preview a study', async ({ page }) => {
     const studyId = await createStudy({ page, name: studyName })
     await goToPage({ page, path: `/study/edit/${studyId}`, loginAs: 'researcher' })
     await page.click('testId=preview-study-btn')
-    await page.waitForNavigation()
-    expect(
-        await page.evaluate(() => document.location.search)
-    ).toMatch(/Q_CHL=preview/)
+    await expect(page).toMatchText('.modal-header', studyName)
+    await page.click('testId=modal-close-btn')
+    await expect(page).not.toMatchText('.modal-header', studyName, { timeout: 1000 })
     await closeStudy({ page, studyId })
 })
