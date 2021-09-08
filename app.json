@@ -1,0 +1,11 @@
+{
+  "name": "OpenStax Labs Research Environment ",
+  "description": "This app manages access to studies for researchers and participants, alike",
+  "keywords": [
+    "heroku",
+    "Rails",
+    "OpenStax"
+   ],
+   "stack": "container"
+}
+
