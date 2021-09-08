@@ -54,9 +54,24 @@ test('can preview a study', async ({ page }) => {
     const studyId = await createStudy({ page, name: studyName })
     await goToPage({ page, path: `/study/edit/${studyId}`, loginAs: 'researcher' })
     await page.click('testId=preview-study-btn')
-    await page.waitForNavigation()
-    expect(
-        await page.evaluate(() => document.location.search)
-    ).toMatch(/Q_CHL=preview/)
+    await expect(page).toMatchText('.modal-header', studyName)
+    await page.click('testId=modal-close-btn')
+    await expect(page).not.toMatchText('.modal-header', studyName, { timeout: 1000 })
+
+    await page.click('testId=preview-study-btn')
+    await page.waitForSelector('iframe[id="study"]')
+
+    // navigate iframe to the landing page
+    await page.evaluate((sid: number) => {
+        document.querySelector('iframe[id="study"]').setAttribute('src', `/study/land/${sid}`)
+    }, studyId)
+    const frameHandle = await page.$('iframe[id="study"]')
+
+    const frame = await frameHandle.contentFrame()
+    // now close by clicking button inside iframe
+    await frame.click('text="Return to view other studies"')
+
+    await expect(page).not.toMatchText('.modal-header', studyName, { timeout: 1000 })
+
     await closeStudy({ page, studyId })
 })

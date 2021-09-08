@@ -56,7 +56,7 @@ const Modal: ModalI = ({
                     {title && (
                         <Modal.Header>
                             <h5 className="modal-title">{title}</h5>
-                            {closeBtn && <Icon icon="close" onClick={onHide} />}
+                            {closeBtn && <Icon data-test-id="modal-close-btn" icon="close" onClick={onHide} />}
                         </Modal.Header>
                     )}
                     {children}

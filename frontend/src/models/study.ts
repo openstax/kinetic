@@ -1,7 +1,12 @@
 
 import * as Yup from 'yup';
-import { Study, NewStudyCategoryEnum, StudiesApi, ParticipantStudies, ParticipantStudy } from '../api'
+import {
+    NewStudy, Study, NewStudyCategoryEnum, StudiesApi, ParticipantStudy,
+} from '../api'
 import dayjs from 'dayjs'
+import { isNil } from '@lib'
+
+export type EditingStudy = NewStudy | Study
 
 export enum StudyStatus {
     Active = 'Active', // eslint-disable-line no-unused-vars
@@ -54,4 +59,12 @@ export const isStudyLaunchable = (study: ParticipantStudy) => {
         !study.completedAt &&
             (!study.closesAt || dayjs(study.closesAt).isAfter(dayjs()))
     )
+}
+
+export function isNewStudy(study: EditingStudy): study is NewStudy {
+    return isNil((study as Study).id)
+}
+
+export function isParticipantStudy(study?: any): study is ParticipantStudy {
+    return study && !isNil((study).id) && !isNil((study).title)
 }

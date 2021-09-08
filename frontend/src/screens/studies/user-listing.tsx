@@ -1,9 +1,9 @@
 import { React, useEffect, useState, useHistory } from '@common'
 import { ParticipantStudies, ParticipantStudy } from '@api'
-import { Box, Col, LinkButton, LoadingAnimation, Row, Icon, Modal } from '@components'
+import { Box, Col, LinkButton, LoadingAnimation, Row, Icon } from '@components'
 import { useStudyApi } from '@lib'
 import { isStudyLaunchable } from '@models'
-
+import { StudyModal } from './modal'
 
 export enum StudyTypes {
     research_study = 'Research Studies',
@@ -61,26 +61,6 @@ const StudyTypeBlock:React.FC<StudyBlockProps> = ({ type, studies: allStudies })
 }
 
 
-const MandatoryModal:React.FC<{ study?: ParticipantStudy }> = ({ study }) => {
-    const api = useStudyApi()
-    const [studyUrl, setStudyUrl] = useState('')
-    useEffect(() => {
-        if (!study) return
-        api.launchStudy({ id: study.id }).then((launch) => setStudyUrl(launch.url!))
-    }, [study?.id])
-    if (!study) { return null }
-
-
-    return (
-        <Modal large show={true} closeBtn={false} title={study.title}>
-            <Modal.Body>
-                {!studyUrl && <LoadingAnimation />}
-                {studyUrl && <iframe css={{ height: 525, width: '100%' }} src={studyUrl} />}
-            </Modal.Body>
-        </Modal>
-    )
-}
-
 export const UserListing = () => {
     const api = useStudyApi()
     const [mandatoryStudy, setMandatoryStudy] = useState<ParticipantStudy>()
@@ -108,7 +88,7 @@ export const UserListing = () => {
                     </LinkButton>
                 </div>
             </nav>
-            <MandatoryModal study={mandatoryStudy} />
+            <StudyModal study={mandatoryStudy} onHide={() => setMandatoryStudy(undefined)} />
             <div>
                 <StudyTypeBlock studies={studies} type="research_study" />
                 <StudyTypeBlock studies={studies} type="cognitive_task" />
