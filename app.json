@@ -6,28 +6,35 @@
     "Rails",
     "OpenStax"
   ],
-  "addons": [
-    "heroku-postgresql:hobby-dev"
-  ],
   "stack": "container",
-  "env": {
-    "ACCOUNTS_ENV_NAME": {
-      "required": true
-    },
-    "COOKIE_NAME": {
-      "required": true
-    },
-    "COOKIE_PRIVATE_KEY": {
-      "required": true
-    },
-    "COOKIE_PUBLIC_KEY": {
-      "required": true
-    },
-    "SECRET_KEY_BASE": {
-      "required": true
-    },
-    "SENTRY_RAILS_DSN": {
-      "required": true
+  "environments": {
+    "review": {
+      "addons": [
+        "heroku-postgresql:hobby-dev"
+      ],
+      "env": {
+        "ACCOUNTS_ENV_NAME": {
+          "required": true
+        },
+        "COOKIE_NAME": {
+          "required": true
+        },
+        "COOKIE_PRIVATE_KEY": {
+          "required": true
+        },
+        "COOKIE_PUBLIC_KEY": {
+          "required": true
+        },
+        "HOST": {
+          "required": true
+        },
+        "SECRET_KEY_BASE": {
+          "required": true
+        },
+        "SENTRY_RAILS_DSN": {
+          "required": true
+        }
+      }
     }
   }
 }
