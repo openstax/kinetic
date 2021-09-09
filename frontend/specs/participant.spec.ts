@@ -26,3 +26,20 @@ test('it auto-launches mandatory studies', async ({ page }) => {
 
     await closeStudy({ page, studyId })
 })
+
+test('disabling completed study', async ({ page }) => {
+    const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
+    await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
+    await page.click('testId=launch-study')
+
+    await goToPage({ page, path: `/study/land/${studyId}`, loginAs: 'user' })
+    await page.pause()
+    await page.click('testId=view-studies')
+    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="true"]`)
+    await page.click(`[data-study-id="${studyId}"]`)
+    // should not have navigated
+    expect(
+        await page.evaluate(() => document.location.pathname)
+    ).toMatch(/studies$/)
+    await closeStudy({ page, studyId })
+})

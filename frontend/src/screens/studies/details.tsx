@@ -16,7 +16,7 @@ const LaunchStudyButton: React.FC<{ study: ParticipantStudy }> = ({ study }) => 
         )
     }
     return (
-        <Button primary onClick={() => LaunchStudy(api, study)}>
+        <Button primary data-test-id="launch-study" onClick={() => LaunchStudy(api, study)}>
             Begin study
         </Button>
     )
@@ -46,11 +46,10 @@ export const StudyDetails:React.FC = () => {
     return (
         <div className="studies mt-6">
             <nav className="navbar fixed-top navbar-light py-1 bg-dark">
-                <div className="container-fluid d-flex justify-content-between">
+                <div className="container d-flex justify-content-between">
                     <LinkButton icon="back" data-test-id="back-to-studies" secondary to="/studies">
                         Studies
                     </LinkButton>
-                    <LaunchStudyButton study={study} />
                 </div>
             </nav>
             <div className="border-bottom bg-white py-2">

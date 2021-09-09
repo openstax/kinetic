@@ -42,7 +42,7 @@ export default function UsersStudies() {
             <Box direction="column" align="center">
                 <h3>Thank you for completing the study</h3>
                 <h5>your response has been recorded</h5>
-                <Button primary onClick={onNav}>Return to view other studies</Button>
+                <Button primary data-test-id="view-studies" onClick={onNav}>Return to view other studies</Button>
             </Box>
         </div>
     )
