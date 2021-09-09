@@ -1,6 +1,6 @@
 {
   "name": "OpenStax Labs Research Environment ",
-  "description": "This app manages access to studies for researchers and participants, alike",
+  "description": "This app manages access to studies for researchers and participants",
   "keywords": [
     "heroku",
     "Rails",
@@ -25,6 +25,9 @@
         "COOKIE_PUBLIC_KEY": {
           "required": true
         },
+        "HEROKU_API_TOKEN": {
+          "required": true
+        },
         "HOST": {
           "required": true
         },
@@ -34,6 +37,10 @@
         "SENTRY_RAILS_DSN": {
           "required": true
         }
+      },
+      "scripts": {
+        "postdeploy": "bundle exec rake heroku:review_app_setup",
+        "pr-predestroy": "bundle exec rake heroku:review_app_predestroy"
       }
     }
   }
