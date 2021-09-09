@@ -23,6 +23,7 @@ const test = base.extend<{ config: TestConfig }>({
 test.beforeAll( async () => {
     await selectors.register('testId', createTestIdEngine)
 })
+test.beforeEach(() => test.setTimeout(15000)) // set timeout for each individual test vs a global one
 
 export * from '@playwright/test'
 
