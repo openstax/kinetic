@@ -5,10 +5,11 @@ class Api::V0::Participant::StudiesController < Api::V0::BaseController
   before_action :set_study, only: [:launch, :land]
 
   def index
-    launched_studies = current_user.launched_studies
+    launched_studies = current_user.launched_studies.includes(study: [:researchers])
 
-    unlaunched_studies = current_user.eligible_studies
+    unlaunched_studies = current_user.eligible_studies.includes(:researchers)
                                      .where.not(id: launched_studies.map(&:study_id))
+
 
     studies = launched_studies + unlaunched_studies
 

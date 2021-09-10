@@ -53,6 +53,9 @@ module Api::V0::Bindings
     # The study's researchers.
     attr_accessor :researchers
 
+    # When the study was launched; null means not launched
+    attr_accessor :first_launched_at
+
     # The study's stages.
     attr_accessor :stages
 
@@ -94,6 +97,7 @@ module Api::V0::Bindings
         :'participation_points' => :'participation_points',
         :'return_url' => :'return_url',
         :'researchers' => :'researchers',
+        :'first_launched_at' => :'first_launched_at',
         :'stages' => :'stages'
       }
     end
@@ -114,6 +118,7 @@ module Api::V0::Bindings
         :'participation_points' => :'Float',
         :'return_url' => :'String',
         :'researchers' => :'Array<Researcher>',
+        :'first_launched_at' => :'DateTime',
         :'stages' => :'Array<Stage>'
       }
     end
@@ -178,6 +183,10 @@ module Api::V0::Bindings
         if (value = attributes[:'researchers']).is_a?(Array)
           self.researchers = value
         end
+      end
+
+      if attributes.has_key?(:'first_launched_at')
+        self.first_launched_at = attributes[:'first_launched_at']
       end
 
       if attributes.has_key?(:'stages')
@@ -284,6 +293,7 @@ module Api::V0::Bindings
           participation_points == o.participation_points &&
           return_url == o.return_url &&
           researchers == o.researchers &&
+          first_launched_at == o.first_launched_at &&
           stages == o.stages
     end
 
@@ -296,7 +306,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, category, duration_minutes, opens_at, closes_at, is_mandatory, participation_points, return_url, researchers, stages].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, category, duration_minutes, opens_at, closes_at, is_mandatory, participation_points, return_url, researchers, first_launched_at, stages].hash
     end
 
     # Builds the object from hash
