@@ -28,7 +28,7 @@ export const Button:React.FC<ButtonProps> = ({
     const [bsClasses, props] = bsClassNames('btn', otherProps, { default: 'light' })
     let iconEl = null
     if (icon) {
-        iconEl = <Icon icon={icon} />
+        iconEl = <Icon icon={icon} css={{ marginRight: '0.35rem' }}/>
     }
 
     const showAsBusy = usePendingState(isBusy, 150)

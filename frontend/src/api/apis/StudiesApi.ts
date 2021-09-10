@@ -65,6 +65,10 @@ export interface DeleteStageRequest {
     id: number;
 }
 
+export interface DeleteStudyRequest {
+    studyId: number;
+}
+
 export interface GetParticipantStudyRequest {
     id: number;
 }
@@ -240,6 +244,37 @@ export class StudiesApi extends runtime.BaseAPI {
      */
     async deleteStage(requestParameters: DeleteStageRequest): Promise<void> {
         await this.deleteStageRaw(requestParameters);
+    }
+
+    /**
+     * Remove a study.  Cannot remove a study that has `first_lauched_at` set.
+     * Deletes an unlaunched study
+     */
+    async deleteStudyRaw(requestParameters: DeleteStudyRequest): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.studyId === null || requestParameters.studyId === undefined) {
+            throw new runtime.RequiredError('studyId','Required parameter requestParameters.studyId was null or undefined when calling deleteStudy.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researcher/studies/{study_id}`.replace(`{${"study_id"}}`, encodeURIComponent(String(requestParameters.studyId))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Remove a study.  Cannot remove a study that has `first_lauched_at` set.
+     * Deletes an unlaunched study
+     */
+    async deleteStudy(requestParameters: DeleteStudyRequest): Promise<void> {
+        await this.deleteStudyRaw(requestParameters);
     }
 
     /**
