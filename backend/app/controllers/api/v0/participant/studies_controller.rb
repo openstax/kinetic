@@ -10,7 +10,6 @@ class Api::V0::Participant::StudiesController < Api::V0::BaseController
     unlaunched_studies = current_user.eligible_studies.includes(:researchers)
                                      .where.not(id: launched_studies.map(&:study_id))
 
-
     studies = launched_studies + unlaunched_studies
 
     response_binding = Api::V0::Bindings::ParticipantStudies.new(

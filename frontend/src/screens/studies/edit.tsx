@@ -64,7 +64,7 @@ const DeleteStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
     }
     return (
         <Button
-            secondary data-test-id="preview-study-btn"
+            secondary
             onClick={deleteStudy}
             icon="trash"
             data-test-id="delete-study-btn"
