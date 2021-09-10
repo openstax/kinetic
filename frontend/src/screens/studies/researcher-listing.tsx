@@ -61,7 +61,7 @@ export const ResearcherListing = () => {
     return (
         <div className="container studies mt-8">
             <nav className="navbar fixed-top navbar-light py-1 bg-dark">
-                <div className="container-fluid d-flex justify-content-end">
+                <div className="container d-flex justify-content-end">
                     <LogoutButton />
                 </div>
             </nav>

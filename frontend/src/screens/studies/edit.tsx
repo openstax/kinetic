@@ -231,7 +231,7 @@ export function EditStudy() {
         <div className="container studies mt-8">
 
             <nav className="navbar fixed-top navbar-light py-1 bg-dark">
-                <div className="container-fluid d-flex justify-content-between">
+                <div className="container d-flex justify-content-between">
                     <LinkButton icon="back" data-test-id="back-to-studies" secondary to="/studies">
                         Studies
                     </LinkButton>
