@@ -1,4 +1,4 @@
-import { test, goToPage, createStudy, expect, dayjs, faker, closeStudy } from './test'
+import { test, goToPage, createStudy, expect, dayjs, faker, rmStudy } from './test'
 
 test('displays studies', async ({ page }) => {
     const studyName = faker.commerce.productDescription()
@@ -9,7 +9,7 @@ test('displays studies', async ({ page }) => {
     await expect(page).toMatchText(RegExp(studyName))
     await page.click(`[data-study-id="${studyId}"]`)
 
-    await closeStudy({ page, studyId })
+    await rmStudy({ page, studyId })
 })
 
 test('it auto-launches mandatory studies', async ({ page }) => {
@@ -24,7 +24,7 @@ test('it auto-launches mandatory studies', async ({ page }) => {
 
     await expect(page).toMatchText('.modal-header', studyName)
 
-    await closeStudy({ page, studyId })
+    await rmStudy({ page, studyId })
 })
 
 test('disabling completed study', async ({ page }) => {
@@ -41,5 +41,5 @@ test('disabling completed study', async ({ page }) => {
     expect(
         await page.evaluate(() => document.location.pathname)
     ).toMatch(/studies$/)
-    await closeStudy({ page, studyId })
+    await rmStudy({ page, studyId })
 })

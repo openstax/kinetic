@@ -1,5 +1,5 @@
 import {
-    test, expect, loginAs, faker, closeStudy, getIdFromUrl,
+    test, expect, loginAs, faker, rmStudy, getIdFromUrl,
     createStudy, goToPage,
 } from './test'
 
@@ -45,7 +45,7 @@ test('can create and edit a study', async ({ page }) => {
     await page.waitForLoadState('networkidle')
     await expect(page).toMatchText('testId=studies-table', RegExp(title))
 
-    await closeStudy({ page, studyId })
+    await rmStudy({ page, studyId })
 })
 
 
@@ -73,5 +73,5 @@ test('can preview a study', async ({ page }) => {
 
     await expect(page).not.toMatchText('.modal-header', studyName, { timeout: 1000 })
 
-    await closeStudy({ page, studyId })
+    await rmStudy({ page, studyId })
 })

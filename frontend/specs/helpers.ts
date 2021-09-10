@@ -1,5 +1,4 @@
 import { Page } from '@playwright/test'
-
 import * as dayjsImport from 'dayjs'
 // not sure why this is needed, but the import doesn't seem to be correct for TS
 const dayjs = (dayjsImport as any)['default'] as typeof dayjsImport
@@ -56,7 +55,7 @@ export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin
     await page.waitForNavigation()
 }
 
-export const closeStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
+export const rmStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
     await loginAs({ page, login: 'researcher' })
     await goToPage({ page, path: `/study/edit/${studyId}` })
     if (await page.$('testId=delete-study-btn')) {
