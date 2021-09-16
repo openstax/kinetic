@@ -10,6 +10,10 @@ class User
     @id = id
   end
 
+  def research_id
+    ResearchId.for_user(self)
+  end
+
   def launched_studies
     LaunchedStudy.where(user_id: id)
   end

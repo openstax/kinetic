@@ -36,6 +36,7 @@ RSpec.describe LaunchPad, multi_stage: true do
         user1_study1_launch_pad.launch_url(preview: true)
       }.to change { LaunchedStudy.count }.by(0)
        .and change { LaunchedStage.count }.by(0)
+       .and change { ResearchId.count }.by(0)
     end
   end
 
@@ -64,6 +65,7 @@ RSpec.describe LaunchPad, multi_stage: true do
         url = user1_study1_launch_pad.launch_url
       }.to change { LaunchedStudy.count }.by(0)
        .and change { LaunchedStage.count }.by(0)
+       .and change { ResearchId.count }.by(0)
 
       expect(url).to match(/^#{stage1a.config[:url]}\?ssotoken=.*/)
     end
