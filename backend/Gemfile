@@ -33,6 +33,9 @@ gem 'openstax_healthcheck'
 # For installing secrets on deploy
 gem 'aws-sdk-ssm'
 
+# For deploying domain names
+gem 'aws-sdk-route53'
+
 gem 'dotenv-rails'
 
 gem 'will_paginate', '~> 3.1.7'

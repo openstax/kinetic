@@ -7,6 +7,10 @@
     "OpenStax"
   ],
   "stack": "container",
+  "scripts": {
+    "postdeploy": "bundle exec rake heroku:review_app_setup",
+    "pr-predestroy": "bundle exec rake heroku:review_app_predestroy"
+  },
   "environments": {
     "review": {
       "addons": [
@@ -28,6 +32,12 @@
         "HEROKU_API_TOKEN": {
           "required": true
         },
+        "AWS_ACCESS_KEY_ID": {
+          "required": true
+        },
+        "AWS_SECRET_ACCESS_KEY": {
+          "required": true
+        },
         "HOST": {
           "required": true
         },
@@ -37,10 +47,6 @@
         "SENTRY_RAILS_DSN": {
           "required": true
         }
-      },
-      "scripts": {
-        "postdeploy": "bundle exec rake heroku:review_app_setup",
-        "pr-predestroy": "bundle exec rake heroku:review_app_predestroy"
       }
     }
   }

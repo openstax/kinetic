@@ -89,6 +89,9 @@ GEM
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
+    aws-sdk-route53 (1.54.0)
+      aws-sdk-core (~> 3, >= 3.119.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-ssm (1.116.0)
       aws-sdk-core (~> 3, >= 3.119.0)
       aws-sigv4 (~> 1.1)
@@ -318,6 +321,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws-sdk-route53
   aws-sdk-ssm
   bootsnap (>= 1.4.4)
   byebug
