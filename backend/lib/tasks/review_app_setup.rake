@@ -22,7 +22,7 @@ namespace :heroku do
     heroku_domain = heroku_client.domain.info(heroku_app_name, hostname)['cname']
 
     # Create or update (UPSERT) CNAME record in Route53 - credentials are in ENV
-    aws_creds = aws::AssumeRoleCredentials.new( {role_arn: 'arn:aws:iam::373045849756:role/research-labs-dns ', role_session_name: 'HerokuLabsReview' } )
+    aws_creds = aws::AssumeRoleCredentials.new( {role_arn: 'arn:aws:iam::373045849756:role/research-labs-dns', role_session_name: 'HerokuLabsReview' } )
     r53 = Aws::Route53::Client.new({credentials: aws_creds})
     domain = r53.list_hosted_zones.hosted_zones.select { |zone| zone[:name] == openstax_domain }[0]
     abort "Domain #{openstax_domain} does not exist" unless domain
