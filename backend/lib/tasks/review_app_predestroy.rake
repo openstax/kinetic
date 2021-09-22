@@ -5,6 +5,7 @@ namespace :heroku do
   task :review_app_predestroy do
     require 'aws-sdk-route53'
 
+    # Q: do we ever want to do non-sandbox PR review?
     openstax_domain = 'labs.sandbox.openstax.org'
 
     # Environment variables are provided when specified in app.json
@@ -18,10 +19,16 @@ namespace :heroku do
     heroku_domain = heroku_client.domain.info(heroku_app_name, hostname)['cname']
 
     # Delete CNAME record from Route53 - credentials are in ENV
-    aws_creds = aws::AssumeRoleCredentials.new( {role_arn: 'arn:aws:iam::373045849756:role/research-labs-dns ', role_session_name: 'HerokuLabsReview' } )
-    r53 = Aws::Route53::Client.new({credentials: aws_creds})
+    aws_creds = Aws::AssumeRoleCredentials.new(
+      {
+        role_arn: 'arn:aws:iam::373045849756:role/research-labs-dns',
+        role_session_name: 'HerokuLabsReview'
+      })
+    r53 = Aws::Route53::Client.new({ credentials: aws_creds })
     # DNS zone name ends with a fullstop
-    domain = r53.list_hosted_zones.hosted_zones.select { |zone| zone[:name] == "#{openstax_domain}." }[0]
+    domain = r53.list_hosted_zones.hosted_zones.select { |zone|
+      zone[:name] == "#{openstax_domain}."
+    }[0]
     abort "Domain #{openstax_domain} does not exist" unless domain
     zone_id = domain.id
 
