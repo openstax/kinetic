@@ -42,7 +42,7 @@
           "required": true
         },
         "HOST": {
-          "required": true
+          "required": false
         },
         "SECRET_KEY_BASE": {
           "required": true
