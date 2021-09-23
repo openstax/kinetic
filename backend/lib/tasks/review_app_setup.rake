@@ -61,7 +61,7 @@ namespace :heroku do
 
     # Wait for change to be active
     delay = 1
-    while change.change_info.status == 'PENDING' & delay < 30
+    while (change.change_info.status == 'PENDING') & (delay < 30)
       change = r53.get_change({ id: change_id })
       sleep delay
       delay *= 2
