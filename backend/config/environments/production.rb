@@ -113,13 +113,15 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
+  host = ENV.fetch('HOST', "pr-#{ENV['HEROKU_PR_NUMBER']}.labs.sandbox.openstax.org")
+
   routes.default_url_options.merge!(
     {
-      host: ENV.fetch('HOST'),
+      host: host,
       protocol: 'https'
     }
   )
 
-  config.hosts << ENV.fetch('HOST')
+  config.hosts << host
 
 end
