@@ -28,9 +28,9 @@ namespace :heroku do
       })
     r53 = Aws::Route53::Client.new({ credentials: aws_creds })
     # DNS zone name ends with a fullstop
-    domain = r53.list_hosted_zones.hosted_zones.select { |zone|
-      zone[:name] == "#{openstax_domain}."
-    }[0]
+    domain = r53.list_hosted_zones.hosted_zones.select do |zone|
+               zone[:name] == "#{openstax_domain}."
+             end [0]
     abort "Domain #{openstax_domain} does not exist" unless domain
     zone_id = domain.id
 
