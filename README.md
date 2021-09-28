@@ -54,6 +54,16 @@ A rake script is provided to generate client libraries.  Call
 `rake openstax_swagger:generate_client[0,ruby]` will generate the Ruby client for the latest version 0 API.  This
 will generate code in the baseline, so if you don't want it committed move it elsewhere.
 
+
+### Testing accounts
+
+A few testing accounts may be created by running `rake demo-users`.  This will create:
+
+ * kenetic-researcher-01@mailinator.com
+ * kenetic-student-01@mailinator.com
+ * kenetic-student-02@mailinator.com
+ * kenetic-student-03@mailinator.com
+
 ### Stubbing Authentication
 
 In the development environment, there are some extra endpoints available to faking your logged-in user.  Your logged-in user is set via a special development-environment-only cookie.  Here are the APIs:
@@ -84,8 +94,3 @@ Call this to make sure an admin and researcher user exists.  After calling this 
 ```GET    /development/users/whoami```
 
 Call this to see who you are logged in as.
-
-
-## TODOs
-
-* [] Don't delete studies
