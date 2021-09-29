@@ -19,7 +19,7 @@ namespace :heroku do
     # Create or update (UPSERT) CNAME record in Route53 - credentials are in ENV
     aws_creds = Aws::AssumeRoleCredentials.new(
       {
-        role_arn: 'arn:aws:iam::373045849756:role/research-labs-dns',
+        role_arn: 'arn:aws:iam::373045849756:role/research-kenetic-dns',
         role_session_name: 'HerokuProdDeploy'
       })
     r53 = Aws::Route53::Client.new({ credentials: aws_creds })

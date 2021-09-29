@@ -2,4 +2,4 @@
 
 CMD=$1
 
-docker exec "${PACKAGE:=openstax/labs.frontend:latest}" yarn run $CMD
+docker exec "${PACKAGE:=openstax/kenetic.frontend:latest}" yarn run $CMD

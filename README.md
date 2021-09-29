@@ -1,4 +1,4 @@
-# labs
+# kenetic
 
 ## Frontend
 
@@ -39,7 +39,7 @@ $> docker-compose exec api rake db:migrate
 
 ### Swagger, Clients, and Bindings
 
-The Labs API is documented in the code using Swagger.  Swagger JSON can be accessed at `/api/v0/swagger`.
+The Kenetic API is documented in the code using Swagger.  Swagger JSON can be accessed at `/api/v0/swagger`.
 
 ### Autogenerating bindings
 

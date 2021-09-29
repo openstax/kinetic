@@ -15,7 +15,7 @@ const StudyLanding = loadAsync('Study Landing Page', () => import('./screens/stu
 const AppRoutes = () => {
     const user = useCurrentUser()
     return (
-        <div className="openstax-labs" data-user-id={user?.id}>
+        <div className="openstax-kenetic" data-user-id={user?.id}>
             <Switch>
                 <Route exact path="/">
                     <Home />

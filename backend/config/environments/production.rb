@@ -55,7 +55,7 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
-  # config.active_job.queue_name_prefix = "labs_production"
+  # config.active_job.queue_name_prefix = "kenetic_production"
 
   # config.action_mailer.perform_caching = false
 
@@ -113,7 +113,7 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
-  host = ENV.fetch('HOST', "pr-#{ENV['HEROKU_PR_NUMBER']}.labs.sandbox.openstax.org")
+  host = ENV.fetch('HOST', "pr-#{ENV['HEROKU_PR_NUMBER']}.kenetic.sandbox.openstax.org")
 
   routes.default_url_options.merge!(
     {

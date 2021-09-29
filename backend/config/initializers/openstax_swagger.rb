@@ -9,10 +9,10 @@ OpenStax::Swagger.configure do |config|
   config.client_language_configs = {
     ruby: lambda do |version|
       {
-        gemName: 'labs-ruby',
-        gemHomepage: 'https://github.com/openstax/labs/backend/clients/ruby',
+        gemName: 'kenetic-ruby',
+        gemHomepage: 'https://github.com/openstax/kenetic/backend/clients/ruby',
         gemRequiredRubyVersion: '>= 2.4',
-        moduleName: 'OpenStax::Labs',
+        moduleName: 'OpenStax::Kenetic',
         gemVersion: version
       }
     end,
