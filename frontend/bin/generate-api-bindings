@@ -18,7 +18,7 @@ if [ -z "$(which yarn)" ]; then
 fi
 
 version=${VERSION:-"0"}
-api_host=${API_HOST:-"dos.labs.sandbox.openstax.org"}
+api_host=${API_HOST:-"dos.kenetic.sandbox.openstax.org"}
 swagger_path="/api/v${version}/swagger.json"
 
 secure=${SECURE:-"true"}
