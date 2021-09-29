@@ -24,9 +24,9 @@ jobs:
         run: |
           sleep 30
           docker ps -a
-          docker logs labs_api_1
+          docker logs kenetic_api_1
           curl -i http://localhost:4006/api/v0/swagger.json
-          docker logs labs_api_1
+          docker logs kenetic_api_1
       - name: Wait for api to boot
         working-directory: frontend
         run: $(npm bin)/wait-on http://localhost:4006/api/v0/swagger.json
