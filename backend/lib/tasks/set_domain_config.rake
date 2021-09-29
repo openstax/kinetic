@@ -13,8 +13,17 @@ namespace :heroku do
 
     # Configure Custom Domain in Heroku
     heroku_client = PlatformAPI.connect_oauth ENV['HEROKU_API_TOKEN']
-    heroku_client.domain.create(heroku_app_name, hostname: hostname)
-    heroku_domain = heroku_client.domain.info(heroku_app_name, hostname)['cname']
+
+    heroku_domain = heroku_client.domain.list(heroku_app_name).select do |d|
+                      d['hostname'] == hostname
+                    end [0]
+
+    if heroku_domain.nil?
+      heroku_client.domain.create(heroku_app_name, hostname: hostname)
+      heroku_cname = heroku_client.domain.info(heroku_app_name, hostname)['cname']
+    else
+      heroku_cname = heroku_domain['cname']
+    end
 
     # Create or update (UPSERT) CNAME record in Route53 - credentials are in ENV
     aws_creds = Aws::AssumeRoleCredentials.new(
@@ -43,12 +52,12 @@ namespace :heroku do
                 ttl: 60,
                 resource_records: [
                   {
-                    value: heroku_domain
+                    value: heroku_cname
                   }
                 ]
               }
             }
-          ],
+          ]
         }
       })
 
