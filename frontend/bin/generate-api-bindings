@@ -18,7 +18,7 @@ if [ -z "$(which yarn)" ]; then
 fi
 
 version=${VERSION:-"0"}
-api_host=${API_HOST:-"dos.labs.sandbox.openstax.org"}
+api_host=${API_HOST:-"dos.kenetic.sandbox.openstax.org"}
 swagger_path="/api/v${version}/swagger.json"
 
 secure=${SECURE:-"true"}
@@ -27,6 +27,7 @@ json_url="$protocol://$api_host$swagger_path"
 
 project_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )"
 temp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
+mkdir "$temp_dir/src"
 
 echo "getting swagger json from: $json_url saving to: $temp_dir/swagger.json"
 

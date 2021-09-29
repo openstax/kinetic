@@ -1,30 +1,35 @@
 # frozen_string_literal: true
 
 namespace :heroku do
-  desc 'review app postdeploy script'
+  desc 'Heroku production postdeploy: set AWS domain from HOST'
   task :review_app_setup do
     require 'platform-api'
     require 'aws-sdk-route53'
 
-    # Q: do we ever want to do non-sandbox PR review?
-    openstax_domain = 'kenetic.sandbox.openstax.org'
-
     # Environment variables are provided when specified in app.json
     heroku_app_name = ENV['HEROKU_APP_NAME']
-    pr_number = ENV['HEROKU_PR_NUMBER']
-    subdomain = "PR-#{pr_number}"
-    hostname = [subdomain, openstax_domain].join('.')
+    hostname = ENV['HOST']
+    openstax_domain = 'kenetic.openstax.org'
 
     # Configure Custom Domain in Heroku
     heroku_client = PlatformAPI.connect_oauth ENV['HEROKU_API_TOKEN']
-    heroku_client.domain.create(heroku_app_name, hostname: hostname)
-    heroku_domain = heroku_client.domain.info(heroku_app_name, hostname)['cname']
+
+    heroku_domain = heroku_client.domain.list(heroku_app_name).select do |d|
+                      d['hostname'] == hostname
+                    end [0]
+
+    if heroku_domain.nil?
+      heroku_client.domain.create(heroku_app_name, hostname: hostname)
+      heroku_cname = heroku_client.domain.info(heroku_app_name, hostname)['cname']
+    else
+      heroku_cname = heroku_domain['cname']
+    end
 
     # Create or update (UPSERT) CNAME record in Route53 - credentials are in ENV
     aws_creds = Aws::AssumeRoleCredentials.new(
       {
         role_arn: 'arn:aws:iam::373045849756:role/research-kenetic-dns',
-        role_session_name: 'HerokuKeneticReview'
+        role_session_name: 'HerokuProdDeploy'
       })
     r53 = Aws::Route53::Client.new({ credentials: aws_creds })
     # DNS zone name ends with a fullstop
@@ -47,13 +52,12 @@ namespace :heroku do
                 ttl: 60,
                 resource_records: [
                   {
-                    value: heroku_domain
+                    value: heroku_cname
                   }
                 ]
               }
             }
-          ],
-          comment: "Review domain for kenetic #{subdomain}"
+          ]
         }
       })
 

@@ -63,7 +63,7 @@ export const closeStudy = async ({ page, studyId }: { page: Page, studyId: strin
     await page.click('testId=form-save-btn')
 }
 
-export const getIdFromUrl = async (page): Promise<number | undefined> => {
+export const getIdFromUrl = async (page: Page): Promise<number | undefined> => {
     const id = await page.evaluate(() => {
         return window.location.href.match(/\/(\d+)$/)[1]
     })

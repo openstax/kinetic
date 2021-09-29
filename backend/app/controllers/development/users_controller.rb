@@ -3,7 +3,7 @@
 # Define an empty class for production so that the autoloader does not complain
 class Development::UsersController < ApplicationController; end
 
-return unless Labs.allow_stubbed_authentication?
+return unless Kenetic.allow_stubbed_authentication?
 
 class Development::UsersController < ApplicationController
   before_action :validate_not_real_production # belt and suspenders

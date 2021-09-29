@@ -5,5 +5,5 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 if [ "$1" == "--ci" ]; then SUFFIX=".ci"; else SUFFIX=""; fi
 
 docker build -f $DIR/Dockerfile$SUFFIX \
-             -t openstax/labs.frontend$SUFFIX:latest \
+             -t openstax/kenetic.frontend$SUFFIX:latest \
              $DIR/..
