@@ -26,20 +26,7 @@ const test = base.extend<{ config: TestConfig }>({
 test.beforeAll( async () => {
     await selectors.register('testId', createTestIdEngine)
 })
-<<<<<<< HEAD
-// eslint-disable-next-line
-test.beforeEach(({ page: _ }, testInfo) => {
-    if (!process.env.DEBUG) { // debug will set infinite timout, don't override it
-        testInfo.setTimeout(testInfo.timeout + 300000)
-=======
-test.beforeEach(({ page }, testInfo) => {
-    page.setDefaultTimeout(DEFAULT_TIMEOUT);
-    page.setDefaultNavigationTimeout(DEFAULT_NAVIGATION_TIMEOUT)
-    if (!process.env.DEBUG) { // debug will set infinite timout, don't override it
-        testInfo.setTimeout(testInfo.timeout + 30000)
->>>>>>> f2b0094... update timeout
-    }
-})
+
 export * from '@playwright/test'
 
 export * from './helpers'
