@@ -33,7 +33,7 @@ test('disabling completed study', async ({ page }) => {
     await page.click('testId=launch-study')
 
     await goToPage({ page, path: `/study/land/${studyId}`, loginAs: 'user' })
-    await page.pause()
+
     await page.click('testId=view-studies')
     await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="true"]`)
     await page.click(`[data-study-id="${studyId}"]`)

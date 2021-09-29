@@ -3,4 +3,4 @@ set -euo pipefail
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-$DIR/../bin/env playwright test --config playwright.ci.ts
+$DIR/../bin/env playwright test --reporter list --config playwright.ci.ts

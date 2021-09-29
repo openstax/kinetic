@@ -1,4 +1,4 @@
-import base, { selectors, Page } from '@playwright/test'
+import base, { selectors } from '@playwright/test'
 import { expect } from '@playwright/test'
 import { matchers } from 'expect-playwright'
 import { TC, TestConfig } from './helpers'
@@ -23,8 +23,12 @@ const test = base.extend<{ config: TestConfig }>({
 test.beforeAll( async () => {
     await selectors.register('testId', createTestIdEngine)
 })
-test.beforeEach(() => test.setTimeout(40000)) // set timeout for each individual test vs a global one
-
+// eslint-disable-next-line
+test.beforeEach(({ page: _ }, testInfo) => {
+    if (!process.env.DEBUG) { // debug will set infinite timout, don't override it
+        testInfo.setTimeout(testInfo.timeout + 300000)
+    }
+})
 export * from '@playwright/test'
 
 export * from './helpers'
