@@ -27,6 +27,7 @@ json_url="$protocol://$api_host$swagger_path"
 
 project_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )"
 temp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
+mkdir "$temp_dir/src"
 
 echo "getting swagger json from: $json_url saving to: $temp_dir/swagger.json"
 
