@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'unique_token'
+
 class ResearchId < ApplicationRecord
 
   unique_token :id
