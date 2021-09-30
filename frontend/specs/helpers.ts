@@ -52,7 +52,7 @@ export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin
     await page.goto('http://localhost:4000/')
     await page.click('testId=login-link')
     await page.click(`[data-user-id="${TC.USERS[login]}"]`)
-    await page.waitForNavigation()
+    await page.waitForSelector('.container.studies')
 }
 
 export const rmStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
