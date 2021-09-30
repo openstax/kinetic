@@ -8,7 +8,7 @@
   ],
   "stack": "container",
   "scripts": {
-    "postdeploy": "bundle exec rake heroku:review_app_setup",
+    "postdeploy": "bundle exec rake heroku:review_app_setup && bundle exec rake demo-users",
     "pr-predestroy": "bundle exec rake heroku:review_app_predestroy"
   },
   "environments": {
