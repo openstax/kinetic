@@ -2,7 +2,7 @@
 
 namespace :heroku do
   desc 'Heroku production postdeploy: set AWS domain from HOST'
-  task :review_app_setup do
+  task :set_domain_config do
     require 'platform-api'
     require 'aws-sdk-route53'
 
