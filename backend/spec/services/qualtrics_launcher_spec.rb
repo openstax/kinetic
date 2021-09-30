@@ -18,6 +18,7 @@ RSpec.describe QualtricsLauncher do
   end
 
   let(:user_id) { SecureRandom.uuid }
+  let!(:research_id) { ResearchId.for_user_id(user_id).id }
 
   it 'shows we can decrypt a Qualtrics-generated token' do
     expect(decrypt_research_id(url: "https://blah.com?ssotoken=#{known_valid_ssotoken}", key: config[:secret_key])).to eq 'foo'
@@ -25,7 +26,7 @@ RSpec.describe QualtricsLauncher do
 
   it 'works' do
     launcher = described_class.new(config: config, user_id: user_id)
-    expect(decrypt_research_id(url: launcher.url, key: config[:secret_key])).to eq user_id
+    expect(decrypt_research_id(url: launcher.url, key: config[:secret_key])).to eq research_id
   end
 
   it 'previews' do

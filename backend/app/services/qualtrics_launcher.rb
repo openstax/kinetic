@@ -33,7 +33,7 @@ class QualtricsLauncher
       [
         ['timestamp', Time.now.utc.iso8601],
         ['expiration', 1.hour.from_now.utc.iso8601],
-        ['research_id', user_id]
+        ['research_id', ResearchId.for_user_id(user_id).id]
       ]
     )
 

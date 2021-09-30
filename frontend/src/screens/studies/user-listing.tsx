@@ -64,7 +64,7 @@ const StudyTypeBlock:React.FC<StudyBlockProps> = ({ type, studies: allStudies })
         <div>
             <h3>{StudyTypes[type]}</h3>
             <Row css={{ marginBottom: '3rem' }}>
-                {studies.map(s => <StudyBlock study={s} />)}
+                {studies.map(s => <StudyBlock key={s.id} study={s} />)}
             </Row>
         </div>
     )

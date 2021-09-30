@@ -3,6 +3,9 @@ import { expect } from '@playwright/test'
 import { matchers } from 'expect-playwright'
 import { TC, TestConfig } from './helpers'
 
+export const DEFAULT_TIMEOUT = 10000;
+export const DEFAULT_NAVIGATION_TIMEOUT = 15000;
+
 expect.extend(matchers)
 
 import * as faker from 'faker'
@@ -23,12 +26,7 @@ const test = base.extend<{ config: TestConfig }>({
 test.beforeAll( async () => {
     await selectors.register('testId', createTestIdEngine)
 })
-// eslint-disable-next-line
-test.beforeEach(({ page: _ }, testInfo) => {
-    if (!process.env.DEBUG) { // debug will set infinite timout, don't override it
-        testInfo.setTimeout(testInfo.timeout + 300000)
-    }
-})
+
 export * from '@playwright/test'
 
 export * from './helpers'
