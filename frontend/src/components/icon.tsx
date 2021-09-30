@@ -9,11 +9,13 @@ import cancel from '@iconify-icons/bi/x-circle'
 import trash from '@iconify-icons/bi/trash'
 import clock from '@iconify-icons/bi/clock-fill'
 import checkCircle from '@iconify-icons/bi/check-circle-fill'
+import search from '@iconify-icons/bi/search'
 
 export const ICONS = {
     close,
     clock,
     back,
+    search,
     plusCircle,
     cancel,
     trash,

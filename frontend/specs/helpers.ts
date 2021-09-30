@@ -1,5 +1,4 @@
 import { Page } from '@playwright/test'
-
 import * as dayjsImport from 'dayjs'
 // not sure why this is needed, but the import doesn't seem to be correct for TS
 const dayjs = (dayjsImport as any)['default'] as typeof dayjsImport
@@ -53,14 +52,18 @@ export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin
     await page.goto('http://localhost:4000/')
     await page.click('testId=login-link')
     await page.click(`[data-user-id="${TC.USERS[login]}"]`)
-    await page.waitForNavigation()
+    await page.waitForSelector('.container.studies')
 }
 
-export const closeStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
+export const rmStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
     await loginAs({ page, login: 'researcher' })
     await goToPage({ page, path: `/study/edit/${studyId}` })
-    await setFlatpickrDate({ selector: '[data-field-name=closesAt]', page, date: dayjs().subtract(1, 'day') })
-    await page.click('testId=form-save-btn')
+    if (await page.$('testId=delete-study-btn')) {
+        await page.click('testId=delete-study-btn')
+    } else {
+        await setFlatpickrDate({ selector: '[data-field-name=closesAt]', page, date: dayjs().subtract(1, 'day') })
+        await page.click('testId=form-save-btn')
+    }
 }
 
 export const getIdFromUrl = async (page: Page): Promise<number | undefined> => {

@@ -109,6 +109,12 @@ export interface Study {
      */
     researchers?: Array<Researcher>;
     /**
+     * When the study was launched; null means not launched
+     * @type {Date}
+     * @memberof Study
+     */
+    firstLaunchedAt?: Date;
+    /**
      * The study's stages.
      * @type {Array<Stage>}
      * @memberof Study
@@ -149,6 +155,7 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
         'returnUrl': !exists(json, 'return_url') ? undefined : json['return_url'],
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
+        'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
     };
 }
@@ -173,6 +180,7 @@ export function StudyToJSON(value?: Study | null): any {
         'is_mandatory': value.isMandatory,
         'participation_points': value.participationPoints,
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(ResearcherToJSON)),
+        'first_launched_at': value.firstLaunchedAt === undefined ? undefined : (value.firstLaunchedAt.toISOString()),
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),
     };
 }

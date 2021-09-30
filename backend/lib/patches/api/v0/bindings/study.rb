@@ -9,7 +9,7 @@ Rails.application.config.to_prepare do
 
     def self.create_from_model(model)
       attributes = model.attributes
-
+      attributes[:first_launched_at] = model.first_launched_study&.first_launched_at
       attributes[:return_url] = frontend_returning_url(model.id)
 
       attributes[:researchers] = model.researchers.map do |researcher_model|

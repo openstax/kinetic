@@ -1,10 +1,11 @@
 import { React, useEffect, useParams, useHistory, useState } from '@common'
 import * as Yup from 'yup'
 import { useField } from 'formik'
+
 import {
     LoadingAnimation, Alert, EditingForm as Form, Modal,
     InputField, SelectField, DateField, Row, Col, Icon,
-    LinkButton, Button,
+    LinkButton, Button, Box,
 } from '@components'
 import { StudyValidationSchema, isNewStudy, EditingStudy } from '@models'
 import { NewStudy, Study, Stage, StudyUpdate, NewStudyCategoryEnum } from '@api'
@@ -40,10 +41,39 @@ const LaunchStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
             <Button
                 secondary data-test-id="preview-study-btn"
                 onClick={() => setShowing(true)}
+                icon="search"
             >
                 Preview {category}
             </Button>
         </>
+    )
+}
+
+
+const DeleteStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
+    const api = useStudyApi()
+    const history = useHistory()
+    const [isPending, setPending] = useState(false)
+    if (isNewStudy(study) || study.firstLaunchedAt) {
+        return null
+    }
+    const deleteStudy = async () => {
+        setPending(true)
+        await api.deleteStudy({ studyId: study.id })
+        history.push('/studies')
+    }
+    return (
+        <Button
+            secondary
+            onClick={deleteStudy}
+            icon="trash"
+            data-test-id="delete-study-btn"
+            busyMessage="Deleting"
+            busy={isPending}
+        >
+            Delete
+        </Button>
+
     )
 }
 
@@ -226,7 +256,6 @@ export function EditStudy() {
         })
     )
 
-
     return (
         <div className="container studies mt-8">
 
@@ -235,11 +264,14 @@ export function EditStudy() {
                     <LinkButton icon="back" data-test-id="back-to-studies" secondary to="/studies">
                         Studies
                     </LinkButton>
-                    <LaunchStudyButton study={study} />
+                    <Box gap>
+                        <DeleteStudyButton study={study} />
+                        <LaunchStudyButton study={study} />
+                    </Box>
                 </div>
             </nav>
 
-            <Form<EditingStudy>
+            <Form
                 onSubmit={saveStudy}
                 showControls
                 onCancel={onCancel}

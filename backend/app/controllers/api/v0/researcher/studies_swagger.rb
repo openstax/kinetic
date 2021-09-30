@@ -88,6 +88,11 @@ class Api::V0::Researcher::StudiesSwagger
         key :'$ref', :Researcher
       end
     end
+    property :first_launched_at do
+      key :type, :string
+      key :format, 'date-time'
+      key :description, 'When the study was launched; null means not launched'
+    end
     property :stages do
       key :type, :array
       key :description, 'The study\'s stages.'
@@ -216,6 +221,34 @@ class Api::V0::Researcher::StudiesSwagger
         schema do
           key :'$ref', :Study
         end
+      end
+      extend Api::V0::SwaggerResponses::AuthenticationError
+      extend Api::V0::SwaggerResponses::ForbiddenError
+      extend Api::V0::SwaggerResponses::UnprocessableEntityError
+      extend Api::V0::SwaggerResponses::ServerError
+    end
+  end
+
+  swagger_path '/researcher/studies/{study_id}' do
+    operation :delete do
+      key :summary, 'Deletes an unlaunched study'
+      key :description, 'Remove a study.  Cannot remove a study that has `first_lauched_at` set.'
+      key :operationId, 'deleteStudy'
+      key :produces, [
+        'application/json'
+      ]
+      key :tags, [
+        'Studies'
+      ]
+      parameter do
+        key :name, :study_id
+        key :in, :path
+        key :description, 'ID of the study.'
+        key :required, true
+        key :type, :integer
+      end
+      response 200 do
+        key :description, 'Success.'
       end
       extend Api::V0::SwaggerResponses::AuthenticationError
       extend Api::V0::SwaggerResponses::ForbiddenError
