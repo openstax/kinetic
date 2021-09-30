@@ -2,7 +2,7 @@ import { PlaywrightTestConfig } from '@playwright/test';
 
 const config: PlaywrightTestConfig = {
     globalSetup: require.resolve('./specs/setup.ts'),
-    timeout: 10 * 60 * 1000,
+    timeout: 5 * 60 * 1000,
     forbidOnly: !!process.env.CI,
     use: {
         screenshot: 'only-on-failure',

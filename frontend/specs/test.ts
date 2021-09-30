@@ -27,6 +27,14 @@ test.beforeAll( async () => {
     await selectors.register('testId', createTestIdEngine)
 })
 
+test.beforeEach(({ context, page }) => {
+    context.setDefaultTimeout(DEFAULT_TIMEOUT);
+    page.setDefaultTimeout(DEFAULT_TIMEOUT);
+    context.setDefaultNavigationTimeout(DEFAULT_NAVIGATION_TIMEOUT);
+    page.setDefaultNavigationTimeout(DEFAULT_NAVIGATION_TIMEOUT);
+});
+
 export * from '@playwright/test'
+
 export * from './helpers'
 export { test, faker }
