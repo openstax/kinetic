@@ -164,6 +164,11 @@ const StageRow:React.FC<{stage: Stage, onDelete(s: Stage): void}> = ({ stage, on
     )
 }
 
+const StudyLandingUrl: React.FC<{ study: Study }> = ({ study }) => {
+
+    return <pre>{`${window.location.origin}/study/land/${study.id}`}</pre>
+}
+
 export const StudyStages: React.FC<{ study: EditingStudy, onUpdate(): void }> = ({ study, onUpdate }) => {
     const api = useStudyApi()
     const [, meta] = useField({
@@ -181,6 +186,9 @@ export const StudyStages: React.FC<{ study: EditingStudy, onUpdate(): void }> = 
     }
     return (
         <React.Fragment>
+            <Row><Col><p className="lead">This study's return url is:</p></Col></Row>
+            <Row><Col><StudyLandingUrl study={study} /></Col></Row>
+
             <Row className="mb-2">
                 <Col sm={11}><h5>Stages</h5></Col>
                 <Col sm={1}>
