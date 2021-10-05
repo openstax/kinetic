@@ -4,9 +4,10 @@ require 'openssl'
 
 class QualtricsLauncher
 
-  def initialize(config:, user_id:)
+  def initialize(config:, user_id:, study_id:)
     @config = config
     @user_id = user_id
+    @study_id = study_id
   end
 
   def url
@@ -23,6 +24,7 @@ class QualtricsLauncher
 
   attr_reader :config
   attr_reader :user_id
+  attr_reader :study_id
 
   def secret_key
     config[:secret_key]
@@ -33,7 +35,8 @@ class QualtricsLauncher
       [
         ['timestamp', Time.now.utc.iso8601],
         ['expiration', 1.hour.from_now.utc.iso8601],
-        ['research_id', ResearchId.for_user_id(user_id).id]
+        ['research_id', ResearchId.for_user_id(user_id).id],
+        ['study_id', study_id]
       ]
     )
 

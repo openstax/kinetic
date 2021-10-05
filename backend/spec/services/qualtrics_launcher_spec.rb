@@ -14,30 +14,40 @@ RSpec.describe QualtricsLauncher do
 
   let(:known_valid_ssotoken) do
     # Generated using "Generate test token" button on Qualtrics survey
-    'FL3ghD3UzMZs0aNasdKlvFkHi3uATPks3wGueHQZ4VXJfR7mKM%2FMV5byH3mJVnHD2Z2Yrn5H0sSNJzdC71TyVv%2FufFVwm%2BQmrBF89IwqnU5RegPUyU7zOzgU78bImEtgE0GFtrZ9R40JPlRiqiZamw%3D%3D'
+    'ql5aeihGrs3oG5tR0BDuaxSGKRVPmfd5zUK08QLn9Ld5gddl7GVTN%2FtZS3j5%2BTZusMRi0EgMi67ocXYrVJs45lbbHEr2w3tr%2BjDv1qZYztIcfWOxH1Ik3ndIudGOkG%2FcQuF88D%2BlIa%2Br1Q%2BC%2FDFi0tH83whoPh%2B52aRbBYolcNk%3D'
   end
 
   let(:user_id) { SecureRandom.uuid }
-  let!(:research_id) { ResearchId.for_user_id(user_id).id }
+  let(:research_id) { '1234' }
+  let(:study_id) { '4321' }
 
   it 'shows we can decrypt a Qualtrics-generated token' do
-    expect(decrypt_research_id(url: "https://blah.com?ssotoken=#{known_valid_ssotoken}", key: config[:secret_key])).to eq 'foo'
+    expect(
+      decrypt_params(url: "https://blah.com?ssotoken=#{known_valid_ssotoken}", key: config[:secret_key])
+    ).to eq(
+      'research_id' => research_id,
+      'study_id' => study_id
+    )
   end
 
-  it 'works' do
-    launcher = described_class.new(config: config, user_id: user_id)
-    expect(decrypt_research_id(url: launcher.url, key: config[:secret_key])).to eq research_id
+  it 'generates and decypts a token' do
+    research_id = ResearchId.for_user_id(user_id).id
+    launcher = described_class.new(config: config, user_id: user_id, study_id: study_id)
+    expect(decrypt_params(url: launcher.url, key: config[:secret_key])).to eq(
+      'research_id' => research_id,
+      'study_id' => study_id
+    )
   end
 
   it 'previews' do
-    expect(described_class.new(config: config, user_id: user_id).preview_url).to match(/Q_CHL=preview/)
+    expect(described_class.new(config: config, user_id: user_id, study_id: study_id).preview_url).to match(/Q_CHL=preview/)
   end
 
-  def decrypt_research_id(url:, key:)
+  def decrypt_params(url:, key:)
     url = URI(url)
     hash = URI.decode_www_form(url.query).to_h
     query_params = URI.decode_www_form(decrypt(token_value: hash['ssotoken'], key: key)).to_h
-    query_params['research_id']
+    query_params.slice('research_id', 'study_id')
   end
 
   def decrypt(token_value:, key:)
@@ -48,3 +58,4 @@ RSpec.describe QualtricsLauncher do
   end
 
 end
+# 1wkgUd7A/kZFfroc
