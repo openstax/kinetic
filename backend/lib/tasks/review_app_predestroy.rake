@@ -32,7 +32,7 @@ namespace :heroku do
     abort "Domain #{openstax_domain} does not exist" unless domain
     zone_id = domain.id
 
-    r53.change_resource_record_sets(
+    change = r53.change_resource_record_sets(
       {
         hosted_zone_id: zone_id,
         change_batch: {
@@ -54,6 +54,16 @@ namespace :heroku do
           comment: "Review domain for kenetic #{subdomain}"
         }
       })
+
+    change_id = change.change_info.id
+
+    # Wait for change to be active
+    delay = 1
+    while (change.change_info.status == 'PENDING') & (delay < 30)
+      change = r53.get_change({ id: change_id })
+      sleep delay
+      delay *= 2
+    end
 
   end
 end
