@@ -54,7 +54,7 @@ export const StudyModal:React.FC<StudyModalProps> = ({ onHide, study }) => {
         <Modal
             large show={true}
             onHide={() => onHide?.()}
-            closeBtn={!!onHide}
+            closeBtn={isPreview}
             title={title}
             data-is-study-preview-modal={isPreview}
         >

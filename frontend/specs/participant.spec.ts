@@ -23,8 +23,8 @@ test('it auto-launches mandatory studies', async ({ page }) => {
         name: studyName,
     })
     await goToPage({ page, path: '/studies', loginAs: 'user' })
-
     await expect(page).toMatchText('.modal-header', studyName)
+    await expect(page).not.toHaveSelector('testId=data-close-btn')
 
     await rmStudy({ page, studyId })
 })
