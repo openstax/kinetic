@@ -69,7 +69,7 @@ test('can preview a study', async ({ page }) => {
 
     const frame = await frameHandle.contentFrame()
     // now close by clicking button inside iframe
-    await frame.click('text="Return to view other studies"')
+    await frame.click('testId=view-studies')
 
     await expect(page).not.toMatchText('.modal-header', studyName, { timeout: 1000 })
 
