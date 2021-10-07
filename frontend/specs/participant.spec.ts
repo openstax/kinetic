@@ -1,4 +1,6 @@
-import { test, goToPage, createStudy, expect, dayjs, faker, rmStudy } from './test'
+import {
+    RESEARCH_HOMEPAGE, test, goToPage, createStudy, expect, dayjs, faker, rmStudy,
+} from './test'
 
 test('displays studies', async ({ page }) => {
     const studyName = faker.commerce.productDescription()
@@ -27,11 +29,18 @@ test('it auto-launches mandatory studies', async ({ page }) => {
     await rmStudy({ page, studyId })
 })
 
-test('disabling completed study', async ({ page }) => {
+test('launching study and testing completion', async ({ page }) => {
     const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
     await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
+
+    await page.route(RESEARCH_HOMEPAGE, route => route.fulfill({
+        status: 200,
+        body: '<html>HI</html>',
+    }))
+
     await page.click('testId=launch-study')
 
+    // qualtrics will redirect here once complete
     await goToPage({ page, path: `/study/land/${studyId}`, loginAs: 'user' })
 
     await page.click('testId=view-studies')
