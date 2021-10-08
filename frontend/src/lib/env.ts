@@ -10,6 +10,7 @@ export const ENV = {
     MODE: import.meta.env.MODE || 'development',
     IS_PROD_MODE: import.meta.env.MODE == 'production',
     API_ADDRESS,
+    GTAG_ID: import.meta.env.VITE_GTAG_ID,
     API_PATH: `${API_ADDRESS}/api/v${API_VERSION}`,
 }
 

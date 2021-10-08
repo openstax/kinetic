@@ -2,6 +2,8 @@ import type { User } from './src/models/user'
 
 declare global {
     interface Window {
+        dataLayer?: any[]
+        gtag?(...args: any[]): void
         config: {
             url: string;
         }
@@ -15,6 +17,7 @@ declare global {
             VITE_API_ADDRESS: string
             MODE: string
             IS_LOCAL: boolean
+            VITE_GTAG_ID: string
         };
     }
 
