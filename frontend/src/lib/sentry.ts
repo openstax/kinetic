@@ -7,8 +7,7 @@ if (ENV.SENTRY_DSN) {
         dsn: ENV.SENTRY_DSN,
         integrations: [new Integrations.BrowserTracing()],
 
-        // We recommend adjusting this value in production, or using tracesSampler
-        // for finer control
+        // Consider lowering if sentry starts to report too many instances of the same error
         tracesSampleRate: 1.0,
     });
 }
