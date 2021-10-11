@@ -18,6 +18,7 @@ declare global {
             MODE: string
             IS_LOCAL: boolean
             VITE_GTAG_ID: string
+            VITE_SENTRY_DSN: string
         };
     }
 

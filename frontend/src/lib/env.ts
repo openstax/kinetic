@@ -12,6 +12,7 @@ export const ENV = {
     API_ADDRESS,
     GTAG_ID: import.meta.env.VITE_GTAG_ID,
     API_PATH: `${API_ADDRESS}/api/v${API_VERSION}`,
+    SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN || '',
 }
 
 Object.freeze(ENV)

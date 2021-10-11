@@ -3,9 +3,6 @@ import { ErrorBoundary } from '@sentry/react'
 import { LoadingAnimation } from './loading-animation'
 import { ErrorPage } from './ui-states'
 
-/* const { Boundary } = Sentry as any
- * console.log({ Sentry }) */
-
 export function loadAsync<T extends React.ComponentType<any>>(
     name: string,
     loader: () => Promise<{ default: T }>,
