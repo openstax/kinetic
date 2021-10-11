@@ -4,6 +4,8 @@ import { PageNotFound } from '@components'
 import { loadAsync } from './components/async'
 import { whenDomReady } from '@lib'
 import { CurrentUserProvider, useCurrentUser } from './lib/user-access'
+import './lib/sentry'
+import './lib/gtm'
 import './index.css'
 import './styles/main.scss'
 
