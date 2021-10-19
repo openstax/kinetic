@@ -15,7 +15,7 @@ RSpec.describe 'Studies', type: :request, api: :v0 do
         short_description: 'A short description',
         long_description: 'A longer description',
         is_mandatory: false,
-        category: 'research_study',
+        tags: ['type:research_study'],
         duration_minutes: 10
       }
     end
@@ -138,12 +138,11 @@ RSpec.describe 'Studies', type: :request, api: :v0 do
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
-      it 'cannot set funky category' do
+      it 'can set funky tags to whatever they want' do
         expect {
           api_put "researcher/studies/#{study1.id}",
-                  params: { study: { category: 'howdy' } }
-        }.not_to change { study1.reload; study1.category }
-        expect(response).to have_http_status(:unprocessable_entity)
+                  params: { study: { tags: ['howdy'] } }
+        }.to change { study1.reload; study1.tags }
       end
     end
   end

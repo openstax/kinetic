@@ -13,7 +13,7 @@ FactoryBot.define do
     short_description { 'A short description' }
     long_description { 'A long description' }
     duration_minutes { 15 }
-    category { 'research_study' }
+    tags { ['type:research_study'] }
     opens_at { 3.days.ago }
     closes_at { 3.days.from_now }
 

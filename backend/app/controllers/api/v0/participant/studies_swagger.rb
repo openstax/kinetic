@@ -28,7 +28,7 @@ class Api::V0::Participant::StudiesSwagger
   end
 
   COMMON_REQUIRED_STUDY_FIELDS = [
-    :title, :short_description, :category, :duration_minutes
+    :title, :short_description, :tags, :duration_minutes
   ].freeze
 
   swagger_schema :ParticipantStudy do
@@ -52,10 +52,10 @@ class Api::V0::Participant::StudiesSwagger
       key :type, :string
       key :description, 'The long study description that participants see.'
     end
-    property :category do
-      key :type, :string
-      key :enum, %w[research_study cognitive_task survey]
-      key :description, 'The category of the study object, used for grouping.'
+    property :tags do
+      key :type, :array
+      key :items, { 'type' => 'string' }
+      key :description, 'The tags of the study object, used for grouping and filtering.'
     end
     property :duration_minutes do
       key :type, :integer

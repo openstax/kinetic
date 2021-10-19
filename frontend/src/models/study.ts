@@ -1,7 +1,7 @@
 
 import * as Yup from 'yup';
 import {
-    NewStudy, Study, NewStudyCategoryEnum, StudiesApi, ParticipantStudy,
+    NewStudy, Study, StudiesApi, ParticipantStudy,
 } from '../api'
 import dayjs from 'dayjs'
 import { isNil } from '@lib'
@@ -14,6 +14,10 @@ export enum StudyStatus {
     Completed = 'Completed', // eslint-disable-line no-unused-vars
 }
 
+export const DEFAULT_TAGS = [
+    'category:study',
+    'category:survey',
+]
 
 export const getStatus = (study: Study):StudyStatus => {
     const now = new Date()
@@ -39,16 +43,11 @@ export const StudyValidationSchema = Yup.object().shape({
     shortDescription: Yup.string().required('Required'),
     longDescription: Yup.string().required('Required'),
     durationMinutes: Yup.number().required('Required'),
-    category: Yup.string().required('Required').oneOf([
-        NewStudyCategoryEnum.CognitiveTask,
-        NewStudyCategoryEnum.ResearchStudy,
-        NewStudyCategoryEnum.Survey,
-    ]),
 });
 
 
 export const LaunchStudy = async (api: StudiesApi, study: {id: number}, options: { preview?: boolean } = {}) => {
-    const launch = await api.launchStudy({ id: study.id, preview: options.preview || false})
+    const launch = await api.launchStudy({ id: study.id, preview: options.preview || false })
 
     window.location.href = launch.url!
     return launch

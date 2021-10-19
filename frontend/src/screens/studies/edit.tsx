@@ -1,18 +1,21 @@
 import { React, useEffect, useParams, useHistory, useState } from '@common'
 import * as Yup from 'yup'
 import { useField } from 'formik'
-
+import { uniqBy } from 'lodash-es'
 import {
     LoadingAnimation, Alert, EditingForm as Form, Modal,
     InputField, SelectField, DateField, Row, Col, Icon,
     LinkButton, Button, Box,
 } from '@components'
-import { StudyValidationSchema, isNewStudy, EditingStudy } from '@models'
-import { NewStudy, Study, Stage, StudyUpdate, NewStudyCategoryEnum } from '@api'
+import { StudyValidationSchema, DEFAULT_TAGS, isNewStudy, EditingStudy } from '@models'
+import { NewStudy, Study, Stage, StudyUpdate } from '@api'
 import { useStudyApi, errorToString, useForceUpdate, pick, remove, titleize } from '@lib'
 import { StudyModal } from './modal'
 
 
+const TAG_OPTIONS = DEFAULT_TAGS.map((t) => ({
+    label: t, value: t,
+}))
 const QualtricsFields = () => (
     <React.Fragment>
         <InputField name="url" id="url" label="URL" type="url" />
@@ -34,7 +37,7 @@ const LaunchStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
     if (isNewStudy(study) || !study.stages?.length) {
         return null
     }
-    const category = titleize(study.category)
+    const category = titleize(study.category || 'study')
     return (
         <>
             {showingModal && <StudyModal onHide={() => setShowing(false)} study={study} />}
@@ -222,7 +225,6 @@ export function EditStudy() {
                 shortDescription: '',
                 longDescription: '',
                 durationMinutes: '' as any,
-                category: NewStudyCategoryEnum.ResearchStudy as any,
             })
             setTimeout(() => { document.querySelector<HTMLInputElement>('#participants-title')?.focus() }, 100)
             return
@@ -263,7 +265,10 @@ export function EditStudy() {
             stages: Yup.array().min(1).required(),
         })
     )
-
+    console.log(study)
+    const tag_options = uniqBy(TAG_OPTIONS.concat(
+        study?.tags?.map(sto => ({ label: sto, value: sto }))
+    ), 'value')
     return (
         <div className="container studies mt-8">
 
@@ -289,17 +294,16 @@ export function EditStudy() {
                 <Alert warning={true} onDismiss={() => setError('')} message={error}>on</Alert>
                 <InputField name="titleForParticipants" id="participants-title" label="Title for participants" />
                 <InputField name="titleForResearchers" id="researchers-title" label="Title for researchers" />
+
                 <InputField name="durationMinutes" id="duration-mins" label="Duration Minutes" type="number" />
                 <InputField name="isMandatory" id="is-mandatory" label="Mandatory study" hint="(must be completed before any others)" type="checkbox" />
                 <StudyStages study={study} onUpdate={reRender} />
                 <SelectField
-                    name="category" id="category" label="Category"
-                    options={[
-                        { label: 'Research Study', value: 'research_study' },
-                        { label: 'Cognitive Task', value: 'cognitive_task' },
-                        { label: 'Survey', value: 'survey' },
-                    ]}
+                    name="tags" id="tags" label="Tags"
+                    allowCreate isMulti
+                    options={tag_options}
                 />
+
                 <DateField name="opensAt" id="opens-at" label="Opens At" />
                 <DateField name="closesAt" id="closes-at" label="Closes At" />
                 <InputField name="shortDescription" id="short-desc" type="textarea" label="Short description"/>

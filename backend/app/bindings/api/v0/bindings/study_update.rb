@@ -29,8 +29,8 @@ module Api::V0::Bindings
     # A long study description.
     attr_accessor :long_description
 
-    # The category of the study object, used for grouping.
-    attr_accessor :category
+    # The tags of the study object, used for grouping and filtering.
+    attr_accessor :tags
 
     # The expected study duration in minutes.
     attr_accessor :duration_minutes
@@ -47,28 +47,6 @@ module Api::V0::Bindings
     # How many points will be awarded for participation in the study
     attr_accessor :participation_points
 
-    class EnumAttributeValidator
-      attr_reader :datatype
-      attr_reader :allowable_values
-
-      def initialize(datatype, allowable_values)
-        @allowable_values = allowable_values.map do |value|
-          case datatype.to_s
-          when /Integer/i
-            value.to_i
-          when /Float/i
-            value.to_f
-          else
-            value
-          end
-        end
-      end
-
-      def valid?(value)
-        !value || allowable_values.include?(value)
-      end
-    end
-
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -77,7 +55,7 @@ module Api::V0::Bindings
         :'title_for_researchers' => :'title_for_researchers',
         :'short_description' => :'short_description',
         :'long_description' => :'long_description',
-        :'category' => :'category',
+        :'tags' => :'tags',
         :'duration_minutes' => :'duration_minutes',
         :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
@@ -94,7 +72,7 @@ module Api::V0::Bindings
         :'title_for_researchers' => :'String',
         :'short_description' => :'String',
         :'long_description' => :'String',
-        :'category' => :'String',
+        :'tags' => :'Array<String>',
         :'duration_minutes' => :'Integer',
         :'opens_at' => :'DateTime',
         :'closes_at' => :'DateTime',
@@ -131,8 +109,10 @@ module Api::V0::Bindings
         self.long_description = attributes[:'long_description']
       end
 
-      if attributes.has_key?(:'category')
-        self.category = attributes[:'category']
+      if attributes.has_key?(:'tags')
+        if (value = attributes[:'tags']).is_a?(Array)
+          self.tags = value
+        end
       end
 
       if attributes.has_key?(:'duration_minutes')
@@ -176,8 +156,6 @@ module Api::V0::Bindings
     def valid?
       return false if !@title_for_participants.nil? && @title_for_participants.to_s.length < 1
       return false if !@title_for_researchers.nil? && @title_for_researchers.to_s.length < 1
-      category_validator = EnumAttributeValidator.new('String', ['research_study', 'cognitive_task', 'survey'])
-      return false unless category_validator.valid?(@category)
       true
     end
 
@@ -201,16 +179,6 @@ module Api::V0::Bindings
       @title_for_researchers = title_for_researchers
     end
 
-    # Custom attribute writer method checking allowed values (enum).
-    # @param [Object] category Object to be assigned
-    def category=(category)
-      validator = EnumAttributeValidator.new('String', ['research_study', 'cognitive_task', 'survey'])
-      unless validator.valid?(category)
-        fail ArgumentError, 'invalid value for "category", must be one of #{validator.allowable_values}.'
-      end
-      @category = category
-    end
-
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
@@ -221,7 +189,7 @@ module Api::V0::Bindings
           title_for_researchers == o.title_for_researchers &&
           short_description == o.short_description &&
           long_description == o.long_description &&
-          category == o.category &&
+          tags == o.tags &&
           duration_minutes == o.duration_minutes &&
           opens_at == o.opens_at &&
           closes_at == o.closes_at &&
@@ -238,7 +206,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, category, duration_minutes, opens_at, closes_at, is_mandatory, participation_points].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, tags, duration_minutes, opens_at, closes_at, is_mandatory, participation_points].hash
     end
 
     # Builds the object from hash

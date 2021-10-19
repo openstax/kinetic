@@ -3,12 +3,13 @@ import { useField } from 'formik'
 import { FloatingFieldProps, FloatingField } from './floating-field'
 import { FloatingLabel } from './label'
 import { useFormContext } from './form'
-import { Select, SelectProps, ValueT } from './select'
+import { Select, SelectOption, SelectProps, SelectValue } from './select'
 
 
-export interface SelectFieldProps extends SelectProps, FloatingFieldProps {
+export interface SelectFieldProps extends SelectProps, Omit<FloatingFieldProps, 'name'> {
     id: string,
     readOnly?: boolean
+    display?: string
     innerRef?: any,
 }
 
@@ -45,8 +46,10 @@ export const SelectField: React.FC<SelectFieldProps> = ({
     menuPlacement,
     noOptionsMessage,
     onChange: propsOnChange,
-    onCreateOption,
     options = [],
+    className,
+    theme,
+    allowCreate,
     ...props
 }) => {
     const [isFocused, setFocusState] = useState(false)
@@ -54,7 +57,6 @@ export const SelectField: React.FC<SelectFieldProps> = ({
     const formContext = useFormContext()
     const hasError = Boolean(meta.touched && meta.error)
     const v = field.value
-
     const hasValue = Array.isArray(v) ? v.length > 0 : !!v
     const readOnly = propsReadonly == null ? formContext.readOnly : propsReadonly
     const onFocus = () => {
@@ -72,15 +74,15 @@ export const SelectField: React.FC<SelectFieldProps> = ({
             {label}
         </FloatingLabel>
     )
-    const onChange = (value: ValueT, meta: any) => {
+    const onChange = (value: SelectValue, option: SelectOption, meta: any) => {
         field.onChange({ target: { ...field, value } })
-        propsOnChange?.(value, meta)
+        propsOnChange?.(value, option, meta)
     }
 
     return (
         <SelectWrapper
             label={labelEl}
-            className={cx('form-control', {
+            className={cx('form-control', className, {
                 valued: hasValue,
                 'is-invalid': hasError,
             })}
@@ -92,16 +94,14 @@ export const SelectField: React.FC<SelectFieldProps> = ({
             <Select
                 {...field}
                 {...props}
+                allowCreate={allowCreate}
                 isDisabled={readOnly}
                 id={id}
-                onCreateOption={onCreateOption}
                 isMulti={isMulti}
                 noOptionsMessage={noOptionsMessage}
                 isClearable={isClearable}
                 menuPlacement={menuPlacement}
                 placeholder={<span />}
-                label={labelEl}
-                ref={innerRef}
                 onFocus={onFocus}
                 onBlur={onBlur}
                 className={cx('select-field', { 'is-invalid': hasError })}

@@ -51,11 +51,11 @@ export interface ParticipantStudy {
      */
     longDescription?: string;
     /**
-     * The category of the study object, used for grouping.
-     * @type {string}
+     * The tags of the study object, used for grouping and filtering.
+     * @type {Array<string>}
      * @memberof ParticipantStudy
      */
-    category: ParticipantStudyCategoryEnum;
+    tags: Array<string>;
     /**
      * The expected study duration in minutes.
      * @type {number}
@@ -106,16 +106,6 @@ export interface ParticipantStudy {
     isMandatory?: boolean;
 }
 
-/**
-* @export
-* @enum {string}
-*/
-export enum ParticipantStudyCategoryEnum {
-    ResearchStudy = 'research_study',
-    CognitiveTask = 'cognitive_task',
-    Survey = 'survey'
-}
-
 export function ParticipantStudyFromJSON(json: any): ParticipantStudy {
     return ParticipantStudyFromJSONTyped(json, false);
 }
@@ -130,7 +120,7 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'title': json['title'],
         'shortDescription': json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
-        'category': json['category'],
+        'tags': json['tags'],
         'durationMinutes': json['duration_minutes'],
         'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
@@ -155,7 +145,7 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'title': value.title,
         'short_description': value.shortDescription,
         'long_description': value.longDescription,
-        'category': value.category,
+        'tags': value.tags,
         'duration_minutes': value.durationMinutes,
         'participation_points': value.participationPoints,
         'first_launched_at': value.firstLaunchedAt === undefined ? undefined : (value.firstLaunchedAt.toISOString()),

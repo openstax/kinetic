@@ -46,10 +46,10 @@ class Api::V0::Researcher::StudiesSwagger
       key :type, :string
       key :description, 'A long study description.'
     end
-    property :category do
-      key :type, :string
-      key :enum, %w[research_study cognitive_task survey]
-      key :description, 'The category of the study object, used for grouping.'
+    property :tags do
+      key :type, :array
+      key :items, { 'type' => 'string' }
+      key :description, 'The tags of the study object, used for grouping and filtering.'
     end
     property :duration_minutes do
       key :type, :integer
