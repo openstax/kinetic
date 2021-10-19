@@ -2,17 +2,12 @@ import { React, useEffect, useState, useHistory, cx } from '@common'
 import { ParticipantStudies, ParticipantStudy } from '@api'
 import { Box, Col, LinkButton, LoadingAnimation, Row, Icon } from '@components'
 import { useStudyApi } from '@lib'
-import { isStudyLaunchable } from '@models'
+import { isStudyLaunchable, StudyTypeLabels } from '@models'
 import { StudyModal } from './modal'
 
-export enum StudyTypes {
-    research_study = 'Research Studies',
-    cognitive_task = 'Cognitive Tasks',
-    survey = 'Surveys',
-}
 
 interface StudyBlockProps {
-    type: keyof typeof StudyTypes
+    type: keyof typeof StudyTypeLabels
     studies: ParticipantStudies
 }
 
@@ -57,12 +52,12 @@ const StudyBlock:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
 }
 
 const StudyTypeBlock:React.FC<StudyBlockProps> = ({ type, studies: allStudies }) => {
-    const studies = (allStudies.data || []).filter(st => st.category == type)
+    const studies = (allStudies.data || []).filter(st => st.tags?.indexOf(type) != -1)
     if (!studies.length) { return null }
 
     return (
         <div>
-            <h3>{StudyTypes[type]}</h3>
+            <h3>{StudyTypeLabels[type]}</h3>
             <Row css={{ marginBottom: '3rem' }}>
                 {studies.map(s => <StudyBlock key={s.id} study={s} />)}
             </Row>
@@ -100,9 +95,9 @@ export const UserListing = () => {
             </nav>
             <StudyModal study={mandatoryStudy} onHide={() => setMandatoryStudy(undefined)} />
             <div>
-                <StudyTypeBlock studies={studies} type="research_study" />
-                <StudyTypeBlock studies={studies} type="cognitive_task" />
-                <StudyTypeBlock studies={studies} type="survey" />
+                {Object.keys(StudyTypeLabels).map(k => (
+                    <StudyTypeBlock key={k} studies={studies} type={k as keyof typeof StudyTypeLabels} />
+                ))}
             </div>
         </div>
     )

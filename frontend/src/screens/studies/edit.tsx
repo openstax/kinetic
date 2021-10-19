@@ -7,9 +7,9 @@ import {
     InputField, SelectField, DateField, Row, Col, Icon,
     LinkButton, Button, Box,
 } from '@components'
-import { StudyValidationSchema, DEFAULT_TAGS, isNewStudy, EditingStudy } from '@models'
+import { StudyValidationSchema, DEFAULT_TAGS, isNewStudy, EditingStudy, isStudy } from '@models'
 import { NewStudy, Study, Stage, StudyUpdate } from '@api'
-import { useStudyApi, errorToString, useForceUpdate, pick, remove, titleize } from '@lib'
+import { useStudyApi, errorToString, useForceUpdate, pick, remove } from '@lib'
 import { StudyModal } from './modal'
 
 
@@ -34,10 +34,10 @@ const AvailableStageFields = {
 
 const LaunchStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
     const [showingModal, setShowing] = useState(false)
-    if (isNewStudy(study) || !study.stages?.length) {
+    if (!isStudy(study) || !study.stages?.length) {
         return null
     }
-    const category = titleize(study.category || 'study')
+
     return (
         <>
             {showingModal && <StudyModal onHide={() => setShowing(false)} study={study} />}
@@ -46,7 +46,7 @@ const LaunchStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
                 onClick={() => setShowing(true)}
                 icon="search"
             >
-                Preview {category}
+                Preview
             </Button>
         </>
     )
@@ -57,7 +57,7 @@ const DeleteStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
     const api = useStudyApi()
     const history = useHistory()
     const [isPending, setPending] = useState(false)
-    if (isNewStudy(study) || study.firstLaunchedAt) {
+    if (!isStudy(study) || study.firstLaunchedAt) {
         return null
     }
     const deleteStudy = async () => {
@@ -177,10 +177,10 @@ export const StudyStages: React.FC<{ study: EditingStudy, onUpdate(): void }> = 
     const [, meta] = useField({
         type: 'array',
         name: 'stages',
-        value: !isNewStudy(study) ? (study?.stages || []).map(s => String(s.id)) : [],
+        value: isStudy(study) ? (study?.stages || []).map(s => String(s.id)) : [],
     })
 
-    if (isNewStudy(study)) { return null }
+    if (!isStudy(study)) { return null }
 
     const deleteStage = async (stage: Stage) => {
         await api.deleteStage({ id: stage.id })
@@ -225,6 +225,7 @@ export function EditStudy() {
                 shortDescription: '',
                 longDescription: '',
                 durationMinutes: '' as any,
+                tags: [],
             })
             setTimeout(() => { document.querySelector<HTMLInputElement>('#participants-title')?.focus() }, 100)
             return
@@ -264,8 +265,9 @@ export function EditStudy() {
         Yup.object().shape({
             stages: Yup.array().min(1).required(),
         })
+
     )
-    console.log(study)
+
     const tag_options = uniqBy(TAG_OPTIONS.concat(
         study?.tags?.map(sto => ({ label: sto, value: sto }))
     ), 'value')

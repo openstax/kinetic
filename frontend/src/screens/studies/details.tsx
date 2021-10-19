@@ -2,9 +2,9 @@ import { React, useEffect, useParams, useState } from '@common'
 import {
     LoadingAnimation, Row, Col, LinkButton, Button, Box,
 } from '@components'
-import { LaunchStudy } from '@models'
+import { LaunchStudy, studyTypeName } from '@models'
 import { ParticipantStudy } from '@api'
-import { titleize, useStudyApi } from '@lib'
+import { useStudyApi } from '@lib'
 import dayjs from 'dayjs'
 
 
@@ -40,7 +40,6 @@ export const StudyDetails:React.FC = () => {
         return <LoadingAnimation message="Loading study" />
     }
 
-    const category = titleize(study.category)
     const researcher = (study.researchers || [])[0] || {}
 
     return (
@@ -58,7 +57,7 @@ export const StudyDetails:React.FC = () => {
                         <Box direction="column">
                             <p css={{
                                 fontSize: 24,
-                            }}>{category}</p>
+                            }}>{studyTypeName(study)}</p>
                             <h3>{study.title}</h3>
                         </Box>
                         <Box align="center" gap justify="end" css={{ minWidth: 240 }}>
@@ -71,7 +70,7 @@ export const StudyDetails:React.FC = () => {
             <div className="container mt-4 d-flex flex-row">
                 <Row css={{ width: '100%' }}>
                     <Col md={8} sm={8} direction="column">
-                        <h5>{category} details</h5>
+                        <h5>{studyTypeName(study)} details</h5>
                         <p>{study.longDescription}</p>
                         {study.closesAt && (
                             <Box gap direction="column">

@@ -1,4 +1,4 @@
-import { React, cx } from '../common'
+import { React, cx } from '@common'
 import { BoxProps } from 'boxible'
 import { Col, ColProps } from './col'
 import { ExtraInfo } from './label'
@@ -6,7 +6,7 @@ import { ExtraInfo } from './label'
 export interface FloatingFieldProps extends BoxProps, ColProps {
     id: string
     label: React.ReactNode,
-    name: string
+    name?: string
     feedback?: string
     hint?: string
     className?: string

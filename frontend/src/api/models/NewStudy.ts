@@ -48,7 +48,7 @@ export interface NewStudy {
      * @type {Array<string>}
      * @memberof NewStudy
      */
-    tags?: Array<string>;
+    tags: Array<string>;
     /**
      * The expected study duration in minutes.
      * @type {number}
@@ -95,7 +95,7 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'titleForResearchers': !exists(json, 'title_for_researchers') ? undefined : json['title_for_researchers'],
         'shortDescription': json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
-        'tags': !exists(json, 'tags') ? undefined : json['tags'],
+        'tags': json['tags'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
         'opensAt': !exists(json, 'opens_at') ? undefined : (new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (new Date(json['closes_at'])),

@@ -147,6 +147,10 @@ module Api::V0::Bindings
         invalid_properties.push('invalid value for "short_description", short_description cannot be nil.')
       end
 
+      if @tags.nil?
+        invalid_properties.push('invalid value for "tags", tags cannot be nil.')
+      end
+
       invalid_properties
     end
 
@@ -157,6 +161,7 @@ module Api::V0::Bindings
       return false if @title_for_participants.to_s.length < 1
       return false if !@title_for_researchers.nil? && @title_for_researchers.to_s.length < 1
       return false if @short_description.nil?
+      return false if @tags.nil?
       true
     end
 

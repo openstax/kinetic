@@ -15,7 +15,16 @@ const StudyRow:React.FC<{ study: Study }> = ({ study }) => {
                 backgroundColor: 'white',
                 marginBottom: '1.5rem',
             }}>
-            <Col sm={7}>{study.titleForResearchers || study.titleForParticipants}</Col>
+            <Col sm={7} className="py-1">
+                <Box direction="column">
+                    <div>
+                        {study.titleForResearchers || study.titleForParticipants}
+                    </div>
+                    <Box gap wrap>
+                        {study.tags?.map(t => <span key={t} className="badge bg-secondary rounded-pill">{t}</span>)}
+                    </Box>
+                </Box>
+            </Col>
             <Col sm={2}>{formatDate(study.opensAt)}</Col>
             <Col sm={2}>{getStatusName(study)}</Col>
             <Col sm={1}><Icon icon="tripleDot" data-test-id="edit-study" onClick={() => history.push(`/study/edit/${study.id}`)}/></Col>

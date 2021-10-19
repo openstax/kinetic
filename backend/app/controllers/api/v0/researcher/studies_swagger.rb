@@ -6,7 +6,7 @@ class Api::V0::Researcher::StudiesSwagger
 
   COMMON_REQUIRED_STUDY_FIELDS = [
     :title_for_participants, :description_for_participants,
-    :short_description, :category
+    :short_description, :tags
   ].freeze
 
   swagger_schema :Study do
@@ -48,6 +48,7 @@ class Api::V0::Researcher::StudiesSwagger
     end
     property :tags do
       key :type, :array
+      key :minLength, 0
       key :items, { 'type' => 'string' }
       key :description, 'The tags of the study object, used for grouping and filtering.'
     end

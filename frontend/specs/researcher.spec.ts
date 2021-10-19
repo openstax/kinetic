@@ -20,6 +20,8 @@ test('can create and edit a study', async ({ page }) => {
     await page.fill('[name=longDescription]', 'long desc')
     await page.fill('[name=durationMinutes]', '42')
 
+    await page.fill('#tags input', 'type:survey')
+    await page.keyboard.press('Enter')
 
     await page.click('testId=form-save-btn')
     await expect(page).not.toHaveSelector('.is-invalid', { timeout: 500 })
