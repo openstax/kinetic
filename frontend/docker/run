@@ -8,5 +8,5 @@ docker run \
     -p 4000:4000/tcp \
     -it \
     -v $DIR/../src:/app/src \
-    "${PACKAGE:=openstax/kenetic.frontend:latest}" \
+    "${PACKAGE:=openstax/kinetic.frontend:latest}" \
     yarn run $CMD

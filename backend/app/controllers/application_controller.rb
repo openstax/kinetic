@@ -3,7 +3,7 @@
 require 'openstax/auth/strategy_2'
 
 class ApplicationController < ActionController::API
-  include ActionController::Cookies if Kenetic.allow_stubbed_authentication?
+  include ActionController::Cookies if Kinetic.allow_stubbed_authentication?
 
   protected
 
@@ -15,7 +15,7 @@ class ApplicationController < ActionController::API
 
   def current_user_uuid
     @current_user_uuid ||=
-      if Kenetic.allow_stubbed_authentication?
+      if Kinetic.allow_stubbed_authentication?
         if ENV['STUBBED_USER_UUID']
           ENV['STUBBED_USER_UUID']
         elsif cookies[:stubbed_user_uuid]

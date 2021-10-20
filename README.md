@@ -1,4 +1,4 @@
-# kenetic
+# kinetic
 
 ## Frontend
 
@@ -39,7 +39,7 @@ $> docker-compose exec api rake db:migrate
 
 ### Swagger, Clients, and Bindings
 
-The Kenetic API is documented in the code using Swagger.  Swagger JSON can be accessed at `/api/v0/swagger`.
+The Kinetic API is documented in the code using Swagger.  Swagger JSON can be accessed at `/api/v0/swagger`.
 
 ### Autogenerating bindings
 
@@ -59,10 +59,10 @@ will generate code in the baseline, so if you don't want it committed move it el
 
 A few testing accounts may be created by running `rake demo-users`.  This will create:
 
- * kenetic-researcher-01@mailinator.com
- * kenetic-student-01@mailinator.com
- * kenetic-student-02@mailinator.com
- * kenetic-student-03@mailinator.com
+ * kinetic-researcher-01@mailinator.com
+ * kinetic-student-01@mailinator.com
+ * kinetic-student-02@mailinator.com
+ * kinetic-student-03@mailinator.com
 
 ### Stubbing Authentication
 

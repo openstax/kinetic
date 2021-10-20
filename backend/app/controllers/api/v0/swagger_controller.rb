@@ -12,9 +12,9 @@ class Api::V0::SwaggerController < ApplicationController
     key :swagger, '2.0'
     info do
       key :version, '0.1.0'
-      key :title, 'OpenStax Kenetic API'
+      key :title, 'OpenStax Kinetic API'
       key :description, <<~DESC
-        The Kenetic API for OpenStax.
+        The Kinetic API for OpenStax.
 
         Requests to this API should include `#{ACCEPT_HEADER}` in the `Accept` header.
 
@@ -31,8 +31,8 @@ class Api::V0::SwaggerController < ApplicationController
       end
     end
     tag do
-      key :name, 'Kenetic'
-      key :description, 'Kenetic endpoints'
+      key :name, 'Kinetic'
+      key :description, 'Kinetic endpoints'
     end
     key :basePath, BASE_PATH
     key :consumes, [ACCEPT_HEADER]

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 RESEARCHERS = [
-  '572cc58d-0ab7-4dd4-bd62-ef8a11033ec7' # kenetic-researcher-01@mailinator.com
+  '572cc58d-0ab7-4dd4-bd62-ef8a11033ec7' # kinetic-researcher-01@mailinator.com
 ].freeze
 
 PARTICIPANTS = [
-  '0a5cb583-d248-4daf-bfca-ad244e3c962b', # kenetic-student-01@mailinator.com
-  '018fb377-d952-4f2b-8f30-c6fc5c4c5670', # kenetic-student-02@mailinator.com
-  '4230d153-005b-4cb2-9df1-b9e5d0ac855f'  # kenetic-student-03@mailinator.com
+  '0a5cb583-d248-4daf-bfca-ad244e3c962b', # kinetic-student-01@mailinator.com
+  '018fb377-d952-4f2b-8f30-c6fc5c4c5670', # kinetic-student-02@mailinator.com
+  '4230d153-005b-4cb2-9df1-b9e5d0ac855f'  # kinetic-student-03@mailinator.com
 ].freeze
 
 desc 'create demo user accounts if they do not exist'

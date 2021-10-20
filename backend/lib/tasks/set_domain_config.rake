@@ -9,7 +9,7 @@ namespace :heroku do
     # Environment variables are provided when specified in app.json
     heroku_app_name = ENV['HEROKU_APP_NAME']
     hostname = ENV['HOST']
-    openstax_domain = 'kenetic.openstax.org'
+    openstax_domain = 'kinetic.openstax.org'
 
     # Configure Custom Domain in Heroku
     heroku_client = PlatformAPI.connect_oauth ENV['HEROKU_API_TOKEN']
@@ -28,7 +28,7 @@ namespace :heroku do
     # Create or update (UPSERT) CNAME record in Route53 - credentials are in ENV
     aws_creds = Aws::AssumeRoleCredentials.new(
       {
-        role_arn: 'arn:aws:iam::373045849756:role/research-kenetic-dns',
+        role_arn: 'arn:aws:iam::373045849756:role/research-kinetic-dns',
         role_session_name: 'HerokuProdDeploy'
       })
     r53 = Aws::Route53::Client.new({ credentials: aws_creds })
