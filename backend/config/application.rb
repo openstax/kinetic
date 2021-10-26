@@ -23,7 +23,7 @@ Bundler.require(*Rails.groups)
 
 Dotenv.load('/etc/.env', '.env')
 
-module Kenetic
+module Kinetic
   def self.allow_stubbed_authentication?
     Rails.env.development? || Rails.env.test?
   end
@@ -68,6 +68,6 @@ module Kenetic
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    config.middleware.use ActionDispatch::Cookies if Kenetic.allow_stubbed_authentication?
+    config.middleware.use ActionDispatch::Cookies if Kinetic.allow_stubbed_authentication?
   end
 end

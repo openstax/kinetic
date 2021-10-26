@@ -7,19 +7,19 @@ services:
       args:
         bundler_version: 2.2.4
     networks:
-      - kenetic
+      - kinetic
     ports:
       - "4006:4006"
     command: bash -c "bundle exec rake about && bundle exec rails server -b '0.0.0.0' -p 4006"
     environment:
       - DB_HOST=postgres
-      - DB_USER=kenetic
-      - DB_PASS=kenetic
-      - DB_NAME=kenetic_development
+      - DB_USER=kinetic
+      - DB_PASS=kinetic
+      - DB_NAME=kinetic_development
       - TEST_DB_HOST=postgres_test
-      - TEST_DB_NAME=kenetic_test
-      - TEST_DB_USER=kenetic
-      - TEST_DB_PASS=kenetic
+      - TEST_DB_NAME=kinetic_test
+      - TEST_DB_USER=kinetic
+      - TEST_DB_PASS=kinetic
       - ACCOUNTS_ENV_NAME=dev
     depends_on:
       - postgres
@@ -32,7 +32,7 @@ services:
       context: ./frontend
       dockerfile: docker/Dockerfile${API_DOCKERFILE_EXT:-}
     networks:
-      - kenetic
+      - kinetic
     volumes:
       - ./frontend/src:/app/src
     ports:
@@ -47,23 +47,23 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - kenetic
+      - kinetic
     environment:
-      - POSTGRES_USER=kenetic
-      - POSTGRES_PASSWORD=kenetic
-      - POSTGRES_DB=kenetic_development
+      - POSTGRES_USER=kinetic
+      - POSTGRES_PASSWORD=kinetic
+      - POSTGRES_DB=kinetic_development
   postgres_test:
     image: "postgres:11"
     networks:
-      - kenetic
+      - kinetic
     environment:
-      - POSTGRES_USER=kenetic
-      - POSTGRES_PASSWORD=kenetic
-      - POSTGRES_DB=kenetic_test
+      - POSTGRES_USER=kinetic
+      - POSTGRES_PASSWORD=kinetic
+      - POSTGRES_DB=kinetic_test
   petstore:
     image: "swaggerapi/petstore"
     networks:
-      - "kenetic"
+      - "kinetic"
     environment:
       - SWAGGER_HOST=http://0.0.0.0:4008
       - SWAGGER_BASE_PATH=/api/v0
@@ -73,7 +73,7 @@ services:
 
 
 networks:
-  kenetic:
+  kinetic:
 volumes:
   pgdata:
   gems:

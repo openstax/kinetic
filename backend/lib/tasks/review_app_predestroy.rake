@@ -6,7 +6,7 @@ namespace :heroku do
     require 'aws-sdk-route53'
 
     # Q: do we ever want to do non-sandbox PR review?
-    openstax_domain = 'kenetic.sandbox.openstax.org'
+    openstax_domain = 'kinetic.sandbox.openstax.org'
 
     # Environment variables are provided when specified in app.json
     heroku_app_name = ENV['HEROKU_APP_NAME']
@@ -21,8 +21,8 @@ namespace :heroku do
     # Delete CNAME record from Route53 - credentials are in ENV
     aws_creds = Aws::AssumeRoleCredentials.new(
       {
-        role_arn: 'arn:aws:iam::373045849756:role/research-kenetic-dns',
-        role_session_name: 'HerokuKeneticReview'
+        role_arn: 'arn:aws:iam::373045849756:role/research-kinetic-dns',
+        role_session_name: 'HerokuKineticReview'
       })
     r53 = Aws::Route53::Client.new({ credentials: aws_creds })
     # DNS zone name ends with a fullstop
@@ -51,7 +51,7 @@ namespace :heroku do
               }
             }
           ],
-          comment: "Review domain for kenetic #{subdomain}"
+          comment: "Review domain for kinetic #{subdomain}"
         }
       })
 

@@ -1,4 +1,4 @@
-OpenStax Kenetic is Copyright Rice University, 2021.
+OpenStax Kinetic is Copyright Rice University, 2021.
 
 Software files herein are licensed under the Affero General Public License
 version 3 (the text of which can be found in the file GNU-AGPL-3.0 or online at
@@ -7,7 +7,7 @@ the AGPL, unless otherwise noted.
 
 All non-programmatic portions of this site, including but not limited to logos,
 images, videos, marketing materials, and text copy, are Copyright Rice University,
-All Rights Reserved.  Derivations of OpenStax Kenetic may not use these materials
+All Rights Reserved.  Derivations of OpenStax Kinetic may not use these materials
 without permission from Rice University.
 
 Per the license specified above, this program is free software.  This program is
@@ -15,7 +15,7 @@ distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; withou
 even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 See the aforementioned license for more details.
 
-Components of OpenStax Kenetic (e.g. libraries, gems, plugins, etc) are
+Components of OpenStax Kinetic (e.g. libraries, gems, plugins, etc) are
 licensed under various other open source licenses. All unmodified files from these
 and other sources retain their original copyright and license notices.  For a full
 listing, see the Gemfile and the contents of the assets directories.
