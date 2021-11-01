@@ -5,10 +5,15 @@ setup:
 build:
   docker:
     web: Dockerfile.heroku
+    web-prod: Dockerfile.heroku
 run:
     web: bundle exec puma
+    web-prod: bundle exec puma
 
 release:
   image: web
+  command:
+    - bundle exec rake db:migrate
+  image: web-prod
   command:
     - bundle exec rake db:migrate
