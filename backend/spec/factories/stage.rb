@@ -9,7 +9,7 @@ FactoryBot.define do
     config do
       {
         type: 'qualtrics',
-        url: "https://foo.com/#{path}",
+        survey_id: 'SV_12QHR3BE',
         secret_key: '1234567890123456'
       }
     end

@@ -18,7 +18,10 @@ class Stage < ApplicationRecord
                else
                  raise "Unsupported stage type: '#{config[:type]}'"
                end
-    launcher.new(config: config, user_id: user_id, study_id: study.id)
+    launcher.new(
+      **config.symbolize_keys.without(:type),
+      user_id: user_id, study_id: study.id
+    )
   end
 
   protected

@@ -3,15 +3,17 @@
 require 'openssl'
 
 class QualtricsLauncher
+  include Rails.application.routes.url_helpers
 
-  def initialize(config:, user_id:, study_id:)
-    @config = config
+  def initialize(secret_key:, survey_id:, user_id:, study_id:)
+    @secret_key = secret_key
+    @survey_id = survey_id
     @user_id = user_id
     @study_id = study_id
   end
 
   def url
-    uri = URI(config[:url])
+    uri = URI("#{Rails.application.secrets.qualtrics_launch_url}/#{survey_id}")
     uri.query = URI.encode_www_form([['ssotoken', sso_token]])
     uri.to_s
   end
@@ -22,13 +24,10 @@ class QualtricsLauncher
 
   protected
 
-  attr_reader :config
+  attr_reader :secret_key
+  attr_reader :study_id # study id is the Kinetic model's ID
+  attr_reader :survey_id # survey is the Qualtrics ID
   attr_reader :user_id
-  attr_reader :study_id
-
-  def secret_key
-    config[:secret_key]
-  end
 
   def sso_token
     raw_query = URI.encode_www_form(
@@ -36,10 +35,10 @@ class QualtricsLauncher
         ['timestamp', Time.now.utc.iso8601],
         ['expiration', 1.hour.from_now.utc.iso8601],
         ['research_id', ResearchId.for_user_id(user_id).id],
+        ['return_to_url', frontend_returning_url(study_id: study_id)],
         ['study_id', study_id]
       ]
     )
-
     hash = md5_hash(raw_query)
     unecrypted_token = "#{raw_query}&mac=#{hash}"
     encrypt(unecrypted_token)
