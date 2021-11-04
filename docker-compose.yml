@@ -10,7 +10,7 @@ services:
       - kinetic
     ports:
       - "4006:4006"
-    command: bash -c "bundle exec rake about && bundle exec rails server -b '0.0.0.0' -p 4006"
+    command: bash -c "bundle exec rake about && rm -r tmp/pids && bundle exec rails server -b '0.0.0.0' -p 4006"
     environment:
       - DB_HOST=postgres
       - DB_USER=kinetic

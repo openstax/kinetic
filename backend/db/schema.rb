@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_16_155137) do
+ActiveRecord::Schema.define(version: 2021_10_18_140839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,7 +77,6 @@ ActiveRecord::Schema.define(version: 2021_09_16_155137) do
     t.string "title_for_participants", null: false
     t.text "short_description", null: false
     t.text "long_description", null: false
-    t.string "category", null: false
     t.integer "duration_minutes", null: false
     t.integer "participation_points"
     t.datetime "opens_at"
@@ -85,6 +84,8 @@ ActiveRecord::Schema.define(version: 2021_09_16_155137) do
     t.boolean "is_mandatory", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "tags", default: [], null: false, array: true
+    t.index ["tags"], name: "index_studies_on_tags", using: :gin
   end
 
   create_table "study_researchers", force: :cascade do |t|

@@ -44,11 +44,11 @@ export interface NewStudy {
      */
     longDescription?: string;
     /**
-     * The category of the study object, used for grouping.
-     * @type {string}
+     * The tags of the study object, used for grouping and filtering.
+     * @type {Array<string>}
      * @memberof NewStudy
      */
-    category: NewStudyCategoryEnum;
+    tags: Array<string>;
     /**
      * The expected study duration in minutes.
      * @type {number}
@@ -81,16 +81,6 @@ export interface NewStudy {
     participationPoints?: number;
 }
 
-/**
-* @export
-* @enum {string}
-*/
-export enum NewStudyCategoryEnum {
-    ResearchStudy = 'research_study',
-    CognitiveTask = 'cognitive_task',
-    Survey = 'survey'
-}
-
 export function NewStudyFromJSON(json: any): NewStudy {
     return NewStudyFromJSONTyped(json, false);
 }
@@ -105,7 +95,7 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'titleForResearchers': !exists(json, 'title_for_researchers') ? undefined : json['title_for_researchers'],
         'shortDescription': json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
-        'category': json['category'],
+        'tags': json['tags'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
         'opensAt': !exists(json, 'opens_at') ? undefined : (new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (new Date(json['closes_at'])),
@@ -127,7 +117,7 @@ export function NewStudyToJSON(value?: NewStudy | null): any {
         'title_for_researchers': value.titleForResearchers,
         'short_description': value.shortDescription,
         'long_description': value.longDescription,
-        'category': value.category,
+        'tags': value.tags,
         'duration_minutes': value.durationMinutes,
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt.toISOString()),

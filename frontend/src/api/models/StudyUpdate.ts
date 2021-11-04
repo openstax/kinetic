@@ -50,11 +50,11 @@ export interface StudyUpdate {
      */
     longDescription?: string;
     /**
-     * The category of the study object, used for grouping.
-     * @type {string}
+     * The tags of the study object, used for grouping and filtering.
+     * @type {Array<string>}
      * @memberof StudyUpdate
      */
-    category?: StudyUpdateCategoryEnum;
+    tags?: Array<string>;
     /**
      * The expected study duration in minutes.
      * @type {number}
@@ -87,16 +87,6 @@ export interface StudyUpdate {
     participationPoints?: number;
 }
 
-/**
-* @export
-* @enum {string}
-*/
-export enum StudyUpdateCategoryEnum {
-    ResearchStudy = 'research_study',
-    CognitiveTask = 'cognitive_task',
-    Survey = 'survey'
-}
-
 export function StudyUpdateFromJSON(json: any): StudyUpdate {
     return StudyUpdateFromJSONTyped(json, false);
 }
@@ -112,7 +102,7 @@ export function StudyUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'titleForResearchers': !exists(json, 'title_for_researchers') ? undefined : json['title_for_researchers'],
         'shortDescription': !exists(json, 'short_description') ? undefined : json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
-        'category': !exists(json, 'category') ? undefined : json['category'],
+        'tags': !exists(json, 'tags') ? undefined : json['tags'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
         'opensAt': !exists(json, 'opens_at') ? undefined : (new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (new Date(json['closes_at'])),
@@ -134,7 +124,7 @@ export function StudyUpdateToJSON(value?: StudyUpdate | null): any {
         'title_for_researchers': value.titleForResearchers,
         'short_description': value.shortDescription,
         'long_description': value.longDescription,
-        'category': value.category,
+        'tags': value.tags,
         'duration_minutes': value.durationMinutes,
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt.toISOString()),

@@ -36,7 +36,7 @@ export interface InputProps extends FloatingFieldProps {
     onBlur?: any
     autoFocus?: boolean
     innerRef?: React.Ref<HTMLInputElement>
-    rows?: string | number
+    rows?: number
 }
 
 export const InputField: React.FC<InputProps> = ({
@@ -48,7 +48,7 @@ export const InputField: React.FC<InputProps> = ({
     type = 'text',
     ...props
 }) => {
-    const [field, meta] = useField({ type, ...props })
+    const [field, meta] = useField({ type, ...(props as any) })
     const hasError = Boolean(meta.touched && meta.error)
     const InputComponent:any = (INPUTS as any)[type] || 'input'
     const formContext = useFormContext()

@@ -50,7 +50,7 @@ RSpec.describe 'Participant Studies', type: :request, api: :v0, multi_stage: tru
           id: study2.id,
           title: study2.title_for_participants,
           short_description: study2.short_description,
-          category: study2.category,
+          tags: study2.tags,
           duration_minutes: study2.duration_minutes,
           researchers: a_collection_containing_exactly(
             {
@@ -98,7 +98,7 @@ RSpec.describe 'Participant Studies', type: :request, api: :v0, multi_stage: tru
             id: study1.id,
             title: study1.title_for_participants,
             short_description: study1.short_description,
-            category: study1.category,
+            tags: study1.tags,
             duration_minutes: study1.duration_minutes,
             researchers: a_collection_containing_exactly(
               {
@@ -112,7 +112,7 @@ RSpec.describe 'Participant Studies', type: :request, api: :v0, multi_stage: tru
             id: study2.id,
             title: study2.title_for_participants,
             short_description: study2.short_description,
-            category: study2.category,
+            tags: study2.tags,
             duration_minutes: study2.duration_minutes,
             researchers: a_collection_containing_exactly(
               {
