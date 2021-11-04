@@ -1,5 +1,5 @@
 import {
-    RESEARCH_HOMEPAGE, test, goToPage, createStudy, expect, dayjs, faker, rmStudy,
+    interceptStudyLaunch, test, goToPage, createStudy, expect, dayjs, faker, rmStudy,
 } from './test'
 
 test('displays studies', async ({ page }) => {
@@ -30,14 +30,11 @@ test('it auto-launches mandatory studies', async ({ page }) => {
 })
 
 test('launching study and testing completion', async ({ page }) => {
+
+    await interceptStudyLaunch({ page })
+
     const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
     await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
-
-    await page.route(RESEARCH_HOMEPAGE, route => route.fulfill({
-        status: 200,
-        body: '<html>HI</html>',
-    }))
-
     await page.click('testId=launch-study')
 
     // qualtrics will redirect here once complete

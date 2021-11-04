@@ -1,6 +1,6 @@
 import {
     test, expect, loginAs, faker, rmStudy, getIdFromUrl,
-    createStudy, goToPage,
+    createStudy, goToPage, interceptStudyLaunch
 } from './test'
 
 test('can create and edit a study', async ({ page }) => {
@@ -52,6 +52,8 @@ test('can create and edit a study', async ({ page }) => {
 
 
 test('can preview a study', async ({ page }) => {
+    interceptStudyLaunch({ page })
+
     const studyName = faker.commerce.productDescription()
     const studyId = await createStudy({ page, name: studyName })
     await goToPage({ page, path: `/study/edit/${studyId}`, loginAs: 'researcher' })

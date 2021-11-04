@@ -37,6 +37,15 @@ export const goToPage = async ({ page, path, loginAs: login }: goToPageArgs) => 
     }
 }
 
+export const interceptStudyLaunch = async ({ page }: { page: Page }) => {
+    await page.route(/studies\/\d+\/launch/, async route => {
+        const response = await page.request.fetch(route.request())
+        const body = await response.json()
+        body.url = '' // will reload page when passed to window.location.assign()
+        route.fulfill({ response, body });
+    });
+}
+
 export const logout = async ({ page }: { page: Page }) => {
     await page.goto(TC.ORIGIN)
     await page.waitForFunction(() => (window as any)._MODELS)
