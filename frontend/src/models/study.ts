@@ -22,6 +22,15 @@ export const StudyTypeLabels = {
     'type:survey': 'Survey',
 }
 
+export const StudySubjects = {
+    'subject:statistics': 'Statistics',
+    'subject:physics': 'Physics',
+    'subject:biology': 'Biology',
+    'subject:sociology': 'Sociology',
+    'subject:chemistry': 'Chemistry',
+    'subject:business-ethics': 'Business Ethics',
+}
+
 export const DEFAULT_TAGS = Object.keys(StudyTypeLabels)
 
 export const getStatus = (study: Study):StudyStatus => {
