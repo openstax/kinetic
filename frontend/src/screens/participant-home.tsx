@@ -50,21 +50,6 @@ const StudyBlock:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     )
 }
 
-const StudyTypeBlock:React.FC<StudyBlockProps> = ({ type, studies: allStudies }) => {
-    const studies = (allStudies.data || []).filter(st => st.tags?.indexOf(type) != -1)
-    if (!studies.length) { return null }
-
-    return (
-        <div>
-            <h3>{StudyTypeLabels[type]}</h3>
-            <Row css={{ marginBottom: '3rem' }}>
-                {studies.map(s => <StudyBlock key={s.id} study={s} />)}
-            </Row>
-        </div>
-    )
-}
-
-
 export default function ParticipantHome() {
     const api = useStudyApi()
     const [mandatoryStudy, setMandatoryStudy] = useState<ParticipantStudy>()
@@ -79,7 +64,7 @@ export default function ParticipantHome() {
         })
     }, [])
 
-    if (!studies) {
+    if (!studies?.data) {
         return <LoadingAnimation message="Loading studies" />
     }
 
@@ -93,11 +78,9 @@ export default function ParticipantHome() {
                 </div>
             </nav>
             <StudyModal study={mandatoryStudy} onHide={() => setMandatoryStudy(undefined)} />
-            <div>
-                {Object.keys(StudyTypeLabels).map(k => (
-                    <StudyTypeBlock key={k} studies={studies} type={k as keyof typeof StudyTypeLabels} />
-                ))}
-            </div>
+            <Row>
+                {studies.data.map(s => <StudyBlock key={s.id} study={s} />)}
+            </Row>
         </div>
     )
 }
