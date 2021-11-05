@@ -32,6 +32,7 @@ WORKDIR /code/backend
 COPY backend ./
 ENV RUBY_ENV=production
 ENV RAILS_LOG_TO_STDOUT=true
+ENV SENTRY_DSN=https://a7ba8f1daead45acaf7a28dbb661d393@o484761.ingest.sentry.io/6051748
 ENV RUBY_SERVE_STATIC_FILES=true
 COPY --from=node /code/frontend/dist/ ./public/
 
