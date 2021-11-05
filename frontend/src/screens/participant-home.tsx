@@ -2,13 +2,8 @@ import { React, useEffect, useState, useHistory, cx } from '@common'
 import { ParticipantStudies, ParticipantStudy } from '@api'
 import { Box, Col, LinkButton, LoadingAnimation, Row, Icon } from '@components'
 import { useStudyApi } from '@lib'
-import { isStudyLaunchable, StudyTypeLabels } from '@models'
+import { isStudyLaunchable } from '@models'
 import { StudyModal } from './studies/modal'
-
-interface StudyBlockProps {
-    type: keyof typeof StudyTypeLabels
-    studies: ParticipantStudies
-}
 
 const StudyBlock:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     const history = useHistory()
