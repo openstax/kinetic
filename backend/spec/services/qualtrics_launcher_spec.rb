@@ -58,4 +58,3 @@ RSpec.describe QualtricsLauncher do
   end
 
 end
-# 1wkgUd7A/kZFfroc
