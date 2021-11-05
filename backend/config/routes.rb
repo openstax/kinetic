@@ -54,7 +54,7 @@ Rails.application.routes.draw do
 
   # Some routes to give us url and path helpers for the frontend app
   scope as: :frontend do
-    get 'returning/:id', as: :returning, to: 'none#none'
+    get 'study/land/:study_id', as: :returning, via: :get, to: 'none#none'
   end
 
   match '*path', via: :get, to: 'static#catchall'

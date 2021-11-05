@@ -1,6 +1,6 @@
 import {
     test, expect, loginAs, faker, rmStudy, getIdFromUrl,
-    createStudy, goToPage,
+    createStudy, goToPage, interceptStudyLaunch
 } from './test'
 
 test('can create and edit a study', async ({ page }) => {
@@ -34,7 +34,7 @@ test('can create and edit a study', async ({ page }) => {
     await page.fill('[name=titleForParticipants]', `${title} - UPDATED`)
 
     await page.click('testId=add-stage')
-    await page.fill('[name=url]', 'http://cnx.org/study-this')
+    await page.fill('[name=survey_id]', 'QR_1234')
     await page.fill('[name=secret_key]', '1234')
     await page.click('testId=add-stage-modal >> testId=form-save-btn')
     expect(await page.textContent('.row.stage')).toContain('qualtrics')
@@ -52,6 +52,8 @@ test('can create and edit a study', async ({ page }) => {
 
 
 test('can preview a study', async ({ page }) => {
+    interceptStudyLaunch({ page })
+
     const studyName = faker.commerce.productDescription()
     const studyId = await createStudy({ page, name: studyName })
     await goToPage({ page, path: `/study/edit/${studyId}`, loginAs: 'researcher' })

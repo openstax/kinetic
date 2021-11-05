@@ -22,6 +22,15 @@ export const StudyTypeLabels = {
     'type:survey': 'Survey',
 }
 
+export const StudySubjects = {
+    'subject:statistics': 'Statistics',
+    'subject:physics': 'Physics',
+    'subject:biology': 'Biology',
+    'subject:sociology': 'Sociology',
+    'subject:chemistry': 'Chemistry',
+    'subject:business-ethics': 'Business Ethics',
+}
+
 export const DEFAULT_TAGS = Object.keys(StudyTypeLabels)
 
 export const getStatus = (study: Study):StudyStatus => {
@@ -58,8 +67,7 @@ export const StudyValidationSchema = Yup.object().shape({
 
 export const LaunchStudy = async (api: StudiesApi, study: {id: number}, options: { preview?: boolean } = {}) => {
     const launch = await api.launchStudy({ id: study.id, preview: options.preview || false })
-
-    window.location.href = launch.url!
+    window.location.assign(launch.url!)
     return launch
 }
 

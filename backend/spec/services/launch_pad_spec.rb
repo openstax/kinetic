@@ -48,7 +48,7 @@ RSpec.describe LaunchPad, multi_stage: true do
       }.to change { LaunchedStudy.count }.by(1)
        .and change { LaunchedStage.count }.by(1)
 
-      expect(url).to match(/^#{stage1a.config[:url]}\?ssotoken=.*/)
+      expect(url).to match(/ssotoken=/)
     end
 
     it 'errors if the user tries to land' do
@@ -67,7 +67,7 @@ RSpec.describe LaunchPad, multi_stage: true do
        .and change { LaunchedStage.count }.by(0)
        .and change { ResearchId.count }.by(0)
 
-      expect(url).to match(/^#{stage1a.config[:url]}\?ssotoken=.*/)
+      expect(url).to match(/ssotoken=/)
     end
 
     it 'can land the first stage' do
@@ -91,7 +91,7 @@ RSpec.describe LaunchPad, multi_stage: true do
       }.to change { LaunchedStudy.count }.by(0)
        .and change { LaunchedStage.count }.by(1)
 
-      expect(url).to match(/^#{stage1b.config[:url]}\?ssotoken=.*/)
+      expect(url).to match(/ssotoken=/)
     end
   end
 

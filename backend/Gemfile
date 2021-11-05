@@ -38,6 +38,8 @@ gem 'aws-sdk-route53'
 
 gem 'dotenv-rails'
 
+gem 'qualtrics_api', github: 'openstax/qualtrics_api', ref: '88b2340d71677ce6ef6e41d681afbc948585b5f0'
+
 gem 'will_paginate', '~> 3.1.7'
 
 gem 'openstax_swagger', github: 'openstax/swagger-rails',

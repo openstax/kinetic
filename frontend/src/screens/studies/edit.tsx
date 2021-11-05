@@ -18,7 +18,7 @@ const TAG_OPTIONS = DEFAULT_TAGS.map((t) => ({
 }))
 const QualtricsFields = () => (
     <React.Fragment>
-        <InputField name="url" id="url" label="URL" type="url" />
+        <InputField name="survey_id" id="id" label="Survey ID" type="text" hint="part of the URL, string like “SV_6xGQzj4OBJnxGuy”" />
         <InputField name="secret_key" id="key" label="Secret Key"  />
     </React.Fragment>
 )
@@ -27,7 +27,7 @@ const AvailableStageFields = {
     qualtrics: {
         component: QualtricsFields,
         toConfig(fields: any): any {
-            return { type: 'qualtrics', ...pick(fields, 'url', 'secret_key') }
+            return { type: 'qualtrics', ...pick(fields, 'survey_id', 'secret_key') }
         },
     },
 }
@@ -125,7 +125,7 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate():void }> = ({ study,
                         showControls
                         onCancel={onHide}
                         validationSchema={Yup.object().shape({
-                            url: Yup.string().url().required(),
+                            survey_id: Yup.string().required(),
                             secret_key: Yup.string().required(),
                         })}
                         initialValues={{
