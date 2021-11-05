@@ -41,3 +41,4 @@ export const bsClassNames = (
     }
     return [classNames, omit(props, ...BS_VARIANTS)]
 }
+

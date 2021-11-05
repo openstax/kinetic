@@ -3,8 +3,10 @@ import { expect } from '@playwright/test'
 import { matchers } from 'expect-playwright'
 import { TC, TestConfig } from './helpers'
 
-export const DEFAULT_TIMEOUT = process.env.CI ? 30000 : 10000
-export const DEFAULT_NAVIGATION_TIMEOUT = process.env.CI ? 30000 : 15000
+export const DEFAULT_TIMEOUT = process.env.CI ? 30000 :
+    process.env.DEBUG ? 0 : 10_000
+export const DEFAULT_NAVIGATION_TIMEOUT = process.env.CI ? 30000 :
+    process.env.DEBUG ? 0 : 15_000
 
 expect.extend(matchers)
 

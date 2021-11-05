@@ -9,7 +9,13 @@ const Dev = loadAsync('Dev', () => import('./screens/dev'))
 const StudyLanding = loadAsync('Study Landing Page', () => import('./screens/study-landing'))
 const EditStudy = loadAsync('Edit Study Details', () => import('./screens/study-edit'))
 const StudyDetails = loadAsync('Study Details', () => import('./screens/study-details'))
-const StudiesListing = loadAsync('Study Details', () => import('./screens/studies-listing'))
+const Researcher = loadAsync('Studies', () => import('./screens/researcher-home'))
+const Participant = loadAsync('Studies', () => import('./screens/participant-home'))
+
+const StudiesHomepage = () => {
+    const user = useCurrentUser()
+    return user.is_researcher ? <Researcher /> : <Participant />
+}
 
 export const AppRoutes = () => {
     const user = useCurrentUser()
@@ -32,7 +38,7 @@ export const AppRoutes = () => {
                     <StudyDetails />
                 </Route>
                 <Route path="/studies" exact>
-                    <StudiesListing />
+                    <StudiesHomepage />
                 </Route>
                 <Route path="*">
                     <PageNotFound />

@@ -13,5 +13,5 @@ export * from './ui-states'
 export * from './col'
 export * from './incorrect-user'
 export * from './logout-button'
-
+export * from './menu'
 export { Box } from 'boxible'

@@ -3,7 +3,7 @@ import { ParticipantStudies, ParticipantStudy } from '@api'
 import { Box, Col, LinkButton, LoadingAnimation, Row, Icon } from '@components'
 import { useStudyApi } from '@lib'
 import { isStudyLaunchable, StudyTypeLabels } from '@models'
-import { StudyModal } from './modal'
+import { StudyModal } from './studies/modal'
 
 interface StudyBlockProps {
     type: keyof typeof StudyTypeLabels
@@ -65,7 +65,7 @@ const StudyTypeBlock:React.FC<StudyBlockProps> = ({ type, studies: allStudies })
 }
 
 
-export const UserListing = () => {
+export default function ParticipantHome() {
     const api = useStudyApi()
     const [mandatoryStudy, setMandatoryStudy] = useState<ParticipantStudy>()
     const [studies, setStudies] = useState<ParticipantStudies>()
