@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from '@common'
 import { ParticipantStudy, Study } from '@api'
-import { useStudyApi } from '@lib'
+import { useStudyApi, isNil } from '@lib'
 import { Modal, LoadingAnimation } from '@components'
 import { isParticipantStudy } from '@models'
 
@@ -12,7 +12,7 @@ interface StudyModalProps {
 
 const Iframe:React.FC<{ url?: string, onClose: StudyModalProps['onHide'] }> = ({ url, onClose }) => {
     useEffect(() => {
-        if (!url) return
+        if (isNil(url)) return
 
         const handler = (event: MessageEvent) => {
             try {
@@ -29,7 +29,7 @@ const Iframe:React.FC<{ url?: string, onClose: StudyModalProps['onHide'] }> = ({
         return () => window.removeEventListener('message', handler)
     }, [url]) // empty array => run only once
 
-    if (!url) return null
+    if (isNil(url)) return null
 
     return <iframe id="study" css={{ height: 525, width: '100%' }} src={url} />
 }
@@ -61,7 +61,7 @@ export const StudyModal:React.FC<StudyModalProps> = ({ onHide, study }) => {
             data-is-study-preview-modal={isPreview}
         >
             <Modal.Body>
-                {!studyUrl && <LoadingAnimation />}
+                {isNil(studyUrl) && <LoadingAnimation />}
                 <Iframe url={studyUrl} onClose={onHide} />
             </Modal.Body>
         </Modal>
