@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
-if Rails.env.production? || ENV['FORCE_ENABLE_SENTRY'] == 'true'
+#if Rails.env.production? || ENV['FORCE_ENABLE_SENTRY'] == 'true'
   secrets = Rails.application.secrets.sentry
   if secrets.nil?
     warn 'No sentry secrets provided; not configuring Sentry!'
     return
   end
+p secrets
   Sentry.init do |config|
     config.dsn = secrets[:dsn]
     config.breadcrumbs_logger = [:active_support_logger, :http_logger]
@@ -18,4 +19,4 @@ if Rails.env.production? || ENV['FORCE_ENABLE_SENTRY'] == 'true'
 
   end
 
-end
+#end
