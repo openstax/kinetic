@@ -113,7 +113,11 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
-  host = Rails.application.secrets.host
+  # it's tempting to move this to config/secrets
+  # but this code runs before secrets is fully initialized
+
+  host = ENV['HEROKU_PR_NUMBER'] ?
+      "pr-#{ENV['HEROKU_PR_NUMBER']}.kinetic.sandbox.openstax.org" : ENV.fetch('HOST', 'kinetic.openstax.org')
 
   routes.default_url_options.merge!(
     {

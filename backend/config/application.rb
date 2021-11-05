@@ -29,7 +29,7 @@ module Kinetic
   end
 
   def self.is_production?
-    Rails.application.secrets.host == 'kinetic.openstax.org'
+    Rails.application.routes.default_url_options[:host] == 'kinetic.openstax.org'
   end
 
   class Application < Rails::Application
