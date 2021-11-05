@@ -44,7 +44,9 @@ export const StudyModal:React.FC<StudyModalProps> = ({ onHide, study }) => {
         api.launchStudy({
             id: study.id,
             preview: isPreview,
-        }).then((launch) => setStudyUrl(launch.url!))
+        }).then((launch) => {
+            setStudyUrl(launch.url!)
+        })
     }, [study?.id])
     if (!study) { return null }
 

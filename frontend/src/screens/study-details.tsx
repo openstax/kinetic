@@ -23,7 +23,7 @@ const LaunchStudyButton: React.FC<{ study: ParticipantStudy }> = ({ study }) => 
 }
 
 
-export const StudyDetails:React.FC = () => {
+export default function StudyDetails() {
     const api = useStudyApi()
 
     const [ study, setStudy ] = useState<ParticipantStudy|null>()

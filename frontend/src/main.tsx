@@ -1,46 +1,12 @@
 import { React, ReactDOM } from '@common'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { PageNotFound } from '@components'
-import { loadAsync } from './components/async'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { whenDomReady } from '@lib'
-import { CurrentUserProvider, useCurrentUser } from './lib/user-access'
+import { CurrentUserProvider } from './lib/user-access'
+import { AppRoutes } from './routes'
 import './lib/sentry'
 import './lib/gtm'
 import './index.css'
 import './styles/main.scss'
-
-const Home = loadAsync('Homepage', () => import('./screens/homepage'))
-const Dev = loadAsync('Dev', () => import('./screens/dev'))
-const Studies = loadAsync('Studies', () => import('./screens/studies'))
-const StudyLanding = loadAsync('Study Landing Page', () => import('./screens/study-landing'))
-
-const AppRoutes = () => {
-    const user = useCurrentUser()
-    return (
-        <div className="openstax-kinetic" data-user-id={user?.id}>
-            <Switch>
-                <Route exact path="/">
-                    <Home />
-                </Route>
-                <Route path="/dev">
-                    <Dev />
-                </Route>
-                <Route path="/studies">
-                    <Studies />
-                </Route>
-                <Route path="/study/land/:studyId" exact>
-                    <StudyLanding />
-                </Route>
-                <Route path="/study">
-                    <Studies />
-                </Route>
-                <Route path="*">
-                    <PageNotFound />
-                </Route>
-            </Switch>
-        </div>
-    )
-}
 
 const App = () => (
     <React.StrictMode>

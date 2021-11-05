@@ -10,7 +10,7 @@ import {
 import { StudyValidationSchema, DEFAULT_TAGS, isNewStudy, EditingStudy, isStudy } from '@models'
 import { NewStudy, Study, Stage, StudyUpdate } from '@api'
 import { useStudyApi, errorToString, useForceUpdate, pick, remove } from '@lib'
-import { StudyModal } from './modal'
+import { StudyModal } from './studies/modal'
 
 
 const TAG_OPTIONS = DEFAULT_TAGS.map((t) => ({
@@ -209,7 +209,7 @@ export const StudyStages: React.FC<{ study: EditingStudy, onUpdate(): void }> = 
 }
 
 
-export function EditStudy() {
+function EditStudy() {
     const history = useHistory()
     const api = useStudyApi()
     const [error, setError] = useState('')
@@ -315,3 +315,5 @@ export function EditStudy() {
         </div>
     )
 }
+
+export default EditStudy

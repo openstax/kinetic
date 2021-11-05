@@ -1,9 +1,9 @@
 import { React } from '@common'
 import { useCurrentUser } from '@lib'
-import { ResearcherListing } from './researcher-listing'
-import { UserListing } from './user-listing'
+import { ResearcherListing } from './studies/researcher-listing'
+import { UserListing } from './studies/user-listing'
 
-export function StudiesListing() {
+export default function StudiesListing() {
     const user = useCurrentUser()
     if (user.is_researcher) {
         return <ResearcherListing />

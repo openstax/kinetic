@@ -5,7 +5,6 @@ import { useStudyApi } from '@lib'
 import { isStudyLaunchable, StudyTypeLabels } from '@models'
 import { StudyModal } from './modal'
 
-
 interface StudyBlockProps {
     type: keyof typeof StudyTypeLabels
     studies: ParticipantStudies
