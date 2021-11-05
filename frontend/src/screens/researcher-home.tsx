@@ -56,7 +56,7 @@ const StudiesTable:React.FC<{ studies: Study[] }> = ({ studies }) => {
 }
 
 
-export const ResearcherListing = () => {
+export default function ResearcherHome() {
     const api = useStudyApi()
     const history = useHistory()
     const [studies, setStudies] = useState<Studies>()

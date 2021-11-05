@@ -12,5 +12,6 @@ export function reloadOnce({ windowImpl = window } = {}) {
 }
 
 export function forceReload({ windowImpl = window } = {}) {
+    // @ts-ignore
     windowImpl.location.reload(true); // true == no-cache (sometimes, in some browsers)
 }

@@ -41,7 +41,7 @@ export const interceptStudyLaunch = async ({ page }: { page: Page }) => {
     await page.route(/studies\/\d+\/launch/, async route => {
         const response = await page.request.fetch(route.request())
         const body = await response.json()
-        body.url = 'https://openstax.org/research'
+        body.url = ''
         route.fulfill({ response, body: JSON.stringify(body) });
     });
 }

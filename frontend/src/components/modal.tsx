@@ -1,5 +1,5 @@
 import { React, cx } from '../common'
-import OverlayModal, { ModalProps as OverlayModalProps } from 'react-overlays/Modal'
+import OverlayModal, { ModalProps as OverlayModalProps } from '@restart/ui/Modal'
 import { Icon } from './icon'
 
 const renderBackdrop = (props: any) => {

@@ -1,4 +1,5 @@
-import { React, cx, styled } from '../common'
+import * as React from 'react'
+import { cx, styled } from '../common'
 import { useHistory } from 'react-router-dom'
 import { usePendingState, isNil } from '../lib'
 import { BSVariants, bsClassNames } from './bs'
@@ -9,24 +10,32 @@ const Busy = styled.span({
     display: 'flex',
 })
 
-
-export interface ButtonProps extends BSVariants, React.HTMLProps<HTMLButtonElement> {
-    className?: string
+export interface ButtonProps extends React.ComponentPropsWithoutRef<'button'>, BSVariants {
     disabled?: boolean
+
     busy?: boolean
     icon?: IconKey
     busyMessage?: string
     type?: 'button' | 'submit' | 'reset'
 }
-export const Button:React.FC<ButtonProps> = ({
-    disabled, busyMessage, children, icon,
-    type = 'button',
-    busy: isBusy = false,
-    className = '',
-    ...otherProps
-}) => {
+
+export const Button = React.forwardRef<HTMLButtonElement, React.PropsWithChildren<ButtonProps>>((forwardedProps, ref) => {
+
+    const {
+        disabled,
+        busyMessage,
+        children,
+        icon,
+        type = 'button',
+        busy: isBusy = false,
+        className = '',
+        ...otherProps
+    } = forwardedProps
+
+
     const [bsClasses, props] = bsClassNames('btn', otherProps, { default: 'light' })
     let iconEl = null
+
     if (icon) {
         iconEl = <Icon icon={icon} css={{ marginRight: '0.35rem' }}/>
     }
@@ -36,6 +45,7 @@ export const Button:React.FC<ButtonProps> = ({
 
     return (
         <button
+            ref={ref}
             type={type}
             css={{
                 display: 'inline-flex',
@@ -53,13 +63,14 @@ export const Button:React.FC<ButtonProps> = ({
         </button>
 
     )
-}
+})
 
 interface LinkButtonProps extends ButtonProps {
     to: string
 }
 
-export const LinkButton:React.FC<LinkButtonProps> = ({ to, ...otherProps }) => {
+export const LinkButton:React.FC<LinkButtonProps> = ({ to, ...props }) => {
     const history = useHistory()
-    return <Button onClick={() => history.push(to)} {...otherProps} />
+    const onClick = () => history.push(to)
+    return <Button onClick={onClick} {...props} />
 }

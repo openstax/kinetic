@@ -36,6 +36,7 @@ class QualtricsLauncher
         ['expiration', 1.hour.from_now.utc.iso8601],
         ['research_id', ResearchId.for_user_id(user_id).id],
         ['return_to_url', frontend_returning_url(study_id: study_id)],
+        ['is_testing', !Kinetic.is_production?],
         ['study_id', study_id]
       ]
     )

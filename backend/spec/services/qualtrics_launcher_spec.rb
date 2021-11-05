@@ -34,6 +34,7 @@ RSpec.describe QualtricsLauncher do
     expect(decrypt_params(url: launcher.url, key: secret_key)).to eq(
       'research_id' => research_id,
       'study_id' => study_id.to_s,
+      'is_testing' => true.to_s,
       'return_to_url' => 'http://example.com/study/land/4321'
     )
   end
@@ -46,7 +47,7 @@ RSpec.describe QualtricsLauncher do
     url = URI(url)
     hash = URI.decode_www_form(url.query).to_h
     query_params = URI.decode_www_form(decrypt(token_value: hash['ssotoken'], key: key)).to_h
-    query_params.slice('research_id', 'study_id', 'return_to_url')
+    query_params.slice('research_id', 'study_id', 'return_to_url', 'is_testing')
   end
 
   def decrypt(token_value:, key:)
