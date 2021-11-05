@@ -31,6 +31,7 @@ FROM ruby as ruby2
 WORKDIR /code/backend
 COPY backend ./
 ENV RUBY_ENV=production
+ENV RAILS_LOG_TO_STDOUT=true
 ENV RUBY_SERVE_STATIC_FILES=true
 COPY --from=node /code/frontend/dist/ ./public/
 
