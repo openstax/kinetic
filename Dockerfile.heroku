@@ -36,6 +36,6 @@ ENV SENTRY_DSN=https://a7ba8f1daead45acaf7a28dbb661d393@o484761.ingest.sentry.io
 ENV RUBY_SERVE_STATIC_FILES=true
 COPY --from=node /code/frontend/dist/ ./public/
 
-ARG SENTRY_RUBY_DSN
+ARG SENTRY_DSN
 ENV RAILS_ENV=production
 CMD bundle exec rake about && bundle exec rails server -b '0.0.0.0' -p $PORT

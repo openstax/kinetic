@@ -141,7 +141,7 @@ GEM
       railties (>= 5.0.0)
     faker (2.19.0)
       i18n (>= 1.6, < 2)
-    faraday (1.7.1)
+    faraday (1.8.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -171,7 +171,7 @@ GEM
       moneta
       multi_json (>= 1.9.2)
       webrick
-    i18n (1.8.10)
+    i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     jmespath (1.4.0)
@@ -202,7 +202,7 @@ GEM
     multi_json (1.15.0)
     multipart-post (2.1.1)
     nio4r (2.5.8)
-    nokogiri (1.12.4)
+    nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
     oj (3.13.3)
@@ -219,7 +219,7 @@ GEM
       rate_throttle_client (~> 0.1.0)
     puma (5.4.0)
       nio4r (~> 2.0)
-    racc (1.5.2)
+    racc (1.6.0)
     rack (2.2.3)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
@@ -298,14 +298,14 @@ GEM
       rubocop-ast (>= 1.1.0)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
-    sentry-rails (4.6.5)
+    sentry-rails (4.7.3)
       railties (>= 5.0)
-      sentry-ruby-core (~> 4.6.0)
-    sentry-ruby (4.6.5)
+      sentry-ruby-core (~> 4.7.0)
+    sentry-ruby (4.7.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       faraday (>= 1.0)
-      sentry-ruby-core (= 4.6.5)
-    sentry-ruby-core (4.6.5)
+      sentry-ruby-core (= 4.7.3)
+    sentry-ruby-core (4.7.3)
       concurrent-ruby
       faraday
     simplecov (0.21.2)
@@ -343,7 +343,7 @@ GEM
     websocket-extensions (0.1.5)
     will_paginate (3.1.8)
     yard (0.9.26)
-    zeitwerk (2.4.2)
+    zeitwerk (2.5.1)
 
 PLATFORMS
   ruby
