@@ -116,8 +116,11 @@ Rails.application.configure do
   # it's tempting to move this to config/secrets
   # but this code runs before secrets is fully initialized
 
-  host = ENV['HEROKU_PR_NUMBER'] ?
-      "pr-#{ENV['HEROKU_PR_NUMBER']}.kinetic.sandbox.openstax.org" : ENV.fetch('HOST', 'kinetic.openstax.org')
+  host = if ENV['HEROKU_PR_NUMBER']
+           "pr-#{ENV['HEROKU_PR_NUMBER']}.kinetic.sandbox.openstax.org"
+         else
+           ENV.fetch('HOST', 'kinetic.openstax.org')
+         end
 
   routes.default_url_options.merge!(
     {

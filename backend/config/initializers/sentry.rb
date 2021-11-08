@@ -15,7 +15,7 @@ if Rails.env.production? || ENV['FORCE_ENABLE_SENTRY'] == 'true'
     # for performance, to see only 50% of all errors use 0.5
     config.traces_sample_rate = 1.0
 
-    config.traces_sampler = lambda do |context|
+    config.traces_sampler = lambda do |_context|
       true
     end
   end
