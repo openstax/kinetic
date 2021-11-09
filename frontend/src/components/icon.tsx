@@ -1,54 +1,67 @@
-
 import * as React from 'react'
+import { keyframes, css } from '@emotion/react'
+import { Popover } from './popover'
 import { Icon as IconifyIconComponent, IconifyIcon } from '@iconify/react'
-import plusCircle from '@iconify-icons/bi/plus-circle'
-import close from '@iconify-icons/bi/x-square'
-import back from '@iconify-icons/bi/chevron-double-left'
-import tripleDot from '@iconify-icons/bi/three-dots'
-import cancel from '@iconify-icons/bi/x-circle'
-import trash from '@iconify-icons/bi/trash'
-import clock from '@iconify-icons/bi/clock-fill'
-import checkCircle from '@iconify-icons/bi/check-circle-fill'
-import search from '@iconify-icons/bi/search'
+import { ICONS } from './packaged-icons'
 
-export const ICONS = {
-    close,
-    clock,
-    back,
-    search,
-    plusCircle,
-    cancel,
-    trash,
-    tripleDot,
-    checkCircle,
+const spinKeyframes = keyframes`
+  from {
+    transform:rotate(0deg);
+  }
+  to {
+    transform:rotate(360deg);
+  }
+`
+
+const spinCSS = css`
+    animation: 2s linear ${spinKeyframes} infinite;
+`
+
+interface IconifyIconDefinition {
+    body: string
 }
 
 export type IconKey = keyof typeof ICONS
 
-interface IconProps extends Omit<IconifyIcon, 'icon'> {
-    icon: IconKey
+export interface IconProps extends Omit<IconifyIcon, 'icon'> {
+    icon: IconKey | IconifyIconDefinition | IconifyIcon
+    title?: string
+    tooltip?: React.ReactNode
     onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-export const Icon:React.FC<IconProps> = ({ icon, onClick, children, ...iconProps }) => {
+export const Icon:React.FC<IconProps> = ({ icon, tooltip, onClick, children, ...iconProps }) => {
+    const iconEl = (
+        <IconifyIconComponent
+            icon={typeof icon === 'object' ? icon : ICONS[icon]}
+            css={icon == 'spin' ? spinCSS : {}}
+            {...iconProps}
+        />
+    )
+    if (tooltip) {
+        return (
+            <Popover popover={tooltip}>
+                {iconEl}
+            </Popover>
+        )
+    }
     if (onClick) {
         return (
             <button onClick={onClick} css={{
                 border: 'none',
+                padding: 0,
+                margin: 0,
                 background: 'transparent',
+                color: '#738694',
+                transition: 'all 0.3s ease-out',
                 ':hover': {
-                    'svg': {
-                        filter: 'drop-shadow( 3px 3px 2px rgba(0,0,0,.7) )',
-                    },
+                    color: '#292929',
                 },
             }}>
-                <IconifyIconComponent
-                    icon={ICONS[icon]}
-                    {...iconProps}
-                />
+                {iconEl}
                 {children}
             </button>
         )
     }
-    return <IconifyIconComponent icon={ICONS[icon]} {...iconProps} />
+    return iconEl
 }
