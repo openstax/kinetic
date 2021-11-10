@@ -54,6 +54,7 @@ Rails.application.routes.draw do
 
   # Some routes to give us url and path helpers for the frontend app
   scope as: :frontend do
+    # production serves the generated index.html file. other env will redirect to dev server
     get 'study/land/:study_id', as: :returning, via: :get, to: 'static#catchall'
   end
 
