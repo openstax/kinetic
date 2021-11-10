@@ -43,8 +43,7 @@ class QualtricsLauncher
       ['study_id', study_id]
     ].map { |k, v| "#{k}=#{v}" }.join('&')
     hash = md5_hash(raw_query)
-    unecrypted_token = "#{raw_query}&mac=#{hash}"
-    encrypt(unecrypted_token)
+    encrypt("#{raw_query}&mac=#{hash}")
   end
 
   def encrypt(value)
