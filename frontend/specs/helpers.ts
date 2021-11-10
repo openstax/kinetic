@@ -30,7 +30,7 @@ interface goToPageArgs {
 export const goToPage = async ({ page, path, loginAs: login }: goToPageArgs) => {
     const url = TC.ORIGIN + path
     await page.goto(url)
-    await page.waitForTimeout(200) // wait for user fetch to complete
+    await page.waitForTimeout(500) // wait for user fetch to complete
     if (await page.$('testId=incorrect-user-panel')) {
         await loginAs({ page, login: login || 'researcher' })
         await page.goto(url)
@@ -41,7 +41,7 @@ export const interceptStudyLaunch = async ({ page }: { page: Page }) => {
     await page.route(/studies\/\d+\/launch/, async route => {
         const response = await page.request.fetch(route.request())
         const body = await response.json()
-        body.url = ''
+        body.url = '/'
         route.fulfill({ response, body: JSON.stringify(body) });
     });
 }
