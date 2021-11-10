@@ -30,6 +30,10 @@ class QualtricsLauncher
   attr_reader :user_id
 
   def sso_token
+    # these values will be url encoded along with the md5hash in the url method.
+    # if we encode them here before generating the md5sum,
+    # qualtrics will fail to properly decode them, causing
+    # slashes in the "return_to_url" to be percent escaped.
     raw_query = [
       ['timestamp', Time.now.utc.iso8601],
       ['expiration', 1.hour.from_now.utc.iso8601],
