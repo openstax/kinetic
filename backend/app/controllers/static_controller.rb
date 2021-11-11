@@ -2,7 +2,11 @@
 
 class StaticController < ActionController::Base
   def catchall
-    render file: 'public/index.html'
+    if Rails.env.production?
+      render file: 'public/index.html'
+    else
+      redirect_to Rails.application.secrets.frontend_url + request.fullpath
+    end
   end
 
   def error404
