@@ -125,7 +125,7 @@ export const applyControls = ({ sort, subjects } : ControlState, studies: Partic
         }
     }
     if (subjects?.length) {
-        studies = studies.filter(s => subjects.find(subj => -1 != s.tags.indexOf(subj)))
+        studies = studies.filter(s => subjects.find(subj => s.tags.includes(subj)))
     }
     return studies
 }
