@@ -27,14 +27,26 @@ interface goToPageArgs {
     path: string
     loginAs?: TestingLogin
 }
+
 export const goToPage = async ({ page, path, loginAs: login }: goToPageArgs) => {
     const url = TC.ORIGIN + path
-    await page.goto(url)
-    await page.waitForTimeout(500) // wait for user fetch to complete
-    if (await page.$('testId=incorrect-user-panel')) {
-        await loginAs({ page, login: login || 'researcher' })
-        await page.goto(url)
+    let attempts = 0
+    do {
+        try {
+            await page.goto(url)
+            await page.waitForTimeout(500) // wait for user fetch to complete
+            if (await page.$('testId=incorrect-user-panel')) {
+                await loginAs({ page, login: login || 'researcher' })
+                await page.goto(url)
+            }
+        } catch (e) {
+            console.log(e) // eslint-disable-line no-console
+            if (attempts == 3) {
+                throw(e)
+            }
+        }
     }
+    while (attempts++ < 3)
 }
 
 export const interceptStudyLaunch = async ({ page }: { page: Page }) => {
@@ -58,8 +70,7 @@ export const logout = async ({ page }: { page: Page }) => {
 
 export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin }) => {
     await logout({ page })
-    await page.goto('http://localhost:4000/')
-    await page.click('testId=login-link')
+    await page.goto('http://localhost:4000/dev/user')
     await page.click(`[data-user-id="${TC.USERS[login]}"]`)
     await page.waitForSelector('.container.studies')
 }
@@ -88,6 +99,9 @@ interface createStudyArgs {
     page: Page
     name: string
     isMandatory?: boolean
+    points?: number
+    mins?: number
+    subject?: string
     opensAt?: dayjsImport.Dayjs,
 }
 
@@ -96,6 +110,9 @@ export const RESEARCH_HOMEPAGE = 'https://openstax.org/research'
 export const createStudy = async ({
     page, name,
     isMandatory = false,
+    points = 10,
+    mins = 10,
+    subject = 'physics',
     opensAt = dayjs().subtract(1, 'day'),
 }: createStudyArgs) => {
     await goToPage({ page, path: '/study/edit/new', loginAs: 'researcher' })
@@ -107,8 +124,16 @@ export const createStudy = async ({
 
     await page.fill('[name=shortDescription]', 'short desc')
     await page.fill('[name=longDescription]', 'long desc')
-    await page.fill('[name=durationMinutes]', '42')
+    await page.fill('[name=durationMinutes]', String(mins))
+    await page.fill('[name=participationPoints]', String(points))
+
     await page.fill('#tags input', 'cog')
+    await page.keyboard.press('Enter')
+
+    await page.fill('#tags input', 'cog')
+    await page.keyboard.press('Enter')
+
+    await page.fill('#tags input', `subject:${subject}`)
     await page.keyboard.press('Enter')
 
     await page.click('testId=form-save-btn')
