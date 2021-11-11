@@ -29,6 +29,10 @@ class Api::V0::MiscSwagger
       key :type, :string
       key :readOnly, true
     end
+    property :homepage_url do
+      key :type, :string
+      key :readOnly, true
+    end
   end
 
   swagger_path '/whoami' do

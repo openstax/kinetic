@@ -1,10 +1,10 @@
 import { React, useEffect, useState, useHistory, useMemo, cx } from '@common'
 import { ParticipantStudies, ParticipantStudy } from '@api'
 import { get } from 'lodash'
-import { Box, Col, LinkButton, LoadingAnimation, Row, Footer, Icon } from '@components'
+import { Box, Col, LoadingAnimation, Row, Footer, Icon } from '@components'
 import envelopeIcon from '@iconify-icons/bi/envelope'
 import { useStudyApi } from '@lib'
-import { isStudyLaunchable, tagOfType, tagsOfType, TagLabels } from '@models'
+import { isStudyLaunchable, tagOfType, tagsOfType, TagLabels, useEnv } from '@models'
 import { Controls, applyControls, ControlState } from './studies/participant-controls'
 import { StudyModal } from './studies/modal'
 
@@ -74,6 +74,7 @@ const Studies:React.FC<{ isFiltering: boolean, studies: ParticipantStudy[] }> = 
 
 export default function ParticipantHome() {
     const api = useStudyApi()
+    const env = useEnv()
 
     const [mandatoryStudy, setMandatoryStudy] = useState<ParticipantStudy>()
     const [allStudies, setStudies] = useState<ParticipantStudies>()
@@ -102,9 +103,10 @@ export default function ParticipantHome() {
         <div className="container studies mt-8">
             <nav className="navbar fixed-top navbar-light py-1 bg-dark">
                 <div className="container">
-                    <LinkButton icon="back" secondary to="/">
+                    <a className="btn btn-secondary" href={env?.homepage_url}>
+                        <Icon icon="back" />
                         Home
-                    </LinkButton>
+                    </a>
                 </div>
             </nav>
             <StudyModal study={mandatoryStudy} onHide={() => setMandatoryStudy(undefined)} />

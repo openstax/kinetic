@@ -48,7 +48,10 @@ RSpec.describe 'Misc', type: :request, api: :v0 do
     it 'returns the environment' do
       allow(Rails.application.secrets.accounts).to receive(:[]).with(:env_name).and_return 'foo'
       get '/api/v0/environment'
-      expect(response_hash).to match(accounts_env_name: 'foo')
+      expect(response_hash).to match({
+        accounts_env_name: 'foo',
+        homepage_url: 'http://localhost:4000'
+      })
     end
   end
 

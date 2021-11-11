@@ -25,6 +25,12 @@ export interface Environment {
      * @memberof Environment
      */
     readonly accountsEnvName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Environment
+     */
+    readonly homepageUrl?: string;
 }
 
 export function EnvironmentFromJSON(json: any): Environment {
@@ -38,6 +44,7 @@ export function EnvironmentFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'accountsEnvName': !exists(json, 'accounts_env_name') ? undefined : json['accounts_env_name'],
+        'homepageUrl': !exists(json, 'homepage_url') ? undefined : json['homepage_url'],
     };
 }
 

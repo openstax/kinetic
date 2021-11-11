@@ -1,5 +1,6 @@
 import type { User } from './src/models/user'
 
+
 declare global {
     interface Window {
         dataLayer?: any[]
@@ -9,16 +10,17 @@ declare global {
         }
         _MODELS?: {
             user?: User
+            env?: any
         }
     }
 
     interface ImportMeta {
         env: {
-            VITE_API_ADDRESS: string
             MODE: string
             IS_LOCAL: boolean
             VITE_GTAG_ID: string
             VITE_SENTRY_DSN: string
+            VITE_API_ADDRESS: string
         };
     }
 

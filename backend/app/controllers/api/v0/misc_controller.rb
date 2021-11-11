@@ -12,7 +12,8 @@ class Api::V0::MiscController < Api::V0::BaseController
 
   def environment
     render status: :ok, json: Api::V0::Bindings::Environment.new(
-      accounts_env_name: Rails.application.secrets.accounts[:env_name]
+      accounts_env_name: Rails.application.secrets.accounts[:env_name],
+      homepage_url: Rails.application.secrets.homepage_url
     )
   end
 

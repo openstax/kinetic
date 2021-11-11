@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react'
 import { ENV } from '@lib'
 
 export interface EnviromentApiPayload {
     accounts_env_name?: 'string'
+    homepage_url: string
 }
 
 export class Environment {
@@ -14,9 +16,11 @@ export class Environment {
     }
 
     accounts_env_name: string
+    homepage_url: string
 
     constructor(payload: EnviromentApiPayload) {
         this.accounts_env_name = payload.accounts_env_name || 'dev'
+        this.homepage_url = payload.homepage_url
     }
 
     get loginURL() {
@@ -34,4 +38,12 @@ export class Environment {
         return `https://accounts-${this.accounts_env_name}.openstax.org`
     }
 
+}
+
+export const useEnv = () => {
+    const [env, setEnv] = useState<Environment>()
+    useEffect(() => {
+        Environment.fetch().then(e => setEnv(e))
+    }, [])
+    return env
 }
