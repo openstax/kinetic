@@ -35,6 +35,7 @@ export const Sort:React.FC<ControlProps> = ({ state, onChange }) => {
                 <label className="dropdown-item" key={value}>
                     <input
                         type="radio"
+                        data-test-id={`sort-${value}`}
                         checked={state?.sort == value}
                         onChange={() => onChange({ ...state, sort: value as any }) }
                     />
@@ -68,6 +69,7 @@ export const Subjects:React.FC<ControlProps> = ({ state, onChange }) => {
                 <label key={value} className="dropdown-item">
                     <input
                         type="checkbox"
+                        data-test-id={`filter-${value}`}
                         value={value || ''}
                         checked={state.subjects?.includes(value as any) || false}
                         onChange={onInputChange}
@@ -147,10 +149,10 @@ export const DesktopControls:React.FC<ControlProps> = (props) => {
                     },
                 }}
             >
-                <Menu label={`Sort by ${sort || ''}`}>
+                <Menu label={`Sort by ${sort || ''}`} data-test-id="sort-by-menu">
                     <Sort {...props} />
                 </Menu>
-                <Menu label="Subject">
+                <Menu label="Subject" data-test-id="subjects-filter-menu">
                     <Subjects {...props} />
                 </Menu>
             </Box>

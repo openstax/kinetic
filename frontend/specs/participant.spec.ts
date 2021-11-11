@@ -14,6 +14,42 @@ test('displays studies', async ({ page }) => {
     await rmStudy({ page, studyId })
 })
 
+test('filtering & sorting', async ({ page }) => {
+    const studyName = faker.commerce.productDescription()
+
+    const firstStudyId = await createStudy({
+        page, mins: 5, points: 5, name: studyName, subject: 'biology',
+    })
+    const secondStudyId = await createStudy({
+        page, mins: 15, points: 15, name: studyName, subject: 'physics',
+    })
+
+    await goToPage({ page, path: '/studies', loginAs: 'user' })
+
+    await page.click('testId=sort-by-menu')
+    await page.click('testId=sort-points:high-low')
+
+    await page.pause()
+
+    let ids = await page.$$eval('[data-study-id]', studies => studies.map(s => Number(s.dataset.studyId)))
+    expect(ids.indexOf(firstStudyId)).toBeGreaterThan(ids.indexOf(secondStudyId))
+
+    await page.click('testId=sort-by-menu')
+    await page.click('testId=sort-points:low-high')
+
+    ids = await page.$$eval('[data-study-id]', studies => studies.map(s => Number(s.dataset.studyId)))
+    expect(ids.indexOf(firstStudyId)).toBeLessThan(ids.indexOf(secondStudyId))
+
+    await page.click('testId=subjects-filter-menu')
+    await page.click('testId=filter-subject:biology')
+    ids = await page.$$eval('[data-study-id]', studies => studies.map(s => Number(s.dataset.studyId)))
+    expect(ids).toContain(firstStudyId)
+    expect(ids).not.toContain(secondStudyId)
+
+    await rmStudy({ page, studyId: firstStudyId })
+    await rmStudy({ page, studyId: secondStudyId })
+})
+
 test('it auto-launches mandatory studies', async ({ page }) => {
     const studyName = faker.commerce.productDescription()
     const studyId = await createStudy({

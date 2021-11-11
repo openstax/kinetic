@@ -15,12 +15,15 @@ const WITH_LINE:CSSObject = {
     borderTop: '1px solid #ced4da',
     marginTop: '1rem',
     paddingTop: '1rem',
+
 }
 
 export const Footer: React.FC<{ className?: string, isBottomFixed?: boolean }> = ({ className, isBottomFixed, children }) => {
     return (
         <Box
-            className={cx('footer', className)} justify="center" gap
+            gap
+            className={cx('footer', className)}
+            justify={isBottomFixed ? 'center' : 'end'}
             css={isBottomFixed ? FIXED : WITH_LINE}
         >
             {children}
