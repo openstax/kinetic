@@ -31,7 +31,11 @@ export const StudySubjects = {
     'subject:business-ethics': 'Business Ethics',
 }
 
-export const DEFAULT_TAGS = Object.keys(StudyTypeLabels)
+export const TagLabels = Object.assign({}, StudyTypeLabels, StudySubjects)
+
+
+export type StudySubjectID = keyof typeof StudySubjects
+
 
 export const getStatus = (study: Study):StudyStatus => {
     const now = new Date()
@@ -67,7 +71,6 @@ export const StudyValidationSchema = Yup.object().shape({
 
 export const LaunchStudy = async (api: StudiesApi, study: {id: number}, options: { preview?: boolean } = {}) => {
     const launch = await api.launchStudy({ id: study.id, preview: options.preview || false })
-    debugger
     window.location.assign(launch.url!)
     return launch
 }
@@ -91,9 +94,14 @@ export function isParticipantStudy(study?: any): study is ParticipantStudy {
     return study && !isNil((study).id) && !isNil((study).title)
 }
 
-export function tagOfType(study: SavedStudy, type: string) {
+export function tagsOfType(study: SavedStudy, type: string) {
     const r = RegExp(`^${type}`)
-    return study.tags.find(t => t.match(r))
+    return study.tags.filter(t => t.match(r))
+}
+
+export function tagOfType(study: SavedStudy, type: string): string | undefined {
+    const tags = tagsOfType(study, type)
+    return tags[0]
 }
 
 export function studyTypeName(study: SavedStudy): string {

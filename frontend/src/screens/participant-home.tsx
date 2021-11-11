@@ -1,16 +1,20 @@
-import { React, useEffect, useState, useHistory, cx } from '@common'
+import { React, useEffect, useState, useHistory, useMemo, cx } from '@common'
 import { ParticipantStudies, ParticipantStudy } from '@api'
-import { Box, Col, LinkButton, LoadingAnimation, Row, Icon } from '@components'
+import { get } from 'lodash'
+import { Box, Col, LinkButton, LoadingAnimation, Row, Footer, Icon } from '@components'
+import envelopeIcon from '@iconify-icons/bi/envelope'
 import { useStudyApi } from '@lib'
-import { isStudyLaunchable, StudyTypeLabels } from '@models'
+import { isStudyLaunchable, tagOfType, tagsOfType, TagLabels } from '@models'
+import { Controls, applyControls, ControlState } from './studies/participant-controls'
 import { StudyModal } from './studies/modal'
 
-interface StudyBlockProps {
-    type: keyof typeof StudyTypeLabels
-    studies: ParticipantStudies
-}
 
-const StudyBlock:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
+const Tag:React.FC<{ tag?: string }> = ({ tag }) => (
+    tag ? <span className="badge bg-light text-dark border border-1">{get(TagLabels, tag, tag)}</span> : null
+)
+
+
+const StudyCard:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     const history = useHistory()
     const isEnabled = isStudyLaunchable(study)
     const onClick = () => {
@@ -37,12 +41,18 @@ const StudyBlock:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
                     </Box>
                     <p>{study.shortDescription}</p>
                     <Box flex />
-                    <Box css={{ fontSize: '14px' }} justify="between">
-                        <Box align="center">
-                            <Icon icon="clock" color="#005380" />
-                            <div css={{ marginLeft: '0.5rem' }}>{study.durationMinutes} min</div>
+                    <Box css={{ fontSize: '14px' }} justify="between" wrap>
+                        <Box gap>
+                            <Box align="center">
+                                <Icon icon="clock" color="#005380" />
+                                <div css={{ marginLeft: '0.5rem' }}>{study.durationMinutes} min</div>
+                            </Box>
+                            {study.participationPoints && <span>• {study.participationPoints}pts</span>}
                         </Box>
-                        {study.participationPoints && <div css={{ color: '#A3A3A3' }}>{study.participationPoints}pts</div>}
+                        <Box gap>
+                            <Tag tag={tagOfType(study, 'type')} />
+                            {tagsOfType(study, 'subject').map(tag => <Tag key={tag} tag={tag} />)}
+                        </Box>
                     </Box>
                 </Box>
             </Box>
@@ -50,25 +60,25 @@ const StudyBlock:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     )
 }
 
-const StudyTypeBlock:React.FC<StudyBlockProps> = ({ type, studies: allStudies }) => {
-    const studies = (allStudies.data || []).filter(st => st.tags?.indexOf(type) != -1)
-    if (!studies.length) { return null }
-
+const Studies:React.FC<{ isFiltering: boolean, studies: ParticipantStudy[] }> = ({ studies, isFiltering }) => {
+    if (isFiltering && !studies.length) {
+        return <h3 className="my-4">No studies match the selected filters.</h3>
+    }
+    if (!studies.length) {
+        return <h3 className="my-4">No studies are currently available.</h3>
+    }
     return (
-        <div>
-            <h3>{StudyTypeLabels[type]}</h3>
-            <Row css={{ marginBottom: '3rem' }}>
-                {studies.map(s => <StudyBlock key={s.id} study={s} />)}
-            </Row>
-        </div>
+        <>{studies.map(s => <StudyCard key={s.id} study={s} />)}</>
     )
 }
 
-
 export default function ParticipantHome() {
     const api = useStudyApi()
+
     const [mandatoryStudy, setMandatoryStudy] = useState<ParticipantStudy>()
-    const [studies, setStudies] = useState<ParticipantStudies>()
+    const [allStudies, setStudies] = useState<ParticipantStudies>()
+    const [controlState, setControlState] = useState<ControlState>({})
+
     useEffect(() => {
         api.getParticipantStudies().then((studies) => {
             const mandatory = studies.data?.find(s => isStudyLaunchable(s) && s.isMandatory)
@@ -79,7 +89,12 @@ export default function ParticipantHome() {
         })
     }, [])
 
-    if (!studies) {
+
+    const studies = useMemo<ParticipantStudy[]>(() => {
+        return applyControls(controlState, allStudies?.data || [])
+    }, [allStudies?.data, controlState])
+
+    if (!allStudies?.data) {
         return <LoadingAnimation message="Loading studies" />
     }
 
@@ -93,11 +108,19 @@ export default function ParticipantHome() {
                 </div>
             </nav>
             <StudyModal study={mandatoryStudy} onHide={() => setMandatoryStudy(undefined)} />
-            <div>
-                {Object.keys(StudyTypeLabels).map(k => (
-                    <StudyTypeBlock key={k} studies={studies} type={k as keyof typeof StudyTypeLabels} />
-                ))}
-            </div>
+            <Controls state={controlState} onChange={setControlState} />
+            <Row>
+                <Studies studies={studies} isFiltering={!!controlState.subjects?.length} />
+            </Row>
+            <Footer isBottomFixed>
+                <p className="mb-0">
+                    <b>Need help?</b>
+                </p>
+                <p className="mb-0">
+                    Contact support
+                </p>
+                <a className="text-decoration-none" href="mailto:support@openstax.org?subject=[Kinetic help]"><Icon icon={envelopeIcon} /> support@openstax.org</a>
+            </Footer>
         </div>
     )
 }

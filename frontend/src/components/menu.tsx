@@ -1,7 +1,10 @@
 import { React, cx, useMemo, useState, useCallback } from '@common'
 import { Button, ButtonProps } from './button'
+import { Icon } from './icon'
 import { uniqueId } from 'lodash-es'
 import { usePopper } from 'react-popper'
+import chevronUp from '@iconify-icons/bi/chevron-up'
+import chevronDown from '@iconify-icons/bi/chevron-down'
 
 export interface MenuProps extends Omit<ButtonProps, 'label'> {
     label: React.ReactElement | string
@@ -48,12 +51,13 @@ export const Menu:React.FC<MenuProps> = ({
             <Button
                 {...buttonProps}
                 ref={setTarget}
-                className={cx(className, 'dropdown-toggle')}
+                className={cx(className, 'dropdown-toggler', 'd-flex', 'justify-content-between')}
                 id={btnId}
                 onClick={onMenuClick}
                 css={{ height: '100%' }}
             >
                 {label}
+                <Icon icon={isOpen ? chevronUp : chevronDown} color="gray" />
             </Button>
             <div
                 className={cx('dropdown-menu', menuClassName, {

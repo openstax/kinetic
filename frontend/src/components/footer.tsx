@@ -1,17 +1,32 @@
 import { React, cx } from '../common'
+import { CSSObject } from '@emotion/serialize'
 import { Box } from 'boxible'
-import styled from '@emotion/styled'
 
-const FooterWrapper = styled(Box)`
-    border-top: 1px solid #ced4da;
-    margin-top: 1rem;
-    padding-top: 1rem;
-`
+const FIXED:CSSObject = {
+    borderTop: '1px solid #ced4da',
+    padding: '1rem',
+    position: 'fixed',
+    bottom: '0',
+    left: '0',
+    right: '0',
+}
 
-export const Footer: React.FC<{ className?: string }> = ({ className, children }) => {
+const WITH_LINE:CSSObject = {
+    borderTop: '1px solid #ced4da',
+    marginTop: '1rem',
+    paddingTop: '1rem',
+
+}
+
+export const Footer: React.FC<{ className?: string, isBottomFixed?: boolean }> = ({ className, isBottomFixed, children }) => {
     return (
-        <FooterWrapper className={cx('footer', className)} justify="end" gap>
+        <Box
+            gap
+            className={cx('footer', className)}
+            justify={isBottomFixed ? 'center' : 'end'}
+            css={isBottomFixed ? FIXED : WITH_LINE}
+        >
             {children}
-        </FooterWrapper>
+        </Box>
     )
 }

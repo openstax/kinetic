@@ -7,13 +7,13 @@ import {
     InputField, SelectField, DateField, Row, Col, Icon,
     LinkButton, Button, Box,
 } from '@components'
-import { StudyValidationSchema, DEFAULT_TAGS, isNewStudy, EditingStudy, isStudy } from '@models'
+import { StudyValidationSchema, TagLabels, isNewStudy, EditingStudy, isStudy } from '@models'
 import { NewStudy, Study, Stage, StudyUpdate } from '@api'
 import { useStudyApi, errorToString, useForceUpdate, pick, remove } from '@lib'
 import { StudyModal } from './studies/modal'
 
 
-const TAG_OPTIONS = DEFAULT_TAGS.map((t) => ({
+const TAG_OPTIONS = Object.keys(TagLabels).map((t) => ({
     label: t, value: t,
 }))
 const QualtricsFields = () => (
@@ -225,6 +225,7 @@ function EditStudy() {
                 shortDescription: '',
                 longDescription: '',
                 durationMinutes: '' as any,
+                participationPoints: '' as any,
                 tags: [],
             })
             setTimeout(() => { document.querySelector<HTMLInputElement>('#participants-title')?.focus() }, 100)
@@ -298,6 +299,7 @@ function EditStudy() {
                 <InputField name="titleForResearchers" id="researchers-title" label="Title for researchers" />
 
                 <InputField name="durationMinutes" id="duration-mins" label="Duration Minutes" type="number" />
+                <InputField name="participationPoints" id="points" label="Participation Points" type="number" />
                 <InputField name="isMandatory" id="is-mandatory" label="Mandatory study" hint="(must be completed before any others)" type="checkbox" />
                 <StudyStages study={study} onUpdate={reRender} />
                 <SelectField
