@@ -1,7 +1,7 @@
 import { React, useEffect, useState, useHistory, useMemo, cx } from '@common'
 import { ParticipantStudies, ParticipantStudy } from '@api'
 import { get } from 'lodash'
-import { Box, Col, LoadingAnimation, Row, Footer, Icon } from '@components'
+import { Box, Col, LoadingAnimation, Row, Footer, Icon, Logo } from '@components'
 import envelopeIcon from '@iconify-icons/bi/envelope'
 import { useStudyApi } from '@lib'
 import { isStudyLaunchable, tagOfType, tagsOfType, TagLabels, useEnv } from '@models'
@@ -103,9 +103,8 @@ export default function ParticipantHome() {
         <div className="container studies mt-8">
             <nav className="navbar fixed-top navbar-light py-1 bg-dark">
                 <div className="container">
-                    <a className="btn btn-secondary" href={env?.homepage_url}>
-                        <Icon icon="back" />
-                        Home
+                    <a href={env?.homepage_url}>
+                        <Logo height={45} />
                     </a>
                 </div>
             </nav>
