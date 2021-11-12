@@ -5,6 +5,7 @@ import {
 } from '../api'
 import dayjs from 'dayjs'
 import { isNil } from '@lib'
+import { StudyTypeTags } from './tags'
 
 export type EditingStudy = NewStudy | Study
 export type SavedStudy = Study | ParticipantStudy
@@ -14,28 +15,6 @@ export enum StudyStatus {
     Scheduled = 'Scheduled', // eslint-disable-line no-unused-vars
     Completed = 'Completed', // eslint-disable-line no-unused-vars
 }
-
-
-export const StudyTypeLabels = {
-    'type:research': 'Research Study',
-    'type:cognitive': 'Cognitive Task',
-    'type:survey': 'Survey',
-}
-
-export const StudySubjects = {
-    'subject:statistics': 'Statistics',
-    'subject:physics': 'Physics',
-    'subject:biology': 'Biology',
-    'subject:sociology': 'Sociology',
-    'subject:chemistry': 'Chemistry',
-    'subject:business-ethics': 'Business Ethics',
-}
-
-export const TagLabels = Object.assign({}, StudyTypeLabels, StudySubjects)
-
-
-export type StudySubjectID = keyof typeof StudySubjects
-
 
 export const getStatus = (study: Study):StudyStatus => {
     const now = new Date()
@@ -107,7 +86,7 @@ export function tagOfType(study: SavedStudy, type: string): string | undefined {
 export function studyTypeName(study: SavedStudy): string {
     const tag = tagOfType(study, 'type')
     if (tag) {
-        const label = (StudyTypeLabels as any)[tag]
+        const label = (StudyTypeTags as any)[tag]
         return label || ''
     }
     return ''
