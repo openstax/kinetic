@@ -100,7 +100,7 @@ export default function ParticipantHome() {
     }
 
     return (
-        <div className="container studies mt-8">
+        <div className="container studies my-8">
             <nav className="navbar fixed-top navbar-light py-1 bg-dark">
                 <div className="container">
                     <a href={env?.homepage_url}>
