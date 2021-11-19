@@ -47,7 +47,7 @@
         "SECRET_KEY_BASE": {
           "required": true
         },
-        "SENTRY_RAILS_DSN": {
+        "SENTRY_DSN": {
           "required": true
         }
       }

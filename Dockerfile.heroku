@@ -16,6 +16,11 @@ RUN bundle install --deployment
 
 FROM node:14-slim as node
 
+# variables below will be substituted into the JS while building
+# if any are added, they must also be present in frontend/build/env
+ARG SENTRY_DSN
+ARG GTAG_ID
+
 WORKDIR /code/frontend
 
 COPY frontend/package.json ./
@@ -24,18 +29,19 @@ RUN yarn install
 
 COPY frontend ./
 
-RUN yarn run build
+RUN GTAG_ID=$GTAG_ID yarn run build
 
 FROM ruby as ruby2
 
-WORKDIR /code/backend
-COPY backend ./
+ARG SENTRY_DSN
 ENV RUBY_ENV=production
 ENV RAILS_LOG_TO_STDOUT=true
-ENV SENTRY_DSN=https://a7ba8f1daead45acaf7a28dbb661d393@o484761.ingest.sentry.io/6051748
+ENV SENTRY_DSN=$SENTRY_DSN
 ENV RUBY_SERVE_STATIC_FILES=true
-COPY --from=node /code/frontend/dist/ ./public/
-
-ARG SENTRY_DSN
 ENV RAILS_ENV=production
+
+WORKDIR /code/backend
+COPY backend ./
+
+COPY --from=node /code/frontend/dist/ ./public/
 CMD bundle exec rake about && bundle exec rails server -b '0.0.0.0' -p $PORT

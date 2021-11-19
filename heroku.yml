@@ -1,10 +1,9 @@
-setup:
-  config:
-    SENTRY_RAILS_DSN: $SENTRY_RAILS_DSN
-
 build:
   docker:
     web: Dockerfile.heroku
+  config:
+    GTAG_ID: GTM-W6N7PB
+    SENTRY_DSN: https://a7ba8f1daead45acaf7a28dbb661d393@o484761.ingest.sentry.io/6051748
 run:
     web: bundle exec puma
 

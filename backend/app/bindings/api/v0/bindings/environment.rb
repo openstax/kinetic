@@ -16,17 +16,21 @@ module Api::V0::Bindings
   class Environment
     attr_accessor :accounts_env_name
 
+    attr_accessor :homepage_url
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'accounts_env_name' => :'accounts_env_name'
+        :'accounts_env_name' => :'accounts_env_name',
+        :'homepage_url' => :'homepage_url'
       }
     end
 
     # Attribute type mapping.
     def self.swagger_types
       {
-        :'accounts_env_name' => :'String'
+        :'accounts_env_name' => :'String',
+        :'homepage_url' => :'String'
       }
     end
 
@@ -40,6 +44,10 @@ module Api::V0::Bindings
 
       if attributes.has_key?(:'accounts_env_name')
         self.accounts_env_name = attributes[:'accounts_env_name']
+      end
+
+      if attributes.has_key?(:'homepage_url')
+        self.homepage_url = attributes[:'homepage_url']
       end
     end
 
@@ -61,7 +69,8 @@ module Api::V0::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          accounts_env_name == o.accounts_env_name
+          accounts_env_name == o.accounts_env_name &&
+          homepage_url == o.homepage_url
     end
 
     # @see the `==` method
@@ -73,7 +82,7 @@ module Api::V0::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [accounts_env_name].hash
+      [accounts_env_name, homepage_url].hash
     end
 
     # Builds the object from hash

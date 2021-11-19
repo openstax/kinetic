@@ -15,4 +15,7 @@ export const ENV = {
     SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN || '',
 }
 
+window._MODELS = window._MODELS || {}
+window._MODELS.env = ENV
+
 Object.freeze(ENV)
