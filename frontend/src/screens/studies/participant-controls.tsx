@@ -2,7 +2,7 @@ import { React, useState } from '@common'
 import { ParticipantStudy } from '@api'
 import { Box, Menu, Button, Icon, OffCanvas } from '@components'
 import { without, sortBy } from 'lodash-es'
-import { StudySubjectID, StudySubjects, tagOfType } from '@models'
+import { StudySubjectID, StudySubjectTags, tagOfType } from '@models'
 import slidersIcon from '@iconify-icons/bi/sliders'
 import { useMediaMatch } from 'rooks'
 
@@ -65,7 +65,7 @@ export const Subjects:React.FC<ControlProps> = ({ state, onChange }) => {
                 marginRight: '0.5rem',
             },
         }}>
-            {Object.entries(StudySubjects).map(([value, label]) => (
+            {Object.entries(StudySubjectTags).map(([value, label]) => (
                 <label key={value} className="dropdown-item">
                     <input
                         type="checkbox"
@@ -99,7 +99,7 @@ export const DesktopFilterRow:React.FC<ControlProps> = ({ onChange, state, state
                         className="btn badge bg-light text-dark border border-1"
                         onClick={() => onChange({ ...state, subjects: without<StudySubjectID>(subjects, subj) })}
                     >
-                        {StudySubjects[subj]}
+                        {StudySubjectTags[subj]}
                         <Icon icon="x" />
                     </button>
                 ))}
