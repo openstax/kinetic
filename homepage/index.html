@@ -27,7 +27,12 @@
   </head>
   <body>
     <script type="application/javascript">
+      // var ACCOUNTS_URL = 'https://accounts.openstax.org';
+      // var KINETIC_URL = 'https://kinetic.openstax.org';
+      // var WHOAMI_URL = 'https://openstax.org/accounts/api/user';
+
       var ACCOUNTS_URL = 'https://accounts-staging.openstax.org';
+      var WHOAMI_URL = 'https://accounts-staging.openstax.org/api/user';
       var KINETIC_URL = 'https://staging.kinetic.openstax.org';
     </script>
     <style>
@@ -666,7 +671,7 @@
           revealElements('login-signup');
           return;
         }
-        window.fetch(ACCOUNTS_URL + '/api/user', {
+        window.fetch(WHOAMI_URL, {
           method: 'GET',
           credentials: 'include'
         }).then(function(resp) {
