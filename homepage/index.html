@@ -33,7 +33,7 @@
 
       var ACCOUNTS_URL = 'https://accounts-staging.openstax.org';
       var WHOAMI_URL = 'https://accounts-staging.openstax.org/api/user';
-      var KINETIC_URL = 'https://staging.kinetic.openstax.org';
+      var KINETIC_URL = 'https://staging.kinetic.openstax.org/';
     </script>
     <style>
       .general.page {
@@ -693,8 +693,8 @@
         }
       }
 
-      rewriteLinks('login', ACCOUNTS_URL + '/i/login/?r=' + KINETIC_URL);
-      rewriteLinks('signup', ACCOUNTS_URL + '/i/signup/?r=' + KINETIC_URL);
+      rewriteLinks('login', ACCOUNTS_URL + '/i/login?r=' + KINETIC_URL);
+      rewriteLinks('signup', ACCOUNTS_URL + '/i/signup?r=' + KINETIC_URL);
       rewriteLinks('start', KINETIC_URL);
       setUserState();
     </script>
