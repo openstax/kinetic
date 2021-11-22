@@ -2,7 +2,7 @@ FROM ruby:3.0.1 as ruby
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    libpq-dev \
+    libpq-dev postgresql-client \
     && rm -rf /var/lib/apt/lists/* && \
     gem install bundler --no-document && \
     bundle config set no-cache 'true' && \
