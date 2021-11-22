@@ -14,6 +14,7 @@ interface ModalProps extends OverlayModalProps {
     onHide?: () => void
     xlarge?: boolean
     scrollable?: boolean
+    fullscreen?: boolean
     large?: boolean
     small?: boolean
     closeBtn?: boolean
@@ -27,7 +28,7 @@ interface ModalI extends React.FC<ModalProps> {
 }
 
 const Modal: ModalI = ({
-    className, header, children, show, title, onHide, xlarge, large, small,
+    className, header, children, show, title, onHide, xlarge, large, small, fullscreen,
     scrollable = true,
     closeBtn = true,
     ...props
@@ -48,6 +49,7 @@ const Modal: ModalI = ({
                 'modal-dialog-scrollable': scrollable,
                 'modal-xl': xlarge,
                 'modal-lg': large,
+                'modal-fullscreen': fullscreen,
                 'modal-small': small,
 
             })}>

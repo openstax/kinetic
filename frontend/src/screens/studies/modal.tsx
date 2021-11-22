@@ -22,16 +22,13 @@ const Iframe:React.FC<{ url?: string, onClose: StudyModalProps['onHide'] }> = ({
                 }
             } catch (e) { }
         }
-
         window.addEventListener('message', handler)
-
-        // clean up
         return () => window.removeEventListener('message', handler)
-    }, [url]) // empty array => run only once
+    }, [url])
 
     if (isNil(url)) return null
 
-    return <iframe id="study" css={{ height: 525, width: '100%' }} src={url} />
+    return <iframe id="study" css={{ height: '100%', width: '100%', overflow: 'scroll' }} src={url} />
 }
 
 export const StudyModal:React.FC<StudyModalProps> = ({ onHide, study }) => {
@@ -54,13 +51,14 @@ export const StudyModal:React.FC<StudyModalProps> = ({ onHide, study }) => {
 
     return (
         <Modal
-            large show={true}
+            fullscreen
+            show={true}
             onHide={() => onHide?.()}
             closeBtn={isPreview}
             title={title}
             data-is-study-preview-modal={isPreview}
         >
-            <Modal.Body>
+            <Modal.Body css={{ padding: 0 }}>
                 {isNil(studyUrl) && <LoadingAnimation />}
                 <Iframe url={studyUrl} onClose={onHide} />
             </Modal.Body>
