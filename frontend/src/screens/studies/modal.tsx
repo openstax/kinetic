@@ -51,7 +51,7 @@ export const StudyModal:React.FC<StudyModalProps> = ({ onHide, study }) => {
 
     return (
         <Modal
-            fullscreen
+            xlarge
             show={true}
             onHide={() => onHide?.()}
             closeBtn={isPreview}

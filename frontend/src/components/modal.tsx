@@ -48,12 +48,13 @@ const Modal: ModalI = ({
             <div className={cx('modal-dialog', {
                 'modal-dialog-scrollable': scrollable,
                 'modal-xl': xlarge,
+                'modal-fullscreen-lg-down': xlarge,
                 'modal-lg': large,
                 'modal-fullscreen': fullscreen,
                 'modal-small': small,
 
             })}>
-                <div className="modal-content">
+                <div className="modal-content" css={{ height: '100%' }}>
                     {header && header}
                     {title && (
                         <Modal.Header>
