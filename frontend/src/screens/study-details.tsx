@@ -53,14 +53,9 @@ export default function StudyDetails() {
             </nav>
             <div className="border-bottom bg-white py-2">
                 <div className="container">
-                    <Box justify="between" align="end">
-                        <Box direction="column">
-                            <p css={{
-                                fontSize: 24,
-                            }}>{studyTypeName(study)}</p>
-                            <h3>{study.title}</h3>
-                        </Box>
-                        <Box align="center" gap justify="end" css={{ minWidth: 240 }}>
+                    <Box justify="between" align="end" direction="column">
+                        <Box flex><h3>{study.title}</h3></Box>
+                        <Box align="center" gap justify="end">
                             <h3 css={{ margin: 0, minWidth: 100 }}>{study.durationMinutes} min</h3>
                             <LaunchStudyButton study={study}/>
                         </Box>
