@@ -73,7 +73,10 @@ module.exports = {
         'react/jsx-uses-vars': ['error'],
         'react/jsx-uses-react':  ['error'],
         'indent': 'off',
-        '@typescript-eslint/indent': ['error', 4, { 'SwitchCase': 1 }],
+        '@typescript-eslint/indent': ['error', 4, {
+            'SwitchCase': 1,
+            'MemberExpression': 'off',
+        }],
         'react/jsx-indent-props': [2, 4],
         'key-spacing': [2, {
             'singleLine': {
