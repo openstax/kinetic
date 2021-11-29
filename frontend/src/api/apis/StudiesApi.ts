@@ -79,6 +79,7 @@ export interface GetStageRequest {
 
 export interface LandStudyRequest {
     id: number;
+    aborted?: LandStudyAbortedEnum;
 }
 
 export interface LaunchStudyRequest {
@@ -408,6 +409,10 @@ export class StudiesApi extends runtime.BaseAPI {
 
         const queryParameters: any = {};
 
+        if (requestParameters.aborted !== undefined) {
+            queryParameters['aborted'] = requestParameters.aborted;
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
@@ -577,4 +582,12 @@ export class StudiesApi extends runtime.BaseAPI {
         return await response.value();
     }
 
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum LandStudyAbortedEnum {
+    Refusedconsent = 'refusedconsent'
 }

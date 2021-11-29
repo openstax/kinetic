@@ -53,6 +53,17 @@ module Api::V0::SwaggerResponses
     end
   end
 
+  module NotAcceptableError
+    def self.extended(base)
+      base.response 406 do
+        key :description, 'Not acceptable.  Invalid input data was detected'
+        schema do
+          key :'$ref', :Error
+        end
+      end
+    end
+  end
+
   module ServerError
     def self.extended(base)
       base.response 500 do

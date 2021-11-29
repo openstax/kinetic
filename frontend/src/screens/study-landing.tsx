@@ -1,17 +1,9 @@
-import { useHistory, useRouteMatch } from 'react-router-dom'
-import { React } from '@common'
-import { Button, IncorrectUser, Box } from '@components'
+import { Redirect, useHistory, useRouteMatch } from 'react-router-dom'
+import { React, useEffect, useState } from '@common'
+import { LandStudyAbortedEnum, LandStudyRequest } from '@api'
+import { Button, IncorrectUser, Box, LoadingAnimation, ErrorPage } from '@components'
 import { useQueryParam, useCurrentUser, useStudyApi, isIframed, sendMessageToParent } from '@lib'
-import { useEffect } from 'react'
-
-
-const NoConsentMessage:React.FC<{ onReturnClick(): void }> = ({ onReturnClick }) => (
-    <Box direction="column" align="center">
-        <h3>Your responses for the study have been discarded</h3>
-        <p>Want to check out other studies?</p>
-        <Button primary data-test-id="view-studies" onClick={onReturnClick}>Return to dashboard</Button>
-    </Box>
-)
+import type { ReactElement } from 'react'
 
 const CompletedMessage:React.FC<{ onReturnClick(): void }> = ({ onReturnClick }) => (
     <Box direction="column" align="center">
@@ -24,10 +16,16 @@ const CompletedMessage:React.FC<{ onReturnClick(): void }> = ({ onReturnClick })
 
 export default function UsersStudies() {
     const { params: { studyId } } = useRouteMatch<{ studyId: string }>();
+
+    // this is somewhat inaccurate but we do not want to say something like "recording status"
+    // since that will alarm participants who refused consent
+    const [pendingMessage, setPendingMessage] = useState<ReactElement|null>(
+        <LoadingAnimation message="Loading studies" />
+    )
     const api = useStudyApi()
     const history = useHistory()
     const user = useCurrentUser()
-    const noConsent = useQueryParam('consent') != 'true'
+    const noConsent = useQueryParam('consent') == 'true'
 
     if (!user) {
         return <IncorrectUser />
@@ -48,15 +46,31 @@ export default function UsersStudies() {
                 window.parent.document.querySelector('[data-is-study-preview-modal="true"]')
             )
         } catch { }
-        if (!isPreview) {
-            api.landStudy({ id: Number(studyId) })
+        if (isPreview) {
+            setPendingMessage(null)
+            return
         }
-    }, [ studyId ])
-    const Body = noConsent ? NoConsentMessage : CompletedMessage
-    return (
+        const params:LandStudyRequest = { id: Number(studyId) }
+        if (noConsent) {
+            params['aborted'] = LandStudyAbortedEnum.Refusedconsent
+        }
 
+        api.landStudy(params)
+           .then(() => {
+               if (noConsent) {
+                   onNav()
+               } else {
+                   setPendingMessage(null)
+               }
+           })
+           .catch((err) => {
+               setPendingMessage(<ErrorPage error={err?.statusText} />)
+           })
+    }, [])
+
+    return (
         <div className="container studies mt-8">
-            <Body onReturnClick={onNav} />
+            {pendingMessage || <CompletedMessage onReturnClick={onNav} />}
         </div>
     )
 

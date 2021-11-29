@@ -23,20 +23,21 @@ class LaunchPad
   end
 
   def land
-    # At any time, a user has zero or one incomplete launched stages for a particular study.
-    # If they are landing, they must have one launched stage or we need to error.
-
-    launched_stage_to_land =
-      user.launched_stages(study: study)
-          .where(completed_at: nil)
-          .first
-
-    raise(LandError, 'Not expecting a landing for this study') if launched_stage_to_land.nil?
+    stage = stage_to_land
 
     # Mark the launched records completed as needed.
+    stage.completed!
+    launched_study.completed_with_consent! if stage.is_last?
+  end
 
-    launched_stage_to_land.completed!
-    launched_study.completed! if launched_stage_to_land.is_last?
+  def abort(reason)
+    stage = stage_to_land
+    if reason == 'refusedconsent'
+      stage.refuse_to_consent!
+      return true
+    end
+
+    false
   end
 
   protected
@@ -46,6 +47,14 @@ class LaunchPad
 
   def study
     @study ||= Study.find(study_id)
+  end
+
+  def stage_to_land
+    # At any time, a user has zero or one incomplete launched stages for a particular study.
+    # If they are landing, they must have one launched stage or we need to error.
+    user.launched_stages(study: study)
+        .where(completed_at: nil)
+        .first || raise(LandError, 'Not expecting a landing for this study')
   end
 
   def user
