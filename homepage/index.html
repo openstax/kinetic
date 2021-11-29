@@ -33,7 +33,7 @@
 
       var ACCOUNTS_URL = 'https://accounts-staging.openstax.org';
       var WHOAMI_URL = 'https://accounts-staging.openstax.org/api/user';
-      var KINETIC_URL = 'https://staging.kinetic.openstax.org';
+      var KINETIC_URL = 'https://staging.kinetic.openstax.org/';
     </script>
     <style>
       .general.page {
@@ -430,7 +430,7 @@
                   data-local="true"
                   href="https://accounts.openstax.org/signup/?r=https%3A%2F%2Fkinetic.openstax.org%2F"
                 >
-                  Start a free account
+                  Sign up
                 </a>
                 <a
                   class="login link"
@@ -632,7 +632,7 @@
                 data-local="true"
                 href="https://accounts.openstax.org/signup/?r=https%3A%2F%2Fkinetic.openstax.org%2F"
               >
-                Start a free account
+                Sign up
               </a>
               <a
                 class="login link"
@@ -693,8 +693,8 @@
         }
       }
 
-      rewriteLinks('login', ACCOUNTS_URL + '/i/login/?r=' + KINETIC_URL);
-      rewriteLinks('signup', ACCOUNTS_URL + '/i/signup/?r=' + KINETIC_URL);
+      rewriteLinks('login', ACCOUNTS_URL + '/i/login?r=' + KINETIC_URL);
+      rewriteLinks('signup', ACCOUNTS_URL + '/i/signup?r=' + KINETIC_URL);
       rewriteLinks('start', KINETIC_URL);
       setUserState();
     </script>

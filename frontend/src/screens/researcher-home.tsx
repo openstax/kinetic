@@ -1,10 +1,10 @@
 import { React, cx, useEffect, useState, useHistory } from '@common'
 import { Studies, Study } from '@api'
 import {
-    Row, Col, Box, Icon, LogoutButton,
+    Row, Col, Box, Icon, LogoutButton, Logo,
 } from '@components'
 import { useStudyApi, formatDate } from '@lib'
-import { StudyStatus, getStatus, getStatusName } from '@models'
+import { StudyStatus, getStatus, getStatusName, useEnv } from '@models'
 
 const StudyRow:React.FC<{ study: Study }> = ({ study }) => {
     const history = useHistory()
@@ -59,6 +59,7 @@ const StudiesTable:React.FC<{ studies: Study[] }> = ({ studies }) => {
 export default function ResearcherHome() {
     const api = useStudyApi()
     const history = useHistory()
+    const env = useEnv()
     const [studies, setStudies] = useState<Studies>()
     useEffect(() => {
         api.getStudies().then(setStudies)
@@ -70,11 +71,13 @@ export default function ResearcherHome() {
     return (
         <div className="container studies mt-8">
             <nav className="navbar fixed-top navbar-light py-1 bg-dark">
-                <div className="container d-flex justify-content-end">
+                <div className="container d-flex  justify-content-between">
+                    <a href={env?.homepage_url}>
+                        <Logo height={45} />
+                    </a>
                     <LogoutButton />
                 </div>
             </nav>
-
             <Box align="center" justify="between">
                 <h1>Studies</h1>
                 <Icon

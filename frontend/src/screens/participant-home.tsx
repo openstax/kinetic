@@ -80,16 +80,21 @@ export default function ParticipantHome() {
     const [allStudies, setStudies] = useState<ParticipantStudies>()
     const [controlState, setControlState] = useState<ControlState>({})
 
-    useEffect(() => {
-        api.getParticipantStudies().then((studies) => {
-            const mandatory = studies.data?.find(s => isStudyLaunchable(s) && s.isMandatory)
-            if (mandatory) {
-                setMandatoryStudy(mandatory)
-            }
-            setStudies(studies)
-        })
-    }, [])
+    const fetchStudies = async () => {
+        const studies = await api.getParticipantStudies()
+        const mandatory = studies.data?.find(s => isStudyLaunchable(s) && s.isMandatory)
+        if (mandatory) {
+            setMandatoryStudy(mandatory)
+        }
+        setStudies(studies)
+    }
 
+    useEffect(() => { fetchStudies() }, [])
+
+    const onMandatoryClose = () => {
+        setMandatoryStudy(undefined)
+        fetchStudies()
+    }
 
     const studies = useMemo<ParticipantStudy[]>(() => {
         return applyControls(controlState, allStudies?.data || [])
@@ -108,7 +113,7 @@ export default function ParticipantHome() {
                     </a>
                 </div>
             </nav>
-            <StudyModal study={mandatoryStudy} onHide={() => setMandatoryStudy(undefined)} />
+            <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
             <Controls state={controlState} onChange={setControlState} />
             <Row>
                 <Studies studies={studies} isFiltering={!!controlState.subjects?.length} />
