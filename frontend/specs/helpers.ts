@@ -39,14 +39,15 @@ export const goToPage = async ({ page, path, loginAs: login }: goToPageArgs) => 
                 await loginAs({ page, login: login || 'researcher' })
                 await page.goto(url)
             }
+            return
         } catch (e) {
             console.log(e) // eslint-disable-line no-console
-            if (attempts == 3) {
+            if (attempts++ >= 3) {
                 throw(e)
             }
         }
     }
-    while (attempts++ < 3)
+    while (true)
 }
 
 export const interceptStudyLaunch = async ({ page }: { page: Page }) => {
