@@ -1,4 +1,4 @@
-import { Redirect, useHistory, useRouteMatch } from 'react-router-dom'
+import { useHistory, useRouteMatch } from 'react-router-dom'
 import { React, useEffect, useState } from '@common'
 import { LandStudyAbortedEnum, LandStudyRequest } from '@api'
 import { Button, IncorrectUser, Box, LoadingAnimation, ErrorPage } from '@components'
