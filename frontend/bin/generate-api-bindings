@@ -17,7 +17,7 @@ if [ -z "$(which yarn)" ]; then
   exit 1;
 fi
 
-version=${VERSION:-"0"}
+version=${VERSION:-"1"}
 api_host=${API_HOST:-"dos.kinetic.sandbox.openstax.org"}
 swagger_path="/api/v${version}/swagger.json"
 

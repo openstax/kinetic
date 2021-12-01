@@ -4,9 +4,10 @@
 Rails.application.routes.draw do
   namespace :api do
     api_version(
-      module: 'V0',
-      path: { value: 'v0' },
-      defaults: { format: :json }
+      module: 'V1',
+      path: { value: 'v1' },
+      defaults: { format: :json },
+      default: true
     ) do
 
       namespace :researcher do
