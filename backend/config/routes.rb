@@ -33,6 +33,8 @@ Rails.application.routes.draw do
         get :environment
       end
 
+      resources :eligibility, only: [:index]
+
       scope :diagnostics, controller: :diagnostics do
         get :exception
         get 'status_code/:status_code', action: :status_code
