@@ -4,7 +4,7 @@ class Api::V0::EligibilityController < Api::V0::BaseController
 
   def index
     country = request.headers['CloudFront-Viewer-Country-Name']
-    book = params[:book_slug]
+    book = params[:book]
 
     render status: :ok, json: {
       eligible: (
