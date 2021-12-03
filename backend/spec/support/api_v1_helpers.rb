@@ -6,7 +6,7 @@ module ApiV1Helpers
   end
 
   def self.more_rspec_config(config)
-    config.before(:example, api: :v0) do
+    config.before(:example, api: :v1) do
       clear_headers
     end
   end
@@ -92,12 +92,12 @@ module ApiV1Helpers
   end
 
   def add_path_prefix(args)
-    args.dup.tap { |copy| copy[0] = "/api/v0/#{copy[0]}" }
+    args.dup.tap { |copy| copy[0] = "/api/v1/#{copy[0]}" }
   end
 
   def prep_request_args(args)
     args.dup.tap do |copy|
-      copy[0] = "/api/v0/#{copy[0]}"
+      copy[0] = "/api/v1/#{copy[0]}"
 
       # Add the headers on to the end or merge them with existing hash
       headers['CONTENT_TYPE'] = 'application/json'
@@ -130,7 +130,7 @@ module ApiV1Helpers
 
   module ClassMethods
     def test_request_status(spec, verb, path, status)
-      spec.it "returns #{status} for #{verb} on path /api/v0/#{path}" do
+      spec.it "returns #{status} for #{verb} on path /api/v1/#{path}" do
         simple_api_request(verb, path)
         expect(response).to have_http_status(status)
       end

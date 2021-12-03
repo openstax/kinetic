@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Participant Studies', type: :request, api: :v0, multi_stage: true do
+RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: true do
 
   let!(:closed_study) { create(:study, num_stages: 2, closes_at: 1.day.ago) }
 

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Studies', type: :request, api: :v0 do
+RSpec.describe 'Studies', type: :request, api: :v1 do
 
   let(:researcher1) { create(:researcher) }
   let(:researcher2) { create(:researcher) }

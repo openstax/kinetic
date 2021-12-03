@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Study Researchers', type: :request, api: :v0 do
+RSpec.describe 'Study Researchers', type: :request, api: :v1 do
 
   before { responses_not_exceptions! }
 
