@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_18_140839) do
+ActiveRecord::Schema.define(version: 2021_11_29_180319) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(version: 2021_10_18_140839) do
     t.datetime "opted_out_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "aborted_at"
+    t.boolean "consent_granted"
     t.index ["study_id"], name: "index_launched_studies_on_study_id"
     t.index ["user_id", "study_id"], name: "index_launched_studies_on_user_id_and_study_id", unique: true
   end

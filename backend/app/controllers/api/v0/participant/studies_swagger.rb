@@ -218,6 +218,14 @@ class Api::V0::Participant::StudiesSwagger
         key :required, true
         key :type, :number
       end
+      parameter do
+        key :name, :aborted
+        key :in, :query
+        key :description, 'Optional reason study was aborted early'
+        key :required, false
+        key :type, :string
+        key :enum, %w[refusedconsent]
+      end
       response 200 do
         key :description, 'Success.  Returns no data.'
       end

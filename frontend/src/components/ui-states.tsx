@@ -19,7 +19,7 @@ export const ErrorPage: React.FC<{ error: any }> = ({ error }) => {
     );
 }
 
-export const PageNotFound: React.FC= () => {
+export const PageNotFound: React.FC = () => {
     const location = useLocation();
     return (
         <div className="invalid-page not-found">

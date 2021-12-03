@@ -25,18 +25,25 @@ class LaunchPad
   def land
     # At any time, a user has zero or one incomplete launched stages for a particular study.
     # If they are landing, they must have one launched stage or we need to error.
+    stage = user.launched_stages(study: study)
+                .where(completed_at: nil)
+                .first
 
-    launched_stage_to_land =
-      user.launched_stages(study: study)
-          .where(completed_at: nil)
-          .first
-
-    raise(LandError, 'Not expecting a landing for this study') if launched_stage_to_land.nil?
+    raise(LandError, 'Not expecting a landing for this study') if stage.nil?
 
     # Mark the launched records completed as needed.
+    stage.completed!
+    launched_study.completed_with_consent! if stage.is_last?
+  end
 
-    launched_stage_to_land.completed!
-    launched_study.completed! if launched_stage_to_land.is_last?
+  def abort(reason)
+    stage = stage_to_land
+    if reason == 'refusedconsent'
+      stage.refuse_to_consent!
+      return true
+    end
+
+    false
   end
 
   protected

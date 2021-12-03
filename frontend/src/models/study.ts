@@ -1,8 +1,8 @@
 
-import * as Yup from 'yup';
+import * as Yup from 'yup'
 import {
     NewStudy, Study, StudiesApi, ParticipantStudy,
-} from '../api'
+} from '@api'
 import dayjs from 'dayjs'
 import { isNil } from '@lib'
 import { StudyTypeTags } from './tags'
