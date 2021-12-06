@@ -2,7 +2,7 @@
 
 Rails.application.config.to_prepare do
 
-  Api::V0::Bindings::ParticipantStudy.class_exec do
+  Api::V1::Bindings::ParticipantStudy.class_exec do
     def self.create_from_model(model)
       attributes =
         case model
@@ -31,7 +31,7 @@ Rails.application.config.to_prepare do
       model.attributes.tap do |attributes|
         attributes[:title] = model.title_for_participants
         attributes[:researchers] = model.researchers.map do |researcher_model|
-          Api::V0::Bindings::PublicResearcher.create_from_model(researcher_model)
+          Api::V1::Bindings::PublicResearcher.create_from_model(researcher_model)
         end
       end
     end
