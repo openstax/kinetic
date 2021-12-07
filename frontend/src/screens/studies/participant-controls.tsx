@@ -2,12 +2,11 @@ import { React, useState } from '@common'
 import { ParticipantStudy } from '@api'
 import { Box, Menu, Button, Icon, OffCanvas } from '@components'
 import { without, sortBy } from 'lodash-es'
-import { StudySubjectID, StudySubjectTags, tagOfType } from '@models'
+import { StudySubjectID, StudySubjectTags } from '@models'
 import slidersIcon from '@iconify-icons/bi/sliders'
 import { useMediaMatch } from 'rooks'
 
 const SortTypes = {
-    'study:type': 'Study Type',
     'time:low-high': 'Time High to Low',
     'time:high-low': 'Time Low to High',
     'points:low-high': 'Points High to Low',
@@ -114,9 +113,7 @@ export const DesktopFilterRow:React.FC<ControlProps> = ({ onChange, state, state
 
 export const applyControls = ({ sort, subjects } : ControlState, studies: ParticipantStudy[]) => {
     if (sort) {
-        if (sort == 'study:type') {
-            studies = sortBy(studies, (s) => tagOfType(s, 'type'))
-        } else if (sort == 'time:high-low') {
+        if (sort == 'time:high-low') {
             studies = sortBy(studies, s => s.durationMinutes * -1)
         } else if (sort == 'time:low-high') {
             studies = sortBy(studies, 'durationMinutes')
