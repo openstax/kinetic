@@ -33,9 +33,9 @@ export class Environment {
     get accounts_url() {
         if (ENV.IS_DEV_MODE) return '/dev/user'
         if (this.accounts_env_name == 'production') {
-            return 'https://accounts.openstax.org'
+            return 'https://openstax.org'
         }
-        return `https://${this.accounts_env_name}.openstax.org/accounts`
+        return `https://${this.accounts_env_name}.openstax.org`
     }
 
 }
