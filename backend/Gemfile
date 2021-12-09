@@ -38,14 +38,22 @@ gem 'aws-sdk-route53'
 
 gem 'dotenv-rails'
 
-gem 'qualtrics_api', github: 'openstax/qualtrics_api', ref: '88b2340d71677ce6ef6e41d681afbc948585b5f0'
+gem 'qualtrics_api',
+    github: 'openstax/qualtrics_api',
+    ref: '88b2340d71677ce6ef6e41d681afbc948585b5f0'
 
 gem 'will_paginate', '~> 3.1.7'
 
-gem 'openstax_swagger', github: 'openstax/swagger-rails',
-                        ref: '1df972b4bae1ea1ae7dd2ecac4804b4bf2642ee9'
+gem 'openstax_swagger',
+    github: 'openstax/swagger-rails',
+    ref: '1df972b4bae1ea1ae7dd2ecac4804b4bf2642ee9'
 
-gem 'openstax_auth', github: 'openstax/auth-rails', ref: 'ed2d7da86ca226b93376955b9474c4cf115c611f'
+gem 'openstax_auth',
+    github: 'openstax/auth-rails',
+    ref: 'ed2d7da86ca226b93376955b9474c4cf115c611f'
+
+# OpenStax Accounts integration
+gem 'openstax_accounts', '9.8.0'
 
 # Exception reporting
 gem 'sentry-rails'
