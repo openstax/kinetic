@@ -1,4 +1,4 @@
-# kinetic
+# OpenStax Kinetic  - a Research Platform for Education
 
 ## Frontend
 
