@@ -86,7 +86,7 @@ class Api::V1::Researcher::StudiesSwagger
       key :type, :array
       key :description, 'The study\'s researchers.'
       items do
-        key :'$ref', :Researcher
+        key :$ref, :Researcher
       end
     end
     property :first_launched_at do
@@ -98,7 +98,7 @@ class Api::V1::Researcher::StudiesSwagger
       key :type, :array
       key :description, 'The study\'s stages.'
       items do
-        key :'$ref', :Stage
+        key :$ref, :Stage
       end
     end
   end
@@ -127,7 +127,7 @@ class Api::V1::Researcher::StudiesSwagger
       key :type, :array
       key :description, 'The studies.'
       items do
-        key :'$ref', :Study
+        key :$ref, :Study
       end
     end
   end
@@ -149,13 +149,13 @@ class Api::V1::Researcher::StudiesSwagger
         key :description, 'The study data'
         key :required, true
         schema do
-          key :'$ref', :NewStudy
+          key :$ref, :NewStudy
         end
       end
       response 201 do
         key :description, 'Created.  Returns the created study.'
         schema do
-          key :'$ref', :Study
+          key :$ref, :Study
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
@@ -181,7 +181,7 @@ class Api::V1::Researcher::StudiesSwagger
       response 200 do
         key :description, 'Success.  Returns the studies.'
         schema do
-          key :'$ref', :Studies
+          key :$ref, :Studies
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
@@ -214,13 +214,13 @@ class Api::V1::Researcher::StudiesSwagger
         key :description, 'The study updates.'
         key :required, true
         schema do
-          key :'$ref', :StudyUpdate
+          key :$ref, :StudyUpdate
         end
       end
       response 200 do
         key :description, 'Success.  Returns the updated study.'
         schema do
-          key :'$ref', :Study
+          key :$ref, :Study
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError

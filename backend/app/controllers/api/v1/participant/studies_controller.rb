@@ -8,7 +8,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
     launched_studies = current_user.launched_studies.includes(study: [:researchers])
 
     unlaunched_studies = current_user.eligible_studies.includes(:researchers)
-                                     .where.not(id: launched_studies.map(&:study_id))
+                           .where.not(id: launched_studies.map(&:study_id))
 
     studies = launched_studies + unlaunched_studies
 

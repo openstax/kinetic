@@ -51,7 +51,7 @@ class Api::V1::MiscSwagger
       response 200 do
         key :description, 'Success.'
         schema do
-          key :'$ref', :Whoami
+          key :$ref, :Whoami
         end
       end
       extend Api::V1::SwaggerResponses::UnprocessableEntityError
@@ -75,7 +75,7 @@ class Api::V1::MiscSwagger
       response 200 do
         key :description, 'Success.'
         schema do
-          key :'$ref', :Environment
+          key :$ref, :Environment
         end
       end
       extend Api::V1::SwaggerResponses::UnprocessableEntityError

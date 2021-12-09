@@ -11,7 +11,7 @@ PARTICIPANTS = [
 ].freeze
 
 desc 'create demo user accounts if they do not exist'
-task :'demo-users', [:path, :run_mode] => :environment do |_, args|
+task :'demo-users', [:path, :run_mode] => :environment do |_, _args|
   RESEARCHERS.each do |uuid|
     Researcher.find_or_create_by(user_id: uuid)
   end
