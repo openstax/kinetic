@@ -89,7 +89,7 @@ class Api::V1::Participant::StudiesSwagger
       key :type, :array
       key :description, 'The study\'s researchers.'
       items do
-        key :'$ref', :PublicResearcher
+        key :$ref, :PublicResearcher
       end
     end
     property :is_mandatory do
@@ -126,7 +126,7 @@ class Api::V1::Participant::StudiesSwagger
       key :type, :array
       key :description, 'The studies.'
       items do
-        key :'$ref', :ParticipantStudy
+        key :$ref, :ParticipantStudy
       end
     end
   end
@@ -152,7 +152,7 @@ class Api::V1::Participant::StudiesSwagger
       response 200 do
         key :description, 'Success.  Returns participant-visible data for the study.'
         schema do
-          key :'$ref', :ParticipantStudy
+          key :$ref, :ParticipantStudy
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
@@ -190,7 +190,7 @@ class Api::V1::Participant::StudiesSwagger
       response 200 do
         key :description, 'Success.  Returns info on how to launch the user.'
         schema do
-          key :'$ref', :Launch
+          key :$ref, :Launch
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
@@ -252,7 +252,7 @@ class Api::V1::Participant::StudiesSwagger
       response 200 do
         key :description, 'Success.  Returns the studies.'
         schema do
-          key :'$ref', :ParticipantStudies
+          key :$ref, :ParticipantStudies
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError

@@ -47,7 +47,7 @@ module Api::V1::SwaggerResponses
       base.response 422 do
         key :description, 'Could not process request'
         schema do
-          key :'$ref', :Error
+          key :$ref, :Error
         end
       end
     end
@@ -58,7 +58,7 @@ module Api::V1::SwaggerResponses
       base.response 406 do
         key :description, 'Not acceptable.  Invalid input data was detected'
         schema do
-          key :'$ref', :Error
+          key :$ref, :Error
         end
       end
     end
@@ -69,7 +69,7 @@ module Api::V1::SwaggerResponses
       base.response 500 do
         key :description, 'Server error.'
         schema do
-          key :'$ref', :Error
+          key :$ref, :Error
         end
       end
     end

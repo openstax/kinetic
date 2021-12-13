@@ -26,8 +26,8 @@ class LaunchPad
     # At any time, a user has zero or one incomplete launched stages for a particular study.
     # If they are landing, they must have one launched stage or we need to error.
     stage = user.launched_stages(study: study)
-                .where(completed_at: nil)
-                .first
+              .where(completed_at: nil)
+              .first
 
     raise(LandError, 'Not expecting a landing for this study') if stage.nil?
 

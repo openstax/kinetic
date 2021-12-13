@@ -83,13 +83,13 @@ class Api::V1::Researcher::StagesSwagger
         key :description, 'The stage data'
         key :required, true
         schema do
-          key :'$ref', :NewStage
+          key :$ref, :NewStage
         end
       end
       response 201 do
         key :description, 'Created.  Returns the created stage.'
         schema do
-          key :'$ref', :Stage
+          key :$ref, :Stage
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
@@ -120,7 +120,7 @@ class Api::V1::Researcher::StagesSwagger
       response 200 do
         key :description, 'Success.  Returns the stage.'
         schema do
-          key :'$ref', :Stage
+          key :$ref, :Stage
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
@@ -154,13 +154,13 @@ class Api::V1::Researcher::StagesSwagger
         key :description, 'The stage updates.'
         key :required, true
         schema do
-          key :'$ref', :StageUpdate
+          key :$ref, :StageUpdate
         end
       end
       response 200 do
         key :description, 'Success.  Returns the updated stage.'
         schema do
-          key :'$ref', :Stage
+          key :$ref, :Stage
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError

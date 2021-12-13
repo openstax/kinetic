@@ -1,5 +1,6 @@
 AllCops:
   TargetRubyVersion: 2.6
+  NewCops: enable
   Exclude:
     - 'db/**/*.rb'
     - 'app/bindings/**/*.rb'
@@ -74,6 +75,9 @@ Layout/ClosingParenthesisIndentation:
 
 Layout/MultilineMethodCallBraceLayout:
   Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented_relative_to_receiver
 
 Style/ClassAndModuleChildren:
   Enabled: false
