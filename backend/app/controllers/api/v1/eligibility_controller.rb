@@ -2,8 +2,6 @@
 
 class Api::V1::EligibilityController < Api::V1::BaseController
 
-  around_action :exhaustive_request_logging
-
   def index
     country = request.headers['CloudFront-Viewer-Country-Name']
     book = params[:book]
