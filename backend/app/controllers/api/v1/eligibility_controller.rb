@@ -3,7 +3,7 @@
 class Api::V1::EligibilityController < Api::V1::BaseController
 
   def index
-    country = request.headers['CloudFront-Viewer-Country-Name']
+    country = request.headers['CloudFront-Viewer-Country']
     book = params[:book]
 
     render status: :ok, json: {
