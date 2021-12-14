@@ -9,6 +9,14 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
+    origins 'localhost:4000'
+    resource '/development/*', {
+      headers: :any,
+      credentials: true,
+      methods: [:get, :options, :head, :put, :delete]
+    }
+  end
+  allow do
     origins ['localhost:4000', '*.openstax.org']
     resource '/api/*', {
       headers: :any,
