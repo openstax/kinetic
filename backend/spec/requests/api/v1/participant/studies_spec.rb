@@ -170,6 +170,24 @@ RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: tru
     context 'when signed in' do
       before { stub_current_user(user1_id) }
 
+      context 'when aborting early' do
+        it 'does not mark complete' do
+          allow_any_instance_of(LaunchPad).to(
+            receive(:abort)
+              .with('refusedconsent')
+              .and_return(true)
+          )
+
+          expect_any_instance_of(LaunchPad).not_to receive(:land)
+          api_put "participant/studies/#{study3.id}/land", params: {
+            abort: 'refusedconsent'
+          }
+          expect(response).to have_http_status(:ok)
+          study3.stages
+        end
+
+      end
+
       it 'works for a launched study not yet landed' do
         expect_any_instance_of(LaunchPad).to receive(:land)
         api_put "participant/studies/#{study2.id}/land"
