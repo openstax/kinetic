@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -xe
+
+docker-compose run api bundle exec rake openstax_swagger:generate_model_bindings[1]
+
+cd frontend
+
+yarn run generate-local-bindings
