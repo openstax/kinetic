@@ -34,4 +34,29 @@ class Api::V1::BaseController < ApplicationController
   def binding_error(status_code:, messages:)
     Api::V1::Bindings::Error.new(status_code: status_code, messages: messages)
   end
+
+  def exhaustive_request_logging
+    puts '*' * 40
+    pp request.method
+    pp request.url
+    pp request.remote_ip
+    pp ActionController::HttpAuthentication::Token.token_and_options(request)
+
+    request.headers.env.each_key do |key|
+      value = request.headers[key]
+      next unless value.is_a?(String) # don't dump things like "puma_config"
+
+      puts format('%<key>20s : %<value>s', { key: key, value: value }).join(' ')
+    end
+    puts '-' * 40
+    params.each_key do |key|
+      puts format('%<key>20s : %<value>s', { key: key.to_s, value: params[key].inspect })
+    end
+    puts '*' * 40
+    begin
+      yield
+    ensure
+      puts response.body
+    end
+  end
 end
