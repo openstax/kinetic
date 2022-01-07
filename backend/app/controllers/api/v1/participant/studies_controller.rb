@@ -35,12 +35,11 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   end
 
   def land
-    if params[:abort] && !launch_pad.abort(params[:abort])
-      head :not_acceptable, 'invalid reason code'
-      return
+    if params[:abort]
+      return head :not_acceptable unless launch_pad.abort(params[:abort])
+    else
+      launch_pad.land
     end
-
-    launch_pad.land
     head :ok
   end
 
