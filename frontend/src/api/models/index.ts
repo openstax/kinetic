@@ -8,6 +8,7 @@ export * from './ParticipantStudy';
 export * from './PublicResearcher';
 export * from './QualtricsStage';
 export * from './Researcher';
+export * from './RewardsScheduleSegment';
 export * from './Stage';
 export * from './StageUpdate';
 export * from './Studies';

@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import {
+    RewardsScheduleSegment,
+    RewardsScheduleSegmentFromJSON,
+    RewardsScheduleSegmentFromJSONTyped,
+    RewardsScheduleSegmentToJSON,
+} from './';
+
 /**
  * 
  * @export
@@ -24,13 +31,19 @@ export interface Environment {
      * @type {string}
      * @memberof Environment
      */
-    readonly accountsEnvName?: string;
+    readonly accountsEnvName: string;
     /**
      * 
      * @type {string}
      * @memberof Environment
      */
-    readonly homepageUrl?: string;
+    readonly homepageUrl: string;
+    /**
+     * The tags of the study object, used for grouping and filtering.
+     * @type {Array<RewardsScheduleSegment>}
+     * @memberof Environment
+     */
+    rewardsSchedule: Array<RewardsScheduleSegment>;
 }
 
 export function EnvironmentFromJSON(json: any): Environment {
@@ -43,8 +56,9 @@ export function EnvironmentFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'accountsEnvName': !exists(json, 'accounts_env_name') ? undefined : json['accounts_env_name'],
-        'homepageUrl': !exists(json, 'homepage_url') ? undefined : json['homepage_url'],
+        'accountsEnvName': json['accounts_env_name'],
+        'homepageUrl': json['homepage_url'],
+        'rewardsSchedule': ((json['rewards_schedule'] as Array<any>).map(RewardsScheduleSegmentFromJSON)),
     };
 }
 
@@ -57,6 +71,7 @@ export function EnvironmentToJSON(value?: Environment | null): any {
     }
     return {
         
+        'rewards_schedule': ((value.rewardsSchedule as Array<any>).map(RewardsScheduleSegmentToJSON)),
     };
 }
 

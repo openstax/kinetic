@@ -4,7 +4,9 @@ import { get } from 'lodash'
 import { Box, Col, LoadingAnimation, Row, Footer, Icon, Logo } from '@components'
 import envelopeIcon from '@iconify-icons/bi/envelope'
 import { useStudyApi } from '@lib'
-import { isStudyLaunchable, tagOfType, tagsOfType, TagLabels, useEnv } from '@models'
+import {
+    isStudyLaunchable, tagOfType, tagsOfType, TagLabels, useEnv, rewardPointsEarned,
+} from '@models'
 import { Controls, applyControls, ControlState } from './studies/participant-controls'
 import { StudyModal } from './studies/modal'
 
@@ -91,6 +93,7 @@ export default function ParticipantHome() {
 
     useEffect(() => { fetchStudies() }, [])
 
+
     const onMandatoryClose = () => {
         setMandatoryStudy(undefined)
         fetchStudies()
@@ -100,19 +103,23 @@ export default function ParticipantHome() {
         return applyControls(controlState, allStudies?.data || [])
     }, [allStudies?.data, controlState])
 
+    const points = useMemo(() => rewardPointsEarned(allStudies?.data || []), allStudies?.data)
+
     if (!allStudies?.data) {
         return <LoadingAnimation message="Loading studies" />
     }
+
 
     return (
         <div className="container studies my-8">
             <nav className="navbar fixed-top navbar-light py-1 bg-dark">
                 <div className="container">
-                    <a href={env?.homepage_url}>
+                    <a href={env?.config.homepageUrl}>
                         <Logo height={45} />
                     </a>
                 </div>
             </nav>
+            <p>Points: {points} out of {env?.currentRewardsSegment?.points || 0}</p>
             <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
             <Controls state={controlState} onChange={setControlState} />
             <Row>

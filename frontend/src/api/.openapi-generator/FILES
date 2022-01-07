@@ -13,6 +13,7 @@ models/ParticipantStudy.ts
 models/PublicResearcher.ts
 models/QualtricsStage.ts
 models/Researcher.ts
+models/RewardsScheduleSegment.ts
 models/Stage.ts
 models/StageUpdate.ts
 models/Studies.ts

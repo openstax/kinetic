@@ -91,3 +91,12 @@ export function studyTypeName(study: SavedStudy): string {
     }
     return ''
 }
+
+export function rewardPointsEarned(studies: ParticipantStudy[]): number {
+    return studies.reduce((points, study) => {
+        if (study.participationPoints && study.completedAt) {
+            points += study.participationPoints
+        }
+        return points
+    }, 0)
+}

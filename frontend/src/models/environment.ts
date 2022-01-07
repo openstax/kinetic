@@ -1,26 +1,20 @@
 import { useState, useEffect } from 'react'
-import { ENV } from '@lib'
-
-export interface EnviromentApiPayload {
-    accounts_env_name?: 'string'
-    homepage_url: string
-}
+import { ApiConfiguration, ENV } from '@lib'
+import { Environment as ApiEnv, MiscApi } from '@api'
+import dayjs from 'dayjs'
 
 export class Environment {
 
     static async fetch() {
-        const reply = await fetch(`${ENV.API_PATH}/environment`, {
-            credentials: 'include',
-        })
-        return new Environment(await reply.json())
+        const api = new MiscApi(ApiConfiguration)
+        const env = await api.getEnvironment()
+        return new Environment(env)
     }
 
-    accounts_env_name: string
-    homepage_url: string
+    config: ApiEnv
 
-    constructor(payload: EnviromentApiPayload) {
-        this.accounts_env_name = payload.accounts_env_name || 'dev'
-        this.homepage_url = payload.homepage_url
+    constructor(config: ApiEnv) {
+        this.config = config
     }
 
     get loginURL() {
@@ -32,12 +26,18 @@ export class Environment {
 
     get accounts_url() {
         if (ENV.IS_DEV_MODE) return '/dev/user'
-        if (this.accounts_env_name == 'production') {
+        if (this.config.accountsEnvName == 'production') {
             return 'https://openstax.org'
         }
-        return `https://${this.accounts_env_name}.openstax.org`
+        return `https://${this.config.accountsEnvName}.openstax.org`
     }
 
+    get currentRewardSegment() {
+        const now = dayjs()
+        return this.config.rewardsSchedule.find(s => (
+            dayjs(s.startAt).isBefore(now) && dayjs(s.endAt).isAfter(now)
+        ))
+    }
 }
 
 export const useEnv = () => {
