@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_29_180319) do
+ActiveRecord::Schema.define(version: 2022_01_10_162620) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,15 @@ ActiveRecord::Schema.define(version: 2021_11_29_180319) do
     t.boolean "consent_granted"
     t.index ["study_id"], name: "index_launched_studies_on_study_id"
     t.index ["user_id", "study_id"], name: "index_launched_studies_on_user_id_and_study_id", unique: true
+  end
+
+  create_table "participant_metadata", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.bigint "study_id", null: false
+    t.jsonb "metadata"
+    t.datetime "created_at"
+    t.index ["study_id"], name: "index_participant_metadata_on_study_id"
+    t.index ["user_id"], name: "index_participant_metadata_on_user_id"
   end
 
   create_table "research_ids", id: :text, force: :cascade do |t|
@@ -102,6 +111,7 @@ ActiveRecord::Schema.define(version: 2021_11_29_180319) do
 
   add_foreign_key "launched_stages", "stages"
   add_foreign_key "launched_studies", "studies"
+  add_foreign_key "participant_metadata", "studies"
   add_foreign_key "stages", "studies"
   add_foreign_key "study_researchers", "researchers"
   add_foreign_key "study_researchers", "studies"
