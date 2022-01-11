@@ -40,7 +40,7 @@ module Api::V1::Bindings
     def self.swagger_types
       {
         :'prize' => :'String',
-        :'points' => :'String',
+        :'points' => :'Float',
         :'start_at' => :'DateTime',
         :'end_at' => :'DateTime'
       }
@@ -75,12 +75,32 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
+      if @prize.nil?
+        invalid_properties.push('invalid value for "prize", prize cannot be nil.')
+      end
+
+      if @points.nil?
+        invalid_properties.push('invalid value for "points", points cannot be nil.')
+      end
+
+      if @start_at.nil?
+        invalid_properties.push('invalid value for "start_at", start_at cannot be nil.')
+      end
+
+      if @end_at.nil?
+        invalid_properties.push('invalid value for "end_at", end_at cannot be nil.')
+      end
+
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
+      return false if @prize.nil?
+      return false if @points.nil?
+      return false if @start_at.nil?
+      return false if @end_at.nil?
       true
     end
 

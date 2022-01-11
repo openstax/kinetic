@@ -1,10 +1,15 @@
 -
-  prize: IPod
-  points: 200
-  start_at: 2010-20-10
-  end_at: 2010-20-10
+  prize: $20 Starbucks gift card
+  points: 75
+  start_at: 2022-01-15
+  end_at: 2022-02-14
 -
-  prize: Gift Cert
-  points: 120
-  start_at: 2022-01-01
-  end_at: 2022-06-01
+  prize: $50 Amazon gift card
+  points: 100
+  start_at: 2022-02-15
+  end_at: 2022-03-14
+-
+  prize: $50 Nike gift card
+  points: 80
+  start_at: 2022-03-15
+  end_at: 2022-04-14

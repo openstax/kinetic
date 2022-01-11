@@ -4,12 +4,13 @@ class Api::V1::MiscSwagger
   include Swagger::Blocks
   include OpenStax::Swagger::SwaggerBlocksExtensions
   add_properties(:RewardsScheduleSegment) do
+    key :required, %w[prize points start_at end_at]
     property :prize do
       key :type, :string
       key :description, 'The Prize that will be awarded for this segment of time'
     end
     property :points do
-      key :type, :string
+      key :type, :number
       key :description, 'The number of points needed to be eligible'
     end
     property :start_at do

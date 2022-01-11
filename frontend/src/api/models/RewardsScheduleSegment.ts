@@ -24,25 +24,25 @@ export interface RewardsScheduleSegment {
      * @type {string}
      * @memberof RewardsScheduleSegment
      */
-    prize?: string;
+    prize: string;
     /**
      * The number of points needed to be eligible
-     * @type {string}
+     * @type {number}
      * @memberof RewardsScheduleSegment
      */
-    points?: string;
+    points: number;
     /**
      * When the segment starts
      * @type {Date}
      * @memberof RewardsScheduleSegment
      */
-    startAt?: Date;
+    startAt: Date;
     /**
      * When the segment ends
      * @type {Date}
      * @memberof RewardsScheduleSegment
      */
-    endAt?: Date;
+    endAt: Date;
 }
 
 export function RewardsScheduleSegmentFromJSON(json: any): RewardsScheduleSegment {
@@ -55,10 +55,10 @@ export function RewardsScheduleSegmentFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
-        'prize': !exists(json, 'prize') ? undefined : json['prize'],
-        'points': !exists(json, 'points') ? undefined : json['points'],
-        'startAt': !exists(json, 'start_at') ? undefined : (new Date(json['start_at'])),
-        'endAt': !exists(json, 'end_at') ? undefined : (new Date(json['end_at'])),
+        'prize': json['prize'],
+        'points': json['points'],
+        'startAt': (new Date(json['start_at'])),
+        'endAt': (new Date(json['end_at'])),
     };
 }
 
@@ -73,8 +73,8 @@ export function RewardsScheduleSegmentToJSON(value?: RewardsScheduleSegment | nu
         
         'prize': value.prize,
         'points': value.points,
-        'start_at': value.startAt === undefined ? undefined : (value.startAt.toISOString()),
-        'end_at': value.endAt === undefined ? undefined : (value.endAt.toISOString()),
+        'start_at': (value.startAt.toISOString()),
+        'end_at': (value.endAt.toISOString()),
     };
 }
 

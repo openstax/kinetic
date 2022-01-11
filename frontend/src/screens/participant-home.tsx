@@ -1,11 +1,11 @@
 import { React, useEffect, useState, useHistory, useMemo, cx } from '@common'
 import { ParticipantStudies, ParticipantStudy } from '@api'
 import { get } from 'lodash'
-import { Box, Col, LoadingAnimation, Row, Footer, Icon, Logo } from '@components'
+import { Box, Col, LoadingAnimation, Row, Footer, Icon, Logo, RewardsProgressBar } from '@components'
 import envelopeIcon from '@iconify-icons/bi/envelope'
 import { useStudyApi } from '@lib'
 import {
-    isStudyLaunchable, tagOfType, tagsOfType, TagLabels, useEnv, rewardPointsEarned,
+    isStudyLaunchable, tagOfType, tagsOfType, TagLabels, useEnv,
 } from '@models'
 import { Controls, applyControls, ControlState } from './studies/participant-controls'
 import { StudyModal } from './studies/modal'
@@ -103,37 +103,39 @@ export default function ParticipantHome() {
         return applyControls(controlState, allStudies?.data || [])
     }, [allStudies?.data, controlState])
 
-    const points = useMemo(() => rewardPointsEarned(allStudies?.data || []), allStudies?.data)
-
     if (!allStudies?.data) {
         return <LoadingAnimation message="Loading studies" />
     }
 
 
     return (
-        <div className="container studies my-8">
-            <nav className="navbar fixed-top navbar-light py-1 bg-dark">
-                <div className="container">
-                    <a href={env?.config.homepageUrl}>
-                        <Logo height={45} />
-                    </a>
+        <div className="studies">
+            <nav className="navbar navbar-light">
+                <div className="navbar-dark bg-dark py-1">
+                    <div className="container">
+                        <a href={env?.config.homepageUrl}>
+                            <Logo height={45} />
+                        </a>
+                    </div>
                 </div>
+                <RewardsProgressBar studies={allStudies?.data || []} />
             </nav>
-            <p>Points: {points} out of {env?.currentRewardsSegment?.points || 0}</p>
-            <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
-            <Controls state={controlState} onChange={setControlState} />
-            <Row>
-                <Studies studies={studies} isFiltering={!!controlState.subjects?.length} />
-            </Row>
-            <Footer isBottomFixed>
-                <p className="mb-0">
-                    <b>Need help?</b>
-                </p>
-                <p className="mb-0">
-                    Contact support
-                </p>
-                <a className="text-decoration-none" href="mailto:support@openstax.org?subject=[Kinetic help]"><Icon icon={envelopeIcon} /> support@openstax.org</a>
-            </Footer>
+            <div className="container studies my-8">
+                <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
+                <Controls state={controlState} onChange={setControlState} />
+                <Row>
+                    <Studies studies={studies} isFiltering={!!controlState.subjects?.length} />
+                </Row>
+                <Footer isBottomFixed>
+                    <p className="mb-0">
+                        <b>Need help?</b>
+                    </p>
+                    <p className="mb-0">
+                        Contact support
+                    </p>
+                    <a className="text-decoration-none" href="mailto:support@openstax.org?subject=[Kinetic help]"><Icon icon={envelopeIcon} /> support@openstax.org</a>
+                </Footer>
+            </div>
         </div>
     )
 }
