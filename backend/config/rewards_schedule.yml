@@ -1,7 +1,7 @@
 -
   prize: $20 Starbucks gift card
   points: 75
-  start_at: 2022-01-15
+  start_at: 2022-01-18
   end_at: 2022-02-14
 -
   prize: $50 Amazon gift card
@@ -10,11 +10,11 @@
   end_at: 2022-03-14
 -
   prize: $50 Nike gift card
-  points: 80
+  points: 50
   start_at: 2022-03-15
   end_at: 2022-04-14
 -
-  prize: Apple AirPods
+  prize: Apple AirPods™
   points: 0
-  start_at: 2022-04-14
-  end_at: 2022-06-01
+  start_at: 2022-04-20
+  end_at: 2022-04-20
