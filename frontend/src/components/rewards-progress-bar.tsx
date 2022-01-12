@@ -6,8 +6,8 @@ import {
 } from '@models'
 import { ParticipantStudy } from '@api'
 import { colors } from '../theme'
-import trophyIcon from '@iconify-icons/bi/trophy'
-
+import trophyFilledIcon from '@iconify-icons/bi/trophy-fill'
+import trophyOutlineIcon from '@iconify-icons/bi/trophy'
 
 interface RewardsProgressBarProps {
     studies: ParticipantStudy[]
@@ -51,32 +51,27 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
         schedule,
         points,
         totalPoints,
+        isCompleted,
+        finalDrawing,
     } = useRewardsSchedule(studies)
 
-    /* const schedule = env?.config.rewardsSchedule || []
-     * sortBy(schedule, 'startAt')
-     * let ttlPoints = 0
-     * schedule.forEach(s => {
-     *     ttlPoints = s.totalPoints = s.points + ttlPoints
-     * })
-     * const points = useMemo(() => rewardPointsEarned(studies), [studies])
-     * const totalPoints = useMemo(
-     *     () => schedule.reduce((pts, seg) => pts + seg.points, 0),
-     *     [schedule],
-     * )
-     * if (!env) return null */
-
     return (
-        <nav className="navbar navbar-light" css={{
+        <nav className="navbar navbar-light py-1" css={{
+            backgroundColor: 'white',
+            boxShadow: '0px 10px 20px -5px rgba(0, 0, 0, 0.08)',
         }}>
             <div className="container">
-                <Box height="40px" align="center" >
+                <div>
+                    <span className="fs-6 fw-light">{finalDrawing?.prize} Giveaway: </span>
+                    <b>{points} / {totalPoints} pts({Math.round((points/totalPoints)*100)}%)</b>
+                </div>
+                <Box align="center" >
 
                     <div
                         css={{
                             height: `${barWidth}px`,
                             flex: 1,
-                            marginRight: `${barWidth * 4}px`,
+
                             background: colors.lightGray,
                             position: 'relative',
                         }}
@@ -96,10 +91,19 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
                             />
                         ))}
                     </div>
-                    <Icon icon={trophyIcon} height="30px" color={colors.lightGray} />
+                    <Icon
+                        color={isCompleted ? colors.purple : colors.lightGray}
+                        icon={isCompleted ? trophyFilledIcon : trophyOutlineIcon}
+                        height="30px"
+                        className="ms-3 me-1"
+                    />
+                    {finalDrawing?.prize && (
+                        <a href="https://openstax.org/kinetic" css={{ maxWidth: '200px' }}>
+                            Find out more information about the {finalDrawing.prize} drawing
+                        </a>
+                    )}
                 </Box>
             </div>
         </nav>
-
     )
 }

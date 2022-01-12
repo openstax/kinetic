@@ -1,7 +1,7 @@
 import { useMemo } from '@common'
 import { RewardsScheduleSegment, ParticipantStudy } from '@api'
 import { useEnv } from './environment'
-import { sortBy } from 'lodash-es'
+import { sortBy, last } from 'lodash-es'
 
 export interface CalculatedRewardsScheduleSegment extends RewardsScheduleSegment {
     totalPoints: number
@@ -23,7 +23,7 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
     const rs = env?.config.rewardsSchedule || []
     sortBy(rs, 'startAt')
     let totalPoints = 0
-    const schedule = rs.map((s, index) => {
+    const allEvents = rs.map((s, index) => {
         totalPoints += s.points
         return {
             ...s,
@@ -35,8 +35,10 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
     const points = useMemo(() => rewardPointsEarned(studies), [studies])
 
     return {
-        schedule,
+        schedule: allEvents.slice(0, -1),
         points,
         totalPoints,
+        finalDrawing: last(allEvents),
+        isCompleted: points >= totalPoints,
     }
 }
