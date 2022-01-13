@@ -30,7 +30,7 @@ const RewardSegmentCircle: React.FC<{
     return (
         <Popover
             displayType="tooltip"
-            style={{ left: `${(segment.totalPoints / totalPoints) * 100}%` }}
+            style={{ left: `calc(${(segment.totalPoints / totalPoints) * 100}% - ${barWidth/2}px)` }}
             css={{
                 height: '20px',
                 width: '20px',
@@ -71,7 +71,7 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
                         css={{
                             height: `${barWidth}px`,
                             flex: 1,
-
+                            borderRadius: '4px',
                             background: colors.lightGray,
                             position: 'relative',
                         }}
@@ -80,6 +80,7 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
                             height: '100%',
                             width: `${(points / totalPoints) * 100}%`,
                             position: 'absolute',
+                            borderRadius: '4px 0 0 4px',
                             background: colors.purple,
                         }} />
                         {schedule.map((segment) => (
@@ -101,7 +102,11 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
                         <a
                             className="fw-light"
                             href="https://openstax.org/kinetic"
-                            css={{ maxWidth: '200px', fontSize: '0.9rem' }}
+                            css={{
+                                maxWidth: '200px',
+                                fontSize: '0.9rem',
+                                color: colors.darkText,
+                            }}
                         >
                             Find out more information about the {finalDrawing.prize} drawing
                         </a>

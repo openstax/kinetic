@@ -7,6 +7,7 @@ export const colors = {
     purple: '#6922EA',
     lightGray: '#DBDBDB',
     text: '#212529',
+    darkText: '#151B2C',
     input: { border: '#ced4da' },
 
 }
