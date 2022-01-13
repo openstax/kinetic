@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
-import { ApiConfiguration, ENV } from '@lib'
+import { API_CONFIGURATION, ENV } from '@lib'
 import { Environment as ApiEnv, MiscApi } from '@api'
 import dayjs from 'dayjs'
 
 export class Environment {
 
     static async fetch() {
-        const api = new MiscApi(ApiConfiguration)
+        const api = new MiscApi(API_CONFIGURATION)
         const env = await api.getEnvironment()
         return new Environment(env)
     }
