@@ -26,7 +26,7 @@ export default function UsersStudies() {
     const history = useHistory()
     const user = useCurrentUser()
     const noConsent = useQueryParam('consent') == 'true'
-
+    const metadata = useQueryParam('metadata') || {}
     if (!user) {
         return <IncorrectUser />
     }
@@ -50,7 +50,11 @@ export default function UsersStudies() {
             setPendingMessage(null)
             return
         }
-        const params:LandStudyRequest = { id: Number(studyId) }
+
+        const params:LandStudyRequest = {
+            id: Number(studyId),
+            metadata,
+        }
         if (noConsent) {
             params['aborted'] = LandStudyAbortedEnum.Refusedconsent
         }
