@@ -13,29 +13,36 @@ Swagger Codegen version: 2.4.13
 require 'date'
 
 module Api::V1::Bindings
-  class Environment
-    attr_accessor :accounts_env_name
+  class RewardsScheduleSegment
+    # The Prize that will be awarded for this segment of time
+    attr_accessor :prize
 
-    attr_accessor :homepage_url
+    # The number of points needed to be eligible
+    attr_accessor :points
 
-    # The tags of the study object, used for grouping and filtering.
-    attr_accessor :rewards_schedule
+    # When the segment starts
+    attr_accessor :start_at
+
+    # When the segment ends
+    attr_accessor :end_at
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'accounts_env_name' => :'accounts_env_name',
-        :'homepage_url' => :'homepage_url',
-        :'rewards_schedule' => :'rewards_schedule'
+        :'prize' => :'prize',
+        :'points' => :'points',
+        :'start_at' => :'start_at',
+        :'end_at' => :'end_at'
       }
     end
 
     # Attribute type mapping.
     def self.swagger_types
       {
-        :'accounts_env_name' => :'String',
-        :'homepage_url' => :'String',
-        :'rewards_schedule' => :'Array<RewardsScheduleSegment>'
+        :'prize' => :'String',
+        :'points' => :'Float',
+        :'start_at' => :'DateTime',
+        :'end_at' => :'DateTime'
       }
     end
 
@@ -47,18 +54,20 @@ module Api::V1::Bindings
       # convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h| h[k.to_sym] = v }
 
-      if attributes.has_key?(:'accounts_env_name')
-        self.accounts_env_name = attributes[:'accounts_env_name']
+      if attributes.has_key?(:'prize')
+        self.prize = attributes[:'prize']
       end
 
-      if attributes.has_key?(:'homepage_url')
-        self.homepage_url = attributes[:'homepage_url']
+      if attributes.has_key?(:'points')
+        self.points = attributes[:'points']
       end
 
-      if attributes.has_key?(:'rewards_schedule')
-        if (value = attributes[:'rewards_schedule']).is_a?(Array)
-          self.rewards_schedule = value
-        end
+      if attributes.has_key?(:'start_at')
+        self.start_at = attributes[:'start_at']
+      end
+
+      if attributes.has_key?(:'end_at')
+        self.end_at = attributes[:'end_at']
       end
     end
 
@@ -66,16 +75,20 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @accounts_env_name.nil?
-        invalid_properties.push('invalid value for "accounts_env_name", accounts_env_name cannot be nil.')
+      if @prize.nil?
+        invalid_properties.push('invalid value for "prize", prize cannot be nil.')
       end
 
-      if @homepage_url.nil?
-        invalid_properties.push('invalid value for "homepage_url", homepage_url cannot be nil.')
+      if @points.nil?
+        invalid_properties.push('invalid value for "points", points cannot be nil.')
       end
 
-      if @rewards_schedule.nil?
-        invalid_properties.push('invalid value for "rewards_schedule", rewards_schedule cannot be nil.')
+      if @start_at.nil?
+        invalid_properties.push('invalid value for "start_at", start_at cannot be nil.')
+      end
+
+      if @end_at.nil?
+        invalid_properties.push('invalid value for "end_at", end_at cannot be nil.')
       end
 
       invalid_properties
@@ -84,9 +97,10 @@ module Api::V1::Bindings
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @accounts_env_name.nil?
-      return false if @homepage_url.nil?
-      return false if @rewards_schedule.nil?
+      return false if @prize.nil?
+      return false if @points.nil?
+      return false if @start_at.nil?
+      return false if @end_at.nil?
       true
     end
 
@@ -95,9 +109,10 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          accounts_env_name == o.accounts_env_name &&
-          homepage_url == o.homepage_url &&
-          rewards_schedule == o.rewards_schedule
+          prize == o.prize &&
+          points == o.points &&
+          start_at == o.start_at &&
+          end_at == o.end_at
     end
 
     # @see the `==` method
@@ -109,7 +124,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [accounts_env_name, homepage_url, rewards_schedule].hash
+      [prize, points, start_at, end_at].hash
     end
 
     # Builds the object from hash

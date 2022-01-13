@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+cd frontend
+
+yarn run lint
+yarn run typecheck
+
+cd ../backend
+
+docker-compose exec api bundle exec rubocop

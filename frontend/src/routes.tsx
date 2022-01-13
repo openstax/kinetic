@@ -14,7 +14,7 @@ const Participant = loadAsync('Studies', () => import('./screens/participant-hom
 
 const StudiesHomepage = () => {
     const user = useCurrentUser()
-    return user.is_researcher ? <Researcher /> : <Participant />
+    return user?.is_researcher ? <Researcher /> : <Participant />
 }
 
 export const AppRoutes = () => {

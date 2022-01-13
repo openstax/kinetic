@@ -91,3 +91,4 @@ export function studyTypeName(study: SavedStudy): string {
     }
     return ''
 }
+

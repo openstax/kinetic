@@ -72,7 +72,7 @@ export default function ResearcherHome() {
         <div className="container studies mt-8">
             <nav className="navbar fixed-top navbar-light py-1 bg-dark">
                 <div className="container d-flex  justify-content-between">
-                    <a href={env?.homepage_url}>
+                    <a href={env?.config.homepageUrl}>
                         <Logo height={45} />
                     </a>
                     <LogoutButton />
