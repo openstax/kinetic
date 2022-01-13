@@ -80,6 +80,7 @@ export interface GetStageRequest {
 export interface LandStudyRequest {
     id: number;
     aborted?: LandStudyAbortedEnum;
+    metadata?: object;
 }
 
 export interface LaunchStudyRequest {
@@ -411,6 +412,10 @@ export class StudiesApi extends runtime.BaseAPI {
 
         if (requestParameters.aborted !== undefined) {
             queryParameters['aborted'] = requestParameters.aborted;
+        }
+
+        if (requestParameters.metadata !== undefined) {
+            queryParameters['metadata'] = requestParameters.metadata;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

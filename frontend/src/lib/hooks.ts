@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useMemo, useState } from '@common'
 import { useLocation } from 'react-router-dom'
+import qs from 'qs'
 
 export const usePendingState = (isEnabled = true, delay = 150) => {
     const [isPending, setPending] = useState<boolean>(false)
@@ -35,8 +36,10 @@ export function useForceUpdate(): () => void {
     return memoizedDispatch;
 }
 
-export function useQueryParam(param: string) {
+export function useQueryParam<T = string>(param: string) {
     const { search } = useLocation();
-
-    return useMemo(() => new URLSearchParams(search).get(param), [search]);
+    return useMemo(() => {
+        const query = qs.parse(search.slice(1));
+        return query[param] as any as T
+    }, [search])
 }

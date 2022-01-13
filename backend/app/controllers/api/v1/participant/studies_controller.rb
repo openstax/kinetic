@@ -35,11 +35,19 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   end
 
   def land
-    if params[:abort]
-      return head :not_acceptable unless launch_pad.abort(params[:abort])
-    else
-      launch_pad.land
+    if params[:metadata]
+      ParticipantMetadatum.create!(
+        user_id: current_user.id,
+        study_id: @study.id,
+        metadata: params[:metadata]
+      )
     end
+    if params[:abort]
+      return head(
+        launch_pad.abort(params[:abort]) ? :ok : :not_acceptable
+      )
+    end
+    launch_pad.land
     head :ok
   end
 

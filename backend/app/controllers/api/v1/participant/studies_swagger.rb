@@ -226,6 +226,13 @@ class Api::V1::Participant::StudiesSwagger
         key :type, :string
         key :enum, %w[refusedconsent]
       end
+      parameter do
+        key :name, :metadata
+        key :in, :query
+        key :description, 'Metadata to record for participant'
+        key :type, :object
+      end
+
       response 200 do
         key :description, 'Success.  Returns no data.'
       end
