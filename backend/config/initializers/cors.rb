@@ -7,6 +7,9 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
+# We allow access from certain localhost domains
+# to allow developers to use test local front-ends without
+# running the server locally
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins 'localhost:4000'
