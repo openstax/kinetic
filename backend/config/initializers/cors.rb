@@ -17,6 +17,15 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     }
   end
   allow do
+    # allow rex development to load eligibility api
+    origins ['localhost:3000', '*.herokuapp.com']
+    resource '/api/v1/eligibility', {
+      headers: :any,
+      credentials: true,
+      methods: [:get]
+    }
+  end
+  allow do
     origins ['localhost:4000', '*.openstax.org']
     resource '/api/*', {
       headers: :any,
