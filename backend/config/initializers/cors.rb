@@ -7,6 +7,9 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
+# We allow access from certain localhost domains
+# to allow developers to use test local front-ends without
+# running the server locally
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins 'localhost:4000'
@@ -18,7 +21,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   end
   allow do
     # allow rex development to load eligibility api
-    origins ['localhost:3000', '*.herokuapp.com']
+    origins ['localhost:3000', /herokuapp.com$/]
     resource '/api/v1/eligibility', {
       headers: :any,
       credentials: true,
@@ -26,7 +29,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     }
   end
   allow do
-    origins ['localhost:4000', '*.openstax.org']
+    origins ['localhost:4000', /openstax.org$/]
     resource '/api/*', {
       headers: :any,
       credentials: true,
