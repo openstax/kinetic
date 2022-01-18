@@ -27,13 +27,20 @@
   </head>
   <body>
     <script type="application/javascript">
-      // var ACCOUNTS_URL = 'https://accounts.openstax.org';
-      // var KINETIC_URL = 'https://kinetic.openstax.org';
-      // var WHOAMI_URL = 'https://openstax.org/accounts/api/user';
-
-      var ACCOUNTS_URL = 'https://staging.openstax.org/accounts';
-      var WHOAMI_URL = 'https://staging.openstax.org/accounts/api/user';
-      var KINETIC_URL = 'https://staging.kinetic.openstax.org/';
+      var URLS = {};
+      if (window.location.host == 'openstax.org') {
+        URLS = {
+          ACCOUNTS: 'https://openstax.org/accounts',
+          WHOAMI: 'https://openstax.org/accounts/api/user',
+          KINETIC: 'https://kinetic.openstax.org/',
+        };
+      } else {
+        URLS = {
+          ACCOUNTS: 'https://staging.openstax.org/accounts',
+          WHOAMI: 'https://staging.openstax.org/accounts/api/user',
+          KINETIC: 'http://staging.kinetic.openstax.org',
+        }
+      }
     </script>
     <style>
       .general.page {
@@ -670,7 +677,7 @@
           revealElements('login-signup');
           return;
         }
-        window.fetch(WHOAMI_URL, {
+        window.fetch(URLS.WHOAMI, {
           method: 'GET',
           credentials: 'include'
         }).then(function(resp) {
@@ -693,9 +700,9 @@
         }
       }
 
-      rewriteLinks('login', ACCOUNTS_URL + '/i/login?r=' + KINETIC_URL);
-      rewriteLinks('signup', ACCOUNTS_URL + '/i/signup?r=' + KINETIC_URL);
-      rewriteLinks('start', KINETIC_URL);
+      rewriteLinks('login', URLS.ACCOUNTS + '/i/login?r=' + URLS.KINETIC);
+      rewriteLinks('signup', URLS.ACCOUNTS + '/i/signup?r=' + URLS.KINETIC);
+      rewriteLinks('start', URLS.KINETIC);
       setUserState();
     </script>
   </body>
