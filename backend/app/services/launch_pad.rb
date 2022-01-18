@@ -37,9 +37,8 @@ class LaunchPad
   end
 
   def abort(reason)
-    stage = stage_to_land
     if reason == 'refusedconsent'
-      stage.refuse_to_consent!
+      launched_study.refuse_to_consent!
       return true
     end
 

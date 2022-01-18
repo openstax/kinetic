@@ -55,6 +55,7 @@ export default function UsersStudies() {
             id: Number(studyId),
             metadata,
         }
+
         if (noConsent) {
             params['aborted'] = LandStudyAbortedEnum.Refusedconsent
         }

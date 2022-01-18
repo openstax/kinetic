@@ -180,7 +180,7 @@ RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: tru
 
           expect_any_instance_of(LaunchPad).not_to receive(:land)
           api_put "participant/studies/#{study3.id}/land", params: {
-            abort: 'refusedconsent'
+            aborted: 'refusedconsent'
           }
           expect(response).to have_http_status(:ok)
           study3.stages

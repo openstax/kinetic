@@ -85,3 +85,24 @@ test('launching study and testing completion', async ({ page }) => {
     ).toMatch(/studies$/)
     await rmStudy({ page, studyId })
 })
+
+test('launching study and aborting it', async ({ page }) => {
+
+    await interceptStudyLaunch({ page })
+
+    const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
+    await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
+    await page.click('testId=launch-study')
+
+    // qualtrics will redirect here once complete
+    await goToPage({ page, path: `/study/land/${studyId}?consent=false`, loginAs: 'user' })
+
+    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="false"]`)
+    await page.click(`[data-study-id="${studyId}"]`)
+    // should have navigated
+    expect(
+        await page.evaluate(() => document.location.pathname)
+    ).toMatch(RegExp(`/study/details/${studyId}$`))
+
+    await rmStudy({ page, studyId })
+})

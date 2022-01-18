@@ -42,9 +42,9 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
         metadata: params[:metadata]
       )
     end
-    if params[:abort]
+    if params[:aborted]
       return head(
-        launch_pad.abort(params[:abort]) ? :ok : :not_acceptable
+        launch_pad.abort(params[:aborted]) ? :ok : :not_acceptable
       )
     end
     launch_pad.land
