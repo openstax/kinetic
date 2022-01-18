@@ -25,7 +25,7 @@ export default function UsersStudies() {
     const api = useStudyApi()
     const history = useHistory()
     const user = useCurrentUser()
-    const noConsent = useQueryParam('consent') == 'true'
+    const noConsent = useQueryParam('consent') == 'false'
     const metadata = useQueryParam('metadata') || {}
     if (!user) {
         return <IncorrectUser />
