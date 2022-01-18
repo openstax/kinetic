@@ -98,10 +98,10 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
                         height="30px"
                         className="ms-3 me-1"
                     />
-                    {finalDrawing?.prize && (
+                    {finalDrawing?.infoUrl && (
                         <a
+                            href={finalDrawing.infoUrl}
                             className="fw-light"
-                            href="https://openstax.org/kinetic"
                             css={{
                                 maxWidth: '200px',
                                 fontSize: '0.9rem',

@@ -23,6 +23,11 @@ class Api::V1::MiscSwagger
       key :format, 'date-time'
       key :description, 'When the segment ends'
     end
+    property :info_url do
+      key :type, :string
+      key :format, 'url'
+      key :description, 'A link to more information about the reward'
+    end
   end
   swagger_schema :Whoami do
     key :required, %w[is_researcher is_administrator]

@@ -43,6 +43,12 @@ export interface RewardsScheduleSegment {
      * @memberof RewardsScheduleSegment
      */
     endAt: Date;
+    /**
+     * A link to more information about the reward
+     * @type {string}
+     * @memberof RewardsScheduleSegment
+     */
+    infoUrl?: string;
 }
 
 export function RewardsScheduleSegmentFromJSON(json: any): RewardsScheduleSegment {
@@ -59,6 +65,7 @@ export function RewardsScheduleSegmentFromJSONTyped(json: any, ignoreDiscriminat
         'points': json['points'],
         'startAt': (new Date(json['start_at'])),
         'endAt': (new Date(json['end_at'])),
+        'infoUrl': !exists(json, 'info_url') ? undefined : json['info_url'],
     };
 }
 
@@ -75,6 +82,7 @@ export function RewardsScheduleSegmentToJSON(value?: RewardsScheduleSegment | nu
         'points': value.points,
         'start_at': (value.startAt.toISOString()),
         'end_at': (value.endAt.toISOString()),
+        'info_url': value.infoUrl,
     };
 }
 
