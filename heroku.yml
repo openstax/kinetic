@@ -2,8 +2,10 @@ build:
   docker:
     web: Dockerfile.heroku
   config:
-    GTAG_ID: GTM-W6N7PB
-    GA_UA: UA-73668038-9
+    PROD_GTAG_ID: GTM-W6N7PB
+    TEST_GTAG_ID: GTM-W6N7PB
+    PROD_GA_UA: UA-73668038-9
+    TEST_GA_UA: UA-73668038-10
     SENTRY_DSN: https://a7ba8f1daead45acaf7a28dbb661d393@o484761.ingest.sentry.io/6051748
 run:
     web: bundle exec puma
