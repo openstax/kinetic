@@ -18,9 +18,10 @@ declare global {
         env: {
             MODE: string
             IS_LOCAL: boolean
-            VITE_GTAG_ID: string
             VITE_SENTRY_DSN: string
             VITE_API_ADDRESS: string
+            VITE_GTAG_ID?: string
+            VITE_GA_UA?: string
         };
     }
 

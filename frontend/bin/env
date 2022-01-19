@@ -5,6 +5,9 @@ set -eo pipefail
 # these also must be set as an ARG in Dockerfile
 export VITE_SENTRY_DSN=$SENTRY_DSN
 export VITE_GTAG_ID=$GTAG_ID
+export VITE_GA_UA=$GA_UA
+
+env
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 

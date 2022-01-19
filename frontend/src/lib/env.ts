@@ -11,6 +11,7 @@ export const ENV = {
     IS_PROD_MODE: import.meta.env.MODE == 'production',
     API_ADDRESS,
     GTAG_ID: import.meta.env.VITE_GTAG_ID,
+    GA_UA: import.meta.env.VITE_GA_UA,
     API_PATH: `${API_ADDRESS}/api/v${API_VERSION}`,
     SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN || '',
 }
