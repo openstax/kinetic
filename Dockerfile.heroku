@@ -20,8 +20,10 @@ FROM node:14-slim as node
 # if any are added, they must also be present in frontend/build/env
 # These are set in heroku.yml, not via heroku config:set
 ARG SENTRY_DSN
-ARG GTAG_ID
-ARG GA_UA
+ARG PROD_GTAG_ID
+ARG PROD_GA_UA
+ARG TEST_GTAG_ID
+ARG TEST_GA_UA
 
 WORKDIR /code/frontend
 
