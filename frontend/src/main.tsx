@@ -4,7 +4,6 @@ import { whenDomReady } from '@lib'
 import { CurrentUserProvider } from './lib/user-access'
 import { AppRoutes } from './routes'
 import './lib/sentry'
-import './lib/analytics'
 import './index.css'
 import './styles/main.scss'
 

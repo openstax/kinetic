@@ -27,5 +27,3 @@ export const analytics = Analytics({
     app: 'Kinetic',
     plugins,
 })
-
-analytics.page()
