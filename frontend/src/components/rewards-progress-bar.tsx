@@ -63,10 +63,9 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
             <div className="container">
                 <div>
                     <span className="fs-6 fw-light">{finalDrawing?.prize} Giveaway: </span>
-                    <b>{points} / {totalPoints} pts({Math.round((points/totalPoints)*100)}%)</b>
+                    <b>{points} / {totalPoints} pts ({Math.round((points/totalPoints)*100)}%)</b>
                 </div>
                 <Box align="center" >
-
                     <div
                         css={{
                             height: `${barWidth}px`,
