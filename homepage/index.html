@@ -41,6 +41,11 @@
           KINETIC: 'https://staging.kinetic.openstax.org/',
         }
       }
+      var favIcon = document.querySelector('[rel="shortcut icon"]');
+      if (favIcon) {
+        favIcon.href =  'https://assets.openstax.org/oscms-prodcms/media/images/kinetic-favicon-32x32.original.webp';
+      }
+      document.title = "Kinetic by OpenStax";
     </script>
     <style>
       .general.page {
