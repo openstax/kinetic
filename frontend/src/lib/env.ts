@@ -2,7 +2,7 @@ const IS_DEV_MODE = import.meta.env.MODE == 'development'
 const IS_LOCAL = window.location.hostname == 'localhost'
 const API_ADDRESS = IS_LOCAL ? 'http://localhost:4006' : ''
 const API_VERSION = 1
-const IS_PRODUCTION = (window.location.host == 'openstax.org')
+const IS_PRODUCTION = (window.location.host == 'kinetic.openstax.org')
 
 export const ENV = {
     IS_DEV_MODE,
