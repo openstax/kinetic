@@ -18,8 +18,12 @@ FROM node:14-slim as node
 
 # variables below will be substituted into the JS while building
 # if any are added, they must also be present in frontend/build/env
+# These are set in heroku.yml, not via heroku config:set
 ARG SENTRY_DSN
-ARG GTAG_ID
+ARG PROD_GTAG_ID
+ARG PROD_GA_UA
+ARG TEST_GTAG_ID
+ARG TEST_GA_UA
 
 WORKDIR /code/frontend
 
@@ -29,7 +33,7 @@ RUN yarn install
 
 COPY frontend ./
 
-RUN GTAG_ID=$GTAG_ID yarn run build
+RUN yarn run build
 
 FROM ruby as ruby2
 

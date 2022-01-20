@@ -4,7 +4,7 @@ import { LoadingAnimation, IncorrectUser, ErrorPage } from '@components'
 import { useLocation } from 'react-router-dom'
 import { ENV } from './env'
 import { retry } from './util'
-
+import { analytics } from './analytics'
 export const CurrentUserContext = React.createContext<User | null>(null)
 
 
@@ -15,6 +15,7 @@ export const CurrentUserProvider:React.FC = ({ children }) => {
     useEffect(() => {
         retry(User.fetchCurrentUser)
             .then((u) => {
+                analytics.identify(u.id)
                 setCurrentUser(u)
             })
             .catch((err) => setError(err))

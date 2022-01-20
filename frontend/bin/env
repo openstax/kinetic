@@ -4,7 +4,10 @@ set -eo pipefail
 
 # these also must be set as an ARG in Dockerfile
 export VITE_SENTRY_DSN=$SENTRY_DSN
-export VITE_GTAG_ID=$GTAG_ID
+export VITE_PROD_GTAG_ID=$PROD_GTAG_ID
+export VITE_PROD_GA_UA=$PROD_GA_UA
+export VITE_TEST_GTAG_ID=$TEST_GTAG_ID
+export VITE_TEST_GA_UA=$TEST_GA_UA
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
