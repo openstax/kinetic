@@ -1,10 +1,12 @@
 disallowed_books:
+  - physics
   - biology-ap-courses
   - college-physics-ap-courses
   - física-universitaria-volumen-1
   - física-universitaria-volumen-2
   - física-universitaria-volumen-3
   - física-universitaria-volumen-4
+  - psychologia-polska
   - principles-microeconomics-ap-courses
   - principles-microeconomics-ap-courses-2e
   - principles-macroeconomics-ap-courses
