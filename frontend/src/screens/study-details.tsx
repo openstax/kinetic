@@ -53,9 +53,9 @@ export default function StudyDetails() {
             </nav>
             <div className="border-bottom bg-white py-2">
                 <div className="container">
-                    <Box justify="between" align="end" direction="column">
+                    <Box justify="between" align="start" direction="row" gap>
                         <Box flex><h3>{study.title}</h3></Box>
-                        <Box align="center" gap justify="end">
+                        <Box align="center" gap justify="end" alignSelf="end">
                             <h3 css={{ margin: 0, minWidth: 100 }}>{study.durationMinutes} min</h3>
                             <LaunchStudyButton study={study}/>
                         </Box>
