@@ -15,7 +15,9 @@ export const CurrentUserProvider:React.FC = ({ children }) => {
     useEffect(() => {
         retry(User.fetchCurrentUser)
             .then((u) => {
-                analytics.identify(u.id)
+                if (u.isValid) {
+                    analytics.identify(u.id)
+                }
                 setCurrentUser(u)
             })
             .catch((err) => setError(err))
