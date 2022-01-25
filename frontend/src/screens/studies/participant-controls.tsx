@@ -7,10 +7,10 @@ import slidersIcon from '@iconify-icons/bi/sliders'
 import { useMediaMatch } from 'rooks'
 
 const SortTypes = {
-    'time:low-high': 'Time High to Low',
-    'time:high-low': 'Time Low to High',
-    'points:low-high': 'Points High to Low',
-    'points:high-low': 'Points Low to High',
+    'time:low-high': 'Time Low to High',
+    'time:high-low': 'Time High to Low',
+    'points:low-high': 'Points Low to High',
+    'points:high-low': 'Points High to Low',
 }
 
 export interface ControlState {
@@ -146,7 +146,7 @@ export const DesktopControls:React.FC<ControlProps> = (props) => {
                     },
                 }}
             >
-                <Menu label={`Sort by ${sort || ''}`} data-test-id="sort-by-menu">
+                <Menu label={`Sort by ${sort ? SortTypes[sort] : ''}`} data-test-id="sort-by-menu">
                     <Sort {...props} />
                 </Menu>
                 <Menu label="Subject" data-test-id="subjects-filter-menu">

@@ -23,7 +23,7 @@ const RewardSegmentCircle: React.FC<{
     const achieved = points > segment.totalPoints
     let popover = ''
     if (achieved) {
-        popover = `You’ve been entered in a giveaway for an ${segment.prize}`
+        popover = `You’ve been entered in a giveaway for a ${segment.prize}`
     } else {
         popover = `reach ${segment.totalPoints} points to be entered in an ${segment.prize} giveaway`
     }
@@ -107,7 +107,7 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
                                 color: colors.darkText,
                             }}
                         >
-                            Find out more information about the {finalDrawing.prize} drawing
+                            Find out more information about the about the giveaways
                         </a>
                     )}
                 </Box>
