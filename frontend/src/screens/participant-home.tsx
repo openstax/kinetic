@@ -126,16 +126,16 @@ export default function ParticipantHome() {
                 <Row>
                     <Studies studies={studies} isFiltering={!!controlState.subjects?.length} />
                 </Row>
-                <Footer isBottomFixed>
-                    <p className="mb-0">
-                        <b>Need help?</b>
-                    </p>
-                    <p className="mb-0">
-                        Contact support
-                    </p>
-                    <a className="text-decoration-none" href="mailto:support@openstax.org?subject=[Kinetic help]"><Icon icon={envelopeIcon} /> support@openstax.org</a>
-                </Footer>
             </div>
+            <Footer isBottom>
+                <p className="mb-0">
+                    <b>Need help?</b>
+                </p>
+                <p className="mb-0">
+                    Contact support
+                </p>
+                <a className="text-decoration-none" href="mailto:support@openstax.org?subject=[Kinetic help]"><Icon icon={envelopeIcon} /> support@openstax.org</a>
+            </Footer>
         </div>
     )
 }
