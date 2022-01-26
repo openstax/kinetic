@@ -107,7 +107,7 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
                                 color: colors.darkText,
                             }}
                         >
-                            Find out more information about the about the giveaways
+                            Find out more information about the giveaways
                         </a>
                     )}
                 </Box>
