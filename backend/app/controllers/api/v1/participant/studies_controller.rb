@@ -14,8 +14,8 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
 
     response_binding = Api::V1::Bindings::ParticipantStudies.new(
       data: studies.map do |study|
-              Api::V1::Bindings::ParticipantStudy.create_from_model(study)
-            end
+        Api::V1::Bindings::ParticipantStudy.create_from_model(study)
+      end
     )
     render json: response_binding, status: :ok
   end
@@ -29,9 +29,11 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   end
 
   def launch
-    url = launch_pad.launch_url(preview: params[:preview] == 'true')
-    response_binding = Api::V1::Bindings::Launch.new(url: url)
-    render json: response_binding, status: :ok
+    LaunchedStudy.transaction do
+      url = launch_pad.launch_url(preview: params[:preview] == 'true')
+      response_binding = Api::V1::Bindings::Launch.new(url: url)
+      render json: response_binding, status: :ok
+    end
   end
 
   def land

@@ -10,13 +10,25 @@ import dayjs from 'dayjs'
 
 const LaunchStudyButton: React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     const api = useStudyApi()
+    const [isBusy, setBusy] = useState(false)
+    const onLaunch = async () => {
+        setBusy(true)
+        await LaunchStudy(api, study)
+        setBusy(false)
+    }
     if (study.completedAt) {
         return (
             <b>Completed on {dayjs(study.completedAt).format('LL')}</b>
         )
     }
     return (
-        <Button primary data-test-id="launch-study" onClick={() => LaunchStudy(api, study)}>
+        <Button
+            busy={isBusy}
+            busyMessage="Launching study…"
+            primary
+            data-test-id="launch-study"
+            onClick={onLaunch}
+        >
             Begin study
         </Button>
     )
