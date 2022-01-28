@@ -3,7 +3,7 @@ import { ParticipantStudies, ParticipantStudy } from '@api'
 import { get } from 'lodash'
 import { Box, Col, LoadingAnimation, Row, Footer, Icon, Logo, RewardsProgressBar } from '@components'
 import envelopeIcon from '@iconify-icons/bi/envelope'
-import { useStudyApi } from '@lib'
+import { useStudyApi, useRewardsVisibile } from '@lib'
 import {
     isStudyLaunchable, tagOfType, tagsOfType, TagLabels, useEnv,
 } from '@models'
@@ -22,6 +22,7 @@ const StudyCard:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     const onClick = () => {
         isEnabled && history.push(`/study/details/${study.id}`)
     }
+    const pointsVisible = useRewardsVisibile() && study.participationPoints
 
     return (
         <Col key={study.id} sm={12} md={6} align="stretch" className="mb-2">
@@ -49,7 +50,7 @@ const StudyCard:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
                                 <Icon icon="clock" color="#005380" />
                                 <div css={{ marginLeft: '0.5rem' }}>{study.durationMinutes} min</div>
                             </Box>
-                            {study.participationPoints && <span>• {study.participationPoints}pts</span>}
+                            {pointsVisible && <span>• {study.participationPoints}pts</span>}
                         </Box>
                         <Box gap>
                             <Tag tag={tagOfType(study, 'type')} />

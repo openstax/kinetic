@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useMemo, useState } from '@common'
 import { useLocation } from 'react-router-dom'
 import qs from 'qs'
+import { Dispatch, SetStateAction } from 'react';
 
 export const usePendingState = (isEnabled = true, delay = 150) => {
     const [isPending, setPending] = useState<boolean>(false)

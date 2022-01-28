@@ -1,9 +1,9 @@
-import { React, useEffect } from '@common'
+import { React } from '@common'
 import { Route, Switch, useLocation } from 'react-router-dom'
 import { PageNotFound } from '@components'
 import { loadAsync } from './components/async'
-import { useCurrentUser } from './lib/user-access'
-import { analytics } from './lib/analytics'
+import { useCurrentUser } from '@lib'
+import { useAnalyticsTracking } from './lib/analytics'
 
 const Home = loadAsync('Homepage', () => import('./screens/homepage'))
 const Dev = loadAsync('Dev', () => import('./screens/dev'))
@@ -21,9 +21,8 @@ const StudiesHomepage = () => {
 export const AppRoutes = () => {
     const user = useCurrentUser()
     const location = useLocation()
-    useEffect(() => {
-        analytics.page()
-    }, [location.pathname])
+    useAnalyticsTracking(location.pathname)
+
     return (
         <div className="openstax-kinetic" data-user-id={user?.id}>
             <Switch>

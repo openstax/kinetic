@@ -1,7 +1,8 @@
 import { React, useState } from '@common'
 import { ParticipantStudy } from '@api'
+import { useRewardsVisibile } from '@lib'
 import { Box, Menu, Button, Icon, OffCanvas } from '@components'
-import { without, sortBy } from 'lodash-es'
+import { without, sortBy, omit } from 'lodash-es'
 import { StudySubjectID, StudySubjectTags } from '@models'
 import slidersIcon from '@iconify-icons/bi/sliders'
 import { useMediaMatch } from 'rooks'
@@ -24,13 +25,16 @@ interface ControlProps {
 }
 
 export const Sort:React.FC<ControlProps> = ({ state, onChange }) => {
+    const showRewards = useRewardsVisibile()
+    const options = Object.entries(omit(SortTypes, showRewards ? [] : ['points:low-high', 'points:high-low']))
+
     return (
         <div css={{
             input: {
                 marginRight: '0.5rem',
             },
         }}>
-            {Object.entries(SortTypes).map(([value, label]) => (
+            {options.map(([value, label]) => (
                 <label className="dropdown-item" key={value}>
                     <input
                         type="radio"
@@ -44,7 +48,6 @@ export const Sort:React.FC<ControlProps> = ({ state, onChange }) => {
         </div>
     )
 }
-
 
 export const Subjects:React.FC<ControlProps> = ({ state, onChange }) => {
     const onInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {

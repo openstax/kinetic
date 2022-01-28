@@ -1,9 +1,9 @@
 import { React } from '@common'
 import { Box, Popover, Icon } from '@components'
 import {
-    useRewardsSchedule,
-    CalculatedRewardsScheduleSegment,
+    useRewardsSchedule, CalculatedRewardsScheduleSegment,
 } from '@models'
+import { useRewardsState } from '@lib'
 import { ParticipantStudy } from '@api'
 import { colors } from '../theme'
 import trophyFilledIcon from '@iconify-icons/bi/trophy-fill'
@@ -45,9 +45,22 @@ const RewardSegmentCircle: React.FC<{
     )
 }
 
+const Bar:React.FC<{ display: boolean }> = ({ display, children }) => {
+    return (
+        <nav className="navbar navbar-light py-1" css={{
+            backgroundColor: 'white',
+            boxShadow: '0px 10px 20px -5px rgba(0, 0, 0, 0.08)',
+            minHeight: '80px',
+        }}>
+            {display ? children : null}
+        </nav>
+    )
+}
+
 export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }) => {
 
     const {
+        rewardsState,
         schedule,
         points,
         totalPoints,
@@ -55,11 +68,10 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
         finalDrawing,
     } = useRewardsSchedule(studies)
 
+    if (rewardsState == 'hidden') { return null }
+
     return (
-        <nav className="navbar navbar-light py-1" css={{
-            backgroundColor: 'white',
-            boxShadow: '0px 10px 20px -5px rgba(0, 0, 0, 0.08)',
-        }}>
+        <Bar display={rewardsState=='display'}>
             <div className="container">
                 <div>
                     <span className="fs-6 fw-light">{finalDrawing?.prize} Giveaway: </span>
@@ -112,6 +124,6 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
                     )}
                 </Box>
             </div>
-        </nav>
+        </Bar>
     )
 }
