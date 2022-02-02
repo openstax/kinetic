@@ -17,6 +17,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@analytics/crazy-egg": "^0.1.2",
     "@analytics/google-analytics": "^0.5.3",
     "@analytics/google-tag-manager": "^0.5.1",
     "@emotion-icons/bootstrap": "^3.14.0",

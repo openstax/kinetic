@@ -3,6 +3,9 @@ import Analytics from 'analytics'
 import googleTagManager from '@analytics/google-tag-manager'
 // @ts-ignore - lacks type definitions
 import googleAnalytics from '@analytics/google-analytics'
+// @ts-ignore - lacks type definitions
+import crazyEgg from '@analytics/crazy-egg'
+
 import { ENV } from './env'
 
 const plugins:any = []
@@ -19,6 +22,14 @@ if (ENV.GA_UA) {
     plugins.push(
         googleAnalytics({
             trackingId: ENV.GA_UA,
+        })
+    )
+}
+
+if (ENV.CRAZY_EGG_ACCOUNT) {
+    plugins.push(
+        crazyEgg({
+            accountNumber: ENV.CRAZY_EGG_ACCOUNT,
         })
     )
 }

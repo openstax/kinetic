@@ -24,6 +24,7 @@ declare global {
             VITE_PROD_GA_UA?: string
             VITE_TEST_GTAG_ID?: string
             VITE_TEST_GA_UA?: string
+            VITE_CRAZY_EGG_ACCOUNT?: string
         };
     }
 
