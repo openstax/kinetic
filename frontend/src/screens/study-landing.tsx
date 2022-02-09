@@ -1,27 +1,74 @@
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { React, useEffect, useState } from '@common'
-import { LandStudyAbortedEnum, LandStudyRequest } from '@api'
-import { Button, IncorrectUser, Box, LoadingAnimation, ErrorPage } from '@components'
+import { colors } from '../theme'
+import { ParticipantStudy, LandStudyAbortedEnum, LandStudyRequest, StudiesApi } from '@api'
+import { Button, IncorrectUser, Box, LoadingAnimation, ErrorPage, KineticWaves } from '@components'
 import { useQueryParam, useCurrentUser, useStudyApi, isIframed, sendMessageToParent } from '@lib'
-import type { ReactElement } from 'react'
 
-const CompletedMessage:React.FC<{ onReturnClick(): void }> = ({ onReturnClick }) => (
-    <Box direction="column" align="center">
-        <h3>Thank you for completing the study</h3>
-        <h5>your response has been recorded</h5>
-        <Button primary data-test-id="view-studies" onClick={onReturnClick}>Return to dashboard</Button>
+
+const Points:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
+    return (
+        <div
+            css={{
+                fontSize: '28px',
+                fontWeight: 300,
+                color: colors.purple,
+            }}
+
+        >
+            +{study.participationPoints}pts
+        </div>
+    )
+}
+
+const CompletedMessage:React.FC<{
+    consented: boolean,
+    study: ParticipantStudy,
+    onReturnClick(): void,
+}> = ({
+    consented, study, onReturnClick,
+}) => (
+    <Box justify="center">
+        <Box
+            css={{
+                background: 'white',
+                border: `2px solid ${colors.lightGray}`,
+            }}
+        >
+            <Box
+                direction="column" pad="large"
+                margin={{ right: '-100px' }} align="start"
+                css={{
+                    maxWidth: '400px',
+                }}
+            >
+                {!consented && <Points study={study} />}
+                <h3>Success!</h3>
+                <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
+                    You‘ve completed a Kinetic activity.
+                    This task will be marked as complete on your dashboard.
+                </h5>
+                <Button primary data-test-id="view-studies" onClick={onReturnClick}>Go back to dashboard</Button>
+
+            </Box>
+            <KineticWaves flipped />
+        </Box>
     </Box>
 )
 
+const landStudy = async (api: StudiesApi, params: LandStudyRequest) => {
+    const study = await api.getParticipantStudy({ id: params.id })
+    await api.landStudy(params)
+    return study
+}
 
 export default function UsersStudies() {
     const { params: { studyId } } = useRouteMatch<{ studyId: string }>();
 
     // this is somewhat inaccurate but we do not want to say something like "recording status"
     // since that will alarm participants who refused consent
-    const [pendingMessage, setPendingMessage] = useState<ReactElement|null>(
-        <LoadingAnimation message="Loading studies" />
-    )
+    const [study, setStudy] = useState<ParticipantStudy|null>(null)
+    const [error, setError] = useState<any>(null)
     const api = useStudyApi()
     const history = useHistory()
     const user = useCurrentUser()
@@ -46,36 +93,30 @@ export default function UsersStudies() {
                 window.parent.document.querySelector('[data-is-study-preview-modal="true"]')
             )
         } catch { }
-        if (isPreview) {
-            setPendingMessage(null)
-            return
-        }
 
-        const params:LandStudyRequest = {
-            id: Number(studyId),
-            metadata,
-        }
+        if (!isPreview) {
+            const params:LandStudyRequest = {
+                id: Number(studyId),
+                metadata,
+            }
+            if (noConsent) {
+                params['aborted'] = LandStudyAbortedEnum.Refusedconsent
+            }
 
-        if (noConsent) {
-            params['aborted'] = LandStudyAbortedEnum.Refusedconsent
+            landStudy(api, params).then((study: ParticipantStudy) => {
+                setStudy(study)
+            }).catch(err => setError(err))
         }
-
-        api.landStudy(params)
-           .then(() => {
-               if (noConsent) {
-                   onNav()
-               } else {
-                   setPendingMessage(null)
-               }
-           })
-           .catch((err) => {
-               setPendingMessage(<ErrorPage error={err?.statusText} />)
-           })
     }, [])
+
+    if (error) {
+        return <ErrorPage error={error} />
+    }
 
     return (
         <div className="container studies mt-8">
-            {pendingMessage || <CompletedMessage onReturnClick={onNav} />}
+            {!study && <LoadingAnimation message="Loading study" />}
+            {study && <CompletedMessage consented={!noConsent} onReturnClick={onNav} study={study} />}
         </div>
     )
 
