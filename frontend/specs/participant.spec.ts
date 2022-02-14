@@ -97,6 +97,7 @@ test('launching study and aborting it', async ({ page }) => {
     // qualtrics will redirect here once complete
     await goToPage({ page, path: `/study/land/${studyId}?consent=false`, loginAs: 'user' })
 
+    await page.click('testId=view-studies')
     await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="false"]`)
     await page.click(`[data-study-id="${studyId}"]`)
     // should have navigated

@@ -59,6 +59,12 @@ export const interceptStudyLaunch = async ({ page }: { page: Page }) => {
     });
 }
 
+export const interceptStudyLand = async ({ page }: { page: Page }) => {
+    await page.route(/study\/land\/d+/, async route => {
+        route.fulfill({ status: 200, body: '{}' })
+    });
+}
+
 export const logout = async ({ page }: { page: Page }) => {
     await page.goto(TC.ORIGIN)
     await page.waitForFunction(() => (window as any)._MODELS)
