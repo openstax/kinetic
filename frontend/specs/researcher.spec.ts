@@ -1,6 +1,6 @@
 import {
     test, expect, loginAs, faker, rmStudy, getIdFromUrl,
-    createStudy, goToPage, interceptStudyLaunch
+    createStudy, goToPage, interceptStudyLaunch, interceptStudyLand,
 } from './test'
 
 test('can create and edit a study', async ({ page }) => {
@@ -53,6 +53,7 @@ test('can create and edit a study', async ({ page }) => {
 
 test('can preview a study', async ({ page }) => {
     interceptStudyLaunch({ page })
+    interceptStudyLand({ page })
 
     const studyName = faker.commerce.productDescription()
     const studyId = await createStudy({ page, name: studyName })
@@ -65,14 +66,16 @@ test('can preview a study', async ({ page }) => {
     await page.click('testId=preview-study-btn')
     await page.waitForSelector('iframe[id="study"]')
 
-    // navigate iframe to the landing page
-    await page.evaluate((sid: number) => {
-        document.querySelector('iframe[id="study"]').setAttribute('src', `/study/land/${sid}`)
-    }, studyId)
     const frameHandle = await page.$('iframe[id="study"]')
-
     const frame = await frameHandle.contentFrame()
-    // now close by clicking button inside iframe
+
+    // it's unclear why this is needed, but without it
+    // the evaluate below seems to have no effect;
+    // the src attribute does not update
+    await page.waitForTimeout(500)
+
+    await frameHandle.evaluate((n, sid: number) => n.setAttribute('src', `/study/land/${sid}`), studyId)
+
     await frame.click('testId=view-studies')
 
     await expect(page).not.toMatchText('.modal-header', studyName, { timeout: 1000 })
