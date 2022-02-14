@@ -6,9 +6,10 @@
 require 'csv'
 
 def query_account_uuids(uuids)
+  search = uuids.map { |uuid| "uuid:#{uuid}" }
   JSON.parse(
     OpenStax::Accounts::Api
-      .search_accounts("uuid:#{uuids.join(',')}")
+      .search_accounts(search.join(' '))
       .response.body
   )['items']
 end
