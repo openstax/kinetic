@@ -56,9 +56,11 @@ const CompletedMessage:React.FC<{
     </Box>
 )
 
-const landStudy = async (api: StudiesApi, params: LandStudyRequest) => {
+const landStudy = async (api: StudiesApi, params: LandStudyRequest, isPreview: boolean) => {
     const study = await api.getParticipantStudy({ id: params.id })
-    await api.landStudy(params)
+    if (!isPreview) {
+        await api.landStudy(params)
+    }
     return study
 }
 
@@ -85,28 +87,24 @@ export default function UsersStudies() {
             history.push('/studies')
         }
     }
-
     useEffect(() => {
         let isPreview = false
         try {
             isPreview = Boolean(
                 window.parent.document.querySelector('[data-is-study-preview-modal="true"]')
             )
-        } catch { }
-
-        if (!isPreview) {
-            const params:LandStudyRequest = {
-                id: Number(studyId),
-                metadata,
-            }
-            if (noConsent) {
-                params['aborted'] = LandStudyAbortedEnum.Refusedconsent
-            }
-
-            landStudy(api, params).then((study: ParticipantStudy) => {
-                setStudy(study)
-            }).catch(err => setError(err))
+        } catch { } // accessing window.parent my throw exception due to SOP
+        const params:LandStudyRequest = {
+            id: Number(studyId),
+            metadata,
         }
+        if (noConsent) {
+            params['aborted'] = LandStudyAbortedEnum.Refusedconsent
+        }
+
+        landStudy(api, params, isPreview)
+            .then(setStudy)
+            .catch(setError)
     }, [])
 
     if (error) {
