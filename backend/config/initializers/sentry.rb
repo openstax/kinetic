@@ -9,13 +9,12 @@ if Rails.env.production? || ENV['FORCE_ENABLE_SENTRY'] == 'true'
   Sentry.init do |config|
     config.dsn = secrets[:dsn]
     config.breadcrumbs_logger = [:active_support_logger, :http_logger]
-
     config.environment = ENV['ENV_NAME'] || Rails.application.secrets.accounts[:env_name]
-
-    # for performance, to see only 50% of all errors use 0.5
-    config.traces_sample_rate = 1.0
-
-    config.traces_sampler = lambda do |_context|
+    config.traces_sampler = lambda do |context|
+      case context[:transaction_context][:name]
+      when /^\/api\/v\d+\/eligibility/ then 0.001 # eligibility is loaded from REX and can have huge traffic
+      else 0.1
+      end
       true
     end
   end
