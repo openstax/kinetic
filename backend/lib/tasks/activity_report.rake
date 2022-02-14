@@ -15,7 +15,7 @@ end
 
 namespace :report do
   desc 'generate CSV dump of study activity'
-  task :activity, [:path, :months_ago] => :environment do |_, args|
+  task :activity, [:months_ago] => :environment do |_, args|
     user_uuids = {}
     launches = LaunchedStage
                  .joins(stage: :study)
@@ -28,38 +28,36 @@ namespace :report do
         user_uuids[account['uuid']] = account
       end
     end
-
-    CSV.open(args[:path], 'wb') do |csv|
-      csv << [
-        'Study ID',
-        'Study Name',
-        'Participant UUID',
-        'Participant Name',
-        'Email',
-        'Launched',
-        'Opted Out',
-        'Completed'
-      ]
-      launches.each do |launch|
-        account = user_uuids[launch.user_id]
-        email = nil
-        if account
-          email = account['contact_infos'].find do |ci|
-            ci['type'] == 'EmailAddress' &&
-              ci['is_verified'] == true &&
-              ci['is_guessed_preferred'] == true
-          end
+    csv = CSV.new($stdout)
+    csv << [
+      'Study ID',
+      'Study Name',
+      'Participant UUID',
+      'Participant Name',
+      'Email',
+      'Launched',
+      'Opted Out',
+      'Completed'
+    ]
+    launches.each do |launch|
+      account = user_uuids[launch.user_id]
+      email = nil
+      if account
+        email = account['contact_infos'].find do |ci|
+          ci['type'] == 'EmailAddress' &&
+            ci['is_verified'] == true &&
+            ci['is_guessed_preferred'] == true
         end
-        csv << [
-          launch.stage.study.id,
-          launch.stage.study.title_for_participants,
-          launch.user_id,
-          account&.name || '',
-          email&.value || '',
-          launch.first_launched_at,
-          launch.stage.study.first_launched_study.opted_out_at
-        ]
       end
+      csv << [
+        launch.stage.study.id,
+        launch.stage.study.title_for_participants,
+        launch.user_id,
+        account&.name || '',
+        email&.value || '',
+        launch.first_launched_at,
+        launch.stage.study.first_launched_study.opted_out_at
+      ]
     end
   end
 end
