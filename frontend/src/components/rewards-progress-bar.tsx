@@ -4,6 +4,7 @@ import {
     useRewardsSchedule,
     CalculatedRewardsScheduleSegment,
 } from '@models'
+import { formatDate } from '@lib'
 import { ParticipantStudy } from '@api'
 import { colors } from '../theme'
 import trophyFilledIcon from '@iconify-icons/bi/trophy-fill'
@@ -25,7 +26,7 @@ const RewardSegmentCircle: React.FC<{
     if (achieved) {
         popover = `You’ve been entered in a giveaway for a ${segment.prize}`
     } else {
-        popover = `reach ${segment.totalPoints} points to be entered in an ${segment.prize} giveaway`
+        popover = `reach ${segment.totalPoints} points by ${formatDate(segment.endAt)} to be entered in an ${segment.prize} giveaway`
     }
     return (
         <Popover
