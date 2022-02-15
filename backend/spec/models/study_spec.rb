@@ -15,13 +15,13 @@ RSpec.describe Study, type: :model do
     end
   end
 
-  describe '#open?' do
+  describe '#available?' do
     it 'works' do
-      expect(opens_and_closes_study).to be_open
-      expect(opens_and_closes_before_study).not_to be_open
-      expect(opens_only_study).to be_open
-      expect(opens_later_only_study).not_to be_open
-      expect(no_times_study).not_to be_open
+      expect(opens_and_closes_study).to be_available
+      expect(opens_and_closes_before_study).not_to be_available
+      expect(opens_only_study).to be_available
+      expect(opens_later_only_study).not_to be_available
+      expect(no_times_study).not_to be_available
     end
   end
 
