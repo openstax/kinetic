@@ -74,8 +74,9 @@ export default function UsersStudies() {
     const api = useStudyApi()
     const history = useHistory()
     const user = useCurrentUser()
-    const noConsent = useQueryParam('consent') == 'false'
-    const metadata = useQueryParam('metadata') || {}
+    const abort = useQueryParam('abort') == 'true'
+    const consent = useQueryParam('consent') == 'true'
+    const md = useQueryParam('md') || {}
     if (!user) {
         return <IncorrectUser />
     }
@@ -96,9 +97,10 @@ export default function UsersStudies() {
         } catch { } // accessing window.parent my throw exception due to SOP
         const params:LandStudyRequest = {
             id: Number(studyId),
-            metadata,
+            md,
+            consent
         }
-        if (noConsent) {
+        if (abort) {
             params['aborted'] = LandStudyAbortedEnum.Refusedconsent
         }
 

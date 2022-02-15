@@ -227,7 +227,14 @@ class Api::V1::Participant::StudiesSwagger
         key :enum, %w[refusedconsent]
       end
       parameter do
-        key :name, :metadata
+        key :name, :consent
+        key :in, :query
+        key :description, 'Optional flag indicating if student consented (default true)'
+        key :required, false
+        key :type, :boolean
+      end
+      parameter do
+        key :name, :md
         key :in, :query
         key :description, 'Metadata to record for participant'
         key :type, :object

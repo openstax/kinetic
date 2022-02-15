@@ -36,12 +36,12 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
     end
   end
 
-  def land
-    if params[:metadata]
+  def land(consent: true)
+    if params[:md]
       ParticipantMetadatum.create!(
         user_id: current_user.id,
         study_id: @study.id,
-        metadata: params[:metadata]
+        metadata: params[:md]
       )
     end
     if params[:aborted]
@@ -49,7 +49,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
         launch_pad.abort(params[:aborted]) ? :ok : :not_acceptable
       )
     end
-    launch_pad.land
+    launch_pad.land(params[:consent])
     head :ok
   end
 

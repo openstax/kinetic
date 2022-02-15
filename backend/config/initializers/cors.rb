@@ -29,7 +29,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     }
   end
   allow do
-    origins ['localhost:4000', /openstax.org$/]
+    origins ['localhost:4000', 'localhost:4008', /openstax.org$/]
     resource '/api/*', {
       headers: :any,
       credentials: true,

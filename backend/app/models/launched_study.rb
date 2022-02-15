@@ -11,11 +11,11 @@ class LaunchedStudy < ApplicationRecord
     completed_at.present?
   end
 
-  def completed_with_consent!
-    update!(completed_at: Time.now, consent_granted: true)
+  def completed!(consent: true)
+    update!(completed_at: Time.now, consent_granted: consent)
   end
 
-  def refuse_to_consent!
-    update!(aborted_at: Time.now, consent_granted: false)
+  def aborted!
+    update!(aborted_at: Time.now)
   end
 end
