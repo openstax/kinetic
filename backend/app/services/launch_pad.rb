@@ -33,8 +33,7 @@ class LaunchPad
 
     # Mark the launched records completed as needed.
     stage.completed!
-    consent = true if consent.nil?
-    launched_study.completed!(consent) if stage.is_last?
+    launched_study.completed!(consent: consent) if stage.is_last?
   end
 
   def abort(reason)
