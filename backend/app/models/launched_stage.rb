@@ -2,6 +2,7 @@
 
 class LaunchedStage < ApplicationRecord
   belongs_to :stage
+  belongs_to :research_id, foreign_key: :user_id, primary_key: :user_id
 
   before_create { self.first_launched_at ||= Time.now }
 

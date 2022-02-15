@@ -19,7 +19,7 @@ namespace :report do
   task :activity, [:months_ago] => :environment do |_, args|
     user_uuids = {}
     launches = LaunchedStage
-                 .joins(stage: :study)
+                 .joins(:research_id, stage: :study)
                  .where('first_launched_at >= ?', (args[:months_ago] || 1).to_i.months.ago)
     launches.each do |launch|
       user_uuids[launch.user_id] = nil
@@ -33,12 +33,14 @@ namespace :report do
     csv << [
       'Study ID',
       'Study Name',
+      'Started At',
+      'Completed At',
+      'Participant Research ID',
       'Participant UUID',
       'Participant Name',
       'Email',
-      'Launched',
       'Opted Out',
-      'Completed'
+      'Test Account?'
     ]
     launches.each do |launch|
       account = user_uuids[launch.user_id] || {}
@@ -53,11 +55,14 @@ namespace :report do
       csv << [
         launch.stage.study.id,
         launch.stage.study.title_for_participants,
+        launch.first_launched_at,
+        launch.completed_at,
+        launch.research_id.id,
         launch.user_id,
         account['name'] || '',
         email['value'] || '',
-        launch.first_launched_at,
-        launch.stage.study.first_launched_study.opted_out_at
+        launch.stage.study.first_launched_study.opted_out_at,
+        account['is_test'] ? 'X' : ''
       ]
     end
   end
