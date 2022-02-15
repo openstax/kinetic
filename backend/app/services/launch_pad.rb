@@ -11,7 +11,7 @@ class LaunchPad
     if preview
       study.stages.order(:order).first.launcher(user_id).preview_url
     else
-      raise(LaunchError, 'This study is not open.') unless study.open?
+      raise(LaunchError, 'This study is not available.') unless study.available?
 
       ActiveRecord::Base.transaction do
         raise(LaunchError, 'You have already completed this study.') if launched_study.completed?
