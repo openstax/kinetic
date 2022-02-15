@@ -75,7 +75,7 @@ export default function UsersStudies() {
     const history = useHistory()
     const user = useCurrentUser()
     const abort = useQueryParam('abort') == 'true'
-    const consent = useQueryParam('consent') == 'true'
+    const noConsent = useQueryParam('consent') == 'false'
     const md = useQueryParam('md') || {}
     if (!user) {
         return <IncorrectUser />
@@ -98,7 +98,7 @@ export default function UsersStudies() {
         const params:LandStudyRequest = {
             id: Number(studyId),
             md,
-            consent
+            consent: !noConsent
         }
         if (abort) {
             params['aborted'] = LandStudyAbortedEnum.Refusedconsent
