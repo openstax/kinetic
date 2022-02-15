@@ -98,7 +98,7 @@ export default function UsersStudies() {
         const params:LandStudyRequest = {
             id: Number(studyId),
             md,
-            consent: !noConsent
+            consent: !noConsent,
         }
         if (abort) {
             params['aborted'] = LandStudyAbortedEnum.Refusedconsent
