@@ -23,7 +23,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   def show
     model =
       current_user.launched_studies.where(study_id: params[:id]).first ||
-      Study.open.find(params[:id])
+      Study.available.find(params[:id])
     response_binding = Api::V1::Bindings::ParticipantStudy.create_from_model(model)
     render json: response_binding, status: :ok
   end
