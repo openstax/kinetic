@@ -62,7 +62,7 @@ namespace :report do
         account['name'] || '',
         email['value'] || '',
         launch.stage.study.first_launched_study.opted_out_at,
-        account['is_test'] ? 'X' : ''
+        account['is_test'] ? 'X' : nil
       ]
     end
   end
