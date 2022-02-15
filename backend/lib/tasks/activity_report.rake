@@ -41,21 +41,21 @@ namespace :report do
       'Completed'
     ]
     launches.each do |launch|
-      account = user_uuids[launch.user_id]
-      email = nil
-      if account
+      account = user_uuids[launch.user_id] || {}
+      email = {}
+      if account.key?('contact_infos')
         email = account['contact_infos'].find do |ci|
           ci['type'] == 'EmailAddress' &&
             ci['is_verified'] == true &&
             ci['is_guessed_preferred'] == true
-        end
+        end || {}
       end
       csv << [
         launch.stage.study.id,
         launch.stage.study.title_for_participants,
         launch.user_id,
-        account&.name || '',
-        email&.value || '',
+        account['name'] || '',
+        email['value'] || '',
         launch.first_launched_at,
         launch.stage.study.first_launched_study.opted_out_at
       ]
