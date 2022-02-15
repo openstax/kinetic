@@ -13,7 +13,7 @@ class Study < ApplicationRecord
 
   arel = Study.arel_table
 
-  scope :open, -> {
+  scope :available, -> {
     where
       .not(opens_at: nil)
       .where(arel[:opens_at].lteq(Time.now))

@@ -23,7 +23,7 @@ class User
   end
 
   def eligible_studies
-    Study.open
+    Study.available
   end
 
   def launch_next_stage!(study)
