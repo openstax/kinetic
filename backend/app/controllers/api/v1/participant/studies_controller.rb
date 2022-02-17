@@ -49,7 +49,10 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
         launch_pad.abort(params[:aborted]) ? :ok : :not_acceptable
       )
     end
-    launch_pad.land(consent: params[:consent] == 'true')
+    
+    # If param present, must be string "true", if absent, default to true
+    consent = params[:consent] ?  params[:consent] == 'true' : true
+    launch_pad.land(consent: consent)
     head :ok
   end
 
