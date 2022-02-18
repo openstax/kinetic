@@ -101,6 +101,7 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
                     {finalDrawing?.infoUrl && (
                         <a
                             href={finalDrawing.infoUrl}
+                            target="_blank"
                             className="fw-light"
                             css={{
                                 maxWidth: '200px',
