@@ -86,7 +86,7 @@ test('launching study and testing completion', async ({ page }) => {
     await rmStudy({ page, studyId })
 })
 
-test('launching study and aborting it', async ({ page }) => {
+test.only('launching study and aborting it', async ({ page }) => {
 
     await interceptStudyLaunch({ page })
 
