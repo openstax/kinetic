@@ -94,16 +94,21 @@ test('launching study and aborting it', async ({ page }) => {
     await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
     await page.click('testId=launch-study')
 
-    // qualtrics will redirect here once complete
-    await goToPage({ page, path: `/study/land/${studyId}?abort=true`, loginAs: 'user' })
+    await goToPage({ page, path: `/study/land/${studyId}?consent=false`, loginAs: 'user' })
+    await expect(page).not.toMatchText(/marked as complete/)
 
     await page.click('testId=view-studies')
     await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="false"]`)
+
     await page.click(`[data-study-id="${studyId}"]`)
     // should have navigated
     expect(
         await page.evaluate(() => document.location.pathname)
     ).toMatch(RegExp(`/study/details/${studyId}$`))
+
+    // now mark complete with consent granted
+    await goToPage({ page, path: `/study/land/${studyId}?consent=true`, loginAs: 'user' })
+    await expect(page).toMatchText(/marked as complete/)
 
     await rmStudy({ page, studyId })
 })

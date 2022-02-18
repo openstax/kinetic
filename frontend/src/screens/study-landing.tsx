@@ -23,10 +23,11 @@ const Points:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
 
 const CompletedMessage:React.FC<{
     consented: boolean,
+    aborted: boolean
     study: ParticipantStudy,
     onReturnClick(): void,
 }> = ({
-    consented, study, onReturnClick,
+    consented, aborted, study, onReturnClick,
 }) => (
     <Box justify="center">
         <Box
@@ -46,7 +47,7 @@ const CompletedMessage:React.FC<{
                 <h3>Success!</h3>
                 <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
                     You‘ve completed a Kinetic activity.
-                    This task will be marked as complete on your dashboard.
+                    {!aborted && ' This task will be marked as complete on your dashboard.'}
                 </h5>
                 <Button primary data-test-id="view-studies" onClick={onReturnClick}>Go back to dashboard</Button>
 
@@ -74,8 +75,11 @@ export default function UsersStudies() {
     const api = useStudyApi()
     const history = useHistory()
     const user = useCurrentUser()
-    const abort = useQueryParam('abort') == 'true'
     const noConsent = useQueryParam('consent') == 'false'
+    const abortParam =  useQueryParam('abort')
+    // default abort to whether consent was not granted only if we did not receive an abort param,
+    const abort = abortParam == null ? noConsent : abortParam == 'true'
+
     const md = useQueryParam('md') || {}
     if (!user) {
         return <IncorrectUser />
@@ -116,7 +120,7 @@ export default function UsersStudies() {
     return (
         <div className="container studies mt-8">
             {!study && <LoadingAnimation message="Loading study" />}
-            {study && <CompletedMessage consented={!noConsent} onReturnClick={onNav} study={study} />}
+            {study && <CompletedMessage aborted={abort} consented={!noConsent} onReturnClick={onNav} study={study} />}
         </div>
     )
 
