@@ -80,7 +80,8 @@ export interface GetStageRequest {
 export interface LandStudyRequest {
     id: number;
     aborted?: LandStudyAbortedEnum;
-    metadata?: object;
+    consent?: boolean;
+    md?: object;
 }
 
 export interface LaunchStudyRequest {
@@ -414,8 +415,12 @@ export class StudiesApi extends runtime.BaseAPI {
             queryParameters['aborted'] = requestParameters.aborted;
         }
 
-        if (requestParameters.metadata !== undefined) {
-            queryParameters['metadata'] = requestParameters.metadata;
+        if (requestParameters.consent !== undefined) {
+            queryParameters['consent'] = requestParameters.consent;
+        }
+
+        if (requestParameters.md !== undefined) {
+            queryParameters['md'] = requestParameters.md;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
