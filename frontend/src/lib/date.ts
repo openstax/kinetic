@@ -17,6 +17,8 @@ export const toDateTime = (dateThing: DateTimeInputs): Date => {
     }
 }
 
+export const toDayJS = (dateThing: DateTimeInputs) => dayjs(toDateTime(dateThing))
+
 export const formatDate = (dateThing?: DateTimeInputs | null, format: string = 'MM/DD/YYYY'): string | null => {
     if (!dateThing) return null
     return dayjs(toDateTime(dateThing)).format(format)

@@ -29,7 +29,7 @@ class Api::V1::EnvironmentSwagger
       key :description, 'A link to more information about the reward'
     end
   end
-  add_properties(:BannersScheduleSegment) do
+  add_properties(:BannerMessage) do
     key :required, %w[id message start_at end_at]
     property :id do
       key :type, :string
@@ -95,7 +95,7 @@ class Api::V1::EnvironmentSwagger
       key :type, :array
       key :minLength, 1
       items do
-        key :$ref, :BannersScheduleSegment
+        key :$ref, :BannerMessage
       end
       key :description, 'Banners that should be displayed to the user'
     end

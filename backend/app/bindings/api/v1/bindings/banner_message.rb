@@ -13,7 +13,7 @@ Swagger Codegen version: 2.4.13
 require 'date'
 
 module Api::V1::Bindings
-  class BannersScheduleSegment
+  class BannerMessage
     # A unique identifier for the message
     attr_accessor :id
 

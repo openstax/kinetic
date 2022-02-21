@@ -54,6 +54,7 @@ export const Icon:React.FC<IconProps> = ({ icon, tooltip, onClick, children, ...
                 background: 'transparent',
                 color: '#738694',
                 transition: 'all 0.3s ease-out',
+                display: 'inline-flex',
                 ':hover': {
                     color: '#292929',
                 },

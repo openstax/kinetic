@@ -14,10 +14,10 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-    BannersScheduleSegment,
-    BannersScheduleSegmentFromJSON,
-    BannersScheduleSegmentFromJSONTyped,
-    BannersScheduleSegmentToJSON,
+    BannerMessage,
+    BannerMessageFromJSON,
+    BannerMessageFromJSONTyped,
+    BannerMessageToJSON,
     EnvironmentUser,
     EnvironmentUserFromJSON,
     EnvironmentUserFromJSONTyped,
@@ -60,10 +60,10 @@ export interface Environment {
     rewardsSchedule: Array<RewardsScheduleSegment>;
     /**
      * Banners that should be displayed to the user
-     * @type {Array<BannersScheduleSegment>}
+     * @type {Array<BannerMessage>}
      * @memberof Environment
      */
-    bannersSchedule: Array<BannersScheduleSegment>;
+    bannersSchedule: Array<BannerMessage>;
 }
 
 export function EnvironmentFromJSON(json: any): Environment {
@@ -80,7 +80,7 @@ export function EnvironmentFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'accountsEnvName': json['accounts_env_name'],
         'homepageUrl': json['homepage_url'],
         'rewardsSchedule': ((json['rewards_schedule'] as Array<any>).map(RewardsScheduleSegmentFromJSON)),
-        'bannersSchedule': ((json['banners_schedule'] as Array<any>).map(BannersScheduleSegmentFromJSON)),
+        'bannersSchedule': ((json['banners_schedule'] as Array<any>).map(BannerMessageFromJSON)),
     };
 }
 
@@ -95,7 +95,7 @@ export function EnvironmentToJSON(value?: Environment | null): any {
         
         'user': EnvironmentUserToJSON(value.user),
         'rewards_schedule': ((value.rewardsSchedule as Array<any>).map(RewardsScheduleSegmentToJSON)),
-        'banners_schedule': ((value.bannersSchedule as Array<any>).map(BannersScheduleSegmentToJSON)),
+        'banners_schedule': ((value.bannersSchedule as Array<any>).map(BannerMessageToJSON)),
     };
 }
 

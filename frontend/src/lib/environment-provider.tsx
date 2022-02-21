@@ -1,5 +1,5 @@
 import { React, useEffect } from '@common'
-import { Environment } from '@models'
+import { Environment, ANON_USER } from '@models'
 import { LoadingAnimation, IncorrectUser, ErrorPage } from '@components'
 import { useLocation } from 'react-router-dom'
 import { ENV } from './env'
@@ -35,4 +35,4 @@ export const EnvironmentProvider:React.FC = ({ children }) => {
 
 export const useEnvironment = () => React.useContext(EnvironmentContext) as Environment
 
-export const useCurrentUser = () => useEnvironment().user
+export const useCurrentUser = () => useEnvironment()?.user || ANON_USER

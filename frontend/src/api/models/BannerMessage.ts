@@ -16,40 +16,40 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface BannersScheduleSegment
+ * @interface BannerMessage
  */
-export interface BannersScheduleSegment {
+export interface BannerMessage {
     /**
      * A unique identifier for the message
      * @type {string}
-     * @memberof BannersScheduleSegment
+     * @memberof BannerMessage
      */
     id: string;
     /**
      * When the banner should start to be displayed
      * @type {Date}
-     * @memberof BannersScheduleSegment
+     * @memberof BannerMessage
      */
     startAt: Date;
     /**
      * When the banner should be hidden
      * @type {Date}
-     * @memberof BannersScheduleSegment
+     * @memberof BannerMessage
      */
     endAt: Date;
     /**
      * The message that should be displayed
      * @type {string}
-     * @memberof BannersScheduleSegment
+     * @memberof BannerMessage
      */
     message: string;
 }
 
-export function BannersScheduleSegmentFromJSON(json: any): BannersScheduleSegment {
-    return BannersScheduleSegmentFromJSONTyped(json, false);
+export function BannerMessageFromJSON(json: any): BannerMessage {
+    return BannerMessageFromJSONTyped(json, false);
 }
 
-export function BannersScheduleSegmentFromJSONTyped(json: any, ignoreDiscriminator: boolean): BannersScheduleSegment {
+export function BannerMessageFromJSONTyped(json: any, ignoreDiscriminator: boolean): BannerMessage {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -62,7 +62,7 @@ export function BannersScheduleSegmentFromJSONTyped(json: any, ignoreDiscriminat
     };
 }
 
-export function BannersScheduleSegmentToJSON(value?: BannersScheduleSegment | null): any {
+export function BannerMessageToJSON(value?: BannerMessage | null): any {
     if (value === undefined) {
         return undefined;
     }

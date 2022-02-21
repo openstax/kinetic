@@ -59,3 +59,5 @@ export class User {
         this.isAdmin = this.isResearcher = false
     }
 }
+
+export const ANON_USER = new User()

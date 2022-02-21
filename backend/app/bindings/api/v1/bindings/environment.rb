@@ -44,7 +44,7 @@ module Api::V1::Bindings
         :'accounts_env_name' => :'String',
         :'homepage_url' => :'String',
         :'rewards_schedule' => :'Array<RewardsScheduleSegment>',
-        :'banners_schedule' => :'Array<BannersScheduleSegment>'
+        :'banners_schedule' => :'Array<BannerMessage>'
       }
     end
 

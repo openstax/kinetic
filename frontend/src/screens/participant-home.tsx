@@ -1,7 +1,10 @@
 import { React, useEffect, useState, useHistory, useMemo, cx } from '@common'
 import { ParticipantStudies, ParticipantStudy } from '@api'
 import { get } from 'lodash'
-import { Box, Col, LoadingAnimation, Row, Footer, Icon, Logo, RewardsProgressBar } from '@components'
+import {
+    Box, Col, LoadingAnimation, Row, Footer, Icon, Logo,
+    RewardsProgressBar, BannersBar,
+} from '@components'
 import envelopeIcon from '@iconify-icons/bi/envelope'
 import { useStudyApi, useEnvironment } from '@lib'
 import {
@@ -118,6 +121,7 @@ export default function ParticipantHome() {
                         </a>
                     </div>
                 </div>
+                <BannersBar />
                 <RewardsProgressBar studies={allStudies?.data || []} />
             </nav>
             <div className="container studies my-8">

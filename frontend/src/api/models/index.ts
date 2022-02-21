@@ -1,4 +1,4 @@
-export * from './BannersScheduleSegment';
+export * from './BannerMessage';
 export * from './Environment';
 export * from './EnvironmentUser';
 export * from './Launch';
