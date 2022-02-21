@@ -99,32 +99,7 @@ class Api::V1::EnvironmentSwagger
       end
       key :description, 'Banners that should be displayed to the user'
     end
-
   end
-
-  # swagger_path '/whoami' do
-  #   operation :get do
-  #     key :summary, 'Get info about the current user'
-  #     key :description, <<~DESC
-  #       Get info about the current user
-  #     DESC
-  #     key :operationId, 'getWhoami'
-  #     key :produces, [
-  #       'application/json'
-  #     ]
-  #     key :tags, [
-  #       'Environment'
-  #     ]
-  #     response 200 do
-  #       key :description, 'Success.'
-  #       schema do
-  #         key :$ref, :Whoami
-  #       end
-  #     end
-  #     extend Api::V1::SwaggerResponses::UnprocessableEntityError
-  #     extend Api::V1::SwaggerResponses::ServerError
-  #   end
-  # end
 
   swagger_path '/environment' do
     operation :get do

@@ -9,6 +9,7 @@ export const EnvironmentContext = React.createContext<Environment | null>(null)
 
 export const EnvironmentProvider:React.FC = ({ children }) => {
     const [currentEnv, setEnvironment] = React.useState<Environment|null>(null)
+
     const [error, setError] = React.useState<any>(false)
     const location = useLocation()
     useEffect(() => {
@@ -20,10 +21,11 @@ export const EnvironmentProvider:React.FC = ({ children }) => {
     if (error) {
         return <ErrorPage error={error} />
     }
+
     if (
         currentEnv?.user.isValid == false && (ENV.IS_PROD_MODE || !location.pathname.startsWith('/dev/user'))
     ) {
-        return <IncorrectUser />
+        return <EnvironmentContext.Provider value={currentEnv}><IncorrectUser /></EnvironmentContext.Provider>
     }
 
     return (

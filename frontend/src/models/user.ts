@@ -13,8 +13,7 @@ export class User {
 
     static bootstrap(env: EnvironmentUser) {
         window._MODELS = window._MODELS || {}
-        window._MODELS.user = new User()
-        const user = new User()
+        const user = window._MODELS.user || (window._MODELS.user = new User())
         user.id = env.userId
         user.isAdmin = env.isAdministrator || false
         user.isResearcher = env.isResearcher || false
@@ -31,8 +30,15 @@ export class User {
 
     constructor(attrs?:any) {
         if (attrs) {
-            Object.assign(this, attrs)
+            this.update(attrs)
         }
+    }
+
+    update(attrs: any) {
+        Object.assign(this, attrs)
+        if (attrs.user_id != null) this.id = attrs.user_id
+        if (attrs.is_researcher != null) this.isResearcher = attrs.is_researcher
+        if (attrs.is_admin != null) this.isAdmin = attrs.is_admin
     }
 
 
@@ -46,8 +52,7 @@ export class User {
         })
         const payload = await result.json()
         if (result.ok) {
-            this.id = payload.user_id
-            Object.assign(this, payload)
+            this.update(payload)
         }
     }
 
@@ -61,3 +66,5 @@ export class User {
 }
 
 export const ANON_USER = new User()
+window._MODELS = window._MODELS || {}
+window._MODELS.user = ANON_USER

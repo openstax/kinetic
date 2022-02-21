@@ -25,7 +25,7 @@ export const AppRoutes = () => {
         analytics.page()
     }, [location.pathname])
     return (
-        <div className="openstax-kinetic" data-user-id={user?.id}>
+        <div className="openstax-kinetic" data-user-id={user.id}>
             <Switch>
                 <Route exact path="/">
                     <Home />
