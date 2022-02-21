@@ -1,4 +1,6 @@
+export * from './BannersScheduleSegment';
 export * from './Environment';
+export * from './EnvironmentUser';
 export * from './Launch';
 export * from './ModelError';
 export * from './NewStage';
@@ -14,4 +16,3 @@ export * from './StageUpdate';
 export * from './Studies';
 export * from './Study';
 export * from './StudyUpdate';
-export * from './Whoami';

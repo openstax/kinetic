@@ -29,10 +29,7 @@ Rails.application.routes.draw do
 
       get :swagger, to: 'swagger#json', constraints: { format: :json }
 
-      controller :misc do
-        get :whoami
-        get :environment
-      end
+      get :environment, to: 'environment#index'
 
       resources :eligibility, only: [:index]
 

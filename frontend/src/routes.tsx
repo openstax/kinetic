@@ -2,7 +2,7 @@ import { React, useEffect } from '@common'
 import { Route, Switch, useLocation } from 'react-router-dom'
 import { PageNotFound } from '@components'
 import { loadAsync } from './components/async'
-import { useCurrentUser } from './lib/user-access'
+import { useCurrentUser } from '@lib'
 import { analytics } from './lib/analytics'
 
 const Home = loadAsync('Homepage', () => import('./screens/homepage'))
@@ -15,7 +15,7 @@ const Participant = loadAsync('Studies', () => import('./screens/participant-hom
 
 const StudiesHomepage = () => {
     const user = useCurrentUser()
-    return user?.is_researcher ? <Researcher /> : <Participant />
+    return user.isResearcher ? <Researcher /> : <Participant />
 }
 
 export const AppRoutes = () => {

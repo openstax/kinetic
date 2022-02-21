@@ -1,2 +1,2 @@
-export * from './MiscApi';
+export * from './EnvironmentApi';
 export * from './StudiesApi';

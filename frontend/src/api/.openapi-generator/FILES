@@ -1,9 +1,11 @@
 .openapi-generator-ignore
-apis/MiscApi.ts
+apis/EnvironmentApi.ts
 apis/StudiesApi.ts
 apis/index.ts
 index.ts
+models/BannersScheduleSegment.ts
 models/Environment.ts
+models/EnvironmentUser.ts
 models/Launch.ts
 models/ModelError.ts
 models/NewStage.ts
@@ -19,6 +21,5 @@ models/StageUpdate.ts
 models/Studies.ts
 models/Study.ts
 models/StudyUpdate.ts
-models/Whoami.ts
 models/index.ts
 runtime.ts

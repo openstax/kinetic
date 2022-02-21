@@ -1,7 +1,9 @@
 import { ENV } from '@lib'
+import { EnvironmentUser } from '@api'
+import { analytics } from '../lib/analytics'
+
 
 export interface UserPayload {
-    name: string
     user_id: string
     is_admin: boolean
     is_researcher: boolean
@@ -9,33 +11,30 @@ export interface UserPayload {
 
 export class User {
 
-    static async fetchCurrentUser() {
+    static bootstrap(env: EnvironmentUser) {
         window._MODELS = window._MODELS || {}
         window._MODELS.user = new User()
-        const reply = await fetch(`${ENV.API_PATH}/whoami`, {
-            credentials: 'include',
-        })
-        return window._MODELS.user.update(await reply.json())
+        const user = new User()
+        user.id = env.userId
+        user.isAdmin = env.isAdministrator || false
+        user.isResearcher = env.isResearcher || false
+        if (user.id) {
+            analytics.identify(user.id)
+        }
+        return user
     }
 
-    id: string = ''
-    is_admin: boolean = false
-    is_researcher: boolean = false
+    id?: string = ''
+    isAdmin: boolean = false
+    isResearcher: boolean = false
     name: string = ''
 
-    constructor(attrs?:UserPayload) {
+    constructor(attrs?:any) {
         if (attrs) {
-            this.update(attrs)
+            Object.assign(this, attrs)
         }
     }
 
-    update(attrs: UserPayload) {
-        this.id = attrs.user_id
-        this.name = attrs.name
-        this.is_admin = attrs.is_admin || false
-        this.is_researcher = attrs.is_researcher || false
-        return this
-    }
 
     get isValid() {
         return Boolean(this.id)
@@ -57,6 +56,6 @@ export class User {
             method: 'DELETE', credentials: 'include',
         })
         this.id = ''
-        this.is_admin = this.is_researcher = false
+        this.isAdmin = this.isResearcher = false
     }
 }

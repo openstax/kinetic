@@ -18,15 +18,12 @@ import {
     Environment,
     EnvironmentFromJSON,
     EnvironmentToJSON,
-    Whoami,
-    WhoamiFromJSON,
-    WhoamiToJSON,
 } from '../models';
 
 /**
  * 
  */
-export class MiscApi extends runtime.BaseAPI {
+export class EnvironmentApi extends runtime.BaseAPI {
 
     /**
      * Get info about the deployment environment 
@@ -53,34 +50,6 @@ export class MiscApi extends runtime.BaseAPI {
      */
     async getEnvironment(): Promise<Environment> {
         const response = await this.getEnvironmentRaw();
-        return await response.value();
-    }
-
-    /**
-     * Get info about the current user 
-     * Get info about the current user
-     */
-    async getWhoamiRaw(): Promise<runtime.ApiResponse<Whoami>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/whoami`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => WhoamiFromJSON(jsonValue));
-    }
-
-    /**
-     * Get info about the current user 
-     * Get info about the current user
-     */
-    async getWhoami(): Promise<Whoami> {
-        const response = await this.getWhoamiRaw();
         return await response.value();
     }
 

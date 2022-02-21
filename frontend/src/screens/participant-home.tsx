@@ -3,9 +3,9 @@ import { ParticipantStudies, ParticipantStudy } from '@api'
 import { get } from 'lodash'
 import { Box, Col, LoadingAnimation, Row, Footer, Icon, Logo, RewardsProgressBar } from '@components'
 import envelopeIcon from '@iconify-icons/bi/envelope'
-import { useStudyApi } from '@lib'
+import { useStudyApi, useEnvironment } from '@lib'
 import {
-    isStudyLaunchable, tagOfType, tagsOfType, TagLabels, useEnv,
+    isStudyLaunchable, tagOfType, tagsOfType, TagLabels,
 } from '@models'
 import { Controls, applyControls, ControlState } from './studies/participant-controls'
 import { StudyModal } from './studies/modal'
@@ -76,7 +76,7 @@ const Studies:React.FC<{ isFiltering: boolean, studies: ParticipantStudy[] }> = 
 
 export default function ParticipantHome() {
     const api = useStudyApi()
-    const env = useEnv()
+    const env = useEnvironment()
 
     const [mandatoryStudy, setMandatoryStudy] = useState<ParticipantStudy>()
     const [allStudies, setStudies] = useState<ParticipantStudies>()

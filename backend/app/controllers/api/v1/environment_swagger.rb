@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::MiscSwagger
+class Api::V1::EnvironmentSwagger
   include Swagger::Blocks
   include OpenStax::Swagger::SwaggerBlocksExtensions
   add_properties(:RewardsScheduleSegment) do
@@ -29,7 +29,28 @@ class Api::V1::MiscSwagger
       key :description, 'A link to more information about the reward'
     end
   end
-  swagger_schema :Whoami do
+  add_properties(:BannersScheduleSegment) do
+    key :required, %w[id message start_at end_at]
+    property :id do
+      key :type, :string
+      key :description, 'A unique identifier for the message'
+    end
+    property :start_at do
+      key :type, :string
+      key :format, 'date-time'
+      key :description, 'When the banner should start to be displayed'
+    end
+    property :end_at do
+      key :type, :string
+      key :format, 'date-time'
+      key :description, 'When the banner should be hidden'
+    end
+    property :message do
+      key :type, :string
+      key :description, 'The message that should be displayed'
+    end
+  end
+  swagger_schema :EnvironmentUser do
     key :required, %w[is_researcher is_administrator]
     property :user_id do
       key :type, :string
@@ -50,7 +71,10 @@ class Api::V1::MiscSwagger
   end
 
   swagger_schema :Environment do
-    key :required, %w[accounts_env_name homepage_url rewards_schedule]
+    key :required, %w[user accounts_env_name homepage_url rewards_schedule banners_schedule]
+    property :user do
+      key :$ref, :EnvironmentUser
+    end
     property :accounts_env_name do
       key :type, :string
       key :readOnly, true
@@ -67,31 +91,40 @@ class Api::V1::MiscSwagger
       end
       key :description, 'The tags of the study object, used for grouping and filtering.'
     end
+    property :banners_schedule do
+      key :type, :array
+      key :minLength, 1
+      items do
+        key :$ref, :BannersScheduleSegment
+      end
+      key :description, 'Banners that should be displayed to the user'
+    end
+
   end
 
-  swagger_path '/whoami' do
-    operation :get do
-      key :summary, 'Get info about the current user'
-      key :description, <<~DESC
-        Get info about the current user
-      DESC
-      key :operationId, 'getWhoami'
-      key :produces, [
-        'application/json'
-      ]
-      key :tags, [
-        'Misc'
-      ]
-      response 200 do
-        key :description, 'Success.'
-        schema do
-          key :$ref, :Whoami
-        end
-      end
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
-    end
-  end
+  # swagger_path '/whoami' do
+  #   operation :get do
+  #     key :summary, 'Get info about the current user'
+  #     key :description, <<~DESC
+  #       Get info about the current user
+  #     DESC
+  #     key :operationId, 'getWhoami'
+  #     key :produces, [
+  #       'application/json'
+  #     ]
+  #     key :tags, [
+  #       'Environment'
+  #     ]
+  #     response 200 do
+  #       key :description, 'Success.'
+  #       schema do
+  #         key :$ref, :Whoami
+  #       end
+  #     end
+  #     extend Api::V1::SwaggerResponses::UnprocessableEntityError
+  #     extend Api::V1::SwaggerResponses::ServerError
+  #   end
+  # end
 
   swagger_path '/environment' do
     operation :get do
@@ -104,7 +137,7 @@ class Api::V1::MiscSwagger
         'application/json'
       ]
       key :tags, [
-        'Misc'
+        'Environment'
       ]
       response 200 do
         key :description, 'Success.'

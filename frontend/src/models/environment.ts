@@ -1,20 +1,24 @@
-import { useState, useEffect } from 'react'
 import { API_CONFIGURATION, ENV } from '@lib'
-import { Environment as ApiEnv, MiscApi } from '@api'
+import { Environment as ApiEnv, EnvironmentApi } from '@api'
 import dayjs from 'dayjs'
+import { retry } from '../lib/util'
+import { User } from './user'
 
 export class Environment {
 
-    static async fetch() {
-        const api = new MiscApi(API_CONFIGURATION)
-        const env = await api.getEnvironment()
-        return new Environment(env)
+    static async bootstrap() {
+        const api = new EnvironmentApi(API_CONFIGURATION)
+        const envData = await retry(() => api.getEnvironment())
+        return new Environment(envData)
     }
 
     config: ApiEnv
 
+    user: User
+
     constructor(config: ApiEnv) {
         this.config = config
+        this.user = User.bootstrap(config.user)
     }
 
     get loginURL() {
@@ -38,12 +42,4 @@ export class Environment {
             dayjs(s.startAt).isBefore(now) && dayjs(s.endAt).isAfter(now)
         ))
     }
-}
-
-export const useEnv = () => {
-    const [env, setEnv] = useState<Environment>()
-    useEffect(() => {
-        Environment.fetch().then(e => setEnv(e))
-    }, [])
-    return env
 }
