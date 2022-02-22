@@ -6,6 +6,7 @@ import {
 test('can create and edit a study', async ({ page }) => {
     const title = faker.company.catchPhrase()
     await loginAs({ page, login: 'researcher' })
+    
     expect(await page.textContent('.studies')).toContain('Studies')
     await page.click('testId=add-study')
 

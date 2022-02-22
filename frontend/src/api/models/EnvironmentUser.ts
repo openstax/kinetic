@@ -16,34 +16,34 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Whoami
+ * @interface EnvironmentUser
  */
-export interface Whoami {
+export interface EnvironmentUser {
     /**
      * The user's ID.
      * @type {string}
-     * @memberof Whoami
+     * @memberof EnvironmentUser
      */
     readonly userId?: string;
     /**
      * If true, the user is an administrator
      * @type {boolean}
-     * @memberof Whoami
+     * @memberof EnvironmentUser
      */
     readonly isAdministrator: boolean;
     /**
      * If true, the user is a researcher
      * @type {boolean}
-     * @memberof Whoami
+     * @memberof EnvironmentUser
      */
     readonly isResearcher: boolean;
 }
 
-export function WhoamiFromJSON(json: any): Whoami {
-    return WhoamiFromJSONTyped(json, false);
+export function EnvironmentUserFromJSON(json: any): EnvironmentUser {
+    return EnvironmentUserFromJSONTyped(json, false);
 }
 
-export function WhoamiFromJSONTyped(json: any, ignoreDiscriminator: boolean): Whoami {
+export function EnvironmentUserFromJSONTyped(json: any, ignoreDiscriminator: boolean): EnvironmentUser {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -55,7 +55,7 @@ export function WhoamiFromJSONTyped(json: any, ignoreDiscriminator: boolean): Wh
     };
 }
 
-export function WhoamiToJSON(value?: Whoami | null): any {
+export function EnvironmentUserToJSON(value?: EnvironmentUser | null): any {
     if (value === undefined) {
         return undefined;
     }

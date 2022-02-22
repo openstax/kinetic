@@ -14,7 +14,7 @@ class Development::UsersController < ApplicationController
     if params[:user_id] =~ /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/i
       uuid = params[:user_id]
       cookies[:stubbed_user_uuid] = uuid
-      render status: :ok, json: Api::V1::Bindings::Whoami.new(
+      render status: :ok, json: Api::V1::Bindings::EnvironmentUser.new(
         user_id: uuid,
         is_administrator: Admin.where(user_id: uuid).any?,
         is_researcher: Researcher.where(user_id: uuid).any?

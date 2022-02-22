@@ -13,31 +13,36 @@ Swagger Codegen version: 2.4.13
 require 'date'
 
 module Api::V1::Bindings
-  class Whoami
-    # The user's ID.
-    attr_accessor :user_id
+  class BannerMessage
+    # A unique identifier for the message
+    attr_accessor :id
 
-    # If true, the user is an administrator
-    attr_accessor :is_administrator
+    # When the banner should start to be displayed
+    attr_accessor :start_at
 
-    # If true, the user is a researcher
-    attr_accessor :is_researcher
+    # When the banner should be hidden
+    attr_accessor :end_at
+
+    # The message that should be displayed
+    attr_accessor :message
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'user_id' => :'user_id',
-        :'is_administrator' => :'is_administrator',
-        :'is_researcher' => :'is_researcher'
+        :'id' => :'id',
+        :'start_at' => :'start_at',
+        :'end_at' => :'end_at',
+        :'message' => :'message'
       }
     end
 
     # Attribute type mapping.
     def self.swagger_types
       {
-        :'user_id' => :'String',
-        :'is_administrator' => :'BOOLEAN',
-        :'is_researcher' => :'BOOLEAN'
+        :'id' => :'String',
+        :'start_at' => :'DateTime',
+        :'end_at' => :'DateTime',
+        :'message' => :'String'
       }
     end
 
@@ -49,16 +54,20 @@ module Api::V1::Bindings
       # convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h| h[k.to_sym] = v }
 
-      if attributes.has_key?(:'user_id')
-        self.user_id = attributes[:'user_id']
+      if attributes.has_key?(:'id')
+        self.id = attributes[:'id']
       end
 
-      if attributes.has_key?(:'is_administrator')
-        self.is_administrator = attributes[:'is_administrator']
+      if attributes.has_key?(:'start_at')
+        self.start_at = attributes[:'start_at']
       end
 
-      if attributes.has_key?(:'is_researcher')
-        self.is_researcher = attributes[:'is_researcher']
+      if attributes.has_key?(:'end_at')
+        self.end_at = attributes[:'end_at']
+      end
+
+      if attributes.has_key?(:'message')
+        self.message = attributes[:'message']
       end
     end
 
@@ -66,12 +75,20 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @is_administrator.nil?
-        invalid_properties.push('invalid value for "is_administrator", is_administrator cannot be nil.')
+      if @id.nil?
+        invalid_properties.push('invalid value for "id", id cannot be nil.')
       end
 
-      if @is_researcher.nil?
-        invalid_properties.push('invalid value for "is_researcher", is_researcher cannot be nil.')
+      if @start_at.nil?
+        invalid_properties.push('invalid value for "start_at", start_at cannot be nil.')
+      end
+
+      if @end_at.nil?
+        invalid_properties.push('invalid value for "end_at", end_at cannot be nil.')
+      end
+
+      if @message.nil?
+        invalid_properties.push('invalid value for "message", message cannot be nil.')
       end
 
       invalid_properties
@@ -80,8 +97,10 @@ module Api::V1::Bindings
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @is_administrator.nil?
-      return false if @is_researcher.nil?
+      return false if @id.nil?
+      return false if @start_at.nil?
+      return false if @end_at.nil?
+      return false if @message.nil?
       true
     end
 
@@ -90,9 +109,10 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          user_id == o.user_id &&
-          is_administrator == o.is_administrator &&
-          is_researcher == o.is_researcher
+          id == o.id &&
+          start_at == o.start_at &&
+          end_at == o.end_at &&
+          message == o.message
     end
 
     # @see the `==` method
@@ -104,7 +124,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [user_id, is_administrator, is_researcher].hash
+      [id, start_at, end_at, message].hash
     end
 
     # Builds the object from hash

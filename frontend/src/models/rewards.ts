@@ -1,6 +1,6 @@
 import { useMemo } from '@common'
 import { RewardsScheduleSegment, ParticipantStudy } from '@api'
-import { useEnv } from './environment'
+import { useEnvironment } from '@lib'
 import { sortBy, last } from 'lodash-es'
 
 export interface CalculatedRewardsScheduleSegment extends RewardsScheduleSegment {
@@ -18,7 +18,7 @@ export function rewardPointsEarned(studies: ParticipantStudy[]): number {
 }
 
 export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
-    const env = useEnv()
+    const env = useEnvironment()
 
     const rs = env?.config.rewardsSchedule || []
     sortBy(rs, 'startAt')

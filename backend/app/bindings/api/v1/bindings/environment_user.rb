@@ -13,38 +13,31 @@ Swagger Codegen version: 2.4.13
 require 'date'
 
 module Api::V1::Bindings
-  class Environment
-    attr_accessor :user
+  class EnvironmentUser
+    # The user's ID.
+    attr_accessor :user_id
 
-    attr_accessor :accounts_env_name
+    # If true, the user is an administrator
+    attr_accessor :is_administrator
 
-    attr_accessor :homepage_url
-
-    # The tags of the study object, used for grouping and filtering.
-    attr_accessor :rewards_schedule
-
-    # Banners that should be displayed to the user
-    attr_accessor :banners_schedule
+    # If true, the user is a researcher
+    attr_accessor :is_researcher
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'user' => :'user',
-        :'accounts_env_name' => :'accounts_env_name',
-        :'homepage_url' => :'homepage_url',
-        :'rewards_schedule' => :'rewards_schedule',
-        :'banners_schedule' => :'banners_schedule'
+        :'user_id' => :'user_id',
+        :'is_administrator' => :'is_administrator',
+        :'is_researcher' => :'is_researcher'
       }
     end
 
     # Attribute type mapping.
     def self.swagger_types
       {
-        :'user' => :'EnvironmentUser',
-        :'accounts_env_name' => :'String',
-        :'homepage_url' => :'String',
-        :'rewards_schedule' => :'Array<RewardsScheduleSegment>',
-        :'banners_schedule' => :'Array<BannerMessage>'
+        :'user_id' => :'String',
+        :'is_administrator' => :'BOOLEAN',
+        :'is_researcher' => :'BOOLEAN'
       }
     end
 
@@ -56,28 +49,16 @@ module Api::V1::Bindings
       # convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h| h[k.to_sym] = v }
 
-      if attributes.has_key?(:'user')
-        self.user = attributes[:'user']
+      if attributes.has_key?(:'user_id')
+        self.user_id = attributes[:'user_id']
       end
 
-      if attributes.has_key?(:'accounts_env_name')
-        self.accounts_env_name = attributes[:'accounts_env_name']
+      if attributes.has_key?(:'is_administrator')
+        self.is_administrator = attributes[:'is_administrator']
       end
 
-      if attributes.has_key?(:'homepage_url')
-        self.homepage_url = attributes[:'homepage_url']
-      end
-
-      if attributes.has_key?(:'rewards_schedule')
-        if (value = attributes[:'rewards_schedule']).is_a?(Array)
-          self.rewards_schedule = value
-        end
-      end
-
-      if attributes.has_key?(:'banners_schedule')
-        if (value = attributes[:'banners_schedule']).is_a?(Array)
-          self.banners_schedule = value
-        end
+      if attributes.has_key?(:'is_researcher')
+        self.is_researcher = attributes[:'is_researcher']
       end
     end
 
@@ -85,24 +66,12 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @user.nil?
-        invalid_properties.push('invalid value for "user", user cannot be nil.')
+      if @is_administrator.nil?
+        invalid_properties.push('invalid value for "is_administrator", is_administrator cannot be nil.')
       end
 
-      if @accounts_env_name.nil?
-        invalid_properties.push('invalid value for "accounts_env_name", accounts_env_name cannot be nil.')
-      end
-
-      if @homepage_url.nil?
-        invalid_properties.push('invalid value for "homepage_url", homepage_url cannot be nil.')
-      end
-
-      if @rewards_schedule.nil?
-        invalid_properties.push('invalid value for "rewards_schedule", rewards_schedule cannot be nil.')
-      end
-
-      if @banners_schedule.nil?
-        invalid_properties.push('invalid value for "banners_schedule", banners_schedule cannot be nil.')
+      if @is_researcher.nil?
+        invalid_properties.push('invalid value for "is_researcher", is_researcher cannot be nil.')
       end
 
       invalid_properties
@@ -111,11 +80,8 @@ module Api::V1::Bindings
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @user.nil?
-      return false if @accounts_env_name.nil?
-      return false if @homepage_url.nil?
-      return false if @rewards_schedule.nil?
-      return false if @banners_schedule.nil?
+      return false if @is_administrator.nil?
+      return false if @is_researcher.nil?
       true
     end
 
@@ -124,11 +90,9 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          user == o.user &&
-          accounts_env_name == o.accounts_env_name &&
-          homepage_url == o.homepage_url &&
-          rewards_schedule == o.rewards_schedule &&
-          banners_schedule == o.banners_schedule
+          user_id == o.user_id &&
+          is_administrator == o.is_administrator &&
+          is_researcher == o.is_researcher
     end
 
     # @see the `==` method
@@ -140,7 +104,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [user, accounts_env_name, homepage_url, rewards_schedule, banners_schedule].hash
+      [user_id, is_administrator, is_researcher].hash
     end
 
     # Builds the object from hash

@@ -1,12 +1,12 @@
 import { React } from '@common'
 import { OXColoredStripe, LoadingAnimation } from '@components'
-import { useEnv } from '../models/environment'
+import { useEnvironment } from '@lib'
 
 export interface IncorrectUserProps {
     desiredRole?: string
 }
 export const IncorrectUser:React.FC<IncorrectUserProps> = ({ desiredRole }) => {
-    const env = useEnv()
+    const env = useEnvironment()
     if (!env) return <LoadingAnimation />
 
     return (
