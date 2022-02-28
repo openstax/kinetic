@@ -14,7 +14,7 @@ class LaunchPad
       raise(LaunchError, 'This study is not available.') unless study.available?
 
       ActiveRecord::Base.transaction do
-        raise(LaunchError, 'You have already completed this study.') if launched_study.completed?
+        raise(LaunchError, 'You have already completed this study.') if launched_study.completed? && !launched_study.retakeable?
 
         stage = study.next_stage_for_user(user)
         raise 'No stage to launch exists' if stage.nil?

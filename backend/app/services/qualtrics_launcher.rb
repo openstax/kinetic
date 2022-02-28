@@ -23,11 +23,16 @@ class QualtricsLauncher
   end
 
   protected
-
+  
   attr_reader :secret_key
   attr_reader :study_id # study id is the Kinetic model's ID
   attr_reader :survey_id # survey is the Qualtrics ID
   attr_reader :user_id
+
+  def last_taken
+    launched_study = LaunchedStudy.where({user_id: user_id, study_id: study_id}).first
+    launched_study&.completed_at
+  end
 
   def sso_token
     # these values will be url encoded along with the md5hash in the url method.
@@ -40,6 +45,7 @@ class QualtricsLauncher
       ['research_id', ResearchId.for_user_id(user_id).id],
       ['return_to_url', frontend_returning_url(study_id: study_id)],
       ['is_testing', !Kinetic.is_production?],
+      ['last_taken', last_taken],
       ['study_id', study_id]
     ].map { |k, v| "#{k}=#{v}" }.join('&')
     hash = md5_hash(raw_query)

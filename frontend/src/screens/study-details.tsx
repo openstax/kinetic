@@ -21,7 +21,7 @@ const LaunchStudyButton: React.FC<{ study: ParticipantStudy }> = ({ study }) => 
         await LaunchStudy(api, study)
         setBusy(false)
     }
-    if (study.completedAt) {
+    if (study.completedAt && !study.optedOutAt) {
         return (
             <b>Completed on {dayjs(study.completedAt).format('LL')}</b>
         )
