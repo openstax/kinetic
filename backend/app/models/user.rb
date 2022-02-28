@@ -35,14 +35,10 @@ class User
       completed_stage_ids = launched_stages(study: study).map(&:stage_id)
       stage = study.stages.where.not(id: completed_stage_ids).order(:order).first
       if stage.nil?
-      begin
+        # See if study is retakable
         # Don't expect more than one, just unwrapping the returned set
-        launched_study = LaunchedStudy.where({user_id: id, study_id: study.id}).first 
-        if launched_study.retakeable?
-          stage = study.stages.order(:order).first
-        end
-      end
-      else
+        launched_study = LaunchedStudy.where({ user_id: id, study_id: study.id }).first
+        stage = study.stages.order(:order).first if launched_study.retakeable?
         raise 'No stage to launch exists' if stage.nil?
       end
 

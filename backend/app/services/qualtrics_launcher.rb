@@ -23,14 +23,14 @@ class QualtricsLauncher
   end
 
   protected
-  
+
   attr_reader :secret_key
   attr_reader :study_id # study id is the Kinetic model's ID
   attr_reader :survey_id # survey is the Qualtrics ID
   attr_reader :user_id
 
   def last_taken
-    launched_study = LaunchedStudy.where({user_id: user_id, study_id: study_id}).first
+    launched_study = LaunchedStudy.where({ user_id: user_id, study_id: study_id }).first
     launched_study&.completed_at
   end
 
