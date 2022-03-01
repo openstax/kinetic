@@ -19,6 +19,10 @@ RSpec.describe LaunchPad, multi_stage: true do
   let(:user2_study2_launch_pad) { described_class.new(study_id: study2.id, user_id: user2_id) }
 
   before do
+     # User needs a ResearchId, to allow query for existing launched studies
+     ResearchId.for_user_id(user1_id)
+     ResearchId.for_user_id(user2_id)
+    
     # Start another studies with our user of interest and another user to test our queries
     user1_study2_launch_pad.launch_url
     user2_study2_launch_pad.launch_url
