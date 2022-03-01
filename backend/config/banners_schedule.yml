@@ -1,55 +1,50 @@
 -
   id: 1-1-1
-  message: ☕ Starbucks gift card giveaways 🎁  📢 on Friday, Feb 25th! / 👀 for new tasks on Monday, Feb 28th!
-  start_at: 2022-02-21
-  end_at: 2022-02-24
--
-  id: 1-1-2
-  message: Starbucks ☕ gift card giveaway winners have been chosen! New studies 🧠 coming in on Monday, Feb 28th! 🗓
-  start_at: 2022-02-25
-  end_at: 2022-02-27
--
-  id: 1-1-3
-  message: New tasks are now available! Happy learning!🤓
+  message: Gift card giveaway  🎁   winners have been 📢 / 👀 for new tasks on Friday, Mar 4th! 🗓
   start_at: 2022-02-28
-  end_at: 2022-03-06
+  end_at: 2022-03-03
 -
   id: 1-2-1
-  message: Keep a good thing going - complete available studies by to enter an Amazon gift card 🎁  giveaway!
-  start_at: 2022-03-07
-  end_at: 2022-03-13
+  message: New studies 🧠  are now available! Happy learning!🤓
+  start_at: 2022-03-04
+  end_at: 2022-03-10
 -
   id: 1-2-2
-  message: Amazon gift card 🎁 giveaways will be awarded on March 21st, and new tasks will be available on Tuesday, Mar 22nd! 🗓
-  start_at: 2022-03-14
-  end_at: 2022-03-20
+  message: Keep a good thing going - complete available studies ☑️ by Monday, Mar 21st to enter a gift card 🎁  giveaway!
+  start_at: 2022-03-11
+  end_at: 2022-03-13
 -
   id: 1-2-3
-  message: Amazon gift card giveaway winners 🎁  have been chosen!  👀 for new tasks on Tuesday, Mar 22nd!
-  start_at: 2022-03-21
-  end_at: 2022-03-21
+  message: New gift card 🎁 giveaways will be awarded on March 25th, and new tasks will be available on Tuesday, Mar 28th! 🗓
+  start_at: 2022-03-14
+  end_at: 2022-03-24
+-
+  id: 1-2-4
+  message: Gift card giveaway winners 🎁  have been chosen! 👀 for new tasks on Tuesday, Mar 28th!
+  start_at: 2022-03-25
+  end_at: 2022-03-27
 -
   id: 1-3-1
   message: A month of learning beckons - access our all new studies! 👓
-  start_at: 2022-03-22
-  end_at: 2022-03-28
+  start_at: 2022-03-28
+  end_at: 2022-04-03
 -
   id: 1-3-2
-  message: Lucky you - studies 📚 are still available to enter a Nike gift card giveaway!
-  start_at: 2022-03-29
-  end_at: 2022-04-06
+  message: Lucky you - studies 📚 are still available to enter an exciting gift card giveaway!🎁
+  start_at: 2022-04-04
+  end_at: 2022-04-12
 -
   id: 1-3-3
-  message: Nike ✔ gift card giveaways 📢 on Friday, Apr 15th! 🥳
-  start_at: 2022-04-07
-  end_at: 2022-04-14
+  message: Gift card giveaways 📢 on Friday, Apr 22nd! 🥳
+  start_at: 2022-04-13
+  end_at: 2022-04-21
 -
   id: 1-3-4
-  message: Nike gift card giveaway winners have been chosen! Continue exploring - the rewards 🏆 haven't ended yet!
-  start_at: 2022-04-15
-  end_at: 2022-04-17
+  message: Gift card 🎁 giveaway winners have been chosen! Continue exploring - the rewards 🏆 haven't ended yet!
+  start_at: 2022-04-22
+  end_at: 2022-04-24
 -
   id: 1-3-5
-  message: Last chance ⏳ to complete all studies by Apr 19 for a chance to win a pair of Apple AirPods! 🎧
-  start_at: 2022-04-18
-  end_at: 2022-04-19
+  message: Last chance ⏳ to complete all studies by Apr 29 for a chance to win a pair of Apple AirPods! 🎧
+  start_at: 2022-04-25
+  end_at: 2022-04-29
