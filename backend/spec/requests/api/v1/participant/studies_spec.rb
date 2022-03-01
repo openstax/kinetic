@@ -25,7 +25,10 @@ RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: tru
 
   before do
     responses_not_exceptions!
-
+    
+    # User needs a ResearchId, to allow query for existing launched studies
+    ResearchId.for_user_id(user1_id)
+    
     # One new study (#1), one in progress (#2), one complete (#3)
     user1_study2_launch_pad.launch_url
     user1_study3_launch_pad.launch_url
