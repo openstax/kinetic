@@ -34,6 +34,12 @@ class LaunchPad
               .where(completed_at: nil)
               .first
 
+    retake = user.launched_studies
+               .where(study_id: study)
+               .where("completed_at - opted_out_at < '0.1 sec'")
+
+    stage = user.launched_stages(study: study).order(id: :desc).first if retake
+
     raise(LandError, 'Not expecting a landing for this study') if stage.nil?
 
     # Mark the launched records completed as needed.
