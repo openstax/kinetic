@@ -12,13 +12,14 @@ class LaunchedStudy < ApplicationRecord
   end
 
   def retakeable?
-    # Timestamps are in microseconds - consider 0.1 sec window as the "same"
-    completed_at - opted_out_at < 0.1
+    completed_at == opted_out_at
   end
 
   def completed!(consent: true)
-    update!(completed_at: Time.now, consent_granted: consent,
-            opted_out_at: consent ? nil : Time.now)
+    # Need the timestamps to be identical
+    now = Time.now
+    update!(completed_at: now, consent_granted: consent,
+            opted_out_at: consent ? nil : now)
   end
 
   def aborted!
