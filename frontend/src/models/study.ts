@@ -56,7 +56,7 @@ export const LaunchStudy = async (api: StudiesApi, study: {id: number}, options:
 
 export const isStudyLaunchable = (study: ParticipantStudy) => {
     return Boolean(
-        (!study.completedAt || (dayjs(study.completedAt).isSame(dayjs(study.optedOutAt)))) &&
+        (!study.completedAt || (dayjs(study.completedAt).isSame(dayjs(study.optedOutAt), 'second'))) &&
             (!study.closesAt || dayjs(study.closesAt).isAfter(dayjs()))
     )
 }
