@@ -36,7 +36,7 @@ class LaunchPad
 
     retake = user.launched_studies
                .where(study_id: study)
-               .where("completed_at - opted_out_at < '0.1 sec'")
+               .where("completed_at - opted_out_at < '0.1 sec'").first
 
     stage = user.launched_stages(study: study).order(id: :desc).first if retake
 
