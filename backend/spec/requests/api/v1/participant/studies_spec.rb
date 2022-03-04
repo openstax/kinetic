@@ -152,6 +152,16 @@ RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: tru
         )
       end
 
+      it 'launches next stage for a multi-part' do
+        stage1a.launch_by_user!(User.new(user1_id)).completed!
+
+        api_put "participant/studies/#{study1.id}/launch"
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match a_hash_including(
+          url: /#{stage1b.config[:url]}.*/
+        )
+      end
+
       it 'gives an error for a complete study' do
         api_put "participant/studies/#{study3.id}/launch"
         expect(response).to have_http_status(:unprocessable_entity)
