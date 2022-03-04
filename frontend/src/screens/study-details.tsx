@@ -27,8 +27,7 @@ const LaunchStudyButton: React.FC<{ study: ParticipantStudy }> = ({ study }) => 
         )
     }
 
-    const action = (study.stages?.length && !study.stages[0].isCompleted) ?
-                   'Begin' : 'Continue'
+    const action = (study.stages?.length && !study.stages[0].isCompleted) ? 'Begin' : 'Continue'
     return (
         <Button
             busy={isBusy}

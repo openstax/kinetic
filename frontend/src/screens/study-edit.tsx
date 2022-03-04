@@ -9,7 +9,7 @@ import {
 } from '@components'
 import { StudyValidationSchema, TagLabels, isNewStudy, EditingStudy, isStudy } from '@models'
 import { NewStudy, Study, Stage, StudyUpdate } from '@api'
-import { useStudyApi, errorToString, useForceUpdate, pick, remove, formatDate } from '@lib'
+import { useStudyApi, errorToString, useForceUpdate, pick, remove } from '@lib'
 import { StudyModal } from './studies/modal'
 
 
