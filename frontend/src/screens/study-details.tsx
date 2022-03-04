@@ -75,7 +75,7 @@ const StudyMultiPartInfo:React.FC<{ study: ParticipantStudy }> = ({ study }) => 
     return (
         <div>
             <h3 className="mb-2">This study has multiple parts</h3>
-            {study.stages.map((stage, i) => <StudyPart key={stage.order} index={i} stage={stage} />)}
+            {(study.stages || []).map((stage, i) => <StudyPart key={stage.order} index={i} stage={stage} />)}
         </div>
     )
 }
