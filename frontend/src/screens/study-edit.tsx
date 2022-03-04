@@ -1,7 +1,7 @@
 import { React, useEffect, useParams, useHistory, useState } from '@common'
 import * as Yup from 'yup'
 import { useField } from 'formik'
-import { uniqBy } from 'lodash-es'
+import { uniqBy, omit } from 'lodash-es'
 import {
     LoadingAnimation, Alert, EditingForm as Form, Modal,
     InputField, SelectField, DateField, Row, Col, Icon,
@@ -9,7 +9,7 @@ import {
 } from '@components'
 import { StudyValidationSchema, TagLabels, isNewStudy, EditingStudy, isStudy } from '@models'
 import { NewStudy, Study, Stage, StudyUpdate } from '@api'
-import { useStudyApi, errorToString, useForceUpdate, pick, remove } from '@lib'
+import { useStudyApi, errorToString, useForceUpdate, pick, remove, formatDate } from '@lib'
 import { StudyModal } from './studies/modal'
 
 
@@ -26,6 +26,9 @@ const QualtricsFields = () => (
 const AvailableStageFields = {
     qualtrics: {
         component: QualtricsFields,
+        withoutConfig(fields: any): any {
+            return omit(fields, 'survey_id', 'secret_key')
+        },
         toConfig(fields: any): any {
             return { type: 'qualtrics', ...pick(fields, 'survey_id', 'secret_key') }
         },
@@ -99,6 +102,7 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate():void }> = ({ study,
         setError('')
         try {
             const reply = await api.addStage({ id: study.id, stage: {
+                ...StageFields.withoutConfig(stage),
                 config: StageFields.toConfig(stage),
             } })
             helpers.resetForm()
@@ -125,16 +129,23 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate():void }> = ({ study,
                         showControls
                         onCancel={onHide}
                         validationSchema={Yup.object().shape({
+                            title: Yup.string().required(),
                             survey_id: Yup.string().required(),
                             secret_key: Yup.string().required(),
+                            availableAfterDays: Yup.number().required(),
                         })}
                         initialValues={{
                             type: stageType,
                             url: '',
                             secret_key: '',
+                            availableAfterDays: 0,
                         }}
                     >
                         <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
+                        <InputField name="title" id="title" label="Title" />
+                        <InputField name="description" id="description" label="Description"  type="textarea" />
+                        <InputField name="availableAfterDays" id="available_after"
+                            type="number" label="Available After Days" hint="0 == immediately available" />
                         <SelectField
                             name="type" id="stage-type" label="Stage Type"
                             onChange={(opt) => setStageType(opt as StageType)}
@@ -152,18 +163,17 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate():void }> = ({ study,
 
 const StageRow:React.FC<{stage: Stage, onDelete(s: Stage): void}> = ({ stage, onDelete }) => {
     return (
-        <Row className="my-2 stage">
-            <Col sm={1}>{stage.order}</Col>
-            <Col sm={2}>{(stage.config as any)?.type }</Col>
-            <Col sm={8}
-                css={{ overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}
-            >{JSON.stringify(stage.config)}</Col>
-            <Col sm={1}><Icon icon="trash" onClick={(ev) => {
-                ev.preventDefault()
-                onDelete(stage)
-            }} />
-            </Col>
-        </Row>
+        <tr className="stage">
+            <td>{stage.title}</td>
+            <td>{stage.description}</td>
+            <td>{stage.availableAfterDays}</td>
+            <td>
+                <Icon icon="trash" onClick={(ev) => {
+                    ev.preventDefault()
+                    onDelete(stage)
+                }} />
+            </td>
+        </tr>
     )
 }
 
@@ -202,7 +212,20 @@ export const StudyStages: React.FC<{ study: EditingStudy, onUpdate(): void }> = 
                 {!study.stages?.length && (
                     <Col css={{ fontWeight: 'bold', color: meta.error ? 'red': 'unset' }}>No stages have been defined</Col>
                 )}
-                {(study.stages || [])?.map(stage => <StageRow onDelete={deleteStage} key={stage.id} stage={stage} />)}
+                <table className="table col-sm-12">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>After Days</th>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {(study.stages || [])?.map(stage =>
+                            <StageRow onDelete={deleteStage} key={stage.id} stage={stage} />)}
+                    </tbody>
+                </table>
             </Row>
         </React.Fragment>
     )
@@ -212,6 +235,7 @@ export const StudyStages: React.FC<{ study: EditingStudy, onUpdate(): void }> = 
 function EditStudy() {
     const history = useHistory()
     const api = useStudyApi()
+
     const [error, setError] = useState('')
     const reRender = useForceUpdate()
     const [ study, setStudy ] = useState<EditingStudy|null>()
@@ -231,6 +255,7 @@ function EditStudy() {
             setTimeout(() => { document.querySelector<HTMLInputElement>('#participants-title')?.focus() }, 100)
             return
         }
+
         api.getStudies().then(studies => {
             const study = studies.data?.find(s => s.id == Number(id))
             if (study) {

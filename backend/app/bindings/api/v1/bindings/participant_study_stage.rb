@@ -13,7 +13,7 @@ Swagger Codegen version: 2.4.13
 require 'date'
 
 module Api::V1::Bindings
-  class NewStage
+  class ParticipantStudyStage
     # An integer that describes the sort order for this stage
     attr_accessor :order
 
@@ -26,8 +26,11 @@ module Api::V1::Bindings
     # How many days after previous stage will this become available
     attr_accessor :available_after_days
 
-    # The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
-    attr_accessor :config
+    # Has the stage been launched
+    attr_accessor :is_completed
+
+    # Can the stage be launched
+    attr_accessor :is_launchable
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -36,7 +39,8 @@ module Api::V1::Bindings
         :'title' => :'title',
         :'description' => :'description',
         :'available_after_days' => :'available_after_days',
-        :'config' => :'config'
+        :'is_completed' => :'is_completed',
+        :'is_launchable' => :'is_launchable'
       }
     end
 
@@ -47,7 +51,8 @@ module Api::V1::Bindings
         :'title' => :'String',
         :'description' => :'String',
         :'available_after_days' => :'Integer',
-        :'config' => :'Object'
+        :'is_completed' => :'BOOLEAN',
+        :'is_launchable' => :'BOOLEAN'
       }
     end
 
@@ -75,8 +80,12 @@ module Api::V1::Bindings
         self.available_after_days = attributes[:'available_after_days']
       end
 
-      if attributes.has_key?(:'config')
-        self.config = attributes[:'config']
+      if attributes.has_key?(:'is_completed')
+        self.is_completed = attributes[:'is_completed']
+      end
+
+      if attributes.has_key?(:'is_launchable')
+        self.is_launchable = attributes[:'is_launchable']
       end
     end
 
@@ -84,17 +93,12 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @config.nil?
-        invalid_properties.push('invalid value for "config", config cannot be nil.')
-      end
-
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @config.nil?
       true
     end
 
@@ -107,7 +111,8 @@ module Api::V1::Bindings
           title == o.title &&
           description == o.description &&
           available_after_days == o.available_after_days &&
-          config == o.config
+          is_completed == o.is_completed &&
+          is_launchable == o.is_launchable
     end
 
     # @see the `==` method
@@ -119,7 +124,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [order, title, description, available_after_days, config].hash
+      [order, title, description, available_after_days, is_completed, is_launchable].hash
     end
 
     # Builds the object from hash

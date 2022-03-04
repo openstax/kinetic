@@ -16,8 +16,11 @@ class LaunchPad
       ActiveRecord::Base.transaction do
         raise(LaunchError, 'You have already completed this study.') if launched_study.completed?
 
-        launch = user.launch_next_stage!(study)
-        launch.stage.launcher(user_id).url
+        stage = study.next_stage_for_user(user)
+        raise 'No stage to launch exists' if stage.nil?
+
+        stage.launch_by_user!(user)
+        stage.launcher(user_id).url
       end
     end || raise('An error occurred when building a launch url')
   end

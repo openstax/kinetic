@@ -4,6 +4,7 @@ class Study < ApplicationRecord
   has_many :study_researchers, dependent: :destroy
   has_many :researchers, through: :study_researchers, dependent: :destroy
   has_many :stages, dependent: :destroy
+  has_many :launched_stages, through: :stages
   has_many :launched_studies
 
   has_one  :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
@@ -27,6 +28,23 @@ class Study < ApplicationRecord
 
   def can_delete?
     launched_studies.none?
+  end
+
+  def next_launchable_stage(user)
+    launched_stage_ids = launched_stages.where(user_id: user.id).complete.pluck(:stage_id)
+    stages
+      .where.not(id: launched_stage_ids)
+      .order(:order)
+      .find { |stage| stage.launchable_by_user?(user) }
+  end
+
+  def next_stage_for_user(user)
+    launches = launched_stages.where(user_id: user.id)
+    incomplete_launch = launches.find(&:incomplete?)
+
+    return incomplete_launch.stage if incomplete_launch.present?
+
+    next_launchable_stage(user)
   end
 
 end

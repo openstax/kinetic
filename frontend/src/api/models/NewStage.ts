@@ -20,6 +20,30 @@ import { exists, mapValues } from '../runtime';
  */
 export interface NewStage {
     /**
+     * An integer that describes the sort order for this stage
+     * @type {number}
+     * @memberof NewStage
+     */
+    readonly order?: number;
+    /**
+     * The name of the stage
+     * @type {string}
+     * @memberof NewStage
+     */
+    title?: string;
+    /**
+     * The longer description shown to participants
+     * @type {string}
+     * @memberof NewStage
+     */
+    description?: string;
+    /**
+     * How many days after previous stage will this become available
+     * @type {number}
+     * @memberof NewStage
+     */
+    availableAfterDays?: number;
+    /**
      * The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
      * @type {object}
      * @memberof NewStage
@@ -37,6 +61,10 @@ export function NewStageFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
+        'order': !exists(json, 'order') ? undefined : json['order'],
+        'title': !exists(json, 'title') ? undefined : json['title'],
+        'description': !exists(json, 'description') ? undefined : json['description'],
+        'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
         'config': json['config'],
     };
 }
@@ -50,6 +78,9 @@ export function NewStageToJSON(value?: NewStage | null): any {
     }
     return {
         
+        'title': value.title,
+        'description': value.description,
+        'available_after_days': value.availableAfterDays,
         'config': value.config,
     };
 }

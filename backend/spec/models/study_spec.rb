@@ -25,6 +25,44 @@ RSpec.describe Study, type: :model do
     end
   end
 
+  describe '#next_stage_for_user' do
+    let(:study) { create(:study, num_stages: 2) }
+    let(:user) { User.new('00000000-0000-0000-0000-000000000001') }
+
+    it 'picks an launched but not landed stage' do
+      stage = study.stages.first
+      stage.launch_by_user!(user)
+      expect(study.next_stage_for_user(user)).to eq study.stages.first
+    end
+
+    describe 'when prior stage is complete' do
+      before do
+        study.stages.first.launch_by_user!(user).completed!
+      end
+
+      it 'selects first uncompleted stage' do
+        expect(study.next_stage_for_user(user)).to eq study.stages.second
+      end
+
+      describe 'when next stage has a availability filter' do
+        before do
+          study.stages.second.update_attribute(:available_after_days, 10)
+        end
+
+        it 'does not launch when not reached' do
+          expect(study.next_stage_for_user(user)).to be_nil
+        end
+
+        it 'launches when time is elapsed' do
+          Timecop.freeze(15.days.from_now) do
+            expect(study.next_stage_for_user(user)).to eq study.stages.second
+          end
+        end
+      end
+    end
+
+  end
+
   def expect_query_results(query, results)
     expect(query.all.map(&:title_for_researchers)).to contain_exactly(
       *results.map(&:title_for_researchers)

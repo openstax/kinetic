@@ -27,6 +27,39 @@ class Api::V1::Participant::StudiesSwagger
     end
   end
 
+  swagger_schema :ParticipantStudyStage do
+    property :order do
+      key :type, :integer
+      key :description, 'An integer that describes the sort order for this stage'
+      key :readOnly, true
+    end
+    property :title do
+      key :type, :string
+      key :description, 'The name of the stage'
+      key :readOnly, true
+    end
+    property :description do
+      key :type, :string
+      key :description, 'The longer description shown to participants'
+      key :readOnly, true
+    end
+    property :available_after_days do
+      key :type, :integer
+      key :description, 'How many days after previous stage will this become available'
+      key :readOnly, true
+    end
+    property :is_completed do
+      key :type, :boolean
+      key :description, 'Has the stage been launched'
+      key :readOnly, true
+    end
+    property :is_launchable do
+      key :type, :boolean
+      key :description, 'Can the stage be launched'
+      key :readOnly, true
+    end
+  end
+
   COMMON_REQUIRED_STUDY_FIELDS = [
     :title, :short_description, :tags, :duration_minutes
   ].freeze
@@ -90,6 +123,13 @@ class Api::V1::Participant::StudiesSwagger
       key :description, 'The study\'s researchers.'
       items do
         key :$ref, :PublicResearcher
+      end
+    end
+    property :stages do
+      key :type, :array
+      key :description, 'The study\'s stages.'
+      items do
+        key :$ref, :ParticipantStudyStage
       end
     end
     property :is_mandatory do

@@ -50,6 +50,9 @@ module Api::V1::Bindings
     # The study's researchers.
     attr_accessor :researchers
 
+    # The study's stages.
+    attr_accessor :stages
+
     # Mandatory studies must be completed by all users
     attr_accessor :is_mandatory
 
@@ -68,6 +71,7 @@ module Api::V1::Bindings
         :'closes_at' => :'closes_at',
         :'opted_out_at' => :'opted_out_at',
         :'researchers' => :'researchers',
+        :'stages' => :'stages',
         :'is_mandatory' => :'is_mandatory'
       }
     end
@@ -87,6 +91,7 @@ module Api::V1::Bindings
         :'closes_at' => :'DateTime',
         :'opted_out_at' => :'DateTime',
         :'researchers' => :'Array<PublicResearcher>',
+        :'stages' => :'Array<ParticipantStudyStage>',
         :'is_mandatory' => :'BOOLEAN'
       }
     end
@@ -151,6 +156,12 @@ module Api::V1::Bindings
         end
       end
 
+      if attributes.has_key?(:'stages')
+        if (value = attributes[:'stages']).is_a?(Array)
+          self.stages = value
+        end
+      end
+
       if attributes.has_key?(:'is_mandatory')
         self.is_mandatory = attributes[:'is_mandatory']
       end
@@ -211,6 +222,7 @@ module Api::V1::Bindings
           closes_at == o.closes_at &&
           opted_out_at == o.opted_out_at &&
           researchers == o.researchers &&
+          stages == o.stages &&
           is_mandatory == o.is_mandatory
     end
 
@@ -223,7 +235,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [id, title, short_description, long_description, tags, duration_minutes, participation_points, first_launched_at, completed_at, closes_at, opted_out_at, researchers, is_mandatory].hash
+      [id, title, short_description, long_description, tags, duration_minutes, participation_points, first_launched_at, completed_at, closes_at, opted_out_at, researchers, stages, is_mandatory].hash
     end
 
     # Builds the object from hash

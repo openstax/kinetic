@@ -3,20 +3,20 @@
 Rails.application.config.to_prepare do
 
   Api::V1::Bindings::ParticipantStudy.class_exec do
-    def self.create_from_model(model)
+    def self.create_from_model(model, user=nil)
       attributes =
         case model
         when LaunchedStudy
-          attributes_from_launched_study(model)
+          attributes_from_launched_study(model, user)
         when Study
-          attributes_from_study_model(model)
+          attributes_from_study_model(model, user)
         end
 
       new(attributes)
     end
 
-    def self.attributes_from_launched_study(model)
-      attributes_from_study_model(model.study).tap do |attributes|
+    def self.attributes_from_launched_study(model, user=nil)
+      attributes_from_study_model(model.study, user).tap do |attributes|
         attributes.merge!(
           model.attributes.with_indifferent_access.slice(
             :first_launched_at,
@@ -27,9 +27,14 @@ Rails.application.config.to_prepare do
       end
     end
 
-    def self.attributes_from_study_model(model)
+    def self.attributes_from_study_model(model, user=nil)
       model.attributes.tap do |attributes|
         attributes[:title] = model.title_for_participants
+        if user
+          attributes[:stages] = model.stages.map do |stage_model|
+            Api::V1::Bindings::ParticipantStudyStage.create_from_model(stage_model, user)
+          end
+        end
         attributes[:researchers] = model.researchers.map do |researcher_model|
           Api::V1::Bindings::PublicResearcher.create_from_model(researcher_model)
         end

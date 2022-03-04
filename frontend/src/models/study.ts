@@ -92,3 +92,6 @@ export function studyTypeName(study: SavedStudy): string {
     return ''
 }
 
+export function studyIsMultipart(study: ParticipantStudy): boolean {
+    return Boolean(study.stages && study.stages.length > 1)
+}
