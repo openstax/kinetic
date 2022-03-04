@@ -95,7 +95,7 @@ test('launching study and aborting it', async ({ page }) => {
     await page.click('testId=launch-study')
 
     await goToPage({ page, path: `/study/land/${studyId}?consent=false`, loginAs: 'user' })
-    await expect(page).not.toMatchText(/marked as complete/)
+    await expect(page).toMatchText(/you can retake/)
 
     await page.click('testId=view-studies')
     await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="false"]`)

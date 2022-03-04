@@ -48,6 +48,7 @@ const CompletedMessage:React.FC<{
                 <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
                     You‘ve completed a Kinetic activity.
                     {!aborted && ' This task will be marked as complete on your dashboard.'}
+                    {!consented && `Since you have chosen to not allow us to use your results in our research, you did not earn ${<Points study={study} /> }. You can retake the study and change that, if you wish` }
                 </h5>
                 <Button primary data-test-id="view-studies" onClick={onReturnClick}>Go back to dashboard</Button>
 
