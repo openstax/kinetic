@@ -27,7 +27,7 @@ const LaunchStudyButton: React.FC<{ study: ParticipantStudy }> = ({ study }) => 
         )
     }
 
-    const action = (study.stages?.length && !study.stages[0].isCompleted) ? 'Begin' : 'Continue'
+    const action = (study.stages?.length && !study.stages[0].isCompleted) ?'Begin' : 'Continue'
     return (
         <Button
             busy={isBusy}
@@ -48,11 +48,10 @@ const PartTitle:React.FC<{ index: number, days?: number }> = ({ index, days }) =
     return (
         <span>
             Part # {index+1} will become available {
-                days ? `${days} days` : 'immediatly'
+                days ? `${Math.round(days)} days` : 'immediatly'
             } after the previous part is completed
         </span>
     )
-
 }
 
 const StudyPart:React.FC<{ stage: ParticipantStudyStage, index: number }> = ({ index, stage }) => {
@@ -76,7 +75,7 @@ const StudyMultiPartInfo:React.FC<{ study: ParticipantStudy }> = ({ study }) => 
     return (
         <div>
             <h3 className="mb-2">This study has multiple parts</h3>
-            {(study.stages || []).map((stage, i) => <StudyPart key={stage.order} index={i} stage={stage} />)}
+            {study.stages.map((stage, i) => <StudyPart key={stage.order} index={i} stage={stage} />)}
         </div>
     )
 }

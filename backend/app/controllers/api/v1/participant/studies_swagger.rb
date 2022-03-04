@@ -44,7 +44,7 @@ class Api::V1::Participant::StudiesSwagger
       key :readOnly, true
     end
     property :available_after_days do
-      key :type, :integer
+      key :type, :number
       key :description, 'How many days after previous stage will this become available'
       key :readOnly, true
     end

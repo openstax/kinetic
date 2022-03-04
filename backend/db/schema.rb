@@ -81,7 +81,7 @@ ActiveRecord::Schema.define(version: 2022_03_03_160442) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "title"
     t.string "description"
-    t.integer "available_after_days", default: 0, null: false
+    t.float "available_after_days", default: 0.0, null: false
     t.index ["order", "study_id"], name: "index_stages_on_order_and_study_id", unique: true
     t.index ["study_id"], name: "index_stages_on_study_id"
   end

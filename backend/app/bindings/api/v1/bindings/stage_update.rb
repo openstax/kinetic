@@ -46,7 +46,7 @@ module Api::V1::Bindings
         :'order' => :'Integer',
         :'title' => :'String',
         :'description' => :'String',
-        :'available_after_days' => :'Integer',
+        :'available_after_days' => :'Float',
         :'config' => :'Object'
       }
     end

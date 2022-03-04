@@ -39,7 +39,7 @@ class Api::V1::Researcher::StagesSwagger
       key :description, 'The longer description shown to participants'
     end
     property :available_after_days do
-      key :type, :integer
+      key :type, :number
       key :description, 'How many days after previous stage will this become available'
     end
     property :config do

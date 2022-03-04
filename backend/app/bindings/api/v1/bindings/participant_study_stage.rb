@@ -50,7 +50,7 @@ module Api::V1::Bindings
         :'order' => :'Integer',
         :'title' => :'String',
         :'description' => :'String',
-        :'available_after_days' => :'Integer',
+        :'available_after_days' => :'Float',
         :'is_completed' => :'BOOLEAN',
         :'is_launchable' => :'BOOLEAN'
       }

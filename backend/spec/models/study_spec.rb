@@ -46,15 +46,18 @@ RSpec.describe Study, type: :model do
 
       describe 'when next stage has a availability filter' do
         before do
-          study.stages.second.update_attribute(:available_after_days, 10)
+          study.stages.second.update_attribute(:available_after_days, 0.001) # approx 1.5 mins
         end
 
         it 'does not launch when not reached' do
           expect(study.next_stage_for_user(user)).to be_nil
+          Timecop.freeze(1.minute.from_now) do
+            expect(study.next_stage_for_user(user)).to be_nil
+          end
         end
 
         it 'launches when time is elapsed' do
-          Timecop.freeze(15.days.from_now) do
+          Timecop.freeze(2.minute.from_now) do
             expect(study.next_stage_for_user(user)).to eq study.stages.second
           end
         end
