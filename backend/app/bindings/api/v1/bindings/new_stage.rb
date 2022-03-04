@@ -14,12 +14,28 @@ require 'date'
 
 module Api::V1::Bindings
   class NewStage
+    # An integer that describes the sort order for this stage
+    attr_accessor :order
+
+    # The name of the stage
+    attr_accessor :title
+
+    # The longer description shown to participants
+    attr_accessor :description
+
+    # How many days after previous stage will this become available
+    attr_accessor :available_after_days
+
     # The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
     attr_accessor :config
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
+        :'order' => :'order',
+        :'title' => :'title',
+        :'description' => :'description',
+        :'available_after_days' => :'available_after_days',
         :'config' => :'config'
       }
     end
@@ -27,6 +43,10 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.swagger_types
       {
+        :'order' => :'Integer',
+        :'title' => :'String',
+        :'description' => :'String',
+        :'available_after_days' => :'Float',
         :'config' => :'Object'
       }
     end
@@ -38,6 +58,22 @@ module Api::V1::Bindings
 
       # convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h| h[k.to_sym] = v }
+
+      if attributes.has_key?(:'order')
+        self.order = attributes[:'order']
+      end
+
+      if attributes.has_key?(:'title')
+        self.title = attributes[:'title']
+      end
+
+      if attributes.has_key?(:'description')
+        self.description = attributes[:'description']
+      end
+
+      if attributes.has_key?(:'available_after_days')
+        self.available_after_days = attributes[:'available_after_days']
+      end
 
       if attributes.has_key?(:'config')
         self.config = attributes[:'config']
@@ -67,6 +103,10 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
+          order == o.order &&
+          title == o.title &&
+          description == o.description &&
+          available_after_days == o.available_after_days &&
           config == o.config
     end
 
@@ -79,7 +119,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [config].hash
+      [order, title, description, available_after_days, config].hash
     end
 
     # Builds the object from hash

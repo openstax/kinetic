@@ -22,22 +22,4 @@ class User
     LaunchedStage.where(user_id: id).joins(:stage).where(stage: { study_id: study.id })
   end
 
-  def eligible_studies
-    Study.available
-  end
-
-  def launch_next_stage!(study)
-    incomplete_launched_stage = launched_stages(study: study).incomplete.first
-    launch = nil
-    if incomplete_launched_stage
-      launch = incomplete_launched_stage
-    else
-      completed_stage_ids = launched_stages(study: study).map(&:stage_id)
-      stage = study.stages.where.not(id: completed_stage_ids).order(:order).first
-      raise 'No stage to launch exists' if stage.nil?
-
-      launch = LaunchedStage.create(stage_id: stage.id, user_id: id)
-    end
-    launch
-  end
 end

@@ -6,6 +6,8 @@ FactoryBot.define do
       path { SecureRandom.hex(6) }
     end
 
+    available_after_days { 0 }
+
     config do
       {
         type: 'qualtrics',

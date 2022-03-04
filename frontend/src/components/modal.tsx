@@ -37,7 +37,6 @@ const Modal: ModalI = ({
         <OverlayModal
             {...props}
             show={show}
-            containerClassName="model-open"
             className={cx(className, 'modal', 'fade', {
                 show,
             })}

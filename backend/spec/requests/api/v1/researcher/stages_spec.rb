@@ -64,12 +64,12 @@ RSpec.describe 'Stages', type: :request, api: :v1 do
         )
       end
 
-      it 'disallows a second stage for the moment' do
+      it 'allows adding a second stage' do
         api_post path, params: { stage: valid_new_stage_attributes }
         expect(response).to have_http_status(:created)
         api_post path, params: { stage: valid_new_stage_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(study.stages.reload.count).to eq 1
+        expect(response).to have_http_status(:created)
+        expect(study.stages.reload.count).to eq 2
       end
     end
   end

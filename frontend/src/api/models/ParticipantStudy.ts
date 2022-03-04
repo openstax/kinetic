@@ -14,6 +14,10 @@
 
 import { exists, mapValues } from '../runtime';
 import {
+    ParticipantStudyStage,
+    ParticipantStudyStageFromJSON,
+    ParticipantStudyStageFromJSONTyped,
+    ParticipantStudyStageToJSON,
     PublicResearcher,
     PublicResearcherFromJSON,
     PublicResearcherFromJSONTyped,
@@ -99,6 +103,12 @@ export interface ParticipantStudy {
      */
     researchers?: Array<PublicResearcher>;
     /**
+     * The study's stages.
+     * @type {Array<ParticipantStudyStage>}
+     * @memberof ParticipantStudy
+     */
+    stages?: Array<ParticipantStudyStage>;
+    /**
      * Mandatory studies must be completed by all users
      * @type {boolean}
      * @memberof ParticipantStudy
@@ -128,6 +138,7 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'closesAt': !exists(json, 'closes_at') ? undefined : (new Date(json['closes_at'])),
         'optedOutAt': !exists(json, 'opted_out_at') ? undefined : (new Date(json['opted_out_at'])),
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(PublicResearcherFromJSON)),
+        'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(ParticipantStudyStageFromJSON)),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
     };
 }
@@ -153,6 +164,7 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt.toISOString()),
         'opted_out_at': value.optedOutAt === undefined ? undefined : (value.optedOutAt.toISOString()),
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(PublicResearcherToJSON)),
+        'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(ParticipantStudyStageToJSON)),
         'is_mandatory': value.isMandatory,
     };
 }

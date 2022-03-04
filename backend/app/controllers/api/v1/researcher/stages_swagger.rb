@@ -24,15 +24,24 @@ class Api::V1::Researcher::StagesSwagger
     end
   end
 
-  add_properties(:Stage) do
+  add_properties(:Stage, :NewStage, :StageUpdate) do
     property :order do
       key :type, :integer
       key :description, 'An integer that describes the sort order for this stage'
       key :readOnly, true
     end
-  end
-
-  add_properties(:Stage, :NewStage, :StageUpdate) do
+    property :title do
+      key :type, :string
+      key :description, 'The name of the stage'
+    end
+    property :description do
+      key :type, :string
+      key :description, 'The longer description shown to participants'
+    end
+    property :available_after_days do
+      key :type, :number
+      key :description, 'How many days after previous stage will this become available'
+    end
     property :config do
       key :type, :object
       key :description,  'The configuration for a particular kind of stage, e.g. Qualtrics.  ' \

@@ -32,6 +32,24 @@ export interface Stage {
      */
     readonly order: number;
     /**
+     * The name of the stage
+     * @type {string}
+     * @memberof Stage
+     */
+    title?: string;
+    /**
+     * The longer description shown to participants
+     * @type {string}
+     * @memberof Stage
+     */
+    description?: string;
+    /**
+     * How many days after previous stage will this become available
+     * @type {number}
+     * @memberof Stage
+     */
+    availableAfterDays?: number;
+    /**
      * The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
      * @type {object}
      * @memberof Stage
@@ -51,6 +69,9 @@ export function StageFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
         
         'id': json['id'],
         'order': json['order'],
+        'title': !exists(json, 'title') ? undefined : json['title'],
+        'description': !exists(json, 'description') ? undefined : json['description'],
+        'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
         'config': json['config'],
     };
 }
@@ -64,6 +85,9 @@ export function StageToJSON(value?: Stage | null): any {
     }
     return {
         
+        'title': value.title,
+        'description': value.description,
+        'available_after_days': value.availableAfterDays,
         'config': value.config,
     };
 }

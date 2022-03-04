@@ -35,10 +35,11 @@ test('can create and edit a study', async ({ page }) => {
     await page.fill('[name=titleForParticipants]', `${title} - UPDATED`)
 
     await page.click('testId=add-stage')
+    await page.fill('input[name=title]', `${title} stage`)
     await page.fill('[name=survey_id]', 'QR_1234')
     await page.fill('[name=secret_key]', '1234')
     await page.click('testId=add-stage-modal >> testId=form-save-btn')
-    expect(await page.textContent('.row.stage')).toContain('qualtrics')
+    expect(await page.textContent('tr.stage')).toContain(`${title} stage`)
 
     await page.click('testId=form-save-btn')
     await page.waitForLoadState('networkidle')
