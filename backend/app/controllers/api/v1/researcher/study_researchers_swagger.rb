@@ -4,24 +4,26 @@ class Api::V1::Researcher::StudyResearchersSwagger
   include Swagger::Blocks
   include OpenStax::Swagger::SwaggerBlocksExtensions
 
-  swagger_schema :Researcher do
-    key :required, [:user_id]
-    property :user_id do
-      key :type, :string
-      key :format, 'uuid'
-      key :description, 'The researcher\'s user ID.'
-    end
-    property :name do
-      key :type, :string
-      key :description, 'The researcher\'s name.'
-    end
-    property :institution do
-      key :type, :string
-      key :description, 'The researcher\'s institution.'
-    end
-    property :bio do
-      key :type, :string
-      key :description, 'The researcher\'s bio.'
+  swagger_component  do
+    schema :Researcher do
+      key :required, [:user_id]
+      property :user_id do
+        key :type, :string
+        key :format, 'uuid'
+        key :description, 'The researcher\'s user ID.'
+      end
+      property :name do
+        key :type, :string
+        key :description, 'The researcher\'s name.'
+      end
+      property :institution do
+        key :type, :string
+        key :description, 'The researcher\'s institution.'
+      end
+      property :bio do
+        key :type, :string
+        key :description, 'The researcher\'s bio.'
+      end
     end
   end
 
@@ -30,9 +32,9 @@ class Api::V1::Researcher::StudyResearchersSwagger
       key :summary, 'Add a researcher to a study'
       key :description, 'Add a researcher to a study'
       key :operationId, 'addResearcherToStudy'
-      key :produces, [
-        'application/json'
-      ]
+      # key :produces, [
+      #   'application/json'
+      # ]
       key :tags, [
         'Studies'
       ]
@@ -41,15 +43,14 @@ class Api::V1::Researcher::StudyResearchersSwagger
         key :in, :path
         key :description, 'ID of the study.'
         key :required, true
-        key :type, :string
+        key :schema, { type: :integer }
       end
       parameter do
         key :name, :user_id
         key :in, :path
         key :description, 'UUID of the user to add as a researcher'
         key :required, true
-        key :type, :string
-        key :format, 'uuid'
+        key :schema, { type: :string, format: 'uuid' }
       end
       response 200 do
         key :description, 'Success.'
@@ -66,9 +67,9 @@ class Api::V1::Researcher::StudyResearchersSwagger
       key :summary, 'Remove a researcher from a study'
       key :description, 'Remove a researcher from a study.  Cannot remove the last researcher.'
       key :operationId, 'removeResearcherFromStudy'
-      key :produces, [
-        'application/json'
-      ]
+      # key :produces, [
+      #   'application/json'
+      # ]
       key :tags, [
         'Studies'
       ]
@@ -77,15 +78,14 @@ class Api::V1::Researcher::StudyResearchersSwagger
         key :in, :path
         key :description, 'ID of the study.'
         key :required, true
-        key :type, :string
+        key :schema, { type: :integer }
       end
       parameter do
         key :name, :user_id
         key :in, :path
         key :description, 'UUID of the user to remove as a researcher'
         key :required, true
-        key :type, :string
-        key :format, 'uuid'
+        key :schema, { type: :string, format: 'uuid' }
       end
       response 200 do
         key :description, 'Success.'

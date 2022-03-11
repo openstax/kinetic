@@ -6,10 +6,10 @@ class Api::V1::SwaggerController < ApplicationController
   include ::Swagger::Blocks
 
   ACCEPT_HEADER = 'application/json'
-  BASE_PATH = '/api/v0'
+  BASE_PATH = '/api/v1'
 
   swagger_root do
-    key :swagger, '2.0'
+    key :openapi, '3.0.0'
     info do
       key :version, '0.1.0'
       key :title, 'OpenStax Kinetic API'
@@ -34,9 +34,10 @@ class Api::V1::SwaggerController < ApplicationController
       key :name, 'Kinetic'
       key :description, 'Kinetic endpoints'
     end
-    key :basePath, BASE_PATH
-    key :consumes, [ACCEPT_HEADER]
-    key :produces, ['application/json']
+    # key :host, 'localhost'
+    # key :basePath, BASE_PATH
+    # key :consumes, [ACCEPT_HEADER]
+    # key :produces, ['application/json']
   end
 
   SWAGGERED_CLASSES = [

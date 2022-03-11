@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * OpenStax Kinetic API
- * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v0/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
+ * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v1/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
  *
  * The version of the OpenAPI document: 0.1.0
  * 
@@ -18,11 +18,13 @@ import {
     ParticipantStudyStageFromJSON,
     ParticipantStudyStageFromJSONTyped,
     ParticipantStudyStageToJSON,
+} from './ParticipantStudyStage';
+import {
     PublicResearcher,
     PublicResearcherFromJSON,
     PublicResearcherFromJSONTyped,
     PublicResearcherToJSON,
-} from './';
+} from './PublicResearcher';
 
 /**
  * 
@@ -35,19 +37,19 @@ export interface ParticipantStudy {
      * @type {number}
      * @memberof ParticipantStudy
      */
-    id: number;
+    id?: number;
     /**
      * The study title that participants see.
      * @type {string}
      * @memberof ParticipantStudy
      */
-    title: string;
+    title?: string;
     /**
      * The shorty study description that participants see.
      * @type {string}
      * @memberof ParticipantStudy
      */
-    shortDescription: string;
+    shortDescription?: string;
     /**
      * The long study description that participants see.
      * @type {string}
@@ -59,13 +61,13 @@ export interface ParticipantStudy {
      * @type {Array<string>}
      * @memberof ParticipantStudy
      */
-    tags: Array<string>;
+    tags?: Array<string>;
     /**
      * The expected study duration in minutes.
      * @type {number}
      * @memberof ParticipantStudy
      */
-    durationMinutes: number;
+    durationMinutes?: number;
     /**
      * How many points will be awarded for participation in the study
      * @type {number}
@@ -126,12 +128,12 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'id': json['id'],
-        'title': json['title'],
-        'shortDescription': json['short_description'],
+        'id': !exists(json, 'id') ? undefined : json['id'],
+        'title': !exists(json, 'title') ? undefined : json['title'],
+        'shortDescription': !exists(json, 'short_description') ? undefined : json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
-        'tags': json['tags'],
-        'durationMinutes': json['duration_minutes'],
+        'tags': !exists(json, 'tags') ? undefined : json['tags'],
+        'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
         'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
         'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
@@ -168,5 +170,4 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'is_mandatory': value.isMandatory,
     };
 }
-
 

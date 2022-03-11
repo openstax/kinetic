@@ -4,16 +4,37 @@ class Api::V1::Researcher::StagesSwagger
   include Swagger::Blocks
   include OpenStax::Swagger::SwaggerBlocksExtensions
 
-  swagger_schema :NewStage do
-    key :required, %w[config]
-  end
+  swagger_component  do
+    schema :NewStage do
+      key :required, %w[config]
+    end
 
-  swagger_schema :StageUpdate do
-    key :required, %w[id config]
-  end
+    schema :StageUpdate do
+      key :required, %w[id config]
+    end
 
-  swagger_schema :Stage do
-    key :required, %w[id order config return_url]
+    schema :Stage do
+      key :required, %w[id order config return_url]
+    end
+
+    schema :QualtricsStage do
+      key :required, %w[type url secret_key]
+      property :type do
+        key :type, :string
+        key :description, 'The type of this stage config'
+        key :enum, %w[qualtrics]
+      end
+      property :url do
+        key :type, :string
+        key :description, 'The Qualtrics URL that this stage launches to'
+        key :minLength, 1
+      end
+      property :secret_key do
+        key :type, :string
+        key :description, 'The survey secret used to encrypt information we send to Qualtrics'
+        key :minLength, 1
+      end
+    end
   end
 
   add_properties(:Stage) do
@@ -49,33 +70,13 @@ class Api::V1::Researcher::StagesSwagger
     end
   end
 
-  swagger_schema :QualtricsStage do
-    key :required, %w[type url secret_key]
-    property :type do
-      key :type, :string
-      key :description, 'The type of this stage config'
-      key :enum, %w[qualtrics]
-    end
-    property :url do
-      key :type, :string
-      key :description, 'The Qualtrics URL that this stage launches to'
-      key :minLength, 1
-    end
-    property :secret_key do
-      key :type, :string
-      key :description, 'The survey secret used to encrypt information we send to Qualtrics'
-      key :minLength, 1
-    end
-  end
+
 
   swagger_path '/researcher/studies/{id}/stages' do
     operation :post do
       key :summary, 'Add a stage to a study'
       key :description, 'Add a stage to study'
       key :operationId, 'addStage'
-      key :produces, [
-        'application/json'
-      ]
       key :tags, [
         'Studies'
       ]
@@ -84,21 +85,23 @@ class Api::V1::Researcher::StagesSwagger
         key :in, :path
         key :description, 'The study ID'
         key :required, true
-        key :type, :integer
+        key :schema, { type: :integer }
       end
-      parameter do
-        key :name, :stage
-        key :in, :body
+      request_body do
         key :description, 'The stage data'
-        key :required, true
-        schema do
-          key :$ref, :NewStage
+        content 'application/json' do
+          schema do
+            property :stage do
+              key :required, true
+              key :$ref, :NewStage
+            end
+          end
         end
       end
       response 201 do
         key :description, 'Created.  Returns the created stage.'
-        schema do
-          key :$ref, :Stage
+        content 'application/json' do
+          schema { key :$ref, :Stage }
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
@@ -113,9 +116,6 @@ class Api::V1::Researcher::StagesSwagger
       key :summary, 'Get a stage'
       key :description, 'Get a stage'
       key :operationId, 'getStage'
-      key :produces, [
-        'application/json'
-      ]
       key :tags, [
         'Studies'
       ]
@@ -124,12 +124,12 @@ class Api::V1::Researcher::StagesSwagger
         key :in, :path
         key :description, 'ID of the stage to get.'
         key :required, true
-        key :type, :integer
+        key :schema, { type: :integer }
       end
       response 200 do
         key :description, 'Success.  Returns the stage.'
-        schema do
-          key :$ref, :Stage
+        content 'application/json' do
+          schema { key :$ref, :Stage }
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
@@ -144,9 +144,6 @@ class Api::V1::Researcher::StagesSwagger
       key :summary, 'Update a stage'
       key :description, 'Update a stage'
       key :operationId, 'updateStage'
-      key :produces, [
-        'application/json'
-      ]
       key :tags, [
         'Studies'
       ]
@@ -155,21 +152,22 @@ class Api::V1::Researcher::StagesSwagger
         key :in, :path
         key :description, 'ID of the stage to update.'
         key :required, true
-        key :type, :integer
+        key :schema, { type: :integer }
       end
-      parameter do
-        key :name, :stage
-        key :in, :body
+
+      request_body do
         key :description, 'The stage updates.'
         key :required, true
-        schema do
-          key :$ref, :StageUpdate
+        content 'application/json' do
+          schema do
+            key :$ref, :StageUpdate
+          end
         end
       end
       response 200 do
         key :description, 'Success.  Returns the updated stage.'
-        schema do
-          key :$ref, :Stage
+        content 'application/json' do
+          schema { key :$ref, :Stage }
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
@@ -184,9 +182,6 @@ class Api::V1::Researcher::StagesSwagger
       key :summary, 'Delete a stage'
       key :description, 'Delete a stage'
       key :operationId, 'deleteStage'
-      key :produces, [
-        'application/json'
-      ]
       key :tags, [
         'Studies'
       ]
@@ -195,7 +190,7 @@ class Api::V1::Researcher::StagesSwagger
         key :in, :path
         key :description, 'ID of the stage to delete.'
         key :required, true
-        key :type, :integer
+        key :schema, { type: :integer }
       end
       response 200 do
         key :description, 'Success.'

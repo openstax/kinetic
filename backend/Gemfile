@@ -49,7 +49,8 @@ gem 'openstax_api', '9.4.1'
 
 gem 'openstax_swagger',
     github: 'openstax/swagger-rails',
-    ref: '1df972b4bae1ea1ae7dd2ecac4804b4bf2642ee9'
+    path: '../../swagger-rails'
+    # ref: '1df972b4bae1ea1ae7dd2ecac4804b4bf2642ee9'
 
 gem 'openstax_auth',
     github: 'openstax/auth-rails',

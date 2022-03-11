@@ -1,7 +1,10 @@
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { React, useEffect, useState } from '@common'
 import { colors } from '../theme'
-import { ParticipantStudy, LandStudyAbortedEnum, LandStudyRequest, StudiesApi } from '@api'
+import { ParticipantStudy,
+
+//         LandStudyAbortedEnum, LandStudyRequest,
+         StudiesApi } from '@api'
 import { Button, IncorrectUser, Box, LoadingAnimation, ErrorPage, KineticWaves } from '@components'
 import { useQueryParam, useCurrentUser, useStudyApi, isIframed, sendMessageToParent } from '@lib'
 

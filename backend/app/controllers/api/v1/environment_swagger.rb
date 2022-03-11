@@ -3,6 +3,62 @@
 class Api::V1::EnvironmentSwagger
   include Swagger::Blocks
   include OpenStax::Swagger::SwaggerBlocksExtensions
+
+  swagger_component do
+
+    schema :EnvironmentUser do
+      key :required, %w[is_researcher is_administrator]
+      property :user_id do
+        key :type, :string
+        key :format, 'uuid'
+        key :description, 'The user\'s ID.'
+        key :readOnly, true
+      end
+      property :is_administrator do
+        key :type, :boolean
+        key :description, 'If true, the user is an administrator'
+        key :readOnly, true
+      end
+      property :is_researcher do
+        key :type, :boolean
+        key :description, 'If true, the user is a researcher'
+        key :readOnly, true
+      end
+    end
+
+    schema :Environment do
+      key :required, %w[user accounts_env_name homepage_url rewards_schedule banners_schedule]
+      property :user do
+        key :$ref, :EnvironmentUser
+      end
+      property :accounts_env_name do
+        key :type, :string
+        key :readOnly, true
+      end
+      property :homepage_url do
+        key :type, :string
+        key :readOnly, true
+      end
+      property :rewards_schedule do
+        key :type, :array
+        key :minLength, 1
+        items do
+          key :$ref, :RewardsScheduleSegment
+        end
+        key :description, 'The tags of the study object, used for grouping and filtering.'
+      end
+      property :banners_schedule do
+        key :type, :array
+        key :minLength, 1
+        items do
+          key :$ref, :BannerMessage
+        end
+        key :description, 'Banners that should be displayed to the user'
+      end
+    end
+
+  end
+
   add_properties(:RewardsScheduleSegment) do
     key :required, %w[prize points start_at end_at]
     property :prize do
@@ -50,56 +106,6 @@ class Api::V1::EnvironmentSwagger
       key :description, 'The message that should be displayed'
     end
   end
-  swagger_schema :EnvironmentUser do
-    key :required, %w[is_researcher is_administrator]
-    property :user_id do
-      key :type, :string
-      key :format, 'uuid'
-      key :description, 'The user\'s ID.'
-      key :readOnly, true
-    end
-    property :is_administrator do
-      key :type, :boolean
-      key :description, 'If true, the user is an administrator'
-      key :readOnly, true
-    end
-    property :is_researcher do
-      key :type, :boolean
-      key :description, 'If true, the user is a researcher'
-      key :readOnly, true
-    end
-  end
-
-  swagger_schema :Environment do
-    key :required, %w[user accounts_env_name homepage_url rewards_schedule banners_schedule]
-    property :user do
-      key :$ref, :EnvironmentUser
-    end
-    property :accounts_env_name do
-      key :type, :string
-      key :readOnly, true
-    end
-    property :homepage_url do
-      key :type, :string
-      key :readOnly, true
-    end
-    property :rewards_schedule do
-      key :type, :array
-      key :minLength, 1
-      items do
-        key :$ref, :RewardsScheduleSegment
-      end
-      key :description, 'The tags of the study object, used for grouping and filtering.'
-    end
-    property :banners_schedule do
-      key :type, :array
-      key :minLength, 1
-      items do
-        key :$ref, :BannerMessage
-      end
-      key :description, 'Banners that should be displayed to the user'
-    end
-  end
 
   swagger_path '/environment' do
     operation :get do
@@ -108,17 +114,15 @@ class Api::V1::EnvironmentSwagger
         Get info about the deployment environment
       DESC
       key :operationId, 'getEnvironment'
-      key :produces, [
-        'application/json'
-      ]
       key :tags, [
         'Environment'
       ]
       response 200 do
         key :description, 'Success.'
-        schema do
-          key :$ref, :Environment
+        content 'application/json' do
+          schema { key :$ref, :Environment }
         end
+        # content 'application/json', { schema do :$ref => :Environment end
       end
       extend Api::V1::SwaggerResponses::UnprocessableEntityError
       extend Api::V1::SwaggerResponses::ServerError

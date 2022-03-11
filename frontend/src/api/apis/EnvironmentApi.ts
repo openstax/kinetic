@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * OpenStax Kinetic API
- * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v0/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
+ * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v1/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
  *
  * The version of the OpenAPI document: 0.1.0
  * 
@@ -14,11 +14,6 @@
 
 
 import * as runtime from '../runtime';
-import {
-    Environment,
-    EnvironmentFromJSON,
-    EnvironmentToJSON,
-} from '../models';
 
 /**
  * 
@@ -29,7 +24,7 @@ export class EnvironmentApi extends runtime.BaseAPI {
      * Get info about the deployment environment 
      * Get info about the deployment environment
      */
-    async getEnvironmentRaw(): Promise<runtime.ApiResponse<Environment>> {
+    async getEnvironmentRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -39,18 +34,17 @@ export class EnvironmentApi extends runtime.BaseAPI {
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        });
+        }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => EnvironmentFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * Get info about the deployment environment 
      * Get info about the deployment environment
      */
-    async getEnvironment(): Promise<Environment> {
-        const response = await this.getEnvironmentRaw();
-        return await response.value();
+    async getEnvironment(initOverrides?: RequestInit): Promise<void> {
+        await this.getEnvironmentRaw(initOverrides);
     }
 
 }

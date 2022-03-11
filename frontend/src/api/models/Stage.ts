@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * OpenStax Kinetic API
- * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v0/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
+ * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v1/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
  *
  * The version of the OpenAPI document: 0.1.0
  * 
@@ -24,13 +24,13 @@ export interface Stage {
      * @type {number}
      * @memberof Stage
      */
-    readonly id: number;
+    readonly id?: number;
     /**
      * An integer that describes the sort order for this stage
      * @type {number}
      * @memberof Stage
      */
-    readonly order: number;
+    readonly order?: number;
     /**
      * The name of the stage
      * @type {string}
@@ -54,7 +54,7 @@ export interface Stage {
      * @type {object}
      * @memberof Stage
      */
-    config: object;
+    config?: object;
 }
 
 export function StageFromJSON(json: any): Stage {
@@ -67,12 +67,12 @@ export function StageFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
     }
     return {
         
-        'id': json['id'],
-        'order': json['order'],
+        'id': !exists(json, 'id') ? undefined : json['id'],
+        'order': !exists(json, 'order') ? undefined : json['order'],
         'title': !exists(json, 'title') ? undefined : json['title'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
-        'config': json['config'],
+        'config': !exists(json, 'config') ? undefined : json['config'],
     };
 }
 
@@ -91,5 +91,4 @@ export function StageToJSON(value?: Stage | null): any {
         'config': value.config,
     };
 }
-
 

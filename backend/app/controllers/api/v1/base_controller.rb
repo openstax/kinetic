@@ -32,7 +32,7 @@ class Api::V1::BaseController < ApplicationController
   protected
 
   def binding_error(status_code:, messages:)
-    Api::V1::Bindings::Error.new(status_code: status_code, messages: messages)
+    Api::V1::Bindings::ServerError.new(status_code: status_code, messages: messages)
   end
 
   def exhaustive_request_logging

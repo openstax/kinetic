@@ -4,68 +4,79 @@ class Api::V1::Participant::StudiesSwagger
   include Swagger::Blocks
   include OpenStax::Swagger::SwaggerBlocksExtensions
 
-  swagger_schema :Launch do
-    key :required, :url
-    property :url do
-      key :type, :string
-      key :description, 'The URL to send a user to to start a study stage'
-    end
-  end
-
-  swagger_schema :PublicResearcher do
-    property :name do
-      key :type, :string
-      key :description, 'The researcher\'s name.'
-    end
-    property :institution do
-      key :type, :string
-      key :description, 'The researcher\'s institution.'
-    end
-    property :bio do
-      key :type, :string
-      key :description, 'The researcher\'s bio.'
-    end
-  end
-
-  swagger_schema :ParticipantStudyStage do
-    property :order do
-      key :type, :integer
-      key :description, 'An integer that describes the sort order for this stage'
-      key :readOnly, true
-    end
-    property :title do
-      key :type, :string
-      key :description, 'The name of the stage'
-      key :readOnly, true
-    end
-    property :description do
-      key :type, :string
-      key :description, 'The longer description shown to participants'
-      key :readOnly, true
-    end
-    property :available_after_days do
-      key :type, :number
-      key :description, 'How many days after previous stage will this become available'
-      key :readOnly, true
-    end
-    property :is_completed do
-      key :type, :boolean
-      key :description, 'Has the stage been launched'
-      key :readOnly, true
-    end
-    property :is_launchable do
-      key :type, :boolean
-      key :description, 'Can the stage be launched'
-      key :readOnly, true
-    end
-  end
-
   COMMON_REQUIRED_STUDY_FIELDS = [
     :title, :short_description, :tags, :duration_minutes
   ].freeze
 
-  swagger_schema :ParticipantStudy do
-    key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
+  swagger_component do
+
+    schema :ParticipantStudy do
+      key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
+    end
+
+    schema :Launch do
+      key :required, [:url]
+      property :url do
+        key :type, :string
+        key :description, 'The URL to send a user to to start a study stage'
+      end
+    end
+    schema :PublicResearcher do
+      property :name do
+        key :type, :string
+        key :description, 'The researcher\'s name.'
+      end
+      property :institution do
+        key :type, :string
+        key :description, 'The researcher\'s institution.'
+      end
+      property :bio do
+        key :type, :string
+        key :description, 'The researcher\'s bio.'
+      end
+    end
+
+    schema :ParticipantStudyStage do
+      property :order do
+        key :type, :integer
+        key :description, 'An integer that describes the sort order for this stage'
+        key :readOnly, true
+      end
+      property :title do
+        key :type, :string
+        key :description, 'The name of the stage'
+        key :readOnly, true
+      end
+      property :description do
+        key :type, :string
+        key :description, 'The longer description shown to participants'
+        key :readOnly, true
+      end
+      property :available_after_days do
+        key :type, :number
+        key :description, 'How many days after previous stage will this become available'
+        key :readOnly, true
+      end
+      property :is_completed do
+        key :type, :boolean
+        key :description, 'Has the stage been launched'
+        key :readOnly, true
+      end
+      property :is_launchable do
+        key :type, :boolean
+        key :description, 'Can the stage be launched'
+        key :readOnly, true
+      end
+    end
+    schema :ParticipantStudies do
+      property :data do
+        key :type, :array
+        key :description, 'The studies.'
+        items do
+          key :$ref, :ParticipantStudy
+        end
+      end
+    end
   end
 
   add_properties(:ParticipantStudy) do
@@ -140,35 +151,7 @@ class Api::V1::Participant::StudiesSwagger
       key :type, :number
       key :description, 'How many points will be awarded for participation in the study'
     end
-  end
 
-  swagger_schema :ParticipantStudies do
-    # organization from https://jsonapi.org/
-    # property :meta do
-    #   property :page do
-    #     key :type, :integer
-    #     key :description, 'The current page number for these paginated results, one-indexed.'
-    #   end
-    #   property :per_page do
-    #     key :type, :integer
-    #     key :description, 'The requested number of results per page.'
-    #   end
-    #   property :count do
-    #     key :type, :integer
-    #     key :description, 'The number of results in the current page.'
-    #   end
-    #   property :total_count do
-    #     key :type, :integer
-    #     key :description, 'The number of results across all pages.'
-    #   end
-    # end
-    property :data do
-      key :type, :array
-      key :description, 'The studies.'
-      items do
-        key :$ref, :ParticipantStudy
-      end
-    end
   end
 
   swagger_path '/participant/studies/{id}' do
@@ -176,23 +159,20 @@ class Api::V1::Participant::StudiesSwagger
       key :summary, 'Get participant-visible info for a study'
       key :description, 'Get participant-visible info for a study'
       key :operationId, 'getParticipantStudy'
-      key :produces, [
-        'application/json'
-      ]
-      key :tags, [
-        'Studies'
-      ]
+      # key :tags, [
+      #   'Studies'
+      # ]
       parameter do
         key :name, :id
         key :in, :path
         key :description, 'ID of the study to get.'
         key :required, true
-        key :type, :number
+        key :schema, { type: :integer }
       end
       response 200 do
         key :description, 'Success.  Returns participant-visible data for the study.'
-        schema do
-          key :$ref, :ParticipantStudy
+        content 'application/json' do
+          schema { key :$ref, :ParticipantStudy }
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
@@ -207,9 +187,6 @@ class Api::V1::Participant::StudiesSwagger
       key :summary, 'Launch the next available study stage'
       key :description, 'Launch the next available study stage'
       key :operationId, 'launchStudy'
-      key :produces, [
-        'application/json'
-      ]
       key :tags, [
         'Studies'
       ]
@@ -218,19 +195,19 @@ class Api::V1::Participant::StudiesSwagger
         key :in, :path
         key :description, 'ID of the study to launch.'
         key :required, true
-        key :type, :number
+        key :schema, { type: :integer }
       end
       parameter do
         key :name, :preview
         key :in, :query
         key :description, 'Whether the launch is a preview'
         key :required, false
-        key :type, :boolean
+        key :schema, { type: :boolean }
       end
       response 200 do
         key :description, 'Success.  Returns info on how to launch the user.'
-        schema do
-          key :$ref, :Launch
+        content 'application/json' do
+          schema { key :$ref, :Launch }
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
@@ -245,9 +222,6 @@ class Api::V1::Participant::StudiesSwagger
       key :summary, 'Land a study stage'
       key :description, 'Land a study stage'
       key :operationId, 'landStudy'
-      key :produces, [
-        'application/json'
-      ]
       key :tags, [
         'Studies'
       ]
@@ -256,28 +230,27 @@ class Api::V1::Participant::StudiesSwagger
         key :in, :path
         key :description, 'ID of the study to land.'
         key :required, true
-        key :type, :number
+        key :schema, { type: :integer }
       end
       parameter do
         key :name, :aborted
         key :in, :query
         key :description, 'Optional reason study was aborted early'
         key :required, false
-        key :type, :string
-        key :enum, %w[refusedconsent]
+        key :schema, { type: :integer, enum: %w[refusedconsent] }
       end
       parameter do
         key :name, :consent
         key :in, :query
         key :description, 'Optional flag indicating if student consented (default true)'
         key :required, false
-        key :type, :boolean
+        key :schema, { type: :boolean }
       end
       parameter do
         key :name, :md
         key :in, :query
         key :description, 'Metadata to record for participant'
-        key :type, :object
+        key :schema, { format: :object }
       end
 
       response 200 do
@@ -297,16 +270,13 @@ class Api::V1::Participant::StudiesSwagger
         Get studies for the calling researcher.
       DESC
       key :operationId, 'getParticipantStudies'
-      key :produces, [
-        'application/json'
-      ]
       key :tags, [
         'Studies'
       ]
       response 200 do
         key :description, 'Success.  Returns the studies.'
-        schema do
-          key :$ref, :ParticipantStudies
+        content 'application/json' do
+          schema { key :$ref, :ParticipantStudies }
         end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
