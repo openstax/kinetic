@@ -4,9 +4,13 @@ class Api::V1::Researcher::StudyResearchersSwagger
   include Swagger::Blocks
   include OpenStax::Swagger::SwaggerBlocksExtensions
 
-  swagger_component  do
+  swagger_component do
     schema :Researcher do
       key :required, [:user_id]
+      property :id do
+        key :type, :integer
+        key :description, 'The researcher\'s ID.'
+      end
       property :user_id do
         key :type, :string
         key :format, 'uuid'
@@ -32,12 +36,6 @@ class Api::V1::Researcher::StudyResearchersSwagger
       key :summary, 'Add a researcher to a study'
       key :description, 'Add a researcher to a study'
       key :operationId, 'addResearcherToStudy'
-      # key :produces, [
-      #   'application/json'
-      # ]
-      key :tags, [
-        'Studies'
-      ]
       parameter do
         key :name, :study_id
         key :in, :path
@@ -67,12 +65,6 @@ class Api::V1::Researcher::StudyResearchersSwagger
       key :summary, 'Remove a researcher from a study'
       key :description, 'Remove a researcher from a study.  Cannot remove the last researcher.'
       key :operationId, 'removeResearcherFromStudy'
-      # key :produces, [
-      #   'application/json'
-      # ]
-      key :tags, [
-        'Studies'
-      ]
       parameter do
         key :name, :study_id
         key :in, :path

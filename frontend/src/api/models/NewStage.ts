@@ -48,7 +48,7 @@ export interface NewStage {
      * @type {object}
      * @memberof NewStage
      */
-    config?: object;
+    config: object;
 }
 
 export function NewStageFromJSON(json: any): NewStage {
@@ -65,7 +65,7 @@ export function NewStageFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'title': !exists(json, 'title') ? undefined : json['title'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
-        'config': !exists(json, 'config') ? undefined : json['config'],
+        'config': json['config'],
     };
 }
 

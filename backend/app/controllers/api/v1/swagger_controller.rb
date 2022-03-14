@@ -34,10 +34,9 @@ class Api::V1::SwaggerController < ApplicationController
       key :name, 'Kinetic'
       key :description, 'Kinetic endpoints'
     end
-    # key :host, 'localhost'
-    # key :basePath, BASE_PATH
-    # key :consumes, [ACCEPT_HEADER]
-    # key :produces, ['application/json']
+    server do
+      key :url, BASE_PATH
+    end
   end
 
   SWAGGERED_CLASSES = [

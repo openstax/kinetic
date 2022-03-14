@@ -19,17 +19,14 @@ GIT
 
 GIT
   remote: https://github.com/openstax/swagger-rails.git
-  revision: 1df972b4bae1ea1ae7dd2ecac4804b4bf2642ee9
-  specs:
-
-PATH
-  remote: ../../swagger-rails
+  revision: e3134b96e9184de88bccda7006a546661ec1e646
+  ref: e3134b96e9184de88bccda7006a546661ec1e646
   specs:
     openstax_swagger (0.1.0)
       oj
       oj_mimic_json
       rails (>= 5.2.3, < 7.0)
-      swagger-blocks
+      swagger-blocks (~> 3.0.0)
 
 GEM
   remote: https://rubygems.org/

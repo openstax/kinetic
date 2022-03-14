@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { ENV } from './env'
-import { Configuration, StudiesApi } from '../api'
+import { Configuration, DefaultApi } from '@api'
 
 
 export const API_CONFIGURATION = new Configuration({
@@ -10,7 +10,7 @@ export const API_CONFIGURATION = new Configuration({
 
 export const useStudyApi = () => {
     const api = useMemo(() => {
-        return new StudiesApi(API_CONFIGURATION)
+        return new DefaultApi(API_CONFIGURATION)
     }, [])
     return api
 }

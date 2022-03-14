@@ -60,7 +60,7 @@ export interface NewStudy {
      * @type {Date}
      * @memberof NewStudy
      */
-    opensAt?: Date;
+    opensAt?: Date | null;
     /**
      * When the study closes for participation; null means does not close.
      * @type {Date}
@@ -97,7 +97,7 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
         'tags': json['tags'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
-        'opensAt': !exists(json, 'opens_at') ? undefined : (new Date(json['opens_at'])),
+        'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
@@ -119,7 +119,7 @@ export function NewStudyToJSON(value?: NewStudy | null): any {
         'long_description': value.longDescription,
         'tags': value.tags,
         'duration_minutes': value.durationMinutes,
-        'opens_at': value.opensAt === undefined ? undefined : (value.opensAt.toISOString()),
+        'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'is_mandatory': value.isMandatory,
         'participation_points': value.participationPoints,

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-API_MAJOR_VERSIONS = [0].freeze
+API_MAJOR_VERSIONS = [1].freeze
 
 desc <<-DESC.strip_heredoc
   Writes Swagger JSON files to /tmp/swagger/vX.json for each major API version X

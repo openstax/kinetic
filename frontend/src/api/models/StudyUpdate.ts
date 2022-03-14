@@ -30,7 +30,7 @@ export interface StudyUpdate {
      * @type {string}
      * @memberof StudyUpdate
      */
-    titleForParticipants: string;
+    titleForParticipants?: string;
     /**
      * An study name that only researchers see.
      * @type {string}
@@ -42,7 +42,7 @@ export interface StudyUpdate {
      * @type {string}
      * @memberof StudyUpdate
      */
-    shortDescription: string;
+    shortDescription?: string;
     /**
      * A long study description.
      * @type {string}
@@ -54,7 +54,7 @@ export interface StudyUpdate {
      * @type {Array<string>}
      * @memberof StudyUpdate
      */
-    tags: Array<string>;
+    tags?: Array<string>;
     /**
      * The expected study duration in minutes.
      * @type {number}
@@ -66,7 +66,7 @@ export interface StudyUpdate {
      * @type {Date}
      * @memberof StudyUpdate
      */
-    opensAt?: Date;
+    opensAt?: Date | null;
     /**
      * When the study closes for participation; null means does not close.
      * @type {Date}
@@ -98,13 +98,13 @@ export function StudyUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'titleForParticipants': json['title_for_participants'],
+        'titleForParticipants': !exists(json, 'title_for_participants') ? undefined : json['title_for_participants'],
         'titleForResearchers': !exists(json, 'title_for_researchers') ? undefined : json['title_for_researchers'],
-        'shortDescription': json['short_description'],
+        'shortDescription': !exists(json, 'short_description') ? undefined : json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
-        'tags': json['tags'],
+        'tags': !exists(json, 'tags') ? undefined : json['tags'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
-        'opensAt': !exists(json, 'opens_at') ? undefined : (new Date(json['opens_at'])),
+        'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
@@ -126,7 +126,7 @@ export function StudyUpdateToJSON(value?: StudyUpdate | null): any {
         'long_description': value.longDescription,
         'tags': value.tags,
         'duration_minutes': value.durationMinutes,
-        'opens_at': value.opensAt === undefined ? undefined : (value.opensAt.toISOString()),
+        'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'is_mandatory': value.isMandatory,
         'participation_points': value.participationPoints,

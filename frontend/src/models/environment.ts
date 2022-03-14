@@ -1,5 +1,5 @@
 import { API_CONFIGURATION, ENV } from '@lib'
-import { Environment as ApiEnv, EnvironmentApi } from '@api'
+import { Environment as ApiEnv, DefaultApi } from '@api'
 import dayjs from 'dayjs'
 import { retry } from '../lib/util'
 import { User } from './user'
@@ -7,7 +7,7 @@ import { User } from './user'
 export class Environment {
 
     static async bootstrap() {
-        const api = new EnvironmentApi(API_CONFIGURATION)
+        const api = new DefaultApi(API_CONFIGURATION)
         const envData = await retry(() => api.getEnvironment())
         return new Environment(envData)
     }

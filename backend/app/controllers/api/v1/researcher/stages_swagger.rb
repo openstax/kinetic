@@ -70,18 +70,13 @@ class Api::V1::Researcher::StagesSwagger
     end
   end
 
-
-
-  swagger_path '/researcher/studies/{id}/stages' do
+  swagger_path '/researcher/studies/{study_id}/stages' do
     operation :post do
       key :summary, 'Add a stage to a study'
       key :description, 'Add a stage to study'
       key :operationId, 'addStage'
-      key :tags, [
-        'Studies'
-      ]
       parameter do
-        key :name, :id
+        key :name, :study_id
         key :in, :path
         key :description, 'The study ID'
         key :required, true
@@ -89,8 +84,11 @@ class Api::V1::Researcher::StagesSwagger
       end
       request_body do
         key :description, 'The stage data'
+        key :required, true
         content 'application/json' do
           schema do
+            key :type, :object
+            key :title, :addStage
             property :stage do
               key :required, true
               key :$ref, :NewStage
@@ -116,9 +114,6 @@ class Api::V1::Researcher::StagesSwagger
       key :summary, 'Get a stage'
       key :description, 'Get a stage'
       key :operationId, 'getStage'
-      key :tags, [
-        'Studies'
-      ]
       parameter do
         key :name, :id
         key :in, :path
@@ -144,9 +139,6 @@ class Api::V1::Researcher::StagesSwagger
       key :summary, 'Update a stage'
       key :description, 'Update a stage'
       key :operationId, 'updateStage'
-      key :tags, [
-        'Studies'
-      ]
       parameter do
         key :name, :id
         key :in, :path
@@ -160,7 +152,11 @@ class Api::V1::Researcher::StagesSwagger
         key :required, true
         content 'application/json' do
           schema do
-            key :$ref, :StageUpdate
+            key :type, :object
+            key :title, :updateStage
+            property :stage do
+              key :$ref, :StageUpdate
+            end
           end
         end
       end
@@ -182,9 +178,6 @@ class Api::V1::Researcher::StagesSwagger
       key :summary, 'Delete a stage'
       key :description, 'Delete a stage'
       key :operationId, 'deleteStage'
-      key :tags, [
-        'Studies'
-      ]
       parameter do
         key :name, :id
         key :in, :path

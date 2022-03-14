@@ -37,19 +37,19 @@ export interface ParticipantStudy {
      * @type {number}
      * @memberof ParticipantStudy
      */
-    id?: number;
+    id: number;
     /**
      * The study title that participants see.
      * @type {string}
      * @memberof ParticipantStudy
      */
-    title?: string;
+    title: string;
     /**
      * The shorty study description that participants see.
      * @type {string}
      * @memberof ParticipantStudy
      */
-    shortDescription?: string;
+    shortDescription: string;
     /**
      * The long study description that participants see.
      * @type {string}
@@ -61,13 +61,13 @@ export interface ParticipantStudy {
      * @type {Array<string>}
      * @memberof ParticipantStudy
      */
-    tags?: Array<string>;
+    tags: Array<string>;
     /**
      * The expected study duration in minutes.
      * @type {number}
      * @memberof ParticipantStudy
      */
-    durationMinutes?: number;
+    durationMinutes: number;
     /**
      * How many points will be awarded for participation in the study
      * @type {number}
@@ -128,12 +128,12 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'title': !exists(json, 'title') ? undefined : json['title'],
-        'shortDescription': !exists(json, 'short_description') ? undefined : json['short_description'],
+        'id': json['id'],
+        'title': json['title'],
+        'shortDescription': json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
-        'tags': !exists(json, 'tags') ? undefined : json['tags'],
-        'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
+        'tags': json['tags'],
+        'durationMinutes': json['duration_minutes'],
         'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
         'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),

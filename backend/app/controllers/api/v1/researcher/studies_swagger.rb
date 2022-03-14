@@ -18,9 +18,7 @@ class Api::V1::Researcher::StudiesSwagger
       key :required, COMMON_REQUIRED_STUDY_FIELDS
     end
 
-    schema :StudyUpdate do
-#      key :required, COMMON_REQUIRED_STUDY_FIELDS
-    end
+    schema :StudyUpdate
 
     schema :Studies do
       property :data do
@@ -72,12 +70,12 @@ class Api::V1::Researcher::StudiesSwagger
     end
     property :opens_at do
       key :type, :string
+      key :nullable, true
       key :format, 'date-time'
       key :description, 'When the study opens for participation; null means not open.'
     end
     property :closes_at do
       key :type, :string
-#      key :required, true
       key :nullable, true
       key :format, 'date-time'
       key :description, 'When the study closes for participation; null means does not close.'
@@ -124,23 +122,28 @@ class Api::V1::Researcher::StudiesSwagger
       key :summary, 'Add a study'
       key :description, 'Add a study'
       key :operationId, 'addStudy'
-      key :tags, [
-        'Studies'
-      ]
       request_body do
         key :description, 'The study data'
         content 'application/json' do
           schema do
+            key :type, :object
+            key :title, :addStudy
             property :study do
-#              key :required, true
-              key :$ref, :NewStudy
+              key :required, true
+              key :$ref, :Study
             end
           end
         end
       end
       response 201 do
         key :description, 'Created.  Returns the created study.'
-        content 'application/json', { schema: { :$ref => :Stage } }
+        content 'application/json' do
+          schema do
+            key :title, 'data'
+            key :required, true
+            key :$ref, :Study
+          end
+        end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
       extend Api::V1::SwaggerResponses::ForbiddenError
@@ -156,12 +159,11 @@ class Api::V1::Researcher::StudiesSwagger
         Get studies for the calling researcher.
       DESC
       key :operationId, 'getStudies'
-      key :tags, [
-        'Studies'
-      ]
       response 200 do
         key :description, 'Success.  Returns the studies.'
-        content 'application/json', { schema: { :$ref => :Studies } }
+        content 'application/json' do
+          schema { key :$ref, :Studies }
+        end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
       extend Api::V1::SwaggerResponses::UnprocessableEntityError
@@ -174,9 +176,6 @@ class Api::V1::Researcher::StudiesSwagger
       key :summary, 'Update a study'
       key :description, 'Update a study'
       key :operationId, 'updateStudy'
-      key :tags, [
-        'Studies'
-      ]
       parameter do
         key :name, :id
         key :in, :path
@@ -189,13 +188,21 @@ class Api::V1::Researcher::StudiesSwagger
         key :description, 'The study updates.'
         content 'application/json' do
           schema do
-            key :$ref, :StudyUpdate
+            key :type, :object
+            key :title, :updateStudy
+            property :study do
+              key :$ref, :StudyUpdate
+            end
           end
         end
       end
       response 200 do
         key :description, 'Success.  Returns the updated study.'
-        content 'application/json', { schema: { :$ref => :Study } }
+        content 'application/json' do
+          schema do
+            key :$ref, :Study
+          end
+        end
       end
       extend Api::V1::SwaggerResponses::AuthenticationError
       extend Api::V1::SwaggerResponses::ForbiddenError
@@ -209,9 +216,6 @@ class Api::V1::Researcher::StudiesSwagger
       key :summary, 'Deletes an unlaunched study'
       key :description, 'Remove a study.  Cannot remove a study that has `first_lauched_at` set.'
       key :operationId, 'deleteStudy'
-      key :tags, [
-        'Studies'
-      ]
       parameter do
         key :name, :study_id
         key :in, :path

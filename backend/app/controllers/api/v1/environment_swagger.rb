@@ -114,9 +114,6 @@ class Api::V1::EnvironmentSwagger
         Get info about the deployment environment
       DESC
       key :operationId, 'getEnvironment'
-      key :tags, [
-        'Environment'
-      ]
       response 200 do
         key :description, 'Success.'
         content 'application/json' do

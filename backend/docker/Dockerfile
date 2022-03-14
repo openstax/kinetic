@@ -10,7 +10,7 @@ RUN apt-get update && \
     openssh-server \
     build-essential \
     wget \
-    # for swagger
+    # for openapi
     openjdk-11-jre-headless \
     && rm -rf /var/lib/apt/lists/*
 
@@ -35,9 +35,9 @@ RUN gem install bundler --no-document --version $bundler_version && \
     bundle binstubs --all && \
     echo 'export PATH=/code/backend/bin:$PATH' >> ~/.bashrc
 
-### swagger-codegen
-
-RUN mkdir /usr/lib/swagger-codegen && \
-  wget -q https://repo1.maven.org/maven2/io/swagger/swagger-codegen-cli/2.4.13/swagger-codegen-cli-2.4.13.jar -O /usr/lib/swagger-codegen/swagger-codegen-cli.jar && \
-  echo "java -jar /usr/lib/swagger-codegen/swagger-codegen-cli.jar \$@" > /usr/bin/swagger-codegen && \
-  chmod a+x /usr/bin/swagger-codegen
+### openapi-codegen
+RUN mkdir /usr/lib/openapi-codegen && \
+  wget -q https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.3.0/openapi-generator-cli-5.3.0.jar -O \
+ /usr/lib/openapi-codegen/openapi-codegen-cli.jar && \
+  echo "java -jar /usr/lib/openapi-codegen/openapi-codegen-cli.jar \$@" > /usr/bin/openapi-generator && \
+  chmod a+x /usr/bin/openapi-generator

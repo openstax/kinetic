@@ -14,22 +14,13 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class EnvironmentUser
-    # The user's ID.
-    attr_accessor :user_id
-
-    # If true, the user is an administrator
-    attr_accessor :is_administrator
-
-    # If true, the user is a researcher
-    attr_accessor :is_researcher
+  class UpdateStage
+    attr_accessor :stage
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'user_id' => :'user_id',
-        :'is_administrator' => :'is_administrator',
-        :'is_researcher' => :'is_researcher'
+        :'stage' => :'stage'
       }
     end
 
@@ -41,9 +32,7 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'user_id' => :'String',
-        :'is_administrator' => :'Boolean',
-        :'is_researcher' => :'Boolean'
+        :'stage' => :'StageUpdate'
       }
     end
 
@@ -57,27 +46,19 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::EnvironmentUser` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::UpdateStage` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::EnvironmentUser`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::UpdateStage`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'user_id')
-        self.user_id = attributes[:'user_id']
-      end
-
-      if attributes.key?(:'is_administrator')
-        self.is_administrator = attributes[:'is_administrator']
-      end
-
-      if attributes.key?(:'is_researcher')
-        self.is_researcher = attributes[:'is_researcher']
+      if attributes.key?(:'stage')
+        self.stage = attributes[:'stage']
       end
     end
 
@@ -85,22 +66,12 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @is_administrator.nil?
-        invalid_properties.push('invalid value for "is_administrator", is_administrator cannot be nil.')
-      end
-
-      if @is_researcher.nil?
-        invalid_properties.push('invalid value for "is_researcher", is_researcher cannot be nil.')
-      end
-
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @is_administrator.nil?
-      return false if @is_researcher.nil?
       true
     end
 
@@ -109,9 +80,7 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          user_id == o.user_id &&
-          is_administrator == o.is_administrator &&
-          is_researcher == o.is_researcher
+          stage == o.stage
     end
 
     # @see the `==` method
@@ -123,7 +92,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [user_id, is_administrator, is_researcher].hash
+      [stage].hash
     end
 
     # Builds the object from hash

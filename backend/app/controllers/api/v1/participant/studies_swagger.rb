@@ -8,12 +8,15 @@ class Api::V1::Participant::StudiesSwagger
     :title, :short_description, :tags, :duration_minutes
   ].freeze
 
-  swagger_component do
+  add_components do
 
     schema :ParticipantStudy do
       key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
     end
 
+  end
+
+  add_components do
     schema :Launch do
       key :required, [:url]
       property :url do
@@ -21,6 +24,7 @@ class Api::V1::Participant::StudiesSwagger
         key :description, 'The URL to send a user to to start a study stage'
       end
     end
+
     schema :PublicResearcher do
       property :name do
         key :type, :string
@@ -159,9 +163,6 @@ class Api::V1::Participant::StudiesSwagger
       key :summary, 'Get participant-visible info for a study'
       key :description, 'Get participant-visible info for a study'
       key :operationId, 'getParticipantStudy'
-      # key :tags, [
-      #   'Studies'
-      # ]
       parameter do
         key :name, :id
         key :in, :path
@@ -187,9 +188,6 @@ class Api::V1::Participant::StudiesSwagger
       key :summary, 'Launch the next available study stage'
       key :description, 'Launch the next available study stage'
       key :operationId, 'launchStudy'
-      key :tags, [
-        'Studies'
-      ]
       parameter do
         key :name, :id
         key :in, :path
@@ -222,9 +220,6 @@ class Api::V1::Participant::StudiesSwagger
       key :summary, 'Land a study stage'
       key :description, 'Land a study stage'
       key :operationId, 'landStudy'
-      key :tags, [
-        'Studies'
-      ]
       parameter do
         key :name, :id
         key :in, :path
@@ -237,7 +232,7 @@ class Api::V1::Participant::StudiesSwagger
         key :in, :query
         key :description, 'Optional reason study was aborted early'
         key :required, false
-        key :schema, { type: :integer, enum: %w[refusedconsent] }
+        key :schema, { type: :string, enum: %w[refusedconsent] }
       end
       parameter do
         key :name, :consent
@@ -250,7 +245,9 @@ class Api::V1::Participant::StudiesSwagger
         key :name, :md
         key :in, :query
         key :description, 'Metadata to record for participant'
-        key :schema, { format: :object }
+        key :schema, { type: :object }
+        # key :style, :deepObject
+        # key :explode, true
       end
 
       response 200 do
@@ -270,9 +267,6 @@ class Api::V1::Participant::StudiesSwagger
         Get studies for the calling researcher.
       DESC
       key :operationId, 'getParticipantStudies'
-      key :tags, [
-        'Studies'
-      ]
       response 200 do
         key :description, 'Success.  Returns the studies.'
         content 'application/json' do

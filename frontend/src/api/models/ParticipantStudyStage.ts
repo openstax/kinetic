@@ -16,46 +16,52 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface StageUpdate
+ * @interface ParticipantStudyStage
  */
-export interface StageUpdate {
+export interface ParticipantStudyStage {
     /**
      * An integer that describes the sort order for this stage
      * @type {number}
-     * @memberof StageUpdate
+     * @memberof ParticipantStudyStage
      */
     readonly order?: number;
     /**
      * The name of the stage
      * @type {string}
-     * @memberof StageUpdate
+     * @memberof ParticipantStudyStage
      */
-    title?: string;
+    readonly title?: string;
     /**
      * The longer description shown to participants
      * @type {string}
-     * @memberof StageUpdate
+     * @memberof ParticipantStudyStage
      */
-    description?: string;
+    readonly description?: string;
     /**
      * How many days after previous stage will this become available
      * @type {number}
-     * @memberof StageUpdate
+     * @memberof ParticipantStudyStage
      */
-    availableAfterDays?: number;
+    readonly availableAfterDays?: number;
     /**
-     * The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
-     * @type {object}
-     * @memberof StageUpdate
+     * Has the stage been launched
+     * @type {boolean}
+     * @memberof ParticipantStudyStage
      */
-    config: object;
+    readonly isCompleted?: boolean;
+    /**
+     * Can the stage be launched
+     * @type {boolean}
+     * @memberof ParticipantStudyStage
+     */
+    readonly isLaunchable?: boolean;
 }
 
-export function StageUpdateFromJSON(json: any): StageUpdate {
-    return StageUpdateFromJSONTyped(json, false);
+export function ParticipantStudyStageFromJSON(json: any): ParticipantStudyStage {
+    return ParticipantStudyStageFromJSONTyped(json, false);
 }
 
-export function StageUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean): StageUpdate {
+export function ParticipantStudyStageFromJSONTyped(json: any, ignoreDiscriminator: boolean): ParticipantStudyStage {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -65,11 +71,12 @@ export function StageUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'title': !exists(json, 'title') ? undefined : json['title'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
-        'config': json['config'],
+        'isCompleted': !exists(json, 'is_completed') ? undefined : json['is_completed'],
+        'isLaunchable': !exists(json, 'is_launchable') ? undefined : json['is_launchable'],
     };
 }
 
-export function StageUpdateToJSON(value?: StageUpdate | null): any {
+export function ParticipantStudyStageToJSON(value?: ParticipantStudyStage | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -78,10 +85,6 @@ export function StageUpdateToJSON(value?: StageUpdate | null): any {
     }
     return {
         
-        'title': value.title,
-        'description': value.description,
-        'available_after_days': value.availableAfterDays,
-        'config': value.config,
     };
 }
 

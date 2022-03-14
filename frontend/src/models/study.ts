@@ -1,7 +1,7 @@
 
 import * as Yup from 'yup'
 import {
-    NewStudy, Study, StudiesApi, ParticipantStudy,
+    NewStudy, Study, DefaultApi, ParticipantStudy,
 } from '@api'
 import dayjs from 'dayjs'
 import { isNil } from '@lib'
@@ -48,7 +48,7 @@ export const StudyValidationSchema = Yup.object().shape({
 });
 
 
-export const LaunchStudy = async (api: StudiesApi, study: {id: number}, options: { preview?: boolean } = {}) => {
+export const LaunchStudy = async (api: DefaultApi, study: {id: number}, options: { preview?: boolean } = {}) => {
     const launch = await api.launchStudy({ id: study.id, preview: options.preview || false })
     window.location.assign(launch.url!)
     return launch

@@ -21,6 +21,10 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
               Api::V1::Bindings::Study.create_from_model(study)
             end
     )
+    pp Api::V1::Bindings::Study.create_from_model(studies.first).id
+
+    # response_binding.data[0].id
+
     render json: response_binding, status: :ok
   end
 

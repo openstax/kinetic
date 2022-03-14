@@ -24,13 +24,13 @@ export interface Stage {
      * @type {number}
      * @memberof Stage
      */
-    readonly id?: number;
+    readonly id: number;
     /**
      * An integer that describes the sort order for this stage
      * @type {number}
      * @memberof Stage
      */
-    readonly order?: number;
+    readonly order: number;
     /**
      * The name of the stage
      * @type {string}
@@ -54,7 +54,7 @@ export interface Stage {
      * @type {object}
      * @memberof Stage
      */
-    config?: object;
+    config: object;
 }
 
 export function StageFromJSON(json: any): Stage {
@@ -67,12 +67,12 @@ export function StageFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'order': !exists(json, 'order') ? undefined : json['order'],
+        'id': json['id'],
+        'order': json['order'],
         'title': !exists(json, 'title') ? undefined : json['title'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
-        'config': !exists(json, 'config') ? undefined : json['config'],
+        'config': json['config'],
     };
 }
 
