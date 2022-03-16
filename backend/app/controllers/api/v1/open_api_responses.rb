@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-module Api::V1::SwaggerResponses
-  include Swagger::Blocks
-  include OpenStax::Swagger::SwaggerBlocksExtensions
+module Api::V1::OpenApiResponses
+  include OpenStax::OpenApi::Blocks
 
-  swagger_component do
+  openapi_component do
     schema :ServerError do
       property :status_code do
         key :type, :integer

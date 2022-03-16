@@ -3,40 +3,40 @@
 set -eo pipefail
 
 # liberally copied from the event capture project.  Thanks Tom!
-# https://github.com/openstax/event-capture-client/blob/master/script/build-swagger-client.bash
+# https://github.com/openstax/event-capture-client/blob/master/script/build-openapi-client.bash
 
 if [ -n "$DEBUG" ]; then set -x; fi
 
 if [ -z "$(which docker)" ]; then
-  echo "docker is required to build swagger" > /dev/stderr;
+  echo "docker is required to build openapi" > /dev/stderr;
   exit 1;
 fi
 
 if [ -z "$(which yarn)" ]; then
-  echo "yarn is required to build swagger" > /dev/stderr;
+  echo "yarn is required to build openapi" > /dev/stderr;
   exit 1;
 fi
 
 version=${VERSION:-"1"}
 api_host=${API_HOST:-"dev.kinetic.sandbox.openstax.org"}
-swagger_path="/api/v${version}/swagger.json"
+openapi_path="/api/v${version}/openapi.json"
 
 secure=${SECURE:-"true"}
 protocol=$(test "$secure" = "true" && echo "https" || echo "http")
-json_url="$protocol://$api_host$swagger_path"
+json_url="$protocol://$api_host$openapi_path"
 
 project_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )"
 temp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
 mkdir "$temp_dir/src"
 
-echo "getting swagger json from: $json_url saving to: $temp_dir/swagger.json"
+echo "getting openapi json from: $json_url saving to: $temp_dir/openapi.json"
 
-curl --fail -s $json_url > "$temp_dir/swagger.json"
+curl --fail -s $json_url > "$temp_dir/openapi.json"
 
-echo "building swagger into: $temp_dir/src" > /dev/stderr;
+echo "building openapi into: $temp_dir/src" > /dev/stderr;
 
 docker run --rm -v "$temp_dir:/shared" openapitools/openapi-generator-cli:v5.4.0 generate \
-  -i /shared/swagger.json \
+  -i /shared/openapi.json \
   -g typescript-fetch \
   --additional-properties=typescriptThreePlus=true \
   --skip-validate-spec \

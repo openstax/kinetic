@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-class Api::V1::EnvironmentSwagger
-  include Swagger::Blocks
-  include OpenStax::Swagger::SwaggerBlocksExtensions
+class Api::V1::EnvironmentOpenApi
+  include OpenStax::OpenApi::Blocks
 
-  swagger_component do
+  openapi_component do
 
     schema :EnvironmentUser do
       key :required, %w[is_researcher is_administrator]
@@ -107,7 +106,7 @@ class Api::V1::EnvironmentSwagger
     end
   end
 
-  swagger_path '/environment' do
+  openapi_path '/environment' do
     operation :get do
       key :summary, 'Get info about the deployment environment'
       key :description, <<~DESC
@@ -121,8 +120,8 @@ class Api::V1::EnvironmentSwagger
         end
         # content 'application/json', { schema do :$ref => :Environment end
       end
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 

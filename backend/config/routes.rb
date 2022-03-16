@@ -27,7 +27,7 @@ Rails.application.routes.draw do
         end
       end
 
-      get :swagger, to: 'swagger#json', constraints: { format: :json }
+      get :openapi, to: 'open_api#json', constraints: { format: :json }
 
       get :environment, to: 'environment#index'
 

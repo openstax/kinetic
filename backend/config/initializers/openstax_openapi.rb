@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-OpenStax::Swagger.configure do |config|
+OpenStax::OpenApi.configure do |config|
   config.json_proc = lambda { |api_major_version|
-    Swagger::Blocks.build_root_json(
-      "::Api::V#{api_major_version}::SwaggerController::SWAGGERED_CLASSES".constantize
+    OpenStax::OpenApi.build_root_json(
+      "::Api::V#{api_major_version}::OpenApiController::OPENAPI_CLASSES".constantize
     )
   }
   config.client_language_configs = {

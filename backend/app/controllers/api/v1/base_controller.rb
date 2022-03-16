@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V1::BaseController < ApplicationController
-  include Swagger::Blocks
-  include OpenStax::Swagger::Bind
+  include OpenStax::OpenApi::Blocks
+  include OpenStax::OpenApi::Bind
 
   rescue_from_unless_local StandardError, send_to_sentry: true do |ex|
     raise if Rails.env.test? # we should never be expecting a 500 in a test

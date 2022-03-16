@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-class Api::V1::Researcher::StudyResearchersSwagger
-  include Swagger::Blocks
-  include OpenStax::Swagger::SwaggerBlocksExtensions
+class Api::V1::Researcher::StudyResearchersOpenApi
+  include OpenStax::OpenApi::Blocks
 
-  swagger_component do
+  openapi_component do
     schema :Researcher do
       key :required, [:user_id]
       property :id do
@@ -31,7 +30,7 @@ class Api::V1::Researcher::StudyResearchersSwagger
     end
   end
 
-  swagger_path '/researcher/studies/{study_id}/researcher/{user_id}' do
+  openapi_path '/researcher/studies/{study_id}/researcher/{user_id}' do
     operation :post do
       key :summary, 'Add a researcher to a study'
       key :description, 'Add a researcher to a study'
@@ -53,14 +52,14 @@ class Api::V1::Researcher::StudyResearchersSwagger
       response 200 do
         key :description, 'Success.'
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
-  swagger_path '/researcher/studies/{study_id}/researcher/{user_id}' do
+  openapi_path '/researcher/studies/{study_id}/researcher/{user_id}' do
     operation :delete do
       key :summary, 'Remove a researcher from a study'
       key :description, 'Remove a researcher from a study.  Cannot remove the last researcher.'
@@ -82,10 +81,10 @@ class Api::V1::Researcher::StudyResearchersSwagger
       response 200 do
         key :description, 'Success.'
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 end

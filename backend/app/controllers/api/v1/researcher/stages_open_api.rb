@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-class Api::V1::Researcher::StagesSwagger
-  include Swagger::Blocks
-  include OpenStax::Swagger::SwaggerBlocksExtensions
+class Api::V1::Researcher::StagesOpenApi
+  include OpenStax::OpenApi::Blocks
 
-  swagger_component  do
+  openapi_component  do
     schema :NewStage do
       key :required, %w[config]
     end
@@ -70,7 +69,7 @@ class Api::V1::Researcher::StagesSwagger
     end
   end
 
-  swagger_path '/researcher/studies/{study_id}/stages' do
+  openapi_path '/researcher/studies/{study_id}/stages' do
     operation :post do
       key :summary, 'Add a stage to a study'
       key :description, 'Add a stage to study'
@@ -102,14 +101,14 @@ class Api::V1::Researcher::StagesSwagger
           schema { key :$ref, :Stage }
         end
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
-  swagger_path '/researcher/stages/{id}' do
+  openapi_path '/researcher/stages/{id}' do
     operation :get do
       key :summary, 'Get a stage'
       key :description, 'Get a stage'
@@ -127,14 +126,14 @@ class Api::V1::Researcher::StagesSwagger
           schema { key :$ref, :Stage }
         end
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
-  swagger_path '/researcher/stages/{id}' do
+  openapi_path '/researcher/stages/{id}' do
     operation :put do
       key :summary, 'Update a stage'
       key :description, 'Update a stage'
@@ -166,14 +165,14 @@ class Api::V1::Researcher::StagesSwagger
           schema { key :$ref, :Stage }
         end
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
-  swagger_path '/researcher/stages/{id}' do
+  openapi_path '/researcher/stages/{id}' do
     operation :delete do
       key :summary, 'Delete a stage'
       key :description, 'Delete a stage'
@@ -188,10 +187,10 @@ class Api::V1::Researcher::StagesSwagger
       response 200 do
         key :description, 'Success.'
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 end

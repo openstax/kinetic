@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
-class Api::V1::Researcher::StudiesSwagger
-  include Swagger::Blocks
-  include OpenStax::Swagger::SwaggerBlocksExtensions
+class Api::V1::Researcher::StudiesOpenApi
+  include OpenStax::OpenApi::Blocks
 
   COMMON_REQUIRED_STUDY_FIELDS = [
     :title_for_participants, :description_for_participants,
     :short_description, :tags
   ].freeze
 
-  swagger_component do
+  openapi_component do
     schema :Study do
       key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
     end
@@ -117,7 +116,7 @@ class Api::V1::Researcher::StudiesSwagger
     end
   end
 
-  swagger_path '/researcher/studies' do
+  openapi_path '/researcher/studies' do
     operation :post do
       key :summary, 'Add a study'
       key :description, 'Add a study'
@@ -145,14 +144,14 @@ class Api::V1::Researcher::StudiesSwagger
           end
         end
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
-  swagger_path '/researcher/studies' do
+  openapi_path '/researcher/studies' do
     operation :get do
       key :summary, 'Get studies for the calling researcher'
       key :description, <<~DESC
@@ -165,13 +164,13 @@ class Api::V1::Researcher::StudiesSwagger
           schema { key :$ref, :Studies }
         end
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
-  swagger_path '/researcher/studies/{id}' do
+  openapi_path '/researcher/studies/{id}' do
     operation :put do
       key :summary, 'Update a study'
       key :description, 'Update a study'
@@ -204,14 +203,14 @@ class Api::V1::Researcher::StudiesSwagger
           end
         end
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
-  swagger_path '/researcher/studies/{study_id}' do
+  openapi_path '/researcher/studies/{study_id}' do
     operation :delete do
       key :summary, 'Deletes an unlaunched study'
       key :description, 'Remove a study.  Cannot remove a study that has `first_lauched_at` set.'
@@ -226,10 +225,10 @@ class Api::V1::Researcher::StudiesSwagger
       response 200 do
         key :description, 'Success.'
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 end

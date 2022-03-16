@@ -8,6 +8,17 @@ GIT
       json-jwt
 
 GIT
+  remote: https://github.com/openstax/openapi-rails.git
+  revision: fbd266525044db42f485ba4c7e34280b0a319314
+  ref: fbd266525044db42f485ba4c7e34280b0a319314
+  specs:
+    openstax_openapi (0.1.0)
+      oj
+      oj_mimic_json
+      rails (>= 5.2.3, < 7.0)
+      swagger-blocks (~> 3.0.0)
+
+GIT
   remote: https://github.com/openstax/qualtrics_api.git
   revision: 88b2340d71677ce6ef6e41d681afbc948585b5f0
   ref: 88b2340d71677ce6ef6e41d681afbc948585b5f0
@@ -16,17 +27,6 @@ GIT
       faraday (~> 1)
       faraday_middleware (~> 1)
       virtus (~> 1.0)
-
-GIT
-  remote: https://github.com/openstax/swagger-rails.git
-  revision: e3134b96e9184de88bccda7006a546661ec1e646
-  ref: e3134b96e9184de88bccda7006a546661ec1e646
-  specs:
-    openstax_swagger (0.1.0)
-      oj
-      oj_mimic_json
-      rails (>= 5.2.3, < 7.0)
-      swagger-blocks (~> 3.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -479,7 +479,7 @@ DEPENDENCIES
   openstax_api (= 9.4.1)
   openstax_auth!
   openstax_healthcheck
-  openstax_swagger!
+  openstax_openapi!
   pg (>= 0.18, < 2.0)
   platform-api
   puma (~> 5.0)

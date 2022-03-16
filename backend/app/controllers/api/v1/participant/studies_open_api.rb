@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-class Api::V1::Participant::StudiesSwagger
-  include Swagger::Blocks
-  include OpenStax::Swagger::SwaggerBlocksExtensions
+class Api::V1::Participant::StudiesOpenApi
+  include OpenStax::OpenApi::Blocks
 
   COMMON_REQUIRED_STUDY_FIELDS = [
     :title, :short_description, :tags, :duration_minutes
@@ -158,7 +157,7 @@ class Api::V1::Participant::StudiesSwagger
 
   end
 
-  swagger_path '/participant/studies/{id}' do
+  openapi_path '/participant/studies/{id}' do
     operation :get do
       key :summary, 'Get participant-visible info for a study'
       key :description, 'Get participant-visible info for a study'
@@ -176,14 +175,14 @@ class Api::V1::Participant::StudiesSwagger
           schema { key :$ref, :ParticipantStudy }
         end
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
-  swagger_path '/participant/studies/{id}/launch' do
+  openapi_path '/participant/studies/{id}/launch' do
     operation :put do
       key :summary, 'Launch the next available study stage'
       key :description, 'Launch the next available study stage'
@@ -208,14 +207,14 @@ class Api::V1::Participant::StudiesSwagger
           schema { key :$ref, :Launch }
         end
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
-  swagger_path '/participant/studies/{id}/land' do
+  openapi_path '/participant/studies/{id}/land' do
     operation :put do
       key :summary, 'Land a study stage'
       key :description, 'Land a study stage'
@@ -253,14 +252,14 @@ class Api::V1::Participant::StudiesSwagger
       response 200 do
         key :description, 'Success.  Returns no data.'
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
-  swagger_path '/participant/studies' do
+  openapi_path '/participant/studies' do
     operation :get do
       key :summary, 'Get studies (available and completed) for the participant'
       key :description, <<~DESC
@@ -273,8 +272,8 @@ class Api::V1::Participant::StudiesSwagger
           schema { key :$ref, :ParticipantStudies }
         end
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
