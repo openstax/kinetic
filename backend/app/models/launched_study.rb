@@ -14,7 +14,8 @@ class LaunchedStudy < ApplicationRecord
   def opted_out!
     update!(opted_out_at: Time.now, consent_granted: false)
   end
-# Chose not to reset opted_out_at, in case it might be useful to find students who changed thier mind between steps
+
+  # Chose not to reset opted_out_at, in case it might be useful to find students who changed thier mind between steps
   def consented!
     update!(consent_granted: true)
   end

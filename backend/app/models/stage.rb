@@ -61,7 +61,7 @@ class Stage < ApplicationRecord
                end
     launcher.new(
       **config.symbolize_keys.without(:type),
-      user_id: user_id, study_id: study.id, stage_ordinal: self.order
+      user_id: user_id, study_id: study.id, stage_ordinal: order
     )
   end
 
