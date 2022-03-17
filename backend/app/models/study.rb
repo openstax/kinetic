@@ -3,7 +3,8 @@
 class Study < ApplicationRecord
   has_many :study_researchers, dependent: :destroy
   has_many :researchers, through: :study_researchers, dependent: :destroy
-  has_many :stages, dependent: :destroy
+  # need the double quotes, order is a postgresql semi-reserved word
+  has_many :stages, -> { order('"order"') }, dependent: :destroy
   has_many :launched_stages, through: :stages
   has_many :launched_studies
 
