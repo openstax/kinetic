@@ -43,7 +43,7 @@ const CompletedMessage:React.FC<{
                     maxWidth: '400px',
                 }}
             >
-                {!consented && <Points study={study} />}
+                {consented && <Points study={study} />}
                 <h3>Success!</h3>
                 <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
                     You‘ve completed a Kinetic activity.
