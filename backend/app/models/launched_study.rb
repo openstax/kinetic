@@ -11,8 +11,16 @@ class LaunchedStudy < ApplicationRecord
     completed_at.present?
   end
 
-  def completed!(consent: true)
-    update!(completed_at: Time.now, consent_granted: consent)
+  def opted_out!
+    update!(opted_out_at: Time.now, consent_granted: false)
+  end
+# Chose not to reset opted_out_at, in case it might be useful to find students who changed thier mind between steps
+  def consented!
+    update!(consent_granted: true)
+  end
+
+  def completed!
+    update!(completed_at: Time.now)
   end
 
   def aborted!

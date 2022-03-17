@@ -76,9 +76,7 @@ export default function UsersStudies() {
     const history = useHistory()
     const user = useCurrentUser()
     const noConsent = useQueryParam('consent') == 'false'
-    const abortParam =  useQueryParam('abort')
-    // default abort to whether consent was not granted only if we did not receive an abort param,
-    const abort = abortParam == null ? noConsent : abortParam == 'true'
+    const abort =  useQueryParam('abort') == 'true'
 
     const md = useQueryParam('md') || {}
     if (!user) {
