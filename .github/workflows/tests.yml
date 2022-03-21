@@ -26,11 +26,11 @@ jobs:
           sleep 30
           docker ps -a
           docker logs kinetic_api_1
-          curl -i http://localhost:4006/api/v0/swagger.json
+          curl -i http://localhost:4006/api/v1/openapi.json
           docker logs kinetic_api_1
       - name: Wait for api to boot
         working-directory: frontend
-        run: $(npm bin)/wait-on http://localhost:4006/api/v1/swagger.json
+        run: $(npm bin)/wait-on http://localhost:4006/api/v1/openapi.json
       - name: Generate bindings
         working-directory: frontend
         run: yarn run generate-local-bindings
