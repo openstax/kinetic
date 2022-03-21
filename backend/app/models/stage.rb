@@ -2,6 +2,7 @@
 
 class Stage < ApplicationRecord
   belongs_to :study
+  self.implicit_order_column = 'order'
 
   has_many :launched_stages do
     def for_user(user)
@@ -60,7 +61,7 @@ class Stage < ApplicationRecord
                end
     launcher.new(
       **config.symbolize_keys.without(:type),
-      user_id: user_id, study_id: study.id
+      user_id: user_id, study_id: study.id, stage_ordinal: order
     )
   end
 

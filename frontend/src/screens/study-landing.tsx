@@ -43,7 +43,7 @@ const CompletedMessage:React.FC<{
                     maxWidth: '400px',
                 }}
             >
-                {!consented && <Points study={study} />}
+                {consented && <Points study={study} />}
                 <h3>Success!</h3>
                 <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
                     You‘ve completed a Kinetic activity.
@@ -76,9 +76,7 @@ export default function UsersStudies() {
     const history = useHistory()
     const user = useCurrentUser()
     const noConsent = useQueryParam('consent') == 'false'
-    const abortParam =  useQueryParam('abort')
-    // default abort to whether consent was not granted only if we did not receive an abort param,
-    const abort = abortParam == null ? noConsent : abortParam == 'true'
+    const abort =  useQueryParam('abort') == 'true'
 
     const md = useQueryParam('md') || {}
     if (!user) {

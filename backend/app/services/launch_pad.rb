@@ -34,9 +34,16 @@ class LaunchPad
 
     raise(LandError, 'Not expecting a landing for this study') if stage.nil?
 
-    # Mark the launched records completed as needed.
-    stage.completed!
-    launched_study.completed!(consent: consent) if stage.is_last?
+    # Mark the launched records consented and completed as needed.
+    Study.transaction do
+      stage.completed!
+      if consent
+        launched_study.consented!
+      else
+        launched_study.opted_out!
+      end
+      launched_study.completed! if stage.is_last?
+    end
   end
 
   def abort(reason)
