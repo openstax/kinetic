@@ -1,7 +1,7 @@
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { React, useEffect, useState } from '@common'
 import { colors } from '../theme'
-import { ParticipantStudy, LandStudyAbortedEnum, LandStudyRequest, StudiesApi } from '@api'
+import { ParticipantStudy, DefaultApi, LandStudyRequest, LandStudyAbortedEnum } from '@api'
 import { Button, IncorrectUser, Box, LoadingAnimation, ErrorPage, KineticWaves } from '@components'
 import { useQueryParam, useCurrentUser, useStudyApi, isIframed, sendMessageToParent } from '@lib'
 
@@ -57,7 +57,7 @@ const CompletedMessage:React.FC<{
     </Box>
 )
 
-const landStudy = async (api: StudiesApi, params: LandStudyRequest, isPreview: boolean) => {
+const landStudy = async (api: DefaultApi, params: LandStudyRequest, isPreview: boolean) => {
     const study = await api.getParticipantStudy({ id: params.id })
     if (!isPreview) {
         await api.landStudy(params)

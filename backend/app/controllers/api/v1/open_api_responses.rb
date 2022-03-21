@@ -1,21 +1,23 @@
 # frozen_string_literal: true
 
-module Api::V1::SwaggerResponses
-  include Swagger::Blocks
-  include OpenStax::Swagger::SwaggerBlocksExtensions
+module Api::V1::OpenApiResponses
+  include OpenStax::OpenApi::Blocks
 
-  swagger_schema :Error do
-    property :status_code do
-      key :type, :integer
-      key :description, 'The HTTP status code'
-    end
-    property :messages do
-      key :type, :array
-      key :description, 'The error messages, if any'
-      items do
-        key :type, :string
+  openapi_component do
+    schema :ServerError do
+      property :status_code do
+        key :type, :integer
+        key :description, 'The HTTP status code'
+      end
+      property :messages do
+        key :type, :array
+        key :description, 'The error messages, if any'
+        items do
+          key :type, :string
+        end
       end
     end
+
   end
 
   module AuthenticationError
@@ -46,8 +48,10 @@ module Api::V1::SwaggerResponses
     def self.extended(base)
       base.response 422 do
         key :description, 'Could not process request'
-        schema do
-          key :$ref, :Error
+        content 'application/json' do
+          schema do
+            key :$ref, :ServerError
+          end
         end
       end
     end
@@ -57,8 +61,8 @@ module Api::V1::SwaggerResponses
     def self.extended(base)
       base.response 406 do
         key :description, 'Not acceptable.  Invalid input data was detected'
-        schema do
-          key :$ref, :Error
+        content 'application/json' do
+          key :$ref, :ServerError
         end
       end
     end
@@ -68,8 +72,10 @@ module Api::V1::SwaggerResponses
     def self.extended(base)
       base.response 500 do
         key :description, 'Server error.'
-        schema do
-          key :$ref, :Error
+        content 'application/json' do
+          schema do
+            key :$ref, :ServerError
+          end
         end
       end
     end

@@ -2,7 +2,7 @@
 
 set -xe
 
-docker-compose run api bundle exec rake openstax_swagger:generate_model_bindings[1]
+docker-compose run api bundle exec rake openstax_openapi:generate_model_bindings[1]
 
 cd frontend
 

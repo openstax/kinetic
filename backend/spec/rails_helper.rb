@@ -6,7 +6,7 @@
 #   require 'simplecov'
 #   SimpleCov.start 'rails' do
 #     add_filter(/^\/app\/bindings\//)
-#     add_filter { |src| src.filename =~ /swagger/ }
+#     add_filter { |src| src.filename =~ /openapi/ }
 #     add_filter { |src| src.filename =~ /scout/ }
 #   end
 

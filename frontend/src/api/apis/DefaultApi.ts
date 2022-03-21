@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * OpenStax Kinetic API
- * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v0/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
+ * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v1/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
  *
  * The version of the OpenAPI document: 0.1.0
  * 
@@ -15,50 +15,56 @@
 
 import * as runtime from '../runtime';
 import {
+    AddStage,
+    AddStageFromJSON,
+    AddStageToJSON,
+    AddStudy,
+    AddStudyFromJSON,
+    AddStudyToJSON,
+    Environment,
+    EnvironmentFromJSON,
+    EnvironmentToJSON,
     Launch,
     LaunchFromJSON,
     LaunchToJSON,
-    NewStage,
-    NewStageFromJSON,
-    NewStageToJSON,
-    NewStudy,
-    NewStudyFromJSON,
-    NewStudyToJSON,
     ParticipantStudies,
     ParticipantStudiesFromJSON,
     ParticipantStudiesToJSON,
     ParticipantStudy,
     ParticipantStudyFromJSON,
     ParticipantStudyToJSON,
+    ServerError,
+    ServerErrorFromJSON,
+    ServerErrorToJSON,
     Stage,
     StageFromJSON,
     StageToJSON,
-    StageUpdate,
-    StageUpdateFromJSON,
-    StageUpdateToJSON,
     Studies,
     StudiesFromJSON,
     StudiesToJSON,
     Study,
     StudyFromJSON,
     StudyToJSON,
-    StudyUpdate,
-    StudyUpdateFromJSON,
-    StudyUpdateToJSON,
+    UpdateStage,
+    UpdateStageFromJSON,
+    UpdateStageToJSON,
+    UpdateStudy,
+    UpdateStudyFromJSON,
+    UpdateStudyToJSON,
 } from '../models';
 
 export interface AddResearcherToStudyRequest {
-    studyId: string;
+    studyId: number;
     userId: string;
 }
 
 export interface AddStageRequest {
-    id: number;
-    stage: NewStage;
+    studyId: number;
+    addStage: AddStage;
 }
 
 export interface AddStudyRequest {
-    study: NewStudy;
+    addStudy?: AddStudy;
 }
 
 export interface DeleteStageRequest {
@@ -90,30 +96,30 @@ export interface LaunchStudyRequest {
 }
 
 export interface RemoveResearcherFromStudyRequest {
-    studyId: string;
+    studyId: number;
     userId: string;
 }
 
 export interface UpdateStageRequest {
     id: number;
-    stage: StageUpdate;
+    updateStage: UpdateStage;
 }
 
 export interface UpdateStudyRequest {
     id: number;
-    study: StudyUpdate;
+    updateStudy?: UpdateStudy;
 }
 
 /**
  * 
  */
-export class StudiesApi extends runtime.BaseAPI {
+export class DefaultApi extends runtime.BaseAPI {
 
     /**
      * Add a researcher to a study
      * Add a researcher to a study
      */
-    async addResearcherToStudyRaw(requestParameters: AddResearcherToStudyRequest): Promise<runtime.ApiResponse<void>> {
+    async addResearcherToStudyRaw(requestParameters: AddResearcherToStudyRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.studyId === null || requestParameters.studyId === undefined) {
             throw new runtime.RequiredError('studyId','Required parameter requestParameters.studyId was null or undefined when calling addResearcherToStudy.');
         }
@@ -131,7 +137,7 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-        });
+        }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -140,21 +146,21 @@ export class StudiesApi extends runtime.BaseAPI {
      * Add a researcher to a study
      * Add a researcher to a study
      */
-    async addResearcherToStudy(requestParameters: AddResearcherToStudyRequest): Promise<void> {
-        await this.addResearcherToStudyRaw(requestParameters);
+    async addResearcherToStudy(requestParameters: AddResearcherToStudyRequest, initOverrides?: RequestInit): Promise<void> {
+        await this.addResearcherToStudyRaw(requestParameters, initOverrides);
     }
 
     /**
      * Add a stage to study
      * Add a stage to a study
      */
-    async addStageRaw(requestParameters: AddStageRequest): Promise<runtime.ApiResponse<Stage>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling addStage.');
+    async addStageRaw(requestParameters: AddStageRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Stage>> {
+        if (requestParameters.studyId === null || requestParameters.studyId === undefined) {
+            throw new runtime.RequiredError('studyId','Required parameter requestParameters.studyId was null or undefined when calling addStage.');
         }
 
-        if (requestParameters.stage === null || requestParameters.stage === undefined) {
-            throw new runtime.RequiredError('stage','Required parameter requestParameters.stage was null or undefined when calling addStage.');
+        if (requestParameters.addStage === null || requestParameters.addStage === undefined) {
+            throw new runtime.RequiredError('addStage','Required parameter requestParameters.addStage was null or undefined when calling addStage.');
         }
 
         const queryParameters: any = {};
@@ -164,12 +170,12 @@ export class StudiesApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/researcher/studies/{id}/stages`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/researcher/studies/{study_id}/stages`.replace(`{${"study_id"}}`, encodeURIComponent(String(requestParameters.studyId))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewStageToJSON(requestParameters.stage),
-        });
+            body: AddStageToJSON(requestParameters.addStage),
+        }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => StageFromJSON(jsonValue));
     }
@@ -178,8 +184,8 @@ export class StudiesApi extends runtime.BaseAPI {
      * Add a stage to study
      * Add a stage to a study
      */
-    async addStage(requestParameters: AddStageRequest): Promise<Stage> {
-        const response = await this.addStageRaw(requestParameters);
+    async addStage(requestParameters: AddStageRequest, initOverrides?: RequestInit): Promise<Stage> {
+        const response = await this.addStageRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -187,11 +193,7 @@ export class StudiesApi extends runtime.BaseAPI {
      * Add a study
      * Add a study
      */
-    async addStudyRaw(requestParameters: AddStudyRequest): Promise<runtime.ApiResponse<Study>> {
-        if (requestParameters.study === null || requestParameters.study === undefined) {
-            throw new runtime.RequiredError('study','Required parameter requestParameters.study was null or undefined when calling addStudy.');
-        }
-
+    async addStudyRaw(requestParameters: AddStudyRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Study>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -203,8 +205,8 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: NewStudyToJSON(requestParameters.study),
-        });
+            body: AddStudyToJSON(requestParameters.addStudy),
+        }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => StudyFromJSON(jsonValue));
     }
@@ -213,8 +215,8 @@ export class StudiesApi extends runtime.BaseAPI {
      * Add a study
      * Add a study
      */
-    async addStudy(requestParameters: AddStudyRequest): Promise<Study> {
-        const response = await this.addStudyRaw(requestParameters);
+    async addStudy(requestParameters: AddStudyRequest = {}, initOverrides?: RequestInit): Promise<Study> {
+        const response = await this.addStudyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -222,7 +224,7 @@ export class StudiesApi extends runtime.BaseAPI {
      * Delete a stage
      * Delete a stage
      */
-    async deleteStageRaw(requestParameters: DeleteStageRequest): Promise<runtime.ApiResponse<void>> {
+    async deleteStageRaw(requestParameters: DeleteStageRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteStage.');
         }
@@ -236,7 +238,7 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        });
+        }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -245,15 +247,15 @@ export class StudiesApi extends runtime.BaseAPI {
      * Delete a stage
      * Delete a stage
      */
-    async deleteStage(requestParameters: DeleteStageRequest): Promise<void> {
-        await this.deleteStageRaw(requestParameters);
+    async deleteStage(requestParameters: DeleteStageRequest, initOverrides?: RequestInit): Promise<void> {
+        await this.deleteStageRaw(requestParameters, initOverrides);
     }
 
     /**
      * Remove a study.  Cannot remove a study that has `first_lauched_at` set.
      * Deletes an unlaunched study
      */
-    async deleteStudyRaw(requestParameters: DeleteStudyRequest): Promise<runtime.ApiResponse<void>> {
+    async deleteStudyRaw(requestParameters: DeleteStudyRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.studyId === null || requestParameters.studyId === undefined) {
             throw new runtime.RequiredError('studyId','Required parameter requestParameters.studyId was null or undefined when calling deleteStudy.');
         }
@@ -267,7 +269,7 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        });
+        }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -276,15 +278,43 @@ export class StudiesApi extends runtime.BaseAPI {
      * Remove a study.  Cannot remove a study that has `first_lauched_at` set.
      * Deletes an unlaunched study
      */
-    async deleteStudy(requestParameters: DeleteStudyRequest): Promise<void> {
-        await this.deleteStudyRaw(requestParameters);
+    async deleteStudy(requestParameters: DeleteStudyRequest, initOverrides?: RequestInit): Promise<void> {
+        await this.deleteStudyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Get info about the deployment environment 
+     * Get info about the deployment environment
+     */
+    async getEnvironmentRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<Environment>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/environment`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EnvironmentFromJSON(jsonValue));
+    }
+
+    /**
+     * Get info about the deployment environment 
+     * Get info about the deployment environment
+     */
+    async getEnvironment(initOverrides?: RequestInit): Promise<Environment> {
+        const response = await this.getEnvironmentRaw(initOverrides);
+        return await response.value();
     }
 
     /**
      * Get studies for the calling researcher. 
      * Get studies (available and completed) for the participant
      */
-    async getParticipantStudiesRaw(): Promise<runtime.ApiResponse<ParticipantStudies>> {
+    async getParticipantStudiesRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<ParticipantStudies>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -294,7 +324,7 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        });
+        }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ParticipantStudiesFromJSON(jsonValue));
     }
@@ -303,8 +333,8 @@ export class StudiesApi extends runtime.BaseAPI {
      * Get studies for the calling researcher. 
      * Get studies (available and completed) for the participant
      */
-    async getParticipantStudies(): Promise<ParticipantStudies> {
-        const response = await this.getParticipantStudiesRaw();
+    async getParticipantStudies(initOverrides?: RequestInit): Promise<ParticipantStudies> {
+        const response = await this.getParticipantStudiesRaw(initOverrides);
         return await response.value();
     }
 
@@ -312,7 +342,7 @@ export class StudiesApi extends runtime.BaseAPI {
      * Get participant-visible info for a study
      * Get participant-visible info for a study
      */
-    async getParticipantStudyRaw(requestParameters: GetParticipantStudyRequest): Promise<runtime.ApiResponse<ParticipantStudy>> {
+    async getParticipantStudyRaw(requestParameters: GetParticipantStudyRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<ParticipantStudy>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getParticipantStudy.');
         }
@@ -326,7 +356,7 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        });
+        }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ParticipantStudyFromJSON(jsonValue));
     }
@@ -335,8 +365,8 @@ export class StudiesApi extends runtime.BaseAPI {
      * Get participant-visible info for a study
      * Get participant-visible info for a study
      */
-    async getParticipantStudy(requestParameters: GetParticipantStudyRequest): Promise<ParticipantStudy> {
-        const response = await this.getParticipantStudyRaw(requestParameters);
+    async getParticipantStudy(requestParameters: GetParticipantStudyRequest, initOverrides?: RequestInit): Promise<ParticipantStudy> {
+        const response = await this.getParticipantStudyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -344,7 +374,7 @@ export class StudiesApi extends runtime.BaseAPI {
      * Get a stage
      * Get a stage
      */
-    async getStageRaw(requestParameters: GetStageRequest): Promise<runtime.ApiResponse<Stage>> {
+    async getStageRaw(requestParameters: GetStageRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Stage>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getStage.');
         }
@@ -358,7 +388,7 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        });
+        }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => StageFromJSON(jsonValue));
     }
@@ -367,8 +397,8 @@ export class StudiesApi extends runtime.BaseAPI {
      * Get a stage
      * Get a stage
      */
-    async getStage(requestParameters: GetStageRequest): Promise<Stage> {
-        const response = await this.getStageRaw(requestParameters);
+    async getStage(requestParameters: GetStageRequest, initOverrides?: RequestInit): Promise<Stage> {
+        const response = await this.getStageRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -376,7 +406,7 @@ export class StudiesApi extends runtime.BaseAPI {
      * Get studies for the calling researcher. 
      * Get studies for the calling researcher
      */
-    async getStudiesRaw(): Promise<runtime.ApiResponse<Studies>> {
+    async getStudiesRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<Studies>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -386,7 +416,7 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        });
+        }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => StudiesFromJSON(jsonValue));
     }
@@ -395,8 +425,8 @@ export class StudiesApi extends runtime.BaseAPI {
      * Get studies for the calling researcher. 
      * Get studies for the calling researcher
      */
-    async getStudies(): Promise<Studies> {
-        const response = await this.getStudiesRaw();
+    async getStudies(initOverrides?: RequestInit): Promise<Studies> {
+        const response = await this.getStudiesRaw(initOverrides);
         return await response.value();
     }
 
@@ -404,7 +434,7 @@ export class StudiesApi extends runtime.BaseAPI {
      * Land a study stage
      * Land a study stage
      */
-    async landStudyRaw(requestParameters: LandStudyRequest): Promise<runtime.ApiResponse<void>> {
+    async landStudyRaw(requestParameters: LandStudyRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling landStudy.');
         }
@@ -430,7 +460,7 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-        });
+        }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -439,15 +469,15 @@ export class StudiesApi extends runtime.BaseAPI {
      * Land a study stage
      * Land a study stage
      */
-    async landStudy(requestParameters: LandStudyRequest): Promise<void> {
-        await this.landStudyRaw(requestParameters);
+    async landStudy(requestParameters: LandStudyRequest, initOverrides?: RequestInit): Promise<void> {
+        await this.landStudyRaw(requestParameters, initOverrides);
     }
 
     /**
      * Launch the next available study stage
      * Launch the next available study stage
      */
-    async launchStudyRaw(requestParameters: LaunchStudyRequest): Promise<runtime.ApiResponse<Launch>> {
+    async launchStudyRaw(requestParameters: LaunchStudyRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Launch>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling launchStudy.');
         }
@@ -465,7 +495,7 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-        });
+        }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LaunchFromJSON(jsonValue));
     }
@@ -474,8 +504,8 @@ export class StudiesApi extends runtime.BaseAPI {
      * Launch the next available study stage
      * Launch the next available study stage
      */
-    async launchStudy(requestParameters: LaunchStudyRequest): Promise<Launch> {
-        const response = await this.launchStudyRaw(requestParameters);
+    async launchStudy(requestParameters: LaunchStudyRequest, initOverrides?: RequestInit): Promise<Launch> {
+        const response = await this.launchStudyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -483,7 +513,7 @@ export class StudiesApi extends runtime.BaseAPI {
      * Remove a researcher from a study.  Cannot remove the last researcher.
      * Remove a researcher from a study
      */
-    async removeResearcherFromStudyRaw(requestParameters: RemoveResearcherFromStudyRequest): Promise<runtime.ApiResponse<void>> {
+    async removeResearcherFromStudyRaw(requestParameters: RemoveResearcherFromStudyRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.studyId === null || requestParameters.studyId === undefined) {
             throw new runtime.RequiredError('studyId','Required parameter requestParameters.studyId was null or undefined when calling removeResearcherFromStudy.');
         }
@@ -501,7 +531,7 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-        });
+        }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -510,21 +540,21 @@ export class StudiesApi extends runtime.BaseAPI {
      * Remove a researcher from a study.  Cannot remove the last researcher.
      * Remove a researcher from a study
      */
-    async removeResearcherFromStudy(requestParameters: RemoveResearcherFromStudyRequest): Promise<void> {
-        await this.removeResearcherFromStudyRaw(requestParameters);
+    async removeResearcherFromStudy(requestParameters: RemoveResearcherFromStudyRequest, initOverrides?: RequestInit): Promise<void> {
+        await this.removeResearcherFromStudyRaw(requestParameters, initOverrides);
     }
 
     /**
      * Update a stage
      * Update a stage
      */
-    async updateStageRaw(requestParameters: UpdateStageRequest): Promise<runtime.ApiResponse<Stage>> {
+    async updateStageRaw(requestParameters: UpdateStageRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Stage>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateStage.');
         }
 
-        if (requestParameters.stage === null || requestParameters.stage === undefined) {
-            throw new runtime.RequiredError('stage','Required parameter requestParameters.stage was null or undefined when calling updateStage.');
+        if (requestParameters.updateStage === null || requestParameters.updateStage === undefined) {
+            throw new runtime.RequiredError('updateStage','Required parameter requestParameters.updateStage was null or undefined when calling updateStage.');
         }
 
         const queryParameters: any = {};
@@ -538,8 +568,8 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: StageUpdateToJSON(requestParameters.stage),
-        });
+            body: UpdateStageToJSON(requestParameters.updateStage),
+        }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => StageFromJSON(jsonValue));
     }
@@ -548,8 +578,8 @@ export class StudiesApi extends runtime.BaseAPI {
      * Update a stage
      * Update a stage
      */
-    async updateStage(requestParameters: UpdateStageRequest): Promise<Stage> {
-        const response = await this.updateStageRaw(requestParameters);
+    async updateStage(requestParameters: UpdateStageRequest, initOverrides?: RequestInit): Promise<Stage> {
+        const response = await this.updateStageRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -557,13 +587,9 @@ export class StudiesApi extends runtime.BaseAPI {
      * Update a study
      * Update a study
      */
-    async updateStudyRaw(requestParameters: UpdateStudyRequest): Promise<runtime.ApiResponse<Study>> {
+    async updateStudyRaw(requestParameters: UpdateStudyRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Study>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateStudy.');
-        }
-
-        if (requestParameters.study === null || requestParameters.study === undefined) {
-            throw new runtime.RequiredError('study','Required parameter requestParameters.study was null or undefined when calling updateStudy.');
         }
 
         const queryParameters: any = {};
@@ -577,8 +603,8 @@ export class StudiesApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: StudyUpdateToJSON(requestParameters.study),
-        });
+            body: UpdateStudyToJSON(requestParameters.updateStudy),
+        }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => StudyFromJSON(jsonValue));
     }
@@ -587,8 +613,8 @@ export class StudiesApi extends runtime.BaseAPI {
      * Update a study
      * Update a study
      */
-    async updateStudy(requestParameters: UpdateStudyRequest): Promise<Study> {
-        const response = await this.updateStudyRaw(requestParameters);
+    async updateStudy(requestParameters: UpdateStudyRequest, initOverrides?: RequestInit): Promise<Study> {
+        const response = await this.updateStudyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

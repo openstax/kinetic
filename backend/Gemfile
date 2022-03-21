@@ -47,9 +47,10 @@ gem 'will_paginate', '~> 3.1.7'
 # API versioning and documentation
 gem 'openstax_api', '9.4.1'
 
-gem 'openstax_swagger',
-    github: 'openstax/swagger-rails',
-    ref: '1df972b4bae1ea1ae7dd2ecac4804b4bf2642ee9'
+gem 'openstax_openapi',
+    github: 'openstax/openapi-rails',
+    ref: 'fbd266525044db42f485ba4c7e34280b0a319314'
+    #path: '../../openapi-rails'
 
 gem 'openstax_auth',
     github: 'openstax/auth-rails',

@@ -124,6 +124,7 @@ RSpec.describe 'Studies', type: :request, api: :v1 do
 
       it 'updates the study' do
         api_put "researcher/studies/#{study1.id}", params: { study: { duration_minutes: 2 } }
+
         expect(response).to have_http_status(:success)
         expect(response_hash).to match(
           a_hash_including(duration_minutes: 2)

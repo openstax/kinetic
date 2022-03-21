@@ -1,23 +1,34 @@
 # frozen_string_literal: true
 
-class Api::V1::Researcher::StudiesSwagger
-  include Swagger::Blocks
-  include OpenStax::Swagger::SwaggerBlocksExtensions
+class Api::V1::Researcher::StudiesOpenApi
+  include OpenStax::OpenApi::Blocks
 
   COMMON_REQUIRED_STUDY_FIELDS = [
     :title_for_participants, :description_for_participants,
     :short_description, :tags
   ].freeze
 
-  swagger_schema :Study do
-    key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
-  end
+  openapi_component do
+    schema :Study do
+      key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
+    end
 
-  swagger_schema :NewStudy do
-    key :required, COMMON_REQUIRED_STUDY_FIELDS
-  end
+    schema :NewStudy do
+      key :required, COMMON_REQUIRED_STUDY_FIELDS
+    end
 
-  swagger_schema :StudyUpdate
+    schema :StudyUpdate
+
+    schema :Studies do
+      property :data do
+        key :type, :array
+        key :description, 'The studies.'
+        items do
+          key :$ref, :Study
+        end
+      end
+    end
+  end
 
   add_properties(:Study, :StudyUpdate) do
     property :id do
@@ -58,11 +69,13 @@ class Api::V1::Researcher::StudiesSwagger
     end
     property :opens_at do
       key :type, :string
+      key :nullable, true
       key :format, 'date-time'
       key :description, 'When the study opens for participation; null means not open.'
     end
     property :closes_at do
       key :type, :string
+      key :nullable, true
       key :format, 'date-time'
       key :description, 'When the study closes for participation; null means does not close.'
     end
@@ -103,158 +116,119 @@ class Api::V1::Researcher::StudiesSwagger
     end
   end
 
-  swagger_schema :Studies do
-    # organization from https://jsonapi.org/
-    # property :meta do
-    #   property :page do
-    #     key :type, :integer
-    #     key :description, 'The current page number for these paginated results, one-indexed.'
-    #   end
-    #   property :per_page do
-    #     key :type, :integer
-    #     key :description, 'The requested number of results per page.'
-    #   end
-    #   property :count do
-    #     key :type, :integer
-    #     key :description, 'The number of results in the current page.'
-    #   end
-    #   property :total_count do
-    #     key :type, :integer
-    #     key :description, 'The number of results across all pages.'
-    #   end
-    # end
-    property :data do
-      key :type, :array
-      key :description, 'The studies.'
-      items do
-        key :$ref, :Study
-      end
-    end
-  end
-
-  swagger_path '/researcher/studies' do
+  openapi_path '/researcher/studies' do
     operation :post do
       key :summary, 'Add a study'
       key :description, 'Add a study'
       key :operationId, 'addStudy'
-      key :produces, [
-        'application/json'
-      ]
-      key :tags, [
-        'Studies'
-      ]
-      parameter do
-        key :name, :study
-        key :in, :body
+      request_body do
         key :description, 'The study data'
-        key :required, true
-        schema do
-          key :$ref, :NewStudy
+        content 'application/json' do
+          schema do
+            key :type, :object
+            key :title, :addStudy
+            property :study do
+              key :required, true
+              key :$ref, :Study
+            end
+          end
         end
       end
       response 201 do
         key :description, 'Created.  Returns the created study.'
-        schema do
-          key :$ref, :Study
+        content 'application/json' do
+          schema do
+            key :title, 'data'
+            key :required, true
+            key :$ref, :Study
+          end
         end
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
-  swagger_path '/researcher/studies' do
+  openapi_path '/researcher/studies' do
     operation :get do
       key :summary, 'Get studies for the calling researcher'
       key :description, <<~DESC
         Get studies for the calling researcher.
       DESC
       key :operationId, 'getStudies'
-      key :produces, [
-        'application/json'
-      ]
-      key :tags, [
-        'Studies'
-      ]
       response 200 do
         key :description, 'Success.  Returns the studies.'
-        schema do
-          key :$ref, :Studies
+        content 'application/json' do
+          schema { key :$ref, :Studies }
         end
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
-  swagger_path '/researcher/studies/{id}' do
+  openapi_path '/researcher/studies/{id}' do
     operation :put do
       key :summary, 'Update a study'
       key :description, 'Update a study'
       key :operationId, 'updateStudy'
-      key :produces, [
-        'application/json'
-      ]
-      key :tags, [
-        'Studies'
-      ]
       parameter do
         key :name, :id
         key :in, :path
         key :description, 'ID of the study to update.'
         key :required, true
-        key :type, :number
+        key :schema, { type: :integer }
       end
-      parameter do
-        key :name, :study
-        key :in, :body
+
+      request_body do
         key :description, 'The study updates.'
-        key :required, true
-        schema do
-          key :$ref, :StudyUpdate
+        content 'application/json' do
+          schema do
+            key :type, :object
+            key :title, :updateStudy
+            property :study do
+              key :$ref, :StudyUpdate
+            end
+          end
         end
       end
       response 200 do
         key :description, 'Success.  Returns the updated study.'
-        schema do
-          key :$ref, :Study
+        content 'application/json' do
+          schema do
+            key :$ref, :Study
+          end
         end
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 
-  swagger_path '/researcher/studies/{study_id}' do
+  openapi_path '/researcher/studies/{study_id}' do
     operation :delete do
       key :summary, 'Deletes an unlaunched study'
       key :description, 'Remove a study.  Cannot remove a study that has `first_lauched_at` set.'
       key :operationId, 'deleteStudy'
-      key :produces, [
-        'application/json'
-      ]
-      key :tags, [
-        'Studies'
-      ]
       parameter do
         key :name, :study_id
         key :in, :path
         key :description, 'ID of the study.'
         key :required, true
-        key :type, :integer
+        key :schema, { type: :integer }
       end
       response 200 do
         key :description, 'Success.'
       end
-      extend Api::V1::SwaggerResponses::AuthenticationError
-      extend Api::V1::SwaggerResponses::ForbiddenError
-      extend Api::V1::SwaggerResponses::UnprocessableEntityError
-      extend Api::V1::SwaggerResponses::ServerError
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
     end
   end
 end

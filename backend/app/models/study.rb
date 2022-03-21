@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Study < ApplicationRecord
+  # list of fields to set to nil when they're ommited in an api udpate
+  NULLABLE_FIELDS = %w[opens_at closes_at].freeze
   has_many :study_researchers, dependent: :destroy
   has_many :researchers, through: :study_researchers, dependent: :destroy
   # need the double quotes, order is a postgresql semi-reserved word

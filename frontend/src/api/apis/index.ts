@@ -1,2 +1,3 @@
-export * from './EnvironmentApi';
-export * from './StudiesApi';
+/* tslint:disable */
+/* eslint-disable */
+export * from './DefaultApi';

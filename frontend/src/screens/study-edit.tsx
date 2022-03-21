@@ -8,7 +8,7 @@ import {
     LinkButton, Button, Box,
 } from '@components'
 import { StudyValidationSchema, TagLabels, isNewStudy, EditingStudy, isStudy } from '@models'
-import { NewStudy, Study, Stage, StudyUpdate } from '@api'
+import { Study, Stage } from '@api'
 import { useStudyApi, errorToString, useForceUpdate, pick, remove } from '@lib'
 import { StudyModal } from './studies/modal'
 
@@ -101,9 +101,11 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate():void }> = ({ study,
     const saveStage = async (stage: any, helpers: any) => {
         setError('')
         try {
-            const reply = await api.addStage({ id: study.id, stage: {
-                ...StageFields.withoutConfig(stage),
-                config: StageFields.toConfig(stage),
+            const reply = await api.addStage({ studyId: study.id, addStage: {
+                stage: {
+                    ...StageFields.withoutConfig(stage),
+                    config: StageFields.toConfig(stage),
+                },
             } })
             helpers.resetForm()
             setShowingModal(false)
@@ -275,11 +277,11 @@ function EditStudy() {
     const saveStudy = async (study: EditingStudy) => {
         try {
             if (isNew) {
-                const savedStudy = await api.addStudy({ study: study as any as NewStudy })
+                const savedStudy = await api.addStudy({ addStudy: { study: study as any } })
                 setStudy(savedStudy)
                 history.push(`/study/edit/${savedStudy.id}`)
             } else {
-                await api.updateStudy({ id: Number(id), study: study as any as StudyUpdate })
+                await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
             }
         }
         catch(err) {

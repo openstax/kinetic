@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * OpenStax Kinetic API
- * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v0/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
+ * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v1/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
  *
  * The version of the OpenAPI document: 0.1.0
  * 
@@ -16,28 +16,28 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface ModelError
+ * @interface ServerError
  */
-export interface ModelError {
+export interface ServerError {
     /**
      * The HTTP status code
      * @type {number}
-     * @memberof ModelError
+     * @memberof ServerError
      */
     statusCode?: number;
     /**
      * The error messages, if any
      * @type {Array<string>}
-     * @memberof ModelError
+     * @memberof ServerError
      */
     messages?: Array<string>;
 }
 
-export function ModelErrorFromJSON(json: any): ModelError {
-    return ModelErrorFromJSONTyped(json, false);
+export function ServerErrorFromJSON(json: any): ServerError {
+    return ServerErrorFromJSONTyped(json, false);
 }
 
-export function ModelErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): ModelError {
+export function ServerErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): ServerError {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -48,7 +48,7 @@ export function ModelErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     };
 }
 
-export function ModelErrorToJSON(value?: ModelError | null): any {
+export function ServerErrorToJSON(value?: ServerError | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -61,5 +61,4 @@ export function ModelErrorToJSON(value?: ModelError | null): any {
         'messages': value.messages,
     };
 }
-
 

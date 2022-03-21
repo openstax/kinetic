@@ -28,7 +28,7 @@ Rails.application.config.to_prepare do
     end
 
     def self.attributes_from_study_model(model, user=nil)
-      model.attributes.tap do |attributes|
+      model.attributes_for_binding(self).tap do |attributes|
         attributes[:title] = model.title_for_participants
         if user
           attributes[:stages] = model.stages.map do |stage_model|

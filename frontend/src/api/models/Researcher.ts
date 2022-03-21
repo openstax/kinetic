@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * OpenStax Kinetic API
- * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v0/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
+ * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v1/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
  *
  * The version of the OpenAPI document: 0.1.0
  * 
@@ -19,6 +19,12 @@ import { exists, mapValues } from '../runtime';
  * @interface Researcher
  */
 export interface Researcher {
+    /**
+     * The researcher's ID.
+     * @type {number}
+     * @memberof Researcher
+     */
+    id?: number;
     /**
      * The researcher's user ID.
      * @type {string}
@@ -55,6 +61,7 @@ export function ResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
+        'id': !exists(json, 'id') ? undefined : json['id'],
         'userId': json['user_id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'institution': !exists(json, 'institution') ? undefined : json['institution'],
@@ -71,11 +78,11 @@ export function ResearcherToJSON(value?: Researcher | null): any {
     }
     return {
         
+        'id': value.id,
         'user_id': value.userId,
         'name': value.name,
         'institution': value.institution,
         'bio': value.bio,
     };
 }
-
 

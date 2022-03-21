@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * OpenStax Kinetic API
- * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v0/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
+ * The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v1/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
  *
  * The version of the OpenAPI document: 0.1.0
  * 
@@ -60,13 +60,13 @@ export interface NewStudy {
      * @type {Date}
      * @memberof NewStudy
      */
-    opensAt?: Date;
+    opensAt?: Date | null;
     /**
      * When the study closes for participation; null means does not close.
      * @type {Date}
      * @memberof NewStudy
      */
-    closesAt?: Date;
+    closesAt?: Date | null;
     /**
      * Mandatory studies must be completed by all users
      * @type {boolean}
@@ -97,8 +97,8 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
         'tags': json['tags'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
-        'opensAt': !exists(json, 'opens_at') ? undefined : (new Date(json['opens_at'])),
-        'closesAt': !exists(json, 'closes_at') ? undefined : (new Date(json['closes_at'])),
+        'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
+        'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
     };
@@ -119,11 +119,10 @@ export function NewStudyToJSON(value?: NewStudy | null): any {
         'long_description': value.longDescription,
         'tags': value.tags,
         'duration_minutes': value.durationMinutes,
-        'opens_at': value.opensAt === undefined ? undefined : (value.opensAt.toISOString()),
-        'closes_at': value.closesAt === undefined ? undefined : (value.closesAt.toISOString()),
+        'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
+        'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'is_mandatory': value.isMandatory,
         'participation_points': value.participationPoints,
     };
 }
-
 

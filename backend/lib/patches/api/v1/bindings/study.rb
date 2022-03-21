@@ -8,7 +8,7 @@ Rails.application.config.to_prepare do
     end
 
     def self.create_from_model(model)
-      attributes = model.attributes
+      attributes = model.attributes_for_binding(self)
       attributes[:first_launched_at] = model.first_launched_study&.first_launched_at
       attributes[:return_url] = frontend_returning_url(model.id)
 

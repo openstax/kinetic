@@ -13,35 +13,42 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import {
+    StageUpdate,
+    StageUpdateFromJSON,
+    StageUpdateFromJSONTyped,
+    StageUpdateToJSON,
+} from './StageUpdate';
+
 /**
  * 
  * @export
- * @interface Launch
+ * @interface UpdateStage
  */
-export interface Launch {
+export interface UpdateStage {
     /**
-     * The URL to send a user to to start a study stage
-     * @type {string}
-     * @memberof Launch
+     * 
+     * @type {StageUpdate}
+     * @memberof UpdateStage
      */
-    url: string;
+    stage?: StageUpdate;
 }
 
-export function LaunchFromJSON(json: any): Launch {
-    return LaunchFromJSONTyped(json, false);
+export function UpdateStageFromJSON(json: any): UpdateStage {
+    return UpdateStageFromJSONTyped(json, false);
 }
 
-export function LaunchFromJSONTyped(json: any, ignoreDiscriminator: boolean): Launch {
+export function UpdateStageFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateStage {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'url': json['url'],
+        'stage': !exists(json, 'stage') ? undefined : StageUpdateFromJSON(json['stage']),
     };
 }
 
-export function LaunchToJSON(value?: Launch | null): any {
+export function UpdateStageToJSON(value?: UpdateStage | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -50,7 +57,7 @@ export function LaunchToJSON(value?: Launch | null): any {
     }
     return {
         
-        'url': value.url,
+        'stage': StageUpdateToJSON(value.stage),
     };
 }
 

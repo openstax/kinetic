@@ -2,14 +2,14 @@
 
 require 'uri'
 
-class Api::V1::SwaggerController < ApplicationController
-  include ::Swagger::Blocks
+class Api::V1::OpenApiController < ApplicationController
+  include ::OpenStax::OpenApi::Blocks
 
   ACCEPT_HEADER = 'application/json'
-  BASE_PATH = '/api/v0'
+  BASE_PATH = '/api/v1'
 
-  swagger_root do
-    key :swagger, '2.0'
+  openapi_root do
+    key :openapi, '3.0.0'
     info do
       key :version, '0.1.0'
       key :title, 'OpenStax Kinetic API'
@@ -34,22 +34,22 @@ class Api::V1::SwaggerController < ApplicationController
       key :name, 'Kinetic'
       key :description, 'Kinetic endpoints'
     end
-    key :basePath, BASE_PATH
-    key :consumes, [ACCEPT_HEADER]
-    key :produces, ['application/json']
+    server do
+      key :url, BASE_PATH
+    end
   end
 
-  SWAGGERED_CLASSES = [
-    Api::V1::SwaggerResponses,
-    Api::V1::Researcher::StudiesSwagger,
-    Api::V1::Researcher::StudyResearchersSwagger,
-    Api::V1::Researcher::StagesSwagger,
-    Api::V1::Participant::StudiesSwagger,
-    Api::V1::EnvironmentSwagger,
+  OPENAPI_CLASSES = [
+    Api::V1::OpenApiResponses,
+    Api::V1::Researcher::StudiesOpenApi,
+    Api::V1::Researcher::StudyResearchersOpenApi,
+    Api::V1::Researcher::StagesOpenApi,
+    Api::V1::Participant::StudiesOpenApi,
+    Api::V1::EnvironmentOpenApi,
     self
   ].freeze
 
   def json
-    render json: Swagger::Blocks.build_root_json(SWAGGERED_CLASSES)
+    render json: OpenStax::OpenApi.build_root_json(OPENAPI_CLASSES)
   end
 end

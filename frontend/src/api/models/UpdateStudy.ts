@@ -13,35 +13,42 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import {
+    StudyUpdate,
+    StudyUpdateFromJSON,
+    StudyUpdateFromJSONTyped,
+    StudyUpdateToJSON,
+} from './StudyUpdate';
+
 /**
  * 
  * @export
- * @interface Launch
+ * @interface UpdateStudy
  */
-export interface Launch {
+export interface UpdateStudy {
     /**
-     * The URL to send a user to to start a study stage
-     * @type {string}
-     * @memberof Launch
+     * 
+     * @type {StudyUpdate}
+     * @memberof UpdateStudy
      */
-    url: string;
+    study?: StudyUpdate;
 }
 
-export function LaunchFromJSON(json: any): Launch {
-    return LaunchFromJSONTyped(json, false);
+export function UpdateStudyFromJSON(json: any): UpdateStudy {
+    return UpdateStudyFromJSONTyped(json, false);
 }
 
-export function LaunchFromJSONTyped(json: any, ignoreDiscriminator: boolean): Launch {
+export function UpdateStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateStudy {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'url': json['url'],
+        'study': !exists(json, 'study') ? undefined : StudyUpdateFromJSON(json['study']),
     };
 }
 
-export function LaunchToJSON(value?: Launch | null): any {
+export function UpdateStudyToJSON(value?: UpdateStudy | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -50,7 +57,7 @@ export function LaunchToJSON(value?: Launch | null): any {
     }
     return {
         
-        'url': value.url,
+        'study': StudyUpdateToJSON(value.study),
     };
 }
 
