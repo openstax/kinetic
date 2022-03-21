@@ -15,12 +15,12 @@ Building will generate files in the `dist` directory.  One of the files is a `ma
 ## Backend
 
 If you want your Git config and SSH keys available inside running docker containers,
-copy the `docker-compose.override.yml.example` file to `docker-compose.override.yml` and
+copy the `docker compose.override.yml.example` file to `docker compose.override.yml` and
 modify its contents as necessary for your configuration.
 
 ```bash
-$> docker-compose build
-$> docker-compose up
+$> docker compose build
+$> docker compose up
 ```
 
 Which will start hosting the Rails api app at http://0.0.0.0:4006.  A PetStore app showing the Rails app API runs at http://0.0.0.0:4008.  The front-end will be at http://0.0.0.0:4000
@@ -28,13 +28,13 @@ Which will start hosting the Rails api app at http://0.0.0.0:4006.  A PetStore a
 Get into a backend terminal with
 
 ```bash
-$> docker-compose exec api /bin/bash
+$> docker compose exec api /bin/bash
 ```
 
 Then you can run `rake db:migrate`, `rspec`, whatever.  Or you can run those directly from the host with
 
 ```bash
-$> docker-compose exec api rake db:migrate
+$> docker compose exec api rake db:migrate
 ```
 
 ### OpenApi, Clients, and Bindings
