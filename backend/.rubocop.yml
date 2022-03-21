@@ -37,7 +37,7 @@ Metrics/BlockLength:
   CountAsOne: ['heredoc']
   Max: 30
   Exclude:
-    - '**/*_swagger.rb'
+    - '**/*_open_api.rb'
     - '**/*.rake'
     - 'lib/patches/api/**/*.rb'
 
