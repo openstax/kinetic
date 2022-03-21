@@ -17,6 +17,9 @@ disallowed_books:
   - principles-microeconomics-ap-courses-2e
   - principles-macroeconomics-ap-courses
   - principles-macroeconomics-ap-courses-2e
+  - cálculo-volumen-1
+  - cálculo-volumen-2
+  - cálculo-volumen-3
 allowed_country_codes:
   - US
   - UM
