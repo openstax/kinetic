@@ -67,7 +67,8 @@ class QualtricsLauncher
 
   def launched_study
     # There should be only one not-completed
-    @launched_study ||= LaunchedStudy.where({ user_id: user_id, study_id: study_id, completed_at: nil }).first
+    @launched_study ||= LaunchedStudy.where({ user_id: user_id, study_id: study_id,
+                                              completed_at: nil }).first
   end
 
 end
