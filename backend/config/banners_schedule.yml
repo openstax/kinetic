@@ -15,36 +15,36 @@
   end_at: 2022-03-13
 -
   id: 1-2-3
-  message: New gift card 🎁 giveaways will be awarded on March 25th, and new tasks will be available on Tuesday, Mar 28th! 🗓
-  start_at: 2022-03-14
-  end_at: 2022-03-24
+  message: New gift card 🎁 giveaways will be awarded on April 4th, and new tasks will be available on Friday, April 8th! 🗓
+  start_at: 2022-03-24
+  end_at: 2022-04-05
 -
   id: 1-2-4
-  message: Gift card giveaway winners 🎁  have been chosen! 👀 for new tasks on Tuesday, Mar 28th!
-  start_at: 2022-03-25
-  end_at: 2022-03-27
+  message: Gift card giveaway winners 🎁  have been chosen! 👀 for new tasks on Friday, April 8th!
+  start_at: 2022-04-05
+  end_at: 2022-04-07
 -
   id: 1-3-1
   message: A month of learning beckons - access our all new studies! 👓
-  start_at: 2022-03-28
-  end_at: 2022-04-03
+  start_at: 2022-04-08
+  end_at: 2022-04-21
 -
   id: 1-3-2
   message: Lucky you - studies 📚 are still available to enter an exciting gift card giveaway!🎁
-  start_at: 2022-04-04
-  end_at: 2022-04-12
+  start_at: 2022-04-22
+  end_at: 2022-04-28
 -
   id: 1-3-3
-  message: Gift card giveaways 📢 on Friday, Apr 22nd! 🥳
-  start_at: 2022-04-13
-  end_at: 2022-04-21
+  message: Gift card giveaways 📢 on Friday, May 6th! 🥳
+  start_at: 2022-04-29
+  end_at: 2022-05-05
 -
   id: 1-3-4
   message: Gift card 🎁 giveaway winners have been chosen! Continue exploring - the rewards 🏆 haven't ended yet!
-  start_at: 2022-04-22
-  end_at: 2022-04-24
+  start_at: 2022-05-06
+  end_at: 2022-05-08
 -
   id: 1-3-5
-  message: Last chance ⏳ to complete all studies by Apr 29 for a chance to win a pair of Apple AirPods! 🎧
-  start_at: 2022-04-25
-  end_at: 2022-04-29
+  message: Last chance ⏳ to complete all studies by May 12 for a chance to win a pair of Apple AirPods! 🎧
+  start_at: 2022-05-09
+  end_at: 2022-05-12
