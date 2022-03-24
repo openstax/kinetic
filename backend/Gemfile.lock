@@ -9,8 +9,8 @@ GIT
 
 GIT
   remote: https://github.com/openstax/openapi-rails.git
-  revision: fbd266525044db42f485ba4c7e34280b0a319314
-  ref: fbd266525044db42f485ba4c7e34280b0a319314
+  revision: c81c58b44ba3f88b7ce31e749b326e2b701a1945
+  ref: c81c58b44ba3f88b7ce31e749b326e2b701a1945
   specs:
     openstax_openapi (0.1.0)
       oj

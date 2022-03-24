@@ -49,7 +49,7 @@ gem 'openstax_api', '9.4.1'
 
 gem 'openstax_openapi',
     github: 'openstax/openapi-rails',
-    ref: 'fbd266525044db42f485ba4c7e34280b0a319314'
+    ref: 'c81c58b44ba3f88b7ce31e749b326e2b701a1945'
     #path: '../../openapi-rails'
 
 gem 'openstax_auth',
