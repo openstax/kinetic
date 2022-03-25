@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: truex
 
 class LaunchPad
 
@@ -69,6 +69,6 @@ class LaunchPad
   end
 
   def launched_study
-    @launched_study ||= LaunchedStudy.find_or_create_by!(study_id: study_id, user_id: user_id)
+    @launched_study ||= LaunchedStudy.where(completed_at: nil).find_or_create_by!(study_id: study_id, user_id: user_id)
   end
 end

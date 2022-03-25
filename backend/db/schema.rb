@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 2022_04_08_162010) do
     t.datetime "aborted_at"
     t.boolean "consent_granted"
     t.index ["study_id"], name: "index_launched_studies_on_study_id"
-    t.index ["user_id", "study_id"], name: "index_launched_studies_on_user_id_and_study_id", unique: true
+    t.index ["user_id", "study_id", "consent_granted"], name: "index_launched_studies_on_user_id_and_study_id_and_consent", unique: true
   end
 
   create_table "participant_metadata", force: :cascade do |t|
