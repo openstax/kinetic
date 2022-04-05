@@ -1,4 +1,4 @@
-import { useHistory, useRouteMatch } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { React, useEffect, useState } from '@common'
 import { colors } from '../theme'
 import { ParticipantStudy, DefaultApi, LandStudyRequest, LandStudyAbortedEnum } from '@api'
@@ -66,14 +66,14 @@ const landStudy = async (api: DefaultApi, params: LandStudyRequest, isPreview: b
 }
 
 export default function UsersStudies() {
-    const { params: { studyId } } = useRouteMatch<{ studyId: string }>();
+    const { studyId } = useParams<string>();
 
     // this is somewhat inaccurate but we do not want to say something like "recording status"
     // since that will alarm participants who refused consent
     const [study, setStudy] = useState<ParticipantStudy|null>(null)
     const [error, setError] = useState<any>(null)
     const api = useStudyApi()
-    const history = useHistory()
+    const nav = useNavigate()
     const user = useCurrentUser()
     const noConsent = useQueryParam('consent') == 'false'
     const abort =  useQueryParam('abort') == 'true'
@@ -87,7 +87,7 @@ export default function UsersStudies() {
         if (isIframed()) {
             sendMessageToParent({ closeStudyModal: true })
         } else {
-            history.push('/studies')
+            nav('/studies')
         }
     }
     useEffect(() => {

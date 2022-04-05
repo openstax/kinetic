@@ -1,7 +1,7 @@
 import { React } from '../common'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 
 export default function Homepage() {
-    return <Redirect to="/studies" />
+    return <Navigate to="/studies" />
 }

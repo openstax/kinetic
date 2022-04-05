@@ -1,4 +1,5 @@
-import { React, ReactDOM } from '@common'
+import { React } from '@common'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { whenDomReady } from '@lib'
 import { EnvironmentProvider } from './lib/environment-provider'
@@ -18,5 +19,6 @@ const App = () => (
 )
 
 whenDomReady().then(() => {
-    ReactDOM.render(<App />, document.getElementById('root'))
+    const root = createRoot(document.getElementById('root')!)
+    root.render(<App />, )
 })

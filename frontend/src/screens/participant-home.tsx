@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useHistory, useMemo, cx } from '@common'
+import { React, useEffect, useState, useNavigate, useMemo, cx } from '@common'
 import { ParticipantStudies, ParticipantStudy } from '@api'
 import { get } from 'lodash'
 import {
@@ -20,10 +20,10 @@ const Tag:React.FC<{ tag?: string }> = ({ tag }) => (
 
 
 const StudyCard:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
-    const history = useHistory()
+    const nav = useNavigate()
     const isEnabled = isStudyLaunchable(study)
     const onClick = () => {
-        isEnabled && history.push(`/study/details/${study.id}`)
+        isEnabled && nav(`/study/details/${study.id}`)
     }
 
     return (

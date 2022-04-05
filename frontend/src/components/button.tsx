@@ -1,76 +1,96 @@
-import * as React from 'react'
-import { cx, styled } from '../common'
-import { useHistory } from 'react-router-dom'
-import { usePendingState, isNil } from '../lib'
+import { React, cx } from '../common'
+import styled from '@emotion/styled'
+
+import { merge } from 'lodash-es'
 import { BSVariants, bsClassNames } from './bs'
-import { IconKey, Icon } from './icon'
 import LD from './loading-dots'
+import { IconKey, Icon } from './icon'
+import { usePendingState } from '@lib'
+
+
+const iconStyle = {
+    display: 'flex',
+    padding: 0,
+    backgroundColor: 'transparent',
+    border: 'none',
+    svg: {
+        marginRight: 0,
+        ':not([height])': {
+            height: '18px',
+        },
+    },
+}
+
+const StyledButton = styled.button<{ iconOnly: boolean }>(({ iconOnly }) => {
+    const baseStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        svg: {
+            transition: 'color 0.2s',
+            color: 'currentColor',
+            marginRight: '0.5rem',
+            ':not([height])': {
+                height: '18px',
+            },
+        },
+        '&.clear': {
+            backgroundColor: 'transparent',
+        },
+    }
+    return iconOnly ? merge(baseStyle, iconStyle) : baseStyle
+})
+
 
 const Busy = styled.span({
     display: 'flex',
 })
 
-export interface ButtonProps extends React.ComponentPropsWithoutRef<'button'>, BSVariants {
-    disabled?: boolean
+type IconT = React.ReactNode | IconKey
 
-    busy?: boolean
-    icon?: IconKey
-    busyMessage?: string
+export interface ButtonProps extends BSVariants, React.ButtonHTMLAttributes<HTMLButtonElement> {
+    children?: React.ReactNode
+    onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void
+    icon?: IconT
     type?: 'button' | 'submit' | 'reset'
+    disabled?: boolean
+    busy?: boolean
+    busyMessage?: string
+    className?: string
+    clear?: boolean
+    small?: boolean
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, React.PropsWithChildren<ButtonProps>>((forwardedProps, ref) => {
-
     const {
-        disabled,
-        busyMessage,
-        children,
-        icon,
+        disabled, busyMessage, children, clear, small,
         type = 'button',
-        busy: isBusy = false,
+        busy: busyProp = false,
         className = '',
         ...otherProps
     } = forwardedProps
+    let { icon, ...nonIconProps } = otherProps
 
+    const [bsClasses, props] = bsClassNames('btn', nonIconProps, { default: 'light' })
 
-    const [bsClasses, props] = bsClassNames('btn', otherProps, { default: 'light' })
-    let iconEl = null
-
-    if (icon) {
-        iconEl = <Icon icon={icon} css={{ marginRight: '0.35rem' }}/>
+    if (typeof icon === 'string') {
+        icon = <Icon icon={icon as IconKey} />
     }
 
-    const showAsBusy = usePendingState(isBusy, 150)
-    const message = showAsBusy ? <Busy>{busyMessage}<LD /></Busy> : children
+    const isBusy = usePendingState(busyProp, 150)
+
+    const message = isBusy ? <Busy>{busyMessage}<LD /></Busy> : children
 
     return (
-        <button
-            ref={ref}
+        <StyledButton
             type={type}
-            css={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                '&.btn-close': {
-                    background: 'transparent',
-                },
-            }}
-            className={cx('btn', className, bsClasses)} {...props
-            }
-            disabled={isNil(disabled) ? isBusy : disabled}
+            ref={ref}
+            disabled={busyProp || disabled}
+            iconOnly={icon && !message}
+            className={cx('btn', className, bsClasses, { clear, 'btn-sm': small })}
+            {...props}
         >
-            {iconEl}
+            {icon}
             {message}
-        </button>
-
+        </StyledButton>
     )
 })
-
-interface LinkButtonProps extends ButtonProps {
-    to: string
-}
-
-export const LinkButton:React.FC<LinkButtonProps> = ({ to, ...props }) => {
-    const history = useHistory()
-    const onClick = () => history.push(to)
-    return <Button onClick={onClick} {...props} />
-}

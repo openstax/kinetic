@@ -1,5 +1,5 @@
 import { React, useEffect } from '@common'
-import { Route, Switch, useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { PageNotFound } from '@components'
 import { loadAsync } from './components/async'
 import { useCurrentUser } from '@lib'
@@ -26,29 +26,15 @@ export const AppRoutes = () => {
     }, [location.pathname])
     return (
         <div className="openstax-kinetic" data-user-id={user.id}>
-            <Switch>
-                <Route exact path="/">
-                    <Home />
-                </Route>
-                <Route path="/dev">
-                    <Dev />
-                </Route>
-                <Route path="/study/land/:studyId" exact>
-                    <StudyLanding />
-                </Route>
-                <Route path={'/study/edit/:id'} exact>
-                    <EditStudy />
-                </Route>
-                <Route path={'/study/details/:id'} exact>
-                    <StudyDetails />
-                </Route>
-                <Route path="/studies" exact>
-                    <StudiesHomepage />
-                </Route>
-                <Route path="*">
-                    <PageNotFound />
-                </Route>
-            </Switch>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/dev/*" element={<Dev />} />
+                <Route path="/study/land/:studyId" element={<StudyLanding />} />
+                <Route path={'/study/edit/:id'} element={<EditStudy />} />
+                <Route path={'/study/details/:id'} element={<StudyDetails />} />
+                <Route path="/studies/*" element={<StudiesHomepage />} />
+                <Route path="*" element={<PageNotFound />} />
+            </Routes>
         </div>
     )
 }

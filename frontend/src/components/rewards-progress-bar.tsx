@@ -95,7 +95,7 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
                     <Icon
                         color={isCompleted ? colors.purple : colors.lightGray}
                         icon={isCompleted ? trophyFilledIcon : trophyOutlineIcon}
-                        height="30px"
+                        height={30}
                         className="ms-3 me-1"
                     />
                     {finalDrawing?.infoUrl && (
