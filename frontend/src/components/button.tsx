@@ -1,6 +1,5 @@
-import { React, cx } from '../common'
+import { React, cx } from '@common'
 import styled from '@emotion/styled'
-
 import { merge } from 'lodash-es'
 import { BSVariants, bsClassNames } from './bs'
 import LD from './loading-dots'
@@ -58,19 +57,25 @@ export interface ButtonProps extends BSVariants, React.ButtonHTMLAttributes<HTML
     className?: string
     clear?: boolean
     small?: boolean
+    iconOnly?: boolean
 }
 
-export const Button = React.forwardRef<HTMLButtonElement, React.PropsWithChildren<ButtonProps>>((forwardedProps, ref) => {
+export const Button = React.forwardRef<HTMLButtonElement,React.PropsWithChildren<ButtonProps>>((
+    forwardedProps,
+    ref
+) => {
     const {
         disabled, busyMessage, children, clear, small,
         type = 'button',
         busy: busyProp = false,
         className = '',
+        iconOnly = false,
         ...otherProps
     } = forwardedProps
-    let { icon, ...nonIconProps } = otherProps
 
-    const [bsClasses, props] = bsClassNames('btn', nonIconProps, { default: 'light' })
+    let { icon } = otherProps
+
+    const [bsClasses, props] = bsClassNames('btn', otherProps, { default: 'light' })
 
     if (typeof icon === 'string') {
         icon = <Icon icon={icon as IconKey} />
@@ -90,7 +95,9 @@ export const Button = React.forwardRef<HTMLButtonElement, React.PropsWithChildre
             {...props}
         >
             {icon}
-            {message}
+            {iconOnly !== true && <span>{message}</span>}
         </StyledButton>
     )
 })
+
+Button.displayName = 'Button'
