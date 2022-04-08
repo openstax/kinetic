@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
 class Api::V1::Admin::BannersController < Api::V1::Admin::BaseController
-
   before_action :set_banner, only: [:update, :destroy]
 
   def index
     render status: :ok, json: Api::V1::Bindings::BannersListing.new(
-      data: Banner.all.map { |banner| banner.to_api_binding(Api::V1::Bindings::BannerNotice) }
+      data: Banner.order(start_at: 'asc').map { |banner| banner.to_api_binding(Api::V1::Bindings::BannerNotice) }
     )
   end
 

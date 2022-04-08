@@ -1,11 +1,12 @@
 import { React } from '@common'
 import { useEnvironment } from '@lib'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, NavLink } from 'react-router-dom'
 import {
     Box, BannersBar, Logo,
 } from '@components'
 import { Navigate } from 'react-router-dom'
 import { AdminBanners } from './admin/banners'
+import { AdminRewards } from './admin/rewards'
 
 export default function AdminHome() {
     const env = useEnvironment()
@@ -21,7 +22,14 @@ export default function AdminHome() {
                             </a>
                             <ul className="nav nav-tabs align-self-end">
                                 <li className="nav-item">
-                                    <a className="nav-link active" aria-current="page" href="#">Banners</a>
+                                    <NavLink className="nav-link" aria-current="page" to="/admin/banners">
+                                        Banners
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" aria-current="page" to="/admin/rewards">
+                                        Rewards
+                                    </NavLink>
                                 </li>
                             </ul>
                         </Box>
@@ -33,6 +41,7 @@ export default function AdminHome() {
                 <Routes>
                     <Route path="/" element={<Navigate to="/admin/banners/" />} />
                     <Route path="/banners/" element={<AdminBanners />} />
+                    <Route path="/rewards/" element={<AdminRewards />} />
                 </Routes>
             </div>
         </div>
