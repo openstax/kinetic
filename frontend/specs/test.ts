@@ -1,6 +1,7 @@
 import base, { selectors } from '@playwright/test'
 import { expect } from '@playwright/test'
 import { matchers } from 'expect-playwright'
+import { faker } from '@faker-js/faker'
 import { TC, TestConfig } from './helpers'
 
 export const DEFAULT_TIMEOUT = process.env.CI ? 90000 :
@@ -10,7 +11,7 @@ export const DEFAULT_NAVIGATION_TIMEOUT = process.env.CI ? 90000 :
 
 expect.extend(matchers)
 
-import * as faker from 'faker'
+
 export const createTestIdEngine = () => {
     const toTestSelector = (sel: string) => {
         const quoted = sel.match(/^".*"$/) ? sel : `"${sel}"`
