@@ -4,14 +4,15 @@ import { React, useEffect, useState } from '@common'
 import {
     Box, Icon, Col, EditingForm as Form, Alert, DateField, InputField, LoadingAnimation,
 } from '@components'
-import { useApi } from '@lib'
+import { useApi, useFetchState } from '@lib'
 
 const RewardCard:React.FC<{ reward: Reward, onUpdate():void }> = ({ reward, onUpdate }) => {
     const [error, setError] = useState('')
     const api = useApi()
     const onDelete = async () => {
+        debugger
         if (reward.id) {
-            await api.deleteReward({ id: reward.id! }).then(onUpdate)
+            await api.deleteReward({ id: reward.id })
         }
         onUpdate()
     }
@@ -55,31 +56,22 @@ const RewardCard:React.FC<{ reward: Reward, onUpdate():void }> = ({ reward, onUp
 
 export function AdminRewards() {
     const api = useApi()
-    const [rewards, setRewards] = useState<Reward[]>([])
-    const [isBusy, setBusy] = useState(true)
-    const fetchRewards = () => {
-        setBusy(true)
-        setRewards([])
-        api.getRewards().then((list) => {
-            setRewards(list.data)
-            setBusy(false)
-        }).catch(() => setBusy(false))
-    }
-    useEffect(fetchRewards, [])
-    const addNewReward = () => {
-        setRewards([RewardFromJSON({}), ...rewards ])
-    }
-    if (isBusy) return <LoadingAnimation />
+    const state = useFetchState<Reward>({
+        fetch: async () => api.getRewards().then(list => list.data),
+        addRecord: async () => RewardFromJSON({}),
+    })
+    if (state.busy) return state.busy
 
     return (
         <div>
             <Box justify="between" align="center" margin="bottom">
                 <h4>Scheduled Rewards</h4>
-                <Icon height={15} icon="plusCircle" data-test-id="add-stage" onClick={addNewReward} />
+                <Icon height={15} icon="plusCircle" data-test-id="add-stage" onClick={state.addNewRecord} />
             </Box>
-            {rewards.map((reward, i) => (
-                <RewardCard key={reward.id || i} reward={reward} onUpdate={fetchRewards}/>
+            {state.records.map((reward, i) => (
+                <RewardCard key={reward.id || i} reward={reward} onUpdate={state.fetchRecords} />
             ))}
+
         </div>
     )
 }

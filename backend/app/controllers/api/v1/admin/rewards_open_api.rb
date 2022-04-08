@@ -45,25 +45,6 @@ class Api::V1::Admin::RewardsOpenApi
   end
 
   openapi_path '/admin/rewards' do
-    operation :delete do
-      key :summary, 'Remove a reward'
-      key :operationId, 'deleteReward'
-      parameter do
-        key :name, :id
-        key :in, :path
-        key :description, 'ID of the reward to delete.'
-        key :required, true
-        key :schema, { type: :integer }
-      end
-      response 200 do
-        key :description, 'Success.'
-      end
-      extend Api::V1::OpenApiResponses::AuthenticationError
-      extend Api::V1::OpenApiResponses::ForbiddenError
-      extend Api::V1::OpenApiResponses::UnprocessableEntityError
-      extend Api::V1::OpenApiResponses::ServerError
-    end
-
     operation :post do
       key :summary, 'Add a reward'
       key :operationId, 'createReward'
@@ -141,6 +122,25 @@ class Api::V1::Admin::RewardsOpenApi
         content 'application/json' do
           schema { key :$ref, :Reward }
         end
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+
+    operation :delete do
+      key :summary, 'Remove a reward'
+      key :operationId, 'deleteReward'
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'ID of the reward to delete.'
+        key :required, true
+        key :schema, { type: :integer }
+      end
+      response 200 do
+        key :description, 'Success.'
       end
       extend Api::V1::OpenApiResponses::AuthenticationError
       extend Api::V1::OpenApiResponses::ForbiddenError

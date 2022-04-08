@@ -4,7 +4,7 @@ import { React, useEffect, useState } from '@common'
 import {
     Box, Icon, Col, EditingForm as Form, Alert, DateField, InputField, LoadingAnimation,
 } from '@components'
-import { useApi } from '@lib'
+import { useApi, useFetchState } from '@lib'
 
 
 const Banner:React.FC<{ banner: BannerNotice, onUpdate():void }> = ({ banner, onUpdate }) => {
@@ -51,29 +51,19 @@ const Banner:React.FC<{ banner: BannerNotice, onUpdate():void }> = ({ banner, on
 
 export function AdminBanners() {
     const api = useApi()
-    const [banners, setBanners] = useState<BannerNotice[]>([])
-    const [isBusy, setBusy] = useState(true)
-    const fetchBanners = () => {
-        setBusy(true)
-        setBanners([])
-        api.getBanners().then((list) => {
-            setBanners(list.data)
-            setBusy(false)
-        }).catch(() => setBusy(false))
-    }
-    useEffect(fetchBanners, [])
-    const addNewBanner = () => {
-        setBanners([BannerNoticeFromJSON({}), ...banners ])
-    }
-    if (isBusy) return <LoadingAnimation />
+    const state = useFetchState<BannerNotice>({
+        fetch: async () => api.getRewards().then(list => list.data),
+        addRecord: async () => BannerNoticeFromJSON({}),
+    })
+    if (state.busy) return state.busy
 
     return (
         <div>
             <Box justify="between" align="center" margin="bottom">
                 <h4>Scheduled Banners</h4>
-                <Icon height={15} icon="plusCircle" data-test-id="add-stage" onClick={addNewBanner} />
+                <Icon height={15} icon="plusCircle" data-test-id="add-stage" onClick={state.addNewRecord} />
             </Box>
-            {banners.map((banner, i) => <Banner key={banner.id || i} banner={banner} onUpdate={fetchBanners}/>)}
+            {state.records.map((banner, i) => <Banner key={banner.id || i} banner={banner} onUpdate={state.fetchRecords}/>)}
         </div>
     )
 }

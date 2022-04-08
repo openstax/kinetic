@@ -38,25 +38,6 @@ class Api::V1::Admin::BannersOpenApi
   end
 
   openapi_path '/admin/banners' do
-    operation :delete do
-      key :summary, 'Remove a banner'
-      key :operationId, 'deleteBanner'
-      parameter do
-        key :name, :id
-        key :in, :path
-        key :description, 'ID of the banner to delete.'
-        key :required, true
-        key :schema, { type: :integer }
-      end
-      response 200 do
-        key :description, 'Success.'
-      end
-      extend Api::V1::OpenApiResponses::AuthenticationError
-      extend Api::V1::OpenApiResponses::ForbiddenError
-      extend Api::V1::OpenApiResponses::UnprocessableEntityError
-      extend Api::V1::OpenApiResponses::ServerError
-    end
-
     operation :post do
       key :summary, 'Add a banner'
       key :operationId, 'createBanner'
@@ -140,6 +121,26 @@ class Api::V1::Admin::BannersOpenApi
       extend Api::V1::OpenApiResponses::UnprocessableEntityError
       extend Api::V1::OpenApiResponses::ServerError
     end
+
+    operation :delete do
+      key :summary, 'Remove a banner'
+      key :operationId, 'deleteBanner'
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'ID of the banner to delete.'
+        key :required, true
+        key :schema, { type: :integer }
+      end
+      response 200 do
+        key :description, 'Success.'
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+
 
   end
 end
