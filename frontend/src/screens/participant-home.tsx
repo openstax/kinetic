@@ -36,7 +36,7 @@ const StudyCard:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
                 }}
                 aria-disabled={!isEnabled}
                 data-study-id={study.id}
-                role="link"
+                role={isEnabled ? 'link' : ''}
                 onClick={onClick}
             >
                 <Box className="card-body" direction="column">

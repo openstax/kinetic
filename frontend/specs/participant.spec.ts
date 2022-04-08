@@ -29,8 +29,6 @@ test('filtering & sorting', async ({ page }) => {
     await page.click('testId=sort-by-menu')
     await page.click('testId=sort-points:high-low')
 
-    await page.pause()
-
     let ids = await page.$$eval('[data-study-id]', studies => studies.map(s => Number(s.dataset.studyId)))
     expect(ids.indexOf(firstStudyId)).toBeGreaterThan(ids.indexOf(secondStudyId))
 
@@ -77,8 +75,9 @@ test('launching study and testing completion', async ({ page }) => {
     await goToPage({ page, path: `/study/land/${studyId}`, loginAs: 'user' })
 
     await page.click('testId=view-studies')
-    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="true"]`)
-    await page.click(`[data-study-id="${studyId}"]`)
+    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="true"][role=""]`)
+    // have to force, it shouldn't be a link
+    await page.click(`[data-study-id="${studyId}"]`, { force: true })
     // should not have navigated
     expect(
         await page.evaluate(() => document.location.pathname)
@@ -126,8 +125,9 @@ test('launching study and completing with no consent', async ({ page }) => {
     await expect(page).toMatchText(/marked as complete/)
 
     await page.click('testId=view-studies')
-    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="true"]`)
-    await page.click(`[data-study-id="${studyId}"]`)
+    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="true"][role=""]`)
+    // have to force, it shouldn't be a link
+    await page.click(`[data-study-id="${studyId}"]`, { force: true })
     // should not have navigated
     expect(
         await page.evaluate(() => document.location.pathname)

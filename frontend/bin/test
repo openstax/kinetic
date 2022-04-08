@@ -2,8 +2,6 @@
 
 set -e
 
-WATCH='f'
-OTHER_ARGS=()
 
 for arg in "$@"
 do
@@ -13,19 +11,7 @@ do
         export DEBUG=pw:api
         shift
         ;;
-        --watch)
-        WATCH='t'
-        shift
-        ;;
-        *)
-        OTHER_ARGS+=("$1")
-        shift # Remove generic argument from processing
-        ;;
     esac
 done
 
-
-$(npm bin)/playwright test "$OTHER_ARGS"
-if [[ "$WATCH" = "t" ]]; then
-    $(npm bin)/chokidar ./tutor/specs/e2e/*.ts -d 1500 -c '$(npm bin)/playwright test --config configs/playwright.config.ts {path}'
-fi
+$(npm bin)/playwright test --config playwright.config.ts --reporter=list $@
