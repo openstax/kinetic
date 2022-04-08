@@ -24,7 +24,7 @@ const Banner:React.FC<{ banner: BannerNotice, onUpdate():void }> = ({ banner, on
         onUpdate()
     }
     return (
-        <Col sm={12} align="stretch" direction="column" className="mb-2 border">
+        <Col sm={12} align="stretch" direction="column" className="mb-2 border bg-white">
             <Box className="card-header" justify="end">
                 <Icon icon="trash" onClick={onDelete} />
             </Box>
@@ -52,7 +52,7 @@ const Banner:React.FC<{ banner: BannerNotice, onUpdate():void }> = ({ banner, on
 export function AdminBanners() {
     const api = useApi()
     const state = useFetchState<BannerNotice>({
-        fetch: async () => api.getRewards().then(list => list.data),
+        fetch: async () => api.getBanners().then(list => list.data),
         addRecord: async () => BannerNoticeFromJSON({}),
     })
     if (state.busy) return state.busy
