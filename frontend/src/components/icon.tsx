@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { keyframes, css } from '@emotion/react'
+import { keyframes, css, CSSObject } from '@emotion/react'
 import { Popover } from './popover'
 import { Icon as IconifyIconComponent, IconifyIcon } from '@iconify/react'
 import { ICONS } from './packaged-icons'
@@ -23,14 +23,21 @@ interface IconifyIconDefinition {
 
 export type IconKey = keyof typeof ICONS
 
-export interface IconProps extends Omit<IconifyIcon, 'icon'> {
+export interface IconProps extends Omit<IconifyIcon, 'icon'|'body'> {
     icon: IconKey | IconifyIconDefinition | IconifyIcon
     title?: string
+    color?: string
+    className?: string
+    busy?: boolean
     tooltip?: React.ReactNode
+    buttonStyles?: CSSObject,
     onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-export const Icon:React.FC<IconProps> = ({ icon, tooltip, onClick, children, ...iconProps }) => {
+export const Icon:React.FC<IconProps> = ({
+    icon: iconProp, tooltip, onClick, children, busy, buttonStyles = {}, ...iconProps
+}) => {
+    const icon = busy ? 'spin' : iconProp
     const iconEl = (
         <IconifyIconComponent
             icon={typeof icon === 'object' ? icon : ICONS[icon]}
@@ -47,18 +54,20 @@ export const Icon:React.FC<IconProps> = ({ icon, tooltip, onClick, children, ...
     }
     if (onClick) {
         return (
-            <button onClick={onClick} css={{
-                border: 'none',
-                padding: 0,
-                margin: 0,
-                background: 'transparent',
-                color: '#738694',
-                transition: 'all 0.3s ease-out',
-                display: 'inline-flex',
-                ':hover': {
-                    color: '#292929',
-                },
-            }}>
+            <button
+                onClick={onClick}
+                disabled={busy}
+                css={Object.assign({
+                    border: 'none',
+                    padding: 0,
+                    margin: 0,
+                    background: 'transparent',
+                    color: '#738694',
+                    transition: 'all 0.3s ease-out',
+                    ':hover': {
+                        color: '#292929',
+                    },
+                }, buttonStyles)}>
                 {iconEl}
                 {children}
             </button>

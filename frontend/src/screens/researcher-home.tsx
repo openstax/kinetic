@@ -1,4 +1,4 @@
-import { React, cx, useEffect, useState, useHistory } from '@common'
+import { React, cx, useEffect, useState, useNavigate } from '@common'
 import { Studies, Study } from '@api'
 import {
     Row, Col, Box, Icon, LogoutButton, Logo,
@@ -7,7 +7,7 @@ import { useStudyApi, useEnvironment, formatDate } from '@lib'
 import { StudyStatus, getStatus, getStatusName } from '@models'
 
 const StudyRow:React.FC<{ study: Study }> = ({ study }) => {
-    const history = useHistory()
+    const nav = useNavigate()
     return (
         <Row
             css={{
@@ -27,7 +27,7 @@ const StudyRow:React.FC<{ study: Study }> = ({ study }) => {
             </Col>
             <Col sm={2}>{formatDate(study.opensAt)}</Col>
             <Col sm={2}>{getStatusName(study)}</Col>
-            <Col sm={1}><Icon icon="tripleDot" data-test-id="edit-study" onClick={() => history.push(`/study/edit/${study.id}`)}/></Col>
+            <Col sm={1}><Icon icon="tripleDot" data-test-id="edit-study" onClick={() => nav(`/study/edit/${study.id}`)}/></Col>
         </Row>
     )
 }
@@ -58,7 +58,7 @@ const StudiesTable:React.FC<{ studies: Study[] }> = ({ studies }) => {
 
 export default function ResearcherHome() {
     const api = useStudyApi()
-    const history = useHistory()
+    const nav = useNavigate()
     const env = useEnvironment()
     const [studies, setStudies] = useState<Studies>()
     useEffect(() => {
@@ -81,10 +81,10 @@ export default function ResearcherHome() {
             <Box align="center" justify="between">
                 <h1>Studies</h1>
                 <Icon
-                    height="1.5rem"
+                    height={15}
                     icon="plusCircle"
                     data-test-id="add-study"
-                    onClick={() => history.push('/study/edit/new')}
+                    onClick={() => nav('/study/edit/new')}
                 />
             </Box>
             <ul className="nav nav-tabs">

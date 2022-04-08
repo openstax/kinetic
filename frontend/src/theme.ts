@@ -10,4 +10,6 @@ export const colors = {
     darkText: '#151B2C',
     input: { border: '#ced4da' },
 
+    linkButtonIcon: '#DBDBDB',
+    linkButtonIconHover: '#151B2C',
 }

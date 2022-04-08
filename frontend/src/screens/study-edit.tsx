@@ -1,4 +1,4 @@
-import { React, useEffect, useParams, useHistory, useState } from '@common'
+import { React, useEffect, useParams, useNavigate, useState } from '@common'
 import * as Yup from 'yup'
 import { useField } from 'formik'
 import { uniqBy, omit } from 'lodash-es'
@@ -58,7 +58,7 @@ const LaunchStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
 
 const DeleteStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
     const api = useStudyApi()
-    const history = useHistory()
+    const nav = useNavigate()
     const [isPending, setPending] = useState(false)
     if (!isStudy(study) || study.firstLaunchedAt) {
         return null
@@ -66,7 +66,7 @@ const DeleteStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
     const deleteStudy = async () => {
         setPending(true)
         await api.deleteStudy({ studyId: study.id })
-        history.push('/studies')
+        nav('/studies')
     }
     return (
         <Button
@@ -158,7 +158,7 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate():void }> = ({ study,
                 </Modal.Body>
             </Modal>
 
-            <Icon height="1.5rem" icon="plusCircle" data-test-id="add-stage" onClick={addNewStage} />
+            <Icon height={15} icon="plusCircle" data-test-id="add-stage" onClick={addNewStage} />
         </React.Fragment>
     )
 }
@@ -235,7 +235,7 @@ export const StudyStages: React.FC<{ study: EditingStudy, onUpdate(): void }> = 
 
 
 function EditStudy() {
-    const history = useHistory()
+    const nav = useNavigate()
     const api = useStudyApi()
 
     const [error, setError] = useState('')
@@ -272,14 +272,14 @@ function EditStudy() {
         return <LoadingAnimation message="Loading study" />
     }
     const onCancel = () => {
-        history.push('/studies')
+        nav('/studies')
     }
     const saveStudy = async (study: EditingStudy) => {
         try {
             if (isNew) {
                 const savedStudy = await api.addStudy({ addStudy: { study: study as any } })
                 setStudy(savedStudy)
-                history.push(`/study/edit/${savedStudy.id}`)
+                nav(`/study/edit/${savedStudy.id}`)
             } else {
                 await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
             }

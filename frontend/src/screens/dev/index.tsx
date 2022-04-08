@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useHistory } from '@common'
+import { React, useEffect, useState, useNavigate } from '@common'
 import { capitalize } from '@lib'
 import { useCurrentUser } from '@lib'
 import { AvailableUsers } from './users'
@@ -40,7 +40,7 @@ const UserCard:React.FC<UserCardProps> = ({ users, type, becomeUser }) => {
 export default function Dev() {
     const [users, setUsers] = useState<AvailableUsers>(new AvailableUsers())
     const currentUser = useCurrentUser()
-    const history = useHistory()
+    const nav = useNavigate()
     useEffect(() => {
         AvailableUsers.fetch().then(setUsers)
     }, [])
@@ -50,7 +50,7 @@ export default function Dev() {
         ev.preventDefault()
         if (userId) {
             await currentUser.become(userId)
-            history.push('/')
+            nav('/')
         }
     }
 
