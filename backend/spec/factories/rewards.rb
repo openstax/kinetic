@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :reward do
     prize { Faker::Creature::Animal.name }
