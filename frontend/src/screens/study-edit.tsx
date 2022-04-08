@@ -9,7 +9,7 @@ import {
 } from '@components'
 import { StudyValidationSchema, TagLabels, isNewStudy, EditingStudy, isStudy } from '@models'
 import { Study, Stage } from '@api'
-import { useStudyApi, errorToString, useForceUpdate, pick, remove } from '@lib'
+import { useApi, errorToString, useForceUpdate, pick, remove } from '@lib'
 import { StudyModal } from './studies/modal'
 
 
@@ -57,7 +57,7 @@ const LaunchStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
 
 
 const DeleteStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
-    const api = useStudyApi()
+    const api = useApi()
     const nav = useNavigate()
     const [isPending, setPending] = useState(false)
     if (!isStudy(study) || study.firstLaunchedAt) {
@@ -87,7 +87,7 @@ const DeleteStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
 type StageType = keyof typeof AvailableStageFields
 
 const AddStageModalIcon: React.FC<{ study: Study, onCreate():void }> = ({ study, onCreate }) => {
-    const api = useStudyApi()
+    const api = useApi()
     const [isShowingModal, setShowingModal] = useState(false)
     const [stageType, setStageType] = useState<StageType>('qualtrics')
     const [error, setError] = useState('')
@@ -185,7 +185,7 @@ const StudyLandingUrl: React.FC<{ study: Study }> = ({ study }) => {
 }
 
 export const StudyStages: React.FC<{ study: EditingStudy, onUpdate(): void }> = ({ study, onUpdate }) => {
-    const api = useStudyApi()
+    const api = useApi()
     const [, meta] = useField({
         type: 'array',
         name: 'stages',
@@ -236,7 +236,7 @@ export const StudyStages: React.FC<{ study: EditingStudy, onUpdate(): void }> = 
 
 function EditStudy() {
     const nav = useNavigate()
-    const api = useStudyApi()
+    const api = useApi()
 
     const [error, setError] = useState('')
     const reRender = useForceUpdate()

@@ -6,7 +6,7 @@ import {
     RewardsProgressBar, BannersBar,
 } from '@components'
 import envelopeIcon from '@iconify-icons/bi/envelope'
-import { useStudyApi, useEnvironment } from '@lib'
+import { useApi, useEnvironment } from '@lib'
 import {
     isStudyLaunchable, tagOfType, tagsOfType, TagLabels,
 } from '@models'
@@ -78,7 +78,7 @@ const Studies:React.FC<{ isFiltering: boolean, studies: ParticipantStudy[] }> = 
 }
 
 export default function ParticipantHome() {
-    const api = useStudyApi()
+    const api = useApi()
     const env = useEnvironment()
 
     const [mandatoryStudy, setMandatoryStudy] = useState<ParticipantStudy>()

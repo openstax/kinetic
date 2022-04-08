@@ -15,12 +15,21 @@
 
 import * as runtime from '../runtime';
 import {
+    AddBanner,
+    AddBannerFromJSON,
+    AddBannerToJSON,
     AddStage,
     AddStageFromJSON,
     AddStageToJSON,
     AddStudy,
     AddStudyFromJSON,
     AddStudyToJSON,
+    BannerNotice,
+    BannerNoticeFromJSON,
+    BannerNoticeToJSON,
+    BannersListing,
+    BannersListingFromJSON,
+    BannersListingToJSON,
     Environment,
     EnvironmentFromJSON,
     EnvironmentToJSON,
@@ -45,6 +54,9 @@ import {
     Study,
     StudyFromJSON,
     StudyToJSON,
+    UpdateBanner,
+    UpdateBannerFromJSON,
+    UpdateBannerToJSON,
     UpdateStage,
     UpdateStageFromJSON,
     UpdateStageToJSON,
@@ -65,6 +77,14 @@ export interface AddStageRequest {
 
 export interface AddStudyRequest {
     addStudy?: AddStudy;
+}
+
+export interface CreateBannerRequest {
+    addBanner: AddBanner;
+}
+
+export interface DeleteBannerRequest {
+    id: number;
 }
 
 export interface DeleteStageRequest {
@@ -98,6 +118,11 @@ export interface LaunchStudyRequest {
 export interface RemoveResearcherFromStudyRequest {
     studyId: number;
     userId: string;
+}
+
+export interface UpdateBannerRequest {
+    id: number;
+    updateBanner: UpdateBanner;
 }
 
 export interface UpdateStageRequest {
@@ -221,6 +246,68 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Add a banner
+     */
+    async createBannerRaw(requestParameters: CreateBannerRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<BannerNotice>> {
+        if (requestParameters.addBanner === null || requestParameters.addBanner === undefined) {
+            throw new runtime.RequiredError('addBanner','Required parameter requestParameters.addBanner was null or undefined when calling createBanner.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/admin/banners`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AddBannerToJSON(requestParameters.addBanner),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BannerNoticeFromJSON(jsonValue));
+    }
+
+    /**
+     * Add a banner
+     */
+    async createBanner(requestParameters: CreateBannerRequest, initOverrides?: RequestInit): Promise<BannerNotice> {
+        const response = await this.createBannerRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Remove a banner
+     */
+    async deleteBannerRaw(requestParameters: DeleteBannerRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteBanner.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/banners`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Remove a banner
+     */
+    async deleteBanner(requestParameters: DeleteBannerRequest, initOverrides?: RequestInit): Promise<void> {
+        await this.deleteBannerRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Delete a stage
      * Delete a stage
      */
@@ -280,6 +367,34 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async deleteStudy(requestParameters: DeleteStudyRequest, initOverrides?: RequestInit): Promise<void> {
         await this.deleteStudyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Returns listing of all banners, expired or not 
+     * Retrive list of all banners
+     */
+    async getBannersRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<BannersListing>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/banners`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BannersListingFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns listing of all banners, expired or not 
+     * Retrive list of all banners
+     */
+    async getBanners(initOverrides?: RequestInit): Promise<BannersListing> {
+        const response = await this.getBannersRaw(initOverrides);
+        return await response.value();
     }
 
     /**
@@ -542,6 +657,43 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async removeResearcherFromStudy(requestParameters: RemoveResearcherFromStudyRequest, initOverrides?: RequestInit): Promise<void> {
         await this.removeResearcherFromStudyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Update a banner
+     */
+    async updateBannerRaw(requestParameters: UpdateBannerRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<BannerNotice>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateBanner.');
+        }
+
+        if (requestParameters.updateBanner === null || requestParameters.updateBanner === undefined) {
+            throw new runtime.RequiredError('updateBanner','Required parameter requestParameters.updateBanner was null or undefined when calling updateBanner.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/admin/banners/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateBannerToJSON(requestParameters.updateBanner),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BannerNoticeFromJSON(jsonValue));
+    }
+
+    /**
+     * Update a banner
+     */
+    async updateBanner(requestParameters: UpdateBannerRequest, initOverrides?: RequestInit): Promise<BannerNotice> {
+        const response = await this.updateBannerRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

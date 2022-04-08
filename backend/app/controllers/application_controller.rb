@@ -40,7 +40,7 @@ class ApplicationController < ActionController::API
   end
 
   def render_unauthorized_unless_admin!
-    head :unauthorized unless current_user_authorized_as_admin?
+    head :unauthorized unless current_user_is_admin?
   end
 
   def current_user_is_admin?

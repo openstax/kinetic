@@ -14,5 +14,5 @@ export { field, modelize, hydrateModel, hydrateInstance } from 'modeled-mobx'
 
 export {
     React, ReactDOM, Box, styled, useState, useEffect, useContext, useMemo, useCallback, Component,
-    css, keyframes, cx, useLocation, useNavigate, useParams,
+    css, keyframes, cx, useLocation, useNavigate, useParams, dayjs,
 }

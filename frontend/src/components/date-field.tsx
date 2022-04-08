@@ -1,11 +1,12 @@
-import { React, useMemo, useState, useCallback, cx } from '@common'
+import { React, useMemo, useState, useCallback, cx, dayjs } from '@common'
 import { useField } from 'formik'
 import { useFormContext } from './form'
 import FlatPickr from 'react-flatpickr'
 import { FloatingField, FloatingFieldProps } from './floating-field'
 import { FloatingLabel } from './label'
-import { toDateTime } from '../lib/date'
+import { toDayJS } from '@lib'
 import { Icon } from './icon'
+
 
 interface DateTimeProps extends FloatingFieldProps {
     id: string,
@@ -40,7 +41,9 @@ export const DateField: DateFieldProps = ({
     const [isFocused, setFocused] = useState(false)
     const formContext = useFormContext()
     const hasValue = !!field.value
-    const value = useMemo(() => hasValue && toDateTime(field.value), [field.value])
+    const value = useMemo(() => hasValue && toDayJS(field.value).toDate(), [hasValue, field.value])
+    const strValue = useMemo(() => value ? dayjs(value).format(format) : '', [hasValue, value, format])
+
     const readOnly = propsReadonly == null ? formContext.readOnly : propsReadonly
     const hasError = Boolean(meta.touched && meta.error)
 
@@ -119,20 +122,19 @@ export const DateField: DateFieldProps = ({
             <div className="controls">
                 <FlatPickr
                     {...pickrProps as any}
-                    value={value || ''}
                     id={id}
+                    value={value || ''}
                     data-enable-time={withTime}
                     onOpen={onOpen}
                     options={{
-                        dateFormat: format,
+                        disableMobile: true,
                         clickOpens: false,
                         ...options,
                     }}
-
                     onClose={onClose}
                     onChange={onChange}
                     onCreate={(fp: any) => setFP(fp)}
-                    render={({ className, ...inputProps }, ref) => {
+                    render={({ className, value, ...inputProps }, ref) => {
                         return (
                             <input
                                 disabled={readOnly}
@@ -142,6 +144,7 @@ export const DateField: DateFieldProps = ({
                                 readOnly
                                 type="text"
                                 onClick={() => !readOnly && (fp as any).open()}
+                                value={strValue}
                             />
                         )
                     }}
@@ -155,6 +158,6 @@ export const DateField: DateFieldProps = ({
 }
 
 DateField.formats = {
-    shortDate: 'M J Y',
-    shortDateTime: 'M J Y h:i K',
+    shortDate: 'll' ,
+    shortDateTime: 'lll',
 }

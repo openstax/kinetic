@@ -118,7 +118,6 @@ class Api::V1::EnvironmentOpenApi
         content 'application/json' do
           schema { key :$ref, :Environment }
         end
-        # content 'application/json', { schema do :$ref => :Environment end
       end
       extend Api::V1::OpenApiResponses::UnprocessableEntityError
       extend Api::V1::OpenApiResponses::ServerError
