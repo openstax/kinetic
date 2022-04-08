@@ -1,8 +1,8 @@
 import * as Yup from 'yup'
 import { Reward, RewardFromJSON } from '@api'
-import { React, useEffect, useState } from '@common'
+import { React, useState } from '@common'
 import {
-    Box, Icon, Col, EditingForm as Form, Alert, DateField, InputField, LoadingAnimation,
+    Box, Icon, Col, EditingForm as Form, Alert, DateField, InputField,
 } from '@components'
 import { useApi, useFetchState } from '@lib'
 
@@ -10,7 +10,6 @@ const RewardCard:React.FC<{ reward: Reward, onUpdate():void }> = ({ reward, onUp
     const [error, setError] = useState('')
     const api = useApi()
     const onDelete = async () => {
-        debugger
         if (reward.id) {
             await api.deleteReward({ id: reward.id })
         }

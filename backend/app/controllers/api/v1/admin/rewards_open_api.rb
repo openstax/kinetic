@@ -1,4 +1,3 @@
-
 class Api::V1::Admin::RewardsOpenApi
   include OpenStax::OpenApi::Blocks
   openapi_component do

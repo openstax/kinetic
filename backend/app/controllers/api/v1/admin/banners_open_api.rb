@@ -141,6 +141,5 @@ class Api::V1::Admin::BannersOpenApi
       extend Api::V1::OpenApiResponses::ServerError
     end
 
-
   end
 end

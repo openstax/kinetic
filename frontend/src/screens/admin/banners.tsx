@@ -1,8 +1,8 @@
 import * as Yup from 'yup'
 import { BannerNotice, BannerNoticeFromJSON } from '@api'
-import { React, useEffect, useState } from '@common'
+import { React, useState } from '@common'
 import {
-    Box, Icon, Col, EditingForm as Form, Alert, DateField, InputField, LoadingAnimation,
+    Box, Icon, Col, EditingForm as Form, Alert, DateField, InputField,
 } from '@components'
 import { useApi, useFetchState } from '@lib'
 
