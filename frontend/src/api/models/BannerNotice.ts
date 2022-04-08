@@ -33,16 +33,16 @@ export interface BannerNotice {
     message?: string;
     /**
      * When the message starts to display
-     * @type {Date}
+     * @type {string}
      * @memberof BannerNotice
      */
-    startAt?: Date;
+    startAt?: string;
     /**
      * When the message stops to display
-     * @type {Date}
+     * @type {string}
      * @memberof BannerNotice
      */
-    endAt?: Date;
+    endAt?: string;
 }
 
 export function BannerNoticeFromJSON(json: any): BannerNotice {
@@ -57,8 +57,8 @@ export function BannerNoticeFromJSONTyped(json: any, ignoreDiscriminator: boolea
         
         'id': !exists(json, 'id') ? undefined : json['id'],
         'message': !exists(json, 'message') ? undefined : json['message'],
-        'startAt': !exists(json, 'start_at') ? undefined : (new Date(json['start_at'])),
-        'endAt': !exists(json, 'end_at') ? undefined : (new Date(json['end_at'])),
+        'startAt': !exists(json, 'start_at') ? undefined : json['start_at'],
+        'endAt': !exists(json, 'end_at') ? undefined : json['end_at'],
     };
 }
 
@@ -73,8 +73,8 @@ export function BannerNoticeToJSON(value?: BannerNotice | null): any {
         
         'id': value.id,
         'message': value.message,
-        'start_at': value.startAt === undefined ? undefined : (value.startAt.toISOString().substr(0,10)),
-        'end_at': value.endAt === undefined ? undefined : (value.endAt.toISOString().substr(0,10)),
+        'start_at': value.startAt,
+        'end_at': value.endAt,
     };
 }
 

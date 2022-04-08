@@ -15,12 +15,12 @@ class Api::V1::Admin::BannersOpenApi
       end
       property :start_at do
         key :type, :string
-        key :format, 'date'
+        key :format, 'datetime'
         key :description, 'When the message starts to display'
       end
       property :end_at do
         key :type, :string
-        key :format, 'date'
+        key :format, 'datetime'
         key :description, 'When the message stops to display'
       end
     end

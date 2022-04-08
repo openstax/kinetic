@@ -19,7 +19,7 @@ module Api::V1::Bindings
     attr_accessor :id
 
     # The messsage to display.  Limited HTML is supported
-    attr_accessor :description
+    attr_accessor :prize
 
     # A link for more information about the reward
     attr_accessor :info_url
@@ -37,7 +37,7 @@ module Api::V1::Bindings
     def self.attribute_map
       {
         :'id' => :'id',
-        :'description' => :'description',
+        :'prize' => :'prize',
         :'info_url' => :'info_url',
         :'points' => :'points',
         :'start_at' => :'start_at',
@@ -54,11 +54,11 @@ module Api::V1::Bindings
     def self.openapi_types
       {
         :'id' => :'Float',
-        :'description' => :'String',
+        :'prize' => :'String',
         :'info_url' => :'String',
         :'points' => :'Float',
-        :'start_at' => :'Date',
-        :'end_at' => :'Date'
+        :'start_at' => :'String',
+        :'end_at' => :'String'
       }
     end
 
@@ -87,8 +87,8 @@ module Api::V1::Bindings
         self.id = attributes[:'id']
       end
 
-      if attributes.key?(:'description')
-        self.description = attributes[:'description']
+      if attributes.key?(:'prize')
+        self.prize = attributes[:'prize']
       end
 
       if attributes.key?(:'info_url')
@@ -127,7 +127,7 @@ module Api::V1::Bindings
       return true if self.equal?(o)
       self.class == o.class &&
           id == o.id &&
-          description == o.description &&
+          prize == o.prize &&
           info_url == o.info_url &&
           points == o.points &&
           start_at == o.start_at &&
@@ -143,7 +143,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, description, info_url, points, start_at, end_at].hash
+      [id, prize, info_url, points, start_at, end_at].hash
     end
 
     # Builds the object from hash

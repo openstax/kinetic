@@ -4,7 +4,7 @@ import { React, useState } from '@common'
 import {
     Box, Icon, Col, EditingForm as Form, Alert, DateField, InputField,
 } from '@components'
-import { useApi, useFetchState } from '@lib'
+import { useApi, useFetchState, toDayOnly } from '@lib'
 
 const RewardCard:React.FC<{ reward: Reward, onUpdate():void }> = ({ reward, onUpdate }) => {
     const [error, setError] = useState('')
@@ -16,6 +16,9 @@ const RewardCard:React.FC<{ reward: Reward, onUpdate():void }> = ({ reward, onUp
         onUpdate()
     }
     const saveReward = async (reward: Reward, meta: any) => {
+        // if we're saving the record has been validated and has dates set
+        reward.startAt = toDayOnly(reward.startAt!)
+        reward.endAt = toDayOnly(reward.endAt!)
         let reply
         if (reward.id) {
             reply = await api.updateReward({ id: reward.id, updateReward: { reward } })
@@ -34,7 +37,8 @@ const RewardCard:React.FC<{ reward: Reward, onUpdate():void }> = ({ reward, onUp
                 <Form
                     onSubmit={saveReward}
                     validationSchema={Yup.object().shape({
-                        description: Yup.string().required(),
+                        points: Yup.string().required(),
+                        prize: Yup.string().required(),
                         startAt: Yup.string().required(),
                         endAt: Yup.string().required(),
                         infoUrl: Yup.string().url(),
@@ -45,7 +49,7 @@ const RewardCard:React.FC<{ reward: Reward, onUpdate():void }> = ({ reward, onUp
                     <InputField name="points" id="points" label="Points" type="number" md={2} />
                     <DateField name="startAt" id="start_at" label="Start At" md={5} />
                     <DateField name="endAt" id="end_at" label="End At" md={5} />
-                    <InputField name="description" id="description" label="Description" type="text" />
+                    <InputField name="prize" id="prize" label="Prize" type="text" />
                     <InputField name="infoUrl" id="info_url" label="Information URL" type="url" />
                 </Form>
             </Box>

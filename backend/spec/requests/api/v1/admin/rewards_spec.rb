@@ -36,7 +36,7 @@ RSpec.describe 'Reward', type: :request, api: :v1 do
               a_hash_including(
                 id: a_kind_of(Integer),
                 points: a_kind_of(Integer),
-                description: a_kind_of(String),
+                prize: a_kind_of(String),
                 start_at: a_kind_of(String),
                 end_at: a_kind_of(String)
               )
@@ -54,7 +54,7 @@ RSpec.describe 'Reward', type: :request, api: :v1 do
     it 'creates rewards' do
       expect {
         api_post path, params: {
-          reward: { description: 'a test', points: 1, start_at: Time.now, end_at: 3.days.from_now }
+          reward: { prize: 'a test', points: 1, start_at: Time.now, end_at: 3.days.from_now }
         }
       }.to change { Reward.count }.by 1
     end
@@ -68,9 +68,9 @@ RSpec.describe 'Reward', type: :request, api: :v1 do
     it 'updates rewards' do
       expect {
         api_put "#{path}/#{reward.id}", params: {
-          reward: { description: 'a test' }
+          reward: { prize: 'a test' }
         }
-      }.to change { reward.reload.description }.to('a test')
+      }.to change { reward.reload.prize }.to('a test')
     end
   end
 

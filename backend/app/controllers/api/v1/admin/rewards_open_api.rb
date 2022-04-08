@@ -7,7 +7,7 @@ class Api::V1::Admin::RewardsOpenApi
         key :type, :number
         key :description, 'The Reward ID'
       end
-      property :description do
+      property :prize do
         key :type, :string
         key :description, 'The messsage to display.  Limited HTML is supported'
       end
@@ -21,12 +21,12 @@ class Api::V1::Admin::RewardsOpenApi
       end
       property :start_at do
         key :type, :string
-        key :format, 'date'
+        key :format, 'datetime'
         key :description, 'When the reward starts to be active'
       end
       property :end_at do
         key :type, :string
-        key :format, 'date'
+        key :format, 'datetime'
         key :description, 'When the reward stops being active'
       end
     end

@@ -23,3 +23,5 @@ export const formatDate = (dateThing?: DateTimeInputs | null, format: string = '
     if (!dateThing) return null
     return dayjs(toDateTime(dateThing)).format(format)
 }
+
+export const toDayOnly = (dateThing: DateTimeInputs) => toDayJS(dateThing).format('YYYY-DD-MM')

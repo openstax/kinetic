@@ -30,7 +30,7 @@ export interface Reward {
      * @type {string}
      * @memberof Reward
      */
-    description?: string;
+    prize?: string;
     /**
      * A link for more information about the reward
      * @type {string}
@@ -45,16 +45,16 @@ export interface Reward {
     points?: number;
     /**
      * When the reward starts to be active
-     * @type {Date}
+     * @type {string}
      * @memberof Reward
      */
-    startAt?: Date;
+    startAt?: string;
     /**
      * When the reward stops being active
-     * @type {Date}
+     * @type {string}
      * @memberof Reward
      */
-    endAt?: Date;
+    endAt?: string;
 }
 
 export function RewardFromJSON(json: any): Reward {
@@ -68,11 +68,11 @@ export function RewardFromJSONTyped(json: any, ignoreDiscriminator: boolean): Re
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
+        'prize': !exists(json, 'prize') ? undefined : json['prize'],
         'infoUrl': !exists(json, 'info_url') ? undefined : json['info_url'],
         'points': !exists(json, 'points') ? undefined : json['points'],
-        'startAt': !exists(json, 'start_at') ? undefined : (new Date(json['start_at'])),
-        'endAt': !exists(json, 'end_at') ? undefined : (new Date(json['end_at'])),
+        'startAt': !exists(json, 'start_at') ? undefined : json['start_at'],
+        'endAt': !exists(json, 'end_at') ? undefined : json['end_at'],
     };
 }
 
@@ -86,11 +86,11 @@ export function RewardToJSON(value?: Reward | null): any {
     return {
         
         'id': value.id,
-        'description': value.description,
+        'prize': value.prize,
         'info_url': value.infoUrl,
         'points': value.points,
-        'start_at': value.startAt === undefined ? undefined : (value.startAt.toISOString().substr(0,10)),
-        'end_at': value.endAt === undefined ? undefined : (value.endAt.toISOString().substr(0,10)),
+        'start_at': value.startAt,
+        'end_at': value.endAt,
     };
 }
 

@@ -47,8 +47,8 @@ module Api::V1::Bindings
       {
         :'id' => :'Float',
         :'message' => :'String',
-        :'start_at' => :'Date',
-        :'end_at' => :'Date'
+        :'start_at' => :'String',
+        :'end_at' => :'String'
       }
     end
 

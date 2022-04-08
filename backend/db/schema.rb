@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 2022_04_08_162010) do
   end
 
   create_table "rewards", force: :cascade do |t|
-    t.text "description", null: false
+    t.text "prize", null: false
     t.text "info_url"
     t.integer "points", null: false
     t.datetime "start_at", null: false

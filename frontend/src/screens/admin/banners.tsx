@@ -39,8 +39,8 @@ const Banner:React.FC<{ banner: BannerNotice, onUpdate():void }> = ({ banner, on
                     initialValues={banner}
                 >
                     <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
-                    <DateField name="startAt" id="start_at" label="Start At" md={6} />
-                    <DateField name="endAt" id="end_at" label="End At" md={6} />
+                    <DateField name="startAt" withTime id="start_at" label="Start At" md={6} />
+                    <DateField name="endAt" withTime id="end_at" label="End At" md={6} />
                     <InputField name="message" id="message" label="Message" type="textarea" />
                 </Form>
             </Box>
