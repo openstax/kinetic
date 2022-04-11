@@ -8,12 +8,13 @@ export const StudyTypeTags = {
 type StudyTypeTagsT = typeof StudyTypeTags
 
 export const StudySubjectTags = {
-    'subject:statistics': 'Statistics',
-    'subject:physics': 'Physics',
     'subject:biology': 'Biology',
-    'subject:sociology': 'Sociology',
-    'subject:chemistry': 'Chemistry',
     'subject:business-ethics': 'Business Ethics',
+    'subject:chemistry': 'Chemistry',
+    'subject:physics': 'Physics',
+    'subject:psychology': 'Psychology',
+    'subject:sociology': 'Sociology',
+    'subject:statistics': 'Statistics',
 }
 type StudySubjectTagsT = typeof StudySubjectTags
 
