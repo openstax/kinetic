@@ -1,7 +1,10 @@
 import { Page } from '@playwright/test'
-import * as dayjsImport from 'dayjs'
-// not sure why this is needed, but the import doesn't seem to be correct for TS
-const dayjs = (dayjsImport as any)['default'] as typeof dayjsImport
+import relativeTime from 'dayjs/plugin/relativeTime'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import dayjs from 'dayjs'
+
+dayjs.extend(relativeTime)
+dayjs.extend(localizedFormat)
 
 export { dayjs }
 
@@ -46,8 +49,7 @@ export const goToPage = async ({ page, path, loginAs: login }: goToPageArgs) => 
                 throw(e)
             }
         }
-    }
-    while (true)
+    } while (true) // eslint-disable-line no-constant-condition
 }
 
 export const interceptStudyLaunch = async ({ page }: { page: Page }) => {
@@ -109,7 +111,7 @@ interface createStudyArgs {
     points?: number
     mins?: number
     subject?: string
-    opensAt?: dayjsImport.Dayjs,
+    opensAt?: dayjs.Dayjs,
 }
 
 export const RESEARCH_HOMEPAGE = 'https://openstax.org/research'
@@ -160,14 +162,13 @@ export const createStudy = async ({
 }
 
 export const setFlatpickrDate = async (
-    { selector, date, page }: { selector:string, date:string | dayjsImport.Dayjs, page:Page},
+    { selector, date, page }: { selector: string, date: dayjs.Dayjs, page: Page},
 ) => {
-    await page.click(`css=${selector} >> css=input`)
-    const d = dayjs(date)
-    await page.selectOption('css=.flatpickr-calendar.open >> css=.flatpickr-monthDropdown-months', String(d.month()))
-    await page.waitForTimeout(100)
-    await page.fill('css=.flatpickr-calendar.open >> css=input.cur-year', String(d.year()))
-    await page.keyboard.press('Enter')
-    await page.waitForTimeout(100)
-    await page.click(`css=.flatpickr-calendar.open >> css=.dayContainer  >> text="${d.date()}"`)
+    const str = date.format('M/D/YYYY')
+    const inputSelector = `css=${selector} >> css=input`
+    await page.waitForSelector(inputSelector)
+    await page.$eval(inputSelector, (el, dte) => {
+        (el as any)._flatpickr.setDate(dte, true, 'm/d/Y')
+        return true
+    }, str)
 }
