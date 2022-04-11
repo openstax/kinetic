@@ -33,6 +33,9 @@ namespace :report do
     csv << [
       'Study ID',
       'Study Name',
+      'Stage ID',
+      'Stage Order',
+      'Stage Name',
       'Started At',
       'Completed At',
       'Participant Research ID',
@@ -55,6 +58,9 @@ namespace :report do
       csv << [
         launch.stage.study.id,
         launch.stage.study.title_for_participants,
+        launch.stage.id,
+        launch.stage.order,
+        launch.stage.title,
         launch.first_launched_at,
         launch.completed_at,
         launch.research_id.id,
