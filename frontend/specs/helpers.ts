@@ -1,10 +1,5 @@
 import { Page } from '@playwright/test'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import localizedFormat from 'dayjs/plugin/localizedFormat'
-import dayjs from 'dayjs'
-
-dayjs.extend(relativeTime)
-dayjs.extend(localizedFormat)
+import { dayjs } from '../src/lib/date'
 
 export { dayjs }
 
@@ -171,4 +166,10 @@ export const setFlatpickrDate = async (
         (el as any)._flatpickr.setDate(dte, true, 'm/d/Y')
         return true
     }, str)
+}
+
+export const setDateField = async (
+    { fieldName, date, page }: { fieldName:string, date: dayjs.Dayjs, page:Page},
+) => {
+    return await setFlatpickrDate({ page, date, selector: `[data-field-name="${fieldName}"]` })
 }

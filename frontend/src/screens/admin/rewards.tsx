@@ -29,9 +29,12 @@ const RewardCard:React.FC<{ reward: Reward, onUpdate():void }> = ({ reward, onUp
         onUpdate()
     }
     return (
-        <Col sm={12} align="stretch" direction="column" className="mb-2 border">
+        <Col
+            data-reward-id={reward.id || 'new'}
+            sm={12} align="stretch" direction="column" className="mb-2 border"
+        >
             <Box className="card-header" justify="end">
-                <Icon icon="trash" onClick={onDelete} />
+                <Icon icon="trash" data-test-id="delete-reward" onClick={onDelete} />
             </Box>
             <Box className="card-body" direction="column">
                 <Form
@@ -69,7 +72,7 @@ export function AdminRewards() {
         <div>
             <Box justify="between" align="center" margin="bottom">
                 <h4>Scheduled Rewards</h4>
-                <Icon height={15} icon="plusCircle" data-test-id="add-stage" onClick={state.addNewRecord} />
+                <Icon height={15} icon="plusCircle" data-test-id="add-reward" onClick={state.addNewRecord} />
             </Box>
             {state.records.map((reward, i) => (
                 <RewardCard key={reward.id || i} reward={reward} onUpdate={state.fetchRecords} />

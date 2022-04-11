@@ -24,9 +24,15 @@ const Banner:React.FC<{ banner: BannerNotice, onUpdate():void }> = ({ banner, on
         onUpdate()
     }
     return (
-        <Col sm={12} align="stretch" direction="column" className="mb-2 border bg-white">
+        <Col
+            data-banner-id={banner.id || 'new'}
+            sm={12}
+            align="stretch"
+            direction="column"
+            className="mb-2 border bg-white"
+        >
             <Box className="card-header" justify="end">
-                <Icon icon="trash" onClick={onDelete} />
+                <Icon icon="trash" data-test-id="delete-banner" onClick={onDelete} />
             </Box>
             <Box className="card-body" direction="column">
                 <Form
@@ -61,7 +67,7 @@ export function AdminBanners() {
         <div>
             <Box justify="between" align="center" margin="bottom">
                 <h4>Scheduled Banners</h4>
-                <Icon height={15} icon="plusCircle" data-test-id="add-stage" onClick={state.addNewRecord} />
+                <Icon height={15} icon="plusCircle" data-test-id="add-banner" onClick={state.addNewRecord} />
             </Box>
             {state.records.map((banner, i) => <Banner key={banner.id || i} banner={banner} onUpdate={state.fetchRecords}/>)}
         </div>

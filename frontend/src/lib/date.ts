@@ -1,5 +1,10 @@
 import { isDate, isString, isNumber } from './util'
 import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+
+dayjs.extend(localizedFormat)
+
+export { dayjs }
 
 export type DateTimeInputs = Date | string | number | dayjs.Dayjs
 
