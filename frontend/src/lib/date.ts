@@ -29,4 +29,4 @@ export const formatDate = (dateThing?: DateTimeInputs | null, format: string = '
     return dayjs(toDateTime(dateThing)).format(format)
 }
 
-export const toDayOnly = (dateThing: DateTimeInputs) => toDayJS(dateThing).format('YYYY-DD-MM')
+export const toDayOnly = (dateThing: DateTimeInputs) => toDayJS(dateThing).format('YYYY-MM-DD')
