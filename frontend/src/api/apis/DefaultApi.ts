@@ -15,12 +15,24 @@
 
 import * as runtime from '../runtime';
 import {
+    AddBanner,
+    AddBannerFromJSON,
+    AddBannerToJSON,
+    AddReward,
+    AddRewardFromJSON,
+    AddRewardToJSON,
     AddStage,
     AddStageFromJSON,
     AddStageToJSON,
     AddStudy,
     AddStudyFromJSON,
     AddStudyToJSON,
+    BannerNotice,
+    BannerNoticeFromJSON,
+    BannerNoticeToJSON,
+    BannersListing,
+    BannersListingFromJSON,
+    BannersListingToJSON,
     Environment,
     EnvironmentFromJSON,
     EnvironmentToJSON,
@@ -33,6 +45,12 @@ import {
     ParticipantStudy,
     ParticipantStudyFromJSON,
     ParticipantStudyToJSON,
+    Reward,
+    RewardFromJSON,
+    RewardToJSON,
+    RewardsListing,
+    RewardsListingFromJSON,
+    RewardsListingToJSON,
     ServerError,
     ServerErrorFromJSON,
     ServerErrorToJSON,
@@ -45,6 +63,12 @@ import {
     Study,
     StudyFromJSON,
     StudyToJSON,
+    UpdateBanner,
+    UpdateBannerFromJSON,
+    UpdateBannerToJSON,
+    UpdateReward,
+    UpdateRewardFromJSON,
+    UpdateRewardToJSON,
     UpdateStage,
     UpdateStageFromJSON,
     UpdateStageToJSON,
@@ -65,6 +89,22 @@ export interface AddStageRequest {
 
 export interface AddStudyRequest {
     addStudy?: AddStudy;
+}
+
+export interface CreateBannerRequest {
+    addBanner: AddBanner;
+}
+
+export interface CreateRewardRequest {
+    addReward: AddReward;
+}
+
+export interface DeleteBannerRequest {
+    id: number;
+}
+
+export interface DeleteRewardRequest {
+    id: number;
 }
 
 export interface DeleteStageRequest {
@@ -98,6 +138,16 @@ export interface LaunchStudyRequest {
 export interface RemoveResearcherFromStudyRequest {
     studyId: number;
     userId: string;
+}
+
+export interface UpdateBannerRequest {
+    id: number;
+    updateBanner: UpdateBanner;
+}
+
+export interface UpdateRewardRequest {
+    id: number;
+    updateReward: UpdateReward;
 }
 
 export interface UpdateStageRequest {
@@ -221,6 +271,130 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Add a banner
+     */
+    async createBannerRaw(requestParameters: CreateBannerRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<BannerNotice>> {
+        if (requestParameters.addBanner === null || requestParameters.addBanner === undefined) {
+            throw new runtime.RequiredError('addBanner','Required parameter requestParameters.addBanner was null or undefined when calling createBanner.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/admin/banners`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AddBannerToJSON(requestParameters.addBanner),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BannerNoticeFromJSON(jsonValue));
+    }
+
+    /**
+     * Add a banner
+     */
+    async createBanner(requestParameters: CreateBannerRequest, initOverrides?: RequestInit): Promise<BannerNotice> {
+        const response = await this.createBannerRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Add a reward
+     */
+    async createRewardRaw(requestParameters: CreateRewardRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Reward>> {
+        if (requestParameters.addReward === null || requestParameters.addReward === undefined) {
+            throw new runtime.RequiredError('addReward','Required parameter requestParameters.addReward was null or undefined when calling createReward.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/admin/rewards`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AddRewardToJSON(requestParameters.addReward),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RewardFromJSON(jsonValue));
+    }
+
+    /**
+     * Add a reward
+     */
+    async createReward(requestParameters: CreateRewardRequest, initOverrides?: RequestInit): Promise<Reward> {
+        const response = await this.createRewardRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Remove a banner
+     */
+    async deleteBannerRaw(requestParameters: DeleteBannerRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteBanner.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/banners/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Remove a banner
+     */
+    async deleteBanner(requestParameters: DeleteBannerRequest, initOverrides?: RequestInit): Promise<void> {
+        await this.deleteBannerRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Remove a reward
+     */
+    async deleteRewardRaw(requestParameters: DeleteRewardRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteReward.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/rewards/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Remove a reward
+     */
+    async deleteReward(requestParameters: DeleteRewardRequest, initOverrides?: RequestInit): Promise<void> {
+        await this.deleteRewardRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Delete a stage
      * Delete a stage
      */
@@ -280,6 +454,34 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async deleteStudy(requestParameters: DeleteStudyRequest, initOverrides?: RequestInit): Promise<void> {
         await this.deleteStudyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Returns listing of all banners, expired or not 
+     * Retrive list of all banners
+     */
+    async getBannersRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<BannersListing>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/banners`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BannersListingFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns listing of all banners, expired or not 
+     * Retrive list of all banners
+     */
+    async getBanners(initOverrides?: RequestInit): Promise<BannersListing> {
+        const response = await this.getBannersRaw(initOverrides);
+        return await response.value();
     }
 
     /**
@@ -367,6 +569,34 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getParticipantStudy(requestParameters: GetParticipantStudyRequest, initOverrides?: RequestInit): Promise<ParticipantStudy> {
         const response = await this.getParticipantStudyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns listing of all rewards, expired or not 
+     * Retrive list of all rewards
+     */
+    async getRewardsRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<RewardsListing>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/rewards`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RewardsListingFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns listing of all rewards, expired or not 
+     * Retrive list of all rewards
+     */
+    async getRewards(initOverrides?: RequestInit): Promise<RewardsListing> {
+        const response = await this.getRewardsRaw(initOverrides);
         return await response.value();
     }
 
@@ -542,6 +772,80 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async removeResearcherFromStudy(requestParameters: RemoveResearcherFromStudyRequest, initOverrides?: RequestInit): Promise<void> {
         await this.removeResearcherFromStudyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Update a banner
+     */
+    async updateBannerRaw(requestParameters: UpdateBannerRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<BannerNotice>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateBanner.');
+        }
+
+        if (requestParameters.updateBanner === null || requestParameters.updateBanner === undefined) {
+            throw new runtime.RequiredError('updateBanner','Required parameter requestParameters.updateBanner was null or undefined when calling updateBanner.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/admin/banners/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateBannerToJSON(requestParameters.updateBanner),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BannerNoticeFromJSON(jsonValue));
+    }
+
+    /**
+     * Update a banner
+     */
+    async updateBanner(requestParameters: UpdateBannerRequest, initOverrides?: RequestInit): Promise<BannerNotice> {
+        const response = await this.updateBannerRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update a reward
+     */
+    async updateRewardRaw(requestParameters: UpdateRewardRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Reward>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateReward.');
+        }
+
+        if (requestParameters.updateReward === null || requestParameters.updateReward === undefined) {
+            throw new runtime.RequiredError('updateReward','Required parameter requestParameters.updateReward was null or undefined when calling updateReward.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/admin/rewards/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateRewardToJSON(requestParameters.updateReward),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RewardFromJSON(jsonValue));
+    }
+
+    /**
+     * Update a reward
+     */
+    async updateReward(requestParameters: UpdateRewardRequest, initOverrides?: RequestInit): Promise<Reward> {
+        const response = await this.updateRewardRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

@@ -3,7 +3,7 @@ import { Studies, Study } from '@api'
 import {
     Row, Col, Box, Icon, LogoutButton, Logo,
 } from '@components'
-import { useStudyApi, useEnvironment, formatDate } from '@lib'
+import { useApi, useEnvironment, formatDate } from '@lib'
 import { StudyStatus, getStatus, getStatusName } from '@models'
 
 const StudyRow:React.FC<{ study: Study }> = ({ study }) => {
@@ -57,7 +57,7 @@ const StudiesTable:React.FC<{ studies: Study[] }> = ({ studies }) => {
 
 
 export default function ResearcherHome() {
-    const api = useStudyApi()
+    const api = useApi()
     const nav = useNavigate()
     const env = useEnvironment()
     const [studies, setStudies] = useState<Studies>()

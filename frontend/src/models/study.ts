@@ -3,8 +3,7 @@ import * as Yup from 'yup'
 import {
     NewStudy, Study, DefaultApi, ParticipantStudy,
 } from '@api'
-import dayjs from 'dayjs'
-import { isNil } from '@lib'
+import { isNil, dayjs } from '@lib'
 import { StudyTypeTags } from './tags'
 
 export type EditingStudy = NewStudy | Study

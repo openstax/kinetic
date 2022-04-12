@@ -8,7 +8,7 @@ export const API_CONFIGURATION = new Configuration({
     credentials: 'include',
 })
 
-export const useStudyApi = () => {
+export const useApi = () => {
     const api = useMemo(() => {
         return new DefaultApi(API_CONFIGURATION)
     }, [])

@@ -3,7 +3,7 @@ import { React, useEffect, useState } from '@common'
 import { colors } from '../theme'
 import { ParticipantStudy, DefaultApi, LandStudyRequest, LandStudyAbortedEnum } from '@api'
 import { Button, IncorrectUser, Box, LoadingAnimation, ErrorPage, KineticWaves } from '@components'
-import { useQueryParam, useCurrentUser, useStudyApi, isIframed, sendMessageToParent } from '@lib'
+import { useQueryParam, useCurrentUser, useApi, isIframed, sendMessageToParent } from '@lib'
 
 
 const Points:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
@@ -72,7 +72,7 @@ export default function UsersStudies() {
     // since that will alarm participants who refused consent
     const [study, setStudy] = useState<ParticipantStudy|null>(null)
     const [error, setError] = useState<any>(null)
-    const api = useStudyApi()
+    const api = useApi()
     const nav = useNavigate()
     const user = useCurrentUser()
     const noConsent = useQueryParam('consent') == 'false'

@@ -27,6 +27,11 @@ Rails.application.routes.draw do
         end
       end
 
+      namespace :admin do
+        resources :rewards
+        resources :banners
+      end
+
       get :openapi, to: 'open_api#json', constraints: { format: :json }
 
       get :environment, to: 'environment#index'

@@ -4,12 +4,11 @@ import {
 } from '@components'
 import { LaunchStudy, studyTypeName, studyIsMultipart } from '@models'
 import { ParticipantStudy, ParticipantStudyStage } from '@api'
-import { useStudyApi } from '@lib'
-import dayjs from 'dayjs'
+import { useApi, dayjs } from '@lib'
 
 
 const LaunchStudyButton: React.FC<{ study: ParticipantStudy }> = ({ study }) => {
-    const api = useStudyApi()
+    const api = useApi()
     const [isBusy, setBusy] = useState(false)
 
     if (study.stages && !study.stages.find(s => s.isLaunchable)) {
@@ -82,7 +81,7 @@ const StudyMultiPartInfo:React.FC<{ study: ParticipantStudy }> = ({ study }) => 
 
 
 export default function StudyDetails() {
-    const api = useStudyApi()
+    const api = useApi()
 
     const [ study, setStudy ] = useState<ParticipantStudy|null>()
     const id = useParams<{ id: string }>().id

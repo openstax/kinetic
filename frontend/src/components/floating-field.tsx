@@ -42,7 +42,7 @@ export const FloatingField: React.FC<FloatingFieldProps> = ({
                     flex: 1,
                     position: 'relative',
                     '.form-control[readonly]': {
-                        backgroundColor: 'white',
+                        backgroundColor: 'inherit',
                     },
                 }}
             >

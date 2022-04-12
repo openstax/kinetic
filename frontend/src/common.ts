@@ -5,10 +5,6 @@ import styled from '@emotion/styled'
 import { cx } from '@emotion/css'
 import { css, keyframes } from '@emotion/react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import dayjs from 'dayjs'
-import localizedFormat from 'dayjs/plugin/localizedFormat'
-
-dayjs.extend(localizedFormat)
 
 export { field, modelize, hydrateModel, hydrateInstance } from 'modeled-mobx'
 

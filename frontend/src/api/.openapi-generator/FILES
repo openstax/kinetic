@@ -2,9 +2,13 @@
 apis/DefaultApi.ts
 apis/index.ts
 index.ts
+models/AddBanner.ts
+models/AddReward.ts
 models/AddStage.ts
 models/AddStudy.ts
 models/BannerMessage.ts
+models/BannerNotice.ts
+models/BannersListing.ts
 models/Environment.ts
 models/EnvironmentUser.ts
 models/Launch.ts
@@ -16,6 +20,8 @@ models/ParticipantStudyStage.ts
 models/PublicResearcher.ts
 models/QualtricsStage.ts
 models/Researcher.ts
+models/Reward.ts
+models/RewardsListing.ts
 models/RewardsScheduleSegment.ts
 models/ServerError.ts
 models/Stage.ts
@@ -23,6 +29,8 @@ models/StageUpdate.ts
 models/Studies.ts
 models/Study.ts
 models/StudyUpdate.ts
+models/UpdateBanner.ts
+models/UpdateReward.ts
 models/UpdateStage.ts
 models/UpdateStudy.ts
 models/index.ts

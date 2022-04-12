@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from '@common'
 import { ParticipantStudy, Study } from '@api'
-import { useStudyApi, isNil } from '@lib'
+import { useApi, isNil } from '@lib'
 import { Modal, LoadingAnimation } from '@components'
 import { isParticipantStudy } from '@models'
 
@@ -32,7 +32,7 @@ const Iframe:React.FC<{ url?: string, onClose: StudyModalProps['onHide'] }> = ({
 }
 
 export const StudyModal:React.FC<StudyModalProps> = ({ onHide, study }) => {
-    const api = useStudyApi()
+    const api = useApi()
     const [studyUrl, setStudyUrl] = useState('')
     const isPreview = !isParticipantStudy(study)
     useEffect(() => {
