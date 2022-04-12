@@ -9,7 +9,7 @@ class RemoveUniqueStudyUser < ActiveRecord::Migration[6.1]
       end
     
       dir.down do
-        remove_index :launched_studies, [:user_id, :study_id]
+        remove_index :launched_studies, name: 'index_launched_studies_on_user_id_and_study_id_and_consent'
         add_index :launched_studies, [:user_id, :study_id], unique: true
       end
     end
