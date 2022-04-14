@@ -8,6 +8,8 @@ class LaunchedStage < ApplicationRecord
   before_validation do
     self.first_launched_at ||= Time.now
     self.research_id ||= ResearchId.for_user_id(user_id)
+    self.launched_study ||= LaunchedStudy.where(completed_at: nil).find_or_create_by!(
+      study_id: stage.study.id, user_id: user_id)
   end
 
   scope :incomplete, -> { where(completed_at: nil) }
