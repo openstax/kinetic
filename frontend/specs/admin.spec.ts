@@ -1,12 +1,14 @@
 import {
-    interceptStudyLaunch, test, goToPage,
-    setDateField,
-    createStudy, expect, dayjs, faker, rmStudy,
+    test, goToPage, setDateField, dayjs, faker, logout,
 } from './test'
 
-test('displays panel', async ({ page }) => {
+test('displays panel only when allowed', async ({ page }) => {
     await goToPage({ page, path: '/admin', loginAs: 'admin' })
-    await page.waitForFunction(() => document.location.pathname.match(/admin\/banners/))
+    await page.waitForFunction(() => document.location.pathname == '/admin/banners/')
+
+    await logout({ page })
+    await goToPage({ page, path: '/admin', loginAs: 'researcher' })
+    await page.waitForFunction(() => document.location.pathname === '/studies')
 })
 
 
