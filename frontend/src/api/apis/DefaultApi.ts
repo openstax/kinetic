@@ -513,7 +513,7 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get studies for the calling researcher. 
+     * Get studies for the calling participant. 
      * Get studies (available and completed) for the participant
      */
     async getParticipantStudiesRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<ParticipantStudies>> {
@@ -532,7 +532,7 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get studies for the calling researcher. 
+     * Get studies for the calling participant. 
      * Get studies (available and completed) for the participant
      */
     async getParticipantStudies(initOverrides?: RequestInit): Promise<ParticipantStudies> {

@@ -55,7 +55,7 @@ export const LaunchStudy = async (api: DefaultApi, study: {id: number}, options:
 
 export const isStudyLaunchable = (study: ParticipantStudy) => {
     return Boolean(
-        (!study.completedAt || study.optedOutAt) &&
+        (!study.completedAt || !study.consentGranted) &&
             (!study.closesAt || dayjs(study.closesAt).isAfter(dayjs()))
     )
 }

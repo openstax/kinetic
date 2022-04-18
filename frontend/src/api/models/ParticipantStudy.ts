@@ -45,7 +45,7 @@ export interface ParticipantStudy {
      */
     title: string;
     /**
-     * The shorty study description that participants see.
+     * The short study description that participants see.
      * @type {string}
      * @memberof ParticipantStudy
      */
@@ -99,6 +99,12 @@ export interface ParticipantStudy {
      */
     optedOutAt?: Date;
     /**
+     * Whether the participant granted consent to use results for research.
+     * @type {boolean}
+     * @memberof ParticipantStudy
+     */
+    consentGranted?: boolean;
+    /**
      * The study's researchers.
      * @type {Array<PublicResearcher>}
      * @memberof ParticipantStudy
@@ -139,6 +145,7 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (new Date(json['closes_at'])),
         'optedOutAt': !exists(json, 'opted_out_at') ? undefined : (new Date(json['opted_out_at'])),
+        'consentGranted': !exists(json, 'consent_granted') ? undefined : json['consent_granted'],
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(PublicResearcherFromJSON)),
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(ParticipantStudyStageFromJSON)),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
@@ -165,6 +172,7 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'completed_at': value.completedAt === undefined ? undefined : (value.completedAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt.toISOString()),
         'opted_out_at': value.optedOutAt === undefined ? undefined : (value.optedOutAt.toISOString()),
+        'consent_granted': value.consentGranted,
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(PublicResearcherToJSON)),
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(ParticipantStudyStageToJSON)),
         'is_mandatory': value.isMandatory,

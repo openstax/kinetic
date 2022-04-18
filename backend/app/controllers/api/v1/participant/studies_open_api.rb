@@ -93,7 +93,7 @@ class Api::V1::Participant::StudiesOpenApi
     end
     property :short_description do
       key :type, :string
-      key :description, 'The shorty study description that participants see.'
+      key :description, 'The short study description that participants see.'
     end
     property :long_description do
       key :type, :string
@@ -131,6 +131,10 @@ class Api::V1::Participant::StudiesOpenApi
       key :type, :string
       key :format, 'date-time'
       key :description, 'When the study was opted-out of; null means not opted out.'
+    end
+    property :consent_granted do
+      key :type, :boolean
+      key :description, 'Whether the participant granted consent to use results for research.'
     end
     property :researchers do
       key :type, :array
@@ -263,7 +267,7 @@ class Api::V1::Participant::StudiesOpenApi
     operation :get do
       key :summary, 'Get studies (available and completed) for the participant'
       key :description, <<~DESC
-        Get studies for the calling researcher.
+        Get studies for the calling participant.
       DESC
       key :operationId, 'getParticipantStudies'
       response 200 do

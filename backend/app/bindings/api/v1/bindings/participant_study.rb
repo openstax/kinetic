@@ -21,7 +21,7 @@ module Api::V1::Bindings
     # The study title that participants see.
     attr_accessor :title
 
-    # The shorty study description that participants see.
+    # The short study description that participants see.
     attr_accessor :short_description
 
     # The long study description that participants see.
@@ -48,6 +48,9 @@ module Api::V1::Bindings
     # When the study was opted-out of; null means not opted out.
     attr_accessor :opted_out_at
 
+    # Whether the participant granted consent to use results for research.
+    attr_accessor :consent_granted
+
     # The study's researchers.
     attr_accessor :researchers
 
@@ -71,6 +74,7 @@ module Api::V1::Bindings
         :'completed_at' => :'completed_at',
         :'closes_at' => :'closes_at',
         :'opted_out_at' => :'opted_out_at',
+        :'consent_granted' => :'consent_granted',
         :'researchers' => :'researchers',
         :'stages' => :'stages',
         :'is_mandatory' => :'is_mandatory'
@@ -96,6 +100,7 @@ module Api::V1::Bindings
         :'completed_at' => :'Time',
         :'closes_at' => :'Time',
         :'opted_out_at' => :'Time',
+        :'consent_granted' => :'Boolean',
         :'researchers' => :'Array<PublicResearcher>',
         :'stages' => :'Array<ParticipantStudyStage>',
         :'is_mandatory' => :'Boolean'
@@ -169,6 +174,10 @@ module Api::V1::Bindings
         self.opted_out_at = attributes[:'opted_out_at']
       end
 
+      if attributes.key?(:'consent_granted')
+        self.consent_granted = attributes[:'consent_granted']
+      end
+
       if attributes.key?(:'researchers')
         if (value = attributes[:'researchers']).is_a?(Array)
           self.researchers = value
@@ -240,6 +249,7 @@ module Api::V1::Bindings
           completed_at == o.completed_at &&
           closes_at == o.closes_at &&
           opted_out_at == o.opted_out_at &&
+          consent_granted == o.consent_granted &&
           researchers == o.researchers &&
           stages == o.stages &&
           is_mandatory == o.is_mandatory
@@ -254,7 +264,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title, short_description, long_description, tags, duration_minutes, participation_points, first_launched_at, completed_at, closes_at, opted_out_at, researchers, stages, is_mandatory].hash
+      [id, title, short_description, long_description, tags, duration_minutes, participation_points, first_launched_at, completed_at, closes_at, opted_out_at, consent_granted, researchers, stages, is_mandatory].hash
     end
 
     # Builds the object from hash
