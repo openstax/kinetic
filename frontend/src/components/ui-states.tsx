@@ -2,10 +2,9 @@ import { React, useEffect, useLocation } from '@common'
 import { Button } from './button'
 import { LinkButton } from './styled-buttons'
 import { OXColoredStripe } from './ox-colored-stripe'
-import { reloadOnce, forceReload } from '../lib/reload';
+import { forceReload } from '../lib/reload';
 
 export const ErrorPage: React.FC<{ error: any }> = ({ error }) => {
-    useEffect(reloadOnce, [])
     return (
         <div className="invalid-page error">
             <OXColoredStripe />
