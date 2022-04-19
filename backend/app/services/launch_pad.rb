@@ -14,8 +14,6 @@ class LaunchPad
       raise(LaunchError, 'This study is not available.') unless study.available?
 
       ActiveRecord::Base.transaction do
-        raise(LaunchError, 'You have already completed this study.') if launched_study.completed?
-
         stage = study.next_stage_for_user(user)
         raise 'No stage to launch exists' if stage.nil?
 
@@ -38,11 +36,11 @@ class LaunchPad
     Study.transaction do
       stage.completed!
       if consent
-        launched_study.consented!
+        stage.launched_study.consented!
       else
-        launched_study.opted_out!
+        stage.launched_study.opted_out!
       end
-      launched_study.completed! if stage.is_last?
+      stage.launched_study.completed! if stage.is_last?
     end
   end
 
@@ -68,8 +66,4 @@ class LaunchPad
     @user ||= User.new(user_id)
   end
 
-  def launched_study
-    @launched_study ||= LaunchedStudy.where(completed_at: nil).find_or_create_by!(
-      study_id: study_id, user_id: user_id)
-  end
 end
