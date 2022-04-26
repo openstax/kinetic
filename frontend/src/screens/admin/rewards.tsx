@@ -6,7 +6,7 @@ import {
 } from '@components'
 import { useApi, useFetchState, toDayOnly } from '@lib'
 
-const RewardCard:React.FC<{ reward: Reward, onUpdate():void }> = ({ reward, onUpdate }) => {
+const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, onUpdate }) => {
     const [error, setError] = useState('')
     const api = useApi()
     const onDelete = async () => {
@@ -20,13 +20,15 @@ const RewardCard:React.FC<{ reward: Reward, onUpdate():void }> = ({ reward, onUp
         reward.startAt = toDayOnly(reward.startAt!)
         reward.endAt = toDayOnly(reward.endAt!)
         let reply
-        if (reward.id) {
-            reply = await api.updateReward({ id: reward.id, updateReward: { reward } })
-        } else {
-            reply = await api.createReward({ addReward: { reward } })
-        }
-        meta.resetForm(reply)
-        onUpdate()
+        try {
+            if (reward.id) {
+                reply = await api.updateReward({ id: reward.id, updateReward: { reward } })
+            } else {
+                reply = await api.createReward({ addReward: { reward } })
+            }
+            meta.resetForm(reply)
+            onUpdate()
+        } catch (e) { setError(String(e)) }
     }
     return (
         <Col
