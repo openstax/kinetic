@@ -64,7 +64,7 @@ class Stage < ApplicationRecord
 
     prev_launch = launched_study.launched_stages.where(stage_id: previous_stage.id).first
     # only first stage is valid, if previous stage not complete
-    return false if prev_launch.nil? || prev_launch.incompleted?
+    return false if prev_launch.nil? || prev_launch.incomplete?
 
     launch = launched_study.launched_stages.where(stage_id: id).first
     # can complete a previous launch, but cannot launch once it's completed
