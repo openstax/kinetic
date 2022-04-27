@@ -10,7 +10,7 @@ export interface CalculatedRewardsScheduleSegment extends RewardsScheduleSegment
 
 export function rewardPointsEarned(studies: ParticipantStudy[]): number {
     return studies.reduce((points, study) => {
-        if (study.participationPoints && study.completedAt && !study.optedOutAt) {
+        if (study.participationPoints && study.completedAt && study.consentGranted) {
             return points + study.participationPoints
         }
         return points
