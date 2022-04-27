@@ -1,4 +1,4 @@
-import { React, useEffect, useLocation } from '@common'
+import { React, useLocation } from '@common'
 import { Button } from './button'
 import { LinkButton } from './styled-buttons'
 import { OXColoredStripe } from './ox-colored-stripe'
