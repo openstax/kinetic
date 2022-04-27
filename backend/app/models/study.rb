@@ -8,9 +8,13 @@ class Study < ApplicationRecord
   # need the double quotes, order is a postgresql semi-reserved word
   has_many :stages, -> { order('"order"') }, dependent: :destroy
   has_many :launched_stages, through: :stages
-  has_many :launched_studies
+  has_many :launched_studies do
+    def for_user(user)
+      where(user_id: user.id).order(completed_at: 'desc')
+    end
+  end
 
-  has_one  :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
+  has_one :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
 
   # Delete researchers to avoid them complaining about not leaving a researcher undeleted
   before_destroy(prepend: true) { study_researchers.delete_all }
@@ -33,21 +37,8 @@ class Study < ApplicationRecord
     launched_studies.none?
   end
 
-  def next_launchable_stage(user)
-    launched_stage_ids = launched_stages.where(user_id: user.id).complete.pluck(:stage_id)
-    stages
-      .where.not(id: launched_stage_ids)
-      .order(:order)
-      .find { |stage| stage.launchable_by_user?(user) }
-  end
-
   def next_stage_for_user(user)
-    launches = launched_stages.where(user_id: user.id)
-    incomplete_launch = launches.find(&:incomplete?)
-
-    return incomplete_launch.stage if incomplete_launch.present?
-
-    next_launchable_stage(user)
+    stages.find { |stage| stage.launchable_by_user?(user) }
   end
 
 end
