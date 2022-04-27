@@ -57,7 +57,7 @@ class Stage < ApplicationRecord
     return previous_stage.nil? unless launched_study
 
     # Completed study - can only relaunch first stage for consent
-    return previous_stage.nil? && !launched_study.consent_granted if launched_study.complete?
+    return previous_stage.nil? && !launched_study.consent_granted if launched_study.completed?
 
     # first stage valid if no stages launched
     return !launched_study.launched_stages if previous_stage.nil?
