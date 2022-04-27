@@ -41,6 +41,7 @@ class Stage < ApplicationRecord
     !launched_stages.for_user(user).first&.completed_at.nil?
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def launchable_by_user?(user)
     # launchable if:
     # 1. the associated study is not currently launched, and this is first stage
@@ -59,8 +60,10 @@ class Stage < ApplicationRecord
     # Completed study - can only relaunch first stage for consent
     return previous_stage.nil? && !launched_study.consent_granted if launched_study.completed?
 
-    # first stage valid if no stages launched
-    return !launched_study.launched_stages if previous_stage.nil?
+    # first stage valid if no stages launched, or one stage (first) is incomplete
+    if previous_stage.nil?
+      return !launched_study.launched_stages || launched_study.launched_stages.first.incomplete?
+    end
 
     prev_launch = launched_study.launched_stages.where(stage_id: previous_stage.id).first
     # only first stage is valid, if previous stage not complete
@@ -76,6 +79,7 @@ class Stage < ApplicationRecord
     # can launch once the days interval is past
     prev_launch.completed_at.before?(available_after_days.days.ago)
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def launcher(user_id)
     launcher = case config[:type]
@@ -91,7 +95,12 @@ class Stage < ApplicationRecord
   end
 
   def launch_by_user!(user)
-    launched_stages.create!(user_id: user.id) if launchable_by_user?(user)
+    stage = launched_stages.for_user(user).first
+    if stage&.incomplete?
+      stage
+    else
+      launched_stages.create!(user_id: user.id)
+    end
   end
 
   protected

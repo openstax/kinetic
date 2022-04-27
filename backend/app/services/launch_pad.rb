@@ -15,7 +15,7 @@ class LaunchPad
 
       ActiveRecord::Base.transaction do
         stage = study.next_stage_for_user(user)
-        raise 'No stage to launch exists' if stage.nil?
+        raise(LaunchError, 'No stage to launch exists') if stage.nil?
 
         stage.launch_by_user!(user)
         stage.launcher(user_id).url
