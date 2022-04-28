@@ -44,6 +44,12 @@ Metrics/BlockLength:
 Metrics/ModuleLength:
   CountAsOne: ['heredoc']
 
+Metrics/CyclomaticComplexity:
+  Max: 8
+
+Metrics/PerceivedComplexity:
+  Max: 9
+
 Style/Alias:
   EnforcedStyle: prefer_alias_method
 

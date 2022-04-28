@@ -6,7 +6,7 @@ class Stage < ApplicationRecord
 
   has_many :launched_stages do
     def for_user(user)
-      # DESC so NULL sorts first
+      # DESC will have either null or most recently completed, first
       where(user_id: user.id).order(completed_at: 'desc')
     end
   end
@@ -38,48 +38,88 @@ class Stage < ApplicationRecord
   end
 
   def has_been_completed_by_user?(user)
-    !launched_stages.for_user(user).first&.completed_at.nil?
+    launched_stages.for_user(user).where(completed_at: nil).none?
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def launchable_by_user?(user)
-    # launchable if:
-    # 1. the associated study is not currently launched, and this is first stage
-    # 2. study is currently launched, but no stages are launched, and this is the first stage
-    # 3. study is currently launched, this stage is launched, but not complete
-    # 4. study is currently launched, and the previous stage in this launch is complete, and the interval has passed
+    # 1. the study is open and
 
-    # incomplete studies will be first, or nil, if never launched
-    launched_study = launched_studies.for_user(user).first
+    # 2. if it is the first stage, either:
+    #     a. study has not been launched
+    #     b. study has been launched, but no stages launched
+    #     c. study launched, one stage (first) launched, and it's not complete
+    #     d. study launched, complete, but not consented
 
-    # ORDER OF TESTS IMPORTANT! Short circuiting conditions
+    # 3. if this is not the first stage, all of:
+    #      a. previous stage is complete and
+    #      b. this stage has not been launched, or is not complete
+    #      b. and is immediate launch, or available after days have passed
 
-    # only first stage is valid, if study never launched
-    return previous_stage.nil? unless launched_study
+    return false unless study.available?
 
-    # Completed study - can only relaunch first stage for consent
-    return previous_stage.nil? && !launched_study.consent_granted if launched_study.completed?
-
-    # first stage valid if no stages launched, or one stage (first) is incomplete
-    if previous_stage.nil?
-      return !launched_study.launched_stages || launched_study.launched_stages.first.incomplete?
+    if first_stage?
+      (never_launched(user) ||
+      launched_study_no_stages(user) ||
+      launched_study_incomplete_first_stage(user) ||
+      completed_study_not_consented(user)
+      )
+    else
+      (previous_stage_complete(user) &&
+      this_stage_not_complete_or_missing(user) &&
+      immediate_or_after_days_passed(user)
+      )
     end
+  end
 
-    prev_launch = launched_study.launched_stages.where(stage_id: previous_stage.id).first
-    # only first stage is valid, if previous stage not complete
-    return false if prev_launch.nil? || prev_launch.incomplete?
+  def first_stage?
+    previous_stage.nil?
+  end
 
-    launch = launched_study.launched_stages.where(stage_id: id).first
+  def never_launched(user)
+    # if study never launched
+    launched_studies.for_user(user).empty?
+  end
+
+  def completed_study_not_consented(user)
+    # Completed study - can only relaunch first stage for consent
+    launched_study = launched_studies.for_user(user).first
+    launched_study&.completed? && !launched_study.consent_granted
+  end
+
+  def launched_study_no_stages(user)
+    launched_study = launched_studies.for_user(user).first
+    launched_study && launched_study.launched_stages.empty?
+  end
+
+  def launched_study_incomplete_first_stage(user)
+    launched_study = launched_studies.for_user(user).first
+    launched_study && launched_study.launched_stages.first.incomplete?
+  end
+
+  def previous_stage_complete(user)
+    launched_study = launched_studies.for_user(user).first
+    if launched_study.present?
+      prev_launch = launched_study.launched_stages.where(stage_id: previous_stage.id).first
+    end
+    !prev_launch.nil? && !prev_launch.incomplete?
+  end
+
+  def this_stage_not_complete_or_missing(user)
+    launched_study = launched_studies.for_user(user).first
+    launch = launched_study.launched_stages.where(stage_id: id).first if launched_study.present?
     # can complete a previous launch, but cannot launch once it's completed
-    return launch.incomplete? if launch.present?
+    launch.present? ? launch.incomplete? : true
+  end
 
-    # Confirmed that study is launched, previous stage is launched and complete, this stage has not launched
+  def immediate_or_after_days_passed(user)
     return true if available_after_days.zero? # can be launched immediately
 
-    # can launch once the days interval is past
-    prev_launch.completed_at.before?(available_after_days.days.ago)
+    launched_study = launched_studies.for_user(user).first
+    if launched_study.present?
+      prev_launch = launched_study.launched_stages.where(stage_id: previous_stage&.id).first
+    end
+    prev_launch.present? ? prev_launch.completed_at.before?(available_after_days.days.ago) : false
   end
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def launcher(user_id)
     launcher = case config[:type]
