@@ -125,13 +125,11 @@ test('launching study and completing with no consent', async ({ page }) => {
     await expect(page).toMatchText(/marked as complete/)
 
     await page.click('testId=view-studies')
-    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="true"][role=""]`)
-    // have to force, it shouldn't be a link
-    await page.click(`[data-study-id="${studyId}"]`, { force: true })
-    // should not have navigated
+    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="false"][role="link"]`)
+    await page.click(`[data-study-id="${studyId}"]`)
     expect(
         await page.evaluate(() => document.location.pathname)
-    ).toMatch(/studies$/)
+    ).toMatch(`/study/details/${studyId}`)
 
     await rmStudy({ page, studyId })
 })
