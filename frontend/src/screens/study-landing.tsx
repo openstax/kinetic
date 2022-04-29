@@ -38,7 +38,7 @@ const CompletedMessage:React.FC<{
         >
             <Box
                 direction="column" pad="large"
-                margin={{ right: '-100px' }} align="start"
+                margin={{ right: '-50px' }} align="start"
                 css={{
                     maxWidth: '400px',
                 }}
@@ -47,8 +47,8 @@ const CompletedMessage:React.FC<{
                 <h3>Success!</h3>
                 <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
                     You‘ve completed a Kinetic activity.
-                    {!aborted && ' This task will be marked as complete on your dashboard.'}
-                    {!consented && `Since you have chosen to not allow us to use your results in our research, you did not earn ${<Points study={study} /> }. You can retake the study and change that, if you wish` }
+                    {!aborted && consented && ' This task will be marked as complete on your dashboard.'}
+                    {!consented && ` If you would like to receive ${study.participationPoints} points for completing this task, please retake the study and provide your consent to allow us to use your anonymized data for research purposes and further our mission to improve educational access and equity for all learners.` }
                 </h5>
                 <Button primary data-test-id="view-studies" onClick={onReturnClick}>Go back to dashboard</Button>
 
