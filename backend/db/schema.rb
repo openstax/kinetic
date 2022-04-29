@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_08_162010) do
+ActiveRecord::Schema.define(version: 2022_04_29_195630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,7 +54,6 @@ ActiveRecord::Schema.define(version: 2022_04_08_162010) do
     t.datetime "aborted_at"
     t.boolean "consent_granted"
     t.index ["study_id"], name: "index_launched_studies_on_study_id"
-    t.index ["user_id", "study_id", "consent_granted"], name: "index_launched_studies_on_user_id_and_study_id_and_consent", unique: true
   end
 
   create_table "participant_metadata", force: :cascade do |t|
