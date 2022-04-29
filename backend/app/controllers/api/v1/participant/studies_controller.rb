@@ -6,6 +6,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
 
   def index
     launched_studies = current_user.launched_studies.includes(study: [:researchers])
+                         .order(completed_at: 'desc').uniq(&:study_id)
 
     unlaunched_studies = Study.available.includes(:researchers)
                            .where.not(id: launched_studies.map(&:study_id))
