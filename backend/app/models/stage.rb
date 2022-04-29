@@ -38,7 +38,12 @@ class Stage < ApplicationRecord
   end
 
   def has_been_completed_by_user?(user)
-    launched_stages.for_user(user).where(completed_at: nil).none?
+    launched_study = launched_studies.for_user(user).first
+    if launched_study
+      launched_study.launched_stages.where(stage_id: id).where.not(completed_at: nil).first
+    else
+      !launched_stages.for_user(user).first&.completed_at.nil?
+    end
   end
 
   def launchable_by_user?(user)
