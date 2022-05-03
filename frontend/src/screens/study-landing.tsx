@@ -3,10 +3,10 @@ import { React, useEffect, useState } from '@common'
 import { colors } from '../theme'
 import { ParticipantStudy, DefaultApi, LandStudyRequest, LandStudyAbortedEnum } from '@api'
 import { Button, IncorrectUser, Box, LoadingAnimation, ErrorPage, KineticWaves } from '@components'
-import { useQueryParam, useCurrentUser, useApi, isIframed, sendMessageToParent } from '@lib'
+import { useQueryParam, useCurrentUser, useApi, isIframed, sendMessageToParent, errorToString } from '@lib'
 
 
-const Points:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
+const Points: React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     return (
         <div
             css={{
@@ -20,15 +20,13 @@ const Points:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
         </div>
     )
 }
-
-const CompletedMessage:React.FC<{
+interface CompletedMessageProps {
     consented: boolean,
     aborted: boolean
     study: ParticipantStudy,
     onReturnClick(): void,
-}> = ({
-    consented, aborted, study, onReturnClick,
-}) => (
+}
+const CompletedMessage: React.FC<CompletedMessageProps> = ({ consented, aborted, study, onReturnClick }) => (
     <Box justify="center">
         <Box
             css={{
@@ -48,7 +46,7 @@ const CompletedMessage:React.FC<{
                 <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
                     You‘ve completed a Kinetic activity.
                     {!aborted && consented && ' This task will be marked as complete on your dashboard.'}
-                    {!consented && ` If you would like to receive ${study.participationPoints} points for completing this task, please retake the study and provide your consent to allow us to use your anonymized data for research purposes and further our mission to improve educational access and equity for all learners.` }
+                    {!consented && ` If you would like to receive ${study.participationPoints} points for completing this task, please retake the study and provide your consent to allow us to use your anonymized data for research purposes and further our mission to improve educational access and equity for all learners.`}
                 </h5>
                 <Button primary data-test-id="view-studies" onClick={onReturnClick}>Go back to dashboard</Button>
 
@@ -71,13 +69,13 @@ export default function UsersStudies() {
 
     // this is somewhat inaccurate but we do not want to say something like "recording status"
     // since that will alarm participants who refused consent
-    const [study, setStudy] = useState<ParticipantStudy|null>(null)
+    const [study, setStudy] = useState<ParticipantStudy | null>(null)
     const [error, setError] = useState<any>(null)
     const api = useApi()
     const nav = useNavigate()
     const user = useCurrentUser()
     const noConsent = useQueryParam('consent') == 'false'
-    const abort =  useQueryParam('abort') == 'true'
+    const abort = useQueryParam('abort') == 'true'
 
     const md = useQueryParam('md') || {}
     if (!user) {
@@ -98,7 +96,7 @@ export default function UsersStudies() {
                 window.parent.document.querySelector('[data-is-study-preview-modal="true"]')
             )
         } catch { } // accessing window.parent my throw exception due to SOP
-        const params:LandStudyRequest = {
+        const params: LandStudyRequest = {
             id: Number(studyId),
             md,
             consent: !noConsent,
@@ -109,7 +107,9 @@ export default function UsersStudies() {
 
         landStudy(api, params, isPreview)
             .then(setStudy)
-            .catch(setError)
+            .catch(async (e: Response) => {
+                setError(await errorToString(e))
+            })
     }, [])
 
     if (error) {
