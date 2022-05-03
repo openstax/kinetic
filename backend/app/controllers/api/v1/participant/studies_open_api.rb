@@ -249,8 +249,6 @@ class Api::V1::Participant::StudiesOpenApi
         key :in, :query
         key :description, 'Metadata to record for participant'
         key :schema, { type: :object }
-        # key :style, :deepObject
-        # key :explode, true
       end
 
       response 200 do
