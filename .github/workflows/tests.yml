@@ -55,7 +55,7 @@ jobs:
         working-directory: frontend
         run: yarn run test:ci
       - name: Debug log
-        if: ${{ failure() }}
+        if: failure()
         run: docker logs kinetic_api_1
       - name: Save test-results of failures
         uses: actions/upload-artifact@v2
