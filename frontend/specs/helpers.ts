@@ -125,7 +125,7 @@ export const createStudy = async ({
     if (isMandatory) {
         await page.click('input[name=isMandatory]')
     }
-    /* if isMandatory is true, the next line gets skipped, for some reason */
+    /* In my local setup, the next line gets skipped, for some reason RJR */
     await page.fill('[name=shortDescription]', 'short desc')
     await page.fill('[name=shortDescription]', 'short desc')
     await page.fill('[name=longDescription]', 'long desc')
