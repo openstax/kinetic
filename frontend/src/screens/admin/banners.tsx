@@ -7,21 +7,25 @@ import {
 import { useApi, useFetchState } from '@lib'
 
 
-const Banner:React.FC<{ banner: BannerNotice, onUpdate():void }> = ({ banner, onUpdate }) => {
+const Banner: React.FC<{ banner: BannerNotice, onUpdate(): void }> = ({ banner, onUpdate }) => {
     const [error, setError] = useState('')
     const api = useApi()
     const onDelete = () => {
         api.deleteBanner({ id: banner.id! }).then(onUpdate)
     }
     const saveBanner = async (banner: BannerNotice, meta: any) => {
-        let reply
-        if (banner.id) {
-            reply = await api.updateBanner({ id: banner.id, updateBanner: { banner } })
-        } else {
-            reply = await api.createBanner({ addBanner: { banner } })
+        let reply: BannerNotice
+        try {
+            if (banner.id) {
+                reply = await api.updateBanner({ id: banner.id, updateBanner: { banner } })
+            } else {
+                reply = await api.createBanner({ addBanner: { banner } })
+            }
+            meta.resetForm(reply)
+            onUpdate()
+        } catch (e) {
+            setError(String(e))
         }
-        meta.resetForm(reply)
-        onUpdate()
     }
     return (
         <Col
@@ -69,7 +73,7 @@ export function AdminBanners() {
                 <h4>Scheduled Banners</h4>
                 <Icon height={15} icon="plusCircle" data-test-id="add-banner" onClick={state.addNewRecord} />
             </Box>
-            {state.records.map((banner, i) => <Banner key={banner.id || i} banner={banner} onUpdate={state.fetchRecords}/>)}
+            {state.records.map((banner, i) => <Banner key={banner.id || i} banner={banner} onUpdate={state.fetchRecords} />)}
         </div>
     )
 }
