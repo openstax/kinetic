@@ -42,7 +42,8 @@ const StudyCard:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
                 <Box className="card-body" direction="column">
                     <Box justify="between">
                         <h5 className="card-title">{study.title}</h5>
-                        {study.completedAt && <Icon icon="checkCircle" css={{ flex: '0 0 25px' }} color="green" />}
+                        {study.completedAt && study.consentGranted && <Icon icon="checkCircle" css={{ flex: '0 0 25px' }} color='green' />}
+                        {study.completedAt && !study.consentGranted && <Icon icon="plusCircle" css={{ flex: '0 0 25px' }} color='orange' />}
                     </Box>
                     <p>{study.shortDescription}</p>
                     <Box flex />

@@ -43,7 +43,7 @@ services:
     environment:
       - API_ADDRESS=http://localhost:4006
   postgres:
-    image: "postgres:11"
+    image: "postgres:14"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
@@ -53,7 +53,7 @@ services:
       - POSTGRES_PASSWORD=kinetic
       - POSTGRES_DB=kinetic_development
   postgres_test:
-    image: "postgres:11"
+    image: "postgres:14"
     networks:
       - kinetic
     environment:

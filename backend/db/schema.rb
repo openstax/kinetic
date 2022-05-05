@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_08_162010) do
+ActiveRecord::Schema.define(version: 2022_04_29_195630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,8 +37,10 @@ ActiveRecord::Schema.define(version: 2022_04_08_162010) do
     t.datetime "completed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "launched_study_id", null: false
+    t.index ["launched_study_id"], name: "index_launched_stages_on_launched_study_id"
     t.index ["stage_id"], name: "index_launched_stages_on_stage_id"
-    t.index ["user_id", "stage_id"], name: "index_launched_stages_on_user_id_and_stage_id", unique: true
+    t.index ["user_id", "stage_id", "launched_study_id"], name: "index_launched_stages_on_user_and_stage_and_launched_study", unique: true
   end
 
   create_table "launched_studies", force: :cascade do |t|
@@ -52,7 +54,6 @@ ActiveRecord::Schema.define(version: 2022_04_08_162010) do
     t.datetime "aborted_at"
     t.boolean "consent_granted"
     t.index ["study_id"], name: "index_launched_studies_on_study_id"
-    t.index ["user_id", "study_id"], name: "index_launched_studies_on_user_id_and_study_id", unique: true
   end
 
   create_table "participant_metadata", force: :cascade do |t|
@@ -130,6 +131,7 @@ ActiveRecord::Schema.define(version: 2022_04_08_162010) do
     t.index ["study_id"], name: "index_study_researchers_on_study_id"
   end
 
+  add_foreign_key "launched_stages", "launched_studies"
   add_foreign_key "launched_stages", "stages"
   add_foreign_key "launched_studies", "studies"
   add_foreign_key "participant_metadata", "studies"

@@ -97,15 +97,13 @@ RSpec.describe LaunchPad, multi_stage: true do
 
   context 'when a user has completed a study' do
     before do
-      user1_study1_launch_pad.launch_url
-      user1_study1_launch_pad.land
-      user1_study1_launch_pad.launch_url
-      user1_study1_launch_pad.land
+      user1_study2_launch_pad.launch_url
+      user1_study2_launch_pad.land
     end
 
     it 'raises an error on launch' do
       expect {
-        user1_study1_launch_pad.launch_url
+        user1_study2_launch_pad.launch_url
       }.to raise_error(LaunchError)
     end
   end

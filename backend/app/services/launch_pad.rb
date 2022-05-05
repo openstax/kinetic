@@ -14,10 +14,8 @@ class LaunchPad
       raise(LaunchError, 'This study is not available.') unless study.available?
 
       ActiveRecord::Base.transaction do
-        raise(LaunchError, 'You have already completed this study.') if launched_study.completed?
-
         stage = study.next_stage_for_user(user)
-        raise 'No stage to launch exists' if stage.nil?
+        raise(LaunchError, 'No stage to launch exists') if stage.nil?
 
         stage.launch_by_user!(user)
         stage.launcher(user_id).url
@@ -26,29 +24,25 @@ class LaunchPad
   end
 
   def land(consent: true)
-    # At any time, a user has zero or one incomplete launched stages for a particular study.
-    # If they are landing, they must have one launched stage or we need to error.
-    stage = user.launched_stages(study: study)
-              .where(completed_at: nil)
-              .first
-
     raise(LandError, 'Not expecting a landing for this study') if stage.nil?
 
     # Mark the launched records consented and completed as needed.
     Study.transaction do
       stage.completed!
       if consent
-        launched_study.consented!
+        stage.launched_study.consented!
       else
-        launched_study.opted_out!
+        stage.launched_study.opted_out!
       end
-      launched_study.completed! if stage.is_last?
+      stage.launched_study.completed! if stage.is_last?
     end
   end
 
   def abort(reason)
+    raise(LandError, 'Not expecting a landing for this study') if stage.nil?
+
     if reason == 'refusedconsent'
-      launched_study.aborted!
+      stage.launched_study.aborted!
       return true
     end
 
@@ -64,11 +58,15 @@ class LaunchPad
     @study ||= Study.find(study_id)
   end
 
+  def stage
+    # At any time, a user has zero or one incomplete launched stages for a particular study.
+    @stage ||= user.launched_stages(study: study)
+                 .where(completed_at: nil)
+                 .first
+  end
+
   def user
     @user ||= User.new(user_id)
   end
 
-  def launched_study
-    @launched_study ||= LaunchedStudy.find_or_create_by!(study_id: study_id, user_id: user_id)
-  end
 end

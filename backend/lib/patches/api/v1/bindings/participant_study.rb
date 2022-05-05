@@ -21,7 +21,8 @@ Rails.application.config.to_prepare do
           model.attributes.with_indifferent_access.slice(
             :first_launched_at,
             :completed_at,
-            :opted_out_at
+            :opted_out_at,
+            :consent_granted
           )
         )
       end

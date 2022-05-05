@@ -2,7 +2,7 @@
 
 class LaunchedStudy < ApplicationRecord
   belongs_to :study
-
+  has_many :launched_stages
   before_create { self.first_launched_at ||= Time.now }
 
   scope :complete, -> { where.not(completed_at: nil) }
