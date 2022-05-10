@@ -5,8 +5,9 @@ import { ParticipantStudy, DefaultApi, LandStudyRequest, LandStudyAbortedEnum } 
 import { Button, IncorrectUser, Box, LoadingAnimation, ErrorPage, KineticWaves } from '@components'
 import { useQueryParam, useCurrentUser, useApi, isIframed, sendMessageToParent } from '@lib'
 
+type LandedStudy = ParticipantStudy & { completedAt?: Date }
 
-const Points:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
+const Points: React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     return (
         <div
             css={{
@@ -21,14 +22,14 @@ const Points:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     )
 }
 
-const CompletedMessage:React.FC<{
+interface CompletedMessageProps {
     consented: boolean,
     aborted: boolean
-    study: ParticipantStudy,
+    study: LandedStudy,
     onReturnClick(): void,
-}> = ({
-    consented, aborted, study, onReturnClick,
-}) => (
+}
+
+const CompletedMessage: React.FC<CompletedMessageProps> = ({ consented, aborted, study, onReturnClick }) => (
     <Box justify="center">
         <Box
             css={{
@@ -46,23 +47,23 @@ const CompletedMessage:React.FC<{
                 {consented && <Points study={study} />}
                 <h3>Success!</h3>
                 <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
-                    You‘ve completed a Kinetic activity.
-                    {!aborted && ' This task will be marked as complete on your dashboard.'}
+                    You‘ve completed {!study.completedAt && 'stage of '} a Kinetic activity.
+                    {!aborted && study.completedAt && ' This task will be marked as complete on your dashboard.'}
                 </h5>
                 <Button primary data-test-id="view-studies" onClick={onReturnClick}>Go back to dashboard</Button>
-
             </Box>
             <KineticWaves flipped />
         </Box>
     </Box>
 )
 
-const landStudy = async (api: DefaultApi, params: LandStudyRequest, isPreview: boolean) => {
+const landStudy = async (api: DefaultApi, params: LandStudyRequest, isPreview: boolean): Promise<LandedStudy> => {
     const study = await api.getParticipantStudy({ id: params.id })
-    if (!isPreview) {
-        await api.landStudy(params)
+    if (isPreview) {
+        return { ...study, completedAt: new Date() }
     }
-    return study
+    const landing = await api.landStudy(params)
+    return { ...study, completedAt: landing.completedAt }
 }
 
 export default function UsersStudies() {
@@ -70,13 +71,13 @@ export default function UsersStudies() {
 
     // this is somewhat inaccurate but we do not want to say something like "recording status"
     // since that will alarm participants who refused consent
-    const [study, setStudy] = useState<ParticipantStudy|null>(null)
+    const [study, setLanded] = useState<LandedStudy | null>(null)
     const [error, setError] = useState<any>(null)
     const api = useApi()
     const nav = useNavigate()
     const user = useCurrentUser()
     const noConsent = useQueryParam('consent') == 'false'
-    const abort =  useQueryParam('abort') == 'true'
+    const abort = useQueryParam('abort') == 'true'
 
     const md = useQueryParam('md') || {}
     if (!user) {
@@ -97,7 +98,7 @@ export default function UsersStudies() {
                 window.parent.document.querySelector('[data-is-study-preview-modal="true"]')
             )
         } catch { } // accessing window.parent my throw exception due to SOP
-        const params:LandStudyRequest = {
+        const params: LandStudyRequest = {
             id: Number(studyId),
             md,
             consent: !noConsent,
@@ -107,7 +108,7 @@ export default function UsersStudies() {
         }
 
         landStudy(api, params, isPreview)
-            .then(setStudy)
+            .then(setLanded)
             .catch(setError)
     }, [])
 

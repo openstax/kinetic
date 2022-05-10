@@ -53,7 +53,16 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
     # If param present, must be string "true", if absent, default to true
     consent = params[:consent] ? params[:consent] == 'true' : true
     launch_pad.land(consent: consent)
-    head :ok
+
+    completed_at = nil
+    if @study.stages.all? { |stage| stage.has_been_completed_by_user?(current_user) }
+      completed_at = @study.launched_stages.last&.completed_at
+    end
+
+    response_binding = Api::V1::Bindings::ParticipantStudyCompletion.new(
+      id: @study.id, completed_at: completed_at
+    )
+    render json: response_binding
   end
 
   protected

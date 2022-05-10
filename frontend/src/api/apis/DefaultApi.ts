@@ -45,6 +45,9 @@ import {
     ParticipantStudy,
     ParticipantStudyFromJSON,
     ParticipantStudyToJSON,
+    ParticipantStudyCompletion,
+    ParticipantStudyCompletionFromJSON,
+    ParticipantStudyCompletionToJSON,
     Reward,
     RewardFromJSON,
     RewardToJSON,
@@ -664,7 +667,7 @@ export class DefaultApi extends runtime.BaseAPI {
      * Land a study stage
      * Land a study stage
      */
-    async landStudyRaw(requestParameters: LandStudyRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<void>> {
+    async landStudyRaw(requestParameters: LandStudyRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<ParticipantStudyCompletion>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling landStudy.');
         }
@@ -692,15 +695,16 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => ParticipantStudyCompletionFromJSON(jsonValue));
     }
 
     /**
      * Land a study stage
      * Land a study stage
      */
-    async landStudy(requestParameters: LandStudyRequest, initOverrides?: RequestInit): Promise<void> {
-        await this.landStudyRaw(requestParameters, initOverrides);
+    async landStudy(requestParameters: LandStudyRequest, initOverrides?: RequestInit): Promise<ParticipantStudyCompletion> {
+        const response = await this.landStudyRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

@@ -13,6 +13,18 @@ class Api::V1::Participant::StudiesOpenApi
       key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
     end
 
+    schema :ParticipantStudyCompletion do
+      property :id do
+        key :type, :integer
+        key :description, 'The study ID.'
+      end
+      property :completed_at do
+        key :type, :string
+        key :format, 'date-time'
+        key :description, 'When the study was completed; null indicates study is not yet complete'
+      end
+    end
+
   end
 
   add_components do
@@ -245,12 +257,13 @@ class Api::V1::Participant::StudiesOpenApi
         key :in, :query
         key :description, 'Metadata to record for participant'
         key :schema, { type: :object }
-        # key :style, :deepObject
-        # key :explode, true
       end
 
       response 200 do
-        key :description, 'Success.  Returns no data.'
+        key :description, 'Success.  Returns study completion status.'
+        content 'application/json' do
+          schema { key :$ref, :ParticipantStudyCompletion }
+        end
       end
       extend Api::V1::OpenApiResponses::AuthenticationError
       extend Api::V1::OpenApiResponses::ForbiddenError

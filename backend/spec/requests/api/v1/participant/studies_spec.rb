@@ -180,6 +180,20 @@ RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: tru
     context 'when signed in' do
       before { stub_current_user(user1_id) }
 
+      it 'returns completion status for a multistage study' do
+        stage1a.launch_by_user!(User.new(user1_id))
+        # expect_any_instance_of(LaunchPad).to receive(:land)
+        api_put "participant/studies/#{study1.id}/land"
+        expect(response_hash[:completed_at]).to be_nil
+
+        stage1b.launch_by_user!(User.new(user1_id))
+        Timecop.freeze do
+          api_put "participant/studies/#{study1.id}/land"
+          expect(response_hash[:completed_at]).not_to be_nil
+          expect(DateTime.parse(response_hash[:completed_at])).to be_within(1.second).of DateTime.now
+        end
+      end
+
       context 'when aborting early' do
         it 'does not mark complete' do
           allow_any_instance_of(LaunchPad).to(
@@ -193,7 +207,6 @@ RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: tru
             aborted: 'refusedconsent'
           }
           expect(response).to have_http_status(:ok)
-          study3.stages
         end
 
       end
