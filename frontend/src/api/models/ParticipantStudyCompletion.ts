@@ -20,11 +20,11 @@ import { exists, mapValues } from '../runtime';
  */
 export interface ParticipantStudyCompletion {
     /**
-     * The study ID.
-     * @type {number}
+     * When the stage was aborted; null indicates stage was marked complete
+     * @type {Date}
      * @memberof ParticipantStudyCompletion
      */
-    id?: number;
+    abortedAt?: Date;
     /**
      * When the study was completed; null indicates study is not yet complete
      * @type {Date}
@@ -43,7 +43,7 @@ export function ParticipantStudyCompletionFromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'abortedAt': !exists(json, 'aborted_at') ? undefined : (new Date(json['aborted_at'])),
         'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
     };
 }
@@ -57,7 +57,7 @@ export function ParticipantStudyCompletionToJSON(value?: ParticipantStudyComplet
     }
     return {
         
-        'id': value.id,
+        'aborted_at': value.abortedAt === undefined ? undefined : (value.abortedAt.toISOString()),
         'completed_at': value.completedAt === undefined ? undefined : (value.completedAt.toISOString()),
     };
 }

@@ -92,8 +92,9 @@ test('launching study and aborting it', async ({ page }) => {
     const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
     await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
     await page.click('testId=launch-study')
-
+    await page.pause()
     await goToPage({ page, path: `/study/land/${studyId}?abort=true`, loginAs: 'user' })
+    await page.waitForSelector('testId=aborted-msg')
     await expect(page).not.toMatchText(/marked as complete/)
 
     await page.click('testId=view-studies')

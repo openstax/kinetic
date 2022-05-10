@@ -44,25 +44,13 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
         metadata: params[:md]
       )
     end
-    if params[:aborted]
-      return head(
-        launch_pad.abort(params[:aborted]) ? :ok : :not_acceptable
-      )
-    end
 
-    # If param present, must be string "true", if absent, default to true
-    consent = params[:consent] ? params[:consent] == 'true' : true
-    launch_pad.land(consent: consent)
-
-    completed_at = nil
-    if @study.stages.all? { |stage| stage.has_been_completed_by_user?(current_user) }
-      completed_at = @study.launched_stages.last&.completed_at
-    end
-
-    response_binding = Api::V1::Bindings::ParticipantStudyCompletion.new(
-      id: @study.id, completed_at: completed_at
+    completion_status = launch_pad.land(
+      consent: params[:consent] != 'false',
+      aborted: params[:aborted]
     )
-    render json: response_binding
+
+    render json: Api::V1::Bindings::ParticipantStudyCompletion.new(completion_status)
   end
 
   protected

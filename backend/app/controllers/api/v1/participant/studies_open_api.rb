@@ -14,9 +14,10 @@ class Api::V1::Participant::StudiesOpenApi
     end
 
     schema :ParticipantStudyCompletion do
-      property :id do
-        key :type, :integer
-        key :description, 'The study ID.'
+      property :aborted_at do
+        key :type, :string
+        key :format, 'date-time'
+        key :description, 'When the stage was aborted; null indicates stage was marked complete'
       end
       property :completed_at do
         key :type, :string

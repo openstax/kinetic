@@ -15,8 +15,8 @@ require 'time'
 
 module Api::V1::Bindings
   class ParticipantStudyCompletion
-    # The study ID.
-    attr_accessor :id
+    # When the stage was aborted; null indicates stage was marked complete
+    attr_accessor :aborted_at
 
     # When the study was completed; null indicates study is not yet complete
     attr_accessor :completed_at
@@ -24,7 +24,7 @@ module Api::V1::Bindings
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'id' => :'id',
+        :'aborted_at' => :'aborted_at',
         :'completed_at' => :'completed_at'
       }
     end
@@ -37,7 +37,7 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'id' => :'Integer',
+        :'aborted_at' => :'Time',
         :'completed_at' => :'Time'
       }
     end
@@ -63,8 +63,8 @@ module Api::V1::Bindings
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'id')
-        self.id = attributes[:'id']
+      if attributes.key?(:'aborted_at')
+        self.aborted_at = attributes[:'aborted_at']
       end
 
       if attributes.key?(:'completed_at')
@@ -90,7 +90,7 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          id == o.id &&
+          aborted_at == o.aborted_at &&
           completed_at == o.completed_at
     end
 
@@ -103,7 +103,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, completed_at].hash
+      [aborted_at, completed_at].hash
     end
 
     # Builds the object from hash

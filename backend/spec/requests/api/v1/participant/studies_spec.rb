@@ -202,7 +202,7 @@ RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: tru
               .and_return(true)
           )
 
-          expect_any_instance_of(LaunchPad).not_to receive(:land)
+          expect_any_instance_of(LaunchedStage).not_to receive(:completed!)
           api_put "participant/studies/#{study3.id}/land", params: {
             aborted: 'refusedconsent'
           }
@@ -212,7 +212,7 @@ RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: tru
       end
 
       it 'works for a launched study not yet landed' do
-        expect_any_instance_of(LaunchPad).to receive(:land)
+        allow_any_instance_of(LaunchPad).to receive(:land).and_return({})
         expect {
           api_put "participant/studies/#{study2.id}/land?md[foo]=bar&md[bar]=baz"
         }.to change { ParticipantMetadatum.count }.by 1
