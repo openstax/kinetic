@@ -14,6 +14,7 @@ export * from './NewStage';
 export * from './NewStudy';
 export * from './ParticipantStudies';
 export * from './ParticipantStudy';
+export * from './ParticipantStudyCompletion';
 export * from './ParticipantStudyStage';
 export * from './PublicResearcher';
 export * from './QualtricsStage';

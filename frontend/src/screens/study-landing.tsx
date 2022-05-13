@@ -5,8 +5,17 @@ import { ParticipantStudy, DefaultApi, LandStudyRequest, LandStudyAbortedEnum } 
 import { Button, IncorrectUser, Box, LoadingAnimation, ErrorPage, KineticWaves } from '@components'
 import { useQueryParam, useCurrentUser, useApi, isIframed, sendMessageToParent } from '@lib'
 
+type LandedStudy = ParticipantStudy & { completedAt?: Date, abortedAt?: Date }
 
-const Points:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
+interface StudyMessagingProps {
+    consented: boolean,
+    aborted: boolean
+    study: LandedStudy,
+
+}
+
+const Points: React.FC<StudyMessagingProps> = ({ study }) => {
+    if (!study.completedAt) return null
     return (
         <div
             css={{
@@ -21,48 +30,67 @@ const Points:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     )
 }
 
-const CompletedMessage:React.FC<{
-    consented: boolean,
-    aborted: boolean
-    study: ParticipantStudy,
-    onReturnClick(): void,
-}> = ({
-    consented, aborted, study, onReturnClick,
-}) => (
-    <Box justify="center">
-        <Box
-            css={{
-                background: 'white',
-                border: `2px solid ${colors.lightGray}`,
-            }}
-        >
+
+const NonAbortedMessage: React.FC<StudyMessagingProps> = ({ study }) => {
+    if (study.abortedAt) return null
+    return (
+        <div data-test-id="completed-msg">
+            <h3>Success!</h3>
+            <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
+                You‘ve completed {!study.completedAt && 'stage of '} a Kinetic activity.
+                {study.completedAt && ' This task will be marked as complete on your dashboard.'}
+            </h5>
+        </div>
+    )
+}
+
+const AbortedMessage: React.FC<StudyMessagingProps> = ({ study }) => {
+    if (!study.abortedAt) return null
+    return (
+        <div data-test-id="aborted-msg">
+            <h3>Try again later!</h3>
+            <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
+                You can re-attempt the study later by selecting it from your dashboard.
+            </h5>
+        </div>
+    )
+}
+
+const StudyMessaging: React.FC<StudyMessagingProps & { onReturnClick(): void }> = ({ onReturnClick, ...props }) => {
+
+    return (
+        <Box justify="center">
             <Box
-                direction="column" pad="large"
-                margin={{ right: '-100px' }} align="start"
                 css={{
-                    maxWidth: '400px',
+                    background: 'white',
+                    border: `2px solid ${colors.lightGray}`,
                 }}
             >
-                {consented && <Points study={study} />}
-                <h3>Success!</h3>
-                <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
-                    You‘ve completed a Kinetic activity.
-                    {!aborted && ' This task will be marked as complete on your dashboard.'}
-                </h5>
-                <Button primary data-test-id="view-studies" onClick={onReturnClick}>Go back to dashboard</Button>
-
+                <Box
+                    direction="column" pad="large"
+                    margin={{ right: '-100px' }} align="start"
+                    css={{
+                        maxWidth: '400px',
+                    }}
+                >
+                    <Points {...props} />
+                    <AbortedMessage {...props} />
+                    <NonAbortedMessage {...props} />
+                    <Button primary data-test-id="view-studies" onClick={onReturnClick}>Go back to dashboard</Button>
+                </Box>
+                <KineticWaves flipped />
             </Box>
-            <KineticWaves flipped />
         </Box>
-    </Box>
-)
+    )
+}
 
-const landStudy = async (api: DefaultApi, params: LandStudyRequest, isPreview: boolean) => {
+const landStudy = async (api: DefaultApi, params: LandStudyRequest, isPreview: boolean): Promise<LandedStudy> => {
     const study = await api.getParticipantStudy({ id: params.id })
-    if (!isPreview) {
-        await api.landStudy(params)
+    if (isPreview) {
+        return { ...study, completedAt: new Date() }
     }
-    return study
+    const landing = await api.landStudy(params)
+    return { ...study, ...landing }
 }
 
 export default function UsersStudies() {
@@ -70,13 +98,13 @@ export default function UsersStudies() {
 
     // this is somewhat inaccurate but we do not want to say something like "recording status"
     // since that will alarm participants who refused consent
-    const [study, setStudy] = useState<ParticipantStudy|null>(null)
+    const [study, setLanded] = useState<LandedStudy | null>(null)
     const [error, setError] = useState<any>(null)
     const api = useApi()
     const nav = useNavigate()
     const user = useCurrentUser()
     const noConsent = useQueryParam('consent') == 'false'
-    const abort =  useQueryParam('abort') == 'true'
+    const abort = useQueryParam('abort') == 'true'
 
     const md = useQueryParam('md') || {}
     if (!user) {
@@ -97,7 +125,7 @@ export default function UsersStudies() {
                 window.parent.document.querySelector('[data-is-study-preview-modal="true"]')
             )
         } catch { } // accessing window.parent my throw exception due to SOP
-        const params:LandStudyRequest = {
+        const params: LandStudyRequest = {
             id: Number(studyId),
             md,
             consent: !noConsent,
@@ -107,7 +135,7 @@ export default function UsersStudies() {
         }
 
         landStudy(api, params, isPreview)
-            .then(setStudy)
+            .then(setLanded)
             .catch(setError)
     }, [])
 
@@ -118,7 +146,7 @@ export default function UsersStudies() {
     return (
         <div className="container studies mt-8">
             {!study && <LoadingAnimation message="Loading study" />}
-            {study && <CompletedMessage aborted={abort} consented={!noConsent} onReturnClick={onNav} study={study} />}
+            {study && <StudyMessaging aborted={abort} consented={!noConsent} onReturnClick={onNav} study={study} />}
         </div>
     )
 

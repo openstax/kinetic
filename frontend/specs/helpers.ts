@@ -122,10 +122,11 @@ export const createStudy = async ({
     await goToPage({ page, path: '/study/edit/new', loginAs: 'researcher' })
     await page.fill('[name=titleForParticipants]', name)
     await setFlatpickrDate({ selector: '[data-field-name=opensAt]', page, date: opensAt })
+
     if (isMandatory) {
         await page.click('input[name=isMandatory]')
     }
-
+    await page.waitForTimeout(100)
     await page.fill('[name=shortDescription]', 'short desc')
     await page.fill('[name=longDescription]', 'long desc')
     await page.fill('[name=durationMinutes]', String(mins))

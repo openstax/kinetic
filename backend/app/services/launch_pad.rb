@@ -25,7 +25,12 @@ class LaunchPad
     end || raise('An error occurred when building a launch url')
   end
 
-  def land(consent: true)
+  def land(consent: true, aborted: nil)
+    if aborted
+      self.abort(aborted)
+      return { aborted_at: Time.now }
+    end
+
     # At any time, a user has zero or one incomplete launched stages for a particular study.
     # If they are landing, they must have one launched stage or we need to error.
     stage = user.launched_stages(study: study)
@@ -44,15 +49,16 @@ class LaunchPad
       end
       launched_study.completed! if stage.is_last?
     end
+
+    { completed_at: stage.is_last? ? stage.completed_at : nil }
   end
 
   def abort(reason)
     if reason == 'refusedconsent'
       launched_study.aborted!
-      return true
+      return
     end
-
-    false
+    raise(LandError, 'invalid aborted reason')
   end
 
   protected
