@@ -20,6 +20,8 @@ disallowed_books:
   - cálculo-volumen-1
   - cálculo-volumen-2
   - cálculo-volumen-3
+  - química-2ed
+  - química-comenzando-átomos-2ed
 allowed_country_codes:
   - US
   - UM
