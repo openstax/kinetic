@@ -162,7 +162,7 @@ RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: tru
         )
       end
 
-      it 'gives an error for a complete study' do
+      it 'does not give an error for a complete study' do
         api_put "participant/studies/#{study3.id}/launch"
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -224,7 +224,8 @@ RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: tru
 
       it 'gives an error for a complete study' do
         api_put "participant/studies/#{study3.id}/land"
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:ok)
+        expect(response_hash).to match a_hash_including(completed_at: kind_of(String))
       end
     end
   end

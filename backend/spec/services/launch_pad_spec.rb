@@ -51,8 +51,8 @@ RSpec.describe LaunchPad, multi_stage: true do
       expect(url).to match(/ssotoken=/)
     end
 
-    it 'errors if the user tries to land' do
-      expect { user1_study1_launch_pad.land }.to raise_error(LandError)
+    it 'does not error if the user tries to land multiple times' do
+      expect { user1_study1_launch_pad.land }.not_to raise_error(LandError)
     end
   end
 
