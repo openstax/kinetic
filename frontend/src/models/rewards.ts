@@ -8,9 +8,9 @@ export interface CalculatedRewardsScheduleSegment extends RewardsScheduleSegment
     index: number
 }
 
-export function rewardPointsEarned(studies: ParticipantStudy[]): number {
+export function rewardPointsEarned(firstSegment: RewardsScheduleSegment, studies: ParticipantStudy[]): number {
     return studies.reduce((points, study) => {
-        if (study.participationPoints && study.completedAt) {
+        if (study.completedAt && study.completedAt > firstSegment.startAt && study.participationPoints) {
             return points + study.participationPoints
         }
         return points
@@ -23,6 +23,7 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
     const rs = env?.config.rewardsSchedule || []
     sortBy(rs, 'startAt')
     let totalPoints = 0
+
     const allEvents = rs.map((s, index) => {
         totalPoints += s.points
         return {
@@ -32,13 +33,17 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
         } as CalculatedRewardsScheduleSegment
     })
 
-    const points = useMemo(() => rewardPointsEarned(studies), [studies])
+    // earned points cannot be greater than total points
+    const pointsEarned = useMemo(() => Math.min(
+        totalPoints,
+        rewardPointsEarned(rs[0], studies)
+    ),[rs, totalPoints, studies])
 
     return {
         schedule: allEvents.slice(0, -1),
-        points,
+        pointsEarned,
         totalPoints,
         finalDrawing: last(allEvents),
-        isCompleted: points >= totalPoints,
+        isCompleted: pointsEarned >= totalPoints,
     }
 }

@@ -174,3 +174,27 @@ export const setDateField = async (
 ) => {
     return await setFlatpickrDate({ page, date, selector: `[data-field-name="${fieldName}"]` })
 }
+
+
+export const addReward = async (
+    {
+        page, points, prize,
+        startAt = dayjs().subtract(1, 'day'),
+        endAt = dayjs().add(1, 'day'),
+    }:
+    {
+        page: Page, points: number, prize: string
+        startAt?: dayjs.Dayjs,
+        endAt?: dayjs.Dayjs,
+    }
+) => {
+    await goToPage({ page, path: '/admin/rewards', loginAs: 'admin' })
+    await page.click('testId=add-reward')
+    await page.waitForSelector('[data-reward-id="new"]')
+    await setDateField({ page, fieldName: 'startAt', date: startAt })
+    await setDateField({ page, fieldName: 'endAt', date: endAt })
+    await page.fill('[name="points"]', String(points))
+    await page.fill('[name="prize"]', prize)
+    await page.click('testId=form-save-btn')
+    await logout({ page })
+}
