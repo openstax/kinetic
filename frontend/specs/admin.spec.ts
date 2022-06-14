@@ -1,6 +1,6 @@
 import { addReward } from './helpers'
 import {
-    test, goToPage, setDateField, dayjs, faker, logout, loginAs
+    test, goToPage, setDateField, dayjs, faker, logout,
 } from './test'
 
 test('displays panel only when allowed', async ({ page }) => {
@@ -25,6 +25,7 @@ test('can add/update/delete banners', async ({ page }) => {
     await page.click('testId=form-save-btn')
 
     const banner = page.locator(`[data-banner-id]:not([data-banner-id="new"]):has-text("${message}")`)
+    await page.pause()
     await banner.waitFor()
     const bannerId = await banner.getAttribute('data-banner-id')
 
@@ -41,7 +42,7 @@ test('can add/update/delete rewards', async ({ page }) => {
     const prize = faker.commerce.productName()
 
     await addReward({ page, prize, points: 10 })
-    await goToPage({ page, path: '/admin/banners/', loginAs: 'admin' })
+    await goToPage({ page, path: '/admin/rewards', loginAs: 'admin' })
 
     const reward = page.locator(`[data-reward-id]:not([data-reward-id="new"]):has([value="${prize}"])`)
     await reward.waitFor()
