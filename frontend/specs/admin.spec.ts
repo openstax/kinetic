@@ -25,7 +25,6 @@ test('can add/update/delete banners', async ({ page }) => {
     await page.click('testId=form-save-btn')
 
     const banner = page.locator(`[data-banner-id]:not([data-banner-id="new"]):has-text("${message}")`)
-    await page.pause()
     await banner.waitFor()
     const bannerId = await banner.getAttribute('data-banner-id')
 
