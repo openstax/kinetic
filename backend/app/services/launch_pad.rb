@@ -31,13 +31,16 @@ class LaunchPad
       return { aborted_at: Time.now }
     end
 
+    stages = user.launched_stages(study: study)
     # At any time, a user has zero or one incomplete launched stages for a particular study.
     # If they are landing, they must have one launched stage or we need to error.
-    stage = user.launched_stages(study: study)
-              .where(completed_at: nil)
-              .first
+    stage = stages.where(completed_at: nil).first
 
-    raise(LandError, 'Not expecting a landing for this study') if stage.nil?
+    if stage.nil?
+      return {
+        completed_at: stages.where('completed_at is not null').last&.completed_at
+      }
+    end
 
     # Mark the launched records consented and completed as needed.
     Study.transaction do

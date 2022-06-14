@@ -1,5 +1,5 @@
 import {
-    interceptStudyLaunch, test, goToPage, createStudy, expect, dayjs, faker, rmStudy,
+    interceptStudyLaunch, test, goToPage, createStudy, expect, dayjs, faker, rmStudy, addReward
 } from './test'
 
 test('displays studies', async ({ page }) => {
@@ -65,9 +65,12 @@ test('it auto-launches mandatory studies', async ({ page }) => {
 
 test('launching study and testing completion', async ({ page }) => {
 
+    await addReward({ page, points: 5, prize: 'Pony' })
+
     await interceptStudyLaunch({ page })
 
-    const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
+    // note: 10 points is greater than the 5 points reward
+    const studyId = await createStudy({ page, points: 10, name: faker.commerce.productDescription() })
     await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
     await page.click('testId=launch-study')
 
@@ -82,6 +85,7 @@ test('launching study and testing completion', async ({ page }) => {
     expect(
         await page.evaluate(() => document.location.pathname)
     ).toMatch(/studies$/)
+    await expect(page).toHaveSelector('[data-test-id=progress-indicator][data-percentage-complete="100"]')
     await rmStudy({ page, studyId })
 })
 

@@ -1,3 +1,4 @@
+import { addReward } from './helpers'
 import {
     test, goToPage, setDateField, dayjs, faker, logout,
 } from './test'
@@ -39,14 +40,8 @@ test('can add/update/delete banners', async ({ page }) => {
 test('can add/update/delete rewards', async ({ page }) => {
     const prize = faker.commerce.productName()
 
-    await goToPage({ page, path: '/admin/rewards/', loginAs: 'admin' })
-    await page.click('testId=add-reward')
-    await page.waitForSelector('[data-reward-id="new"]')
-    await setDateField({ page, fieldName: 'startAt', date: dayjs().add(1, 'day') })
-    await setDateField({ page, fieldName: 'endAt', date: dayjs().add(1, 'month') })
-    await page.fill('[name="points"]', '10')
-    await page.fill('[name="prize"]', prize)
-    await page.click('testId=form-save-btn')
+    await addReward({ page, prize, points: 10 })
+    await goToPage({ page, path: '/admin/rewards', loginAs: 'admin' })
 
     const reward = page.locator(`[data-reward-id]:not([data-reward-id="new"]):has([value="${prize}"])`)
     await reward.waitFor()

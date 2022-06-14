@@ -31,7 +31,7 @@ const RewardSegmentCircle: React.FC<{
     return (
         <Popover
             displayType="tooltip"
-            style={{ left: `calc(${(segment.totalPoints / totalPoints) * 100}% - ${barWidth/2}px)` }}
+            style={{ left: `calc(${(segment.totalPoints / totalPoints) * 100}% - ${barWidth / 2}px)` }}
             css={{
                 height: '20px',
                 width: '20px',
@@ -46,16 +46,16 @@ const RewardSegmentCircle: React.FC<{
     )
 }
 
-export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }) => {
+export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies }) => {
 
     const {
         schedule,
-        points,
+        pointsEarned,
         totalPoints,
         isCompleted,
         finalDrawing,
     } = useRewardsSchedule(studies)
-
+    const completion = (pointsEarned / totalPoints) * 100
     return (
         <nav className="navbar navbar-light py-1" css={{
             backgroundColor: 'white',
@@ -64,7 +64,7 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
             <div className="container">
                 <div>
                     <span className="fs-6 fw-light">{finalDrawing?.prize} Giveaway: </span>
-                    <b>{points} / {totalPoints} pts ({Math.round((points/totalPoints)*100)}%)</b>
+                    <b>{pointsEarned} / {totalPoints} pts ({Math.round((pointsEarned / totalPoints) * 100)}%)</b>
                 </div>
                 <Box align="center" >
                     <div
@@ -76,18 +76,21 @@ export const RewardsProgressBar:React.FC<RewardsProgressBarProps> = ({ studies }
                             position: 'relative',
                         }}
                     >
-                        <div css={{
-                            height: '100%',
-                            width: `${(points / totalPoints) * 100}%`,
-                            position: 'absolute',
-                            borderRadius: '4px 0 0 4px',
-                            background: colors.purple,
-                        }} />
+                        <div
+                            data-test-id="progress-indicator"
+                            data-percentage-complete={completion}
+                            css={{
+                                height: '100%',
+                                width: `${completion}%`,
+                                position: 'absolute',
+                                borderRadius: '4px 0 0 4px',
+                                background: colors.purple,
+                            }} />
                         {schedule.map((segment) => (
                             <RewardSegmentCircle
                                 totalPoints={totalPoints}
                                 key={segment.index}
-                                points={points}
+                                points={pointsEarned}
                                 segment={segment}
                             />
                         ))}
