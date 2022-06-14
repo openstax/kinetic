@@ -14,12 +14,12 @@ import { Controls, applyControls, ControlState } from './studies/participant-con
 import { StudyModal } from './studies/modal'
 
 
-const Tag:React.FC<{ tag?: string }> = ({ tag }) => (
+const Tag: React.FC<{ tag?: string }> = ({ tag }) => (
     tag ? <span className="badge bg-light text-dark border border-1">{get(TagLabels, tag, tag)}</span> : null
 )
 
 
-const StudyCard:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
+const StudyCard: React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     const nav = useNavigate()
     const isEnabled = isStudyLaunchable(study)
     const onClick = () => {
@@ -65,15 +65,16 @@ const StudyCard:React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     )
 }
 
-const Studies:React.FC<{ isFiltering: boolean, studies: ParticipantStudy[] }> = ({ studies, isFiltering }) => {
+const Studies: React.FC<{ isFiltering: boolean, studies: ParticipantStudy[] }> = ({ studies, isFiltering }) => {
     if (isFiltering && !studies.length) {
         return <h3 className="my-4">No studies match the selected filters.</h3>
     }
     if (!studies.length) {
         return <h3 className="my-4">No studies are currently available.</h3>
     }
+
     return (
-        <>{studies.map(s => <StudyCard key={s.id} study={s} />)}</>
+        <>{studies.map((s, i) => <StudyCard key={`${i}.${s.id}`} study={s} />)}</>
     )
 }
 
