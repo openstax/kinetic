@@ -1,7 +1,7 @@
 import { useMemo } from '@common'
 import { RewardsScheduleSegment, ParticipantStudy } from '@api'
 import { useEnvironment, dayjs } from '@lib'
-import { sortBy, last } from 'lodash-es'
+import { sortBy } from 'lodash-es'
 
 export interface CalculatedRewardsScheduleSegment extends RewardsScheduleSegment {
     totalPoints: number
@@ -35,11 +35,12 @@ export function rewardPointsEarned(schedule: RewardsScheduleSegment[], studies: 
 }
 
 
-const calculatePoints = (segment: RewardsScheduleSegment, studies: ParticipantStudy[]): number => {
+const calculatePoints = (segment: RewardsScheduleSegment, cycleStart: Date, studies: ParticipantStudy[]): number => {
     return studies.reduce((points, study) => {
         if (study.completedAt &&
             study.participationPoints &&
-            study.completedAt <= segment.endAt
+            study.completedAt <= segment.endAt &&
+            study.completedAt >= cycleStart
         ) {
             return points + study.participationPoints
         }
@@ -51,6 +52,7 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
     const env = useEnvironment()
 
     const rs = sortBy(env?.config.rewardsSchedule || [], 'startAt')
+    const firstSegment = rs[0]
 
     let totalPoints = 0
     const now = dayjs()
@@ -61,7 +63,7 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
     const allEvents = rs.map((s, index) => {
         totalPoints += s.points
 
-        const pointsEarned = calculatePoints(s, studies)
+        const pointsEarned = calculatePoints(s, firstSegment.startAt, studies)
 
         //console.log(pointsEarned, pointsEarned >= s.points, s)
         previousSegment = {
