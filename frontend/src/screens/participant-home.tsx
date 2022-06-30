@@ -123,8 +123,8 @@ export default function ParticipantHome() {
                     </div>
                 </div>
                 <BannersBar />
-                <RewardsProgressBar studies={allStudies?.data || []} />
             </nav>
+            <RewardsProgressBar studies={allStudies?.data || []} />
             <div className="container studies my-8">
                 <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
                 <Controls state={controlState} onChange={setControlState} />
