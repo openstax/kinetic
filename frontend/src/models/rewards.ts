@@ -88,10 +88,10 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
     ), [rs, totalPoints, studies])
 
     return {
-        schedule: allEvents.slice(0, -1),
+        schedule: allEvents,
         pointsEarned,
         totalPoints,
-        finalDrawing: last(allEvents),
+        //   finalDrawing: last(allEvents),
         isCompleted: pointsEarned >= totalPoints,
     }
 }

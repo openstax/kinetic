@@ -1,4 +1,5 @@
 import { React, cx } from '@common'
+import { last } from 'lodash-es'
 import { Box, Popover, Icon } from '@components'
 import {
     useRewardsSchedule,
@@ -93,12 +94,29 @@ const popOverMessage = (segment: CalculatedRewardsScheduleSegment) => {
         popover = `🎉 ${segment.isPast ? 'You were' : 'You’ve been'} entered in a giveaway for a ${segment.prize}`
     } else {
         if (segment.isPast) {
-            popover = `Missed it ? No worries, more prizes ahead`
+            popover = `Missed it? No worries, more prizes ahead`
         } else {
             popover = `reach ${segment.totalPoints} points by ${formatDate(segment.endAt)} to be entered in an ${segment.prize} giveaway`
         }
     }
     return popover
+}
+
+const GrandPrize: React.FC<{ segment?: CalculatedRewardsScheduleSegment }> = ({ segment }) => {
+    if (!segment) return null
+
+    return (
+        <Box direction='column' align='center' >
+            <Icon
+                css={{ background: 'white', marginTop: -5 }}
+                color={segment.achieved ? colors.purple : colors.lightGray}
+                icon={segment.isCurrent ? trophyFilledIcon : trophyOutlineIcon}
+                height={30}
+                className="me-1"
+            />
+            <SegmentLabel segment={segment} />
+        </Box>
+    )
 }
 
 const RewardSegment: React.FC<{
@@ -107,6 +125,29 @@ const RewardSegment: React.FC<{
     totalPoints: number
 }> = ({ segment, totalPoints }) => {
 
+    let body: React.ReactNode
+    if (segment.isFinal) {
+        body = <GrandPrize segment={segment} />
+    } else {
+        body = (
+            <>
+                <Popover
+                    displayType="tooltip"
+                    className={cx({
+                        past: segment.isPast,
+                        future: segment.isFuture,
+                        current: segment.isCurrent,
+                        achieved: segment.achieved,
+                    })}
+
+                    css={circleStyle}
+                    popover={popOverMessage(segment)}
+                />
+                <SegmentLabel segment={segment} />
+            </>
+        )
+    }
+
     return (
         <div
             css={{
@@ -114,19 +155,7 @@ const RewardSegment: React.FC<{
                 left: `calc(${(segment.totalPoints / totalPoints) * 100}% - ${segmentWidth / 2}px)`,
             }}
         >
-            <Popover
-                displayType="tooltip"
-                className={cx({
-                    past: segment.isPast,
-                    future: segment.isFuture,
-                    current: segment.isCurrent,
-                    achieved: segment.achieved,
-                })}
-
-                css={circleStyle}
-                popover={popOverMessage(segment)}
-            />
-            <SegmentLabel segment={segment} />
+            {body}
         </div>
     )
 }
@@ -154,21 +183,7 @@ const CurrentSegmentInfo: React.FC<{ segment?: CalculatedRewardsScheduleSegment 
     )
 }
 
-const GrandPrize: React.FC<{ segment?: CalculatedRewardsScheduleSegment }> = ({ segment }) => {
-    if (!segment) return null
 
-    return (
-        <Box direction='column' align='center' margin={{ left: '-60px', top: '10px' }}>
-            <Icon
-                color={segment.achieved ? colors.purple : colors.lightGray}
-                icon={segment.isCurrent ? trophyFilledIcon : trophyOutlineIcon}
-                height={30}
-                className="me-1"
-            />
-            <SegmentLabel segment={segment} />
-        </Box>
-    )
-}
 const FirstSegmentExplain: React.FC<{ segment?: CalculatedRewardsScheduleSegment }> = ({ segment }) => {
     if (!segment) return null
     return (
@@ -189,7 +204,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
         schedule,
         pointsEarned,
         totalPoints,
-        finalDrawing,
+
     } = useRewardsSchedule(studies)
     const completion = (pointsEarned / totalPoints) * 100
 
@@ -243,22 +258,8 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
 
                     </div>
 
-                    <GrandPrize segment={finalDrawing} />
 
-                    {finalDrawing?.infoUrl && (
-                        <a
-                            href={finalDrawing.infoUrl}
-                            target="_blank"
-                            className="fw-light"
-                            css={{
-                                maxWidth: '200px',
-                                fontSize: '0.9rem',
-                                color: colors.darkText,
-                            }}
-                        >
-                            Find out more information about the giveaways
-                        </a>
-                    )}
+
                 </Box>
             </div>
         </nav>
