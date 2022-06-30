@@ -1,5 +1,4 @@
 import { React, cx } from '@common'
-import { last } from 'lodash-es'
 import { Box, Popover, Icon } from '@components'
 import {
     useRewardsSchedule,
@@ -243,10 +242,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                                 background: colors.purple,
                             }}
                         />
-
                         <FirstSegmentExplain segment={schedule[0]} />
-
-
                         {schedule.map((segment) => (
                             <RewardSegment
                                 totalPoints={totalPoints}
@@ -255,11 +251,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                                 segment={segment}
                             />
                         ))}
-
                     </div>
-
-
-
                 </Box>
             </div>
         </nav>
