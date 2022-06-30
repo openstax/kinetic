@@ -133,6 +133,10 @@ export default function ParticipantHome() {
                 </Row>
             </div>
             <Footer isBottom>
+                <a className="text-decoration-none" href="https://openstax.org/privacy-policy">
+                    Privacy Policy
+                </a>
+                <span>|</span>
                 <p className="mb-0">
                     <b>Need help?</b>
                 </p>
