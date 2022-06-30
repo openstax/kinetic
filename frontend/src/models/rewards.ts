@@ -38,11 +38,9 @@ export function rewardPointsEarned(schedule: RewardsScheduleSegment[], studies: 
 const calculatePoints = (segment: RewardsScheduleSegment, studies: ParticipantStudy[]): number => {
     return studies.reduce((points, study) => {
         if (study.completedAt &&
-            study.completedAt >= segment.startAt &&
-            study.completedAt <= segment.endAt &&
-            study.participationPoints
+            study.participationPoints &&
+            study.completedAt <= segment.endAt
         ) {
-            //    console.log(study.id, segment, study.completedAt, segment.startAt, segment.endAt)
             return points + study.participationPoints
         }
         return points
@@ -57,11 +55,14 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
     let totalPoints = 0
     const now = dayjs()
 
+
     let previousSegment: CalculatedRewardsScheduleSegment | null = null
 
     const allEvents = rs.map((s, index) => {
         totalPoints += s.points
+
         const pointsEarned = calculatePoints(s, studies)
+
         //console.log(pointsEarned, pointsEarned >= s.points, s)
         previousSegment = {
             ...s,
@@ -74,7 +75,7 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
             justStarted: now.subtract(1, 'day').isBefore(s.startAt),
             isFuture: now.isBefore(s.startAt),
             isPast: now.isAfter(s.endAt),
-            achieved: pointsEarned >= s.points,
+            achieved: pointsEarned >= totalPoints,
         } as CalculatedRewardsScheduleSegment
 
         return previousSegment
