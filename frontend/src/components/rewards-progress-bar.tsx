@@ -54,7 +54,7 @@ const circleStyle: CSSObject = {
     '&.past:not(.achieved)': {
         background: colors.lightGray,
         '&:before': {
-            color: 'white',
+            color: colors.darkGray,
             content: '"✕"',
             fontWeight: 'bold',
         },
