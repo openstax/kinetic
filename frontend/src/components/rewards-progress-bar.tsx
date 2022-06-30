@@ -80,7 +80,7 @@ const SegmentLabel: React.FC<{ segment: CalculatedRewardsScheduleSegment }> = ({
             fontSize: 12,
             color: segment.isCurrent ? 'black' : colors.darkGray,
         }}>
-            {segment.points}pts by {toDayJS(segment.endAt).format('ll')}
+            {segment.totalPoints}pts by {toDayJS(segment.endAt).format('ll')}
         </div>
     )
 }
@@ -137,7 +137,6 @@ const RewardSegment: React.FC<{
                         current: segment.isCurrent,
                         achieved: segment.achieved,
                     })}
-
                     css={circleStyle}
                     popover={popOverMessage(segment)}
                 />
