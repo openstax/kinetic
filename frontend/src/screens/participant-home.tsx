@@ -143,7 +143,7 @@ export default function ParticipantHome() {
                 <p className="mb-0">
                     Contact support
                 </p>
-                <a className="text-decoration-none" href="mailto:support@openstax.org?subject=[Kinetic help]"><Icon icon={envelopeIcon} /> support@openstax.org</a>
+                <a className="text-decoration-none" href="mailto:kinetic@openstax.org?subject=[Kinetic help]"><Icon icon={envelopeIcon} /> kinetic@openstax.org</a>
             </Footer>
         </div>
     )
