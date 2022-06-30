@@ -55,7 +55,7 @@ const circleStyle: CSSObject = {
         background: colors.lightGray,
         '&:before': {
             color: 'white',
-            content: '"X"',
+            content: '"✕"',
             fontWeight: 'bold',
         },
     },
