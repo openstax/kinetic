@@ -21,13 +21,11 @@ export function rewardPointsEarned(schedule: RewardsScheduleSegment[], studies: 
     if (!first || !last) return 0
 
     return studies.reduce((points, study) => {
-        //        if (study.id == 66) console.log(study.id, first.startAt, study.completedAt)
         if (study.completedAt &&
             study.completedAt > first.startAt &&
             study.completedAt < last.endAt &&
             study.participationPoints
         ) {
-            //    console.log(study.id, study.participationPoints, first.startAt, study.completedAt)
             return points + study.participationPoints
         }
         return points
@@ -65,7 +63,6 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
 
         const pointsEarned = calculatePoints(s, firstSegment.startAt, studies)
 
-        //console.log(pointsEarned, pointsEarned >= s.points, s)
         previousSegment = {
             ...s,
             index,
@@ -93,7 +90,6 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
         schedule: allEvents,
         pointsEarned,
         totalPoints,
-        //   finalDrawing: last(allEvents),
         isCompleted: pointsEarned >= totalPoints,
     }
 }

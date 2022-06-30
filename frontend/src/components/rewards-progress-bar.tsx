@@ -35,7 +35,6 @@ const circleStyle: CSSObject = {
             fontWeight: 'bold',
         },
     },
-
     '&.future': {
         background: colors.lightGray,
     },
@@ -163,7 +162,7 @@ const CurrentSegmentInfo: React.FC<{ segment?: CalculatedRewardsScheduleSegment 
     if (!segment) return null
     let msg = ''
     let displayedSegment = segment // : CalculatedRewardsScheduleSegment | null = null
-    //    ${ segment.previousSegment.prize }
+
     if (segment.justStarted && segment.previousSegment && segment.previousSegment.achieved) {
         msg = `🎉 Yay! You were entered into giveway`
         displayedSegment = segment.previousSegment
