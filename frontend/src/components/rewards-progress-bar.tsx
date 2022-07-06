@@ -94,7 +94,7 @@ const popOverMessage = (segment: CalculatedRewardsScheduleSegment) => {
         if (segment.isPast) {
             popover = `Missed it? No worries, more prizes ahead`
         } else {
-            popover = `reach ${segment.totalPoints} points by ${formatDate(segment.endAt)} to be entered in an ${segment.prize} giveaway`
+            popover = `reach ${segment.totalPoints} points by ${formatDate(segment.endAt, 'll')} to be entered in an ${segment.prize} giveaway`
         }
     }
     return popover
