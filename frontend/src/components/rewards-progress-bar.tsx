@@ -94,7 +94,7 @@ const popOverMessage = (segment: CalculatedRewardsScheduleSegment) => {
         if (segment.isPast) {
             popover = `Missed it? No worries, more prizes ahead`
         } else {
-            popover = `reach ${segment.totalPoints} points by ${formatDate(segment.endAt, 'll')} to be entered in an ${segment.prize} giveaway`
+            popover = `Reach ${segment.totalPoints} points by ${formatDate(segment.endAt, 'll')} to be entered in an ${segment.prize} giveaway`
         }
     }
     return popover
@@ -150,7 +150,14 @@ const RewardSegment: React.FC<{
 
     let body: React.ReactNode
     if (segment.isFinal) {
-        body = <GrandPrize segment={segment} />
+        body = (
+            <Popover
+                popover={popOverMessage(segment)}
+                displayType="tooltip"
+            >
+                <GrandPrize segment={segment} />
+            </Popover>
+        )
     } else {
         body = (
             <>
