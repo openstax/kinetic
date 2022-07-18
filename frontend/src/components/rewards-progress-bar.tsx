@@ -76,12 +76,16 @@ const segmentStyle: CSSObject = {
 
 const SegmentLabel: React.FC<{ segment: CalculatedRewardsScheduleSegment }> = ({ segment }) => {
     return (
-        <div className="explanation" css={{
-            fontSize: 12,
-            color: segment.isCurrent ? 'black' : colors.darkGray,
-        }}>
-            {segment.totalPoints}pts by {toDayJS(segment.endAt).format('ll')}
-        </div>
+        <Box
+            direction="column"
+            justify='center'
+            className="explanation" css={{
+                fontSize: 12,
+                color: segment.isCurrent ? 'black' : colors.darkGray,
+            }}>
+            <span>{segment.totalPoints}pts</span>
+            <span>{toDayJS(segment.endAt).format('DD MMM')}</span>
+        </Box>
     )
 }
 
@@ -135,7 +139,6 @@ const GrandPrize: React.FC<{ segment?: CalculatedRewardsScheduleSegment }> = ({ 
                 color={segment.achieved ? colors.purple : colors.lightGray}
                 icon={segment.isCurrent ? trophyFilledIcon : trophyOutlineIcon}
                 height={30}
-                className="me-1"
             />
             <SegmentLabel segment={segment} />
         </Box>
@@ -144,9 +147,8 @@ const GrandPrize: React.FC<{ segment?: CalculatedRewardsScheduleSegment }> = ({ 
 
 const RewardSegment: React.FC<{
     segment: CalculatedRewardsScheduleSegment
-    points: number
-    totalPoints: number
-}> = ({ segment, totalPoints }) => {
+    segmentCount: number,
+}> = ({ segment, segmentCount }) => {
 
     let body: React.ReactNode
     if (segment.isFinal) {
@@ -181,7 +183,7 @@ const RewardSegment: React.FC<{
         <div
             css={{
                 ...segmentStyle,
-                left: `calc(${(segment.totalPoints / totalPoints) * 100}% - ${segmentWidth / 2}px)`,
+                left: `calc(${(100 / segmentCount) * (segment.index + 1)}% - ${segmentWidth / 2}px)`,
             }}
         >
             {body}
@@ -212,23 +214,7 @@ const CurrentSegmentInfo: React.FC<{ segment?: CalculatedRewardsScheduleSegment 
     )
 }
 
-
-const FirstSegmentExplain: React.FC<{ segment?: CalculatedRewardsScheduleSegment }> = ({ segment }) => {
-    if (!segment) return null
-    return (
-        <Box gap align='end' height='30px' css={{
-            fontSize: 12,
-            marginLeft: -50,
-        }}>
-            <span>
-                Rewards start {toDayJS(segment.startAt).format('ll')}
-            </span>
-        </Box >
-    )
-}
-
 export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies }) => {
-
     const {
         schedule,
         pointsEarned,
@@ -246,10 +232,10 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
 
                 <CurrentSegmentInfo segment={schedule.find(s => s.isCurrent)} />
 
-                <Box align="center" gap css={{
+                <Box align="start" padding={{ top: 'large' }} gap css={{
                     height: 60,
                 }}>
-                    <Box direction='column'>
+                    <Box direction='column' margin={{ top: '-10px' }}>
                         <b>{pointsEarned} / {totalPoints} pts</b>
                     </Box>
                     <div
@@ -272,12 +258,11 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                                 background: colors.purple,
                             }}
                         />
-                        <FirstSegmentExplain segment={schedule[0]} />
+
                         {schedule.map((segment) => (
                             <RewardSegment
-                                totalPoints={totalPoints}
+                                segmentCount={schedule.length}
                                 key={segment.index}
-                                points={pointsEarned}
                                 segment={segment}
                             />
                         ))}
