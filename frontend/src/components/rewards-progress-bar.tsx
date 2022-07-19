@@ -62,7 +62,7 @@ const circleStyle: CSSObject = {
 }
 
 
-const segmentWidth = 150
+const segmentWidth = 50
 
 const segmentStyle: CSSObject = {
     position: 'absolute',
@@ -245,6 +245,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                             borderRadius: '4px',
                             background: colors.lightGray,
                             position: 'relative',
+                            marginRight: '20px',
                         }}
                     >
                         <div
