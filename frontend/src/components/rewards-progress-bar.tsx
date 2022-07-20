@@ -145,7 +145,7 @@ const GrandPrize: React.FC<{ segment?: CalculatedRewardsScheduleSegment }> = ({ 
     return (
         <Box direction='column' align='center'>
             <Icon
-                css={{ background: 'white', marginTop: -5 }}
+                css={{ background: 'white', marginTop: -10 }}
                 color={segment.achieved ? colors.purple : colors.lightGray}
                 icon={segment.isCurrent ? trophyFilledIcon : trophyOutlineIcon}
                 height={30}
@@ -194,6 +194,7 @@ const RewardSegment: React.FC<{
         <div
             css={{
                 ...segmentStyle,
+
                 left: `calc(${(100 / segmentCount) * (segment.index + 1)}% - ${segmentWidth / 2}px)`,
             }}
         >
