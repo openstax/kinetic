@@ -17,6 +17,10 @@ interface RewardsProgressBarProps {
 
 const barWidth = 7
 
+const popOverStyle: CSSObject = {
+    '.tooltip-inner': { width: '180px' },
+}
+
 const circleStyle: CSSObject = {
     height: '20px',
     width: '20px',
@@ -24,15 +28,21 @@ const circleStyle: CSSObject = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 0,
+    margin: 0,
 
-    '.tooltip-inner': { width: '220px' },
+    ...popOverStyle,
+
+    '&:before': {
+        padding: 0,
+        margin: 0,
+    },
 
     '&.achieved': {
         background: colors.purple,
         '&:before': {
             content: '"✓"',
             color: 'white',
-            fontWeight: 'bold',
         },
     },
     '&.future': {
@@ -56,7 +66,6 @@ const circleStyle: CSSObject = {
         '&:before': {
             color: colors.darkGray,
             content: '"✕"',
-            fontWeight: 'bold',
         },
     },
 }
@@ -79,6 +88,7 @@ const SegmentLabel: React.FC<{ segment: CalculatedRewardsScheduleSegment }> = ({
         <Box
             direction="column"
             justify='center'
+            align='center'
             className="explanation" css={{
                 fontSize: 12,
                 color: segment.isCurrent ? 'black' : colors.darkGray,
@@ -156,6 +166,7 @@ const RewardSegment: React.FC<{
             <Popover
                 popover={popOverMessage(segment)}
                 displayType="tooltip"
+                css={popOverStyle}
             >
                 <GrandPrize segment={segment} />
             </Popover>
