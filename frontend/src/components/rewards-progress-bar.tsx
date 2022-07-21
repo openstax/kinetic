@@ -158,6 +158,7 @@ const GrandPrize: React.FC<{ segment?: RewardsSegment }> = ({ segment }) => {
 const RewardSegment: React.FC<{
     segment: RewardsSegment
     segmentCount: number,
+    totalPoints: number,
 }> = ({ segment, segmentCount }) => {
 
     let body: React.ReactNode
@@ -194,7 +195,7 @@ const RewardSegment: React.FC<{
         <div
             css={{
                 ...segmentStyle,
-
+                //left: `calc(${(segment.totalPoints / totalPoints) * 100}% - ${segmentWidth / 2}px)`,
                 left: `calc(${(100 / segmentCount) * (segment.index + 1)}% - ${segmentWidth / 2}px)`,
             }}
         >
@@ -276,6 +277,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                             <RewardSegment
                                 segmentCount={schedule.length}
                                 key={segment.index}
+                                totalPoints={totalPoints}
                                 segment={segment}
                             />
                         ))}
