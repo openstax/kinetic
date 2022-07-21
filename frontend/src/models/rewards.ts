@@ -3,7 +3,7 @@ import { RewardsScheduleSegment, ParticipantStudy } from '@api'
 import { useEnvironment, dayjs } from '@lib'
 import { sortBy } from 'lodash-es'
 
-export interface CalculatedRewardsScheduleSegment extends RewardsScheduleSegment {
+export interface RewardsSegment extends RewardsScheduleSegment {
     totalPoints: number
     pointsEarned: number
     achieved: boolean
@@ -12,8 +12,8 @@ export interface CalculatedRewardsScheduleSegment extends RewardsScheduleSegment
     isCurrent: boolean
     isFuture: boolean
     isFinal: boolean
-    justStarted: boolean
-    previousSegment: CalculatedRewardsScheduleSegment | null
+    recentlyAchieved: boolean
+    previousSegment: RewardsSegment | null
 }
 
 export function rewardPointsEarned(schedule: RewardsScheduleSegment[], studies: ParticipantStudy[]): number {
@@ -47,6 +47,7 @@ const calculatePoints = (segment: RewardsScheduleSegment, cycleStart: Date, stud
 }
 
 export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
+    // studies.sort((a, b) => )
     const env = useEnvironment()
 
     const rs = sortBy(env?.config.rewardsSchedule || [], 'startAt')
@@ -55,27 +56,32 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
     let totalPoints = 0
     const now = dayjs()
 
+    let previousSegment: RewardsSegment | null = null
 
-    let previousSegment: CalculatedRewardsScheduleSegment | null = null
+    const recentlyEarnedPoints = studies.find(s => (
+        s.completedAt && dayjs(s.completedAt).isBetween(now.subtract(1, 'day'), now)
+    ))?.participationPoints || 0
 
     const allEvents = rs.map((s, index) => {
         totalPoints += s.points
 
         const pointsEarned = calculatePoints(s, firstSegment.startAt, studies)
+        const achieved = pointsEarned >= totalPoints
+        const isCurrent = now.isBetween(s.startAt, s.endAt)
 
         previousSegment = {
             ...s,
             index,
+            achieved,
+            isCurrent,
+            recentlyAchieved: achieved && pointsEarned - recentlyEarnedPoints < totalPoints,
             totalPoints,
             pointsEarned,
             previousSegment,
             isFinal: index == rs.length - 1,
-            isCurrent: now.isBetween(s.startAt, s.endAt),
-            justStarted: now.subtract(1, 'day').isBefore(s.startAt),
             isFuture: now.isBefore(s.startAt),
             isPast: now.isAfter(s.endAt),
-            achieved: pointsEarned >= totalPoints,
-        } as CalculatedRewardsScheduleSegment
+        } as RewardsSegment
 
         return previousSegment
     })

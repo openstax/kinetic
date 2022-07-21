@@ -2,7 +2,7 @@ import { React, cx } from '@common'
 import { Box, Popover, Icon } from '@components'
 import {
     useRewardsSchedule,
-    CalculatedRewardsScheduleSegment,
+    RewardsSegment,
 } from '@models'
 import { formatDate, toDayJS } from '@lib'
 import { ParticipantStudy } from '@api'
@@ -83,7 +83,7 @@ const segmentStyle: CSSObject = {
 
 }
 
-const SegmentLabel: React.FC<{ segment: CalculatedRewardsScheduleSegment }> = ({ segment }) => {
+const SegmentLabel: React.FC<{ segment: RewardsSegment }> = ({ segment }) => {
     return (
         <Box
             direction="column"
@@ -100,7 +100,7 @@ const SegmentLabel: React.FC<{ segment: CalculatedRewardsScheduleSegment }> = ({
 }
 
 
-const popOverMessage = (segment: CalculatedRewardsScheduleSegment) => {
+const popOverMessage = (segment: RewardsSegment) => {
     let popover = ''
     if (segment.achieved) {
         popover = `🎉 ${segment.isPast ? 'You were' : 'You’ve been'} entered in a giveaway for a ${segment.prize}`
@@ -135,7 +135,7 @@ const MissedGrandPrize = (props: React.SVGProps<SVGSVGElement>) => (
 )
 
 
-const GrandPrize: React.FC<{ segment?: CalculatedRewardsScheduleSegment }> = ({ segment }) => {
+const GrandPrize: React.FC<{ segment?: RewardsSegment }> = ({ segment }) => {
     if (!segment) return null
 
     if (segment.isPast && !segment.achieved) {
@@ -156,7 +156,7 @@ const GrandPrize: React.FC<{ segment?: CalculatedRewardsScheduleSegment }> = ({ 
 }
 
 const RewardSegment: React.FC<{
-    segment: CalculatedRewardsScheduleSegment
+    segment: RewardsSegment
     segmentCount: number,
 }> = ({ segment, segmentCount }) => {
 
@@ -203,14 +203,14 @@ const RewardSegment: React.FC<{
     )
 }
 
-const CurrentSegmentInfo: React.FC<{ segment?: CalculatedRewardsScheduleSegment }> = ({ segment }) => {
+const SegmentInfo: React.FC<{ schedule: RewardsSegment[] }> = ({ schedule }) => {
+    const segment = schedule.find(s => s.recentlyAchieved) || schedule.find(s => s.isCurrent)
     if (!segment) return null
-    let msg = ''
-    let displayedSegment = segment // : CalculatedRewardsScheduleSegment | null = null
 
-    if (segment.justStarted && segment.previousSegment && segment.previousSegment.achieved) {
+    let msg = ''
+
+    if (segment.recentlyAchieved) {
         msg = `🎉 Yay! You were entered into giveway`
-        displayedSegment = segment.previousSegment
     } else {
         msg = `${segment.isFinal ? 'Grand ' : ''}Givaway`
     }
@@ -221,7 +221,7 @@ const CurrentSegmentInfo: React.FC<{ segment?: CalculatedRewardsScheduleSegment 
             <span>{msg}:</span>
             <b css={{
                 textTransform: 'capitalize',
-            }}>{displayedSegment.prize}</b>
+            }}>{segment.prize}</b>
         </Box>
     )
 }
@@ -242,7 +242,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
         }}>
             <div className="container">
 
-                <CurrentSegmentInfo segment={schedule.find(s => s.isCurrent)} />
+                <SegmentInfo schedule={schedule} />
 
                 <Box align="start" padding={{ top: 'large' }} gap css={{
                     height: 60,
