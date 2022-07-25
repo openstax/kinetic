@@ -159,7 +159,7 @@ const RewardSegment: React.FC<{
     segment: RewardsSegment
     segmentCount: number,
     totalPoints: number,
-}> = ({ segment, segmentCount }) => {
+}> = ({ segment, totalPoints }) => {
 
     let body: React.ReactNode
     if (segment.isFinal) {
@@ -195,8 +195,8 @@ const RewardSegment: React.FC<{
         <div
             css={{
                 ...segmentStyle,
-                //left: `calc(${(segment.totalPoints / totalPoints) * 100}% - ${segmentWidth / 2}px)`,
-                left: `calc(${(100 / segmentCount) * (segment.index + 1)}% - ${segmentWidth / 2}px)`,
+                left: `calc(${(segment.totalPoints / totalPoints) * 100}% - ${segmentWidth / 2}px)`,
+                // left: `calc(${(100 / segmentCount) * (segment.index + 1)}% - ${segmentWidth / 2}px)`,
             }}
         >
             {body}
