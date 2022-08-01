@@ -6,6 +6,7 @@ export const colors = {
     teal: '#0dc0de',
     purple: '#6922EA',
     lightGray: '#DBDBDB',
+    darkGray: '#989898',
     text: '#212529',
     darkText: '#151B2C',
     input: { border: '#ced4da' },

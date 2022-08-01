@@ -1,11 +1,19 @@
 import { useMemo } from '@common'
 import { RewardsScheduleSegment, ParticipantStudy } from '@api'
-import { useEnvironment } from '@lib'
-import { sortBy, last } from 'lodash-es'
+import { useEnvironment, dayjs } from '@lib'
+import { sortBy } from 'lodash-es'
 
-export interface CalculatedRewardsScheduleSegment extends RewardsScheduleSegment {
+export interface RewardsSegment extends RewardsScheduleSegment {
     totalPoints: number
+    pointsEarned: number
+    achieved: boolean
     index: number
+    isPast: boolean
+    isCurrent: boolean
+    isFuture: boolean
+    isFinal: boolean
+    recentlyAchieved: boolean
+    previousSegment: RewardsSegment | null
 }
 
 export function rewardPointsEarned(schedule: RewardsScheduleSegment[], studies: ParticipantStudy[]): number {
@@ -24,33 +32,70 @@ export function rewardPointsEarned(schedule: RewardsScheduleSegment[], studies: 
     }, 0)
 }
 
+
+const calculatePoints = (segment: RewardsScheduleSegment, cycleStart: Date, studies: ParticipantStudy[]): number => {
+    return studies.reduce((points, study) => {
+        if (study.completedAt &&
+            study.participationPoints &&
+            study.completedAt <= segment.endAt &&
+            study.completedAt >= cycleStart
+        ) {
+            return points + study.participationPoints
+        }
+        return points
+    }, 0)
+}
+
 export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
+    // studies.sort((a, b) => )
     const env = useEnvironment()
 
-    const rs = env?.config.rewardsSchedule || []
-    sortBy(rs, 'startAt')
+    const rs = sortBy(env?.config.rewardsSchedule || [], 'startAt')
+    const firstSegment = rs[0]
+
     let totalPoints = 0
+    const now = dayjs()
+
+    let previousSegment: RewardsSegment | null = null
+
+    const recentlyEarnedPoints = studies.find(s => (
+        s.completedAt && dayjs(s.completedAt).isBetween(now.subtract(1, 'day'), now)
+    ))?.participationPoints || 0
 
     const allEvents = rs.map((s, index) => {
         totalPoints += s.points
-        return {
+
+        const pointsEarned = calculatePoints(s, firstSegment.startAt, studies)
+        const achieved = pointsEarned >= totalPoints
+        const isCurrent = now.isBetween(s.startAt, s.endAt)
+
+        previousSegment = {
             ...s,
             index,
+            achieved,
+            isCurrent,
+            recentlyAchieved: achieved && pointsEarned - recentlyEarnedPoints < totalPoints,
             totalPoints,
-        } as CalculatedRewardsScheduleSegment
+            pointsEarned,
+            previousSegment,
+            isFinal: index == rs.length - 1,
+            isFuture: now.isBefore(s.startAt),
+            isPast: now.isAfter(s.endAt),
+        } as RewardsSegment
+
+        return previousSegment
     })
 
     // earned points cannot be greater than total points
     const pointsEarned = useMemo(() => Math.min(
         totalPoints,
         rewardPointsEarned(rs, studies)
-    ),[rs, totalPoints, studies])
+    ), [rs, totalPoints, studies])
 
     return {
-        schedule: allEvents.slice(0, -1),
+        schedule: allEvents,
         pointsEarned,
         totalPoints,
-        finalDrawing: last(allEvents),
         isCompleted: pointsEarned >= totalPoints,
     }
 }

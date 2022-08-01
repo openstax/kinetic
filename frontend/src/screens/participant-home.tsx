@@ -123,8 +123,8 @@ export default function ParticipantHome() {
                     </div>
                 </div>
                 <BannersBar />
-                <RewardsProgressBar studies={allStudies?.data || []} />
             </nav>
+            <RewardsProgressBar studies={allStudies?.data || []} />
             <div className="container studies my-8">
                 <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
                 <Controls state={controlState} onChange={setControlState} />
@@ -133,13 +133,17 @@ export default function ParticipantHome() {
                 </Row>
             </div>
             <Footer isBottom>
+                <a className="text-decoration-none" href="https://openstax.org/privacy-policy">
+                    Privacy Policy
+                </a>
+                <span>|</span>
                 <p className="mb-0">
                     <b>Need help?</b>
                 </p>
                 <p className="mb-0">
                     Contact support
                 </p>
-                <a className="text-decoration-none" href="mailto:support@openstax.org?subject=[Kinetic help]"><Icon icon={envelopeIcon} /> support@openstax.org</a>
+                <a className="text-decoration-none" href="mailto:kinetic@openstax.org?subject=[Kinetic help]"><Icon icon={envelopeIcon} /> kinetic@openstax.org</a>
             </Footer>
         </div>
     )

@@ -1,15 +1,16 @@
 import { isDate, isString, isNumber } from './util'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
-
+import isBetween from 'dayjs/plugin/isBetween'
 dayjs.extend(localizedFormat)
+dayjs.extend(isBetween)
 
 export { dayjs }
 
 export type DateTimeInputs = Date | string | number | dayjs.Dayjs
 
 export const toDateTime = (dateThing: DateTimeInputs): Date => {
-    if (isDate(dateThing)){
+    if (isDate(dateThing)) {
         return dateThing
     } else if (dayjs.isDayjs(dateThing)) {
         return dateThing.toDate()

@@ -4,7 +4,7 @@ import { React, useState } from '@common'
 import {
     Box, Icon, Col, EditingForm as Form, Alert, DateField, InputField,
 } from '@components'
-import { useApi, useFetchState, toDayOnly } from '@lib'
+import { useApi, useFetchState } from '@lib'
 
 const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, onUpdate }) => {
     const [error, setError] = useState('')
@@ -16,9 +16,6 @@ const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, on
         onUpdate()
     }
     const saveReward = async (reward: Reward, meta: any) => {
-        // if we're saving the record has been validated and has dates set
-        reward.startAt = toDayOnly(reward.startAt!)
-        reward.endAt = toDayOnly(reward.endAt!)
         let reply
         try {
             if (reward.id) {
@@ -52,8 +49,8 @@ const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, on
                 >
                     <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
                     <InputField name="points" id="points" label="Points" type="number" md={2} />
-                    <DateField name="startAt" id="start_at" label="Start At" md={5} />
-                    <DateField name="endAt" id="end_at" label="End At" md={5} />
+                    <DateField withTime name="startAt" id="start_at" label="Start At" md={5} />
+                    <DateField withTime name="endAt" id="end_at" label="End At" md={5} />
                     <InputField name="prize" id="prize" label="Prize" type="text" />
                     <InputField name="infoUrl" id="info_url" label="Information URL" type="url" />
                 </Form>
