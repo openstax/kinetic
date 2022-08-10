@@ -1,4 +1,5 @@
 /* eslint-disable */
+// @ts-nocheck
 
 export interface Config {
     input?: string | HTMLInputElement;
