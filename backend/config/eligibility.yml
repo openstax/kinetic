@@ -1,27 +1,27 @@
 disallowed_books:
-  - physics
-  - statistics
   - biology-ap-courses
   - college-physics-ap-courses
-  - introducción-estadística
-  - introducción-estadística-empresarial
+  - cálculo-volumen-1
+  - cálculo-volumen-2
+  - cálculo-volumen-3
+  - fizyka-dla-szkół-wyższych-tom-1
+  - fizyka-dla-szkół-wyższych-tom-2
+  - fizyka-dla-szkół-wyższych-tom-3
   - física-universitaria-volumen-1
   - física-universitaria-volumen-2
   - física-universitaria-volumen-3
   - física-universitaria-volumen-4
-  - fizyka-dla-szkół-wyższych-tom-1
-  - fizyka-dla-szkół-wyższych-tom-2
-  - fizyka-dla-szkół-wyższych-tom-3
-  - psychologia-polska
-  - principles-microeconomics-ap-courses
-  - principles-microeconomics-ap-courses-2e
+  - introducción-estadística
+  - introducción-estadística-empresarial
+  - physics
   - principles-macroeconomics-ap-courses
   - principles-macroeconomics-ap-courses-2e
-  - cálculo-volumen-1
-  - cálculo-volumen-2
-  - cálculo-volumen-3
+  - principles-microeconomics-ap-courses
+  - principles-microeconomics-ap-courses-2e
+  - psychologia-polska
   - química-2ed
   - química-comenzando-átomos-2ed
+  - statistics
 allowed_country_codes:
   - US
   - UM
