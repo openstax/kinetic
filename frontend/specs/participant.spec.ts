@@ -85,7 +85,7 @@ test('launching study and testing completion', async ({ page }) => {
     expect(
         await page.evaluate(() => document.location.pathname)
     ).toMatch(/studies$/)
-    await expect(page).toHaveSelector('[data-test-id=progress-indicator][data-percentage-complete="100"]')
+
     await rmStudy({ page, studyId })
 })
 

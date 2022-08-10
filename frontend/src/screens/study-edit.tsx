@@ -338,8 +338,8 @@ function EditStudy() {
                     options={tag_options}
                 />
 
-                <DateTimeField name="dates" rangeNames={['startAt', 'endAt']} label="Date Range" />
-
+                <DateTimeField name="opensAt" id="opens-at" label="Opens At" md={6} />
+                <DateTimeField name="closesAt" id="closes-at" label="Closes At" md={6} />
                 <InputField name="shortDescription" id="short-desc" type="textarea" label="Short description" />
                 <InputField name="longDescription" id="long-desc" type="textarea" label="Long description" />
             </Form>

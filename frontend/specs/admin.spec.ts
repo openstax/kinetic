@@ -18,8 +18,10 @@ test('can add/update/delete banners', async ({ page }) => {
     await goToPage({ page, path: '/admin/banners/', loginAs: 'admin' })
     await page.click('testId=add-banner')
     await page.waitForSelector('[data-banner-id="new"]')
-    await setDateField({ page, fieldName: 'startAt', date: dayjs().add(1, 'day') })
-    await setDateField({ page, fieldName: 'endAt', date: dayjs().add(1, 'month') })
+
+    await setDateField({
+        page, fieldName: 'dates', date: [dayjs().add(1, 'day'), dayjs().add(1, 'month')],
+    })
 
     await page.fill('[name="message"]', message)
     await page.click('testId=form-save-btn')

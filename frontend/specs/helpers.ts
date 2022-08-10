@@ -41,7 +41,7 @@ export const goToPage = async ({ page, path, loginAs: login }: goToPageArgs) => 
         } catch (e) {
             console.log(e) // eslint-disable-line no-console
             if (attempts++ >= 3) {
-                throw(e)
+                throw (e)
             }
         }
     } while (true) // eslint-disable-line no-constant-condition
@@ -158,19 +158,23 @@ export const createStudy = async ({
 }
 
 export const setFlatpickrDate = async (
-    { selector, date, page }: { selector: string, date: dayjs.Dayjs, page: Page},
+    { selector, date, page }: { selector: string, date: dayjs.Dayjs | [dayjs.Dayjs, dayjs.Dayjs], page: Page },
 ) => {
-    const str = date.format('M/D/YYYY')
+    const dates = (Array.isArray(date) ? date : [date]).map(date => date.format('M/D/YYYY'))
     const inputSelector = `css=${selector} >> css=input`
     await page.waitForSelector(inputSelector)
-    await page.$eval(inputSelector, (el, dte) => {
-        (el as any)._flatpickr.setDate(dte, true, 'm/d/Y')
+    await page.$eval(inputSelector, (el, dates) => {
+        (el as any)._flatpickr.setDate(dates, true, 'm/d/Y')
         return true
-    }, str)
+    }, dates)
 }
 
 export const setDateField = async (
-    { fieldName, date, page }: { fieldName:string, date: dayjs.Dayjs, page:Page},
+    {
+        fieldName, date, page,
+    }: {
+        fieldName: string, date: dayjs.Dayjs | [dayjs.Dayjs, dayjs.Dayjs], page: Page,
+    },
 ) => {
     return await setFlatpickrDate({ page, date, selector: `[data-field-name="${fieldName}"]` })
 }
@@ -181,8 +185,7 @@ export const addReward = async (
         page, points, prize,
         startAt = dayjs().subtract(1, 'day'),
         endAt = dayjs().add(1, 'day'),
-    }:
-    {
+    }: {
         page: Page, points: number, prize: string
         startAt?: dayjs.Dayjs,
         endAt?: dayjs.Dayjs,
@@ -191,8 +194,7 @@ export const addReward = async (
     await goToPage({ page, path: '/admin/rewards', loginAs: 'admin' })
     await page.click('testId=add-reward')
     await page.waitForSelector('[data-reward-id="new"]')
-    await setDateField({ page, fieldName: 'startAt', date: startAt })
-    await setDateField({ page, fieldName: 'endAt', date: endAt })
+    await setDateField({ page, fieldName: 'dates', date: [startAt, endAt] })
     await page.fill('[name="points"]', String(points))
     await page.fill('[name="prize"]', prize)
     await page.click('testId=form-save-btn')
