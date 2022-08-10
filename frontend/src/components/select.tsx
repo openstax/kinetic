@@ -1,10 +1,38 @@
-import { React, cx, useState, useCallback } from '@common'
+import { React, cx } from '@common'
 import { colors } from '../theme'
 import { isNil } from '../lib/util'
-import ReactSelect, { Props as ReactSelectProps, ActionMeta } from 'react-select'
+import ReactSelect, { components, Props as ReactSelectProps, OptionProps, ActionMeta } from 'react-select'
 import ReactSelectCreate from 'react-select/creatable'
+import ReactSelectAsync from 'react-select/async';
 
 export type SelectOptionType = { [key: string]: any }
+
+const RSOption = components.Option as any
+export type Option = { label: string, value: string | number }
+export type Options = Array<Option>
+export type SelectValue = Array<string | number> | string | number
+export type SelectedOption = { label: string, value: string | number } | null
+export type SelectOptions = { label?: string, value: string | number }[]
+
+
+function DataIdOption(props: OptionProps<Option>) {
+    return (
+        <RSOption
+            {...props}
+            innerProps={{
+                ...props.innerProps,
+                'data-is-selected': !!props.isSelected,
+                'data-id': props.data.value,
+            }}
+
+        />
+    )
+
+}
+
+const CUSTOM_COMPONENTS = {
+    Option: DataIdOption,
+};
 
 // https://github.com/JedWatson/react-select/blob/master/packages/react-select/src/styles.js
 const stdStyles = {
@@ -35,7 +63,12 @@ const stdStyles = {
     }),
     menu: (provided: any) => ({
         ...provided,
+        backgroundColor: 'white',
         zIndex: 5,
+    }),
+    valueContainer: (provided: any) => ({
+        ...provided,
+        flexWrap: 'no-wrap',
     }),
 }
 
@@ -50,13 +83,14 @@ const smallStyles = {
             borderColor: colors.input.border,
             minHeight: '30px',
             height: '30px',
-            minWidth: '100px',
+            minWidth: '80px',
             boxShadow: state.isFocused ? null : null,
         }
     },
 
-    valueContainer: (provided:any) => ({
+    valueContainer: (provided: any) => ({
         ...provided,
+        flexWrap: 'no-wrap',
         height: '30px',
         padding: '0 6px',
     }),
@@ -67,21 +101,21 @@ const smallStyles = {
     indicatorSeparator: () => ({
         display: 'none',
     }),
-    multiValueLabel: (provided:any) => ({
+    multiValueLabel: (provided: any) => ({
         ...provided,
         padding: 0,
         fontSize: '70%',
     }),
-    indicatorsContainer: (provided:any) => ({
+    indicatorsContainer: (provided: any) => ({
         ...provided,
         height: '30px',
         padding: 0,
     }),
-    dropdownIndicator: (provided:any) => ({
+    dropdownIndicator: (provided: any) => ({
         ...provided,
         padding: 2,
     }),
-    clearIndicator: (provided:any) => ({
+    clearIndicator: (provided: any) => ({
         ...provided,
         padding: 2,
     }),
@@ -99,31 +133,31 @@ const tinyStyles = {
             boxShadow: state.isFocused ? null : null,
         }
     },
-
 }
 
-export type SelectValue = Array<string | number> | string | number
-export type SelectOption = { label: string, value: string | number } | null
-export type SelectOptions = { label: string, value: string | number }[]
-
-const optionForValue = (value: SelectValue | undefined, options: SelectOptions) => {
+const optionForValue = (value: SelectValue | undefined, options: Options) => {
     if (isNil(value)) return null
     const v = Array.isArray(value) ?
         options.filter(o => o && value.includes(o.value)) :
-        options.find(o => o?.value == value)
+        options.find(o => o?.value === value)
 
     return isNil(v) ? null : v
 }
 
-export interface SelectProps extends Omit<ReactSelectProps, 'isMulti' | 'onChange' | 'name'> {
+export type SelectLoadOptionsFn = (inputValue: string) => Promise<SelectOptions>
+
+export interface SelectProps<O extends Option> extends Omit<ReactSelectProps, 'isMulti' | 'onChange' | 'name'> {
+
+    //export interface SelectProps extends Omit<ReactSelectProps, 'isMulti' | 'onChange' | 'name'> {
     defaultValue?: SelectValue
+    onCreateOption?: (value: string) => void
     value?: SelectValue
     isMulti?: boolean
     isClearable?: boolean
-    options: SelectOptions
+    options: Array<O>
     onChange?(
         value: null | SelectValue,
-        option: SelectOption,
+        option: SelectedOption,
         meta: ActionMeta<SelectOptionType>
     ): void
     small?: boolean
@@ -131,43 +165,47 @@ export interface SelectProps extends Omit<ReactSelectProps, 'isMulti' | 'onChang
     allowCreate?: boolean
     className?: string
     name?: string
+
+    loadOptions?: SelectLoadOptionsFn
 }
 
 
-export const Select: React.FC<SelectProps> = ({
-    small, tiny, defaultValue, value, onChange, options: providedOptions, className, allowCreate, ...props
-}) => {
-    const [createdOptions, setCreatedOptions] = useState<SelectOptions>([])
-    const options:SelectOptions = [...providedOptions, ...createdOptions]
-
+export function Select<O extends Option>({
+    small, tiny, defaultValue, value, onChange, options,
+    className, allowCreate, onCreateOption, loadOptions,
+    ...props
+}: SelectProps<O>) {
     // eslint-disable-next-line max-len
-    const onChangeHandler = useCallback((selectedOptions: SelectOption, meta: ActionMeta<SelectOptionType>) => {
-        onChange
-        if (selectedOptions) {
-            const value = Array.isArray(selectedOptions) ? selectedOptions.map(o => o?.value) : selectedOptions.value
-
-            if (allowCreate){
-                const missing = Array.isArray(selectedOptions) ?
-                    selectedOptions.find(so => !options.find(o => o.value == so.value)) :
-                    !options.find(o => o.value == selectedOptions.value)
-                if (missing) {
-                    setCreatedOptions(createdOptions.concat(missing))
-                }
-            }
-            onChange?.(value, selectedOptions, meta)
+    const onChangeHandler = onChange ? (option: SelectedOption, meta: ActionMeta<SelectOptionType>) => {
+        if (option) {
+            const value = Array.isArray(option) ? option.map(o => o?.value) : option.value
+            onChange(value, option, meta)
         } else {
-            onChange?.(props.isMulti ? [] : null, selectedOptions, meta)
+            onChange(props.isMulti ? [] : null, option, meta)
         }
-    }, [onChange, providedOptions])
+    } : null
 
-    const S = (allowCreate ? ReactSelectCreate : ReactSelect) as any
+    let S: any // FC<ReactSelectProps | ReactSelectProps<>
+    if (allowCreate) {
+        S = ReactSelectCreate
+    } else if (loadOptions) {
+        S = ReactSelectAsync
+    } else {
+        S = ReactSelect
+    }
 
     return (
         <S
-            className={cx('select', className)}
+            components={CUSTOM_COMPONENTS}
+            selectProps={{}}
+            className={cx('select', className, {
+                'has-options': (!!loadOptions || options.length > 0),
+            })}
             options={options}
+            loadOptions={loadOptions}
             styles={tiny ? tinyStyles : small ? smallStyles : stdStyles}
             {...props}
+            onCreateOption={onCreateOption}
             value={optionForValue(value, options)}
             defaultValue={optionForValue(defaultValue, options)}
             onChange={onChangeHandler}

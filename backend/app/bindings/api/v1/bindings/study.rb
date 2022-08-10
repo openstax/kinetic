@@ -33,6 +33,15 @@ module Api::V1::Bindings
     # The tags of the study object, used for grouping and filtering.
     attr_accessor :tags
 
+    # Description of the feedback that is displayed to the user upon study completion
+    attr_accessor :feedback_description
+
+    # Freeform id of image that should be displayed on study card
+    attr_accessor :image_id
+
+    # Description of how the study benefits participants
+    attr_accessor :benefits
+
     # The expected study duration in minutes.
     attr_accessor :duration_minutes
 
@@ -69,6 +78,9 @@ module Api::V1::Bindings
         :'short_description' => :'short_description',
         :'long_description' => :'long_description',
         :'tags' => :'tags',
+        :'feedback_description' => :'feedback_description',
+        :'image_id' => :'image_id',
+        :'benefits' => :'benefits',
         :'duration_minutes' => :'duration_minutes',
         :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
@@ -95,6 +107,9 @@ module Api::V1::Bindings
         :'short_description' => :'String',
         :'long_description' => :'String',
         :'tags' => :'Array<String>',
+        :'feedback_description' => :'String',
+        :'image_id' => :'String',
+        :'benefits' => :'String',
         :'duration_minutes' => :'Integer',
         :'opens_at' => :'Time',
         :'closes_at' => :'Time',
@@ -154,6 +169,18 @@ module Api::V1::Bindings
         if (value = attributes[:'tags']).is_a?(Array)
           self.tags = value
         end
+      end
+
+      if attributes.key?(:'feedback_description')
+        self.feedback_description = attributes[:'feedback_description']
+      end
+
+      if attributes.key?(:'image_id')
+        self.image_id = attributes[:'image_id']
+      end
+
+      if attributes.key?(:'benefits')
+        self.benefits = attributes[:'benefits']
       end
 
       if attributes.key?(:'duration_minutes')
@@ -285,6 +312,9 @@ module Api::V1::Bindings
           short_description == o.short_description &&
           long_description == o.long_description &&
           tags == o.tags &&
+          feedback_description == o.feedback_description &&
+          image_id == o.image_id &&
+          benefits == o.benefits &&
           duration_minutes == o.duration_minutes &&
           opens_at == o.opens_at &&
           closes_at == o.closes_at &&
@@ -305,7 +335,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, tags, duration_minutes, opens_at, closes_at, is_mandatory, participation_points, return_url, researchers, first_launched_at, stages].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, duration_minutes, opens_at, closes_at, is_mandatory, participation_points, return_url, researchers, first_launched_at, stages].hash
     end
 
     # Builds the object from hash

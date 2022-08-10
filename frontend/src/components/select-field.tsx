@@ -1,13 +1,13 @@
-import { React, styled, useState, cx } from '../common'
+import { React, styled, useState, cx, useMemo } from '../common'
 import { useField } from 'formik'
 import { FloatingFieldProps, FloatingField } from './floating-field'
 import { FloatingLabel } from './label'
 import { useFormContext } from './form'
-import { Select, SelectOption, SelectProps, SelectValue } from './select'
+import { Select, Option, SelectedOption, SelectProps, SelectValue } from './select'
+import { uniqueId } from 'lodash-es'
 
-
-export interface SelectFieldProps extends SelectProps, Omit<FloatingFieldProps, 'name'> {
-    id: string,
+export interface SelectFieldProps<O extends Option> extends SelectProps<O>, Omit<FloatingFieldProps, 'name' | 'id' | 'loadOptions'> {
+    id?: string
     readOnly?: boolean
     display?: string
     innerRef?: any,
@@ -36,8 +36,9 @@ export const SelectWrapper = styled(FloatingField)`
     }
 `
 
-export const SelectField: React.FC<SelectFieldProps> = ({
-    id,
+export function SelectField<O extends Option>({
+    name,
+    id: providedId,
     innerRef,
     label,
     isMulti,
@@ -50,13 +51,18 @@ export const SelectField: React.FC<SelectFieldProps> = ({
     className,
     theme,
     allowCreate,
+    value,
+    onCreateOption,
     ...props
-}) => {
+}: SelectFieldProps<O>) {
+    const id = useMemo(() => providedId || uniqueId('date-time-field'), [providedId])
     const [isFocused, setFocusState] = useState(false)
-    const [field, meta] = useField(props as any)
+    const [field, meta] = useField({ name, ...props as any })
+
     const formContext = useFormContext()
     const hasError = Boolean(meta.touched && meta.error)
-    const v = field.value
+
+    const v = field.value || value
     const hasValue = Array.isArray(v) ? v.length > 0 : !!v
     const readOnly = propsReadonly == null ? formContext.readOnly : propsReadonly
     const onFocus = () => {
@@ -74,29 +80,31 @@ export const SelectField: React.FC<SelectFieldProps> = ({
             {label}
         </FloatingLabel>
     )
-    const onChange = (value: SelectValue, option: SelectOption, meta: any) => {
+    const onChange = (value: SelectValue, option: SelectedOption, meta: any) => {
         field.onChange({ target: { ...field, value } })
         propsOnChange?.(value, option, meta)
     }
 
     return (
         <SelectWrapper
+            id={id} name={name} meta={meta}
             label={labelEl}
             className={cx('form-control', className, {
                 valued: hasValue,
                 'is-invalid': hasError,
             })}
-            id={id} meta={meta}
             data-field-name={field.name}
             {...props}
         >
-
             <Select
                 {...field}
                 {...props}
+                value={v}
+                id={id}
+                name={name}
+                onCreateOption={onCreateOption}
                 allowCreate={allowCreate}
                 isDisabled={readOnly}
-                id={id}
                 isMulti={isMulti}
                 noOptionsMessage={noOptionsMessage}
                 isClearable={isClearable}
@@ -108,6 +116,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
                 onChange={onChange}
                 options={options}
             />
+
         </SelectWrapper>
     )
 }

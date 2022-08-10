@@ -50,6 +50,24 @@ export interface NewStudy {
      */
     tags: Array<string>;
     /**
+     * Description of the feedback that is displayed to the user upon study completion
+     * @type {string}
+     * @memberof NewStudy
+     */
+    feedbackDescription?: string;
+    /**
+     * Freeform id of image that should be displayed on study card
+     * @type {string}
+     * @memberof NewStudy
+     */
+    imageId?: string;
+    /**
+     * Description of how the study benefits participants
+     * @type {string}
+     * @memberof NewStudy
+     */
+    benefits?: string;
+    /**
      * The expected study duration in minutes.
      * @type {number}
      * @memberof NewStudy
@@ -96,6 +114,9 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'shortDescription': json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
         'tags': json['tags'],
+        'feedbackDescription': !exists(json, 'feedback_description') ? undefined : json['feedback_description'],
+        'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
+        'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
         'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
@@ -118,6 +139,9 @@ export function NewStudyToJSON(value?: NewStudy | null): any {
         'short_description': value.shortDescription,
         'long_description': value.longDescription,
         'tags': value.tags,
+        'feedback_description': value.feedbackDescription,
+        'image_id': value.imageId,
+        'benefits': value.benefits,
         'duration_minutes': value.durationMinutes,
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
