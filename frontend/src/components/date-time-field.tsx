@@ -71,8 +71,7 @@ export const DateTimeField: React.FC<DateTimeFieldFieldProps> = ({
 
     const [isFocused, setFocused] = useState(false)
     const onClear = useCallback(() => {
-
-        fieldNames.map(fn => form.getFieldHelpers<Date | undefined>(fn).setValue(null))
+        fieldNames.map(fn => form.getFieldHelpers<Date | null>(fn).setValue(null))
     }, [fieldNames, form])
 
     const onOpen = useCallback(() => setFocused(true), [setFocused])
