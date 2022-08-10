@@ -1,5 +1,6 @@
 import { React, useMemo, useState, useCallback, cx } from '@common'
 import { Box } from 'boxible'
+import styled from '@emotion/styled'
 import { DateTime, DateTimeProps } from './date-time'
 import { uniqueId, compact } from 'lodash-es'
 import { useFormContext } from './form'
@@ -10,6 +11,38 @@ import { Icon } from './icon'
 interface DateTimeFieldFieldProps extends DateTimeProps, Omit<FloatingFieldProps, 'id' | 'name' | 'align'> {
 
 }
+
+const Wrapper = styled(FloatingField)({
+    display: 'flex',
+    paddingTop: 0,
+    paddingBottom: 0,
+    flexDirection: 'column',
+    '.controls': {
+        display: 'flex',
+        '.form-control': {
+            padding: 0,
+            display: 'flex',
+        },
+    },
+    '.flatpickr-input': {
+        height: 'calc(3.5rem + 2px)',
+
+        border: 0,
+        flex: 1,
+        '&:focus': {
+            outline: 'none',
+        },
+        '&[readonly]': {
+            cursor: 'default',
+        },
+    },
+    '&.valued': {
+        '.flatpickr-input': {
+            paddingTop: '1.625rem',
+            paddingBottom: '0.625rem',
+        },
+    },
+})
 
 export const DateTimeField: React.FC<DateTimeFieldFieldProps> = ({
     id: providedId,
@@ -46,38 +79,8 @@ export const DateTimeField: React.FC<DateTimeFieldFieldProps> = ({
     const onClose = useCallback(() => setFocused(false), [setFocused])
 
     return (
-        <FloatingField
-            css={{
-                display: 'flex',
-                paddingTop: 0,
-                paddingBottom: 0,
-                flexDirection: 'column',
-                '.controls': {
-                    display: 'flex',
-                    '.form-control': {
-                        padding: 0,
-                        display: 'flex',
-                    },
-                },
-                '.flatpickr-input': {
-                    height: 'calc(3.5rem + 2px)',
+        <Wrapper
 
-                    border: 0,
-                    flex: 1,
-                    '&:focus': {
-                        outline: 'none',
-                    },
-                    '&[readonly]': {
-                        cursor: 'default',
-                    },
-                },
-                '&.valued': {
-                    '.flatpickr-input': {
-                        paddingTop: '1.625rem',
-                        paddingBottom: '0.625rem',
-                    },
-                },
-            }}
             data-field-name={name}
             label={(
                 <FloatingLabel isRaised={hasValue || isFocused || readOnly}>
@@ -110,6 +113,6 @@ export const DateTimeField: React.FC<DateTimeFieldFieldProps> = ({
                     <Icon onClick={onClear} icon="cancel" color="#cbcccb" />
                 )}
             </div>
-        </FloatingField>
+        </Wrapper>
     )
 }
