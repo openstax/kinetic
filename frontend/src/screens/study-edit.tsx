@@ -107,7 +107,7 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate(): void }> = ({ study
                         ...StageFields.withoutConfig(stage),
                         config: StageFields.toConfig(stage),
                     },
-                }
+                },
             })
             helpers.resetForm()
             setShowingModal(false)
