@@ -63,7 +63,7 @@ for (const [value, ci] of Object.entries(CardImages)) {
     imageOptions.push({ value, ci, label: ci.title })
 }
 
-interface CardImagesSelectorProps extends Omit<SelectFieldProps<OptionT>, 'options'> {
+interface CardImagesSelectorProps extends Omit<SelectFieldProps<ImageOption>, 'options'> {
 
 }
 
