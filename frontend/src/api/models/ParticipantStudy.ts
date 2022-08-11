@@ -63,6 +63,24 @@ export interface ParticipantStudy {
      */
     tags: Array<string>;
     /**
+     * Description of the feedback that is displayed to the user upon study completion
+     * @type {string}
+     * @memberof ParticipantStudy
+     */
+    feedbackDescription?: string;
+    /**
+     * Freeform id of image that should be displayed on study card
+     * @type {string}
+     * @memberof ParticipantStudy
+     */
+    imageId?: string;
+    /**
+     * Description of how the study benefits participants
+     * @type {string}
+     * @memberof ParticipantStudy
+     */
+    benefits?: string;
+    /**
      * The expected study duration in minutes.
      * @type {number}
      * @memberof ParticipantStudy
@@ -133,6 +151,9 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'shortDescription': json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
         'tags': json['tags'],
+        'feedbackDescription': !exists(json, 'feedback_description') ? undefined : json['feedback_description'],
+        'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
+        'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
         'durationMinutes': json['duration_minutes'],
         'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
@@ -159,6 +180,9 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'short_description': value.shortDescription,
         'long_description': value.longDescription,
         'tags': value.tags,
+        'feedback_description': value.feedbackDescription,
+        'image_id': value.imageId,
+        'benefits': value.benefits,
         'duration_minutes': value.durationMinutes,
         'participation_points': value.participationPoints,
         'first_launched_at': value.firstLaunchedAt === undefined ? undefined : (value.firstLaunchedAt.toISOString()),

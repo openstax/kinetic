@@ -39,7 +39,7 @@ export const CheckboxFieldWrapper = styled(FloatingField)({
 
 export interface InputProps extends
     Omit<React.HTMLProps<HTMLInputElement>, 'height' | 'width' | 'wrap' | 'label'>,
-    Omit<FloatingFieldProps, "label" | "id"> {
+    Omit<FloatingFieldProps, 'label' | 'id'> {
     type?: 'checkbox' | 'radio' | 'textarea' | 'text' | 'password' | 'email' | 'number' | 'tel' | 'url'
     autoComplete?: string
     readOnly?: boolean
@@ -50,15 +50,14 @@ export interface InputProps extends
     label?: React.ReactNode,
 }
 
-export const InputField = React.forwardRef<
-    HTMLInputElement | HTMLTextAreaElement,
-    PropsWithOptionalChildren<InputProps>
->((forwardedProps, ref) => {
+export const InputField = React.forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>((
+    forwardedProps, ref
+) => {
 
     const {
         label,
         name,
-        id = uniqueId(name),
+        id: providedId,
         onBlur: propsOnBlur,
         readOnly: propsReadonly,
         type = 'text',
@@ -66,13 +65,14 @@ export const InputField = React.forwardRef<
         ...props
     } = forwardedProps
 
+    const id = useMemo(() => providedId || uniqueId('date-time-field'), [providedId])
     const [field, meta] = useField({ type, name, ...props as any })
     const hasError = Boolean(meta.touched && meta.error)
     const InputComponent: any = (INPUTS as any)[type] || 'input'
     const formContext = useFormContext()
     const isCheckLike = type === 'radio' || type === 'checkbox'
     const Wrapper = isCheckLike ? CheckboxFieldWrapper : FloatingField
-    const labelEl = <label htmlFor={id} className="col-form-label">{label}</label>
+    const labelEl = <label htmlFor={id} className='col-form-label'>{label}</label>
     const readOnly = propsReadonly == null ? formContext.readOnly : propsReadonly
     const onBlur = useMemo(() => (e: React.FocusEvent<HTMLInputElement>) => {
         field.onBlur(e)

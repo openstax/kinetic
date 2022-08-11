@@ -279,6 +279,7 @@ function EditStudy() {
         nav('/studies')
     }
     const saveStudy = async (study: EditingStudy) => {
+        console.log(study)
         try {
             if (isNew) {
                 const savedStudy = await api.addStudy({ addStudy: { study: study as any } })
@@ -327,7 +328,10 @@ function EditStudy() {
             >
                 <Alert warning={true} onDismiss={() => setError('')} message={error}>on</Alert>
 
-                <CardImagesSelector />
+                <CardImagesSelector
+                    label="Card image"
+                    name="imageId"
+                />
 
 
                 <InputField name="titleForParticipants" id="participants-title" label="Title for participants" />

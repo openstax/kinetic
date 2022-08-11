@@ -23,5 +23,3 @@ export function loadAsync<T extends React.ComponentType<any>>(
 
     return (props: any) => <Loader {...props} />;
 }
-
-
