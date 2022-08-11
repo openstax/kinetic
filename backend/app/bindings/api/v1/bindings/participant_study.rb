@@ -30,7 +30,7 @@ module Api::V1::Bindings
     # The tags of the study object, used for grouping and filtering.
     attr_accessor :tags
 
-    # Description of the feedback that is displayed to the user upon study completion
+    # Description of feedback displayed to the user upon study completion
     attr_accessor :feedback_description
 
     # Freeform id of image that should be displayed on study card

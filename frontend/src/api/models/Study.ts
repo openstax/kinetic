@@ -69,7 +69,7 @@ export interface Study {
      */
     tags: Array<string>;
     /**
-     * Description of the feedback that is displayed to the user upon study completion
+     * Description of feedback displayed to the user upon study completion
      * @type {string}
      * @memberof Study
      */
