@@ -119,7 +119,7 @@ class Api::V1::Participant::StudiesOpenApi
     end
     property :feedback_description do
       key :type, :string
-      key :description, 'Description of the feedback that is displayed to the user upon study completion'
+      key :description, 'Description of feedback displayed to the user upon study completion'
     end
     property :image_id do
       key :type, :string
