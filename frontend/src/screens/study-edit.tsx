@@ -4,7 +4,7 @@ import { useField } from 'formik'
 import { uniqBy, omit } from 'lodash-es'
 import {
     LoadingAnimation, Alert, EditingForm as Form, Modal,
-    InputField, SelectField, DateField, Row, Col, Icon,
+    InputField, SelectField, DateTimeField, Row, Col, Icon,
     LinkButton, Button, Box,
 } from '@components'
 import { StudyValidationSchema, TagLabels, isNewStudy, EditingStudy, isStudy } from '@models'
@@ -19,7 +19,7 @@ const TAG_OPTIONS = Object.keys(TagLabels).map((t) => ({
 const QualtricsFields = () => (
     <React.Fragment>
         <InputField name="survey_id" id="id" label="Survey ID" type="text" hint="part of the URL, string like “SV_6xGQzj4OBJnxGuy”" />
-        <InputField name="secret_key" id="key" label="Secret Key"  />
+        <InputField name="secret_key" id="key" label="Secret Key" />
     </React.Fragment>
 )
 
@@ -86,7 +86,7 @@ const DeleteStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
 
 type StageType = keyof typeof AvailableStageFields
 
-const AddStageModalIcon: React.FC<{ study: Study, onCreate():void }> = ({ study, onCreate }) => {
+const AddStageModalIcon: React.FC<{ study: Study, onCreate(): void }> = ({ study, onCreate }) => {
     const api = useApi()
     const [isShowingModal, setShowingModal] = useState(false)
     const [stageType, setStageType] = useState<StageType>('qualtrics')
@@ -101,18 +101,20 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate():void }> = ({ study,
     const saveStage = async (stage: any, helpers: any) => {
         setError('')
         try {
-            const reply = await api.addStage({ studyId: study.id, addStage: {
-                stage: {
-                    ...StageFields.withoutConfig(stage),
-                    config: StageFields.toConfig(stage),
+            const reply = await api.addStage({
+                studyId: study.id, addStage: {
+                    stage: {
+                        ...StageFields.withoutConfig(stage),
+                        config: StageFields.toConfig(stage),
+                    },
                 },
-            } })
+            })
             helpers.resetForm()
             setShowingModal(false)
             study.stages?.push(reply)
             onCreate()
         }
-        catch(err) {
+        catch (err) {
             setError(await errorToString(err))
         }
     }
@@ -145,13 +147,13 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate():void }> = ({ study,
                     >
                         <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
                         <InputField name="title" id="title" label="Title" />
-                        <InputField name="description" id="description" label="Description"  type="textarea" />
+                        <InputField name="description" id="description" label="Description" type="textarea" />
                         <InputField name="availableAfterDays" id="available_after"
                             type="number" label="Available After Days" hint="0 == immediately available" />
                         <SelectField
                             name="type" id="stage-type" label="Stage Type"
                             onChange={(opt) => setStageType(opt as StageType)}
-                            options={[ { value: 'qualtrics', label: 'Qualtrics' } ]}
+                            options={[{ value: 'qualtrics', label: 'Qualtrics' }]}
                         />
                         <StageFields.component />
                     </Form>
@@ -163,7 +165,7 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate():void }> = ({ study,
     )
 }
 
-const StageRow:React.FC<{stage: Stage, onDelete(s: Stage): void}> = ({ stage, onDelete }) => {
+const StageRow: React.FC<{ stage: Stage, onDelete(s: Stage): void }> = ({ stage, onDelete }) => {
     return (
         <tr className="stage">
             <td>{stage.title}</td>
@@ -212,7 +214,7 @@ export const StudyStages: React.FC<{ study: EditingStudy, onUpdate(): void }> = 
             </Row>
             <Row className="mb-2 stages-listing">
                 {!study.stages?.length && (
-                    <Col css={{ fontWeight: 'bold', color: meta.error ? 'red': 'unset' }}>No stages have been defined</Col>
+                    <Col css={{ fontWeight: 'bold', color: meta.error ? 'red' : 'unset' }}>No stages have been defined</Col>
                 )}
                 <table className="table col-sm-12">
                     <thead>
@@ -240,7 +242,7 @@ function EditStudy() {
 
     const [error, setError] = useState('')
     const reRender = useForceUpdate()
-    const [ study, setStudy ] = useState<EditingStudy|null>()
+    const [study, setStudy] = useState<EditingStudy | null>()
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
     useEffect(() => {
@@ -261,7 +263,8 @@ function EditStudy() {
         api.getStudies().then(studies => {
             const study = studies.data?.find(s => s.id == Number(id))
             if (study) {
-                setStudy(study) }
+                setStudy(study)
+            }
             else {
                 setError('study was not found')
             }
@@ -284,7 +287,7 @@ function EditStudy() {
                 await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
             }
         }
-        catch(err) {
+        catch (err) {
             setError(await errorToString(err))
         }
     }
@@ -335,10 +338,10 @@ function EditStudy() {
                     options={tag_options}
                 />
 
-                <DateField name="opensAt" id="opens-at" label="Opens At" />
-                <DateField name="closesAt" id="closes-at" label="Closes At" />
-                <InputField name="shortDescription" id="short-desc" type="textarea" label="Short description"/>
-                <InputField name="longDescription" id="long-desc" type="textarea" label="Long description"/>
+                <DateTimeField name="opensAt" id="opens-at" label="Opens At" md={6} />
+                <DateTimeField name="closesAt" id="closes-at" label="Closes At" md={6} />
+                <InputField name="shortDescription" id="short-desc" type="textarea" label="Short description" />
+                <InputField name="longDescription" id="long-desc" type="textarea" label="Long description" />
             </Form>
 
         </div>

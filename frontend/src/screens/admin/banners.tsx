@@ -2,7 +2,7 @@ import * as Yup from 'yup'
 import { BannerNotice, BannerNoticeFromJSON } from '@api'
 import { React, useState } from '@common'
 import {
-    Box, Icon, Col, EditingForm as Form, Alert, DateField, InputField,
+    Box, Icon, Col, EditingForm as Form, Alert, DateTimeField, InputField,
 } from '@components'
 import { useApi, useFetchState } from '@lib'
 
@@ -49,8 +49,7 @@ const Banner: React.FC<{ banner: BannerNotice, onUpdate(): void }> = ({ banner, 
                     initialValues={banner}
                 >
                     <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
-                    <DateField name="startAt" withTime id="start_at" label="Start At" md={6} />
-                    <DateField name="endAt" withTime id="end_at" label="End At" md={6} />
+                    <DateTimeField name="dates" withTime rangeNames={['startAt', 'endAt']} label="Date range" />
                     <InputField name="message" id="message" label="Message" type="textarea" />
                 </Form>
             </Box>

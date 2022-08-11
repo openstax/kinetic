@@ -2,7 +2,7 @@ import * as Yup from 'yup'
 import { Reward, RewardFromJSON } from '@api'
 import { React, useState } from '@common'
 import {
-    Box, Icon, Col, EditingForm as Form, Alert, DateField, InputField,
+    Box, Icon, Col, EditingForm as Form, Alert, DateTimeField, InputField,
 } from '@components'
 import { useApi, useFetchState } from '@lib'
 
@@ -27,6 +27,7 @@ const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, on
             onUpdate()
         } catch (e) { setError(String(e)) }
     }
+
     return (
         <Col
             data-reward-id={reward.id || 'new'}
@@ -48,9 +49,15 @@ const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, on
                     initialValues={reward}
                 >
                     <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
+
                     <InputField name="points" id="points" label="Points" type="number" md={2} />
-                    <DateField withTime name="startAt" id="start_at" label="Start At" md={5} />
-                    <DateField withTime name="endAt" id="end_at" label="End At" md={5} />
+                    <DateTimeField
+                        rangeNames={['startAt', 'endAt']}
+                        name="dates"
+                        label="Date Range"
+                        withTime
+                        sm={10}
+                    />
                     <InputField name="prize" id="prize" label="Prize" type="text" />
                     <InputField name="infoUrl" id="info_url" label="Information URL" type="url" />
                 </Form>
