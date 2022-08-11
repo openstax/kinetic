@@ -279,7 +279,6 @@ function EditStudy() {
         nav('/studies')
     }
     const saveStudy = async (study: EditingStudy) => {
-        console.log(study)
         try {
             if (isNew) {
                 const savedStudy = await api.addStudy({ addStudy: { study: study as any } })
