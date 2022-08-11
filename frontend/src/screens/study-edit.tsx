@@ -327,11 +327,12 @@ function EditStudy() {
             >
                 <Alert warning={true} onDismiss={() => setError('')} message={error}>on</Alert>
 
+                <StudyStages study={study} onUpdate={reRender} />
+
                 <CardImagesSelector
                     label="Card image"
                     name="imageId"
                 />
-
 
                 <InputField name="titleForParticipants" id="participants-title" label="Title for participants" />
                 <InputField name="titleForResearchers" id="researchers-title" label="Title for researchers" />
@@ -352,9 +353,6 @@ function EditStudy() {
                 <InputField name="benefits" type="textarea" label="Participant benefits desription" />
                 <InputField name="shortDescription" id="short-desc" type="textarea" label="Short description" />
                 <InputField name="longDescription" id="long-desc" type="textarea" label="Long description" />
-
-                <StudyStages study={study} onUpdate={reRender} />
-
             </Form>
 
         </div>
