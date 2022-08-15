@@ -33,6 +33,7 @@ namespace :report do
     csv << [
       'Study ID',
       'Study Name',
+      'Study Points',
       'Stage ID',
       'Stage Order',
       'Stage Name',
@@ -58,6 +59,7 @@ namespace :report do
       csv << [
         launch.stage.study.id,
         launch.stage.study.title_for_participants,
+        launch.stage.study.participation_points,
         launch.stage.id,
         launch.stage.order,
         launch.stage.title,
