@@ -13,7 +13,7 @@ export function loadAsync<T extends React.ComponentType<any>>(
 
     const Loader = (props: any) => (
         <ErrorBoundary
-            fallback={({ error }: {error: Error}) => <ErrorPage error={error} />}
+            fallback={({ error }: { error: Error }) => <ErrorPage error={error} />}
         >
             <React.Suspense fallback={loading}>
                 <Component {...props} />

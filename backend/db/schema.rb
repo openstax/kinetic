@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_08_162010) do
+ActiveRecord::Schema.define(version: 2022_08_10_173840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,7 +38,6 @@ ActiveRecord::Schema.define(version: 2022_04_08_162010) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["stage_id"], name: "index_launched_stages_on_stage_id"
-    t.index ["user_id", "stage_id"], name: "index_launched_stages_on_user_id_and_stage_id", unique: true
   end
 
   create_table "launched_studies", force: :cascade do |t|
@@ -52,7 +51,6 @@ ActiveRecord::Schema.define(version: 2022_04_08_162010) do
     t.datetime "aborted_at"
     t.boolean "consent_granted"
     t.index ["study_id"], name: "index_launched_studies_on_study_id"
-    t.index ["user_id", "study_id"], name: "index_launched_studies_on_user_id_and_study_id", unique: true
   end
 
   create_table "participant_metadata", force: :cascade do |t|
@@ -117,6 +115,9 @@ ActiveRecord::Schema.define(version: 2022_04_08_162010) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "tags", default: [], null: false, array: true
+    t.string "benefits"
+    t.string "feedback_description"
+    t.string "image_id"
     t.index ["tags"], name: "index_studies_on_tags", using: :gin
   end
 

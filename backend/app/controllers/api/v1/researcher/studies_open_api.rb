@@ -63,6 +63,18 @@ class Api::V1::Researcher::StudiesOpenApi
       key :items, { 'type' => 'string' }
       key :description, 'The tags of the study object, used for grouping and filtering.'
     end
+    property :feedback_description do
+      key :type, :string
+      key :description, 'Description of feedback displayed to the user upon study completion'
+    end
+    property :image_id do
+      key :type, :string
+      key :description, 'Freeform id of image that should be displayed on study card'
+    end
+    property :benefits do
+      key :type, :string
+      key :description, 'Description of how the study benefits participants'
+    end
     property :duration_minutes do
       key :type, :integer
       key :description, 'The expected study duration in minutes.'

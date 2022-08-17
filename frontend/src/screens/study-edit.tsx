@@ -11,7 +11,7 @@ import { StudyValidationSchema, TagLabels, isNewStudy, EditingStudy, isStudy } f
 import { Study, Stage } from '@api'
 import { useApi, errorToString, useForceUpdate, pick, remove } from '@lib'
 import { StudyModal } from './studies/modal'
-
+import { CardImagesSelector } from '../components/study-card-images/selector'
 
 const TAG_OPTIONS = Object.keys(TagLabels).map((t) => ({
     label: t, value: t,
@@ -146,6 +146,7 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate(): void }> = ({ study
                         }}
                     >
                         <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
+
                         <InputField name="title" id="title" label="Title" />
                         <InputField name="description" id="description" label="Description" type="textarea" />
                         <InputField name="availableAfterDays" id="available_after"
@@ -325,13 +326,20 @@ function EditStudy() {
                 validationSchema={editingValidationSchema}
             >
                 <Alert warning={true} onDismiss={() => setError('')} message={error}>on</Alert>
+
+                <StudyStages study={study} onUpdate={reRender} />
+
+                <CardImagesSelector
+                    label="Card image"
+                    name="imageId"
+                />
+
                 <InputField name="titleForParticipants" id="participants-title" label="Title for participants" />
                 <InputField name="titleForResearchers" id="researchers-title" label="Title for researchers" />
 
                 <InputField name="durationMinutes" id="duration-mins" label="Duration Minutes" type="number" />
                 <InputField name="participationPoints" id="points" label="Participation Points" type="number" />
                 <InputField name="isMandatory" id="is-mandatory" label="Mandatory study" hint="(must be completed before any others)" type="checkbox" />
-                <StudyStages study={study} onUpdate={reRender} />
                 <SelectField
                     name="tags" id="tags" label="Tags"
                     allowCreate isMulti
@@ -340,6 +348,9 @@ function EditStudy() {
 
                 <DateTimeField name="opensAt" id="opens-at" label="Opens At" md={6} />
                 <DateTimeField name="closesAt" id="closes-at" label="Closes At" md={6} />
+
+                <InputField name="feedbackDescription" type="textarea" label="Feedback description" />
+                <InputField name="benefits" type="textarea" label="Participant benefits desription" />
                 <InputField name="shortDescription" id="short-desc" type="textarea" label="Short description" />
                 <InputField name="longDescription" id="long-desc" type="textarea" label="Long description" />
             </Form>
