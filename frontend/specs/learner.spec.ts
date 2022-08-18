@@ -28,24 +28,13 @@ test('filtering & sorting', async ({ page }) => {
 
     await goToPage({ page, path: '/studies', loginAs: 'user' })
 
+    await page.click('testId=topic:memory')
+    await page.waitForSelector(`.studies.filtered [data-study-id="${firstStudyId}"]`)
+    await expect(page).not.toHaveSelector(`.studies.filtered [data-study-id="${secondStudyId}"]`, { timeout: 100 })
 
-    await page.click('testId=sort-by-menu')
-    await page.click('testId=sort-points:high-low')
-
-    let ids = await page.$$eval('[data-study-id]', studies => studies.map(s => Number(s.dataset.studyId)))
-    expect(ids.indexOf(firstStudyId)).toBeGreaterThan(ids.indexOf(secondStudyId))
-
-    await page.click('testId=sort-by-menu')
-    await page.click('testId=sort-points:low-high')
-
-    ids = await page.$$eval('[data-study-id]', studies => studies.map(s => Number(s.dataset.studyId)))
-    expect(ids.indexOf(firstStudyId)).toBeLessThan(ids.indexOf(secondStudyId))
-
-    await page.click('testId=subjects-filter-menu')
-    await page.click('testId=filter-subject:biology')
-    ids = await page.$$eval('[data-study-id]', studies => studies.map(s => Number(s.dataset.studyId)))
-    expect(ids).toContain(firstStudyId)
-    expect(ids).not.toContain(secondStudyId)
+    await page.click('testId=topic:learning')
+    await page.waitForSelector(`.studies.filtered [data-study-id="${secondStudyId}"]`)
+    await expect(page).not.toHaveSelector(`.studies.filtered [data-study-id="${firstStudyId}"]`, { timeout: 100 })
 
     await rmStudy({ page, studyId: firstStudyId })
     await rmStudy({ page, studyId: secondStudyId })
@@ -92,54 +81,54 @@ test('launching study and testing completion', async ({ page }) => {
     await rmStudy({ page, studyId })
 })
 
-test('launching study and aborting it', async ({ page }) => {
+// test('launching study and aborting it', async ({ page }) => {
 
-    await interceptStudyLaunch({ page })
+//     await interceptStudyLaunch({ page })
 
-    const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
-    await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
-    await page.click('testId=launch-study')
-    await page.pause()
-    await goToPage({ page, path: `/study/land/${studyId}?abort=true`, loginAs: 'user' })
-    await page.waitForSelector('testId=aborted-msg')
-    await expect(page).not.toMatchText(/marked as complete/)
+//     const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
+//     await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
+//     await page.click('testId=launch-study')
+//     await page.pause()
+//     await goToPage({ page, path: `/study/land/${studyId}?abort=true`, loginAs: 'user' })
+//     await page.waitForSelector('testId=aborted-msg')
+//     await expect(page).not.toMatchText(/marked as complete/)
 
-    await page.click('testId=view-studies')
-    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="false"]`)
+//     await page.click('testId=view-studies')
+//     await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="false"]`)
 
-    await page.click(`[data-study-id="${studyId}"]`)
-    // should have navigated
-    expect(
-        await page.evaluate(() => document.location.pathname)
-    ).toMatch(RegExp(`/study/details/${studyId}$`))
+//     await page.click(`[data-study-id="${studyId}"]`)
+//     // should have navigated
+//     expect(
+//         await page.evaluate(() => document.location.pathname)
+//     ).toMatch(RegExp(`/study/details/${studyId}$`))
 
-    // now mark complete with consent granted
-    await goToPage({ page, path: `/study/land/${studyId}?consent=true`, loginAs: 'user' })
-    await expect(page).toMatchText(/marked as complete/)
+//     // now mark complete with consent granted
+//     await goToPage({ page, path: `/study/land/${studyId}?consent=true`, loginAs: 'user' })
+//     await expect(page).toMatchText(/marked as complete/)
 
-    await rmStudy({ page, studyId })
-})
+//     await rmStudy({ page, studyId })
+// })
 
-test('launching study and completing with no consent', async ({ page }) => {
+// test('launching study and completing with no consent', async ({ page }) => {
 
-    await interceptStudyLaunch({ page })
+//     await interceptStudyLaunch({ page })
 
-    const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
-    await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
-    await page.click('testId=launch-study')
+//     const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
+//     await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
+//     await page.click('testId=launch-study')
 
-    await goToPage({ page, path: `/study/land/${studyId}?consent=false`, loginAs: 'user' })
-    await expect(page).not.toMatchText(/Points/)
-    await expect(page).toMatchText(/marked as complete/)
+//     await goToPage({ page, path: `/study/land/${studyId}?consent=false`, loginAs: 'user' })
+//     await expect(page).not.toMatchText(/Points/)
+//     await expect(page).toMatchText(/marked as complete/)
 
-    await page.click('testId=view-studies')
-    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="true"][role=""]`)
-    // have to force, it shouldn't be a link
-    await page.click(`[data-study-id="${studyId}"]`, { force: true })
-    // should not have navigated
-    expect(
-        await page.evaluate(() => document.location.pathname)
-    ).toMatch(/studies$/)
+//     await page.click('testId=view-studies')
+//     await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="true"][role=""]`)
+//     // have to force, it shouldn't be a link
+//     await page.click(`[data-study-id="${studyId}"]`, { force: true })
+//     // should not have navigated
+//     expect(
+//         await page.evaluate(() => document.location.pathname)
+//     ).toMatch(/studies$/)
 
-    await rmStudy({ page, studyId })
-})
+//     await rmStudy({ page, studyId })
+// })
