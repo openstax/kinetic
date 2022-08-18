@@ -15,7 +15,7 @@ export enum StudyStatus {
     Completed = 'Completed', // eslint-disable-line no-unused-vars
 }
 
-export const getStatus = (study: Study):StudyStatus => {
+export const getStatus = (study: Study): StudyStatus => {
     const now = new Date()
     if (study.opensAt && study.opensAt > now) {
         return StudyStatus.Scheduled
@@ -26,7 +26,7 @@ export const getStatus = (study: Study):StudyStatus => {
     return StudyStatus.Active
 }
 
-export const getStatusName = (study: Study):string => {
+export const getStatusName = (study: Study): string => {
     const status = getStatus(study)
     if (status == StudyStatus.Active) return 'Active'
     if (status == StudyStatus.Scheduled) return 'Scheduled'
@@ -47,7 +47,7 @@ export const StudyValidationSchema = Yup.object().shape({
 });
 
 
-export const LaunchStudy = async (api: DefaultApi, study: {id: number}, options: { preview?: boolean } = {}) => {
+export const LaunchStudy = async (api: DefaultApi, study: { id: number }, options: { preview?: boolean } = {}) => {
     const launch = await api.launchStudy({ id: study.id, preview: options.preview || false })
     window.location.assign(launch.url!)
     return launch
@@ -56,7 +56,7 @@ export const LaunchStudy = async (api: DefaultApi, study: {id: number}, options:
 export const isStudyLaunchable = (study: ParticipantStudy) => {
     return Boolean(
         !study.completedAt &&
-            (!study.closesAt || dayjs(study.closesAt).isAfter(dayjs()))
+        (!study.closesAt || dayjs(study.closesAt).isAfter(dayjs()))
     )
 }
 
@@ -78,8 +78,8 @@ export function tagsOfType(study: SavedStudy, type: string) {
 }
 
 export function tagOfType(study: SavedStudy, type: string): string | undefined {
-    const tags = tagsOfType(study, type)
-    return tags[0]
+    const r = RegExp(`^${type}`)
+    return study.tags.find(t => t.match(r))
 }
 
 export function studyTypeName(study: SavedStudy): string {

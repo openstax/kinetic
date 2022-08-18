@@ -2,14 +2,15 @@ import { React, useEffect, useState, useMemo, useCallback } from '@common'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors } from '../theme'
+import { tagOfType } from '@models'
 import { Global } from '@emotion/react'
-import { sortBy, intersection } from 'lodash'
+import { sortBy, groupBy } from 'lodash'
 import {
     Box, Logo, RewardsProgressBar, BannersBar,
 } from '@components'
 import { useApi, useEnvironment } from '@lib'
 import {
-    isStudyLaunchable, StudyTopicTags,
+    isStudyLaunchable, StudyTopicTags, StudyTopicTagIDs, StudyTopicID,
 } from '@models'
 import { StudyCard } from './learner/card'
 import { Footer } from './learner/footer'
@@ -23,46 +24,54 @@ const Splash = styled(Box)({
     position: 'relative',
 })
 
-const TOPIC_TAGS = Object.keys(StudyTopicTags)
+type StudyByTopics = Record<StudyTopicID, ParticipantStudy[]>
+
+interface StudyState {
+    mandatoryStudy?: ParticipantStudy
+    allStudies: ParticipantStudy[]
+    popularStudies: ParticipantStudy[]
+    studiesByTopic: StudyByTopics
+}
 
 const useParticpantStudies = () => {
     const api = useApi()
+    const [filter, setFilter] = useState<StudyTopicID>('topic:personality')
+    const [studies, setStudyState] = useState<StudyState>({
+        allStudies: [],
+        popularStudies: [],
+        studiesByTopic: {} as StudyByTopics,
+    })
 
-    const [filter, setFilter] = useState<string>('topic:personality')
-    const [mandatoryStudy, setMandatoryStudy] = useState<ParticipantStudy>()
-    const [allStudies, setStudies] = useState<ParticipantStudy[]>([])
-
-    const fetchStudies = async () => {
-        const studies = await api.getParticipantStudies()
-        const mandatory = studies.data?.find(s => isStudyLaunchable(s) && s.isMandatory)
-        if (mandatory) {
-            setMandatoryStudy(mandatory)
+    const fetchStudies = useCallback(async () => {
+        const fetchedStudies = await api.getParticipantStudies()
+        const mandatoryStudy = fetchedStudies.data?.find(s => isStudyLaunchable(s) && s.isMandatory)
+        const allStudies = fetchedStudies.data || []
+        const popularStudies = sortBy(allStudies, 'popularity_rating').slice(0, 3)
+        const studiesByTopic = groupBy(allStudies, (s) => tagOfType(s, 'topic') || 'topic:other') as any as StudyByTopics
+        if (!studiesByTopic[filter]) {
+            setFilter((Object.keys(studiesByTopic) as Array<StudyTopicID>)[0])
         }
-        setStudies(studies.data || [])
-    }
+        setStudyState({
+            mandatoryStudy, allStudies, popularStudies, studiesByTopic,
+        })
+    }, [setStudyState])
 
-    useEffect(() => { fetchStudies() }, [])
+
+    useEffect(() => {
+        fetchStudies()
+    }, [])
 
     const onMandatoryClose = useCallback(() => {
-        setMandatoryStudy(undefined)
+        setStudyState({ ...studies, mandatoryStudy: undefined })
         fetchStudies()
     }, [fetchStudies])
-    const popular = useMemo(() => sortBy(allStudies, 'popularity_rating').slice(0, 3), [allStudies])
-    const studies = useMemo(() => allStudies.filter((s) => (
-        !popular.includes(s) && (
-            (filter == 'other' && intersection(s.tags, TOPIC_TAGS).length == 0) ||
-            (s.tags.includes(filter))
-        )
-    )), [filter, setFilter, popular, allStudies])
 
     return useMemo(() => ({
-        mandatory: mandatoryStudy,
-        studies,
-        popular,
+        ...studies,
         filter,
         setFilter,
         onMandatoryClose,
-    }), [studies, mandatoryStudy, onMandatoryClose, filter, setFilter])
+    }), [studies, onMandatoryClose, filter, setFilter])
 }
 
 
@@ -74,10 +83,8 @@ interface StudyListProps {
 const Grid = styled.div({
     display: 'grid',
     gridTemplateColumns: 'repeat(3, [col-start] minmax(100px, 1fr) [col-end])',
-
     gridColumnGap: 20,
     gridRowGap: 20,
-
 })
 
 const StudyList: React.FC<StudyListProps> = ({ title, studies, children }) => {
@@ -95,20 +102,22 @@ const StudyList: React.FC<StudyListProps> = ({ title, studies, children }) => {
 }
 
 interface FiltersProps {
-    filter: string
-    setFilter(filter: string): void
+    studies: StudyByTopics
+    filter: StudyTopicID
+    setFilter(filter: StudyTopicID): void
 }
 
 
-const filterProps = (type: string, filter: string, setType: (t: string) => void) => ({
+const filterProps = (type: StudyTopicID, filter: StudyTopicID, setType: (t: StudyTopicID) => void) => ({
     className: type == filter ? 'active' : '',
-    'data-type': type,
+    'data-test-id': type,
     onClick() { setType(type) },
 })
 
-const Filters: React.FC<FiltersProps> = ({ filter, setFilter }) => {
+const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
+
     return (
-        <Box gap="large" wrap margin={{ bottom: 'large' }}
+        <Box gap="large" data-test-id="topic-tabs" wrap margin={{ bottom: 'large' }}
             css={{
                 span: {
                     cursor: 'pointer',
@@ -122,20 +131,24 @@ const Filters: React.FC<FiltersProps> = ({ filter, setFilter }) => {
                 },
             }}
         >
-            {Object.entries(StudyTopicTags).map(([tag, title]) => <span key={tag} {...filterProps(tag, filter, setFilter)}>{title}</span>)}
-            <span {...filterProps('other', filter, setFilter)}>Others</span>
+            {StudyTopicTagIDs.map((tag) => (
+                studies[tag]?.length ?
+                    <span role="tab" key={tag} {...filterProps(tag, filter, setFilter)}>{StudyTopicTags[tag]}</span> : null
+            ))}
         </Box >
     )
 }
 const LearnerDashboard = () => {
     const env = useEnvironment()
 
-    const { popular, mandatory, filter, onMandatoryClose, setFilter, studies } = useParticpantStudies()
+    const {
+        popularStudies, mandatoryStudy, allStudies, filter, onMandatoryClose, setFilter, studiesByTopic,
+    } = useParticpantStudies()
 
 
     return (
         <div className="studies learner">
-            <StudyModal study={mandatory} onHide={onMandatoryClose} />
+            <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
             <Global styles={{ background: colors.pageBackground }} />
             <nav className="navbar navbar-light">
                 <div className="navbar-dark bg-dark py-1">
@@ -147,7 +160,7 @@ const LearnerDashboard = () => {
                 </div>
                 <BannersBar />
             </nav>
-            <RewardsProgressBar studies={studies} />
+            <RewardsProgressBar studies={allStudies} />
 
             <Splash direction='column' justify='center'>
                 <SplashImage
@@ -178,10 +191,10 @@ const LearnerDashboard = () => {
                 </div>
             </Splash >
 
-            <StudyList title="Popular Studies on Kinetic" studies={popular} />
+            <StudyList title="Popular Studies on Kinetic" studies={popularStudies} />
 
-            <StudyList title="View All Studies" studies={studies}>
-                <Filters filter={filter} setFilter={setFilter} />
+            <StudyList title="View All Studies" studies={studiesByTopic[filter] || []}>
+                <Filters studies={studiesByTopic} filter={filter} setFilter={setFilter} />
             </StudyList>
 
             <Footer />
