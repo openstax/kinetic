@@ -10,7 +10,7 @@ interface ControlledPopoverProps {
     title?: React.ReactNode
 }
 
-interface PopoverProps extends Omit<ControlledPopoverProps, 'show'> {
+export interface PopoverProps extends Omit<ControlledPopoverProps, 'show'> {
     popover: React.ReactNode
     className?: string
     style?: CSS.Properties<string | number>
@@ -56,7 +56,7 @@ export const Popover: React.FC<PopoverProps> = ({
     ...popoverProps
 }) => {
     const [isHovered, setIsHovered] = useState(false)
-    const [ setWrapperRef, wrapperRef] = useRefElement<HTMLElement>()
+    const [setWrapperRef, wrapperRef] = useRefElement<HTMLElement>()
 
     return (
         <div
