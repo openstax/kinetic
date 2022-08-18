@@ -93,6 +93,12 @@ export interface ParticipantStudy {
      */
     participationPoints?: number;
     /**
+     * How popular the study is on a fractional scale of 0.0 to 1.0
+     * @type {number}
+     * @memberof ParticipantStudy
+     */
+    popularityRating?: number;
+    /**
      * When the study was launched; null means not launched
      * @type {Date}
      * @memberof ParticipantStudy
@@ -156,6 +162,7 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
         'durationMinutes': json['duration_minutes'],
         'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
+        'popularityRating': !exists(json, 'popularity_rating') ? undefined : json['popularity_rating'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
         'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (new Date(json['closes_at'])),
@@ -185,6 +192,7 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'benefits': value.benefits,
         'duration_minutes': value.durationMinutes,
         'participation_points': value.participationPoints,
+        'popularity_rating': value.popularityRating,
         'first_launched_at': value.firstLaunchedAt === undefined ? undefined : (value.firstLaunchedAt.toISOString()),
         'completed_at': value.completedAt === undefined ? undefined : (value.completedAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt.toISOString()),

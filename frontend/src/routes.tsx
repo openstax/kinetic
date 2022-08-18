@@ -11,11 +11,12 @@ const StudyLanding = loadAsync('Study Landing Page', () => import('./screens/stu
 const EditStudy = loadAsync('Edit Study Details', () => import('./screens/study-edit'))
 const StudyDetails = loadAsync('Study Details', () => import('./screens/study-details'))
 const Researcher = loadAsync('Studies', () => import('./screens/researcher-home'))
-const Participant = loadAsync('Studies', () => import('./screens/participant-home'))
+const LearnerDashboard = loadAsync('Studies', () => import('./screens/learner'))
 const AdminHomepage = loadAsync('Admin', () => import('./screens/admin-home'))
+
 const StudiesHomepage = () => {
     const user = useCurrentUser()
-    return user.isResearcher ? <Researcher /> : <Participant />
+    return user.isResearcher ? <Researcher /> : <LearnerDashboard />
 }
 
 export const AppRoutes = () => {

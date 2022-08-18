@@ -5,7 +5,18 @@ export const StudyTypeTags = {
     'type:assessment': 'Assessment',
     'type:survey': 'Survey',
 }
+
 type StudyTypeTagsT = typeof StudyTypeTags
+
+
+export const StudyTopicTags = {
+    'topic:personality': 'Personality',
+    'topic:memory': 'Memory',
+    'topic:learning': 'Learning',
+    'topic:career': 'School & Future Career',
+}
+type StudyTopicTagsT = typeof StudyTopicTags
+
 
 export const StudySubjectTags = {
     'subject:biology': 'Biology',
@@ -30,8 +41,8 @@ export const MiscTags = {
 }
 type MiscTagsT = typeof MiscTags
 
-type TagLabelT = StudyTypeTagsT & StudySubjectTagsT & ResearchTypeTagsT & MiscTagsT
+type TagLabelT = StudyTypeTagsT & StudySubjectTagsT & StudyTopicTagsT & ResearchTypeTagsT & MiscTagsT
 
-export const TagLabels:TagLabelT = Object.assign({}, StudyTypeTags, StudySubjectTags, ResearchTypeTags, MiscTags)
+export const TagLabels: TagLabelT = Object.assign({}, StudyTopicTags, StudyTypeTags, StudySubjectTags, ResearchTypeTags, MiscTags)
 
 export type StudySubjectID = keyof typeof StudySubjectTags

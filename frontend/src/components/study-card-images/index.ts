@@ -1,1 +1,2 @@
-export { CardImages, CardImagesSelector } from './selector'
+export { CardImages } from './images'
+export { CardImagesSelector } from './selector'

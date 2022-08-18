@@ -125,6 +125,7 @@ export default function ParticipantHome() {
                 <BannersBar />
             </nav>
             <RewardsProgressBar studies={allStudies?.data || []} />
+
             <div className="container studies my-8">
                 <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
                 <Controls state={controlState} onChange={setControlState} />
