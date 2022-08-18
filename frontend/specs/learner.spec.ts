@@ -8,6 +8,8 @@ test('displays studies', async ({ page }) => {
     const studyId = await createStudy({ page, opensAt: dayjs().subtract(1, 'day'), name: studyName })
     await goToPage({ page, path: '/studies', loginAs: 'user' })
     await page.waitForTimeout(100)
+    await page.pause()
+
     await expect(page).toMatchText(RegExp(studyName))
     await page.click(`[data-study-id="${studyId}"]`)
 
@@ -18,13 +20,14 @@ test('filtering & sorting', async ({ page }) => {
     const studyName = faker.commerce.productDescription()
 
     const firstStudyId = await createStudy({
-        page, mins: 5, points: 5, name: studyName, subject: 'biology',
+        page, mins: 5, points: 5, name: studyName, topic: 'memory',
     })
     const secondStudyId = await createStudy({
-        page, mins: 15, points: 15, name: studyName, subject: 'physics',
+        page, mins: 15, points: 15, name: studyName, topic: 'learning',
     })
 
     await goToPage({ page, path: '/studies', loginAs: 'user' })
+
 
     await page.click('testId=sort-by-menu')
     await page.click('testId=sort-points:high-low')
