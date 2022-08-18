@@ -77,9 +77,9 @@ export function tagsOfType(study: SavedStudy, type: string) {
     return study.tags.filter(t => t.match(r))
 }
 
-export function tagOfType(study: SavedStudy, type: string): string | undefined {
+export function tagOfType<T = string>(study: SavedStudy, type: string): T | undefined {
     const r = RegExp(`^${type}`)
-    return study.tags.find(t => t.match(r))
+    return study.tags.find(t => t.match(r)) as any as T
 }
 
 export function studyTypeName(study: SavedStudy): string {
