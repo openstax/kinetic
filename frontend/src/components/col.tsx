@@ -18,7 +18,7 @@ export interface ColProps extends BoxProps {
     }
 }
 
-export const Col:React.FC<ColProps> = ({
+export const Col: React.FC<ColProps> = ({
     children,
     sm,
     md,
@@ -31,7 +31,7 @@ export const Col:React.FC<ColProps> = ({
     ...props
 }) => {
     return (
-        <Box className={cx(className, {
+        <Box className={cx(className, 'col', {
             [`col-sm-${sm}`]: sm,
             [`col-md-${md}`]: md,
             [`col-lg-${lg}`]: lg,
@@ -54,7 +54,7 @@ export interface RowProps {
     className?: string
 }
 
-export const Row:React.FC<RowProps> = ({
+export const Row: React.FC<RowProps> = ({
     children,
     className,
 }) => {
