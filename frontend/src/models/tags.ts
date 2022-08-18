@@ -1,3 +1,4 @@
+import { omit } from "lodash-es"
 
 export const StudyTypeTags = {
     'type:research': 'Research Study',
@@ -5,7 +6,21 @@ export const StudyTypeTags = {
     'type:assessment': 'Assessment',
     'type:survey': 'Survey',
 }
+
 type StudyTypeTagsT = typeof StudyTypeTags
+
+
+export const StudyTopicTags = {
+    'topic:personality': 'Personality',
+    'topic:memory': 'Memory',
+    'topic:learning': 'Learning',
+    'topic:career': 'School & Future Career',
+    'topic:other': 'Others',
+}
+type StudyTopicTagsT = typeof StudyTopicTags
+export type StudyTopicID = keyof StudyTopicTagsT
+
+export const StudyTopicTagIDs = Object.keys(StudyTopicTags) as any as (keyof StudyTopicTagsT)[]
 
 export const StudySubjectTags = {
     'subject:biology': 'Biology',
@@ -17,6 +32,7 @@ export const StudySubjectTags = {
     'subject:statistics': 'Statistics',
 }
 type StudySubjectTagsT = typeof StudySubjectTags
+
 
 export const ResearchTypeTags = {
     'individual-differences': 'Individual Differences',
@@ -30,8 +46,8 @@ export const MiscTags = {
 }
 type MiscTagsT = typeof MiscTags
 
-type TagLabelT = StudyTypeTagsT & StudySubjectTagsT & ResearchTypeTagsT & MiscTagsT
+type TagLabelT = StudyTypeTagsT & StudySubjectTagsT & StudyTopicTagsT & ResearchTypeTagsT & MiscTagsT
 
-export const TagLabels:TagLabelT = Object.assign({}, StudyTypeTags, StudySubjectTags, ResearchTypeTags, MiscTags)
+export const TagLabels: TagLabelT = Object.assign({}, omit(StudyTopicTags, 'topic:other'), StudyTypeTags, StudySubjectTags, ResearchTypeTags, MiscTags)
 
 export type StudySubjectID = keyof typeof StudySubjectTags

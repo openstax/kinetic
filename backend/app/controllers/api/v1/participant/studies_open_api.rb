@@ -137,6 +137,11 @@ class Api::V1::Participant::StudiesOpenApi
       key :type, :integer
       key :description, 'How many points a participant will earn upon completion'
     end
+    property :popularity_rating do
+      key :type, :number
+      key :description, 'How popular the study is on a fractional scale of 0.0 to 1.0'
+    end
+
     property :first_launched_at do
       key :type, :string
       key :format, 'date-time'

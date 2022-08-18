@@ -3,6 +3,7 @@ import { Box, BoxProps } from 'boxible'
 
 export interface ColProps extends BoxProps {
     className?: string
+    auto?: boolean
     sm?: number
     md?: number
     lg?: number
@@ -18,8 +19,9 @@ export interface ColProps extends BoxProps {
     }
 }
 
-export const Col:React.FC<ColProps> = ({
+export const Col: React.FC<ColProps> = ({
     children,
+    auto,
     sm,
     md,
     lg,
@@ -32,6 +34,7 @@ export const Col:React.FC<ColProps> = ({
 }) => {
     return (
         <Box className={cx(className, {
+            'col': auto,
             [`col-sm-${sm}`]: sm,
             [`col-md-${md}`]: md,
             [`col-lg-${lg}`]: lg,
@@ -45,7 +48,7 @@ export const Col:React.FC<ColProps> = ({
             [`offset-xxl-${offset.xxl}`]: offset.xxl,
         } as any)} {...props}>
             {children}
-        </Box>
+        </Box >
     )
 }
 
@@ -54,7 +57,7 @@ export interface RowProps {
     className?: string
 }
 
-export const Row:React.FC<RowProps> = ({
+export const Row: React.FC<RowProps> = ({
     children,
     className,
 }) => {

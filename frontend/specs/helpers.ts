@@ -76,7 +76,7 @@ export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin
     await logout({ page })
     await page.goto('http://localhost:4000/dev/user')
     await page.click(`[data-user-id="${TC.USERS[login]}"]`)
-    await page.waitForSelector('.container.studies')
+    await page.waitForSelector('.studies')
 }
 
 export const rmStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
@@ -105,6 +105,7 @@ interface createStudyArgs {
     isMandatory?: boolean
     points?: number
     mins?: number
+    topic?: string
     subject?: string
     opensAt?: dayjs.Dayjs,
 }
@@ -116,6 +117,7 @@ export const createStudy = async ({
     isMandatory = false,
     points = 10,
     mins = 10,
+    topic = 'personality',
     subject = 'physics',
     opensAt = dayjs().subtract(1, 'day'),
 }: createStudyArgs) => {
@@ -136,6 +138,9 @@ export const createStudy = async ({
     await page.keyboard.press('Enter')
 
     await page.fill('#tags input', 'cog')
+    await page.keyboard.press('Enter')
+
+    await page.fill('#tags input', `topic:${topic}`)
     await page.keyboard.press('Enter')
 
     await page.fill('#tags input', `subject:${subject}`)

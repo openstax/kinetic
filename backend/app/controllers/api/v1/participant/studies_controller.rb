@@ -13,10 +13,9 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
     studies = launched_studies + unlaunched_studies
 
     response_binding = Api::V1::Bindings::ParticipantStudies.new(
-      data: studies.map do |study|
-        Api::V1::Bindings::ParticipantStudy.create_from_model(study)
-      end
+      data: Api::V1::Bindings::ParticipantStudy.create_from_models_list(studies, current_user)
     )
+
     render json: response_binding, status: :ok
   end
 

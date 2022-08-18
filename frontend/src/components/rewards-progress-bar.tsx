@@ -241,7 +241,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
             backgroundColor: 'white',
             boxShadow: '0px 10px 20px -5px rgba(0, 0, 0, 0.08)',
         }}>
-            <div className="container">
+            <div className="container-lg">
 
                 <SegmentInfo schedule={schedule} />
 

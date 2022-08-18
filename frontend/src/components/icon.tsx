@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { keyframes, css, CSSObject } from '@emotion/react'
-import { Popover } from './popover'
+import { Popover, PopoverProps } from './popover'
 import { Icon as IconifyIconComponent, IconifyIcon } from '@iconify/react'
 import { ICONS } from './packaged-icons'
 
@@ -23,19 +23,20 @@ interface IconifyIconDefinition {
 
 export type IconKey = keyof typeof ICONS
 
-export interface IconProps extends Omit<IconifyIcon, 'icon'|'body'> {
+export interface IconProps extends Omit<IconifyIcon, 'icon' | 'body'> {
     icon: IconKey | IconifyIconDefinition | IconifyIcon
     title?: string
     color?: string
     className?: string
     busy?: boolean
     tooltip?: React.ReactNode
+    tooltipProps?: Omit<PopoverProps, 'children' | 'target' | 'popover'>
     buttonStyles?: CSSObject,
     onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-export const Icon:React.FC<IconProps> = ({
-    icon: iconProp, tooltip, onClick, children, busy, buttonStyles = {}, ...iconProps
+export const Icon: React.FC<IconProps> = ({
+    icon: iconProp, tooltip, onClick, children, busy, buttonStyles = {}, tooltipProps = {}, ...iconProps
 }) => {
     const icon = busy ? 'spin' : iconProp
     const iconEl = (
@@ -47,7 +48,7 @@ export const Icon:React.FC<IconProps> = ({
     )
     if (tooltip) {
         return (
-            <Popover popover={tooltip}>
+            <Popover popover={tooltip} {...tooltipProps}>
                 {iconEl}
             </Popover>
         )

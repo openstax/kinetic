@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_10_173840) do
+ActiveRecord::Schema.define(version: 2022_08_17_161302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 2022_08_10_173840) do
     t.string "benefits"
     t.string "feedback_description"
     t.string "image_id"
+    t.integer "completed_count", default: 0, null: false
     t.index ["tags"], name: "index_studies_on_tags", using: :gin
   end
 
