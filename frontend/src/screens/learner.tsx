@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useMemo, useCallback } from '@common'
+import { React, useEffect, useState, useMemo, useCallback, cx } from '@common'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors } from '../theme'
@@ -16,6 +16,8 @@ import { StudyCard } from './learner/card'
 import { Footer } from './learner/footer'
 import { SplashImage } from './learner/splash-image'
 import { StudyModal } from './studies/modal'
+import { StudyDetails } from './learner/details'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 
 const Splash = styled(Box)({
     height: 400,
@@ -78,6 +80,8 @@ const useParticpantStudies = () => {
 interface StudyListProps {
     studies: ParticipantStudy[],
     title: string
+    className: string
+    onSelect(study: ParticipantStudy): void
 }
 
 const Grid = styled.div({
@@ -87,15 +91,15 @@ const Grid = styled.div({
     gridRowGap: 20,
 })
 
-const StudyList: React.FC<StudyListProps> = ({ title, studies, children }) => {
+const StudyList: React.FC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
 
     return (
-        <div className="container-lg studies my-8" >
+        <div className={cx('container-lg', 'studies', 'my-8', className)} >
             <h3 css={{ margin: '2rem 0' }}>{title}</h3>
             {children}
             {!studies.length && <h3>No studies were found</h3>}
             <Grid>
-                {studies.map(s => <StudyCard study={s} key={s.id} />)}
+                {studies.map(s => <StudyCard onSelect={onSelect} study={s} key={s.id} />)}
             </Grid>
         </div>
     )
@@ -140,14 +144,17 @@ const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
 }
 const LearnerDashboard = () => {
     const env = useEnvironment()
-
+    const nav = useNavigate()
+    const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
     const {
         popularStudies, mandatoryStudy, allStudies, filter, onMandatoryClose, setFilter, studiesByTopic,
     } = useParticpantStudies()
 
-
     return (
         <div className="studies learner">
+            <Routes>
+                <Route path={'details/:studyId'} element={<StudyDetails studies={allStudies} />} />
+            </Routes>
             <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
             <Global styles={{ background: colors.pageBackground }} />
             <nav className="navbar navbar-light">
@@ -165,20 +172,17 @@ const LearnerDashboard = () => {
             <Splash direction='column' justify='center'>
                 <SplashImage
                     preserveAspectRatio='xMinYMid slice'
-
                     css={{
-
                         position: 'absolute',
                         top: 0,
                         left: 0,
                         width: '100%',
                         height: '100%',
-
                         zIndex: -1,
                     }}
                 />
                 <div className="container-lg">
-                    < div css={{ maxWidth: 500, p: { marginBottom: 5 } }}>
+                    <div css={{ maxWidth: 500, p: { marginBottom: 5 } }}>
                         <h2>Learning Pays,</h2>
                         <h2>In More Ways Than One!</h2>
                         <p>
@@ -191,9 +195,9 @@ const LearnerDashboard = () => {
                 </div>
             </Splash >
 
-            <StudyList title="Popular Studies on Kinetic" studies={popularStudies} />
+            <StudyList onSelect={onStudySelect} title="Popular Studies on Kinetic" className="popular" studies={popularStudies} />
 
-            <StudyList title="View All Studies" studies={studiesByTopic[filter] || []}>
+            <StudyList onSelect={onStudySelect} title="View All Studies" className="filtered" studies={studiesByTopic[filter] || []}>
                 <Filters studies={studiesByTopic} filter={filter} setFilter={setFilter} />
             </StudyList>
 

@@ -7,11 +7,7 @@ test('displays studies', async ({ page }) => {
 
     const studyId = await createStudy({ page, opensAt: dayjs().subtract(1, 'day'), name: studyName })
     await goToPage({ page, path: '/studies', loginAs: 'user' })
-    await page.waitForTimeout(100)
-    await page.pause()
-
-    await expect(page).toMatchText(RegExp(studyName))
-    await page.click(`[data-study-id="${studyId}"]`)
+    await page.waitForSelector(`text=${studyName}`)
 
     await rmStudy({ page, studyId })
 })
@@ -63,72 +59,67 @@ test('launching study and testing completion', async ({ page }) => {
 
     // note: 10 points is greater than the 5 points reward
     const studyId = await createStudy({ page, points: 10, name: faker.commerce.productDescription() })
-    await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
+    await goToPage({ page, path: `/studies/details/${studyId}`, loginAs: 'user' })
     await page.click('testId=launch-study')
 
     // qualtrics will redirect here once complete
     await goToPage({ page, path: `/study/land/${studyId}`, loginAs: 'user' })
 
     await page.click('testId=view-studies')
-    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="true"][role=""]`)
-    // have to force, it shouldn't be a link
-    await page.click(`[data-study-id="${studyId}"]`, { force: true })
-    // should not have navigated
-    expect(
-        await page.evaluate(() => document.location.pathname)
-    ).toMatch(/studies$/)
+    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][role="link"]`)
+    await page.click(`[data-study-id="${studyId}"]`)
 
     await rmStudy({ page, studyId })
 })
 
-// test('launching study and aborting it', async ({ page }) => {
+test('launching study and aborting it', async ({ page }) => {
 
-//     await interceptStudyLaunch({ page })
+    await interceptStudyLaunch({ page })
 
-//     const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
-//     await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
-//     await page.click('testId=launch-study')
-//     await page.pause()
-//     await goToPage({ page, path: `/study/land/${studyId}?abort=true`, loginAs: 'user' })
-//     await page.waitForSelector('testId=aborted-msg')
-//     await expect(page).not.toMatchText(/marked as complete/)
+    const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
+    await goToPage({ page, path: `/studies/details/${studyId}`, loginAs: 'user' })
+    await page.click('testId=launch-study')
 
-//     await page.click('testId=view-studies')
-//     await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="false"]`)
+    await goToPage({ page, path: `/study/land/${studyId}?abort=true`, loginAs: 'user' })
+    await page.waitForSelector('testId=aborted-msg')
+    await expect(page).not.toMatchText(/marked as complete/)
+    await page.click('testId=view-studies')
+    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][data-is-completed="false"]`)
 
-//     await page.click(`[data-study-id="${studyId}"]`)
-//     // should have navigated
-//     expect(
-//         await page.evaluate(() => document.location.pathname)
-//     ).toMatch(RegExp(`/study/details/${studyId}$`))
+    await page.click(`[data-study-id="${studyId}"]`)
+    // should have navigated
+    expect(
+        await page.evaluate(() => document.location.pathname)
+    ).toMatch(RegExp(`/studies/details/${studyId}$`))
 
-//     // now mark complete with consent granted
-//     await goToPage({ page, path: `/study/land/${studyId}?consent=true`, loginAs: 'user' })
-//     await expect(page).toMatchText(/marked as complete/)
+    // now mark complete with consent granted
+    await goToPage({ page, path: `/study/land/${studyId}?consent=true`, loginAs: 'user' })
+    await expect(page).toMatchText(/marked as complete/)
+    await page.click('testId=view-studies')
+    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][data-is-completed="true"]`)
+    await page.click(`[data-study-id="${studyId}"]`)
+    await expect(page).not.toHaveSelector('testId=launch-study', { timeout: 200 })
 
-//     await rmStudy({ page, studyId })
-// })
+    await rmStudy({ page, studyId })
+})
 
-// test('launching study and completing with no consent', async ({ page }) => {
+test('launching study and completing with no consent', async ({ page }) => {
 
-//     await interceptStudyLaunch({ page })
+    await interceptStudyLaunch({ page })
 
-//     const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
-//     await goToPage({ page, path: `/study/details/${studyId}`, loginAs: 'user' })
-//     await page.click('testId=launch-study')
+    const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
+    await goToPage({ page, path: `/studies/details/${studyId}`, loginAs: 'user' })
+    await page.click('testId=launch-study')
 
-//     await goToPage({ page, path: `/study/land/${studyId}?consent=false`, loginAs: 'user' })
-//     await expect(page).not.toMatchText(/Points/)
-//     await expect(page).toMatchText(/marked as complete/)
+    await goToPage({ page, path: `/study/land/${studyId}?consent=false`, loginAs: 'user' })
+    await expect(page).not.toMatchText(/Points/)
+    await expect(page).toMatchText(/marked as complete/)
 
-//     await page.click('testId=view-studies')
-//     await expect(page).toHaveSelector(`[data-study-id="${studyId}"][aria-disabled="true"][role=""]`)
-//     // have to force, it shouldn't be a link
-//     await page.click(`[data-study-id="${studyId}"]`, { force: true })
-//     // should not have navigated
-//     expect(
-//         await page.evaluate(() => document.location.pathname)
-//     ).toMatch(/studies$/)
+    await page.click('testId=view-studies')
+    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][data-is-completed="true"]`)
 
-//     await rmStudy({ page, studyId })
-// })
+    await page.click(`[data-study-id="${studyId}"]`)
+
+    await expect(page).not.toHaveSelector('testId=launch-study', { timeout: 200 })
+    await rmStudy({ page, studyId })
+})

@@ -1,47 +1,65 @@
-import { React, cx, useState, useEffect  } from '@common'
-import { useEventListenerRef, useForkRef, useRefElement } from 'rooks'
+import { React, cx, useCallback, useState, useMemo, useEffect } from '@common'
 import { Icon, Box } from '@components'
-import { Offcanvas as BSOffcanvas } from 'bootstrap'
+import { useEventListenerRef, useForkRef } from 'rooks'
+import BSOffcanvas from 'bootstrap/js/dist/offcanvas'
+import { uniqueId } from 'lodash-es'
 
-export interface OffCanvasProps {
-    isVisible?: boolean
-    title: string
-    onHide(): void
+const useOffCanvas = ({ show, onHide }: { show: boolean, onHide?(): void }) => {
+    const [isVisible, setVisible] = useState(false)
+    const [bs, setBs] = useState<BSOffcanvas | null>(null)
+    const cbRef = useCallback((el: HTMLElement | null) => {
+        if (!el) return
+        const bs = BSOffcanvas.getOrCreateInstance(el)
+        bs
+        setBs(bs)
+    }, [setBs])
+
+    const close = useCallback(() => {
+        setVisible(false)
+    }, [setVisible])
+
+    useEffect(() => {
+        setVisible(show)
+    }, [show])
+
+    useEffect(() => {
+        if (!bs) return
+        isVisible ? bs.show() : bs.hide()
+    }, [bs, isVisible])
+
+    const eventRef = useEventListenerRef('hidden.bs.offcanvas', () => onHide?.())
+    const ref = useForkRef(cbRef, eventRef)
+    return useMemo(() => ({
+        ref,
+        show,
+        close,
+    }), [ref, show])
 }
 
-export const OffCanvas: React.FC<OffCanvasProps> = ({ children, title, isVisible, onHide }) => {
-    const [bs, setBS] = useState<BSOffcanvas>()
-    const [elRef, element] = useRefElement<HTMLElement>();
-    const ref = useForkRef(elRef, useEventListenerRef('hide.bs.offcanvas', onHide))
+interface OffCanvasProps {
+    show: boolean
+    title?: React.ReactNode
+    className?: string
+    onHide?(): void
+}
 
-    useEffect(() => {
-        isVisible ? bs?.show() : bs?.hide()
-    }, [isVisible])
-
-    useEffect(() => {
-        if (!element) return
-        setBS(BSOffcanvas.getOrCreateInstance(element))
-        return () => {
-            bs?.dispose()
-        }
-    }, [element])
-    
+export const OffCanvas: React.FC<OffCanvasProps> = ({ show, onHide, className, children, title }) => {
+    const { ref, close } = useOffCanvas({ show, onHide })
+    const id = useMemo(() => uniqueId('off-canvas'), [])
     return (
         <div
-            className={cx('offcanvas', 'offcanvas-end')}
-            tabIndex={-1}
             ref={ref}
-            id="offcanvas"
-            aria-labelledby={title}
+            className={cx('offcanvas', 'offcanvas-end', className)}
+            tabIndex={-1}
+            aria-labelledby={id}
         >
-            <Box className="offcanvas-header" align="center">
-                <h5 className="offcanvas-title" id="offcanvasLabel">{title}</h5>
-                <Icon icon="close" data-bs-dismiss="offcanvas" aria-label="Close" />
-            </Box>
-            <div className="offcanvas-body">
-                {children}
+            <div className="offcanvas-header">
+                <h5 className="offcanvas-title" id={id}>{title}</h5>
+                <Icon icon="close" onClick={close} />
             </div>
+            <Box className="offcanvas-body" direction="column">
+                {children}
+            </Box>
         </div>
-
     )
 }

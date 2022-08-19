@@ -1,4 +1,4 @@
-import { React } from '@common'
+import { React, useCallback } from '@common'
 import { Box, Icon } from '@components'
 import { get } from 'lodash'
 import { toSentence } from '@lib'
@@ -6,7 +6,6 @@ import { tagOfType, tagsOfType, TagLabels } from '@models'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { CardImages } from '../../components/study-card-images/images'
-import feedbackIcon from '@iconify-icons/bi/chat-left-dots-fill'
 import multiStageIcon from '@iconify-icons/bi/stack'
 import { colors } from '../../theme'
 
@@ -20,6 +19,13 @@ const Card = styled(Box)({
     backgroundColor: 'white',
     padding: '2rem',
     boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.1)',
+    position: 'relative',
+    color: 'inherit',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    '&:hover': {
+        boxShadow: '0px 8px 10px rgba(0, 0, 0, 0.4)',
+    },
 })
 
 const Tag: React.FC<{ tag?: string }> = ({ tag }) => (
@@ -40,7 +46,7 @@ const Feedback: React.FC<StudyCardProps> = ({ study }) => {
 
     return (
         <Box align='center' gap margin="default">
-            <Icon icon={feedbackIcon} color={colors.purple} />
+            <Icon icon="feedback" color={colors.purple} />
             <span css={{ color: colors.darkText }}>Feedback Available</span>
         </Box>
     )
@@ -66,18 +72,34 @@ const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
     if (!study.completedAt) return null
 
     return (
-        <Box gap align="center" pad="default" css={{ color: colors.blackText, backgroundColor: colors.green, position: 'absolute', borderBottomLeftRadius: 20, borderTopLeftRadius: 20, right: 0, top: 40 }}>
+        <Box gap
+            align="center"
+            pad="default"
+            css={{ color: colors.blackText, backgroundColor: colors.green, position: 'absolute', borderBottomLeftRadius: 20, borderTopLeftRadius: 20, right: 0, top: 40 }}
+        >
             <Icon icon="checkCircle" color='white' />
             <span>Complete</span>
         </Box>
     )
 }
 
-export const StudyCard: React.FC<StudyCardProps> = ({ study }) => {
+export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantStudy): void }> = ({
+    onSelect,
+    study,
+}) => {
     const Image = CardImages[study.imageId || 'StemInterest'] || CardImages.StemInterest
 
+    const onClick = useCallback(() => onSelect(study), [onSelect])
     return (
-        <Card className="col study" direction='column' data-study-id={study.id} css={{ position: 'relative' }}>
+        <Card
+            as="a"
+            role={'link'}
+            className="col study"
+            direction='column'
+            data-study-id={study.id}
+            data-is-completed={!!study.completedAt}
+            onClick={onClick}
+        >
             <Image.image name={Image.title} height="200px" css={{ marginBottom: 20, border: `1px solid ${colors.lightGray}`, borderRadius: 8 }} />
             <CompleteFlag study={study} />
             <Box justify='between'>
@@ -96,7 +118,6 @@ export const StudyCard: React.FC<StudyCardProps> = ({ study }) => {
                 <Box gap>
 
                     <div css={{ marginLeft: '0.5rem' }}>{study.durationMinutes} min</div>
-
                     {study.participationPoints && <span>• {study.participationPoints}pts</span>}
                 </Box>
             </Box>
