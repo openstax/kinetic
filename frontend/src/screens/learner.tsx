@@ -6,7 +6,7 @@ import { tagOfType } from '@models'
 import { Global } from '@emotion/react'
 import { sortBy, groupBy } from 'lodash'
 import {
-    Box, Logo, RewardsProgressBar, BannersBar,
+    Box, RewardsProgressBar, BannersBar, NavbarLogoLink,
 } from '@components'
 import { useApi, useEnvironment } from '@lib'
 import {
@@ -160,9 +160,7 @@ const LearnerDashboard = () => {
             <nav className="navbar navbar-light">
                 <div className="navbar-dark bg-dark py-1">
                     <div className="container-lg">
-                        <a href={env?.config.homepageUrl}>
-                            <Logo height={45} />
-                        </a>
+                        <NavbarLogoLink />
                     </div>
                 </div>
                 <BannersBar />

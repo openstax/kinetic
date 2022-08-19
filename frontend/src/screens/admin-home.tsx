@@ -2,7 +2,7 @@ import { React } from '@common'
 import { useEnvironment, useCurrentUser } from '@lib'
 import { Route, Routes, NavLink, Navigate } from 'react-router-dom'
 import {
-    Box, BannersBar, Logo,
+    Box, BannersBar, NavbarLogoLink,
 } from '@components'
 import { AdminBanners } from './admin/banners'
 import { AdminRewards } from './admin/rewards'
@@ -10,7 +10,7 @@ import { AdminRewards } from './admin/rewards'
 export default function AdminHome() {
     const env = useEnvironment()
     const user = useCurrentUser()
-    if (!user.isAdmin) { return <Navigate to="/studies" />  }
+    if (!user.isAdmin) { return <Navigate to="/studies" /> }
 
     return (
         <div className="studies">
@@ -18,9 +18,7 @@ export default function AdminHome() {
                 <div className="navbar-dark bg-dark">
                     <div className="container">
                         <Box justify="between">
-                            <a href={env?.config.homepageUrl} className="py-1">
-                                <Logo height={45} />
-                            </a>
+                            <NavbarLogoLink />
                             <ul className="nav nav-tabs align-self-end">
                                 <li className="nav-item">
                                     <NavLink className="nav-link" aria-current="page" to="/admin/banners">
