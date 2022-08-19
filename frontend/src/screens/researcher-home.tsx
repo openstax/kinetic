@@ -1,12 +1,12 @@
 import { React, cx, useEffect, useState, useNavigate } from '@common'
 import { Studies, Study } from '@api'
 import {
-    Row, Col, Box, Icon, LogoutButton, Logo,
+    Row, Col, Box, Icon, LogoutButton, NavbarLogoLink,
 } from '@components'
-import { useApi, useEnvironment, formatDate } from '@lib'
+import { useApi, formatDate } from '@lib'
 import { StudyStatus, getStatus, getStatusName } from '@models'
 
-const StudyRow:React.FC<{ study: Study }> = ({ study }) => {
+const StudyRow: React.FC<{ study: Study }> = ({ study }) => {
     const nav = useNavigate()
     return (
         <Row
@@ -27,12 +27,12 @@ const StudyRow:React.FC<{ study: Study }> = ({ study }) => {
             </Col>
             <Col sm={2}>{formatDate(study.opensAt)}</Col>
             <Col sm={2}>{getStatusName(study)}</Col>
-            <Col sm={1}><Icon icon="tripleDot" data-test-id="edit-study" onClick={() => nav(`/study/edit/${study.id}`)}/></Col>
+            <Col sm={1}><Icon icon="tripleDot" data-test-id="edit-study" onClick={() => nav(`/study/edit/${study.id}`)} /></Col>
         </Row>
     )
 }
 
-const StudiesTable:React.FC<{ studies: Study[] }> = ({ studies }) => {
+const StudiesTable: React.FC<{ studies: Study[] }> = ({ studies }) => {
     if (!studies.length) return null
 
     return (
@@ -59,7 +59,6 @@ const StudiesTable:React.FC<{ studies: Study[] }> = ({ studies }) => {
 export default function ResearcherHome() {
     const api = useApi()
     const nav = useNavigate()
-    const env = useEnvironment()
     const [studies, setStudies] = useState<Studies>()
     useEffect(() => {
         api.getStudies().then(setStudies)
@@ -72,9 +71,7 @@ export default function ResearcherHome() {
         <div className="container studies mt-8">
             <nav className="navbar fixed-top navbar-light py-1 bg-dark">
                 <div className="container d-flex  justify-content-between">
-                    <a href={env?.config.homepageUrl}>
-                        <Logo height={45} />
-                    </a>
+                    <NavbarLogoLink />
                     <LogoutButton />
                 </div>
             </nav>
