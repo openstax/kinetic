@@ -8,7 +8,7 @@ import { sortBy, groupBy } from 'lodash'
 import {
     Box, RewardsProgressBar, BannersBar, NavbarLogoLink,
 } from '@components'
-import { useApi, useEnvironment } from '@lib'
+import { useApi } from '@lib'
 import {
     isStudyLaunchable, StudyTopicTags, StudyTopicTagIDs, StudyTopicID,
 } from '@models'
@@ -143,7 +143,6 @@ const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
     )
 }
 const LearnerDashboard = () => {
-    const env = useEnvironment()
     const nav = useNavigate()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
     const {

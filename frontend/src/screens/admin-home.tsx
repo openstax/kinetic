@@ -1,5 +1,5 @@
 import { React } from '@common'
-import { useEnvironment, useCurrentUser } from '@lib'
+import { useCurrentUser } from '@lib'
 import { Route, Routes, NavLink, Navigate } from 'react-router-dom'
 import {
     Box, BannersBar, NavbarLogoLink,
@@ -8,7 +8,6 @@ import { AdminBanners } from './admin/banners'
 import { AdminRewards } from './admin/rewards'
 
 export default function AdminHome() {
-    const env = useEnvironment()
     const user = useCurrentUser()
     if (!user.isAdmin) { return <Navigate to="/studies" /> }
 
