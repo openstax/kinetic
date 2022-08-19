@@ -112,7 +112,7 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
                     <Box gap align="center" margin={{ vertical: 'default' }}>
                         <Icon icon="clock" color={colors.purple} />
                         <div css={{ marginLeft: '0.5rem' }}>{study.durationMinutes} min</div>
-                        {study.participationPoints && <span>• {study.participationPoints}pts</span>}
+                        {study.participationPoints && <span> {study.participationPoints}pts</span>}
                     </Box>
                     <StudyPart property="feedbackDescription" title="Feedback Available" icon="feedback" study={study} />
                     <Part icon="warning" title="Notice">
