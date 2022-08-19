@@ -19,6 +19,13 @@ const Card = styled(Box)({
     backgroundColor: 'white',
     padding: '2rem',
     boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.1)',
+    position: 'relative',
+    color: 'inherit',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    '&:hover': {
+        boxShadow: '0px 8px 10px rgba(0, 0, 0, 0.4)',
+    },
 })
 
 const Tag: React.FC<{ tag?: string }> = ({ tag }) => (
@@ -85,13 +92,13 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
     const onClick = useCallback(() => onSelect(study), [onSelect])
     return (
         <Card
+            as="a"
             role={'link'}
             className="col study"
             direction='column'
             data-study-id={study.id}
             data-is-completed={!!study.completedAt}
             onClick={onClick}
-            css={{ position: 'relative' }}
         >
             <Image.image name={Image.title} height="200px" css={{ marginBottom: 20, border: `1px solid ${colors.lightGray}`, borderRadius: 8 }} />
             <CompleteFlag study={study} />
