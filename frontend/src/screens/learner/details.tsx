@@ -48,11 +48,11 @@ const LaunchStudyButton: React.FC<StudyDetailsProps> = ({ study }) => {
 
     if (!isStudyLaunchable(study)) return null
 
-    const onLaunch = async () => {
+    const onLaunch = useCallback(async () => {
         setBusy(true)
         await LaunchStudy(api, study)
         setBusy(false)
-    }
+    }, [api, study, LaunchStudy, setBusy])
     if (study.completedAt) {
         return (
             <b>Completed on {dayjs(study.completedAt).format('LL')}</b>
