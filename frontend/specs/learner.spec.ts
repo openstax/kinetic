@@ -8,11 +8,6 @@ test('displays studies', async ({ page }) => {
     const studyId = await createStudy({ page, opensAt: dayjs().subtract(1, 'day'), name: studyName })
     await goToPage({ page, path: '/studies', loginAs: 'user' })
     await page.waitForSelector(`text=${studyName}`)
-    // await page.waitForTimeout(500)
-    // await page.pause()
-
-    //    await expect(page).toMatchText(RegExp(studyName))
-    //    await page.click(`[data-study-id="${studyId}"]`)
 
     await rmStudy({ page, studyId })
 })
