@@ -1,14 +1,14 @@
 import { React, useEffect, useState, useMemo, useCallback, cx } from '@common'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
-import { colors } from '../theme'
+import { colors, media } from '../theme'
 import { tagOfType } from '@models'
 import { Global } from '@emotion/react'
 import { sortBy, groupBy } from 'lodash'
 import {
     Box, RewardsProgressBar, BannersBar, NavbarLogoLink,
 } from '@components'
-import { useApi } from '@lib'
+import { useApi, useIsMobileDevice } from '@lib'
 import {
     isStudyLaunchable, StudyTopicTags, StudyTopicTagIDs, StudyTopicID,
 } from '@models'
@@ -89,6 +89,17 @@ const Grid = styled.div({
     gridTemplateColumns: 'repeat(3, [col-start] minmax(100px, 1fr) [col-end])',
     gridColumnGap: 20,
     gridRowGap: 20,
+    [media.tablet]: {
+        gridTemplateColumns: 'repeat(2, [col-start] minmax(100px, 1fr) [col-end])',
+    },
+    [media.mobile]: {
+        overflowY: 'auto',
+        display: 'flex',
+        '.col': {
+            maxWidth: '80vw',
+            minWidth: '80vw',
+        },
+    },
 })
 
 const StudyList: React.FC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
@@ -119,6 +130,9 @@ const filterProps = (type: StudyTopicID, filter: StudyTopicID, setType: (t: Stud
 })
 
 const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
+    if (useIsMobileDevice()) {
+        return null
+    }
 
     return (
         <Box gap="large" data-test-id="topic-tabs" wrap margin={{ bottom: 'large' }}
@@ -142,6 +156,34 @@ const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
         </Box >
     )
 }
+
+interface AllSubjectsProps extends FiltersProps {
+    onSelect(study: ParticipantStudy): void
+}
+
+const AllSubjects: React.FC<AllSubjectsProps> = ({
+    onSelect,
+    filter,
+    setFilter,
+    studies,
+}) => {
+    if (useIsMobileDevice()) {
+        return (
+            <>
+                {StudyTopicTagIDs.map((tag) => (
+                    <StudyList key={tag} onSelect={onSelect} title={StudyTopicTags[tag]} className={tag} studies={studies[tag] || []} />
+                ))}
+            </>
+        )
+    }
+
+    return (
+        <StudyList onSelect={onSelect} title="View All Studies" className="filtered" studies={studies[filter] || []} >
+            <Filters studies={studies} filter={filter} setFilter={setFilter} />
+        </StudyList>
+    )
+}
+
 const LearnerDashboard = () => {
     const nav = useNavigate()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
@@ -168,7 +210,7 @@ const LearnerDashboard = () => {
 
             <Splash direction='column' justify='center'>
                 <SplashImage
-                    preserveAspectRatio='xMinYMid slice'
+                    preserveAspectRatio='xMidYMid slice'
                     css={{
                         position: 'absolute',
                         top: 0,
@@ -179,7 +221,7 @@ const LearnerDashboard = () => {
                     }}
                 />
                 <div className="container-lg">
-                    <div css={{ maxWidth: 500, p: { marginBottom: 5 } }}>
+                    <div css={{ maxWidth: '55%', p: { marginBottom: 5 } }}>
                         <h2>Learning Pays,</h2>
                         <h2>In More Ways Than One!</h2>
                         <p>
@@ -194,9 +236,7 @@ const LearnerDashboard = () => {
 
             <StudyList onSelect={onStudySelect} title="Popular Studies on Kinetic" className="popular" studies={popularStudies} />
 
-            <StudyList onSelect={onStudySelect} title="View All Studies" className="filtered" studies={studiesByTopic[filter] || []}>
-                <Filters studies={studiesByTopic} filter={filter} setFilter={setFilter} />
-            </StudyList>
+            <AllSubjects onSelect={onStudySelect} studies={studiesByTopic} filter={filter} setFilter={setFilter} />
 
             <Footer />
         </div >
