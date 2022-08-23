@@ -20,7 +20,7 @@ export const StudyTopicTags = {
 type StudyTopicTagsT = typeof StudyTopicTags
 export type StudyTopicID = keyof StudyTopicTagsT
 
-export const StudyTopicTagIDs = Object.keys(StudyTopicTags) as any as (keyof StudyTopicTagsT)[]
+export const studyTopicTagIDs = Object.keys(StudyTopicTags) as any as (keyof StudyTopicTagsT)[]
 
 export const StudySubjectTags = {
     'subject:biology': 'Biology',

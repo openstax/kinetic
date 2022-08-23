@@ -10,7 +10,7 @@ import {
 } from '@components'
 import { useApi, useIsMobileDevice } from '@lib'
 import {
-    isStudyLaunchable, StudyTopicTags, StudyTopicTagIDs, StudyTopicID,
+    isStudyLaunchable, StudyTopicTags, studyTopicTagIDs, StudyTopicID,
 } from '@models'
 import { StudyCard } from './learner/card'
 import { SplashImage } from './learner/splash-image'
@@ -147,7 +147,7 @@ const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
                 },
             }}
         >
-            {StudyTopicTagIDs.map((tag) => (
+            {studyTopicTagIDs.map((tag) => (
                 studies[tag]?.length ?
                     <span role="tab" key={tag} {...filterProps(tag, filter, setFilter)}>{StudyTopicTags[tag]}</span> : null
             ))}
@@ -168,7 +168,7 @@ const AllSubjects: React.FC<AllSubjectsProps> = ({
     if (useIsMobileDevice()) {
         return (
             <>
-                {StudyTopicTagIDs.map((tag) => (
+                {studyTopicTagIDs.map((tag) => (
                     <StudyList key={tag} onSelect={onSelect} title={StudyTopicTags[tag]} className={tag} studies={studies[tag] || []} />
                 ))}
             </>
