@@ -4,6 +4,12 @@ import dayjs from 'dayjs'
 import { retry } from '../lib/util'
 import { User } from './user'
 
+export interface UserInfo {
+    id: string
+    full_name: string
+    contact_infos: Array<{ type: string, value: string }>
+}
+
 export class Environment {
 
     static async bootstrap() {
@@ -31,9 +37,14 @@ export class Environment {
     get accounts_url() {
         if (ENV.IS_DEV_MODE) return '/dev/user'
         if (this.config.accountsEnvName == 'production') {
-            return 'https://openstax.org'
+            return 'https://openstax.org/accounts'
         }
-        return `https://${this.config.accountsEnvName}.openstax.org`
+        return `https://${this.config.accountsEnvName}.openstax.org/accounts`
+    }
+
+    get accounts_api_url() {
+        if (ENV.IS_DEV_MODE) return `${ENV.API_ADDRESS}/development/user/api/user`
+        return `${this.accounts_url}/api/user`
     }
 
     get currentRewardSegment() {
@@ -42,4 +53,10 @@ export class Environment {
             dayjs(s.startAt).isBefore(now) && dayjs(s.endAt).isAfter(now)
         ))
     }
+
+    async fetchUserInfo(): Promise<UserInfo> {
+        const resp = await fetch(`${this.accounts_api_url}`, { credentials: 'include' })
+        return resp.json()
+    }
+
 }

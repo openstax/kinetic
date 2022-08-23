@@ -2,6 +2,7 @@ import plusCircle from '@iconify-icons/bi/plus-circle'
 import close from '@iconify-icons/bi/x-square'
 import x from '@iconify-icons/bi/x'
 import back from '@iconify-icons/bi/chevron-double-left'
+import right from '@iconify-icons/bi/chevron-right'
 import tripleDot from '@iconify-icons/bi/three-dots'
 import cancel from '@iconify-icons/bi/x-circle'
 import trash from '@iconify-icons/bi/trash'
@@ -13,6 +14,7 @@ import spin from '@iconify-icons/bi/arrow-clockwise'
 import heart from '@iconify-icons/bi/heart-fill'
 import warning from '@iconify-icons/bi/exclamation-triangle-fill'
 import rolodex from '@iconify-icons/bi/person-rolodex'
+import list from '@iconify-icons/bi/list'
 
 export const ICONS = {
     x,
@@ -30,4 +32,6 @@ export const ICONS = {
     heart,
     warning,
     rolodex,
+    list,
+    right,
 }

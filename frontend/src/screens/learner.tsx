@@ -6,14 +6,13 @@ import { tagOfType } from '@models'
 import { Global } from '@emotion/react'
 import { sortBy, groupBy } from 'lodash'
 import {
-    Box, RewardsProgressBar, BannersBar, NavbarLogoLink,
+    Box, RewardsProgressBar, TopNavBar, Footer,
 } from '@components'
 import { useApi, useIsMobileDevice } from '@lib'
 import {
     isStudyLaunchable, StudyTopicTags, StudyTopicTagIDs, StudyTopicID,
 } from '@models'
 import { StudyCard } from './learner/card'
-import { Footer } from './learner/footer'
 import { SplashImage } from './learner/splash-image'
 import { StudyModal } from './studies/modal'
 import { StudyDetails } from './learner/details'
@@ -198,14 +197,7 @@ const LearnerDashboard = () => {
             </Routes>
             <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
             <Global styles={{ background: colors.pageBackground }} />
-            <nav className="navbar navbar-light">
-                <div className="navbar-dark bg-dark py-1">
-                    <div className="container-lg">
-                        <NavbarLogoLink />
-                    </div>
-                </div>
-                <BannersBar />
-            </nav>
+            <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 
             <Splash direction='column' justify='center'>
@@ -238,7 +230,7 @@ const LearnerDashboard = () => {
 
             <AllSubjects onSelect={onStudySelect} studies={studiesByTopic} filter={filter} setFilter={setFilter} />
 
-            <Footer />
+            <Footer includeFunders />
         </div >
     )
 }

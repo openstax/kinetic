@@ -6,6 +6,15 @@ class Development::UsersController < ApplicationController; end
 return unless Kinetic.allow_stubbed_authentication?
 
 class Development::UsersController < ApplicationController
+  MOCK_USERS = [
+    { user_id: '00000000-0000-0000-0000-000000000001', role: 'admin', name: 'Admin Uno' },
+    { user_id: '00000000-0000-0000-0000-000000000001', role: 'researcher', name: 'Researcher Uno' },
+    { user_id: '00000000-0000-0000-0000-000000000002', role: 'user', name: 'User Uno' },
+    { user_id: '00000000-0000-0000-0000-000000000003', role: 'user', name: 'User Dos' },
+    { user_id: '00000000-0000-0000-0000-000000000004', role: 'user', name: 'User Tres' },
+    { user_id: '00000000-0000-0000-0000-000000000005', role: 'user', name: 'User Cuatro' }
+  ].freeze
+
   before_action :validate_not_real_production # belt and suspenders
 
   include ActionController::Cookies
@@ -40,12 +49,7 @@ class Development::UsersController < ApplicationController
       users[:admins] ||= []
       users[:admins].push({ user_id: admin.user_id, name: 'admin' })
     end
-    users[:users] = [
-      { user_id: '00000000-0000-0000-0000-000000000002' },
-      { user_id: '00000000-0000-0000-0000-000000000003' },
-      { user_id: '00000000-0000-0000-0000-000000000004' },
-      { user_id: '00000000-0000-0000-0000-000000000005' }
-    ]
+    users[:users] = MOCK_USERS.map { |u| u[:user_id] }
     render json: users, status: :ok
   end
 
@@ -55,4 +59,19 @@ class Development::UsersController < ApplicationController
     head :ok
   end
 
+  def user_info
+    user = MOCK_USERS.find { |u| u[:user_id] == current_user_uuid }
+    if user.nil?
+      head :not_found
+      return
+    end
+
+    render json: {
+      id: user[:user_id],
+      full_name: user[:name],
+      contact_infos: [{
+        type: 'EmailAddress', value: "#{user[:name].parameterize}@test.openstax.org"
+      }]
+    }
+  end
 end

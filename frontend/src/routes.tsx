@@ -12,6 +12,7 @@ const EditStudy = loadAsync('Edit Study Details', () => import('./screens/study-
 const Researcher = loadAsync('Studies', () => import('./screens/researcher-home'))
 const LearnerDashboard = loadAsync('Studies', () => import('./screens/learner'))
 const AdminHomepage = loadAsync('Admin', () => import('./screens/admin-home'))
+const AccountDetails = loadAsync('Account', () => import('./screens/account-details'))
 
 const StudiesHomepage = () => {
     const user = useCurrentUser()
@@ -31,6 +32,7 @@ export const AppRoutes = () => {
                 <Route path="/dev/*" element={<Dev />} />
                 <Route path="/study/land/:studyId" element={<StudyLanding />} />
                 <Route path={'/study/edit/:id'} element={<EditStudy />} />
+                <Route path="/account" element={<AccountDetails />} />
                 <Route path="/studies/*" element={<StudiesHomepage />} />
                 <Route path="/admin/*" element={<AdminHomepage />} />
                 <Route path="*" element={<PageNotFound />} />
