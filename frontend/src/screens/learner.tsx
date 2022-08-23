@@ -10,7 +10,7 @@ import {
 } from '@components'
 import { useApi, useIsMobileDevice } from '@lib'
 import {
-    isStudyLaunchable, StudyTopicTags, StudyTopicTagIDs, StudyTopicID,
+    isStudyLaunchable, StudyTopicTags, studyTopicTagIDs, StudyTopicID,
 } from '@models'
 import { StudyCard } from './learner/card'
 import { SplashImage } from './learner/splash-image'
@@ -19,7 +19,6 @@ import { StudyDetails } from './learner/details'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 
 const Splash = styled(Box)({
-    height: 400,
     width: '100%',
     overflow: 'hidden',
     position: 'relative',
@@ -148,7 +147,7 @@ const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
                 },
             }}
         >
-            {StudyTopicTagIDs.map((tag) => (
+            {studyTopicTagIDs.map((tag) => (
                 studies[tag]?.length ?
                     <span role="tab" key={tag} {...filterProps(tag, filter, setFilter)}>{StudyTopicTags[tag]}</span> : null
             ))}
@@ -169,7 +168,7 @@ const AllSubjects: React.FC<AllSubjectsProps> = ({
     if (useIsMobileDevice()) {
         return (
             <>
-                {StudyTopicTagIDs.map((tag) => (
+                {studyTopicTagIDs.map((tag) => (
                     <StudyList key={tag} onSelect={onSelect} title={StudyTopicTags[tag]} className={tag} studies={studies[tag] || []} />
                 ))}
             </>
@@ -185,6 +184,7 @@ const AllSubjects: React.FC<AllSubjectsProps> = ({
 
 const LearnerDashboard = () => {
     const nav = useNavigate()
+    const isMobile = useIsMobileDevice()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
     const {
         popularStudies, mandatoryStudy, allStudies, filter, onMandatoryClose, setFilter, studiesByTopic,
@@ -200,7 +200,7 @@ const LearnerDashboard = () => {
             <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 
-            <Splash direction='column' justify='center'>
+            <Splash direction='column' justify='center' height={`${isMobile ? '400' : '600'}px`} className="splash">
                 <SplashImage
                     preserveAspectRatio='xMidYMid slice'
                     css={{

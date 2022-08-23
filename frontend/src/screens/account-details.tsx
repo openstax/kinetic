@@ -1,8 +1,7 @@
-import { React, useEffect, useState } from '@common'
+import { React } from '@common'
 import styled from '@emotion/styled'
 import { colors } from '../theme'
-import { useEnvironment } from '@lib'
-import { UserInfo } from '@models'
+import { useUserInfo, useEnvironment } from '@lib'
 import {
     TopNavBar, Box, Icon, LoadingAnimation, Footer,
 } from '@components'
@@ -37,12 +36,8 @@ const Wrapper = styled.div({
 })
 
 export default function AdminHome() {
-    const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
     const env = useEnvironment()
-
-    useEffect(() => {
-        env.fetchUserInfo().then(setUserInfo)
-    }, [])
+    const userInfo = useUserInfo()
 
     if (!userInfo) return <LoadingAnimation message="Loading account…" />;
 
