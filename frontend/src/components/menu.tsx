@@ -1,5 +1,5 @@
 import { React, cx, useMemo, useState, useCallback } from '@common'
-
+import { useUserInfo, useIsMobileDevice } from '@lib'
 import { Icon } from './icon'
 import { Box } from 'boxible'
 import { uniqueId } from 'lodash-es'
@@ -10,13 +10,17 @@ export interface MenuProps {
     className?: string
     menuClassName?: string
 }
+
 export const Menu: React.FC<MenuProps> = ({
     children, className, alignEnd, menuClassName,
 }) => {
+    const isMobile = useIsMobileDevice()
+    const userInfo = useUserInfo()
+
     const [isOpen, setOpen] = useState(false)
     const [popover, setPopover] = useState<HTMLDivElement | null>(null)
 
-    const [target, setTarget] = useState<SVGSVGElement | null>(null)
+    const [target, setTarget] = useState<SVGSVGElement | HTMLDivElement | null>(null)
 
     const { styles, attributes } = usePopper(target, popover, {
         placement: `bottom-${alignEnd ? 'end' : 'start'}`,
@@ -35,7 +39,7 @@ export const Menu: React.FC<MenuProps> = ({
         onClose()
     }, [onClose])
 
-    const onMenuClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
+    const onMenuClick = (ev: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
         ev.stopPropagation()
         if (isOpen) {
             onClose()
@@ -44,16 +48,20 @@ export const Menu: React.FC<MenuProps> = ({
             setOpen(true)
         }
     }
+    const toggleProps = { id: btnId, ref: setTarget, onClick: onMenuClick, className: cx(className, 'dropdown-toggler') }
+    const menuToggle = isMobile ? (
+        <Icon icon="list"
+            {...toggleProps}
+            height={30}
+            color="white"
+        />
+    ) : (
+        <div css={{ color: 'white', alignSelf: 'center', cursor: 'pointer' }} {...toggleProps}>Hi {userInfo?.full_name}</div>
+    )
+
     return (
         <Box className="dropdown">
-            <Icon icon="list"
-                id={btnId}
-                ref={setTarget}
-                onClick={onMenuClick}
-                className={cx(className, 'dropdown-toggler')}
-                height={30}
-                color="white"
-            />
+            {menuToggle}
             <div
                 className={cx('dropdown-menu', menuClassName, {
                     show: isOpen,
