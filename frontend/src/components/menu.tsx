@@ -56,7 +56,7 @@ export const Menu: React.FC<MenuProps> = ({
             color="white"
         />
     ) : (
-        <div css={{ color: 'white', alignSelf: 'center', cursor: 'pointer' }} {...toggleProps}>Hi {userInfo?.full_name}</div>
+        <div css={{ color: 'white', alignSelf: 'center', cursor: 'pointer', whiteSpace: 'nowrap' }} {...toggleProps}>Hi {userInfo?.full_name}</div>
     )
 
     return (
