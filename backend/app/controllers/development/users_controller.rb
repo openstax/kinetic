@@ -49,7 +49,7 @@ class Development::UsersController < ApplicationController
       users[:admins] ||= []
       users[:admins].push({ user_id: admin.user_id, name: 'admin' })
     end
-    users[:users] = MOCK_USERS.map { |u| u[:user_id] }
+    users[:users] = MOCK_USERS.filter { |u| u[:role] == 'user' }
     render json: users, status: :ok
   end
 
