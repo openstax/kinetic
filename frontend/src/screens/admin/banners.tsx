@@ -41,6 +41,7 @@ const Banner: React.FC<{ banner: BannerNotice, onUpdate(): void }> = ({ banner, 
             <Box className="card-body" direction="column">
                 <Form
                     onSubmit={saveBanner}
+                    showControls={!banner.id}
                     validationSchema={Yup.object().shape({
                         message: Yup.string().required(),
                         startAt: Yup.string().required(),
@@ -67,7 +68,7 @@ export function AdminBanners() {
     if (state.busy) return state.busy
 
     return (
-        <div>
+        <div className="banners">
             <Box justify="between" align="center" margin="bottom">
                 <h4>Scheduled Banners</h4>
                 <Icon height={15} icon="plusCircle" data-test-id="add-banner" onClick={state.addNewRecord} />

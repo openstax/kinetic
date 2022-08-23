@@ -39,6 +39,7 @@ const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, on
             <Box className="card-body" direction="column">
                 <Form
                     onSubmit={saveReward}
+                    showControls={!reward.id}
                     validationSchema={Yup.object().shape({
                         points: Yup.string().required(),
                         prize: Yup.string().required(),
@@ -75,7 +76,7 @@ export function AdminRewards() {
     if (state.busy) return state.busy
 
     return (
-        <div>
+        <div className="rewards">
             <Box justify="between" align="center" margin="bottom">
                 <h4>Scheduled Rewards</h4>
                 <Icon height={15} icon="plusCircle" data-test-id="add-reward" onClick={state.addNewRecord} />
