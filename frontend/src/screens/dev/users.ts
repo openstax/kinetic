@@ -30,5 +30,4 @@ export class AvailableUsers {
             this.researchers = researchers.map(u => new User({ ...u, isResearcher: true }))
         }
     }
-
 }

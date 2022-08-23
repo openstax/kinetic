@@ -24,6 +24,7 @@ interface IconifyIconDefinition {
 export type IconKey = keyof typeof ICONS
 
 export interface IconProps extends Omit<IconifyIcon, 'icon' | 'body'> {
+    id?: string
     icon: IconKey | IconifyIconDefinition | IconifyIcon
     title?: string
     color?: string
@@ -35,12 +36,21 @@ export interface IconProps extends Omit<IconifyIcon, 'icon' | 'body'> {
     onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-export const Icon: React.FC<IconProps> = ({
-    icon: iconProp, tooltip, onClick, children, busy, buttonStyles = {}, tooltipProps = {}, ...iconProps
-}) => {
+export const Icon = React.forwardRef<SVGSVGElement, React.PropsWithChildren<IconProps>>((
+    forwardedProps,
+    ref
+) => {
+
+    const {
+        id, icon: iconProp, tooltip, onClick, children, busy, buttonStyles = {}, tooltipProps = {}, ...iconProps
+    } = forwardedProps
+
+    //  ) => {
     const icon = busy ? 'spin' : iconProp
     const iconEl = (
         <IconifyIconComponent
+            id={id}
+            ref={ref as any}
             icon={typeof icon === 'object' ? icon : ICONS[icon]}
             css={icon == 'spin' ? spinCSS : {}}
             {...iconProps}
@@ -75,4 +85,4 @@ export const Icon: React.FC<IconProps> = ({
         )
     }
     return iconEl
-}
+})

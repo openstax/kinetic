@@ -1,7 +1,7 @@
 import { React, cx, useEffect, useState, useNavigate } from '@common'
 import { Studies, Study } from '@api'
 import {
-    Row, Col, Box, Icon, LogoutButton, NavbarLogoLink,
+    Row, Col, Box, Icon, TopNavBar,
 } from '@components'
 import { useApi, formatDate } from '@lib'
 import { StudyStatus, getStatus, getStatusName } from '@models'
@@ -69,12 +69,7 @@ export default function ResearcherHome() {
 
     return (
         <div className="container studies mt-8">
-            <nav className="navbar fixed-top navbar-light py-1 bg-dark">
-                <div className="container d-flex  justify-content-between">
-                    <NavbarLogoLink />
-                    <LogoutButton />
-                </div>
-            </nav>
+            <TopNavBar />
             <Box align="center" justify="between">
                 <h1>Studies</h1>
                 <Icon
