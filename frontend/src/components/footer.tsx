@@ -41,16 +41,16 @@ export const Footer: React.FC<{ includeFunders?: boolean }> = ({ includeFunders 
             <div css={{ backgroundColor: 'black', color: 'white', a: { color: 'white', textDecoration: 'none' } }}>
                 <div className='container-lg'>
                     <Row css={{ padding: '20px 0' }}>
-                        <Col direction="column">
+                        <Col auto direction="column">
                             <b>Need Help?</b>
                             <a className="text-decoration-none" href="mailto:kinetic@openstax.org?subject=[Kinetic help]"><Icon icon={envelopeIcon} /> Contact us at kinetic@openstax.org</a>
                         </Col>
-                        <Col direction="column">
+                        <Col auto direction="column">
                             <b>Resource</b>
                             <a href="https://openstax.org/privacy-policy">FAQs</a>
                             <a href="https://openstax.org/privacy-policy">Privacy Policy</a>
                         </Col>
-                        <Col direction="column">
+                        <Col auto direction="column">
                             <b>Follow us</b>
                             <Box gap>
                                 <a href="http://facebook.com"><Icon icon={fbIcon} /></a>
