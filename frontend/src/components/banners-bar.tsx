@@ -24,6 +24,7 @@ export const BannersBar: React.FC = () => {
     return (
         <div
             css={{
+                margin: '0 10px',
                 color: 'white',
                 fontSize: '1.8rem',
                 backgroundColor: colors.teal,

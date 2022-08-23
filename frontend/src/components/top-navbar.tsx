@@ -15,7 +15,7 @@ export const TopNavBar: React.FC = ({ children }) => {
         <nav className="navbar navbar-light">
             <div className="navbar-dark bg-dark py-1">
                 <div className="container-lg">
-                    <Box justify="between">
+                    <Box justify="between" align="end">
                         <NavbarLogoLink />
                         {!isMobile && <BannersBar />}
                         {children}
@@ -28,6 +28,6 @@ export const TopNavBar: React.FC = ({ children }) => {
                 </div>
             </div>
             {isMobile && <BannersBar />}
-        </nav>
+        </nav >
     )
 }
