@@ -51,7 +51,7 @@ export default function AdminHome() {
     return (
         <Wrapper className="account">
             <TopNavBar />
-            <div className="container-lg">
+            <div className="container">
                 <h1>My Account</h1>
                 <Box justify='between'>
                     <h5>General</h5>
