@@ -19,7 +19,6 @@ import { StudyDetails } from './learner/details'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 
 const Splash = styled(Box)({
-    height: 400,
     width: '100%',
     overflow: 'hidden',
     position: 'relative',
@@ -185,6 +184,7 @@ const AllSubjects: React.FC<AllSubjectsProps> = ({
 
 const LearnerDashboard = () => {
     const nav = useNavigate()
+    const isMobile = useIsMobileDevice()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
     const {
         popularStudies, mandatoryStudy, allStudies, filter, onMandatoryClose, setFilter, studiesByTopic,
@@ -200,7 +200,7 @@ const LearnerDashboard = () => {
             <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 
-            <Splash direction='column' justify='center'>
+            <Splash direction='column' justify='center' height={`${isMobile ? '400' : '600'}px`} className="splash">
                 <SplashImage
                     preserveAspectRatio='xMidYMid slice'
                     css={{
