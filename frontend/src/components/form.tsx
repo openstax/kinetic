@@ -5,7 +5,7 @@ import {
     Formik, Form as FormikForm, FormikHelpers, useFormikContext, FormikConfig, FormikProps,
 } from 'formik'
 import { Button, ButtonProps } from './button'
-import { Footer } from './footer'
+import { Box } from 'boxible'
 
 interface FormContextI {
     readOnly?: boolean
@@ -23,6 +23,23 @@ interface FormProps<T> extends FormikConfig<T> {
     onCancel?(): void
     showControls?: boolean
     action?: string
+}
+
+const Footer: React.FC<{ className?: string, isBottom?: boolean }> = ({ className, isBottom, children }) => {
+    return (
+        <Box
+            gap
+            className={cx('footer', className)}
+            justify={isBottom ? 'center' : 'end'}
+            css={{
+                borderTop: '1px solid #ced4da',
+                marginTop: '1rem',
+                paddingTop: '1rem',
+            }}
+        >
+            {children}
+        </Box>
+    )
 }
 
 export type FormSubmitHandler<T> = (values: T, helpers: FormikHelpers<T>) => Promise<void>
@@ -46,7 +63,7 @@ export function Form<T>(props: React.PropsWithChildren<FormProps<T>>): JSX.Eleme
 }
 
 
-export const FormCancelButton:React.FC<ButtonProps> = ({ children, ...props }) => {
+export const FormCancelButton: React.FC<ButtonProps> = ({ children, ...props }) => {
     const fc = useFormikContext()
     const { isSubmitting } = fc
     return (
@@ -57,7 +74,7 @@ export const FormCancelButton:React.FC<ButtonProps> = ({ children, ...props }) =
     )
 }
 
-export const FormSaveButton:React.FC<ButtonProps> = ({ children, ...props }) => {
+export const FormSaveButton: React.FC<ButtonProps> = ({ children, ...props }) => {
     const fc = useFormikContext()
     const { isSubmitting } = fc
     return (
