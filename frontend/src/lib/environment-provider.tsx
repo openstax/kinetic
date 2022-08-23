@@ -1,5 +1,5 @@
-import { React, useEffect } from '@common'
-import { Environment, ANON_USER } from '@models'
+import { React, useEffect, useState } from '@common'
+import { Environment, ANON_USER, UserInfo } from '@models'
 import { LoadingAnimation, IncorrectUser, ErrorPage } from '@components'
 import { useLocation } from 'react-router-dom'
 import { ENV } from './env'
@@ -7,8 +7,8 @@ import { ENV } from './env'
 export const EnvironmentContext = React.createContext<Environment | null>(null)
 
 
-export const EnvironmentProvider:React.FC = ({ children }) => {
-    const [currentEnv, setEnvironment] = React.useState<Environment|null>(null)
+export const EnvironmentProvider: React.FC = ({ children }) => {
+    const [currentEnv, setEnvironment] = React.useState<Environment | null>(null)
 
     const [error, setError] = React.useState<any>(false)
     const location = useLocation()
@@ -38,3 +38,12 @@ export const EnvironmentProvider:React.FC = ({ children }) => {
 export const useEnvironment = () => React.useContext(EnvironmentContext) as Environment
 
 export const useCurrentUser = () => useEnvironment()?.user || ANON_USER
+
+export const useUserInfo = () => {
+    const env = useEnvironment()
+    const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
+    useEffect(() => {
+        env.fetchUserInfo().then(setUserInfo)
+    }, [])
+    return userInfo
+}
