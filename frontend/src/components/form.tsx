@@ -1,69 +1,95 @@
 import {
-    React, cx, useContext,
-} from '../common'
+    React, cx, useContext, useMemo,
+} from '@common'
+import styled from '@emotion/styled'
 import {
-    Formik, Form as FormikForm, FormikHelpers, useFormikContext, FormikConfig, FormikProps,
+    Formik, Form as FormikForm, useFormikContext, FormikConfig, FormikProps,
 } from 'formik'
+import { Box, BoxProps } from 'boxible'
+import { ErrorAlert, ErrorTypes } from './alert'
 import { Button, ButtonProps } from './button'
-import { Box } from 'boxible'
+import { emptyFn } from '@lib'
+
+
+const ERROR_FIELD_KEY = 'FORM_ERROR'
+
+export type FormContext<T> = FormContextI & FormikProps<T>
 
 interface FormContextI {
     readOnly?: boolean
+    setFormError(error?: ErrorTypes): void
 }
 
-export const FormContext = React.createContext<FormContextI>({})
+export const FORM_CONTEXT = React.createContext<FormContextI>({
+    setFormError: emptyFn,
+})
+
 
 export function useFormContext<T>(): (FormContextI & FormikProps<T>) {
-    return useContext(FormContext) as (FormContextI & FormikProps<T>)
+    return useContext(FORM_CONTEXT) as (FormContextI & FormikProps<T>)
 }
 
+export type FormSubmitHandler<T> = FormikConfig<T>['onSubmit']
+export type FormCancelHandler<T> = (fc: FormContext<T>) => void
+export type FormDeleteHandler<T> = (fc: FormContext<T>) => void
+
+
 interface FormProps<T> extends FormikConfig<T> {
+    children: React.ReactNode
     className?: string
     readOnly?: boolean
-    onCancel?(): void
+    onDelete?: FormDeleteHandler<T>
+    onCancel?: FormCancelHandler<T>
     showControls?: boolean
     action?: string
 }
 
-const Footer: React.FC<{ className?: string, isBottom?: boolean }> = ({ className, isBottom, children }) => {
+const FooterWrapper = styled(Box)(props => ({
+    ...props.theme.css.topLine,
+}))
+
+const Footer: FCWC<{ className?: string } & BoxProps> = ({ className, children, ...boxProps }) => {
     return (
-        <Box
-            gap
-            className={cx('footer', className)}
-            justify={isBottom ? 'center' : 'end'}
-            css={{
-                borderTop: '1px solid #ced4da',
-                marginTop: '1rem',
-                paddingTop: '1rem',
-            }}
-        >
+        <FooterWrapper className={cx('footer', className)} justify="end" gap {...boxProps}>
             {children}
-        </Box>
+        </FooterWrapper>
     )
 }
 
-export type FormSubmitHandler<T> = (values: T, helpers: FormikHelpers<T>) => Promise<void>
+function InnerForm<T>(formProps: FormProps<T>) {
+    const { className, action, children, readOnly } = formProps
 
-export function Form<T>(props: React.PropsWithChildren<FormProps<T>>): JSX.Element {
-    const { readOnly, className, children, action, ...formProps } = props
+    const C: React.FC<FormikProps<T>> = (props) => {
+
+        const context = useMemo(() => ({
+            readOnly,
+            setFormError: (err: ErrorTypes) => props.setFieldError(ERROR_FIELD_KEY, err as any),
+            ...props,
+        }), [props])
+
+
+        return (
+            <FormikForm method="POST" className={className} action={action}>
+                <FORM_CONTEXT.Provider value={context}>
+                    {children}
+                </FORM_CONTEXT.Provider>
+            </FormikForm>
+        )
+    }
+    return C
+}
+
+export function Form<T>(props: PropsWithChildren<FormProps<T>>): JSX.Element {
     return (
         <Formik
-            {...formProps}
-        >
-            {(formState) => (
-                <FormikForm method="POST" className={className} action={action}>
-                    <FormContext.Provider value={{ ...formState, readOnly }}>
-                        {children}
-
-                    </FormContext.Provider>
-                </FormikForm>
-            )}
-        </Formik>
+            {...props}
+            component={InnerForm<T>(props)}
+        />
     )
 }
 
 
-export const FormCancelButton: React.FC<ButtonProps> = ({ children, ...props }) => {
+export const FormCancelButton: FCWC<ButtonProps> = ({ children, ...props }) => {
     const fc = useFormikContext()
     const { isSubmitting } = fc
     return (
@@ -74,23 +100,33 @@ export const FormCancelButton: React.FC<ButtonProps> = ({ children, ...props }) 
     )
 }
 
-export const FormSaveButton: React.FC<ButtonProps> = ({ children, ...props }) => {
+export const FormSaveButton: FCWC<ButtonProps> = ({
+    children,
+    busyMessage = 'Saving',
+    type = 'submit',
+    ...props }) => {
     const fc = useFormikContext()
+
     const { isSubmitting } = fc
     return (
         <Button
+            type={type}
+            busyMessage={busyMessage}
             busy={isSubmitting}
             {...props}
         >{children}</Button>
     )
 }
 
-interface SaveCancelBtnProps {
+interface SaveCancelBtnProps<T> {
     showControls?: boolean
-    onCancel?(): void
+    onDelete?: FormDeleteHandler<T>
+    onCancel?: FormCancelHandler<T>
 }
-const SaveCancelBtn: React.FC<SaveCancelBtnProps> = ({ onCancel, showControls }) => {
-    const fc = useFormikContext()
+function SaveCancelBtn<T>({
+    onCancel, onDelete, showControls,
+}: SaveCancelBtnProps<T>): JSX.Element | null {
+    const fc = useFormContext<T>()
     const { isSubmitting, resetForm, dirty } = fc
     if (!showControls && !dirty) { return null }
 
@@ -101,34 +137,59 @@ const SaveCancelBtn: React.FC<SaveCancelBtnProps> = ({ onCancel, showControls })
 
     const onFormCancel = async () => {
         resetForm()
-        onCancel?.()
+        onCancel?.(fc)
     }
 
+    const onFormDelete = () => onDelete?.(fc)
+
     return (
-        <Footer>
-            <Button
-                data-test-id="form-cancel-btn"
-                disabled={isSubmitting}
-                onClick={onFormCancel}
-            >Cancel</Button>
-            <Button
-                data-test-id="form-save-btn"
-                busy={isSubmitting}
-                onClick={onSubmit}
-                primary
-            >Save</Button>
-        </Footer>
+        <Footer justify={onDelete ? 'between' : 'end'}>
+            {onDelete && (
+                <Button
+                    danger
+                    data-test-id="form-delete-btn"
+                    disabled={isSubmitting}
+                    onClick={onFormDelete}
+                >Delete</Button>
+
+            )}
+            <Box gap>
+                {onCancel && (
+                    <Button
+                        data-test-id="form-cancel-btn"
+                        disabled={isSubmitting}
+                        onClick={onFormCancel}
+                    >Cancel</Button>
+                )}
+                <Button
+                    data-test-id="form-save-btn"
+                    busy={isSubmitting}
+                    onClick={onSubmit}
+                    primary
+                >Save</Button>
+            </Box>
+        </Footer >
     )
 }
 
+export function FormSaveError<T>() {
+    const fc = useFormikContext<T>()
+    const onDismiss = () => {
+        fc.setFieldError(ERROR_FIELD_KEY, undefined)
+    }
+    return (
+        <ErrorAlert error={(fc.errors as any)['FORM_ERROR'] as any} onDismiss={onDismiss} />
+    )
+}
 
 export function EditingForm<T>({
-    children, showControls, className, onCancel, ...props
+    children, showControls, className, onCancel, onDelete, ...props
 }: FormProps<T>): JSX.Element {
     return (
         <Form {...props} className={cx('editing', 'row', className)}>
             {children}
-            <SaveCancelBtn onCancel={onCancel} showControls={showControls} />
+            <FormSaveError />
+            <SaveCancelBtn onCancel={onCancel} onDelete={onDelete} showControls={showControls} />
         </Form>
     )
 }

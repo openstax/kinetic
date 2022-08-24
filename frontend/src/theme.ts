@@ -15,7 +15,7 @@ export const colors = {
     darkText: '#151B2C',
     blackText: '#424242',
     input: { border: '#ced4da' },
-
+    line: '#cfcfcf',
     linkButtonIcon: '#DBDBDB',
     linkButtonIconHover: '#151B2C',
 }
@@ -33,3 +33,28 @@ export const media = {
     tablet: `@media (min-width: ${screenSizes['md']}px) and (max-width: ${screenSizes['xl']}px)`,
     desktop: `@media (min-width: ${screenSizes['xl']}px)`,
 }
+
+const makeLine = (side: string) => ({
+    [`border${side}`]: `1px solid ${colors.line}`,
+    [`margin${side}`]: '1rem',
+    [`padding${side}`]: '1rem',
+})
+
+
+export const theme = {
+    colors,
+    media,
+    line: `1px solid ${colors.line}`,
+    subtleBorder: `1px solid ${colors.line}`,
+    css: {
+        topLine: makeLine('Top'),
+        bottomLine: makeLine('Bottom'),
+        box: {
+            border: `1px solid ${colors.line}`,
+            padding: '1rem',
+        },
+    },
+}
+
+type ThemeT = typeof theme
+export type { ThemeT }
