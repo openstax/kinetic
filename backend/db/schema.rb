@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_17_161302) do
+ActiveRecord::Schema.define(version: 2022_08_24_152243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,17 @@ ActiveRecord::Schema.define(version: 2022_08_17_161302) do
     t.datetime "created_at"
     t.index ["study_id"], name: "index_participant_metadata_on_study_id"
     t.index ["user_id"], name: "index_participant_metadata_on_user_id"
+  end
+
+  create_table "participant_preference", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.boolean "cycle_deadlines_email", default: true, null: false
+    t.boolean "prize_cycle_email", default: true, null: false
+    t.boolean "study_available_email", default: true, null: false
+    t.boolean "session_available_email", default: true, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_participant_preference_on_user_id"
   end
 
   create_table "research_ids", id: :text, force: :cascade do |t|
@@ -130,6 +141,17 @@ ActiveRecord::Schema.define(version: 2022_08_17_161302) do
     t.index ["researcher_id", "study_id"], name: "index_study_researchers_on_researcher_id_and_study_id", unique: true
     t.index ["researcher_id"], name: "index_study_researchers_on_researcher_id"
     t.index ["study_id"], name: "index_study_researchers_on_study_id"
+  end
+
+  create_table "user_preferences", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.boolean "cycle_deadlines_email", default: true, null: false
+    t.boolean "prize_cycle_email", default: true, null: false
+    t.boolean "study_available_email", default: true, null: false
+    t.boolean "session_available_email", default: true, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_preferences_on_user_id"
   end
 
   add_foreign_key "launched_stages", "stages"

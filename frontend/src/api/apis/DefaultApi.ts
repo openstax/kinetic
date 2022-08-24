@@ -69,6 +69,9 @@ import {
     UpdateBanner,
     UpdateBannerFromJSON,
     UpdateBannerToJSON,
+    UpdatePreferences,
+    UpdatePreferencesFromJSON,
+    UpdatePreferencesToJSON,
     UpdateReward,
     UpdateRewardFromJSON,
     UpdateRewardToJSON,
@@ -78,6 +81,9 @@ import {
     UpdateStudy,
     UpdateStudyFromJSON,
     UpdateStudyToJSON,
+    UserPreferences,
+    UserPreferencesFromJSON,
+    UserPreferencesToJSON,
 } from '../models';
 
 export interface AddResearcherToStudyRequest {
@@ -146,6 +152,10 @@ export interface RemoveResearcherFromStudyRequest {
 export interface UpdateBannerRequest {
     id: number;
     updateBanner: UpdateBanner;
+}
+
+export interface UpdatePreferencesRequest {
+    updatePreferences: UpdatePreferences;
 }
 
 export interface UpdateRewardRequest {
@@ -576,6 +586,34 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Returns the preferences, will create a default set of prefences if the user not saved them previously 
+     * Obtain the current users preferences
+     */
+    async getPreferencesRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<UserPreferences>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/preferences`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserPreferencesFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns the preferences, will create a default set of prefences if the user not saved them previously 
+     * Obtain the current users preferences
+     */
+    async getPreferences(initOverrides?: RequestInit): Promise<UserPreferences> {
+        const response = await this.getPreferencesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns listing of all rewards, expired or not 
      * Retrive list of all rewards
      */
@@ -812,6 +850,39 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async updateBanner(requestParameters: UpdateBannerRequest, initOverrides?: RequestInit): Promise<BannerNotice> {
         const response = await this.updateBannerRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Create or update the users preferences
+     */
+    async updatePreferencesRaw(requestParameters: UpdatePreferencesRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<UserPreferences>> {
+        if (requestParameters.updatePreferences === null || requestParameters.updatePreferences === undefined) {
+            throw new runtime.RequiredError('updatePreferences','Required parameter requestParameters.updatePreferences was null or undefined when calling updatePreferences.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/preferences`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdatePreferencesToJSON(requestParameters.updatePreferences),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserPreferencesFromJSON(jsonValue));
+    }
+
+    /**
+     * Create or update the users preferences
+     */
+    async updatePreferences(requestParameters: UpdatePreferencesRequest, initOverrides?: RequestInit): Promise<UserPreferences> {
+        const response = await this.updatePreferencesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

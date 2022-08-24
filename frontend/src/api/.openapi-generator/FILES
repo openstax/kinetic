@@ -31,8 +31,10 @@ models/Studies.ts
 models/Study.ts
 models/StudyUpdate.ts
 models/UpdateBanner.ts
+models/UpdatePreferences.ts
 models/UpdateReward.ts
 models/UpdateStage.ts
 models/UpdateStudy.ts
+models/UserPreferences.ts
 models/index.ts
 runtime.ts
