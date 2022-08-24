@@ -16,7 +16,7 @@ export interface PopoverProps extends Omit<ControlledPopoverProps, 'show'> {
     style?: CSS.Properties<string | number>
 }
 
-export const ControlledPopover: React.FC<ControlledPopoverProps> = ({
+export const ControlledPopover: FCWC<ControlledPopoverProps> = ({
     show,
     title,
     target,
@@ -48,7 +48,7 @@ export const ControlledPopover: React.FC<ControlledPopoverProps> = ({
     )
 }
 
-export const Popover: React.FC<PopoverProps> = ({
+export const Popover: FCWC<PopoverProps> = ({
     popover,
     children,
     className,

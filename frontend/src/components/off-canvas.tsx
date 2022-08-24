@@ -43,7 +43,7 @@ interface OffCanvasProps {
     onHide?(): void
 }
 
-export const OffCanvas: React.FC<OffCanvasProps> = ({ show, onHide, className, children, title }) => {
+export const OffCanvas: FCWC<OffCanvasProps> = ({ show, onHide, className, children, title }) => {
     const { ref, close } = useOffCanvas({ show, onHide })
     const id = useMemo(() => uniqueId('off-canvas'), [])
     return (

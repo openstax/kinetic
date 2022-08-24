@@ -10,7 +10,7 @@ export interface AlertProps extends BSVariants {
     canDismiss?: boolean
 }
 
-export const Alert: React.FC<AlertProps> = ({
+export const Alert: FC<AlertProps> = ({
     message,
     onDismiss,
     className = '',
@@ -59,7 +59,7 @@ interface ErrorAlertProps {
     error?: ErrorTypes
     onDismiss?(): void
 }
-export const ErrorAlert: React.FC<ErrorAlertProps> = ({ error, onDismiss: onDismissProp }) => {
+export const ErrorAlert: FC<ErrorAlertProps> = ({ error, onDismiss: onDismissProp }) => {
     const [err, setError] = useState<ErrorTypes>(error)
     useEffect(() => {
         setError(error)

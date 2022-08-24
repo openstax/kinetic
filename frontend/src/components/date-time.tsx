@@ -54,7 +54,7 @@ export const DateTime: React.FC<DateTimeProps> = ({
     const fieldNames = useMemo<string[]>(() => Array.isArray(rangeNames) ? rangeNames : [name], [rangeNames, name])
     const values = useMemo(() => compact(fieldNames.map(fn => form.getFieldProps(fn).value)).map(toDateTime), [form, fieldNames])
 
-    const onChange = useCallback((newDates: Date[], a, b, c) => {
+    const onChange = useCallback((newDates: Date[], a: any, b: any, c: any) => {
         for (let i = 0; i < fieldNames.length; i++) {
             if (newDates[i] && (newDates[i].getTime() !== values[i]?.getTime())) {
                 setFieldValue(fieldNames[i], newDates[i], true)
@@ -63,7 +63,7 @@ export const DateTime: React.FC<DateTimeProps> = ({
         onChangeProp?.(newDates, a, b, c)
     }, [fieldNames, setFieldValue, onChangeProp, values])
 
-    const onClose = useCallback((newDates: Date[], a, b, c) => {
+    const onClose = useCallback((newDates: Date[], a: any, b: any, c: any) => {
         let wasChanged = false
         for (let i = 0; i < fieldNames.length; i++) {
             if (newDates[i] && (newDates[i].getTime() !== values[i]?.getTime())) {

@@ -11,7 +11,7 @@ export interface MenuProps {
     menuClassName?: string
 }
 
-export const Menu: React.FC<MenuProps> = ({
+export const Menu: FCWC<MenuProps> = ({
     children, className, alignEnd, menuClassName,
 }) => {
     const isMobile = useIsMobileDevice()

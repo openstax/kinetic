@@ -5,7 +5,7 @@ import { Menu } from './menu'
 import { BannersBar } from './banners-bar'
 import { useIsMobileDevice } from '@lib'
 
-export const TopNavBar: React.FC = ({ children }) => {
+export const TopNavBar: FCWOC = ({ children }) => {
     const nav = useNavigate()
     const onNavClick = useCallback(
         (ev: React.MouseEvent<HTMLAnchorElement>) => nav(ev.currentTarget.pathname),

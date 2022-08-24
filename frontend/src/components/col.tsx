@@ -19,7 +19,7 @@ export interface ColProps extends BoxProps {
     }
 }
 
-export const Col: React.FC<ColProps> = ({
+export const Col: FCWC<ColProps> = ({
     children,
     auto,
     sm,
@@ -57,7 +57,7 @@ export interface RowProps {
     className?: string
 }
 
-export const Row: React.FC<RowProps> = ({
+export const Row: FCWC<RowProps> = ({
     children,
     className,
 }) => {

@@ -100,7 +100,7 @@ const Grid = styled.div({
     },
 })
 
-const StudyList: React.FC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
+const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
 
     return (
         <div className={cx('container-lg', 'studies', 'my-8', className)} >
@@ -159,7 +159,7 @@ interface AllSubjectsProps extends FiltersProps {
     onSelect(study: ParticipantStudy): void
 }
 
-const AllSubjects: React.FC<AllSubjectsProps> = ({
+const AllSubjects: FC<AllSubjectsProps> = ({
     onSelect,
     filter,
     setFilter,
