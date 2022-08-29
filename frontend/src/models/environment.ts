@@ -31,7 +31,7 @@ export class Environment {
         const url = this.accounts_url
         if (ENV.IS_DEV_MODE) return url
 
-        return `${url}/i/login/?r=${encodeURIComponent(window.location.href)}`
+        return `${url}/login/?r=${encodeURIComponent(window.location.href)}`
     }
 
     get accounts_url() {
