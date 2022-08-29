@@ -25,10 +25,10 @@ const Funders = () => {
                 <h5 css={{ fontWeight: 'bold' }}>Funder & Partner</h5>
 
                 <Box wrap gap="large" justify='around'>
-                    <img height="80" src={NSFLogoURL} />
-                    <img height="80" src={IESLogoURL} />
-                    <img height="80" src={SFLogoURL} />
-                    <img height="80" src={RiceLogoURL} />
+                    <a target="_blank" href="https://www.nsf.org/gb/en"><img height="80" alt="National Science Foundation logo" src={NSFLogoURL} /></a>
+                    <a target="_blank" href="https://ies.ed.gov/"><img alt="Institute of Education Sciences logo" height="80" src={IESLogoURL} /></a>
+                    <a target="_blank" href="https://www.schmidtfutures.com/"><img height="80" src={SFLogoURL} alt="Schmidt Futures log" /></a>
+                    <a target="_blank" href="https://www.rice.edu/"><img alt="Rice University logo" height="80" src={RiceLogoURL} /></a>
                 </Box>
             </Box>
         </div>

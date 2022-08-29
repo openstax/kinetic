@@ -4,18 +4,18 @@ import { React } from '@common'
 import { useBanners } from '@models'
 import { colors } from '../theme'
 
-const Banner:React.FC<{
-    onRemove: (b: BannerMessage)=>void,
+const Banner: React.FC<{
+    onRemove: (b: BannerMessage) => void,
     banner: BannerMessage,
 }> = ({ banner, onRemove }) => (
-    <Box className="py-2" justify="between" align="center">
+    <Box className="py-2" justify="between" align="start">
         <span>{banner.message}</span>
-        <Icon icon="close" onClick={() => onRemove(banner)} color="white"/>
+        <Icon icon="close" onClick={() => onRemove(banner)} color="white" />
     </Box>
 )
 
 
-export const BannersBar:React.FC = () => {
+export const BannersBar: React.FC = () => {
     const [banners, removeBanner] = useBanners()
     if (!banners.length) {
         return null
@@ -24,6 +24,7 @@ export const BannersBar:React.FC = () => {
     return (
         <div
             css={{
+                margin: '0 10px',
                 color: 'white',
                 fontSize: '1.8rem',
                 backgroundColor: colors.teal,
