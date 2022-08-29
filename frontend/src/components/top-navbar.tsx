@@ -29,6 +29,6 @@ export const TopNavBar: React.FC = ({ children }) => {
                 </div>
             </div>
             {isMobile && <BannersBar />}
-        </nav >
+        </nav>
     )
 }
