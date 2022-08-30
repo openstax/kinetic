@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { colors } from '../theme'
 
 import { Field } from 'formik'
-import { useApi, useUserInfo, useEnvironment, useUserPreferences } from '@lib'
+import { useApi, useUserInfo, useEnvironment, useIsMobileDevice, useUserPreferences } from '@lib'
 import {
     TopNavBar, Box, Icon, Row, HelpLink, LoadingAnimation, Footer, ResourceLinks,
 } from '@components'
@@ -71,14 +71,10 @@ export default function AdminHome() {
     const env = useEnvironment()
     const api = useApi()
     const userInfo = useUserInfo()
-<<<<<<< HEAD
-    const prefs = useUserPreferences()
-    if (!userInfo || !prefs) return <LoadingAnimation message="Loading account…" />;
-=======
     const isMobile = useIsMobileDevice()
 
-    if (!userInfo) return <LoadingAnimation message="Loading account…" />;
->>>>>>> a2a1804 (add resources sidebar onto account details screen)
+    const prefs = useUserPreferences()
+    if (!userInfo || !prefs) return <LoadingAnimation message="Loading account…" />;
 
     const email = userInfo.contact_infos.find(e => e.type == 'EmailAddress')
     const savePrefs = async (update: UserPreferences) => {
@@ -91,11 +87,11 @@ export default function AdminHome() {
         }}>
             {!isMobile && <Sidebar />}
             <TopNavBar className="fixed-top" />
-            <div className="container-lg my-6 py-6">
+            <div className="container-lg my-8 py-6">
                 <div css={{ maxWidth: '600px' }}>
-                    <h2>My Account</h2>
-                    <Box justify='between'>
-                        <h5>General</h5>
+                    <h2 className="mb-3">My Account</h2>
+                    <Box justify='between' align="center">
+                        <h5 className="mb-0 p-0">General</h5>
                         <a href={`${env.accounts_url}`}>
                             <span>Update Account</span>
                             <Icon icon="right" />
@@ -124,10 +120,16 @@ export default function AdminHome() {
 
     </Row>
 
+<<<<<<< HEAD
 >>>>>>> a2a1804 (add resources sidebar onto account details screen)
         <h5>Email Notification</h5>
         <h6>Opt-in to your preferred email communications. </h6>
         <p css={{ color: colors.grayText }}>*Exception: when you win a prize on Kinetic, we will email you your gift card.</p>
+=======
+                    <h5 className="mt-5 mb-3 p-0">Email Notification</h5>
+                    <h6>Opt-in to your preferred email communications. </h6>
+                    <p css={{ color: colors.grayText }}>*Exception: when you win a prize on Kinetic, we will email you your gift card.</p>
+>>>>>>> d65093e (fine tine margin/padding on account details)
 
         <label className="check">
 <<<<<<< HEAD
