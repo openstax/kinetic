@@ -68,36 +68,38 @@ export default function ResearcherHome() {
     const displayingStudies = (studies?.data || []).filter(s => getStatus(s) == currentStatus)
 
     return (
-        <div className="container studies mt-8">
+        <div className="studies">
             <TopNavBar />
-            <Box align="center" justify="between">
-                <h1>Studies</h1>
-                <Icon
-                    height={15}
-                    icon="plusCircle"
-                    data-test-id="add-study"
-                    onClick={() => nav('/study/edit/new')}
-                />
-            </Box>
-            <ul className="nav nav-tabs">
-                <li className="nav-item">
-                    <a href="#" onClick={setStatus} data-status="Active" className={cx('nav-link', { active: currentStatus == StudyStatus.Active })}>
-                        Active
-                    </a>
-                </li>
-                <li className="nav-item">
-                    <a href="#" onClick={setStatus} data-status="Scheduled" className={cx('nav-link', { active: currentStatus == StudyStatus.Scheduled })}>
-                        Scheduled
-                    </a>
-                </li>
-                <li className="nav-item">
-                    <a href="#" onClick={setStatus} data-status="Completed" className={cx('nav-link', { active: currentStatus == StudyStatus.Completed })}>
-                        Completed
-                    </a>
-                </li>
-            </ul>
-            <StudiesTable studies={displayingStudies} />
-        </div>
+            <div className="container-lg mt-8">
+                <Box align="center" justify="between">
+                    <h1>Studies</h1>
+                    <Icon
+                        height={15}
+                        icon="plusCircle"
+                        data-test-id="add-study"
+                        onClick={() => nav('/study/edit/new')}
+                    />
+                </Box>
+                <ul className="nav nav-tabs">
+                    <li className="nav-item">
+                        <a href="#" onClick={setStatus} data-status="Active" className={cx('nav-link', { active: currentStatus == StudyStatus.Active })}>
+                            Active
+                        </a>
+                    </li>
+                    <li className="nav-item">
+                        <a href="#" onClick={setStatus} data-status="Scheduled" className={cx('nav-link', { active: currentStatus == StudyStatus.Scheduled })}>
+                            Scheduled
+                        </a>
+                    </li>
+                    <li className="nav-item">
+                        <a href="#" onClick={setStatus} data-status="Completed" className={cx('nav-link', { active: currentStatus == StudyStatus.Completed })}>
+                            Completed
+                        </a>
+                    </li>
+                </ul>
+                <StudiesTable studies={displayingStudies} />
+            </div>
+        </div >
     )
 
 }

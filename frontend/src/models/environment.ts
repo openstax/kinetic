@@ -34,6 +34,12 @@ export class Environment {
         return `${url}/login/?r=${encodeURIComponent(window.location.href)}`
     }
 
+    get logoutURL() {
+        if (ENV.IS_DEV_MODE) return '/development/users/log_out'
+
+        return `${this.accounts_url}/signout`
+    }
+
     get accounts_url() {
         if (ENV.IS_DEV_MODE) return '/dev/user'
         if (this.config.accountsEnvName == 'production') {
