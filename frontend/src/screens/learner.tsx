@@ -46,7 +46,7 @@ const useParticpantStudies = () => {
         const fetchedStudies = await api.getParticipantStudies()
         const mandatoryStudy = fetchedStudies.data?.find(s => isStudyLaunchable(s) && s.isMandatory)
         const allStudies = fetchedStudies.data || []
-        const popularStudies = sortBy(allStudies, 'popularity_rating').slice(0, 3)
+        const popularStudies = sortBy(allStudies.filter(s => !s.isMandatory), 'popularity_rating').slice(0, 3)
         const studiesByTopic = groupBy(allStudies, (s) => tagOfType(s, 'topic') || 'topic:other') as any as StudyByTopics
         if (!studiesByTopic[filter]) {
             setFilter((Object.keys(studiesByTopic) as Array<StudyTopicID>)[0])
