@@ -1,11 +1,11 @@
-import { React, useNavigate, useCallback } from '@common'
+import { React, useNavigate, useCallback, cx } from '@common'
 import { Box } from 'boxible'
 import { NavbarLogoLink } from './navbar-logo-link'
 import { Menu } from './menu'
 import { BannersBar } from './banners-bar'
 import { useEnvironment, useIsMobileDevice } from '@lib'
 
-export const TopNavBar: FCWOC = ({ children }) => {
+export const TopNavBar: FCWOC<{ className?: string }> = ({ children, className }) => {
     const nav = useNavigate()
     const env = useEnvironment()
     const onNavClick = useCallback(
@@ -13,8 +13,8 @@ export const TopNavBar: FCWOC = ({ children }) => {
         [nav])
     const isMobile = useIsMobileDevice()
     return (
-        <nav className="navbar navbar-light">
-            <div className="navbar-dark bg-dark py-1">
+        <nav className={cx('navbar', 'navbar-light', className)}>
+            < div className="navbar-dark bg-dark py-1" >
                 <div className="container-lg">
                     <Box justify="between" align="end" gap>
                         <NavbarLogoLink />
@@ -30,8 +30,8 @@ export const TopNavBar: FCWOC = ({ children }) => {
                         </Box>
                     </Box>
                 </div>
-            </div>
+            </div >
             {isMobile && <BannersBar />}
-        </nav>
+        </nav >
     )
 }

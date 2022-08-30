@@ -1,4 +1,5 @@
-import { React } from '@common'
+import { React, cx } from '@common'
+import { ResourceLinks, HelpLink } from './resource-links'
 import { colors } from '../theme'
 import {
     Icon, Box, Row, Col,
@@ -9,7 +10,7 @@ import NSFLogoURL from '../images/nsf-logo.png'
 // @ts-ignore
 import IESLogoURL from '../images/ies-logo.png'
 
-import envelopeIcon from '@iconify-icons/bi/envelope'
+
 import fbIcon from '@iconify-icons/bi/facebook'
 import igIcon from '@iconify-icons/bi/instagram'
 import twIcon from '@iconify-icons/bi/twitter'
@@ -28,28 +29,25 @@ const Funders = () => {
         </div>
     )
 }
-export const Footer: React.FC<{ includeFunders?: boolean }> = ({ includeFunders }) => {
+export const Footer: React.FC<{ className?: string, includeFunders?: boolean }> = ({ className, includeFunders }) => {
     return (
-        <div className="footer mt-4">
+        <div className={cx('footer', 'mt-4', className)}>
             {includeFunders && < Funders />}
             <div css={{ backgroundColor: 'black', color: 'white', a: { color: 'white', textDecoration: 'none' } }}>
                 <div className='container-lg'>
                     <Row css={{ padding: '20px 0' }}>
                         <Col auto direction="column">
-                            <b>Need Help?</b>
-                            <a className="text-decoration-none" href="mailto:kinetic@openstax.org?subject=[Kinetic help]"><Icon icon={envelopeIcon} /> Contact us at kinetic@openstax.org</a>
+                            <HelpLink />
                         </Col>
                         <Col auto direction="column">
-                            <b>Resource</b>
-                            <a href="https://openstax.org/privacy-policy">FAQs</a>
-                            <a href="https://openstax.org/privacy-policy">Privacy Policy</a>
+                            <ResourceLinks />
                         </Col>
                         <Col auto direction="column">
                             <b>Follow us</b>
                             <Box gap>
-                                <a href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org"><Icon icon={fbIcon} /></a>
-                                <a href="https://www.instagram.com/openstax/"><Icon icon={igIcon} /></a>
-                                <a href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org"><Icon icon={twIcon} /></a>
+                                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org"><Icon icon={fbIcon} /></a>
+                                <a target="_blank" href="https://www.instagram.com/openstax/"><Icon icon={igIcon} /></a>
+                                <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org"><Icon icon={twIcon} /></a>
                             </Box>
                         </Col>
                     </Row>
