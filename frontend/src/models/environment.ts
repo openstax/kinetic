@@ -36,8 +36,8 @@ export class Environment {
 
     get logoutURL() {
         if (ENV.IS_DEV_MODE) return '/development/users/log_out'
-
-        return `${this.accounts_url}/signout?r=${encodeURIComponent(window.location.href)}`
+        const homepage = encodeURIComponent(`https://${this.config.accountsEnvName}.openstax.org`)
+        return `${this.accounts_url}/signout?r=${homepage}`
     }
 
     get accounts_url() {
