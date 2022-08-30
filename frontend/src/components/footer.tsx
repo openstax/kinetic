@@ -11,7 +11,7 @@ import IESLogoURL from '../images/ies-logo.png'
 
 import envelopeIcon from '@iconify-icons/bi/envelope'
 import fbIcon from '@iconify-icons/bi/facebook'
-import scIcon from '@iconify-icons/bi/snapchat'
+import igIcon from '@iconify-icons/bi/instagram'
 import twIcon from '@iconify-icons/bi/twitter'
 
 const Funders = () => {
@@ -48,7 +48,7 @@ export const Footer: React.FC<{ includeFunders?: boolean }> = ({ includeFunders 
                             <b>Follow us</b>
                             <Box gap>
                                 <a href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org"><Icon icon={fbIcon} /></a>
-                                <a href="http://snapchat.com"><Icon icon={scIcon} /></a>
+                                <a href="https://www.instagram.com/openstax/"><Icon icon={igIcon} /></a>
                                 <a href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org"><Icon icon={twIcon} /></a>
                             </Box>
                         </Col>
