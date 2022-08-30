@@ -20,11 +20,13 @@ export const TopNavBar: FCWOC = ({ children }) => {
                         <NavbarLogoLink />
                         {!isMobile && <BannersBar />}
                         {children}
-                        {!isMobile && <a href="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }} onClick={onNavClick}>Studies</a>}
-                        <Menu alignEnd >
-                            <li><a className="dropdown-item" href="/account" onClick={onNavClick}>My account</a></li>
-                            <li><a className="dropdown-item" href={env.logoutURL} onClick={onNavClick}>Log out</a></li>
-                        </Menu>
+                        <Box gap>
+                            {!isMobile && <a href="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }} onClick={onNavClick}>Studies</a>}
+                            <Menu alignEnd >
+                                <li><a className="dropdown-item" href="/account" onClick={onNavClick}>My account</a></li>
+                                <li><a className="dropdown-item" href={env.logoutURL} onClick={onNavClick}>Log out</a></li>
+                            </Menu>
+                        </Box>
                     </Box>
                 </div>
             </div>
