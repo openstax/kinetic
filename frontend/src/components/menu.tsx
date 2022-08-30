@@ -59,7 +59,7 @@ export const Menu: FCWC<MenuProps> = ({
         />
     ) : (
         <Box gap alignSelf='center' align='center' css={{
-            cursor: 'pointer', whiteSpace: 'nowrap', userSelect: 'none', color: isOpen ? 'white' : '#b8bbbf',
+            fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap', userSelect: 'none', color: isOpen ? 'white' : '#b8bbbf',
         }} {...toggleProps}>
             <span>Hi {userInfo?.full_name}</span>
             <Icon icon={isOpen ? chevronUp : chevronDown} />
