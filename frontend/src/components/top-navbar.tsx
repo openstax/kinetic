@@ -20,7 +20,7 @@ export const TopNavBar: FCWOC = ({ children }) => {
                         <NavbarLogoLink />
                         {!isMobile && <BannersBar />}
                         {children}
-                        <Box gap>
+                        <Box gap="xlarge">
                             {!isMobile && <a href="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }} onClick={onNavClick}>Studies</a>}
                             <Menu alignEnd >
                                 {isMobile && <li><a className="dropdown-item" href="/studies" onClick={onNavClick}>Studies</a></li>}
