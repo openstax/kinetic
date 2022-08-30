@@ -91,7 +91,7 @@ export default function AdminHome() {
         }}>
             {!isMobile && <Sidebar />}
             <TopNavBar className="fixed-top" />
-            <div className="container-lg my-4 py-4">
+            <div className="container-lg my-6 py-6">
                 <div css={{ maxWidth: '600px' }}>
                     <h2>My Account</h2>
                     <Box justify='between'>

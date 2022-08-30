@@ -16,7 +16,7 @@ export const TopNavBar: FCWOC<{ className?: string }> = ({ children, className }
         <nav className={cx('navbar', 'navbar-light', className)}>
             < div className="navbar-dark bg-dark py-1" >
                 <div className="container-lg">
-                    <Box justify="between" align="end" gap>
+                    <Box justify="between" align="end" gap pad={{ vertical: 'default' }}>
                         <NavbarLogoLink />
                         {!isMobile && <BannersBar />}
                         {children}
