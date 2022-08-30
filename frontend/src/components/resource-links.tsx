@@ -1,6 +1,4 @@
 import { React } from '@common'
-import envelopeIcon from '@iconify-icons/bi/envelope'
-import { Icon } from './icon'
 
 export const ResourceLinks = () => {
     return (
@@ -16,7 +14,7 @@ export const HelpLink = () => {
     return (
         <>
             <b>Need Help?</b>
-            <a className="text-decoration-none" href="mailto:kinetic@openstax.org?subject=[Kinetic help]"><Icon icon={envelopeIcon} /> Contact us at kinetic@openstax.org</a>
+            <a target="_blank" href="https://openstax.org/contact">Contact us here</a>
         </>
     )
 }
