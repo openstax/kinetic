@@ -33,7 +33,7 @@ export const Footer: React.FC<{ className?: string, includeFunders?: boolean }> 
     return (
         <div className={cx('footer', 'mt-4', className)}>
             {includeFunders && < Funders />}
-            <div css={{ backgroundColor: 'black', color: 'white', a: { color: 'white', textDecoration: 'none' } }}>
+            <div css={{ backgroundColor: 'black', color: 'white', a: { color: 'white' } }}>
                 <div className='container-lg'>
                     <Row css={{ padding: '20px 0' }}>
                         <Col auto direction="column">
