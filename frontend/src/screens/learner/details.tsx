@@ -56,9 +56,10 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
         await LaunchStudy(api, study)
         setBusy(false)
     }, [api, study, LaunchStudy, setBusy])
+
     if (study.completedAt) {
         return (
-            <b>Completed on {dayjs(study.completedAt).format('LL')}</b>
+            <Button primary disabled>Completed on {dayjs(study.completedAt).format('LL')}</Button>
         )
     }
 
@@ -145,9 +146,7 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
     const tag = topic ? StudyTopicTags[topic] : ''
 
     return (
-        <OffCanvas show={!!study} title="Study Detail" onHide={onHide}
-            css={{ '&.offcanvas-end': { width: 500 }, '.offcanvas-header': { padding: '3rem 3rem 0 3rem' }, '.offcanvas-body': { padding: '3rem 3rem 3rem 3rem' } }}
-        >
+        <OffCanvas show={!!study} title="Study Detail" onHide={onHide}>
             <Box direction="column" flex>
                 <div css={{ overflowY: 'auto', flex: 1 }}>
                     <h3>{study.title}</h3>
