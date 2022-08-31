@@ -42,6 +42,9 @@ module Api::V1::Bindings
     # The expected study duration in minutes.
     attr_accessor :duration_minutes
 
+    # is the study deleted
+    attr_accessor :is_deleted
+
     # When the study opens for participation; null means not open.
     attr_accessor :opens_at
 
@@ -66,6 +69,7 @@ module Api::V1::Bindings
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
         :'duration_minutes' => :'duration_minutes',
+        :'is_deleted' => :'is_deleted',
         :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
         :'is_mandatory' => :'is_mandatory',
@@ -90,6 +94,7 @@ module Api::V1::Bindings
         :'image_id' => :'String',
         :'benefits' => :'String',
         :'duration_minutes' => :'Integer',
+        :'is_deleted' => :'Boolean',
         :'opens_at' => :'Time',
         :'closes_at' => :'Time',
         :'is_mandatory' => :'Boolean',
@@ -156,6 +161,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'duration_minutes')
         self.duration_minutes = attributes[:'duration_minutes']
+      end
+
+      if attributes.key?(:'is_deleted')
+        self.is_deleted = attributes[:'is_deleted']
       end
 
       if attributes.key?(:'opens_at')
@@ -261,6 +270,7 @@ module Api::V1::Bindings
           image_id == o.image_id &&
           benefits == o.benefits &&
           duration_minutes == o.duration_minutes &&
+          is_deleted == o.is_deleted &&
           opens_at == o.opens_at &&
           closes_at == o.closes_at &&
           is_mandatory == o.is_mandatory &&
@@ -276,7 +286,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, duration_minutes, opens_at, closes_at, is_mandatory, participation_points].hash
+      [title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, duration_minutes, is_deleted, opens_at, closes_at, is_mandatory, participation_points].hash
     end
 
     # Builds the object from hash

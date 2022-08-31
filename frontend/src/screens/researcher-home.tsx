@@ -65,7 +65,7 @@ export default function ResearcherHome() {
     }, [])
     const [currentStatus, setCurrentStudies] = useState<StudyStatus>(StudyStatus.Active)
     const setStatus = (ev: React.MouseEvent<HTMLAnchorElement>) => setCurrentStudies(ev.currentTarget.dataset.status! as any)
-    const displayingStudies = (studies?.data || []).filter(s => getStatus(s) == currentStatus)
+    const displayingStudies = (studies?.data || []).filter(s => !s.isDeleted && getStatus(s) == currentStatus)
 
     return (
         <div className="container studies mt-8">
