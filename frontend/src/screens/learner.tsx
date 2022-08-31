@@ -231,7 +231,7 @@ const LearnerDashboard = () => {
                     <div css={{ maxWidth: '55%', p: { marginBottom: 5 } }}>
                         <H>Level up to new ways of</H>
                         <H>learning, and earn prizes!</H>
-                        <Sh>
+                        <Sh className="mt-1">
                             With Kinetic, participate in scientific research and learn tips and tricks
                         </Sh>
                         <Sh>
