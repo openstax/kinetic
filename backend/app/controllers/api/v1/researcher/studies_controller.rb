@@ -40,7 +40,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   end
 
   def destroy
-    @study.destroy!
+    @study.update!(is_deleted: true)
     head :ok
   end
 

@@ -79,6 +79,10 @@ class Api::V1::Researcher::StudiesOpenApi
       key :type, :integer
       key :description, 'The expected study duration in minutes.'
     end
+    property :is_deleted do
+      key :type, :boolean
+      key :description, 'is the study deleted'
+    end
     property :opens_at do
       key :type, :string
       key :nullable, true

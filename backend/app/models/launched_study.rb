@@ -34,4 +34,8 @@ class LaunchedStudy < ApplicationRecord
   def completed_count
     study.completed_count
   end
+
+  def is_deleted?
+    study.is_deleted?
+  end
 end

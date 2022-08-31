@@ -76,6 +76,12 @@ RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: tru
           first_launched_at: kind_of(String)
         )
       end
+
+      it 'hides deleted studies' do
+        study1.update!(is_deleted: true)
+        api_get "participant/studies/#{study1.id}"
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 
@@ -132,6 +138,13 @@ RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: tru
             completed_at: kind_of(String)
           )
         )
+      end
+
+      it 'hides soft deleted studies' do
+        study1.update!(is_deleted: true)
+        expect(Study.available.find_by(id: study1.id)).to be_nil
+        api_get 'participant/studies'
+        expect(response_hash[:data]).not_to include(a_hash_including(id: study1.id))
       end
     end
   end
