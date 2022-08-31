@@ -145,7 +145,9 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
     const tag = topic ? StudyTopicTags[topic] : ''
 
     return (
-        <OffCanvas show={!!study} title="Study Detail" onHide={onHide}>
+        <OffCanvas show={!!study} title="Study Detail" onHide={onHide}
+            css={{ '&.offcanvas-end': { width: 500 }, '.offcanvas-header': { padding: '3rem 3rem 0 3rem' }, '.offcanvas-body': { padding: '3rem 3rem 3rem 3rem' } }}
+        >
             <Box direction="column" flex>
                 <div css={{ overflowY: 'auto', flex: 1 }}>
                     <h3>{study.title}</h3>
