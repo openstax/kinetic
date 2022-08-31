@@ -9,6 +9,10 @@ import {
 import NSFLogoURL from '../images/nsf-logo.png'
 // @ts-ignore
 import IESLogoURL from '../images/ies-logo.png'
+// @ts-ignore
+import RiceLogoURL from '../images/rice-logo.png'
+// @ts-ignore
+import OpenStaxURL from '../images/openstax-logo.png'
 
 
 import fbIcon from '@iconify-icons/bi/facebook'
@@ -33,7 +37,7 @@ export const Footer: React.FC<{ className?: string, includeFunders?: boolean }> 
     return (
         <div className={cx('footer', 'mt-4', className)}>
             {includeFunders && < Funders />}
-            <div css={{ backgroundColor: 'black', color: 'white', a: { color: 'white' } }}>
+            <div css={{ backgroundColor: colors.darkBlue, color: 'white', a: { color: 'white' } }}>
                 <div className='container-lg'>
                     <Row css={{ padding: '20px 0' }}>
                         <Col auto direction="column">
@@ -50,9 +54,14 @@ export const Footer: React.FC<{ className?: string, includeFunders?: boolean }> 
                                 <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org"><Icon icon={twIcon} /></a>
                             </Box>
                         </Col>
+                        <Col auto direction="column" gap>
+                            <div><img alt="Rice University logo" height="38" src={RiceLogoURL} /></div>
+                            <div><img alt="Open Stax logo" height="33" src={OpenStaxURL} /></div>
+                        </Col>
+
                     </Row>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
