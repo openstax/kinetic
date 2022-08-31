@@ -182,6 +182,21 @@ const AllSubjects: FC<AllSubjectsProps> = ({
     )
 }
 
+const H = styled.h2({
+    fontSize: 48,
+    lineHeight: '64px',
+    fontWeight: 700,
+    marginBottom: 0,
+    fontFamily: 'Helvetica Neue',
+})
+
+const Sh = styled.h6({
+    fontFamily: 'Helvetica Neue',
+    marginBottom: 0,
+    fontSize: '18px',
+    lineHeight: '30px',
+})
+
 const LearnerDashboard = () => {
     const nav = useNavigate()
     const isMobile = useIsMobileDevice()
@@ -214,14 +229,14 @@ const LearnerDashboard = () => {
                 />
                 <div className="container-lg">
                     <div css={{ maxWidth: '55%', p: { marginBottom: 5 } }}>
-                        <h2>Learning Pays,</h2>
-                        <h2>In More Ways Than One!</h2>
-                        <p>
-                            Learning doesn’t have to be boring - and it can even win you prizes!
-                        </p>
-                        <p>
-                            With OpenStax Kinetic, you are guaranteed to learn something new everyday!
-                        </p>
+                        <H>Level up to new ways of</H>
+                        <H>learning, and earn prizes!</H>
+                        <Sh>
+                            With Kinetic, participate in scientific research and learn tips and tricks
+                        </Sh>
+                        <Sh>
+                            to help you become a better learner. All while winning prizes!
+                        </Sh>
                     </div>
                 </div>
             </Splash >
