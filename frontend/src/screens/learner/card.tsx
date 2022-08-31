@@ -42,7 +42,7 @@ const Researchers: React.FC<StudyCardProps> = ({ study }) => {
 }
 
 const Feedback: React.FC<StudyCardProps> = ({ study }) => {
-    if (!study.feedbackDescription) return null
+    if (!study.feedbackDescription) return <span />
 
     return (
         <Box align='center' gap margin="default">
@@ -53,7 +53,7 @@ const Feedback: React.FC<StudyCardProps> = ({ study }) => {
 }
 
 const MultiSession: React.FC<StudyCardProps> = ({ study }) => {
-    if (!studyIsMultipart(study)) return null
+    if (!studyIsMultipart(study)) return <span />
 
     return (
         <Box align='center' gap margin="default">
