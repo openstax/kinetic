@@ -3,11 +3,13 @@ import { Environment, ANON_USER, UserInfo } from '@models'
 import { LoadingAnimation, IncorrectUser, ErrorPage } from '@components'
 import { useLocation } from 'react-router-dom'
 import { ENV } from './env'
+import { useApi } from './api-config'
+import { UserPreferences } from '@api'
 
 export const EnvironmentContext = React.createContext<Environment | null>(null)
 
 
-export const EnvironmentProvider: React.FC = ({ children }) => {
+export const EnvironmentProvider: FCWC = ({ children }) => {
     const [currentEnv, setEnvironment] = React.useState<Environment | null>(null)
 
     const [error, setError] = React.useState<any>(false)
@@ -46,4 +48,13 @@ export const useUserInfo = () => {
         env.fetchUserInfo().then(setUserInfo)
     }, [])
     return userInfo
+}
+
+export const useUserPreferences = () => {
+    const api = useApi()
+    const [preferences, setPreferences] = useState<UserPreferences | null>(null)
+    useEffect(() => {
+        api.getPreferences().then(setPreferences)
+    }, [])
+    return preferences
 }

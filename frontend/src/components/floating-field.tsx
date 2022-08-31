@@ -17,7 +17,7 @@ export interface FloatingFieldProps extends BoxProps, ColProps {
 }
 
 
-export const FloatingField: React.FC<FloatingFieldProps> = ({
+export const FloatingField: FCWC<FloatingFieldProps> = ({
     id,
     name,
     reversed,

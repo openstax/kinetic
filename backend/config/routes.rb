@@ -38,6 +38,8 @@ Rails.application.routes.draw do
 
       resources :eligibility, only: [:index]
 
+      resources :preferences, only: [:index, :create]
+
       scope :diagnostics, controller: :diagnostics do
         get :exception
         get 'status_code/:status_code', action: :status_code

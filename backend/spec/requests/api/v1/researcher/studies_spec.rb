@@ -172,10 +172,11 @@ RSpec.describe 'Studies', type: :request, api: :v1 do
     context 'when signed as the owning researcher' do
       before { stub_current_user(researcher1) }
 
-      it 'deletes the study' do
+      it 'hides the study' do
         api_delete "researcher/studies/#{study1.id}"
         expect(response).to have_http_status(:ok)
-        expect(study1).to be_destroyed
+        expect(study1.reload.is_hidden).to be(true)
+        expect(study1).not_to be_destroyed
       end
     end
   end

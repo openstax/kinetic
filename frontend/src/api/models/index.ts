@@ -29,6 +29,8 @@ export * from './Studies';
 export * from './Study';
 export * from './StudyUpdate';
 export * from './UpdateBanner';
+export * from './UpdatePreferences';
 export * from './UpdateReward';
 export * from './UpdateStage';
 export * from './UpdateStudy';
+export * from './UserPreferences';

@@ -23,6 +23,8 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
     model =
       current_user.launched_studies.where(study_id: params[:id]).first ||
       Study.available.find(params[:id])
+    raise ActiveRecord::RecordNotFound if model.is_hidden?
+
     response_binding = Api::V1::Bindings::ParticipantStudy.create_from_model(model, current_user)
     render json: response_binding, status: :ok
   end

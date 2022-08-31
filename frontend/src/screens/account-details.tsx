@@ -1,10 +1,12 @@
 import { React } from '@common'
 import styled from '@emotion/styled'
 import { colors } from '../theme'
-import { useUserInfo, useEnvironment } from '@lib'
+import { Field } from 'formik'
+import { useApi, useUserInfo, useEnvironment, useUserPreferences } from '@lib'
 import {
-    TopNavBar, Box, Icon, LoadingAnimation, Footer,
+    TopNavBar, Box, Icon, LoadingAnimation, Footer, Form, FormSaveButton,
 } from '@components'
+import { UserPreferences } from '@api'
 
 const Wrapper = styled.div({
     h5: {
@@ -37,11 +39,15 @@ const Wrapper = styled.div({
 
 export default function AdminHome() {
     const env = useEnvironment()
+    const api = useApi()
     const userInfo = useUserInfo()
-
-    if (!userInfo) return <LoadingAnimation message="Loading account…" />;
+    const prefs = useUserPreferences()
+    if (!userInfo || !prefs) return <LoadingAnimation message="Loading account…" />;
 
     const email = userInfo.contact_infos.find(e => e.type == 'EmailAddress')
+    const savePrefs = async (update: UserPreferences) => {
+        await api.updatePreferences({ updatePreferences: { preferences: update } })
+    }
 
     return (
         <Wrapper className="account">
@@ -64,22 +70,30 @@ export default function AdminHome() {
                     <input disabled value={email.value} />
                 </label>)}
 
-                <h5>Email Notification</h5>
-                <h6>Opt-in to your preferred email communications. </h6>
-                <p css={{ color: colors.grayText }}>*Exception: when you win a prize on Kinetic, we will email you your gift card.</p>
+                <Form
+                    initialValues={prefs}
 
-                <label className="check">
-                    <input type="checkbox" name="cycle-deadlines" /> Notify me of upcoming prize cycle deadlines
-                </label>
-                <label className="check">
-                    <input type="checkbox" name="prize-cycle" /> Notify me of the start of a new prize cycle
-                </label>
-                <label className="check">
-                    <input type="checkbox" name="study-available" /> Notify me when a new study becomes available
-                </label>
-                <label className="check">
-                    <input type="checkbox" name="session-available" /> Notify me when follow up sessions become available on multi-session studies
-                </label>
+                    onSubmit={savePrefs}
+                >
+                    <h5>Email Notification</h5>
+                    <h6>Opt-in to your preferred email communications. </h6>
+                    <p css={{ color: colors.grayText }}>*Exception: when you win a prize on Kinetic, we will email you your gift card.</p>
+
+                    <label className="check">
+                        <Field type="checkbox" name="cycleDeadlinesEmail" /> Notify me of upcoming prize cycle deadlines
+                    </label>
+                    <label className="check">
+                        <Field type="checkbox" name="prizeCycleEmail" /> Notify me of the start of a new prize cycle
+                    </label>
+                    <label className="check">
+                        <Field type="checkbox" name="studyAvailableEmail" /> Notify me when a new study becomes available
+                    </label>
+                    <label className="check">
+                        <Field type="checkbox" name="sessionAvailableEmail" /> Notify me when follow up sessions become available on multi-session studies
+                    </label>
+
+                    <FormSaveButton primary>Update Preferences</FormSaveButton>
+                </Form>
             </div>
 
             <Footer />

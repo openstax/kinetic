@@ -9,7 +9,7 @@ interface StudyDetailsProps {
     study: ParticipantStudy
 }
 
-const Part: React.FC<{ title: string, icon: IconKey }> = ({
+const Part: FCWC<{ title: string, icon: IconKey }> = ({
     children,
     title,
     icon,
@@ -26,7 +26,7 @@ const Part: React.FC<{ title: string, icon: IconKey }> = ({
     )
 }
 
-const StudyPart: React.FC<StudyDetailsProps & { title: string, icon: IconKey, property: string }> = ({
+const StudyPart: FC<StudyDetailsProps & { title: string, icon: IconKey, property: string }> = ({
     icon,
     study,
     title,
@@ -42,7 +42,7 @@ const StudyPart: React.FC<StudyDetailsProps & { title: string, icon: IconKey, pr
     )
 }
 
-const LaunchStudyButton: React.FC<StudyDetailsProps> = ({ study }) => {
+const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
     const api = useApi()
     const [isBusy, setBusy] = useState(false)
 

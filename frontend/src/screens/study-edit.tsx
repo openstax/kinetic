@@ -60,7 +60,7 @@ const DeleteStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
     const api = useApi()
     const nav = useNavigate()
     const [isPending, setPending] = useState(false)
-    if (!isStudy(study) || study.firstLaunchedAt) {
+    if (!isStudy(study) || study.isHidden) {
         return null
     }
     const deleteStudy = async () => {
@@ -325,7 +325,7 @@ function EditStudy() {
                 initialValues={study}
                 validationSchema={editingValidationSchema}
             >
-                <Alert warning={true} onDismiss={() => setError('')} message={error}>on</Alert>
+                <Alert warning={true} onDismiss={() => setError('')} message={error} />
 
                 <StudyStages study={study} onUpdate={reRender} />
 

@@ -21,10 +21,10 @@ interface ModalProps extends OverlayModalProps {
 }
 
 
-interface ModalI extends React.FC<ModalProps> {
-    Header: React.FC<ModalPartProps>,
-    Body: React.FC<ModalPartProps>,
-    Footer: React.FC<ModalPartProps>,
+interface ModalI extends FCWC<ModalProps> {
+    Header: FCWC<ModalPartProps>,
+    Body: FCWC<ModalPartProps>,
+    Footer: FCWC<ModalPartProps>,
 }
 
 const Modal: ModalI = ({

@@ -1,8 +1,5 @@
 {
-    "include": ["./src"],
-    "files": [
-        "./global.d.ts"
-    ],
+    "include": ["./src", "./types"],
      "exclude": [
          "node_modules",
          "src/api"

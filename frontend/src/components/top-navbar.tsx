@@ -5,7 +5,7 @@ import { Menu } from './menu'
 import { BannersBar } from './banners-bar'
 import { useEnvironment, useIsMobileDevice } from '@lib'
 
-export const TopNavBar: React.FC = ({ children }) => {
+export const TopNavBar: FCWOC = ({ children }) => {
     const nav = useNavigate()
     const env = useEnvironment()
     const onNavClick = useCallback(

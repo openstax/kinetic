@@ -7,6 +7,10 @@ class LaunchedStudy < ApplicationRecord
 
   scope :complete, -> { where.not(completed_at: nil) }
 
+  # forward a few methods so launched can be treated like a study
+  delegate :completed_count, to: :study
+  delegate :is_hidden?, to: :study
+
   def completed?
     completed_at.present?
   end
@@ -30,8 +34,4 @@ class LaunchedStudy < ApplicationRecord
     update!(aborted_at: Time.now)
   end
 
-  # convenience method to allows bindings to treat launched like a study
-  def completed_count
-    study.completed_count
-  end
 end

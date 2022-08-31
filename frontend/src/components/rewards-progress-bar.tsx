@@ -185,8 +185,9 @@ const RewardSegment: React.FC<{
                     })}
                     css={circleStyle}
                     popover={popOverMessage(segment)}
-                />
-                <SegmentLabel segment={segment} />
+                >
+                    <SegmentLabel segment={segment} />
+                </Popover>
             </>
         )
     }

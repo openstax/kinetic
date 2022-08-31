@@ -26,7 +26,7 @@ export function remove<T>(el: T, array: T[]): void {
 
 function tagTester<T>(name: string) {
     const tag = '[object ' + name + ']'
-    return function(obj: unknown): obj is T {
+    return function (obj: unknown): obj is T {
         return Object.prototype.toString.call(obj) === tag
     }
 }
@@ -45,7 +45,7 @@ export const isArrayBuffer = tagTester<ArrayBuffer>('ArrayBuffer')
 export const isFunction = tagTester<Function>('Function')
 
 export const whenDomReady = (): Promise<void> => {
-    if (document.readyState != 'loading'){
+    if (document.readyState != 'loading') {
         return Promise.resolve()
     } else {
         return new Promise(r => document.addEventListener('DOMContentLoaded', () => r()));
@@ -82,3 +82,5 @@ export function retry<T>(
             })
     })
 }
+
+export const emptyFn = () => { }

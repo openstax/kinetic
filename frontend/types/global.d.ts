@@ -1,5 +1,7 @@
-import type { User } from './src/models/user'
+/* eslint-disable no-unused-vars, @typescript-eslint/ban-types */
+export { }
 
+import type { User } from '../src/models/user'
 
 declare global {
     interface Window {
@@ -26,9 +28,4 @@ declare global {
             VITE_TEST_GA_UA?: string
         };
     }
-
 }
-
-
-// Adding this exports the declaration file which Typescript/CRA can now pickup:
-export {}
