@@ -60,7 +60,7 @@ const DeleteStudyButton: React.FC<{ study: EditingStudy }> = ({ study }) => {
     const api = useApi()
     const nav = useNavigate()
     const [isPending, setPending] = useState(false)
-    if (!isStudy(study) || study.isDeleted) {
+    if (!isStudy(study) || study.isHidden) {
         return null
     }
     const deleteStudy = async () => {

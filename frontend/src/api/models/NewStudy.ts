@@ -74,11 +74,11 @@ export interface NewStudy {
      */
     durationMinutes?: number;
     /**
-     * is the study deleted
+     * is the study hidden from participants
      * @type {boolean}
      * @memberof NewStudy
      */
-    isDeleted?: boolean;
+    isHidden?: boolean;
     /**
      * When the study opens for participation; null means not open.
      * @type {Date}
@@ -124,7 +124,7 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
-        'isDeleted': !exists(json, 'is_deleted') ? undefined : json['is_deleted'],
+        'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
         'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
@@ -150,7 +150,7 @@ export function NewStudyToJSON(value?: NewStudy | null): any {
         'image_id': value.imageId,
         'benefits': value.benefits,
         'duration_minutes': value.durationMinutes,
-        'is_deleted': value.isDeleted,
+        'is_hidden': value.isHidden,
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'is_mandatory': value.isMandatory,

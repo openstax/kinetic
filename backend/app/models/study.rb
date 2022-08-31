@@ -20,14 +20,14 @@ class Study < ApplicationRecord
   scope :available, -> {
     where
       .not(opens_at: nil)
-      .where(is_deleted: false)
+      .where(is_hidden: false)
       .where(arel[:opens_at].lteq(Time.now))
       .where(arel[:closes_at].eq(nil).or(
                arel[:closes_at].gteq(Time.now)))
   }
 
   def available?
-    !is_deleted? && opens_at && Time.now > opens_at && (closes_at.nil? || Time.now <= closes_at)
+    !is_hidden? && opens_at && Time.now > opens_at && (closes_at.nil? || Time.now <= closes_at)
   end
 
   def can_delete?

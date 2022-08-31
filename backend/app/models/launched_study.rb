@@ -9,7 +9,7 @@ class LaunchedStudy < ApplicationRecord
 
   # forward a few methods so launched can be treated like a study
   delegate :completed_count, to: :study
-  delegate :is_deleted?, to: :study
+  delegate :is_hidden?, to: :study
 
   def completed?
     completed_at.present?

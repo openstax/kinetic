@@ -15,7 +15,7 @@ class User
   end
 
   def launched_studies
-    LaunchedStudy.joins(:study).where(study: { is_deleted: false }, user_id: id)
+    LaunchedStudy.joins(:study).where(study: { is_hidden: false }, user_id: id)
   end
 
   def launched_stages(study:)

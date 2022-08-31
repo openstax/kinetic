@@ -130,7 +130,7 @@ ActiveRecord::Schema.define(version: 2022_08_31_143454) do
     t.string "feedback_description"
     t.string "image_id"
     t.integer "completed_count", default: 0, null: false
-    t.boolean "is_deleted", default: false, null: false
+    t.boolean "is_hidden", default: false, null: false
     t.index ["tags"], name: "index_studies_on_tags", using: :gin
   end
 
