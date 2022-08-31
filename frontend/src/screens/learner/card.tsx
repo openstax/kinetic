@@ -2,11 +2,11 @@ import { React, useCallback } from '@common'
 import { Box, Icon } from '@components'
 import { get } from 'lodash'
 import { toSentence } from '@lib'
-import { tagOfType, tagsOfType, TagLabels } from '@models'
+import { tagOfType, tagsOfType, TagLabels, studyIsMultipart } from '@models'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { CardImages } from '../../components/study-card-images/images'
-import multiStageIcon from '@iconify-icons/bi/stack'
+
 import { colors } from '../../theme'
 
 interface StudyCardProps {
@@ -53,12 +53,12 @@ const Feedback: React.FC<StudyCardProps> = ({ study }) => {
 }
 
 const MultiSession: React.FC<StudyCardProps> = ({ study }) => {
-    if ((study.stages || []).length < 2) return null
+    if (!studyIsMultipart(study)) return null
 
     return (
         <Box align='center' gap margin="default">
             <Icon
-                icon={multiStageIcon}
+                icon="multiStage"
                 color={colors.purple}
                 tooltipProps={{ displayType: 'tooltip' }}
                 tooltip="This study has multiple sessions. The other sessions will be released once available."

@@ -15,6 +15,7 @@ import heart from '@iconify-icons/bi/heart-fill'
 import warning from '@iconify-icons/bi/exclamation-triangle-fill'
 import rolodex from '@iconify-icons/bi/person-rolodex'
 import list from '@iconify-icons/bi/list'
+import multiStage from '@iconify-icons/bi/stack'
 
 export const ICONS = {
     x,
@@ -34,4 +35,5 @@ export const ICONS = {
     rolodex,
     list,
     right,
+    multiStage,
 }

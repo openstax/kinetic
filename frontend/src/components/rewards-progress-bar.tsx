@@ -1,5 +1,5 @@
 import { React, cx } from '@common'
-import { Box, Popover, Icon } from '@components'
+import { Box, Popover, Icon, SegmentedBar, Segment, segmentCircleStyle } from '@components'
 import {
     useRewardsSchedule,
     RewardsSegment,
@@ -15,72 +15,8 @@ interface RewardsProgressBarProps {
     studies: ParticipantStudy[]
 }
 
-const barWidth = 7
-
 const popOverStyle: CSSObject = {
     '.tooltip-inner': { width: '180px' },
-}
-
-const circleStyle: CSSObject = {
-    height: '20px',
-    width: '20px',
-    borderRadius: '10px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    margin: 0,
-
-    ...popOverStyle,
-
-    '&:before': {
-        padding: 0,
-        margin: 0,
-    },
-
-    '&.achieved': {
-        background: colors.purple,
-        '&:before': {
-            content: '"✓"',
-            color: 'white',
-        },
-    },
-    '&.future': {
-        background: colors.lightGray,
-    },
-    '&.current': {
-        background: 'white',
-        border: `3px solid ${colors.purple}`,
-        '&.achieved': {
-            background: 'white',
-            '&:before': {
-                color: colors.purple,
-            },
-        },
-        '.explanation': {
-            color: 'black',
-        },
-    },
-    '&.past:not(.achieved)': {
-        background: colors.lightGray,
-        '&:before': {
-            color: colors.darkGray,
-            content: '"✕"',
-        },
-    },
-}
-
-
-const segmentWidth = 50
-
-const segmentStyle: CSSObject = {
-    position: 'absolute',
-    width: segmentWidth,
-    top: `-${barWidth}px`,
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-
 }
 
 const SegmentLabel: React.FC<{ segment: RewardsSegment }> = ({ segment }) => {
@@ -157,13 +93,10 @@ const GrandPrize: React.FC<{ segment?: RewardsSegment }> = ({ segment }) => {
 
 const RewardSegment: React.FC<{
     segment: RewardsSegment
-    segmentCount: number,
-    totalPoints: number,
-}> = ({ segment, totalPoints }) => {
+}> = ({ segment }) => {
 
-    let body: React.ReactNode
     if (segment.isFinal) {
-        body = (
+        return (
             <Popover
                 popover={popOverMessage(segment)}
                 displayType="tooltip"
@@ -172,39 +105,39 @@ const RewardSegment: React.FC<{
                 <GrandPrize segment={segment} />
             </Popover>
         )
-    } else {
-        body = (
-            <>
-                <Popover
-                    displayType="tooltip"
-                    className={cx({
-                        past: segment.isPast,
-                        future: segment.isFuture,
-                        current: segment.isCurrent,
-                        achieved: segment.achieved,
-                    })}
-                    css={circleStyle}
-                    popover={popOverMessage(segment)}
-                >
-                    <span />
-                </Popover>
-                <SegmentLabel segment={segment} />
-            </>
-        )
     }
 
     return (
-        <div
-            css={{
-                ...segmentStyle,
-                left: `calc(${(segment.totalPoints / totalPoints) * 100}% - ${segmentWidth / 2}px)`,
-                // left: `calc(${(100 / segmentCount) * (segment.index + 1)}% - ${segmentWidth / 2}px)`,
-            }}
-        >
-            {body}
-        </div>
+        <>
+            <Popover
+                displayType="tooltip"
+                className={cx({
+                    past: segment.isPast,
+                    future: segment.isFuture,
+                    current: segment.isCurrent,
+                    achieved: segment.achieved,
+                })}
+                css={segmentCircleStyle}
+                popover={popOverMessage(segment)}
+            >
+                <span />
+            </Popover>
+            <SegmentLabel segment={segment} />
+        </>
     )
 }
+
+// return (
+//     <div
+//         css={{
+//             ...segmentStyle,
+//             left: `calc(${(segment.totalPoints / totalPoints) * 100}% - ${segmentWidth / 2}px)`,
+//         }}
+//     >
+//         {body}
+//     </div>
+// )
+// }
 
 const SegmentInfo: React.FC<{ schedule: RewardsSegment[] }> = ({ schedule }) => {
     const segment = schedule.find(s => s.recentlyAchieved) || schedule.find(s => s.isCurrent)
@@ -253,39 +186,21 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                     <Box direction='column' margin={{ top: '-10px' }}>
                         <b>{pointsEarned} / {totalPoints} pts</b>
                     </Box>
-                    <div
-                        css={{
-                            height: `${barWidth}px`,
-                            flex: 1,
-                            borderRadius: '4px',
-                            background: colors.lightGray,
-                            position: 'relative',
-                            marginRight: '20px',
-                        }}
-                    >
-                        <div
-                            data-test-id="progress-indicator"
-                            data-percentage-complete={completion}
-                            css={{
-                                height: '100%',
-                                width: `${completion}% `,
-                                position: 'absolute',
-                                borderRadius: '4px 0 0 4px',
-                                background: colors.purple,
-                            }}
-                        />
 
+                    <SegmentedBar completedPercentage={completion}>
                         {schedule.map((segment) => (
-                            <RewardSegment
-                                segmentCount={schedule.length}
+                            <Segment
                                 key={segment.index}
-                                totalPoints={totalPoints}
-                                segment={segment}
-                            />
+                                percentage={(segment.totalPoints / totalPoints) * 100}
+                            >
+                                <RewardSegment key={segment.index} segment={segment} />
+                            </Segment>
                         ))}
-                    </div>
+                    </SegmentedBar>
+
+
                 </Box>
             </div>
-        </nav>
+        </nav >
     )
 }
