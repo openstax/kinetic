@@ -1,11 +1,9 @@
-import { React, useState, useCallback, useNavigate, useParams, useMemo } from '@common'
+import { React, useState, useCallback, useNavigate, useParams } from '@common'
 import { ParticipantStudy, PublicResearcher } from '@api'
-import { filter } from 'lodash-es'
-import plur from 'plur'
 import { LaunchStudy, isStudyLaunchable, StudyTopicID, StudyTopicTags, tagOfType, studyIsMultipart } from '@models'
 import { useApi, dayjs } from '@lib'
 import {
-    OffCanvas, Icon, IconKey, Box, Button, SegmentedBar, Segment, SegmentCircle,
+    OffCanvas, Icon, IconKey, Box, Button, MultiSessionBar,
 } from '@components'
 import { colors } from '../../theme'
 
@@ -79,20 +77,10 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
     )
 }
 
+
 const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
     if (!study.stages || !studyIsMultipart(study)) return null
 
-    const perc = filter(study.stages, 'isCompleted').length / study.stages.length
-
-    const [first, last] = study.stages
-    const duration = useMemo(() => {
-        const d = last.availableAfterDays || 0
-        if (d === 0) return 'immediately'
-        if (0 === (d % 7)) {
-            return `${d / 7} ${plur('week', d / 7)}`
-        }
-        return `${d} ${plur('day', d)}`
-    }, [last.availableAfterDays])
     return (
         <Box direction="column" margin={{ bottom: 'large' }}>
             <Box align='center' gap>
@@ -103,25 +91,7 @@ const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
                 <span css={{ color: colors.darkText }}>Multi-Session</span>
             </Box>
             <Box margin={{ vertical: 'large' }}>
-                <SegmentedBar completedPercentage={perc} css={{ margin: '0 15px' }}>
-                    <Segment key={1} percentage={0}>
-                        <SegmentCircle achieved={first.isCompleted} />
-                        <span>{first.title}</span>
-                    </Segment>
-                    <Segment key={2} percentage={50}>
-                        <SegmentCircle
-                            achieved={last.isCompleted}
-                            current={first.isCompleted}
-                            future={!first.isCompleted}
-                            past={last.isCompleted}
-                        />
-                        <span>{duration}</span>
-                    </Segment>
-                    <Segment key={3} percentage={100}>
-                        <SegmentCircle achieved={last.isCompleted} future={!last.isLaunchable} />
-                        <span>{last.title}</span>
-                    </Segment>
-                </SegmentedBar>
+                <MultiSessionBar study={study} />
             </Box>
         </Box >
     )
