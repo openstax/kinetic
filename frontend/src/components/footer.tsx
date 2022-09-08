@@ -58,8 +58,8 @@ export const Footer: React.FC<{ className?: string, includeFunders?: boolean }> 
                             </Box>
                         </Col>
                         <Col auto direction="column" gap>
-                            <div><img alt="Rice University logo" height="38" src={RiceLogoURL} /></div>
-                            <div><img alt="Open Stax logo" height="33" src={OpenStaxURL} /></div>
+                            <div><img alt="Rice University logo" height="30" src={RiceLogoURL} /></div>
+                            <div><img alt="Open Stax logo" height="30" src={OpenStaxURL} /></div>
                         </Col>
 
                     </Row>
