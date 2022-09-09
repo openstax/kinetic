@@ -1,6 +1,8 @@
 class UserNotifications
   class << self
 
+    # GIVEN user is a registered Kinetic user
+    # WHEN completing the demographic study
     def deliver_welcomes
       uuids = LaunchedStudy.joins(:study)
                 .where(
@@ -15,6 +17,8 @@ class UserNotifications
       end
     end
 
+    # GIVEN the user has opted-in to receive new prize cycle emails
+    # WHEN a new reward milestone begins (for each milestone within an entire cycle)
     def deliver_new_prize_cycle
       users = users_with_emails_for('prize_cycle')
       return unless users.any?
@@ -27,6 +31,8 @@ class UserNotifications
       end
     end
 
+    # GIVEN the user has opted-in to receive prize cycle deadline emails
+    # WHEN an upcoming deadline is due in 72h AND the user hasn’t qualified for it yet
     def deliver_prize_cycle_deadline
       users = users_with_emails_for('prize_cycle')
       return unless users.any?
@@ -48,6 +54,8 @@ class UserNotifications
       end
     end
 
+    # GIVEN the user has opted-in to receive new available studies email
+    # WHEN a new study/studies becomes available on the learner dashboard
     def deliver_new_studies
       studies = Study.where(opens_at: yesterday).or(Study.where(opens_at: nil,
                                                                 created_at: yesterday))
@@ -61,6 +69,8 @@ class UserNotifications
       end
     end
 
+    # GIVEN the user has opted-in for two-part study email
+    # WHEN the second part of a two-part study becomes available
     def deliver_additional_session
       prev_launches = LaunchedStage
                         .complete
