@@ -6,7 +6,7 @@ import {
 test('can create and edit a study', async ({ page }) => {
     const title = faker.company.catchPhrase()
     await loginAs({ page, login: 'researcher' })
-    
+
     expect(await page.textContent('.studies')).toContain('Studies')
     await page.click('testId=add-study')
 
@@ -22,6 +22,8 @@ test('can create and edit a study', async ({ page }) => {
     await page.fill('[name=durationMinutes]', '42')
 
     await page.fill('#tags input', 'type:survey')
+    await page.keyboard.press('Enter')
+    await page.fill('#tags input', 'topic:memory')
     await page.keyboard.press('Enter')
 
     await page.click('testId=form-save-btn')

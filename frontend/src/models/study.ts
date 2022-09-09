@@ -43,6 +43,10 @@ export const StudyValidationSchema = Yup.object().shape({
         'has-type',
         'studies must have a type set',
         (tags) => Boolean(tags?.find(t => t?.match(/^type:/)))
+    ).test(
+        'has-topic',
+        'studies must have a topic set',
+        (tags) => Boolean(tags?.find(t => t?.match(/^topic:/)))
     ),
 });
 

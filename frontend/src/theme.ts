@@ -2,7 +2,7 @@
 export const colors = {
     pageBackground: '#f7f8fa',
     orange: '#f47641',
-    darkBlue: '#233066',
+    darkBlue: '#151B2C',
     red: '#ca2026',
     teal: '#0dc0de',
     purple: '#6922EA',

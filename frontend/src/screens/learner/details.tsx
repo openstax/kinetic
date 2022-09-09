@@ -1,8 +1,10 @@
 import { React, useState, useCallback, useNavigate, useParams } from '@common'
 import { ParticipantStudy, PublicResearcher } from '@api'
-import { LaunchStudy, isStudyLaunchable, StudyTopicID, StudyTopicTags, tagOfType } from '@models'
+import { LaunchStudy, isStudyLaunchable, StudyTopicID, StudyTopicTags, tagOfType, studyIsMultipart } from '@models'
 import { useApi, dayjs } from '@lib'
-import { OffCanvas, Icon, IconKey, Box, Button } from '@components'
+import {
+    OffCanvas, Icon, IconKey, Box, Button, MultiSessionBar,
+} from '@components'
 import { colors } from '../../theme'
 
 interface StudyDetailsProps {
@@ -16,7 +18,7 @@ const Part: FCWC<{ title: string, icon: IconKey }> = ({
 }) => {
     if (!children) return null
     return (
-        <Box direction="column">
+        <Box direction="column" margin={{ bottom: 'large' }}>
             <Box align='center' gap margin={{ vertical: 'default' }}>
                 <Icon icon={icon} color={colors.purple} />
                 <span css={{ color: colors.darkText }}>{title}</span>
@@ -53,9 +55,10 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
         await LaunchStudy(api, study)
         setBusy(false)
     }, [api, study, LaunchStudy, setBusy])
+
     if (study.completedAt) {
         return (
-            <b>Completed on {dayjs(study.completedAt).format('LL')}</b>
+            <Button primary disabled>Completed on {dayjs(study.completedAt).format('LL')}</Button>
         )
     }
 
@@ -75,6 +78,25 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
 }
 
 
+const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
+    if (!study.stages || !studyIsMultipart(study)) return null
+
+    return (
+        <Box direction="column" margin={{ bottom: 'large' }}>
+            <Box align='center' gap>
+                <Icon
+                    icon="multiStage"
+                    color={colors.purple}
+                />
+                <span css={{ color: colors.darkText }}>Multi-Session</span>
+            </Box>
+            <Box margin={{ vertical: 'large' }}>
+                <MultiSessionBar study={study} />
+            </Box>
+        </Box >
+    )
+}
+
 const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher }) => {
     if (!researcher) return null
 
@@ -86,7 +108,7 @@ const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher })
                     <span>{researcher.institution}</span>
                 </Box>
                 <p>{researcher.bio}</p>
-            </Box >
+            </Box>
         </Part>
     )
 }
@@ -108,18 +130,21 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
             <Box direction="column" flex>
                 <div css={{ overflowY: 'auto', flex: 1 }}>
                     <h3>{study.title}</h3>
-                    {tag && <Box gap align="center" margin={{ vertical: 'default' }}><Icon icon="feedback" color={colors.purple} />{tag}</Box>}
-                    <Box gap align="center" margin={{ vertical: 'default' }}>
+                    {tag && <Box gap align="center" margin={{ vertical: 'large' }}><Icon icon="feedback" color={colors.purple} />{tag}</Box>}
+                    <Box gap align="center" margin={{ bottom: 'large' }}>
                         <Icon icon="clock" color={colors.purple} />
-                        <div css={{ marginLeft: '0.5rem' }}>{study.durationMinutes} min</div>
+                        <div>{study.durationMinutes} min</div>
                         {study.participationPoints && <span> {study.participationPoints}pts</span>}
                     </Box>
                     <StudyPart property="feedbackDescription" title="Feedback Available" icon="feedback" study={study} />
+                    <MultiSession study={study} />
+                    <Box margin={{ bottom: 'large' }} css={{ color: colors.grayText }}>{study.longDescription}</Box>
+                    <Researcher researcher={study.researchers?.[0]} />
+                    <StudyPart property="benefits" title="What’s in it for you" icon="heart" study={study} />
                     <Part icon="warning" title="Notice">
                         Your responses to this study will be used to further learning science and
                         education research. All your data will be kept confidential and anonymous.
                     </Part>
-                    <Researcher researcher={study.researchers?.[0]} />
                 </div>
                 <LaunchStudyButton study={study} />
             </Box>

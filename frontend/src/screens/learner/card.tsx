@@ -1,12 +1,12 @@
 import { React, useCallback } from '@common'
-import { Box, Icon } from '@components'
+import { Box, Icon, MultiSessionBar } from '@components'
 import { get } from 'lodash'
 import { toSentence } from '@lib'
-import { tagOfType, tagsOfType, TagLabels } from '@models'
+import { tagOfType, tagsOfType, TagLabels, studyIsMultipart } from '@models'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { CardImages } from '../../components/study-card-images/images'
-import multiStageIcon from '@iconify-icons/bi/stack'
+
 import { colors } from '../../theme'
 
 interface StudyCardProps {
@@ -42,7 +42,7 @@ const Researchers: React.FC<StudyCardProps> = ({ study }) => {
 }
 
 const Feedback: React.FC<StudyCardProps> = ({ study }) => {
-    if (!study.feedbackDescription) return null
+    if (!study.feedbackDescription) return <span />
 
     return (
         <Box align='center' gap margin="default">
@@ -53,12 +53,12 @@ const Feedback: React.FC<StudyCardProps> = ({ study }) => {
 }
 
 const MultiSession: React.FC<StudyCardProps> = ({ study }) => {
-    if ((study.stages || []).length < 2) return null
+    if (!studyIsMultipart(study)) return <span />
 
     return (
         <Box align='center' gap margin="default">
             <Icon
-                icon={multiStageIcon}
+                icon="multiStage"
                 color={colors.purple}
                 tooltipProps={{ displayType: 'tooltip' }}
                 tooltip="This study has multiple sessions. The other sessions will be released once available."
@@ -83,6 +83,32 @@ const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
     )
 }
 
+const MultiSessionFlag: FC<StudyCardProps> = ({ study }) => {
+    if (!studyIsMultipart(study) || !study.stages?.[0].isCompleted || study.stages?.[1].isCompleted) return null
+
+    return (
+        <div
+            css={{
+                color: colors.blackText,
+                position: 'absolute',
+                borderBottomLeftRadius: 20,
+                borderTopLeftRadius: 20,
+                right: 0,
+                top: 40,
+                width: 250,
+                backgroundColor: 'white',
+                zIndex: 3,
+                height: 60,
+                padding: 20,
+                boxShadow: '0px 4px 8px rgb(0 0 0 / 18%)',
+
+            }}
+        >
+            <MultiSessionBar study={study} />
+        </div>
+    )
+}
+
 export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantStudy): void }> = ({
     onSelect,
     study,
@@ -102,6 +128,7 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
         >
             <Image.image name={Image.title} height="200px" css={{ marginBottom: 20, border: `1px solid ${colors.lightGray}`, borderRadius: 8 }} />
             <CompleteFlag study={study} />
+            <MultiSessionFlag study={study} />
             <Box justify='between'>
                 <Feedback study={study} />
                 <MultiSession study={study} />
