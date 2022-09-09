@@ -12,6 +12,8 @@ class Study < ApplicationRecord
 
   has_one  :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
 
+  scope :multi_stage, -> { joins(:stages).group('studies.id').having('count(study_id) > 1') }
+
   # Delete researchers to avoid them complaining about not leaving a researcher undeleted
   before_destroy(prepend: true) { study_researchers.delete_all }
 

@@ -11,18 +11,23 @@ class LaunchPad
     if preview
       study.stages.order(:order).first.launcher(user_id).preview_url
     else
-      raise(LaunchError, 'This study is not available.') unless study.available?
-
-      ActiveRecord::Base.transaction do
-        raise(LaunchError, 'You have already completed this study.') if launched_study.completed?
-
-        stage = study.next_stage_for_user(user)
-        raise 'No stage to launch exists' if stage.nil?
-
-        stage.launch_by_user!(user)
-        stage.launcher(user_id).url
-      end
+      stage = launch
+      stage.launcher(user_id).url
     end || raise('An error occurred when building a launch url')
+  end
+
+  def launch
+    raise(LaunchError, 'This study is not available.') unless study.available?
+
+    ActiveRecord::Base.transaction do
+      raise(LaunchError, 'You have already completed this study.') if launched_study.completed?
+
+      stage = study.next_stage_for_user(user)
+      raise 'No stage to launch exists' if stage.nil?
+
+      stage.launch_by_user!(user)
+      stage
+    end
   end
 
   def land(consent: true, aborted: nil)

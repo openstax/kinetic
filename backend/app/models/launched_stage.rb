@@ -2,7 +2,18 @@
 
 class LaunchedStage < ApplicationRecord
   belongs_to :stage
+
   belongs_to :research_id, foreign_key: :user_id, primary_key: :user_id
+  has_one :study, through: :stage
+
+  has_many :stages, through: :study, class_name: 'Stage', foreign_key: :study_id,
+                    primary_key: :study_id
+
+  scope :multi_stage, -> {
+    joins(:stages)
+      .group('launched_stages.id')
+      .having('count(stages.id) > 1')
+  }
 
   before_validation do
     self.first_launched_at ||= Time.now
@@ -11,6 +22,15 @@ class LaunchedStage < ApplicationRecord
 
   scope :incomplete, -> { where(completed_at: nil) }
   scope :complete, -> { where.not(completed_at: nil) }
+
+  def unlaunched_next_stage
+    stages
+      .left_joins(:launches)
+      .where('launched_stages.id is null')
+      .where(Stage.arel_table[:order].gt(stage.order))
+      .order(:order)
+      .first
+  end
 
   def incomplete?
     completed_at.nil?
@@ -22,5 +42,9 @@ class LaunchedStage < ApplicationRecord
 
   def completed!
     update!(completed_at: Time.now)
+  end
+
+  def next_stage_delayed_and_available?
+    stages.find_index { |s| s }
   end
 end

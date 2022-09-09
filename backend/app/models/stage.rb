@@ -2,6 +2,9 @@
 
 class Stage < ApplicationRecord
   belongs_to :study
+
+  has_many :launches, class_name: 'LaunchedStage', foreign_key: :stage_id
+
   self.implicit_order_column = 'order'
 
   has_many :launched_stages do
@@ -20,6 +23,10 @@ class Stage < ApplicationRecord
 
   def previous_stage
     siblings.where(Stage.arel_table[:order].lt(order)).order(:order).last
+  end
+
+  def next_stage
+    siblings.where(Stage.arel_table[:order].gt(order)).order(:order).first
   end
 
   def config
@@ -50,6 +57,10 @@ class Stage < ApplicationRecord
 
     # can launch once the days interval is past
     prev_launch.completed_at.before?(available_after_days.days.ago)
+  end
+
+  def delayed?
+    available_after_days.positive?
   end
 
   def launcher(user_id)
