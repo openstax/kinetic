@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserMailer < ApplicationMailer
   default from: 'OpenStax Kinetic <noreply@mg.kinetic.openstax.org>'
 
@@ -16,7 +18,7 @@ class UserMailer < ApplicationMailer
   def additional_session
     mail(
       to: params[:user].email_address,
-      subject: 'It’s finally here! The second part of your #{params[:study].title_for_participants} study 🥳',
+      subject: "It’s finally here! The second part of your #{params[:study].title_for_participants} study 🥳",
       template: 'two_part_study'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {

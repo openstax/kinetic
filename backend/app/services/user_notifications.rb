@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserNotifications
   class << self
 
@@ -76,19 +78,13 @@ class UserNotifications
                         .complete
                         .multi_stage
                         .where('user_id in (?)', user_ids_with_emails_for('session_available'))
-                        .filter do |launch|
+                        .filter(&:next_stage_delayed_and_recently_available?)
 
-        next_stage = launch.unlaunched_next_stage
-
-        next_stage.present? && next_stage.delayed? &&
-          (launch.completed_at + next_stage.available_after_days.days).to_date == Date.today
-      end
       users = UserInfo.for_uuids(prev_launches.map(&:user_id))
       prev_launches.each do |launch|
-        user = users[launch.user_id]
-        next unless user.present? && user[:email_address]
+        next unless users[launch.user_id]&.email_address
 
-        UserMailer.with(user: user, study: launch.study).additional_session.deliver
+        UserMailer.with(user: users[launch.user_id], study: launch.study).additional_session.deliver
       end
     end
 

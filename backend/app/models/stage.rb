@@ -45,7 +45,9 @@ class Stage < ApplicationRecord
     return true if previous_stage.nil? # first stage is always valid
 
     prev_launch = previous_stage.launched_stages.for_user(user)
-    return false if prev_launch.nil? || prev_launch.incomplete? # the previous stage will be launched
+    if prev_launch.nil? || prev_launch.incomplete? # the previous stage will be launched
+      return false
+    end
 
     # launch for the user on this stage
     launch = launched_stages.for_user(user)

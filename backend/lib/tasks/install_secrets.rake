@@ -67,10 +67,7 @@ task :install_secrets, [] do
 end
 
 def write_yaml_file(filename, hash)
-  File.open(File.expand_path(filename), 'w') do |file|
-    # write the hash as yaml, getting rid of the "---\n" at the front
-    file.write(hash.deep_stringify_keys.to_yaml[4..])
-  end
+  File.write(File.expand_path(filename), hash.deep_stringify_keys.to_yaml[4..])
 end
 
 def get_env_var!(name)

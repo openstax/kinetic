@@ -9,7 +9,7 @@ if Rails.env.production? || ENV['FORCE_ENABLE_SENTRY'] == 'true'
   Sentry.init do |config|
     config.dsn = secrets[:dsn]
     config.breadcrumbs_logger = [:active_support_logger, :http_logger]
-    config.environment = ENV['ENV_NAME'] || Rails.application.secrets.accounts[:env_name]
+    config.environment = ENV.fetch('ENV_NAME') { Rails.application.secrets.accounts[:env_name] }
     config.traces_sampler = lambda do |context|
       case context[:transaction_context][:name]
       when /^\/api\/v\d+\/eligibility/ then 0.001 # eligibility is loaded from REX and can have huge traffic

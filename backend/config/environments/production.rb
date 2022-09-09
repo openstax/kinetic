@@ -2,7 +2,7 @@
 
 require 'active_support/core_ext/integer/time'
 
-Rails.application.configure do
+Rails.application.configure do # rubocop:disable Metrics/BlockLength
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -62,9 +62,10 @@ Rails.application.configure do
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
+
   config.action_mailer.delivery_method = :mailgun
   config.action_mailer.mailgun_settings = {
-    api_key: ENV['MG_API_KEY'],
+    api_key: ENV.fetch('MG_API_KEY', nil),
     domain: 'mg.kinetic.openstax.org'
   }
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
@@ -121,7 +122,7 @@ Rails.application.configure do
   # but this code runs before secrets is fully initialized
 
   host = if ENV['HEROKU_PR_NUMBER']
-           "pr-#{ENV['HEROKU_PR_NUMBER']}.kinetic.sandbox.openstax.org"
+           "pr-#{ENV.fetch('HEROKU_PR_NUMBER', nil)}.kinetic.sandbox.openstax.org"
          else
            ENV.fetch('HOST', 'kinetic.openstax.org')
          end

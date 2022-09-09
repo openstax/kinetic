@@ -44,7 +44,7 @@ RSpec.describe UserNotifications, type: :mailer do
     assert_emails 0 do
       described_class.deliver_additional_session
     end
-    Timecop.freeze(2.days.from_now) do
+    Timecop.freeze(3.days.from_now) do
       assert_emails 1 do
         described_class.deliver_additional_session
       end
