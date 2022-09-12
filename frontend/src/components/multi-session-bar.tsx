@@ -23,7 +23,7 @@ export const MultiSessionBar: FC<{ study: ParticipantStudy }> = ({ study }) => {
         <SegmentedBar completedPercentage={perc} css={{ margin: '0 15px' }}>
             <Segment key={1} percentage={0}>
                 <SegmentCircle achieved={first.isCompleted} />
-                <span>{first.title}</span>
+                <span className="title">{first.title}</span>
             </Segment>
             <Segment key={2} percentage={50}>
                 <SegmentCircle
@@ -36,7 +36,7 @@ export const MultiSessionBar: FC<{ study: ParticipantStudy }> = ({ study }) => {
             </Segment>
             <Segment key={3} percentage={100}>
                 <SegmentCircle achieved={last.isCompleted} future={!last.isLaunchable} />
-                <span>{last.title}</span>
+                <span className="title">{last.title}</span>
             </Segment>
         </SegmentedBar>
 

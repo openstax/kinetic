@@ -6,10 +6,12 @@ import { CSSObject } from '@emotion/react'
 
 interface SegmentProps {
     percentage: number
+    className?: string
 }
 
-const segmentWidth = 50
+const segmentWidth = 80
 const barWidth = 7
+const segmentTitlePadding = (segmentWidth * 0.5) - 15
 
 const segmentStyle: CSSObject = {
     position: 'absolute',
@@ -18,12 +20,23 @@ const segmentStyle: CSSObject = {
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
+    '&:first-of-type': {
+        '.title': {
+            paddingLeft: segmentTitlePadding,
+        },
+    },
+    '&:last-of-type': {
+        '.title': {
+            paddingRight: segmentTitlePadding,
+        },
+    },
 }
 
 const SegmentWrapper = styled.div(segmentStyle)
 
-export const Segment: FCWC<SegmentProps> = ({ children, percentage }) => {
-    return <SegmentWrapper css={{ left: `calc(${percentage}% - ${segmentWidth / 2}px)` }}>{children}</SegmentWrapper>
+export const Segment: FCWC<SegmentProps> = ({ children, className, percentage }) => {
+    return <SegmentWrapper className={cx('segment', className)} css={{ left: `calc(${percentage}% - ${segmentWidth / 2}px)` }
+    }> {children}</SegmentWrapper >
 }
 
 export const segmentCircleStyle: CSSObject = {
@@ -134,7 +147,7 @@ export const SegmentedBar: FCWC<SegmentedBarProps> = ({ className, children, com
                 marginRight: '20px',
             }}
         >
-            <div
+            <span
                 data-test-id="progress-indicator"
                 data-percentage-complete={completedPercentage}
                 css={{
