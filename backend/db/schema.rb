@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_31_143454) do
+ActiveRecord::Schema.define(version: 2022_09_12_181638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,9 +146,9 @@ ActiveRecord::Schema.define(version: 2022_08_31_143454) do
 
   create_table "user_preferences", force: :cascade do |t|
     t.uuid "user_id", null: false
-    t.boolean "cycle_deadlines_email", default: true, null: false
-    t.boolean "prize_cycle_email", default: true, null: false
-    t.boolean "study_available_email", default: true, null: false
+    t.boolean "cycle_deadlines_email", default: false, null: false
+    t.boolean "prize_cycle_email", default: false, null: false
+    t.boolean "study_available_email", default: false, null: false
     t.boolean "session_available_email", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

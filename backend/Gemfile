@@ -59,6 +59,8 @@ gem 'openstax_auth',
 # OpenStax Accounts integration
 gem 'openstax_accounts', '9.8.0'
 
+gem 'mailgun-ruby', '~>1.2.5'
+
 # Exception reporting
 gem 'sentry-rails'
 gem 'sentry-ruby'

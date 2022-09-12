@@ -24,7 +24,6 @@ ARG PROD_GTAG_ID
 ARG PROD_GA_UA
 ARG TEST_GTAG_ID
 ARG TEST_GA_UA
-
 WORKDIR /code/frontend
 
 COPY frontend/package.json ./
@@ -38,12 +37,13 @@ RUN yarn run build
 FROM ruby as ruby2
 
 ARG SENTRY_DSN
+ARG MG_API_KEY
 ENV RUBY_ENV=production
 ENV RAILS_LOG_TO_STDOUT=true
 ENV SENTRY_DSN=$SENTRY_DSN
 ENV RUBY_SERVE_STATIC_FILES=true
 ENV RAILS_ENV=production
-
+ENV MG_API_KEY=$MG_API_KEY
 WORKDIR /code/backend
 COPY backend ./
 

@@ -2,14 +2,22 @@
 
 class LaunchedStudy < ApplicationRecord
   belongs_to :study, counter_cache: :completed_count
+  has_many :stages, through: :study
+
+  # foreign_key: :user_id, primary_key: :user_id
 
   before_create { self.first_launched_at ||= Time.now }
 
   scope :complete, -> { where.not(completed_at: nil) }
+  scope :incomplete, -> { where(completed_at: nil) }
 
   # forward a few methods so launched can be treated like a study
   delegate :completed_count, to: :study
   delegate :is_hidden?, to: :study
+
+  def available_stages
+    stage
+  end
 
   def completed?
     completed_at.present?

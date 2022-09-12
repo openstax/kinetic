@@ -9,13 +9,13 @@ namespace :heroku do
     openstax_domain = 'kinetic.sandbox.openstax.org'
 
     # Environment variables are provided when specified in app.json
-    heroku_app_name = ENV['HEROKU_APP_NAME']
-    pr_number = ENV['HEROKU_PR_NUMBER']
+    heroku_app_name = ENV.fetch('HEROKU_APP_NAME', nil)
+    pr_number = ENV.fetch('HEROKU_PR_NUMBER', nil)
     subdomain = "PR-#{pr_number}"
     hostname = [subdomain, openstax_domain].join('.')
 
     # Fetch CNAME value
-    heroku_client = PlatformAPI.connect_oauth ENV['HEROKU_API_TOKEN']
+    heroku_client = PlatformAPI.connect_oauth ENV.fetch('HEROKU_API_TOKEN', nil)
     heroku_domain = heroku_client.domain.info(heroku_app_name, hostname)['cname']
 
     # Delete CNAME record from Route53 - credentials are in ENV

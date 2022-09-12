@@ -50,6 +50,9 @@ Style/Alias:
 Style/Documentation:
   Enabled: false
 
+Style/OpenStructUse:
+  Enabled: false
+
 Style/StringLiterals:
   ConsistentQuotesInMultiline: true
 

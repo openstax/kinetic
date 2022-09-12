@@ -24,10 +24,10 @@ RSpec.describe 'Environment', type: :request, api: :v1 do
         expect(response).to have_http_status(:ok)
         expect(response_hash).to match(
           a_hash_including(
-            cycle_deadlines_email: true,
-            prize_cycle_email: true,
+            cycle_deadlines_email: false,
+            prize_cycle_email: false,
             session_available_email: true,
-            study_available_email: true
+            study_available_email: false
           )
         )
       end
@@ -37,15 +37,15 @@ RSpec.describe 'Environment', type: :request, api: :v1 do
       before { stub_current_user(user_id) }
 
       it 'returns their saved preferences' do
-        UserPreferences.create!(user_id: user_id, cycle_deadlines_email: false)
+        UserPreferences.create!(user_id: user_id, cycle_deadlines_email: true)
         get '/api/v1/preferences'
         expect(response).to have_http_status(:ok)
         expect(response_hash).to match(
           a_hash_including(
-            cycle_deadlines_email: false,
-            prize_cycle_email: true,
+            cycle_deadlines_email: true,
+            prize_cycle_email: false,
             session_available_email: true,
-            study_available_email: true
+            study_available_email: false
           )
         )
       end

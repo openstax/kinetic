@@ -7,12 +7,12 @@ namespace :heroku do
     require 'aws-sdk-route53'
 
     # Environment variables are provided when specified in app.json
-    heroku_app_name = ENV['HEROKU_APP_NAME']
-    hostname = ENV['HOST']
+    heroku_app_name = ENV.fetch('HEROKU_APP_NAME', nil)
+    hostname = ENV.fetch('HOST', nil)
     openstax_domain = 'kinetic.openstax.org'
 
     # Configure Custom Domain in Heroku
-    heroku_client = PlatformAPI.connect_oauth ENV['HEROKU_API_TOKEN']
+    heroku_client = PlatformAPI.connect_oauth ENV.fetch('HEROKU_API_TOKEN', nil)
 
     heroku_domain = heroku_client.domain.list(heroku_app_name).select do |d|
                       d['hostname'] == hostname

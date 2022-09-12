@@ -2,6 +2,9 @@
 
 class Stage < ApplicationRecord
   belongs_to :study
+
+  has_many :launches, class_name: 'LaunchedStage', foreign_key: :stage_id
+
   self.implicit_order_column = 'order'
 
   has_many :launched_stages do
@@ -22,6 +25,10 @@ class Stage < ApplicationRecord
     siblings.where(Stage.arel_table[:order].lt(order)).order(:order).last
   end
 
+  def next_stage
+    siblings.where(Stage.arel_table[:order].gt(order)).order(:order).first
+  end
+
   def config
     self[:config]&.with_indifferent_access
   end
@@ -38,7 +45,9 @@ class Stage < ApplicationRecord
     return true if previous_stage.nil? # first stage is always valid
 
     prev_launch = previous_stage.launched_stages.for_user(user)
-    return false if prev_launch.nil? || prev_launch.incomplete? # the previous stage will be launched
+    if prev_launch.nil? || prev_launch.incomplete? # the previous stage will be launched
+      return false
+    end
 
     # launch for the user on this stage
     launch = launched_stages.for_user(user)
@@ -50,6 +59,10 @@ class Stage < ApplicationRecord
 
     # can launch once the days interval is past
     prev_launch.completed_at.before?(available_after_days.days.ago)
+  end
+
+  def delayed?
+    available_after_days.positive?
   end
 
   def launcher(user_id)
