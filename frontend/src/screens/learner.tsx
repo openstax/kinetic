@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { colors, media } from '../theme'
 import { tagOfType } from '@models'
 import { Global } from '@emotion/react'
-import { sortBy, groupBy } from 'lodash'
+import { sampleSize, sortBy, groupBy } from 'lodash'
 import {
     Box, RewardsProgressBar, TopNavBar, Footer,
 } from '@components'
@@ -29,7 +29,7 @@ type StudyByTopics = Record<StudyTopicID, ParticipantStudy[]>
 interface StudyState {
     mandatoryStudy?: ParticipantStudy
     allStudies: ParticipantStudy[]
-    popularStudies: ParticipantStudy[]
+    highlightedStudies: ParticipantStudy[]
     studiesByTopic: StudyByTopics
 }
 
@@ -38,21 +38,22 @@ const useParticpantStudies = () => {
     const [filter, setFilter] = useState<StudyTopicID>('topic:personality')
     const [studies, setStudyState] = useState<StudyState>({
         allStudies: [],
-        popularStudies: [],
+        highlightedStudies: [],
         studiesByTopic: {} as StudyByTopics,
     })
 
     const fetchStudies = useCallback(async () => {
         const fetchedStudies = await api.getParticipantStudies()
         const mandatoryStudy = fetchedStudies.data?.find(s => isStudyLaunchable(s) && s.isMandatory)
-        const allStudies = fetchedStudies.data || []
-        const popularStudies = sortBy(allStudies.filter(s => !s.isMandatory), 'popularity_rating').slice(0, 3)
+        const allStudies = sortBy(fetchedStudies.data || [], s => s.completedAt ? 1 : 0)
+        const highlightedStudies = sampleSize(allStudies.filter(s => !s.isMandatory && !s.completedAt), 3)
+
         const studiesByTopic = groupBy(allStudies, (s) => tagOfType(s, 'topic') || 'topic:other') as any as StudyByTopics
         if (!studiesByTopic[filter]) {
             setFilter((Object.keys(studiesByTopic) as Array<StudyTopicID>)[0])
         }
         setStudyState({
-            mandatoryStudy, allStudies, popularStudies, studiesByTopic,
+            mandatoryStudy, allStudies, highlightedStudies, studiesByTopic,
         })
     }, [setStudyState])
 
@@ -106,7 +107,7 @@ const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies,
         <div className={cx('container-lg', 'studies', 'my-8', className)} >
             <h3 css={{ margin: '2rem 0' }}>{title}</h3>
             {children}
-            {!studies.length && <h3>No studies were found</h3>}
+            {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
             <Grid>
                 {studies.map(s => <StudyCard onSelect={onSelect} study={s} key={s.id} />)}
             </Grid>
@@ -202,7 +203,7 @@ const LearnerDashboard = () => {
     const isMobile = useIsMobileDevice()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
     const {
-        popularStudies, mandatoryStudy, allStudies, filter, onMandatoryClose, setFilter, studiesByTopic,
+        highlightedStudies, mandatoryStudy, allStudies, filter, onMandatoryClose, setFilter, studiesByTopic,
     } = useParticpantStudies()
 
     return (
@@ -241,7 +242,7 @@ const LearnerDashboard = () => {
                 </div>
             </Splash >
 
-            <StudyList onSelect={onStudySelect} title="Popular Studies on Kinetic" className="popular" studies={popularStudies} />
+            <StudyList onSelect={onStudySelect} title="Highlighted Studies on Kinetic" className="highlighted" studies={highlightedStudies} />
 
             <AllSubjects onSelect={onStudySelect} studies={studiesByTopic} filter={filter} setFilter={setFilter} />
 
