@@ -11,7 +11,8 @@ interface SegmentProps {
 
 const segmentWidth = 80
 const barWidth = 7
-const segmentTitlePadding = (segmentWidth * 0.5) - 15
+const circleDiameter = 20
+const segmentTitlePadding = (segmentWidth * 0.5) - (circleDiameter * 0.75)
 
 const segmentStyle: CSSObject = {
     position: 'absolute',
@@ -40,9 +41,9 @@ export const Segment: FCWC<SegmentProps> = ({ children, className, percentage })
 }
 
 export const segmentCircleStyle: CSSObject = {
-    height: '20px',
-    width: '20px',
-    borderRadius: '10px',
+    height: circleDiameter,
+    width: circleDiameter,
+    borderRadius: circleDiameter / 2,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
