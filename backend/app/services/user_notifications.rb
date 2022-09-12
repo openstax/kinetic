@@ -77,8 +77,10 @@ class UserNotifications
       prev_launches = LaunchedStage
                         .complete
                         .multi_stage
-                        .where('user_id in (?)', user_ids_with_emails_for('session_available'))
-                        .filter(&:next_stage_delayed_and_recently_available?)
+                        .where(
+                          'user_id in (?)',
+                          user_ids_with_emails_for('session_available', include_unset: true)
+                        ).filter(&:next_stage_delayed_and_recently_available?)
 
       users = UserInfo.for_uuids(prev_launches.map(&:user_id))
       prev_launches.each do |launch|
@@ -98,8 +100,10 @@ class UserNotifications
       Date.today + 3.days..Date.today + 4.days
     end
 
-    def user_ids_with_emails_for(type)
-      UserPreferences.where([["#{type}_email", 't']].to_h).pluck(:user_id)
+    def user_ids_with_emails_for(type, include_unset: false)
+      query = UserPreferences.where([["#{type}_email", 't']].to_h)
+      query = query.or(UserPreferences.where([["#{type}_email", nil]].to_h)) if include_unset
+      query.pluck(:user_id)
     end
 
     def users_with_emails_for(type)
