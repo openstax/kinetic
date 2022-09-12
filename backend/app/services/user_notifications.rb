@@ -3,6 +3,14 @@
 class UserNotifications
   class << self
 
+    def deliver!
+      deliver_welcomes
+      deliver_new_prize_cycle
+      deliver_prize_cycle_deadline
+      deliver_new_studies
+      deliver_additional_session
+    end
+
     # GIVEN user is a registered Kinetic user
     # WHEN completing the demographic study
     def deliver_welcomes
