@@ -4,7 +4,7 @@ export const ResourceLinks = () => {
     return (
         <>
             <h4>Resource</h4>
-            <a target="_blank" href="https://openstax.secure.force.com/help/articles/FAQ/Find-our-more-information-about-the-AirPods-giveaway">FAQs</a>
+            <a target="_blank" href="https://openstax.secure.force.com/help/articles/FAQ/Kinetic-FAQs">FAQs</a>
             <a target="_blank" href="https://openstax.org/privacy-policy">Privacy Policy</a>
         </>
     )
