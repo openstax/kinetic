@@ -98,10 +98,12 @@ const MultiSessionFlag: FC<StudyCardProps> = ({ study }) => {
                 width: 250,
                 backgroundColor: 'white',
                 zIndex: 3,
-                height: 60,
+                height: 80,
                 padding: 20,
+                display: 'flex',
+                flex: 1,
+                overflow: 'hidden',
                 boxShadow: '0px 4px 8px rgb(0 0 0 / 18%)',
-
             }}
         >
             <MultiSessionBar study={study} />

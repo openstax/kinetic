@@ -21,6 +21,10 @@ const segmentStyle: CSSObject = {
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
+    '.title': {
+        marginTop: '5px',
+        lineHeight: '18px',
+    },
     '&:first-of-type': {
         '.title': {
             paddingLeft: segmentTitlePadding,
