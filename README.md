@@ -37,6 +37,10 @@ Then you can run `rake db:migrate`, `rspec`, whatever.  Or you can run those dir
 $> docker compose exec api rake db:migrate
 ```
 
+### Deploying Kinetic
+
+Kinetic is currently hosted on Heroku using the Docker integration.  To deploy the application you need to add a git remote per the [heroku  instructions](https://devcenter.heroku.com/articles/git) and then `git push heroku main` (or whatever you've named your remote as).
+
 ### OpenApi, Clients, and Bindings
 
 The Kinetic API is documented in the code using OpenApi.  OpenApi JSON can be accessed at `/api/v1/openapi`.
