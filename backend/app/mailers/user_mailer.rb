@@ -6,7 +6,7 @@ class UserMailer < ApplicationMailer
   def welcome
     mail(
       to: params[:user].email_address,
-      subject: 'Welcome to OpenStax Kinetic! 🥳🥳',
+      subject: 'Welcome to OpenStax Kinetic!',
       template: 'welcome'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
@@ -18,11 +18,12 @@ class UserMailer < ApplicationMailer
   def additional_session
     mail(
       to: params[:user].email_address,
-      subject: "It’s finally here! The second part of your #{params[:study].title_for_participants} study 🥳",
+      subject: 'It’s finally here! The second part of your Kinetic study',
       template: 'two_part_study'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
         'full_name' => params[:user].full_name,
+        'study_name' => params[:study].title_for_participants,
         'study_details_url' => "https://kinetic.openstax.org/studies/details/#{params[:study].id}"
       }
     end
@@ -44,7 +45,7 @@ class UserMailer < ApplicationMailer
   def upcoming_prize_cycle_deadline
     mail(
       to: params[:user].email_address,
-      subject: 'Don’t miss out on an exciting prize! 😱',
+      subject: 'Don’t miss out on an exciting prize!',
       template: 'upcoming_prize_cycle_deadline'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
@@ -57,7 +58,7 @@ class UserMailer < ApplicationMailer
   def new_studies
     mail(
       to: params[:user].email_address,
-      subject: 'A brand new Kinetic study - just for you! 👏',
+      subject: 'A brand new Kinetic study - just for you!',
       template: 'new_studies'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
