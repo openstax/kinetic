@@ -257,6 +257,9 @@
           padding: 20px;
           box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.18);
           border-radius: 20px;
+          transition: all 0.5s ease;
+          color: black;
+          background: #fff;
       }
       #kinetic-homepage .step.active {
           background: #6922EA;
@@ -330,7 +333,17 @@
       #kinetic-homepage .supporters .columns {
           align-items: center;
       }
-
+      #kinetic-homepage .supporters .centered {
+          max-width: 600px;
+          margin: auto;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+      }
+      #kinetic-homepage .supporters .imgs {
+          display: flex;
+          align-items: center;
+      }
       
       #kinetic-homepage .participate {
           overflow: hidden;
@@ -380,14 +393,20 @@
           }
           #kinetic-homepage .participate .txt-block {
               margin-left: 0;
-
-              
           }
           #kinetic-homepage .participate .lines {
             transform: rotate(41deg) translate(-340px, 0px);
             left: 50px;
             top: 100%;
           }
+
+          #kinetic-homepage .supporters .imgs a {
+              max-width: 50%;
+          }
+          #kinetic-homepage .supporters a img {
+              width: 100%;
+          }
+          
       }
 
       
@@ -546,19 +565,24 @@
           <h4>
             Support from Scientific Agencies
           </h4>
-          <div class="columns">
-            <a target="_blank" href="https://www.nsf.org/gb/en">
-              <img  src="https://assets.openstax.org/oscms-prodcms/media/images/NSF_logo.original.webp">
-            </a>
-            <a target="_blank" href="https://ies.ed.gov/">
-              <img src="https://assets.openstax.org/oscms-prodcms/media/images/IES_logo.original.webp">
-            </a>
+          <div class="centered">
+            <div class="imgs">
+              <a target="_blank" href="https://ies.ed.gov/">
+                <img src="https://assets.openstax.org/oscms-prodcms/media/images/IES_logo.original.webp">
+              </a>
+              <a target="_blank" href="https://www.nsf.org/gb/en">
+                <img  src="https://assets.openstax.org/oscms-prodcms/media/images/NSF_logo.original.webp">
+              </a>
+            </div>
+            
+            <a class="other-supporters" href="https://openstax.org/foundation">View Other Philanthropic Supporters</a>
+            
+            <p class="light">
+              *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
+            </p>
+
           </div>
 
-          <a class="other-supporters" href="https://openstax.org/foundation">View Other Philanthropic Supporters</a>
-          <p class="light">
-            *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
-          </p>
         </div>
       </div>
 
@@ -639,11 +663,11 @@
                   focusStep(order[indx]);
                   indx += 1;
                   if (indx >= order.length) {
-                      stopStepsAnimation();
+                      indx = 0;
                   }
               }
               animate();
-              stepsAnimationTimer = setInterval(animate, 1000)
+              stepsAnimationTimer = setInterval(animate, 3000)
           }
 
           function setupStepActions() {
