@@ -14,6 +14,12 @@ const barWidth = 7
 const circleDiameter = 20
 const segmentTitlePadding = (segmentWidth * 0.5) - (circleDiameter * 0.75)
 
+export const SegmentTitle: FCWC<{ className?: string }> = ({ children, className }) => <div className={cx('title', className)} css={{
+    marginTop: '5px',
+    lineHeight: '18px',
+    fontSize: '14px',
+}}>{children}</div>
+
 const segmentStyle: CSSObject = {
     position: 'absolute',
     width: segmentWidth,
@@ -22,8 +28,6 @@ const segmentStyle: CSSObject = {
     alignItems: 'center',
     flexDirection: 'column',
     '.title': {
-        marginTop: '5px',
-        lineHeight: '18px',
     },
     '&:first-of-type': {
         '.title': {
@@ -41,8 +45,9 @@ const SegmentWrapper = styled.div(segmentStyle)
 
 export const Segment: FCWC<SegmentProps> = ({ children, className, percentage }) => {
     return <SegmentWrapper className={cx('segment', className)} css={{ left: `calc(${percentage}% - ${segmentWidth / 2}px)` }
-    }> {children}</SegmentWrapper >
+    }> {children}</SegmentWrapper>
 }
+
 
 export const segmentCircleStyle: CSSObject = {
     height: circleDiameter,
@@ -102,7 +107,7 @@ interface SegmentCircleProps {
     current?: boolean
 
 }
-export const SegmentCircle: FC<SegmentCircleProps> = ({ past, future, current, achieved }) => {
+export const SegmentCircle: FCWOC<SegmentCircleProps> = ({ children, past, future, current, achieved }) => {
     if (!past && !future) {
         current = true
     }
@@ -114,7 +119,8 @@ export const SegmentCircle: FC<SegmentCircleProps> = ({ past, future, current, a
                 current,
                 achieved,
             })
-        } />
+        }
+        >{children}</CircleDiv>
     )
 }
 

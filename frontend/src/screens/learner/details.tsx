@@ -48,8 +48,6 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
     const api = useApi()
     const [isBusy, setBusy] = useState(false)
 
-    if (!isStudyLaunchable(study)) return null
-
     const onLaunch = useCallback(async () => {
         setBusy(true)
         await LaunchStudy(api, study)
@@ -61,7 +59,6 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
             <Button primary disabled>Completed on {dayjs(study.completedAt).format('LL')}</Button>
         )
     }
-
     const action = (study.stages?.length && !study.stages[0].isCompleted) ? 'Begin' : 'Continue'
     return (
         <Button
@@ -69,6 +66,7 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
             css={{ justifyContent: 'center' }}
             busyMessage="Launching Study…"
             primary
+            disabled={!isStudyLaunchable(study)}
             data-test-id="launch-study"
             onClick={onLaunch}
         >
