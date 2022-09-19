@@ -18,6 +18,7 @@ export const colors = {
     line: '#cfcfcf',
     linkButtonIcon: '#DBDBDB',
     linkButtonIconHover: '#151B2C',
+    white: '#ffffff',
 }
 
 export const screenSizes = {

@@ -21,7 +21,7 @@ import twIcon from '@iconify-icons/bi/twitter'
 
 const Funders = () => {
     return (
-        <div css={{ backgroundColor: colors.gray }}>
+        <div css={{ backgroundColor: colors.white }}>
             <Box className="container-lg" direction="column" padding={{ vertical: 'xlarge' }}>
                 <h5 css={{ fontWeight: 'bold' }}>Support from Scientific Agencies</h5>
                 <Box wrap justify='center' margin={{ vertical: 'large' }} gap="xxlarge">
