@@ -57,10 +57,18 @@ export const LaunchStudy = async (api: DefaultApi, study: { id: number }, option
     return launch
 }
 
+const areStudyStagesLaunchable = (study: ParticipantStudy) => {
+    if (!study.stages) {
+        return false
+    }
+    return Boolean(study.stages.find(s => !s.isCompleted && s.isLaunchable))
+}
+
 export const isStudyLaunchable = (study: ParticipantStudy) => {
     return Boolean(
-        !study.completedAt &&
-        (!study.closesAt || dayjs(study.closesAt).isAfter(dayjs()))
+        !study.completedAt
+        && (!study.closesAt || dayjs(study.closesAt).isAfter(dayjs()))
+        && areStudyStagesLaunchable(study)
     )
 }
 
