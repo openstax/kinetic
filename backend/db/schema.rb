@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 2022_09_12_181638) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["stage_id"], name: "index_launched_stages_on_stage_id"
+    t.index ["user_id", "stage_id"], name: "index_launched_stages_on_user_id_and_stage_id", unique: true
   end
 
   create_table "launched_studies", force: :cascade do |t|
@@ -51,6 +52,7 @@ ActiveRecord::Schema.define(version: 2022_09_12_181638) do
     t.datetime "aborted_at"
     t.boolean "consent_granted"
     t.index ["study_id"], name: "index_launched_studies_on_study_id"
+    t.index ["user_id", "study_id"], name: "index_launched_studies_on_user_id_and_study_id", unique: true
   end
 
   create_table "participant_metadata", force: :cascade do |t|
@@ -60,17 +62,6 @@ ActiveRecord::Schema.define(version: 2022_09_12_181638) do
     t.datetime "created_at"
     t.index ["study_id"], name: "index_participant_metadata_on_study_id"
     t.index ["user_id"], name: "index_participant_metadata_on_user_id"
-  end
-
-  create_table "participant_preference", force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.boolean "cycle_deadlines_email", default: true, null: false
-    t.boolean "prize_cycle_email", default: true, null: false
-    t.boolean "study_available_email", default: true, null: false
-    t.boolean "session_available_email", default: true, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_participant_preference_on_user_id"
   end
 
   create_table "research_ids", id: :text, force: :cascade do |t|
