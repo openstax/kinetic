@@ -128,10 +128,10 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
             data-is-completed={!!study.completedAt}
             onClick={onClick}
         >
-            <Image.image name={Image.title} height="200px" css={{ marginBottom: 20, border: `1px solid ${colors.lightGray}`, borderRadius: 8 }} />
+            <Image.image name={Image.title} height="200px" css={{ border: `1px solid ${colors.lightGray}`, borderRadius: 8 }} />
             <CompleteFlag study={study} />
             <MultiSessionFlag study={study} />
-            <Box justify='between'>
+            <Box justify='between' margin={{ bottom: 'large', top: 'small' }} css={{ fontSize: '14px' }}>
                 <Feedback study={study} />
                 <MultiSession study={study} />
             </Box>
@@ -145,7 +145,6 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
                     {tagsOfType(study, 'subject').map(tag => <Tag key={tag} tag={tag} />)}
                 </Box>
                 <Box gap>
-
                     <div css={{ marginLeft: '0.5rem' }}>{study.durationMinutes} min</div>
                     {study.participationPoints && <span>• {study.participationPoints}pts</span>}
                 </Box>
