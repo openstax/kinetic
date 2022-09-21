@@ -1,4 +1,5 @@
 import { React, cx } from '@common'
+import styled from '@emotion/styled'
 import { ResourceLinks, HelpLink } from './resource-links'
 import { colors } from '../theme'
 import {
@@ -14,10 +15,14 @@ import RiceLogoURL from '../images/rice-logo.png'
 // @ts-ignore
 import OpenStaxURL from '../images/openstax-logo.png'
 
-
 import fbIcon from '@iconify-icons/bi/facebook'
 import igIcon from '@iconify-icons/bi/instagram'
 import twIcon from '@iconify-icons/bi/twitter'
+
+const Supporter = styled.a({
+    display: 'flex',
+    alignItems: 'center',
+})
 
 const Funders = () => {
     return (
@@ -27,9 +32,8 @@ const Funders = () => {
 
                 <Box direction="column" css={{ maxWidth: 600, margin: 'auto' }}>
                     <Box wrap justify='center' margin={{ vertical: 'large' }} gap="xxlarge">
-
-                        <a target="_blank" href="https://ies.ed.gov/"><img alt="Institute of Education Sciences logo" src={IESLogoURL} /></a>
-                        <a target="_blank" href="https://www.nsf.org/gb/en"><img alt="National Science Foundation logo" src={NSFLogoURL} /></a>
+                        <Supporter target="_blank" href="https://ies.ed.gov/"><img alt="Institute of Education Sciences logo" src={IESLogoURL} /></Supporter>
+                        <Supporter target="_blank" href="https://www.nsf.org/gb/en"><img alt="National Science Foundation logo" src={NSFLogoURL} /></Supporter>
                     </Box>
 
                     <a href="https://openstax.org/foundation" className="mb-2">View Other Philanthropic Supporters</a>
