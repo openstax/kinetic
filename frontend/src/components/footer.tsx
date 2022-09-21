@@ -6,9 +6,9 @@ import {
 } from '@components'
 
 // @ts-ignore
-import NSFLogoURL from '../images/nsf-logo.png'
+import NSFLogoURL from '../images/nsf-logo.webp'
 // @ts-ignore
-import IESLogoURL from '../images/ies-logo.png'
+import IESLogoURL from '../images/ies-logo.webp'
 // @ts-ignore
 import RiceLogoURL from '../images/rice-logo.png'
 // @ts-ignore
@@ -23,15 +23,20 @@ const Funders = () => {
     return (
         <div css={{ backgroundColor: colors.white }}>
             <Box className="container-lg" direction="column" padding={{ vertical: 'xlarge' }}>
-                <h5 css={{ fontWeight: 'bold' }}>Support from Scientific Agencies</h5>
-                <Box wrap justify='center' margin={{ vertical: 'large' }} gap="xxlarge">
-                    <a target="_blank" href="https://ies.ed.gov/"><img alt="Institute of Education Sciences logo" height="80" src={IESLogoURL} /></a>
-                    <a target="_blank" href="https://www.nsf.org/gb/en"><img height="80" alt="National Science Foundation logo" src={NSFLogoURL} /></a>
+                <h4 css={{ fontWeight: 'bold' }}>Support from Scientific Agencies</h4>
+
+                <Box direction="column" css={{ maxWidth: 600, margin: 'auto' }}>
+                    <Box wrap justify='center' margin={{ vertical: 'large' }} gap="xxlarge">
+
+                        <a target="_blank" href="https://ies.ed.gov/"><img alt="Institute of Education Sciences logo" src={IESLogoURL} /></a>
+                        <a target="_blank" href="https://www.nsf.org/gb/en"><img alt="National Science Foundation logo" src={NSFLogoURL} /></a>
+                    </Box>
+
+                    <a href="https://openstax.org/foundation" className="mb-2">View Other Philanthropic Supporters</a>
+                    <p css={{ color: colors.grayText }}>
+                        *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
+                    </p>
                 </Box>
-                <a href="https://openstax.org/foundation" className="mb-2">View Other Philanthropic Supporters</a>
-                <p css={{ color: colors.grayText }}>
-                    *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
-                </p>
             </Box>
         </div>
     )
