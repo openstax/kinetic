@@ -29,7 +29,7 @@
     <script type="application/javascript">
       window.KINETIC = (window.KINETIC || {});
       if (!window.KINETIC.preScriptRan) {
-          
+
           var URLS = {};
           if (window.location.host == 'openstax.org') {
               URLS = {
@@ -45,9 +45,9 @@
               }
           }
           var favIcon = document.querySelector('[rel="shortcut icon"]');
-          var previousFavIcon; 
+          var previousFavIcon;
           if (favIcon) {
-              previousFavIcon = { href: favIcon.href, el: favIcon }; 
+              previousFavIcon = { href: favIcon.href, el: favIcon };
               favIcon.href =  'https://assets.openstax.org/oscms-prodcms/media/images/kinetic-favicon-32x32.original.webp';
           }
           document.title = "OpenStax Kinetic";
@@ -677,13 +677,21 @@
 
     <script type="application/javascript">
       if (!window.KINETIC.postScriptRan) {
-          
+
           function revealElements(klass) {
               var links = document.querySelectorAll('.' + klass);
               for (var i = 0; i < links.length; i++) {
                   links[i].style.display = "block";
               }
           }
+
+		  function hideElements(klass) {
+			  var links = document.querySelectorAll('.' + klass);
+			  console.log(links);
+			  for (var i = 0; i < links.length; i++) {
+				  links[i].style.display = "none";
+			  }
+		  }
 
           function setUserState() {
               if (!window.fetch) {
@@ -697,13 +705,14 @@
                   resp.json().then(function(user) {
                       if (user.id) {
                           revealElements('start-using');
+						  hideElements('login-signup');
                       } else {
                           revealElements('login-signup');
                       }
                   });
               }).catch(function() {
                   revealElements('login-signup');
-              });
+			  });
           }
 
           function rewriteLinks(klass, href) {
@@ -720,7 +729,7 @@
 
           function onPageUnload() {
               if (previousFavIcon) {
-                  previousFavIcon.el.href = previousFavIcon.href; 
+                  previousFavIcon.el.href = previousFavIcon.href;
               }
               delete window.KINETIC;
           }
