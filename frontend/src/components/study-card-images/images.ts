@@ -25,4 +25,10 @@ export const CardImages: Record<string, CardImage> = {
     RememberNumbersWhenReading: { title: 'Remember Numbers When Reading', image: loadAsync('image', () => import('./RememberNumbersWhenReading')) },
     StemInterest: { title: 'StemInterest', image: loadAsync('image', () => import('./StemInterest')) },
     UncoverAchievementLearning: { title: 'Uncover Achievement Learning', image: loadAsync('image', () => import('./UncoverAchievementLearning')) },
+    Biology1: { title: 'Biology 1', image: loadAsync('image', () => import('./Bio1')) },
+    Biology2: { title: 'Biology 2', image: loadAsync('image', () => import('./Bio2')) },
+    Biology3: { title: 'Biology 3', image: loadAsync('image', () => import('./Bio3')) },
+    Demographic: { title: 'Demographic', image: loadAsync('image', () => import('./Demographic')) },
+    FinancialLiteracy: { title: 'Financial Literacy', image: loadAsync('image', () => import('./FinancialLiteracy')) },
+    Psychology: { title: 'Psychology', image: loadAsync('image', () => import('./Psychology')) },
 }
