@@ -26,7 +26,7 @@ export const BannersBar: React.FC = () => {
     return (
         <div
             css={{
-                margin: isMobile ? '0' : '0 10px',
+                margin: isMobile ? '0' : '0 50px',
                 display: 'flex',
                 alignItems: 'center',
                 color: 'white',
