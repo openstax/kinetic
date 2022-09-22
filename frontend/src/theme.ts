@@ -5,6 +5,7 @@ export const colors = {
     darkBlue: '#151B2C',
     red: '#ca2026',
     teal: '#0dc0de',
+    darkTeal: '#039AC4',
     purple: '#6922EA',
     gray: '#E8E8E8',
     green: '#0EE094',
