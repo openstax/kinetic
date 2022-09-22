@@ -110,3 +110,8 @@ Call this to make sure an admin and researcher user exists.  After calling this 
 ```GET    /development/users/whoami```
 
 Call this to see who you are logged in as.
+
+
+### Managing Banners & Rewards
+
+Be logged in as an admin, and go to `/admin`
