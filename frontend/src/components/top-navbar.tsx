@@ -23,9 +23,9 @@ export const TopNavBar: FCWOC<{ className?: string }> = ({ children, className }
                         <Box gap="xlarge">
                             {!isMobile && <a href="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }} onClick={onNavClick}>Studies</a>}
                             <Menu alignEnd >
-                                {isMobile && <li><a className="dropdown-item" href="/studies" onClick={onNavClick}>Studies</a></li>}
-                                <li><a className="dropdown-item" href="/account" onClick={onNavClick}>My account</a></li>
-                                <li><a className="dropdown-item" href={env.logoutURL} onClick={onNavClick}>Log out</a></li>
+                                {isMobile && <li><a className="dropdown-item" href="/studies">Studies</a></li>}
+                                <li><a className="dropdown-item" href="/account">My account</a></li>
+                                <li><a className="dropdown-item" href={env.logoutURL}>Log out</a></li>
                             </Menu>
                         </Box>
                     </Box>
