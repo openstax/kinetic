@@ -27,6 +27,13 @@ export class Environment {
         this.user = User.bootstrap(config.user)
     }
 
+    get host() {
+        if (this.config.accountsEnvName === 'production') {
+            return `https://openstax.org`;
+        }
+        return `https://${this.config.accountsEnvName}.openstax.org`;
+    }
+
     get loginURL() {
         const url = this.accounts_url
         if (ENV.IS_DEV_MODE) return url
@@ -35,29 +42,19 @@ export class Environment {
     }
 
     get logoutURL() {
-        if (ENV.IS_DEV_MODE) return '/development/users/log_out'
-        const homepage = encodeURIComponent(`https://${this.config.accountsEnvName}.openstax.org`)
-        return `${this.accounts_url}/signout?r=${homepage}`
+        if (ENV.IS_DEV_MODE) return '/development/users/log_out';
+        const homepage = encodeURIComponent(`${this.host}/kinetic`);
+        return `${this.accounts_url}/signout?r=${homepage}`;
     }
 
     get accounts_url() {
         if (ENV.IS_DEV_MODE) return '/dev/user'
-        if (this.config.accountsEnvName == 'production') {
-            return 'https://openstax.org/accounts'
-        }
-        return `https://${this.config.accountsEnvName}.openstax.org/accounts`
+        return `${this.host}/accounts`;
     }
 
     get accounts_api_url() {
         if (ENV.IS_DEV_MODE) return `${ENV.API_ADDRESS}/development/user/api/user`
         return `${this.accounts_url}/api/user`
-    }
-
-    get currentRewardSegment() {
-        const now = dayjs()
-        return this.config.rewardsSchedule.find(s => (
-            dayjs(s.startAt).isBefore(now) && dayjs(s.endAt).isAfter(now)
-        ))
     }
 
     async fetchUserInfo(): Promise<UserInfo> {
