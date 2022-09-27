@@ -1,6 +1,5 @@
 import { API_CONFIGURATION, ENV } from '@lib'
-import { Environment as ApiEnv, DefaultApi } from '@api'
-import dayjs from 'dayjs'
+import { DefaultApi, Environment as ApiEnv } from '@api'
 import { retry } from '../lib/util'
 import { User } from './user'
 
@@ -42,7 +41,7 @@ export class Environment {
     }
 
     get logoutURL() {
-        if (ENV.IS_DEV_MODE) return '/development/users/log_out';
+        if (ENV.IS_DEV_MODE) return '/dev/user';
         const homepage = encodeURIComponent(`${this.host}/kinetic`);
         return `${this.accounts_url}/signout?r=${homepage}`;
     }

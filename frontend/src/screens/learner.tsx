@@ -92,7 +92,6 @@ const Grid = styled.div({
         gridTemplateColumns: 'repeat(2, [col-start] minmax(100px, 1fr) [col-end])',
     },
     [media.mobile]: {
-        overflowY: 'auto',
         display: 'flex',
         '.col': {
             maxWidth: '80vw',

@@ -57,6 +57,7 @@ export class User {
     }
 
     async logout() {
+        if (!ENV.IS_DEV_MODE) return
         await fetch(`${ENV.API_ADDRESS}/development/users/log_out`, {
             method: 'DELETE', credentials: 'include',
         })
