@@ -1,4 +1,4 @@
-import { React, useNavigate, useCallback, cx } from '@common'
+import { cx, React, useCallback } from '@common'
 import { Box } from 'boxible'
 import { NavbarLogoLink } from './navbar-logo-link'
 import { Menu } from './menu'
@@ -6,13 +6,17 @@ import { BannersBar } from './banners-bar'
 import { useCurrentUser, useEnvironment, useIsMobileDevice } from '@lib'
 
 export const TopNavBar: FCWOC<{ className?: string }> = ({ children, className }) => {
-    const nav = useNavigate()
     const env = useEnvironment()
     const user = useCurrentUser()
-    const onNavClick = useCallback(
-        (ev: React.MouseEvent<HTMLAnchorElement>) => nav(ev.currentTarget.pathname),
-        [nav])
     const isMobile = useIsMobileDevice()
+
+    const onLogout = useCallback(() => {
+        if (env.isDev) {
+            user.logout();
+        }
+    },
+    [user, env]
+    )
     return (
         <nav className={cx('navbar', 'navbar-light', className)}>
             < div className="navbar-dark bg-dark py-1" >
@@ -22,11 +26,11 @@ export const TopNavBar: FCWOC<{ className?: string }> = ({ children, className }
                         {!isMobile && <BannersBar />}
                         {children}
                         <Box gap="xlarge">
-                            {!isMobile && <a href="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }} onClick={onNavClick}>Studies</a>}
+                            {!isMobile && <a href="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Studies</a>}
                             <Menu alignEnd >
                                 {isMobile && <li><a className="dropdown-item" href="/studies">Studies</a></li>}
                                 <li><a className="dropdown-item" href="/account">My account</a></li>
-                                <li><a className="dropdown-item" href={env.logoutURL} onClick={user.logout}>Log out</a></li>
+                                <li><a className="dropdown-item" href={env.logoutURL} onClick={onLogout}>Log out</a></li>
                             </Menu>
                         </Box>
                     </Box>

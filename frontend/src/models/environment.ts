@@ -1,6 +1,5 @@
 import { API_CONFIGURATION, ENV } from '@lib'
-import { Environment as ApiEnv, DefaultApi } from '@api'
-import dayjs from 'dayjs'
+import { DefaultApi, Environment as ApiEnv } from '@api'
 import { retry } from '../lib/util'
 import { User } from './user'
 
@@ -55,6 +54,10 @@ export class Environment {
     get accounts_api_url() {
         if (ENV.IS_DEV_MODE) return `${ENV.API_ADDRESS}/development/user/api/user`
         return `${this.accounts_url}/api/user`
+    }
+
+    get isDev(): boolean {
+        return ENV.IS_DEV_MODE;
     }
 
     async fetchUserInfo(): Promise<UserInfo> {
