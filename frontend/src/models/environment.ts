@@ -41,7 +41,7 @@ export class Environment {
     }
 
     get logoutURL() {
-        if (ENV.IS_DEV_MODE) return '/';
+        if (ENV.IS_DEV_MODE) return '/dev/user';
         const homepage = encodeURIComponent(`${this.host}/kinetic`);
         return `${this.accounts_url}/signout?r=${homepage}`;
     }
@@ -54,10 +54,6 @@ export class Environment {
     get accounts_api_url() {
         if (ENV.IS_DEV_MODE) return `${ENV.API_ADDRESS}/development/user/api/user`
         return `${this.accounts_url}/api/user`
-    }
-
-    get isDev(): boolean {
-        return ENV.IS_DEV_MODE;
     }
 
     async fetchUserInfo(): Promise<UserInfo> {
