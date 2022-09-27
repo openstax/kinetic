@@ -11,11 +11,7 @@ export const TopNavBar: FCWOC<{ className?: string }> = ({ children, className }
     const isMobile = useIsMobileDevice()
 
     const onLogout = useCallback(
-        () => {
-            if (env.isDev) {
-                user.logout();
-            }
-        },
+        () => env.isDev && user.logout(),
         [user, env]
     )
     return (
