@@ -10,12 +10,13 @@ export const TopNavBar: FCWOC<{ className?: string }> = ({ children, className }
     const user = useCurrentUser()
     const isMobile = useIsMobileDevice()
 
-    const onLogout = useCallback(() => {
-        if (env.isDev) {
-            user.logout();
-        }
-    },
-    [user, env]
+    const onLogout = useCallback(
+        () => {
+            if (env.isDev) {
+                user.logout();
+            }
+        },
+        [user, env]
     )
     return (
         <nav className={cx('navbar', 'navbar-light', className)}>
