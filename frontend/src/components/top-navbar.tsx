@@ -3,11 +3,12 @@ import { Box } from 'boxible'
 import { NavbarLogoLink } from './navbar-logo-link'
 import { Menu } from './menu'
 import { BannersBar } from './banners-bar'
-import { useEnvironment, useIsMobileDevice } from '@lib'
+import { useCurrentUser, useEnvironment, useIsMobileDevice } from '@lib'
 
 export const TopNavBar: FCWOC<{ className?: string }> = ({ children, className }) => {
     const nav = useNavigate()
     const env = useEnvironment()
+    const user = useCurrentUser()
     const onNavClick = useCallback(
         (ev: React.MouseEvent<HTMLAnchorElement>) => nav(ev.currentTarget.pathname),
         [nav])
@@ -25,7 +26,7 @@ export const TopNavBar: FCWOC<{ className?: string }> = ({ children, className }
                             <Menu alignEnd >
                                 {isMobile && <li><a className="dropdown-item" href="/studies">Studies</a></li>}
                                 <li><a className="dropdown-item" href="/account">My account</a></li>
-                                <li><a className="dropdown-item" href={env.logoutURL}>Log out</a></li>
+                                <li><a className="dropdown-item" href={env.logoutURL} onClick={user.logout}>Log out</a></li>
                             </Menu>
                         </Box>
                     </Box>

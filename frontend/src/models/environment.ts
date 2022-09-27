@@ -42,7 +42,7 @@ export class Environment {
     }
 
     get logoutURL() {
-        if (ENV.IS_DEV_MODE) return '/development/users/log_out';
+        if (ENV.IS_DEV_MODE) return '/';
         const homepage = encodeURIComponent(`${this.host}/kinetic`);
         return `${this.accounts_url}/signout?r=${homepage}`;
     }
