@@ -183,11 +183,15 @@ const AllSubjects: FC<AllSubjectsProps> = ({
 }
 
 const H = styled.h2({
-    fontSize: 48,
+    fontSize: '48px',
     lineHeight: '64px',
     fontWeight: 700,
     marginBottom: 0,
     fontFamily: 'Helvetica Neue',
+    [media.mobile]: {
+        fontSize: '40px',
+        lineHeight: '50px',
+    },
 })
 
 const Sh = styled.h6({
@@ -195,6 +199,10 @@ const Sh = styled.h6({
     marginBottom: 0,
     fontSize: '18px',
     lineHeight: '30px',
+    [media.mobile]: {
+        fontSize: '16px',
+        lineHeight: '24px',
+    },
 })
 
 const LearnerDashboard = () => {
@@ -228,7 +236,7 @@ const LearnerDashboard = () => {
                     }}
                 />
                 <div className="container-lg">
-                    <div css={{ maxWidth: '55%', p: { marginBottom: 5 } }}>
+                    <div css={{ maxWidth: isMobile ? '100%' : '55%', p: { marginBottom: 5 } }}>
                         <H>Level up to new ways of</H>
                         <H>learning, and earn prizes!</H>
                         <Sh className="mt-1">

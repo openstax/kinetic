@@ -116,7 +116,7 @@ export default function AdminHome() {
                         onSubmit={savePrefs}
                     >
                         <h5 className="mt-5 mb-3 p-0">Email Notification</h5>
-                        <h6>Opt-in to your preferred email communications. </h6>
+                        <h6>Adjust your preferred email communications. </h6>
                         <p css={{ color: colors.grayText }}>*Exception: when you win a prize on Kinetic, we will email you your gift card.</p>
 
 

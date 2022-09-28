@@ -6,8 +6,10 @@ $link-color: #0d6efd;
 
 @import "./bootstrap";
 @import "flatpickr/dist/flatpickr.css";
-@import "./effects";
 
+#root {
+    overflow: hidden;
+}
 
 .btn-primary {
     color: $white;
