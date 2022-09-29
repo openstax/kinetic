@@ -50,73 +50,78 @@ const Funders = () => {
         </div>
     )
 }
-export const Footer: React.FC<{ className?: string, includeFunders?: boolean }> = ({ className, includeFunders }) => {
-    const isMobile = useIsMobileDevice();
+
+export const MobileFooter: React.FC<{ className?: string, includeFunders?: boolean }> = ({ className, includeFunders }) => {
     return (
-        !isMobile ?
-            <div className={cx('footer', 'mt-4', className)}>
-                {includeFunders && < Funders />}
-                <div css={{ backgroundColor: colors.darkBlue, color: 'white', a: { color: 'white' } }}>
-                    <div className='container-lg'>
-                        <Row css={{ padding: '20px 0' }}>
-                            <Col auto direction="column">
-                                <HelpLink />
-                            </Col>
-                            <Col auto direction="column">
-                                <ResourceLinks />
-                            </Col>
-                            <Col auto direction="column">
-                                <b>Follow us</b>
-                                <Box gap>
-                                    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org"><Icon icon={fbIcon} /></a>
-                                    <a target="_blank" href="https://www.instagram.com/openstax/"><Icon icon={igIcon} /></a>
-                                    <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org"><Icon icon={twIcon} /></a>
-                                </Box>
-                            </Col>
-                            <Col auto direction="column" gap>
-                                <div><img alt="Rice University logo" height="30" src={RiceLogoURL} /></div>
-                                <div><img alt="Open Stax logo" height="30" src={OpenStaxURL} /></div>
-                            </Col>
-                        </Row>
-                    </div>
-                </div>
+        <div css={{ backgroundColor: colors.darkBlue, color: 'white', a: { color: 'white' } }}>
+            <div className='container-lg'>
+                <Row className="py-2">
+                    <Row className="py-1">
+                        <HelpLink />
+                    </Row>
+
+                    <Row className="py-1">
+                        <ResourceLinks />
+                    </Row>
+
+                    <Row className="py-1">
+                        <b>Follow us</b>
+                        <Box gap>
+                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org">
+                                <Icon icon={fbIcon} height={30}/>
+                            </a>
+                            <a target="_blank" href="https://www.instagram.com/openstax/">
+                                <Icon icon={igIcon} height={30}/>
+                            </a>
+                            <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org">
+                                <Icon icon={twIcon} height={30}/>
+                            </a>
+                        </Box>
+                    </Row>
+                    <Col className="py-1" direction="row" justify="around">
+                        <div><img alt="Rice University logo" height="30" src={RiceLogoURL} /></div>
+                        <div><img alt="Open Stax logo" height="30" src={OpenStaxURL} /></div>
+                    </Col>
+                </Row>
             </div>
-            :
-            <div className={cx('footer', 'mt-4', className)}>
-                {includeFunders && < Funders />}
-                <div css={{ backgroundColor: colors.darkBlue, color: 'white', a: { color: 'white' } }}>
-                    <div className='container-lg'>
-                        <Row className="py-2">
-                            <Row className="py-1">
-                                <HelpLink />
-                            </Row>
+        </div>
+    )
+}
 
-                            <Row className="py-1">
-                                <ResourceLinks />
-                            </Row>
-
-                            <Row className="py-1">
-                                <b>Follow us</b>
-                                <Box gap>
-                                    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org">
-                                        <Icon icon={fbIcon} height={30}/>
-                                    </a>
-                                    <a target="_blank" href="https://www.instagram.com/openstax/">
-                                        <Icon icon={igIcon} height={30}/>
-                                    </a>
-                                    <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org">
-                                        <Icon icon={twIcon} height={30}/>
-                                    </a>
-                                </Box>
-                            </Row>
-                            <Col className="py-1" direction="row" justify="around">
-                                <div><img alt="Rice University logo" height="30" src={RiceLogoURL} /></div>
-                                <div><img alt="Open Stax logo" height="30" src={OpenStaxURL} /></div>
-                            </Col>
-                        </Row>
-                    </div>
-                </div>
+export const DesktopFooter: React.FC<{ className?: string, includeFunders?: boolean }> = ({ className, includeFunders }) => {
+    return (
+        <div css={{ backgroundColor: colors.darkBlue, color: 'white', a: { color: 'white' } }}>
+            <div className='container-lg'>
+                <Row css={{ padding: '20px 0' }}>
+                    <Col auto direction="column">
+                        <HelpLink />
+                    </Col>
+                    <Col auto direction="column">
+                        <ResourceLinks />
+                    </Col>
+                    <Col auto direction="column">
+                        <b>Follow us</b>
+                        <Box gap>
+                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org"><Icon icon={fbIcon} /></a>
+                            <a target="_blank" href="https://www.instagram.com/openstax/"><Icon icon={igIcon} /></a>
+                            <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org"><Icon icon={twIcon} /></a>
+                        </Box>
+                    </Col>
+                    <Col auto direction="column" gap>
+                        <div><img alt="Rice University logo" height="30" src={RiceLogoURL} /></div>
+                        <div><img alt="Open Stax logo" height="30" src={OpenStaxURL} /></div>
+                    </Col>
+                </Row>
             </div>
+        </div>
+    )
+}
 
+export const Footer: React.FC<{ className?: string, includeFunders?: boolean }> = ({ className, includeFunders }) => {
+    return (
+        <div className={cx('footer', 'mt-4', className)}>
+            {includeFunders && < Funders />}
+            {useIsMobileDevice() ? <MobileFooter/> : <DesktopFooter/>}
+        </div>
     )
 }

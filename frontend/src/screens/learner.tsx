@@ -189,8 +189,8 @@ const H = styled.h2({
     marginBottom: 0,
     fontFamily: 'Helvetica Neue',
     [media.mobile]: {
-        fontSize: '40px',
-        lineHeight: '50px',
+        fontSize: '20px',
+        lineHeight: '24px',
     },
 })
 
@@ -200,8 +200,8 @@ const Sh = styled.h6({
     fontSize: '18px',
     lineHeight: '30px',
     [media.mobile]: {
-        fontSize: '16px',
-        lineHeight: '24px',
+        fontSize: '15px',
+        lineHeight: '18px',
     },
 })
 
@@ -223,7 +223,7 @@ const LearnerDashboard = () => {
             <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 
-            <Splash direction='column' justify='center' height={`${isMobile ? '400' : '600'}px`} className="splash">
+            <Splash direction='column' justify='center' height={`${isMobile ? '285' : '600'}px`} className="splash">
                 <SplashImage
                     preserveAspectRatio='xMidYMid slice'
                     css={{
@@ -236,14 +236,10 @@ const LearnerDashboard = () => {
                     }}
                 />
                 <div className="container-lg">
-                    <div css={{ maxWidth: isMobile ? '100%' : '55%', p: { marginBottom: 5 } }}>
-                        <H>Level up to new ways of</H>
-                        <H>learning, and earn prizes!</H>
+                    <div css={{ maxWidth: '55%', p: { marginBottom: 5 } }}>
+                        <H>Level up to new ways of learning, and earn prizes!</H>
                         <Sh className="mt-1">
-                            With Kinetic, participate in scientific research and learn tips and tricks
-                        </Sh>
-                        <Sh>
-                            to help you become a better learner. All while winning prizes!
+                            With Kinetic, participate in scientific research and learn tips and tricks to help you become a better learner. All while winning prizes!
                         </Sh>
                     </div>
                 </div>
