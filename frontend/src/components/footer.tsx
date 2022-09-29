@@ -51,7 +51,7 @@ const Funders = () => {
     )
 }
 
-export const MobileFooter: React.FC<{ className?: string, includeFunders?: boolean }> = ({ className, includeFunders }) => {
+export const MobileFooter: React.FC<{ className?: string, includeFunders?: boolean }> = () => {
     return (
         <div css={{ backgroundColor: colors.darkBlue, color: 'white', a: { color: 'white' } }}>
             <div className='container-lg'>
@@ -88,7 +88,7 @@ export const MobileFooter: React.FC<{ className?: string, includeFunders?: boole
     )
 }
 
-export const DesktopFooter: React.FC<{ className?: string, includeFunders?: boolean }> = ({ className, includeFunders }) => {
+export const DesktopFooter: React.FC<{ className?: string, includeFunders?: boolean }> = () => {
     return (
         <div css={{ backgroundColor: colors.darkBlue, color: 'white', a: { color: 'white' } }}>
             <div className='container-lg'>
