@@ -31,7 +31,7 @@ const SupporterImage = styled.img({
 const Funders = () => {
     return (
         <div css={{ backgroundColor: colors.white }}>
-            <Box direction="column" className='mx-2' padding={{ vertical: 'xlarge' }}>
+            <Box direction="column" className='p-2'>
                 <h4 css={{ fontWeight: 'bold' }}>Support from Scientific Agencies</h4>
 
                 <Box justify='evenly'>
@@ -44,8 +44,8 @@ const Funders = () => {
                 </Box>
 
                 <a href="https://openstax.org/foundation" className="mb-2">
-                    View Other Philanthropic Supporter
-                    s</a>
+                    View Other Philanthropic Supporters
+                </a>
                 <p css={{ color: colors.grayText }}>
                     *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
                 </p>
@@ -58,7 +58,7 @@ export const MobileFooter: React.FC<{ className?: string, includeFunders?: boole
     return (
         <div css={{ backgroundColor: colors.darkBlue, color: 'white', a: { color: 'white' } }}>
             <div className='container-lg'>
-                <Row className="py-2">
+                <Row className="py-1">
                     <Row className="py-1">
                         <HelpLink />
                     </Row>
@@ -81,7 +81,7 @@ export const MobileFooter: React.FC<{ className?: string, includeFunders?: boole
                             </a>
                         </Box>
                     </Row>
-                    <Col className="py-1" direction="row">
+                    <Col className="py-1">
                         <a href="https://www.rice.edu/" target="_blank">
                             <img alt="Rice University logo" height="30" src={RiceLogoURL}/>
                         </a>
