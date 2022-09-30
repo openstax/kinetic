@@ -1,7 +1,7 @@
 import { React, cx } from '@common'
 import styled from '@emotion/styled'
 import { ResourceLinks, HelpLink } from './resource-links'
-import { colors } from '../theme'
+import { colors, media } from '../theme'
 import {
     Icon, Box, Row, Col,
 } from '@components'
@@ -25,27 +25,32 @@ const Supporter = styled.a({
     alignItems: 'center',
 })
 
+const SupporterImage = styled.img({
+    width: '100%',
+    height: 'auto',
+})
+
 const Funders = () => {
     return (
         <div css={{ backgroundColor: colors.white }}>
-            <Box direction="column" padding={{ vertical: 'xlarge' }}>
+            <Box direction="column" className='mx-2' padding={{ vertical: 'xlarge' }}>
                 <h4 css={{ fontWeight: 'bold' }}>Support from Scientific Agencies</h4>
 
-                <Box direction="column" css={{ maxWidth: 600, margin: 'auto' }}>
-                    <Box wrap justify='center' margin={{ vertical: 'large' }} gap="xxlarge">
-                        <Supporter target="_blank" href="https://ies.ed.gov/">
-                            <img className="mw-100" alt="Institute of Education Sciences logo" src={IESLogoURL} />
-                        </Supporter>
-                        <Supporter target="_blank" href="https://www.nsf.org/gb/en">
-                            <img className="mw-100" alt="National Science Foundation logo" src={NSFLogoURL} />
-                        </Supporter>
-                    </Box>
-
-                    <a href="https://openstax.org/foundation" className="mb-2 align-self-center">View Other Philanthropic Supporters</a>
-                    <p css={{ color: colors.grayText }}>
-                        *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
-                    </p>
+                <Box justify='evenly'>
+                    <Supporter target="_blank" href="https://ies.ed.gov/">
+                        <SupporterImage alt="Institute of Education Sciences logo" src={IESLogoURL} />
+                    </Supporter>
+                    <Supporter target="_blank" href="https://www.nsf.org/gb/en">
+                        <SupporterImage alt="National Science Foundation logo" src={NSFLogoURL} />
+                    </Supporter>
                 </Box>
+
+                <a href="https://openstax.org/foundation" className="mb-2">
+                    View Other Philanthropic Supporter
+                    s</a>
+                <p css={{ color: colors.grayText }}>
+                    *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
+                </p>
             </Box>
         </div>
     )
@@ -78,9 +83,13 @@ export const MobileFooter: React.FC<{ className?: string, includeFunders?: boole
                             </a>
                         </Box>
                     </Row>
-                    <Col className="py-1" direction="row" justify="around">
-                        <div><img alt="Rice University logo" height="30" src={RiceLogoURL} /></div>
-                        <div><img alt="Open Stax logo" height="30" src={OpenStaxURL} /></div>
+                    <Col className="py-1" direction="row">
+                        <a href="https://www.rice.edu/" target="_blank">
+                            <img alt="Rice University logo" height="30" src={RiceLogoURL}/>
+                        </a>
+                        <a href="https://openstax.org/" target="_blank" css={{ marginLeft: '60px' }}>
+                            <img alt="Open Stax logo" height="30" src={OpenStaxURL}/>
+                        </a>
                     </Col>
                 </Row>
             </div>

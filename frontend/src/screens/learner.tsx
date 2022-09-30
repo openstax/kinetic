@@ -101,7 +101,6 @@ const Grid = styled.div({
 })
 
 const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
-
     return (
         <div className={cx('container-lg', 'studies', 'my-8', className)} >
             <h3 css={{ margin: '2rem 0' }}>{title}</h3>
@@ -119,7 +118,6 @@ interface FiltersProps {
     filter: StudyTopicID
     setFilter(filter: StudyTopicID): void
 }
-
 
 const filterProps = (type: StudyTopicID, filter: StudyTopicID, setType: (t: StudyTopicID) => void) => ({
     className: type == filter ? 'active' : '',
@@ -168,9 +166,12 @@ const AllSubjects: FC<AllSubjectsProps> = ({
     if (useIsMobileDevice()) {
         return (
             <>
-                {studyTopicTagIDs.map((tag) => (
-                    <StudyList key={tag} onSelect={onSelect} title={StudyTopicTags[tag]} className={tag} studies={studies[tag] || []} />
-                ))}
+                {studyTopicTagIDs
+                    .filter((tag) => !!studies[tag]?.length)
+                    .map((tag) => (
+                        <StudyList key={tag} onSelect={onSelect} title={StudyTopicTags[tag]} className={tag} studies={studies[tag] || []} />
+                    ))
+                }
             </>
         )
     }
