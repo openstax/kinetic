@@ -30,9 +30,9 @@ const SupporterImage = styled.img({
 
 const Funders = () => {
     return (
-        <div css={{ backgroundColor: colors.white }}>
+        <div css={{ backgroundColor: colors.white, fontSize: '12px' }}>
             <Box direction="column" className='p-2'>
-                <h4 css={{ fontWeight: 'bold' }}>Support from Scientific Agencies</h4>
+                <h4 className="fw-bold">Support from Scientific Agencies</h4>
 
                 <Box justify='evenly'>
                     <Supporter target="_blank" href="https://ies.ed.gov/">
