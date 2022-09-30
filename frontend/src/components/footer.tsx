@@ -30,7 +30,7 @@ const SupporterImage = styled.img({
 
 const Funders = () => {
     return (
-        <div css={{ backgroundColor: colors.white, fontSize: '12px' }}>
+        <div css={{ backgroundColor: colors.white, fontSize: useIsMobileDevice() ? '12px' : '16px' }}>
             <Box direction="column" className='p-2'>
                 <h4 className="fw-bold">Support from Scientific Agencies</h4>
 
