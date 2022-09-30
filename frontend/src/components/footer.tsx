@@ -1,10 +1,8 @@
-import { React, cx } from '@common'
+import { cx, React } from '@common'
 import styled from '@emotion/styled'
-import { ResourceLinks, HelpLink } from './resource-links'
-import { colors, media } from '../theme'
-import {
-    Icon, Box, Row, Col,
-} from '@components'
+import { HelpLink, ResourceLinks } from './resource-links'
+import { colors } from '../theme'
+import { Box, Col, Icon, Row } from '@components'
 
 // @ts-ignore
 import NSFLogoURL from '../images/nsf-logo.webp'
