@@ -148,7 +148,7 @@ export const createStudy = async ({
 
     await page.click('testId=form-save-btn')
     await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(1000)
     await page.click('testId=add-stage')
 
     await page.waitForSelector('.modal-content')
