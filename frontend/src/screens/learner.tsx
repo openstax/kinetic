@@ -101,13 +101,15 @@ const Grid = styled.div({
 })
 
 const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
-
     return (
         <div className={cx('container-lg', 'studies', 'my-8', className)} >
             <h3 css={{ margin: '2rem 0' }}>{title}</h3>
             {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
-            <Grid>
+            <Grid css={{
+                overflow: 'auto',
+                paddingBottom: '10px',
+            }}>
                 {studies.map(s => <StudyCard onSelect={onSelect} study={s} key={s.id} />)}
             </Grid>
         </div>
@@ -119,7 +121,6 @@ interface FiltersProps {
     filter: StudyTopicID
     setFilter(filter: StudyTopicID): void
 }
-
 
 const filterProps = (type: StudyTopicID, filter: StudyTopicID, setType: (t: StudyTopicID) => void) => ({
     className: type == filter ? 'active' : '',
@@ -168,9 +169,12 @@ const AllSubjects: FC<AllSubjectsProps> = ({
     if (useIsMobileDevice()) {
         return (
             <>
-                {studyTopicTagIDs.map((tag) => (
-                    <StudyList key={tag} onSelect={onSelect} title={StudyTopicTags[tag]} className={tag} studies={studies[tag] || []} />
-                ))}
+                {studyTopicTagIDs
+                    .filter((tag) => !!studies[tag]?.length)
+                    .map((tag) => (
+                        <StudyList key={tag} onSelect={onSelect} title={StudyTopicTags[tag]} className={tag} studies={studies[tag] || []} />
+                    ))
+                }
             </>
         )
     }
@@ -183,11 +187,15 @@ const AllSubjects: FC<AllSubjectsProps> = ({
 }
 
 const H = styled.h2({
-    fontSize: 48,
+    fontSize: '48px',
     lineHeight: '64px',
     fontWeight: 700,
     marginBottom: 0,
     fontFamily: 'Helvetica Neue',
+    [media.mobile]: {
+        fontSize: '20px',
+        lineHeight: '24px',
+    },
 })
 
 const Sh = styled.h6({
@@ -195,6 +203,10 @@ const Sh = styled.h6({
     marginBottom: 0,
     fontSize: '18px',
     lineHeight: '30px',
+    [media.mobile]: {
+        fontSize: '15px',
+        lineHeight: '18px',
+    },
 })
 
 const LearnerDashboard = () => {
@@ -215,7 +227,7 @@ const LearnerDashboard = () => {
             <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 
-            <Splash direction='column' justify='center' height={`${isMobile ? '400' : '600'}px`} className="splash">
+            <Splash direction='column' justify='center' height={`${isMobile ? '285' : '600'}px`} className="splash">
                 <SplashImage
                     preserveAspectRatio='xMidYMid slice'
                     css={{
@@ -229,13 +241,9 @@ const LearnerDashboard = () => {
                 />
                 <div className="container-lg">
                     <div css={{ maxWidth: '55%', p: { marginBottom: 5 } }}>
-                        <H>Level up to new ways of</H>
-                        <H>learning, and earn prizes!</H>
+                        <H>Level up to new ways of learning, and earn prizes!</H>
                         <Sh className="mt-1">
-                            With Kinetic, participate in scientific research and learn tips and tricks
-                        </Sh>
-                        <Sh>
-                            to help you become a better learner. All while winning prizes!
+                            With Kinetic, participate in scientific research and learn tips and tricks to help you become a better learner. All while winning prizes!
                         </Sh>
                     </div>
                 </div>
