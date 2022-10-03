@@ -182,6 +182,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
 
                 <Box align="start" padding={{ top: 'large' }} gap css={{
                     height: 60,
+                    paddingRight: '20px',
                 }}>
                     <Box direction='column' margin={{ top: '-10px' }}>
                         <b>{pointsEarned} / {totalPoints} pts</b>
