@@ -2,17 +2,22 @@ import { useEffect, useState, useMemo, useCallback } from '@common'
 import { useLocalstorageState } from 'rooks'
 import { tagOfType } from '@models'
 import { ParticipantStudy } from '@api'
-import { sampleSize, sortBy, groupBy, xorBy, shuffle } from 'lodash'
+import { sampleSize, sortBy, groupBy } from 'lodash'
 import { useApi } from '@lib'
 import {
     isStudyLaunchable, StudyTopicID,
 } from '@models'
 
+
 export type StudyByTopics = Record<StudyTopicID, ParticipantStudy[]>
 const MS_IN_MONTH = 1000 * 60 * 60 * 24 * 30
 
-interface StudyState {
+interface StudySort {
     lastCalculated: number
+    sort: Record<number, number>
+}
+
+interface StudyState {
     mandatoryStudy?: ParticipantStudy
     allStudies: ParticipantStudy[]
     highlightedStudies: ParticipantStudy[]
@@ -21,40 +26,41 @@ interface StudyState {
 
 export const useLearnerStudies = () => {
     const api = useApi()
-
-    const [filter, setFilter] = useState<StudyTopicID>('topic:personality')
-    const [studies, setStudyState] = useLocalstorageState<StudyState>('learner-studies', {
+    const [studySort, setStudySort] = useLocalstorageState<StudySort>('learner-studies-order', {
         lastCalculated: Date.now(),
+        sort: {},
+    })
+    const [filter, setFilter] = useState<StudyTopicID>('topic:personality')
+    const [studies, setStudyState] = useState<StudyState>({
         allStudies: [],
         highlightedStudies: [],
         studiesByTopic: {} as StudyByTopics,
     })
 
     const fetchStudies = useCallback(async () => {
-        const fetchedStudies = (await api.getParticipantStudies())?.data || []
-        const mandatoryStudy = fetchedStudies.find(s => isStudyLaunchable(s) && s.isMandatory)
+        const fetchedStudies = await api.getParticipantStudies()
 
-        // compare the two arrays using the study id property.
-        // recalculate if it's been more than 30 days or if there are changes
-        if (studies.lastCalculated < Date.now() - MS_IN_MONTH ||
-            xorBy(studies.allStudies, fetchedStudies, 'id').length) {
+        const mandatoryStudy = fetchedStudies.data?.find(s => isStudyLaunchable(s) && s.isMandatory)
 
-            const allStudies = sortBy(shuffle(fetchedStudies), s => s.completedAt ? 1 : 0)
-
-            const highlightedStudies = sampleSize(allStudies.filter(s => !s.isMandatory && !s.completedAt), 3)
-
-            const studiesByTopic = groupBy(allStudies, (s) => tagOfType(s, 'topic') || 'topic:other') as any as StudyByTopics
-            Object.assign(studies, {
-                lastCalculated: Date.now(), allStudies, highlightedStudies, studiesByTopic,
-            })
+        if (studySort.lastCalculated < Date.now() - MS_IN_MONTH) {
+            studySort.lastCalculated = Date.now()
+            studySort.sort = {} // clear values
         }
+        const allStudies = sortBy(fetchedStudies.data || [], s => {
+            const rnd = studySort.sort[s.id] = (studySort.sort[s.id] || Math.random())
+            return rnd * (s.completedAt ? 1 : -1)
+        })
+        setStudySort({ ...studySort })
 
-        if (!studies.studiesByTopic[filter]) {
-            setFilter((Object.keys(studies.studiesByTopic) as Array<StudyTopicID>)[0])
+        const highlightedStudies = sampleSize(allStudies.filter(s => !s.isMandatory && !s.completedAt), 3)
+
+        const studiesByTopic = groupBy(allStudies, (s) => tagOfType(s, 'topic') || 'topic:other') as any as StudyByTopics
+        if (!studiesByTopic[filter]) {
+            setFilter((Object.keys(studiesByTopic) as Array<StudyTopicID>)[0])
         }
-
-        setStudyState({ ...studies, mandatoryStudy })
-
+        setStudyState({
+            mandatoryStudy, allStudies, highlightedStudies, studiesByTopic,
+        })
     }, [setStudyState])
 
 
@@ -67,12 +73,11 @@ export const useLearnerStudies = () => {
         fetchStudies()
     }, [fetchStudies])
 
-    //    console.log(studies)
-
     return useMemo(() => ({
         ...studies,
         filter,
         setFilter,
         onMandatoryClose,
     }), [studies, onMandatoryClose, filter, setFilter])
+
 }
