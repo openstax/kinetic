@@ -1,17 +1,16 @@
-import { React, useEffect, useState, useMemo, useCallback, cx } from '@common'
+import { React, useCallback, cx } from '@common'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '../theme'
-import { tagOfType } from '@models'
 import { Global } from '@emotion/react'
-import { sampleSize, sortBy, groupBy } from 'lodash'
 import {
     Box, RewardsProgressBar, TopNavBar, Footer,
 } from '@components'
-import { useApi, useIsMobileDevice } from '@lib'
+import { useIsMobileDevice } from '@lib'
 import {
-    isStudyLaunchable, StudyTopicTags, studyTopicTagIDs, StudyTopicID,
+    StudyTopicTags, studyTopicTagIDs, StudyTopicID,
 } from '@models'
+import { useLearnerStudies, StudyByTopics } from './learner/studies'
 import { StudyCard } from './learner/card'
 import { SplashImage } from './learner/splash-image'
 import { StudyModal } from './studies/modal'
@@ -23,57 +22,6 @@ const Splash = styled(Box)({
     overflow: 'hidden',
     position: 'relative',
 })
-
-type StudyByTopics = Record<StudyTopicID, ParticipantStudy[]>
-
-interface StudyState {
-    mandatoryStudy?: ParticipantStudy
-    allStudies: ParticipantStudy[]
-    highlightedStudies: ParticipantStudy[]
-    studiesByTopic: StudyByTopics
-}
-
-const useParticpantStudies = () => {
-    const api = useApi()
-    const [filter, setFilter] = useState<StudyTopicID>('topic:personality')
-    const [studies, setStudyState] = useState<StudyState>({
-        allStudies: [],
-        highlightedStudies: [],
-        studiesByTopic: {} as StudyByTopics,
-    })
-
-    const fetchStudies = useCallback(async () => {
-        const fetchedStudies = await api.getParticipantStudies()
-        const mandatoryStudy = fetchedStudies.data?.find(s => isStudyLaunchable(s) && s.isMandatory)
-        const allStudies = sortBy(fetchedStudies.data || [], s => s.completedAt ? 1 : 0)
-        const highlightedStudies = sampleSize(allStudies.filter(s => !s.isMandatory && !s.completedAt), 3)
-
-        const studiesByTopic = groupBy(allStudies, (s) => tagOfType(s, 'topic') || 'topic:other') as any as StudyByTopics
-        if (!studiesByTopic[filter]) {
-            setFilter((Object.keys(studiesByTopic) as Array<StudyTopicID>)[0])
-        }
-        setStudyState({
-            mandatoryStudy, allStudies, highlightedStudies, studiesByTopic,
-        })
-    }, [setStudyState])
-
-
-    useEffect(() => {
-        fetchStudies()
-    }, [])
-
-    const onMandatoryClose = useCallback(() => {
-        setStudyState({ ...studies, mandatoryStudy: undefined })
-        fetchStudies()
-    }, [fetchStudies])
-
-    return useMemo(() => ({
-        ...studies,
-        filter,
-        setFilter,
-        onMandatoryClose,
-    }), [studies, onMandatoryClose, filter, setFilter])
-}
 
 
 interface StudyListProps {
@@ -106,10 +54,7 @@ const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies,
             <h3 css={{ margin: '2rem 0' }}>{title}</h3>
             {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
-            <Grid css={{
-                overflow: 'auto',
-                paddingBottom: '10px',
-            }}>
+            <Grid css={{ overflow: 'auto', paddingBottom: '10px' }} data-test-id="studies-listing">
                 {studies.map(s => <StudyCard onSelect={onSelect} study={s} key={s.id} />)}
             </Grid>
         </div>
@@ -215,7 +160,7 @@ const LearnerDashboard = () => {
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
     const {
         highlightedStudies, mandatoryStudy, allStudies, filter, onMandatoryClose, setFilter, studiesByTopic,
-    } = useParticpantStudies()
+    } = useLearnerStudies()
 
     return (
         <div className="studies learner">

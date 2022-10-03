@@ -1,5 +1,5 @@
 import {
-    interceptStudyLaunch, test, goToPage, createStudy, expect, dayjs, faker, rmStudy, addReward
+    interceptStudyLaunch, test, goToPage, createStudy, expect, dayjs, faker, rmStudy, addReward, Locator,
 } from './test'
 
 test('displays studies', async ({ page }) => {
@@ -51,6 +51,8 @@ test('it auto-launches mandatory studies', async ({ page }) => {
     await rmStudy({ page, studyId })
 })
 
+const studyIdForCard = (l: Locator) => l.evaluate<string, HTMLDivElement>(card => card.dataset.studyId)
+
 test('launching study and testing completion', async ({ page }) => {
 
     await addReward({ page, points: 5, prize: 'Pony' })
@@ -59,6 +61,12 @@ test('launching study and testing completion', async ({ page }) => {
 
     // note: 10 points is greater than the 5 points reward
     const studyId = await createStudy({ page, points: 10, name: faker.commerce.productDescription() })
+    await goToPage({ page, path: '/studies', loginAs: 'user' })
+
+    const firstStudyCard = page.locator('css=.studies.filtered >> [data-test-id="studies-listing"]').nth(0)
+
+    const firstStudyId = await studyIdForCard(firstStudyCard)
+
     await goToPage({ page, path: `/studies/details/${studyId}`, loginAs: 'user' })
     await page.click('testId=launch-study')
 
@@ -67,6 +75,10 @@ test('launching study and testing completion', async ({ page }) => {
 
     await page.click('testId=view-studies')
     await expect(page).toHaveSelector(`[data-study-id="${studyId}"][role="link"]`)
+
+    // test that sort order is the same
+    expect(firstStudyId).toEqual(await studyIdForCard(firstStudyCard))
+
     await page.click(`[data-study-id="${studyId}"]`)
 
     await rmStudy({ page, studyId })
