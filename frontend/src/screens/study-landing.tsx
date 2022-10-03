@@ -57,13 +57,13 @@ const AbortedMessage: React.FC<StudyMessagingProps> = ({ study }) => {
 }
 
 const StudyMessaging: React.FC<StudyMessagingProps & { onReturnClick(): void }> = ({ onReturnClick, ...props }) => {
-
     return (
         <Box justify="center">
             <Box
                 css={{
                     background: 'white',
                     border: `2px solid ${colors.lightGray}`,
+                    maxWidth: '100%',
                 }}
             >
                 <Box
@@ -76,7 +76,9 @@ const StudyMessaging: React.FC<StudyMessagingProps & { onReturnClick(): void }> 
                     <Points {...props} />
                     <AbortedMessage {...props} />
                     <NonAbortedMessage {...props} />
-                    <Button primary data-test-id="view-studies" onClick={onReturnClick}>Go back to dashboard</Button>
+                    <Button primary data-test-id="view-studies" onClick={onReturnClick}>
+                        Go back to dashboard
+                    </Button>
                 </Box>
                 <KineticWaves flipped />
             </Box>
