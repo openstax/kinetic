@@ -104,7 +104,8 @@ export const FormSaveButton: FCWC<ButtonProps> = ({
     children,
     busyMessage = 'Saving',
     type = 'submit',
-    ...props }) => {
+    ...props
+}) => {
     const fc = useFormikContext()
 
     const { isSubmitting } = fc

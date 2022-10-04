@@ -13,7 +13,7 @@ export const ResourceLinks = () => {
 export const HelpLink = () => {
     return (
         <>
-            <b>Need Help?</b>
+            <h4>Need Help?</h4>
             <a target="_blank" href="https://openstax.org/contact">Contact us here</a>
         </>
     )
