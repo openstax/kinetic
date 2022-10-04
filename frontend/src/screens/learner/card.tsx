@@ -131,7 +131,7 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
             <Image.image name={Image.title} height="200px" css={{ border: `1px solid ${colors.lightGray}`, borderRadius: 8 }} />
             <CompleteFlag study={study} />
             <MultiSessionFlag study={study} />
-            <Box justify='between' margin={{ bottom: 'large', top: 'small' }} css={{ fontSize: '14px' }}>
+            <Box justify='between' margin={{ bottom: 'large', top: 'small' }} css={{ minHeight: 40, fontSize: '14px' }}>
                 <Feedback study={study} />
                 <MultiSession study={study} />
             </Box>
