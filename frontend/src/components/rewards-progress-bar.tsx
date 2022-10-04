@@ -192,7 +192,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                         {schedule.map((segment) => (
                             <Segment
                                 key={segment.index}
-                                percentage={(segment.totalPoints / totalPoints) * 100}
+                                percentage={(segment.points / totalPoints) * 100}
                             >
                                 <RewardSegment key={segment.index} segment={segment} />
                             </Segment>

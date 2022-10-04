@@ -9,10 +9,8 @@ interface SegmentProps {
     className?: string
 }
 
-const segmentWidth = 80
 const barWidth = 7
 const circleDiameter = 20
-const segmentTitlePadding = (segmentWidth * 0.5) - (circleDiameter * 0.75)
 
 export const SegmentTitle: FCWC<{ className?: string }> = ({ children, className }) => <div className={cx('title', className)} css={{
     marginTop: '5px',
@@ -21,22 +19,23 @@ export const SegmentTitle: FCWC<{ className?: string }> = ({ children, className
 }}>{children}</div>
 
 const segmentStyle: CSSObject = {
-    position: 'absolute',
-    width: segmentWidth,
-    top: `-${barWidth}px`,
+    marginTop: `-${barWidth * 2}px`,
     display: 'flex',
-    alignItems: 'center',
     flexDirection: 'column',
+    flexGrow: 0,
+    flexShrink: 0,
+    alignItems: 'flex-end',
     '.title': {
+        textAlign: 'center',
     },
     '&:first-of-type': {
         '.title': {
-            paddingLeft: segmentTitlePadding,
+            textAlign: 'left',
         },
     },
     '&:last-of-type': {
         '.title': {
-            paddingRight: segmentTitlePadding,
+            textAlign: 'right',
         },
     },
 }
@@ -44,8 +43,11 @@ const segmentStyle: CSSObject = {
 const SegmentWrapper = styled.div(segmentStyle)
 
 export const Segment: FCWC<SegmentProps> = ({ children, className, percentage }) => {
-    return <SegmentWrapper className={cx('segment', className)} css={{ left: `calc(${percentage}% - ${segmentWidth / 2}px)` }
-    }> {children}</SegmentWrapper>
+    return <SegmentWrapper
+        className={cx('segment', className)}
+        css={{
+            flexBasis: `${percentage}%`,
+        }}> {children}</SegmentWrapper>
 }
 
 
@@ -147,29 +149,40 @@ interface SegmentedBarProps {
 export const SegmentedBar: FCWC<SegmentedBarProps> = ({ className, children, completedPercentage }) => {
 
     return (
-        <div
-            className={cx('segmented-bar', className)}
-            css={{
-                height: `${barWidth}px`,
-                flex: 1,
-                borderRadius: '4px',
-                background: colors.lightGray,
-                position: 'relative',
-                marginRight: '20px',
-            }}
-        >
-            <span
-                data-test-id="progress-indicator"
-                data-percentage-complete={completedPercentage}
+        <div css={{
+            display: 'flex',
+            flex: 1,
+            flexDirection: 'column',
+        }}>
+            <div
+                className={cx('segmented-bar', className)}
                 css={{
-                    height: '100%',
-                    width: `${completedPercentage}% `,
-                    position: 'absolute',
-                    borderRadius: '4px 0 0 4px',
-                    background: colors.purple,
+                    minHeight: `${barWidth}px`,
+                    maxHeight: `${barWidth}px`,
+                    borderRadius: '4px',
+                    background: colors.lightGray,
+                    zIndex: -1,
+                    position: 'relative',
                 }}
-            />
-            {children}
+            >
+                <span
+                    data-test-id="progress-indicator"
+                    data-percentage-complete={completedPercentage}
+                    css={{
+                        height: '100%',
+                        width: `${completedPercentage}% `,
+                        position: 'absolute',
+                        borderRadius: '4px 0 0 4px',
+                        background: colors.purple,
+                    }}
+                />
+            </div>
+            <div css={{
+                display: 'flex',
+                flex: 1,
+            }}>
+                {children}
+            </div>
         </div>
     )
 }
