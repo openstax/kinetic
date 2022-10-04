@@ -46,9 +46,9 @@
               });
           }
           var favIcon = document.querySelector('[rel="shortcut icon"]');
-          var previousFavIcon; 
+          var previousFavIcon;
           if (favIcon) {
-              previousFavIcon = { href: favIcon.href, el: favIcon }; 
+              previousFavIcon = { href: favIcon.href, el: favIcon };
               favIcon.href =  'https://assets.openstax.org/oscms-prodcms/media/images/kinetic-favicon-32x32.original.webp';
           }
           document.title = "OpenStax Kinetic";
@@ -80,7 +80,7 @@
           background-color: #fff;
           font-family: 'Helvetica Neue';
       }
-      
+
       #kinetic-homepage h1,
       #kinetic-homepage h2,
       #kinetic-homepage h3,
@@ -88,18 +88,18 @@
           font-style: normal;
           font-weight: 700;
           color: #151B2C;
-      }          
+      }
       #kinetic-homepage h2 {
           font-size: 36px;
           line-height: 40px;
           letter-spacing: -0.04em;
-          text-align: center;          
+          text-align: center;
       }
       #kinetic-homepage h3 {
           font-size: 36px;
           line-height: 40px;
           text-align: center;
-      }      
+      }
       #kinetic-homepage h4 {
           font-size: 24px;
           line-height: 30px;
@@ -120,6 +120,9 @@
       #kinetic-homepage p.light {
           color: #848484;
       }
+	  #kinetic-homepage p.small {
+		  font-size: 12px;
+	  }
       #kinetic-homepage .container {
           padding-left: 20px;
           padding-right: 20px;
@@ -139,7 +142,7 @@
           flex: 1;
           text-align: center;
       }
-      
+
       #kinetic-homepage .hero-block,
       #kinetic-homepage .participate {
           background: #151B2C;
@@ -147,7 +150,7 @@
           position: relative;
           z-index: 0;
       }
-      
+
       #kinetic-homepage .hero-block .container {
           display: flex;
           align-items: center;
@@ -190,7 +193,7 @@
       #kinetic-homepage .btn.primary:hover {
         color: #a7a7a7;
       }
-      
+
       #kinetic-homepage .link {
         border-bottom: 1px solid #fff;
       }
@@ -232,7 +235,7 @@
       #kinetic-homepage .how h3 {
           margin: 60px auto;
       }
-      
+
       #kinetic-homepage .how .panels {
           display: flex;
       }
@@ -251,7 +254,7 @@
           display: block;
       }
 
-      
+
       #kinetic-homepage .step-cards {
           display: flex;
           flex-direction: column;
@@ -282,7 +285,7 @@
           margin-left: 80px;
       }
 
-      
+
       #kinetic-homepage .sample { margin-top: 40px; }
       #kinetic-homepage .sample h4 { position: relative; }
       #kinetic-homepage .sample h4 svg {
@@ -306,7 +309,7 @@
           align-items: center;
           margin-bottom: 40px;
       }
-      
+
 
       #kinetic-homepage .about {
           background: #F7F8FA;
@@ -325,11 +328,10 @@
           margin-bottom: 0;
       }
 
-
       #kinetic-homepage .supporters {
           padding: 40px 0;
       }
-      
+
       #kinetic-homepage .supporters h4 {
           text-align: left;
       }
@@ -352,7 +354,7 @@
           display: flex;
           align-items: center;
       }
-      
+
       #kinetic-homepage .participate {
           overflow: hidden;
           padding: 60px 0;
@@ -370,7 +372,6 @@
       #kinetic-homepage .participate .lines {
           position: absolute;
           z-index: -1;
-          position: absolute;
           transform: rotate(44deg) translate(-475px, 0px);
           width: 100%;
           left: -500px;
@@ -407,23 +408,18 @@
             left: 50px;
             top: 100%;
           }
-
-          #kinetic-homepage .supporters .imgs a {
-              max-width: 50%;
-          }
           #kinetic-homepage .supporters a img {
               width: 100%;
           }
-          
       }
 
-      
+
     </style>
 
     <div id="kinetic-homepage" class="full-width">
 
       <div class="hero-block full-width">
-        
+
         <img class="lines" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-wavy-lines.svg">
 
         <div class="container">
@@ -467,7 +463,7 @@
                 </a>
               </div>
             </div>
-            
+
 
           </div>
           <div class="cards">
@@ -530,7 +526,7 @@
         </a>
 
         <a class="link sample-study btn primary">Take the sample study</a>
-        
+
         </div>
       </div>
 
@@ -583,16 +579,16 @@
           <div class="centered">
             <div class="imgs">
               <a target="_blank" href="https://ies.ed.gov/">
-                <img src="https://assets.openstax.org/oscms-prodcms/media/images/IES_logo.original.webp">
+                <img class="supporter-image" alt="Institute of Education Sciences logo" src="https://assets.openstax.org/oscms-prodcms/media/images/IES_logo.original.webp">
               </a>
               <a target="_blank" href="https://www.nsf.org/gb/en">
-                <img  src="https://assets.openstax.org/oscms-prodcms/media/images/NSF_logo.original.webp">
+                <img class="supporter-image" alt="National Science Foundation logo" src="https://assets.openstax.org/oscms-prodcms/media/images/NSF_logo.original.webp">
               </a>
             </div>
-            
+
             <a class="other-supporters" href="https://openstax.org/foundation">View Other Philanthropic Supporters</a>
-            
-            <p class="light">
+
+            <p class="light small">
               *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
             </p>
 
@@ -603,10 +599,10 @@
 
       <div class="participate">
         <img class="lines" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-wavy-lines.svg">
-        
+
         <div class="container">
 
-        
+
           <div class="txt-block">
             <h3>
               Want to participate in Kinetic research?
@@ -614,7 +610,7 @@
             <p>
               Already have an OpenStax account? Use your email and password to log into kinetic
             </p>
-            
+
             <div class="actions-block login-signup" style="display: none;">
               <div class="buttons">
                 <a
@@ -640,22 +636,22 @@
                 </a>
               </div>
             </div>
-            
+
           </div>
-          
+
 
         </div>
-        
+
       </div>
     </div>
 
     <script type="application/javascript">
-     
+
       if (!window.KINETIC.postScriptRan) {
           var steps = document.querySelectorAll('#kinetic-homepage .step-cards .step');
           var images = document.querySelectorAll('#kinetic-homepage .step-pics img');
           var stepsAnimationTimer;
-          
+
           function revealElements(klass) {
               var links = document.querySelectorAll('.' + klass);
               for (var i = 0; i < links.length; i++) {
@@ -714,7 +710,7 @@
               });
               observer.observe(document.querySelector('#kinetic-homepage .step-cards'));
           }
-          
+
           function setUserState() {
               if (!window.fetch) {
                   revealElements('login-signup');
@@ -751,7 +747,7 @@
 
           function onPageUnload() {
               if (previousFavIcon) {
-                  previousFavIcon.el.href = previousFavIcon.href; 
+                  previousFavIcon.el.href = previousFavIcon.href;
               }
               delete window.KINETIC;
           }

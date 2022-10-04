@@ -33,22 +33,32 @@ const Funders = () => {
         <div css={{ backgroundColor: colors.white, fontSize: useIsMobileDevice() ? '12px' : '16px' }}>
             <Box direction="column" className='p-2'>
                 <h4 className="fw-bold">Support from Scientific Agencies</h4>
+                <div css={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    maxWidth: '600px',
+                    margin: 'auto',
+                    alignItems: 'center',
+                }}>
+                    <Box justify='evenly'>
+                        <Supporter target="_blank" href="https://ies.ed.gov/">
+                            <SupporterImage alt="Institute of Education Sciences logo" src={IESLogoURL} />
+                        </Supporter>
+                        <Supporter target="_blank" href="https://www.nsf.org/gb/en">
+                            <SupporterImage alt="National Science Foundation logo" src={NSFLogoURL} />
+                        </Supporter>
+                    </Box>
 
-                <Box justify='evenly'>
-                    <Supporter target="_blank" href="https://ies.ed.gov/">
-                        <SupporterImage alt="Institute of Education Sciences logo" src={IESLogoURL} />
-                    </Supporter>
-                    <Supporter target="_blank" href="https://www.nsf.org/gb/en">
-                        <SupporterImage alt="National Science Foundation logo" src={NSFLogoURL} />
-                    </Supporter>
-                </Box>
+                    <div>
+                        <a href="https://openstax.org/foundation" className="mb-2">
+                            View Other Philanthropic Supporters
+                        </a>
 
-                <a href="https://openstax.org/foundation" className="mb-2">
-                    View Other Philanthropic Supporters
-                </a>
-                <p css={{ color: colors.grayText }}>
-                    *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
-                </p>
+                        <p css={{ color: colors.grayText }}>
+                            *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
+                        </p>
+                    </div>
+                </div>
             </Box>
         </div>
     )
