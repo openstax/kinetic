@@ -30,6 +30,7 @@ export const useLearnerStudies = () => {
         lastCalculated: Date.now(),
         sort: {},
     })
+    studySort.sort = (studySort.sort || {}) // value from localStorage might not have "sort" key
     const [filter, setFilter] = useState<StudyTopicID>('topic:personality')
     const [studies, setStudyState] = useState<StudyState>({
         allStudies: [],
