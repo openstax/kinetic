@@ -33,7 +33,7 @@ const Wrapper = styled.div({
             },
         },
         '&.check': {
-            margin: '10px 0',
+            margin: '15px 0',
             input: {
                 marginRight: 5,
             },
@@ -115,30 +115,34 @@ export default function AdminHome() {
                         initialValues={prefs}
                         onSubmit={savePrefs}
                     >
-                        <h5 className="mt-5 mb-3 p-0">Email Notification</h5>
+                        <h5 className="mt-5 mb-3 p-0">Email Notifications</h5>
                         <h6>Adjust your preferred email communications. </h6>
-                        <p css={{ color: colors.grayText }}>*Exception: when you win a prize on Kinetic, we will email you your gift card.</p>
+                        <p css={{ color: colors.grayText, fontSize: '12px' }}>*Exception: when you win a prize on Kinetic, we will email you your gift card.</p>
 
 
                         <label className="check">
-                            <Field type="checkbox" name="cycleDeadlinesEmail" /> Notify me of upcoming prize cycle deadlines
+                            <Field type="checkbox" name="cycleDeadlinesEmail" />
+                            Notify me of upcoming prize cycle deadlines
                         </label >
                         <label className="check">
-                            <Field type="checkbox" name="prizeCycleEmail" /> Notify me of the start of a new prize cycle
+                            <Field type="checkbox" name="prizeCycleEmail" />
+                            Notify me of the start of a new prize cycle
                         </label>
                         <label className="check">
-                            <Field type="checkbox" name="studyAvailableEmail" /> Notify me when a new study becomes available
+                            <Field type="checkbox" name="studyAvailableEmail" />
+                            Notify me when a new study becomes available
                         </label>
                         <label className="check">
-                            <Field type="checkbox" name="sessionAvailableEmail" /> Notify me when follow up sessions become available on multi-session studies
+                            <Field type="checkbox" name="sessionAvailableEmail" />
+                            Notify me when follow up sessions become available on multi-session studies
                         </label>
 
-                        <FormSaveButton primary>Update Preferences</FormSaveButton>
+                        <FormSaveButton className="mt-3" primary>Update Preferences</FormSaveButton>
                     </Form >
                 </div>
             </div >
 
-            <Footer className='fixed-bottom' />
+            <Footer />
         </Wrapper>
     )
 }

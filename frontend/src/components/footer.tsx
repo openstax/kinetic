@@ -68,7 +68,7 @@ export const MobileFooter: React.FC<{ className?: string, includeFunders?: boole
                     </Row>
 
                     <Row className="py-1">
-                        <b>Follow us</b>
+                        <h4>Follow us</h4>
                         <Box gap>
                             <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org">
                                 <Icon icon={fbIcon} height={30}/>
