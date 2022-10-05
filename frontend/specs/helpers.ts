@@ -147,12 +147,16 @@ export const createStudy = async ({
     await page.keyboard.press('Enter')
 
     await page.click('testId=form-save-btn')
-
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(1000)
     await page.click('testId=add-stage')
+
+    await page.waitForSelector('.modal-content')
     await page.fill('.modal-content >> input[name=title]', `${name} stage`)
     await page.fill('.modal-content >> input[name=survey_id]', '1Q_RT12345')
     await page.fill('.modal-content >> input[name=secret_key]', '0123466789123456')
     await page.click('.modal-content >> testId=form-save-btn')
+    await page.waitForLoadState('networkidle')
     await page.click('testId=form-save-btn')
 
     await page.waitForLoadState('networkidle')

@@ -1,5 +1,5 @@
-import base, { selectors } from '@playwright/test'
-import { expect } from '@playwright/test'
+import base, { selectors, expect, Locator } from '@playwright/test'
+//import { expect } from '@playwright/test'
 import { matchers } from 'expect-playwright'
 import { faker } from '@faker-js/faker'
 import { TC, TestConfig } from './helpers'
@@ -26,7 +26,7 @@ export const createTestIdEngine = () => {
 const test = base.extend<{ config: TestConfig }>({
     config: TC,
 })
-test.beforeAll( async () => {
+test.beforeAll(async () => {
     await selectors.register('testId', createTestIdEngine)
 })
 
@@ -40,4 +40,4 @@ test.beforeEach(({ context, page }) => {
 export * from '@playwright/test'
 
 export * from './helpers'
-export { test, faker }
+export { test, faker, Locator }
