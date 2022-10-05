@@ -111,6 +111,7 @@ const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher })
     )
 }
 
+
 export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
     const { studyId: sid } = useParams<{ studyId: string }>()
     const nav = useNavigate()
@@ -128,7 +129,19 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
             <Box direction="column" flex>
                 <div css={{ overflowY: 'auto', flex: 1 }}>
                     <h3>{study.title}</h3>
-                    {tag && <Box gap align="center" margin={{ vertical: 'large' }}><Icon icon="feedback" color={colors.purple} />{tag}</Box>}
+                    {tag && <Box gap align="center" margin={{ vertical: 'large' }}>
+                        <div css={{ position: 'relative' }}>
+                            <Icon icon="chatLeft" color={colors.purple} />
+                            <span css={{
+                                position: 'absolute',
+                                left: 6,
+                                top: 6,
+                                color: 'white',
+                                fontSize: 7,
+                            }}>#</span>
+                        </div>
+                        {tag}</Box>
+                    }
                     <Box gap align="center" margin={{ bottom: 'large' }}>
                         <Icon icon="clock" color={colors.purple} />
                         <div>{study.durationMinutes} min</div>

@@ -16,6 +16,7 @@ import warning from '@iconify-icons/bi/exclamation-triangle-fill'
 import rolodex from '@iconify-icons/bi/person-rolodex'
 import list from '@iconify-icons/bi/list'
 import multiStage from '@iconify-icons/bi/stack'
+import chatLeft from '@iconify-icons/bi/chat-left-fill'
 
 export const ICONS = {
     x,
@@ -36,4 +37,5 @@ export const ICONS = {
     list,
     right,
     multiStage,
+    chatLeft,
 }
