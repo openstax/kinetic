@@ -75,7 +75,7 @@ const GrandPrize: React.FC<{ segment?: RewardsSegment }> = ({ segment }) => {
     if (!segment) return null
 
     if (segment.isPast && !segment.achieved) {
-        return <MissedGrandPrize css={{ margin: '-10px 0 10px 50px' }} />
+        return <MissedGrandPrize css={{}} />
     }
 
     return (
@@ -192,7 +192,9 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                         {schedule.map((segment) => (
                             <Segment
                                 key={segment.index}
-                                percentage={(segment.points / totalPoints) * 100}
+                                margin={segment.isFinal ? { top: -10, left: 50 } : {}}
+                                percentage={(segment.points / totalPoints) * 100
+                                }
                             >
                                 <RewardSegment key={segment.index} segment={segment} />
                             </Segment>

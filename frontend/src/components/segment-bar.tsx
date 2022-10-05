@@ -1,10 +1,10 @@
 import { React, cx } from '@common'
 import { colors } from '../theme'
 import styled from '@emotion/styled'
-import { Box } from 'boxible'
+import { Box, BoxProps } from 'boxible'
 import { CSSObject } from '@emotion/react'
 
-interface SegmentProps {
+interface SegmentProps extends BoxProps {
     percentage: number
     className?: string
 }
@@ -19,12 +19,6 @@ export const SegmentTitle: FCWC<{ className?: string }> = ({ children, className
 }}>{children}</div>
 
 const segmentStyle: CSSObject = {
-    marginTop: `-${barWidth * 2}px`,
-    display: 'flex',
-    flexDirection: 'column',
-    flexGrow: 0,
-    flexShrink: 0,
-    alignItems: 'flex-end',
     '.title': {
         textAlign: 'center',
     },
@@ -40,14 +34,16 @@ const segmentStyle: CSSObject = {
     },
 }
 
-const SegmentWrapper = styled.div(segmentStyle)
+const SegmentWrapper = styled(Box)(segmentStyle)
 
-export const Segment: FCWC<SegmentProps> = ({ children, className, percentage }) => {
+export const Segment: FCWC<SegmentProps> = ({ children, className, percentage, ...boxProps }) => {
     return <SegmentWrapper
+        flex={{ grow: false, shrink: false, basis: `${percentage}%` }}
         className={cx('segment', className)}
-        css={{
-            flexBasis: `${percentage}%`,
-        }}> {children}</SegmentWrapper>
+        direction="column"
+        align="end"
+        {...boxProps}
+    > {children}</SegmentWrapper >
 }
 
 
@@ -178,11 +174,13 @@ export const SegmentedBar: FCWC<SegmentedBarProps> = ({ className, children, com
                 />
             </div>
             <div css={{
+                marginTop: -1 * ((barWidth + circleDiameter) * 0.5),
+
                 display: 'flex',
                 flex: 1,
             }}>
                 {children}
             </div>
-        </div>
+        </div >
     )
 }
