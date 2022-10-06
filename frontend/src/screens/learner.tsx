@@ -131,29 +131,6 @@ const AllSubjects: FC<AllSubjectsProps> = ({
     )
 }
 
-const H = styled.h2({
-    fontSize: '48px',
-    lineHeight: '64px',
-    fontWeight: 700,
-    marginBottom: 0,
-    fontFamily: 'Helvetica Neue',
-    [media.mobile]: {
-        fontSize: '20px',
-        lineHeight: '24px',
-    },
-})
-
-const Sh = styled.h6({
-    fontFamily: 'Helvetica Neue',
-    marginBottom: 0,
-    fontSize: '18px',
-    lineHeight: '30px',
-    [media.mobile]: {
-        fontSize: '15px',
-        lineHeight: '18px',
-    },
-})
-
 const LearnerDashboard = () => {
     const nav = useNavigate()
     const isMobile = useIsMobileDevice()
@@ -186,10 +163,10 @@ const LearnerDashboard = () => {
                 />
                 <div className="container-lg">
                     <div css={{ maxWidth: '55%', p: { marginBottom: 5 } }}>
-                        <H>Level up to new ways of learning, and earn prizes!</H>
-                        <Sh className="mt-1">
+                        <h2 className="mb-0">Level up to new ways of learning, and earn prizes!</h2>
+                        <h6 className="mt-1 mb-0">
                             With Kinetic, participate in scientific research and learn tips and tricks to help you become a better learner. All while winning prizes!
-                        </Sh>
+                        </h6>
                     </div>
                 </div>
             </Splash >
