@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useCallback } from '@common'
 import { useLocalstorageState } from 'rooks'
 import { tagOfType } from '@models'
 import { ParticipantStudy } from '@api'
-import { sampleSize, sortBy, groupBy } from 'lodash'
+import { remove, sortBy, groupBy } from 'lodash'
 import { useApi } from '@lib'
 import {
     isStudyLaunchable, StudyTopicID,
@@ -11,6 +11,7 @@ import {
 
 export type StudyByTopics = Record<StudyTopicID, ParticipantStudy[]>
 const MS_IN_MONTH = 1000 * 60 * 60 * 24 * 30
+const FEATURED_COUNT = 3
 
 interface StudySort {
     lastCalculated: number
@@ -53,7 +54,8 @@ export const useLearnerStudies = () => {
         })
         setStudySort({ ...studySort })
 
-        const highlightedStudies = sampleSize(allStudies.filter(s => !s.isMandatory && !s.completedAt), 3)
+        const highlightedStudies = allStudies.filter(s => !s.isMandatory && !s.completedAt).slice(0, FEATURED_COUNT)
+        remove(allStudies, s => highlightedStudies.includes(s))
 
         const studiesByTopic = groupBy(allStudies, (s) => tagOfType(s, 'topic') || 'topic:other') as any as StudyByTopics
         if (!studiesByTopic[filter]) {
