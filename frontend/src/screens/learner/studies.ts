@@ -53,9 +53,8 @@ export const useLearnerStudies = () => {
             return rnd * (s.completedAt ? 1 : -1)
         })
         setStudySort({ ...studySort })
-
-        const highlightedStudies = allStudies.filter(s => !s.isMandatory && !s.completedAt).slice(0, FEATURED_COUNT)
-        remove(allStudies, s => highlightedStudies.includes(s))
+        // pick the last 3 eligible from the randomized list
+        const highlightedStudies = allStudies.filter(s => !s.isMandatory && !s.completedAt).slice(-1 * FEATURED_COUNT)
 
         const studiesByTopic = groupBy(allStudies, (s) => tagOfType(s, 'topic') || 'topic:other') as any as StudyByTopics
         if (!studiesByTopic[filter]) {
