@@ -74,7 +74,7 @@ const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
     return (
         <Box gap
             align="center"
-            pad="default"
+            padding="default"
             css={{ color: colors.blackText, backgroundColor: colors.green, position: 'absolute', borderBottomLeftRadius: 20, borderTopLeftRadius: 20, right: 0, top: 40 }}
         >
             <Icon icon="checkCircle" color='white' />
