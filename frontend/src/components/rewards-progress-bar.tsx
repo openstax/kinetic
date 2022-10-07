@@ -162,6 +162,8 @@ const SegmentInfo: React.FC<{ schedule: RewardsSegment[] }> = ({ schedule }) => 
     )
 }
 
+const FINAL_STEP_WIDTH = 50
+
 export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies }) => {
     const {
         schedule,
@@ -182,7 +184,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
 
                 <Box align="start" padding={{ top: 'large' }} gap css={{
                     height: 60,
-                    paddingRight: '20px',
+                    paddingRight: FINAL_STEP_WIDTH,
                 }}>
                     <Box direction='column' margin={{ top: '-10px' }}>
                         <b>{pointsEarned} / {totalPoints} pts</b>
@@ -192,7 +194,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                         {schedule.map((segment) => (
                             <Segment
                                 key={segment.index}
-                                margin={segment.isFinal ? { top: -10, left: 50 } : {}}
+                                margin={segment.isFinal ? { top: -10, left: FINAL_STEP_WIDTH } : {}}
                                 percentage={(segment.points / totalPoints) * 100
                                 }
                             >
