@@ -148,7 +148,7 @@ const SegmentInfo: React.FC<{ schedule: RewardsSegment[] }> = ({ schedule }) => 
     if (segment.recentlyAchieved) {
         msg = `🎉 Yay! You were entered into giveway`
     } else {
-        msg = `${segment.isFinal ? 'Grand ' : ''}Givaway`
+        msg = `${segment.isFinal ? 'Grand ' : ''}Giveaway`
     }
 
     return (
