@@ -5,6 +5,7 @@ require_relative 'application'
 
 require 'errors'
 require 'rescue_from_unless_local'
+require 'cookie_authentication'
 require 'utilities'
 require 'unique_token'
 Dir[Rails.root.join('lib', 'patches', '**', '*.rb')].sort.each { |f| require f }
