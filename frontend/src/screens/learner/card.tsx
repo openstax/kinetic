@@ -1,23 +1,24 @@
 import { React, useCallback } from '@common'
 import { Box, Icon, MultiSessionBar } from '@components'
 import { get } from 'lodash'
-import { toSentence } from '@lib'
+import { toSentence, useIsMobileDevice } from '@lib'
 import { tagOfType, tagsOfType, TagLabels, studyIsMultipart } from '@models'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { CardImages } from '../../components/study-card-images/images'
 
-import { colors } from '../../theme'
+import { colors, media } from '../../theme'
 
 interface StudyCardProps {
     study: ParticipantStudy
+    className?: string
 }
 
 const Card = styled(Box)({
     minWidth: 300,
     maxWidth: 450,
     backgroundColor: 'white',
-    padding: '2rem',
+    padding: '1rem',
     boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.1)',
     position: 'relative',
     color: 'inherit',
@@ -25,6 +26,11 @@ const Card = styled(Box)({
     cursor: 'pointer',
     '&:hover': {
         boxShadow: '0px 8px 10px rgba(0, 0, 0, 0.4)',
+    },
+    [media.mobile]: {
+        margin: '0 1.5rem',
+        padding: '1rem',
+        height: '360px',
     },
 })
 
@@ -46,7 +52,7 @@ const Feedback: React.FC<StudyCardProps> = ({ study }) => {
 
     return (
         <Box align='center' gap margin="default">
-            <Icon icon="feedback" color={colors.purple} />
+            <Icon className='fs-6' icon="feedback" color={colors.purple} />
             <span css={{ color: colors.darkText }}>Feedback Available</span>
         </Box>
     )
@@ -59,6 +65,7 @@ const MultiSession: React.FC<StudyCardProps> = ({ study }) => {
         <Box align='center' gap margin="default">
             <Icon
                 icon="multiStage"
+                className='fs-6'
                 color={colors.purple}
                 tooltipProps={{ displayType: 'tooltip' }}
                 tooltip="This study has multiple sessions. The other sessions will be released once available."
@@ -75,7 +82,15 @@ const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
         <Box gap
             align="center"
             pad="default"
-            css={{ color: colors.blackText, backgroundColor: colors.green, position: 'absolute', borderBottomLeftRadius: 20, borderTopLeftRadius: 20, right: 0, top: 40 }}
+            css={{
+                color: colors.blackText,
+                backgroundColor: colors.green,
+                position: 'absolute',
+                borderBottomLeftRadius: 20,
+                borderTopLeftRadius: 20,
+                right: 0,
+                top: 0,
+            }}
         >
             <Icon icon="checkCircle" color='white' />
             <span>Complete</span>
@@ -94,7 +109,7 @@ const MultiSessionFlag: FC<StudyCardProps> = ({ study }) => {
                 borderBottomLeftRadius: 20,
                 borderTopLeftRadius: 20,
                 right: 0,
-                top: 40,
+                top: 0,
                 width: 250,
                 backgroundColor: 'white',
                 zIndex: 3,
@@ -128,19 +143,29 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
             data-is-completed={!!study.completedAt}
             onClick={onClick}
         >
-            <Image.image name={Image.title} height="200px" css={{ border: `1px solid ${colors.lightGray}`, borderRadius: 8 }} />
+            <Image.image
+                name={Image.title}
+                height={useIsMobileDevice() ? '97px' : '200px'}
+                css={{
+                    border: `1px solid ${colors.lightGray}`,
+                    borderRadius: 8,
+
+                }}
+            />
             <CompleteFlag study={study} />
             <MultiSessionFlag study={study} />
-            <Box justify='between' margin={{ bottom: 'large', top: 'small' }} css={{ minHeight: 40, fontSize: '14px' }}>
+            <Box justify='between' wrap margin={{ bottom: 'large', top: 'small' }} css={{ minHeight: 40, fontSize: '14px' }}>
                 <Feedback study={study} />
                 <MultiSession study={study} />
             </Box>
-            <h5>{study.title}</h5>
+            <h6 className='truncate-2'>
+                {study.title}
+            </h6>
             <Researchers study={study} />
             <p css={{ color: colors.grayText }}>{study.shortDescription}</p>
             <Box flex />
             <Box css={{ fontSize: '14px' }} justify="between" wrap>
-                <Box gap>
+                <Box gap wrap>
                     <Tag tag={tagOfType(study, 'topic')} />
                     {tagsOfType(study, 'subject').map(tag => <Tag key={tag} tag={tag} />)}
                 </Box>
