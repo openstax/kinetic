@@ -11,7 +11,7 @@ import { colors, media } from '../../theme'
 
 interface StudyCardProps {
     study: ParticipantStudy
-    className: string
+    className?: string
 }
 
 const Card = styled(Box)({

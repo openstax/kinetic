@@ -64,26 +64,24 @@ const MobileStudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, st
             {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
 
-            {chunk(studies, 6).map((studyChunk, i) => {
-                return (
-                    <Swiper
-                        key={i}
-                        slidesPerView={'auto'}
-                        pagination={{
-                            clickable: true,
-                        }}
-                        effect={'cards'}
-                        modules={[EffectCards, Pagination]}
-                        className="pb-4 overflow-hidden"
-                    >
-                        {studyChunk.map((s, index) =>
-                            <SwiperSlide key={index} className="pb-1">
-                                <StudyCard onSelect={onSelect} study={s} key={s.id} />
-                            </SwiperSlide>
-                        )}
-                    </Swiper>
-                )
-            })}
+            {chunk(studies, 6).map((studyChunk, i) =>
+                <Swiper
+                    key={i}
+                    slidesPerView={'auto'}
+                    pagination={{
+                        clickable: true,
+                    }}
+                    effect={'cards'}
+                    modules={[EffectCards, Pagination]}
+                    className="pb-4 overflow-hidden"
+                >
+                    {studyChunk.map(s =>
+                        <SwiperSlide key={s.id} className="pb-1">
+                            <StudyCard onSelect={onSelect} study={s} />
+                        </SwiperSlide>
+                    )}
+                </Swiper>
+            )}
         </div>
     )
 }
@@ -234,7 +232,6 @@ const LearnerDashboard = () => {
                 </div>
             </Splash >
 
-            {/*<StudyList onSelect={onStudySelect} title="Highlighted Studies on Kinetic" className="highlighted" studies={highlightedStudies} />*/}
             <HighlightedStudies studies={highlightedStudies} title="Highlighted Studies on Kinetic" className="highlighted" onSelect={onStudySelect}/>
 
             <AllSubjects onSelect={onStudySelect} studies={studiesByTopic} filter={filter} setFilter={setFilter} />
