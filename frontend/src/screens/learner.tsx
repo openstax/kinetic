@@ -1,4 +1,4 @@
-import { cx, React, useCallback, useState } from '@common'
+import { cx, React, useCallback } from '@common'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '../theme'
@@ -13,7 +13,12 @@ import { StudyModal } from './studies/modal'
 import { StudyDetails } from './learner/details'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { chunk } from 'lodash-es'
-import Carousel from 'react-bootstrap/Carousel';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCards, Pagination } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-cards';
 
 const Splash = styled(Box)({
     width: '100%',
@@ -39,7 +44,6 @@ const Grid = styled.div({
     },
     [media.mobile]: {
         display: 'flex',
-        // gridTemplateColumns: 'repeat(6, [col-start] minmax(100px, 1fr) [col-end])',
         '.col': {
             width: '80vw',
         },
@@ -67,18 +71,23 @@ const MobileStudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, st
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
 
             {chunk(studies, 6).map((studyChunk, i) => {
-                const [index, setIndex] = useState(0);
-                const handleSelect = (selectedIndex: number) => {
-                    setIndex(selectedIndex);
-                };
                 return (
-                    <Carousel className="pb-4" activeIndex={index} onSelect={handleSelect} variant="dark" key={i} controls={false} interval={null}>
+                    <Swiper
+                        key={i}
+                        slidesPerView={'auto'}
+                        pagination={{
+                            clickable: true,
+                        }}
+                        effect={'cards'}
+                        modules={[EffectCards, Pagination]}
+                        className="pb-4 overflow-hidden"
+                    >
                         {studyChunk.map((s, index) =>
-                            <Carousel.Item key={index} className="pb-1">
+                            <SwiperSlide key={index} className="pb-1">
                                 <StudyCard onSelect={onSelect} study={s} key={s.id} />
-                            </Carousel.Item>
+                            </SwiperSlide>
                         )}
-                    </Carousel>
+                    </Swiper>
                 )
             })}
         </div>

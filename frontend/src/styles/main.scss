@@ -6,6 +6,8 @@ $link-color: #0d6efd;
 
 @import "./bootstrap";
 @import "flatpickr/dist/flatpickr.css";
+@import 'swiper/swiper.min.css';
+@import 'swiper/swiper-bundle.css';
 
 .btn-primary {
     color: $white;
