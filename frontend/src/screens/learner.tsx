@@ -15,10 +15,6 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import { chunk } from 'lodash-es'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Pagination } from 'swiper';
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-cards';
 
 const Splash = styled(Box)({
     width: '100%',
