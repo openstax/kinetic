@@ -1,8 +1,8 @@
 import { React, useCallback } from '@common'
 import { Box, Icon, MultiSessionBar } from '@components'
 import { get } from 'lodash'
-import { toSentence, useIsMobileDevice } from '@lib'
-import { tagOfType, tagsOfType, TagLabels, studyIsMultipart } from '@models'
+import { toSentence } from '@lib'
+import { studyIsMultipart, TagLabels, tagOfType, tagsOfType } from '@models'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { CardImages } from '../../components/study-card-images/images'
@@ -27,12 +27,19 @@ const Card = styled(Box)({
     '&:hover': {
         boxShadow: '0px 8px 10px rgba(0, 0, 0, 0.4)',
     },
+    '.study-card-image': {
+        height: 200,
+    },
     [media.mobile]: {
         margin: '0 1.5rem',
         padding: '1rem',
         height: '360px',
+        '.study-card-image': {
+            height: '30%',
+        },
     },
 })
+
 
 const Tag: React.FC<{ tag?: string }> = ({ tag }) => (
     tag ? <span className="badge text-dark" css={{ borderRadius: 8, background: colors.gray }}>{get(TagLabels, tag, tag)}</span> : null
@@ -145,7 +152,7 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
         >
             <Image.image
                 name={Image.title}
-                height={useIsMobileDevice() ? '97px' : '200px'}
+                className='study-card-image'
                 css={{
                     border: `1px solid ${colors.lightGray}`,
                     borderRadius: 8,
