@@ -89,7 +89,7 @@ const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
                 borderBottomLeftRadius: 20,
                 borderTopLeftRadius: 20,
                 right: 0,
-                top: 0,
+                top: 16,
             }}
         >
             <Icon icon="checkCircle" color='white' />
