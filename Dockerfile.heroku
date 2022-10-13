@@ -44,8 +44,10 @@ ENV SENTRY_DSN=$SENTRY_DSN
 ENV RUBY_SERVE_STATIC_FILES=true
 ENV RAILS_ENV=production
 ENV MG_API_KEY=$MG_API_KEY
+
 WORKDIR /code/backend
 COPY backend ./
 
 COPY --from=node /code/frontend/dist/ ./public/
+RUN mv public/index.html public/app-root.html
 CMD bundle exec rake about && bundle exec rails server -b '0.0.0.0' -p $PORT

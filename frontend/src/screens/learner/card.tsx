@@ -81,7 +81,7 @@ const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
     return (
         <Box gap
             align="center"
-            pad="default"
+            padding="default"
             css={{
                 color: colors.blackText,
                 backgroundColor: colors.green,

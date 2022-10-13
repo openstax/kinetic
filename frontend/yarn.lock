@@ -1851,10 +1851,10 @@ bootstrap@^5.1.3:
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.1.3.tgz#ba081b0c130f810fa70900acbc1c6d3c28fa8f34"
   integrity sha512-fcQztozJ8jToQWXxVuEyXWW+dSo8AiXWKwiSSrKWsRB/Qt+Ewwza+JWoLKiTuQLaEPhdNAJ7+Dosc9DOIqNy7Q==
 
-boxible@1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/boxible/-/boxible-1.5.0.tgz#f32c62da2601362dd809a92d938b1e40ecc5470c"
-  integrity sha512-wUi3L3OJSCZUxOzT4zvnaAf7bxHMU5wqMrR2xtbYkzu2cMh+/KU2e8dsDpfpi8UQEQyo7YETR6yIOyrCXcXB6g==
+boxible@1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/boxible/-/boxible-1.7.0.tgz#a92dcb5d02251f5dd2439d627c8f36389db9a86f"
+  integrity sha512-yiW3JGaZK+WRg06VJ3mTIoJQv5Jca0IAElKOZy1zO2P14Lu4kKqzDOBgTnqYArsO3G41rhS9GclcBUYe8dT6QQ==
   dependencies:
     jest-environment-jsdom "^28.1.2"
 
