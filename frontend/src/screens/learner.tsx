@@ -20,6 +20,10 @@ const Splash = styled(Box)({
     width: '100%',
     overflow: 'hidden',
     position: 'relative',
+    height: 600,
+    [media.mobile]: {
+        height: 285,
+    },
 })
 
 
@@ -37,12 +41,6 @@ const Grid = styled.div({
     gridRowGap: 20,
     [media.tablet]: {
         gridTemplateColumns: 'repeat(2, [col-start] minmax(100px, 1fr) [col-end])',
-    },
-    [media.mobile]: {
-        display: 'flex',
-        '.col': {
-            width: '80vw',
-        },
     },
 })
 
@@ -199,7 +197,6 @@ const Sh = styled.h6({
 
 const LearnerDashboard = () => {
     const nav = useNavigate()
-    const isMobile = useIsMobileDevice()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
     const {
         highlightedStudies, mandatoryStudy, allStudies, filter, onMandatoryClose, setFilter, studiesByTopic,
@@ -215,7 +212,7 @@ const LearnerDashboard = () => {
             <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 
-            <Splash direction='column' justify='center' height={`${isMobile ? '285' : '600'}px`} className="splash">
+            <Splash direction='column' justify='center' className="splash">
                 <SplashImage
                     preserveAspectRatio='xMidYMid slice'
                     css={{

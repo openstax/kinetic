@@ -11,7 +11,7 @@ import { colors, media } from '../../theme'
 
 interface StudyCardProps {
     study: ParticipantStudy
-    className?: string
+    className: string
 }
 
 const Card = styled(Box)({
@@ -149,7 +149,6 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
                 css={{
                     border: `1px solid ${colors.lightGray}`,
                     borderRadius: 8,
-
                 }}
             />
             <CompleteFlag study={study} />
