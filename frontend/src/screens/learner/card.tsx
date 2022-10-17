@@ -35,7 +35,8 @@ const Card = styled(Box)({
         padding: '1rem',
         height: '360px',
         '.study-card-image': {
-            height: '30%',
+            minHeight: '35%',
+            maxHeight: '35%',
         },
     },
 })
