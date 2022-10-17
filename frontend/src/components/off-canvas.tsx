@@ -27,6 +27,11 @@ const useOffCanvas = ({ show, onHide }: { show: boolean, onHide?(): void }) => {
         isVisible ? bs.show() : bs.hide()
     }, [bs, isVisible])
 
+    useEffect(() => {
+        if (!bs) return
+        return () => bs.hide()
+    },[bs])
+
     const eventRef = useEventListenerRef('hidden.bs.offcanvas', () => onHide?.())
     const ref = useForkRef(cbRef, eventRef)
     return useMemo(() => ({
