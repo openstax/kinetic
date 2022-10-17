@@ -67,13 +67,16 @@ const MobileStudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, st
             {chunk(studies, 6).map((studyChunk, i) =>
                 <Swiper
                     key={i}
-                    slidesPerView={'auto'}
-                    pagination={{
-                        clickable: true,
-                    }}
                     effect={'cards'}
+                    slidesPerView={'auto'}
+                    cardsEffect={{
+                        slideShadows: false,
+                        perSlideOffset: 14,
+                    }}
+                    centeredSlides={true}
+                    pagination
                     modules={[EffectCards, Pagination]}
-                    className="pb-4 overflow-hidden"
+                    className="pb-3 overflow-hidden"
                 >
                     {studyChunk.map(s =>
                         <SwiperSlide key={s.id} className="pb-1">

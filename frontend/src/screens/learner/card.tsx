@@ -31,7 +31,9 @@ const Card = styled(Box)({
         height: 200,
     },
     [media.mobile]: {
-        margin: '0 1.5rem',
+        minWidth: 250,
+        maxWidth: 250,
+        margin: '0 auto',
         padding: '1rem',
         height: '360px',
         '.study-card-image': {
