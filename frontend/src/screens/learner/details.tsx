@@ -95,6 +95,37 @@ const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
     )
 }
 
+const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
+    // TODO when https://github.com/openstax/research/issues/204 is complete
+    //  render this dynamically using study.stages
+    if (studyIsMultipart(study)) {
+        return (
+            <Box className='mb-1' direction='column'>
+                <Box gap>
+                    <Icon icon="clock" color={colors.purple} />
+                    <Box>
+                        <span>*Total: {study.durationMinutes}min</span>
+                        {study.participationPoints && <span>&nbsp;{study.participationPoints}pts</span>}
+                    </Box>
+                </Box>
+                <Box margin={{ left: 'large' }} css={{ color: colors.grayText }} direction='column'>
+                    <small>Session 1: 20min 35pts</small>
+                    <small>Session 2: 20min 35pts</small>
+                </Box>
+            </Box>
+        )
+    }
+
+    return (
+        <Box gap align="center" className='mb-1'>
+            <Icon icon="clock" color={colors.purple} />
+            <div>{study.durationMinutes}min</div>
+            {study.participationPoints && <span> {study.participationPoints}pts</span>}
+        </Box>
+    )
+}
+
+
 const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher }) => {
     if (!researcher) return null
 
@@ -142,11 +173,7 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
                         </div>
                         {tag}</Box>
                     }
-                    <Box gap align="center" margin={{ bottom: 'large' }}>
-                        <Icon icon="clock" color={colors.purple} />
-                        <div>{study.durationMinutes} min</div>
-                        {study.participationPoints && <span> {study.participationPoints}pts</span>}
-                    </Box>
+                    <StudyTime study={study} />
                     <StudyPart property="feedbackDescription" title="Feedback Available" icon="feedback" study={study} />
                     <MultiSession study={study} />
                     <Box margin={{ bottom: 'large' }} css={{ color: colors.grayText }}>{study.longDescription}</Box>
