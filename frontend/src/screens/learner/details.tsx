@@ -108,7 +108,7 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
                         {study.participationPoints && <span>&nbsp;{study.participationPoints}pts</span>}
                     </Box>
                 </Box>
-                <Box margin={{ left: 'large' }} css={{ color: colors.grayText }} direction='column'>
+                <Box css={{ color: colors.grayText }} direction='column'>
                     <small>Session 1: 20min 35pts</small>
                     <small>Session 2: 20min 35pts</small>
                 </Box>
