@@ -1,24 +1,2 @@
-export { default as WhatAreYourAbilityBeliefs } from "./WhatAreYourAbilityBeliefs";
-export { default as AreYouAnxiousPerson01 } from "./AreYouAnxiousPerson01";
-export { default as AreYouSuperReader01 } from "./AreYouSuperReader01";
-export { default as BiologyCellsAndHighlightingTwoParts } from "./BiologyCellsAndHighlightingTwoParts";
-export { default as BiologyPlusCellsLesson } from "./BiologyPlusCellsLesson";
-export { default as Demographic } from "./Demographic";
-export { default as DoYouFitIn01 } from "./DoYouFitIn01";
-export { default as DoYouStickWithGoal01 } from "./DoYouStickWithGoal01";
-export { default as DoYouSurviveOrThrive01 } from "./DoYouSurviveOrThrive01";
-export { default as HowDoYouStudyOnline01 } from "./HowDoYouStudyOnline01";
-export { default as HowImpulsiveAreYou01 } from "./HowImpulsiveAreYou01";
-export { default as HowInControlDoYouFeel } from "./HowInControlDoYouFeel";
-export { default as HowManyLettersYouRemember } from "./HowManyLettersYouRemember";
-export { default as HowMuchYouRemeberFromScience } from "./HowMuchYouRemeberFromScience";
-export { default as PersonalFinanceAndYou } from "./PersonalFinanceAndYou";
-export { default as PotentialFutureCareer01 } from "./PotentialFutureCareer01";
-export { default as Psychology } from "./Psychology";
-export { default as ReflectingOnYourChildhoodExperiences } from "./ReflectingOnYourChildhoodExperiences";
-export { default as RememberNumbersWhenReading } from "./RememberNumbersWhenReading";
-export { default as StemBiodata01 } from "./StemBiodata01";
-export { default as StemInterest01 } from "./StemInterest01";
-export { default as TestYourVisualSkillsAndFinishPatterns } from "./TestYourVisualSkillsAndFinishPatterns";
-export { default as UncoverAchievementLearning01 } from "./UncoverAchievementLearning01";
-export { default as WhatAreYourCorePersonalityTraits } from "./WhatAreYourCorePersonalityTraits";
+export { CardImages } from './images'
+export { CardImagesSelector } from './selector'
