@@ -11,6 +11,7 @@ export interface CardImage {
 
 export const CardImages: Record<string, CardImage> = {
     AbilityBeliefs: { title: 'Ability Beliefs', image: loadAsync('image', () => import('./WhatAreYourAbilityBeliefs')) },
+    AnxiousPersonNew: { title: 'Anxious Person New', image: loadAsync('image', () => import('./AnxiouPersonNew')) },
     AreYouAnxiousPerson: { title: 'Are You an Anxious Person', image: loadAsync('image', () => import('./AreYouAnxiousPerson01')) },
     AreYouSuperReader: { title: 'Are You a Super Reader', image: loadAsync('image', () => import('./AreYouSuperReader01')) },
     Biology1: { title: 'Biology Highlighting (Two Parts)', image: loadAsync('image', () => import('./BiologyCellsAndHighlightingTwoParts')) },
@@ -27,6 +28,7 @@ export const CardImages: Record<string, CardImage> = {
     HowImpulsiveAreYou: { title: 'How Impulsive Are You', image: loadAsync('image', () => import('./HowImpulsiveAreYou01')) },
     HowManyLettersYouRemember: { title: 'How Many Letters do You Remember', image: loadAsync('image', () => import('./HowManyLettersYouRemember')) },
     HowMuchYouRemeberFromScience: { title: 'How Much You Remeber From Science', image: loadAsync('image', () => import('./HowMuchYouRemeberFromScience')) },
+    NewPersonalityTraits: { title: 'New Personality Traits', image: loadAsync('image', () => import('./NewPersonalityTraits')) },
     PatternRecognition: { title: 'Pattern Recognition', image: loadAsync('image', () => import('./TestYourVisualSkillsAndFinishPatterns')) },
     PotentialFutureCareer: { title: 'Potential Future Career', image: loadAsync('image', () => import('./PotentialFutureCareer01')) },
     Psychology: { title: 'Psychology', image: loadAsync('image', () => import('./Psychology')) },
