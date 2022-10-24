@@ -23,6 +23,14 @@ if (ENV.GA_UA) {
     )
 }
 
+if (ENV.OX_GA_UA) {
+    plugins.push(
+        googleAnalytics({
+            trackingId: ENV.OX_GA_UA,
+        })
+    )
+}
+
 export const analytics = Analytics({
     app: 'Kinetic',
     plugins,

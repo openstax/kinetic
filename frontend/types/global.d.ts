@@ -26,6 +26,8 @@ declare global {
             VITE_PROD_GA_UA?: string
             VITE_TEST_GTAG_ID?: string
             VITE_TEST_GA_UA?: string
+            VITE_PROD_OX_GA_UA?: string
+            VITE_OX_TEST_GA_UA?: string
         };
     }
 }
