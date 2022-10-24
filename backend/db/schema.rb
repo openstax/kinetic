@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_12_181638) do
+ActiveRecord::Schema.define(version: 2022_10_20_135148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,8 +109,6 @@ ActiveRecord::Schema.define(version: 2022_09_12_181638) do
     t.string "title_for_participants", null: false
     t.text "short_description", null: false
     t.text "long_description", null: false
-    t.integer "duration_minutes", null: false
-    t.integer "participation_points"
     t.datetime "opens_at"
     t.datetime "closes_at"
     t.boolean "is_mandatory", default: false, null: false
@@ -122,6 +120,8 @@ ActiveRecord::Schema.define(version: 2022_09_12_181638) do
     t.string "image_id"
     t.integer "completed_count", default: 0, null: false
     t.boolean "is_hidden", default: false, null: false
+    t.integer "participation_points"
+    t.integer "duration_minutes"
     t.index ["tags"], name: "index_studies_on_tags", using: :gin
   end
 
