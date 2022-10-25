@@ -350,7 +350,7 @@ function EditStudy() {
                 <DateTimeField name="closesAt" id="closes-at" label="Closes At" md={6} />
 
                 <InputField name="feedbackDescription" type="textarea" label="Feedback description" />
-                <InputField name="benefits" type="textarea" label="Participant benefits desription" />
+                <InputField name="benefits" type="textarea" label="Participant benefits description" />
                 <InputField name="shortDescription" id="short-desc" type="textarea" label="Short description" />
                 <InputField name="longDescription" id="long-desc" type="textarea" label="Long description" />
             </Form>

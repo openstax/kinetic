@@ -100,6 +100,8 @@ ActiveRecord::Schema.define(version: 2022_10_20_135148) do
     t.string "title"
     t.string "description"
     t.float "available_after_days", default: 0.0, null: false
+    t.integer "duration_minutes", default: 0, null: false
+    t.integer "points", default: 0, null: false
     t.index ["order", "study_id"], name: "index_stages_on_order_and_study_id", unique: true
     t.index ["study_id"], name: "index_stages_on_study_id"
   end
@@ -120,8 +122,6 @@ ActiveRecord::Schema.define(version: 2022_10_20_135148) do
     t.string "image_id"
     t.integer "completed_count", default: 0, null: false
     t.boolean "is_hidden", default: false, null: false
-    t.integer "participation_points"
-    t.integer "duration_minutes"
     t.index ["tags"], name: "index_studies_on_tags", using: :gin
   end
 
