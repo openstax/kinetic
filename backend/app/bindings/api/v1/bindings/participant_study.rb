@@ -39,12 +39,6 @@ module Api::V1::Bindings
     # Description of how the study benefits participants
     attr_accessor :benefits
 
-    # The expected study duration in minutes.
-    attr_accessor :duration_minutes
-
-    # How many points will be awarded for participation in the study
-    attr_accessor :participation_points
-
     # How popular the study is on a fractional scale of 0.0 to 1.0
     attr_accessor :popularity_rating
 
@@ -80,8 +74,6 @@ module Api::V1::Bindings
         :'feedback_description' => :'feedback_description',
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
-        :'duration_minutes' => :'duration_minutes',
-        :'participation_points' => :'participation_points',
         :'popularity_rating' => :'popularity_rating',
         :'first_launched_at' => :'first_launched_at',
         :'completed_at' => :'completed_at',
@@ -109,8 +101,6 @@ module Api::V1::Bindings
         :'feedback_description' => :'String',
         :'image_id' => :'String',
         :'benefits' => :'String',
-        :'duration_minutes' => :'Integer',
-        :'participation_points' => :'Float',
         :'popularity_rating' => :'Float',
         :'first_launched_at' => :'Time',
         :'completed_at' => :'Time',
@@ -177,14 +167,6 @@ module Api::V1::Bindings
         self.benefits = attributes[:'benefits']
       end
 
-      if attributes.key?(:'duration_minutes')
-        self.duration_minutes = attributes[:'duration_minutes']
-      end
-
-      if attributes.key?(:'participation_points')
-        self.participation_points = attributes[:'participation_points']
-      end
-
       if attributes.key?(:'popularity_rating')
         self.popularity_rating = attributes[:'popularity_rating']
       end
@@ -242,10 +224,6 @@ module Api::V1::Bindings
         invalid_properties.push('invalid value for "tags", tags cannot be nil.')
       end
 
-      if @duration_minutes.nil?
-        invalid_properties.push('invalid value for "duration_minutes", duration_minutes cannot be nil.')
-      end
-
       invalid_properties
     end
 
@@ -256,7 +234,6 @@ module Api::V1::Bindings
       return false if @title.nil?
       return false if @short_description.nil?
       return false if @tags.nil?
-      return false if @duration_minutes.nil?
       true
     end
 
@@ -273,8 +250,6 @@ module Api::V1::Bindings
           feedback_description == o.feedback_description &&
           image_id == o.image_id &&
           benefits == o.benefits &&
-          duration_minutes == o.duration_minutes &&
-          participation_points == o.participation_points &&
           popularity_rating == o.popularity_rating &&
           first_launched_at == o.first_launched_at &&
           completed_at == o.completed_at &&
@@ -294,7 +269,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title, short_description, long_description, tags, feedback_description, image_id, benefits, duration_minutes, participation_points, popularity_rating, first_launched_at, completed_at, closes_at, opted_out_at, researchers, stages, is_mandatory].hash
+      [id, title, short_description, long_description, tags, feedback_description, image_id, benefits, popularity_rating, first_launched_at, completed_at, closes_at, opted_out_at, researchers, stages, is_mandatory].hash
     end
 
     # Builds the object from hash

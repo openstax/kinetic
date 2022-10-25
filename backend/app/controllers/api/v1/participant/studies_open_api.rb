@@ -4,7 +4,7 @@ class Api::V1::Participant::StudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
   COMMON_REQUIRED_STUDY_FIELDS = [
-    :title, :short_description, :tags, :duration_minutes
+    :title, :short_description, :tags
   ].freeze
 
   add_components do
@@ -83,6 +83,16 @@ class Api::V1::Participant::StudiesOpenApi
         key :description, 'Can the stage be launched'
         key :readOnly, true
       end
+      property :duration_minutes do
+        key :type, :integer
+        key :description, 'How long the stage lasts'
+        key :readOnly, true
+      end
+      property :points do
+        key :type, :integer
+        key :description, 'How many points the stage is worth'
+        key :readOnly, true
+      end
     end
     schema :ParticipantStudies do
       property :data do
@@ -129,19 +139,10 @@ class Api::V1::Participant::StudiesOpenApi
       key :type, :string
       key :description, 'Description of how the study benefits participants'
     end
-    property :duration_minutes do
-      key :type, :integer
-      key :description, 'The expected study duration in minutes.'
-    end
-    property :participation_points do
-      key :type, :integer
-      key :description, 'How many points a participant will earn upon completion'
-    end
     property :popularity_rating do
       key :type, :number
       key :description, 'How popular the study is on a fractional scale of 0.0 to 1.0'
     end
-
     property :first_launched_at do
       key :type, :string
       key :format, 'date-time'
@@ -180,11 +181,16 @@ class Api::V1::Participant::StudiesOpenApi
       key :type, :boolean
       key :description, 'Mandatory studies must be completed by all users'
     end
-    property :participation_points do
-      key :type, :number
-      key :description, 'How many points will be awarded for participation in the study'
-    end
-
+    # TODO Remove? or compose stage values?
+    # property :participation_points do
+    #   key :type, :number
+    #   key :description, 'How many points will be awarded for participation in the study'
+    # end
+    # TODO Remove? or compose stage values?
+    # property :duration_minutes do
+    #   key :type, :integer
+    #   key :description, 'The expected study duration in minutes.'
+    # end
   end
 
   openapi_path '/participant/studies/{id}' do

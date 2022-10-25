@@ -18,7 +18,7 @@ module Api::V1::Bindings
     # The study name that participants see.
     attr_accessor :title_for_participants
 
-    # An study name that only researchers see.
+    # The study name that only researchers see.
     attr_accessor :title_for_researchers
 
     # A short study description.
@@ -42,7 +42,7 @@ module Api::V1::Bindings
     # The expected study duration in minutes.
     attr_accessor :duration_minutes
 
-    # is the study hidden from participants
+    # Is the study hidden from participants
     attr_accessor :is_hidden
 
     # When the study opens for participation; null means not open.

@@ -46,7 +46,7 @@ class Api::V1::Researcher::StudiesOpenApi
     end
     property :title_for_researchers do
       key :type, :string
-      key :description, 'An study name that only researchers see.'
+      key :description, 'The study name that only researchers see.'
       key :minLength, 1
     end
     property :short_description do
@@ -81,7 +81,7 @@ class Api::V1::Researcher::StudiesOpenApi
     end
     property :is_hidden do
       key :type, :boolean
-      key :description, 'is the study hidden from participants'
+      key :description, 'Is the study hidden from participants'
     end
     property :opens_at do
       key :type, :string
