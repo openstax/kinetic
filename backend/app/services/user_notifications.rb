@@ -54,6 +54,7 @@ class UserNotifications
       points_needed = Reward.where('end_at <= ?', reward.end_at).sum(:points)
 
       users.each do |uuid, user|
+        # TODO Sum points from studies.stages instead
         points = LaunchedStudy
                    .where('completed_at >= ? and user_id = ?', first_reward.start_at, uuid)
                    .joins(:study)

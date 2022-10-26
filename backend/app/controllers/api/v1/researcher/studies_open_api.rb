@@ -99,10 +99,10 @@ class Api::V1::Researcher::StudiesOpenApi
       key :type, :boolean
       key :description, 'Mandatory studies must be completed by all users'
     end
-    property :participation_points do
-      key :type, :number
-      key :description, 'How many points will be awarded for participation in the study'
-    end
+    # property :participation_points do
+    #   key :type, :number
+    #   key :description, 'How many points will be awarded for participation in the study'
+    # end
   end
 
   add_properties(:Study) do

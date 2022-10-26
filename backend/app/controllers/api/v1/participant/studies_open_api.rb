@@ -33,7 +33,7 @@ class Api::V1::Participant::StudiesOpenApi
       key :required, [:url]
       property :url do
         key :type, :string
-        key :description, 'The URL to send a user to to start a study stage'
+        key :description, 'The URL to send a user to start a study stage'
       end
     end
 
