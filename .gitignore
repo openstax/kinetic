@@ -2,6 +2,7 @@
 tmp
 .DS_Store
 docker-compose.override.yml
+docker-compose.dev.yml
 backend/clients
 frontend/test-results
 .env*
