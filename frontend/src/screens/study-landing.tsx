@@ -67,7 +67,7 @@ const StudyMessaging: React.FC<StudyMessagingProps & { onReturnClick(): void }> 
                 }}
             >
                 <Box
-                    direction="column" pad="large"
+                    direction="column" padding="large"
                     margin={{ right: '-100px' }} align="start"
                     css={{
                         maxWidth: '400px',

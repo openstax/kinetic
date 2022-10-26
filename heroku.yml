@@ -8,7 +8,7 @@ build:
     TEST_GA_UA: UA-73668038-10
     SENTRY_DSN: https://a7ba8f1daead45acaf7a28dbb661d393@o484761.ingest.sentry.io/6051748
 run:
-    web: bundle exec puma
+    web: rm public/index.html ; bundle exec puma
 
 release:
   image: web

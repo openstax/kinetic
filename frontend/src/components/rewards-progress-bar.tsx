@@ -75,7 +75,7 @@ const GrandPrize: React.FC<{ segment?: RewardsSegment }> = ({ segment }) => {
     if (!segment) return null
 
     if (segment.isPast && !segment.achieved) {
-        return <MissedGrandPrize css={{ margin: '-10px 0 10px 50px' }} />
+        return <MissedGrandPrize css={{}} />
     }
 
     return (
@@ -148,7 +148,7 @@ const SegmentInfo: React.FC<{ schedule: RewardsSegment[] }> = ({ schedule }) => 
     if (segment.recentlyAchieved) {
         msg = `🎉 Yay! You were entered into giveway`
     } else {
-        msg = `${segment.isFinal ? 'Grand ' : ''}Givaway`
+        msg = `${segment.isFinal ? 'Grand ' : ''}Giveaway`
     }
 
     return (
@@ -161,6 +161,8 @@ const SegmentInfo: React.FC<{ schedule: RewardsSegment[] }> = ({ schedule }) => 
         </Box>
     )
 }
+
+const FINAL_STEP_WIDTH = 50
 
 export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies }) => {
     const {
@@ -182,7 +184,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
 
                 <Box align="start" padding={{ top: 'large' }} gap css={{
                     height: 60,
-                    paddingRight: '20px',
+                    paddingRight: FINAL_STEP_WIDTH,
                 }}>
                     <Box direction='column' margin={{ top: '-10px' }}>
                         <b>{pointsEarned} / {totalPoints} pts</b>
@@ -192,7 +194,9 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                         {schedule.map((segment) => (
                             <Segment
                                 key={segment.index}
-                                percentage={(segment.totalPoints / totalPoints) * 100}
+                                margin={segment.isFinal ? { top: -10, left: FINAL_STEP_WIDTH } : {}}
+                                percentage={(segment.points / totalPoints) * 100
+                                }
                             >
                                 <RewardSegment key={segment.index} segment={segment} />
                             </Segment>

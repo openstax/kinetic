@@ -66,7 +66,7 @@ Rails.application.routes.draw do
     get 'study/land/:study_id', as: :returning, via: :get, to: 'static#catchall'
   end
 
+  match '/', via: :get, to: 'static#catchall'
   match '*path', via: :get, to: 'static#catchall'
-  match '*path', via: :all, to: 'static#error404'
 end
 # rubocop:enable Metrics/BlockLength

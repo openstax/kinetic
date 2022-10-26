@@ -80,7 +80,7 @@ const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
     if (!study.stages || !studyIsMultipart(study)) return null
 
     return (
-        <Box direction="column" margin={{ bottom: 'xlarge' }}>
+        <Box direction="column" margin={{ bottom: 'large' }}>
             <Box align='center' gap>
                 <Icon
                     icon="multiStage"
