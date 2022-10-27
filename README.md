@@ -115,3 +115,13 @@ Call this to see who you are logged in as.
 ### Managing Banners & Rewards
 
 Be logged in as an admin, and go to `/admin`
+
+
+### Deploying Homepage to Openstax CMS.
+
+Access the [cms](https://openstax.org/admin).  
+Grab the updated homepage HTML
+```
+./homepage/copy-to-clipboard
+```
+and paste it into the CMS for openstax/kinetic homepage
