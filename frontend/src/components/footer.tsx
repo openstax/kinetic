@@ -54,7 +54,7 @@ const Funders = () => {
                             View Other Philanthropic Supporters
                         </a>
 
-                        <p className="extra-small" css={{ color: colors.grayText }}>
+                        <p className="x-small" css={{ color: colors.grayText }}>
                             *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
                         </p>
                     </div>
