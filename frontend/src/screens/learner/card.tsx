@@ -139,7 +139,7 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
             <Researchers study={study} />
             <p css={{ color: colors.grayText }}>{study.shortDescription}</p>
             <Box flex />
-            <Box css={{ fontSize: '14px' }} justify="between" wrap>
+            <Box className='small' justify='between' wrap>
                 <Box gap>
                     <Tag tag={tagOfType(study, 'topic')} />
                     {tagsOfType(study, 'subject').map(tag => <Tag key={tag} tag={tag} />)}

@@ -30,7 +30,6 @@ export const BannersBar: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 color: 'white',
-                fontSize: isMobile ? '14px' : '16px',
                 fontFamily: 'Helvetica Neue',
                 textAlign: 'center',
                 backgroundColor: colors.darkTeal,
