@@ -149,7 +149,7 @@ const LearnerDashboard = () => {
             <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 
-            <Splash direction='column' justify='center' height={`${isMobile ? '285' : '600'}px`} className="splash">
+            <Splash direction='column' justify='center' height={`${isMobile ? '400' : '600'}px`} className="splash">
                 <SplashImage
                     preserveAspectRatio='xMidYMid slice'
                     css={{
@@ -163,10 +163,10 @@ const LearnerDashboard = () => {
                 />
                 <div className="container-lg">
                     <div css={{ maxWidth: '55%', p: { marginBottom: 5 } }}>
-                        <h2 className="mb-0">Level up to new ways of learning, and earn prizes!</h2>
-                        <h6 className="mt-1 mb-0">
+                        <h1>Level up to new ways of learning, and earn prizes!</h1>
+                        <h4>
                             With Kinetic, participate in scientific research and learn tips and tricks to help you become a better learner. All while winning prizes!
-                        </h6>
+                        </h4>
                     </div>
                 </div>
             </Splash >
@@ -176,7 +176,7 @@ const LearnerDashboard = () => {
             <AllSubjects onSelect={onStudySelect} studies={studiesByTopic} filter={filter} setFilter={setFilter} />
 
             <Footer includeFunders />
-        </div >
+        </div>
     )
 }
 
