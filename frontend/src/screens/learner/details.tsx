@@ -99,6 +99,7 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
     // TODO when https://github.com/openstax/research/issues/204 is complete
     //  render this dynamically using study.stages
     if (studyIsMultipart(study)) {
+        const numStages = study.stages?.length || 0;
         return (
             <Box className='mb-1' direction='column'>
                 <Box gap>
@@ -109,8 +110,12 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
                     </Box>
                 </Box>
                 <Box css={{ color: colors.grayText }} direction='column'>
-                    <small>Session 1: 20min 35pts</small>
-                    <small>Session 2: 20min 35pts</small>
+                    <small>
+                        Session 1: {study.durationMinutes / numStages}min {study.participationPoints && study.participationPoints / numStages}pts
+                    </small>
+                    <small>
+                        Session 2: {study.durationMinutes / numStages}min {study.participationPoints && study.participationPoints / numStages}pts
+                    </small>
                 </Box>
             </Box>
         )
