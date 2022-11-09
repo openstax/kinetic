@@ -181,16 +181,6 @@ class Api::V1::Participant::StudiesOpenApi
       key :type, :boolean
       key :description, 'Mandatory studies must be completed by all users'
     end
-    # TODO Remove? or compose stage values?
-    # property :participation_points do
-    #   key :type, :number
-    #   key :description, 'How many points will be awarded for participation in the study'
-    # end
-    # TODO Remove? or compose stage values?
-    # property :duration_minutes do
-    #   key :type, :integer
-    #   key :description, 'The expected study duration in minutes.'
-    # end
   end
 
   openapi_path '/participant/studies/{id}' do
