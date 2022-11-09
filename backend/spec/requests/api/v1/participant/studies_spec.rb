@@ -51,7 +51,6 @@ RSpec.describe 'Participant Studies', type: :request, api: :v1, multi_stage: tru
           title: study2.title_for_participants,
           short_description: study2.short_description,
           tags: study2.tags,
-          duration_minutes: study2.duration_minutes,
           researchers: a_collection_containing_exactly(
             {
               name: study2.researchers.first.name,

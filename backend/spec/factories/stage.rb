@@ -7,6 +7,8 @@ FactoryBot.define do
     end
 
     available_after_days { 0 }
+    duration_minutes { rand(1..50) }
+    points { rand(1..50) }
 
     config do
       {

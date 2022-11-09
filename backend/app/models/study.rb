@@ -28,6 +28,10 @@ class Study < ApplicationRecord
                arel[:closes_at].gteq(Time.now)))
   }
 
+  def total_points
+    stages.sum(:points)
+  end
+
   def available?
     !is_hidden? && opens_at && Time.now > opens_at && (closes_at.nil? || Time.now <= closes_at)
   end
