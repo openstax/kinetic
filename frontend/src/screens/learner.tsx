@@ -213,7 +213,7 @@ const LearnerDashboard = () => {
             <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 
-            <Splash direction='column' justify='center' height={`${isMobile ? '400' : '600'}px`} className="splash">
+            <Splash direction='column' justify='center' height={`${useIsMobileDevice() ? '400' : '600'}px`} className="splash">
                 <SplashImage
                     preserveAspectRatio='xMidYMid slice'
                     css={{
