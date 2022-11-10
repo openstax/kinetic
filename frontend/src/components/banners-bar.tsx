@@ -3,7 +3,6 @@ import { Box, Icon } from '@components'
 import { React } from '@common'
 import { useBanners } from '@models'
 import { colors } from '../theme'
-import { useIsMobileDevice } from '@lib';
 
 const Banner: React.FC<{
     onRemove: (b: BannerMessage) => void,
