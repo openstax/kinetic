@@ -12,10 +12,9 @@ interface SegmentProps extends BoxProps {
 const barWidth = 7
 const circleDiameter = 20
 
-export const SegmentTitle: FCWC<{ className?: string }> = ({ children, className }) => <div className={cx('title', className)} css={{
+export const SegmentTitle: FCWC<{ className?: string }> = ({ children, className }) => <div className={cx('title', 'small', className)} css={{
     marginTop: '5px',
     lineHeight: '18px',
-    fontSize: '14px',
 }}>{children}</div>
 
 const segmentStyle: CSSObject = {

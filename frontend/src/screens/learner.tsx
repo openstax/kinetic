@@ -173,29 +173,6 @@ const HighlightedStudies: FCWOC<StudyListProps> = ({ onSelect, studies, title, c
     )
 }
 
-const H = styled.h2({
-    fontSize: '48px',
-    lineHeight: '64px',
-    fontWeight: 700,
-    marginBottom: 0,
-    fontFamily: 'Helvetica Neue',
-    [media.mobile]: {
-        fontSize: '20px',
-        lineHeight: '24px',
-    },
-})
-
-const Sh = styled.h6({
-    fontFamily: 'Helvetica Neue',
-    marginBottom: 0,
-    fontSize: '18px',
-    lineHeight: '30px',
-    [media.mobile]: {
-        fontSize: '15px',
-        lineHeight: '18px',
-    },
-})
-
 const LearnerDashboard = () => {
     const nav = useNavigate()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
@@ -213,7 +190,7 @@ const LearnerDashboard = () => {
             <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 
-            <Splash direction='column' justify='center' className="splash">
+            <Splash direction='column' justify='center' height={`${useIsMobileDevice() ? '400' : '600'}px`} className="splash">
                 <SplashImage
                     preserveAspectRatio='xMidYMid slice'
                     css={{
@@ -227,10 +204,10 @@ const LearnerDashboard = () => {
                 />
                 <div className="container-lg">
                     <div css={{ maxWidth: '55%', p: { marginBottom: 5 } }}>
-                        <H>Level up to new ways of learning, and earn prizes!</H>
-                        <Sh className="mt-1">
+                        <h1>Level up to new ways of learning, and earn prizes!</h1>
+                        <h4>
                             With Kinetic, participate in scientific research and learn tips and tricks to help you become a better learner. All while winning prizes!
-                        </Sh>
+                        </h4>
                     </div>
                 </div>
             </Splash >
@@ -240,7 +217,7 @@ const LearnerDashboard = () => {
             <AllSubjects onSelect={onStudySelect} studies={studiesByTopic} filter={filter} setFilter={setFilter} />
 
             <Footer includeFunders />
-        </div >
+        </div>
     )
 }
 
