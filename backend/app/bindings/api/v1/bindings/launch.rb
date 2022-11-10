@@ -15,7 +15,7 @@ require 'time'
 
 module Api::V1::Bindings
   class Launch
-    # The URL to send a user to to start a study stage
+    # The URL to send a user to start a study stage
     attr_accessor :url
 
     # Attribute mapping from ruby-style variable name to JSON key.

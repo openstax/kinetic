@@ -57,9 +57,6 @@ module Api::V1::Bindings
     # Mandatory studies must be completed by all users
     attr_accessor :is_mandatory
 
-    # How many points will be awarded for participation in the study
-    attr_accessor :participation_points
-
     # The URL to which stages should return after completing
     attr_accessor :return_url
 
@@ -89,7 +86,6 @@ module Api::V1::Bindings
         :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
         :'is_mandatory' => :'is_mandatory',
-        :'participation_points' => :'participation_points',
         :'return_url' => :'return_url',
         :'researchers' => :'researchers',
         :'first_launched_at' => :'first_launched_at',
@@ -119,7 +115,6 @@ module Api::V1::Bindings
         :'opens_at' => :'Time',
         :'closes_at' => :'Time',
         :'is_mandatory' => :'Boolean',
-        :'participation_points' => :'Float',
         :'return_url' => :'String',
         :'researchers' => :'Array<Researcher>',
         :'first_launched_at' => :'Time',
@@ -206,10 +201,6 @@ module Api::V1::Bindings
 
       if attributes.key?(:'is_mandatory')
         self.is_mandatory = attributes[:'is_mandatory']
-      end
-
-      if attributes.key?(:'participation_points')
-        self.participation_points = attributes[:'participation_points']
       end
 
       if attributes.key?(:'return_url')
@@ -329,7 +320,6 @@ module Api::V1::Bindings
           opens_at == o.opens_at &&
           closes_at == o.closes_at &&
           is_mandatory == o.is_mandatory &&
-          participation_points == o.participation_points &&
           return_url == o.return_url &&
           researchers == o.researchers &&
           first_launched_at == o.first_launched_at &&
@@ -345,7 +335,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, duration_minutes, is_hidden, opens_at, closes_at, is_mandatory, participation_points, return_url, researchers, first_launched_at, stages].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, duration_minutes, is_hidden, opens_at, closes_at, is_mandatory, return_url, researchers, first_launched_at, stages].hash
     end
 
     # Builds the object from hash
