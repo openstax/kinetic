@@ -179,7 +179,11 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
                     {tagsOfType(study, 'subject').map(tag => <Tag key={tag} tag={tag} />)}
                 </Box>
                 <Box gap>
-                    <div css={{ marginLeft: '0.5rem' }}>{study.durationMinutes} min</div>
+                    <div css={{ marginLeft: '0.5rem' }}>
+                        {studyIsMultipart(study) && <span>*Total: </span>}
+                        {study.durationMinutes}min
+                    </div>
+
                     {study.participationPoints && <span>• {study.participationPoints}pts</span>}
                 </Box>
             </Box>
