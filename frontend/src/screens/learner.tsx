@@ -173,29 +173,6 @@ const HighlightedStudies: FCWOC<StudyListProps> = ({ onSelect, studies, title, c
     )
 }
 
-const H = styled.h2({
-    fontSize: '48px',
-    lineHeight: '64px',
-    fontWeight: 700,
-    marginBottom: 0,
-    fontFamily: 'Helvetica Neue',
-    [media.mobile]: {
-        fontSize: '20px',
-        lineHeight: '24px',
-    },
-})
-
-const Sh = styled.h6({
-    fontFamily: 'Helvetica Neue',
-    marginBottom: 0,
-    fontSize: '18px',
-    lineHeight: '30px',
-    [media.mobile]: {
-        fontSize: '15px',
-        lineHeight: '18px',
-    },
-})
-
 const LearnerDashboard = () => {
     const nav = useNavigate()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
