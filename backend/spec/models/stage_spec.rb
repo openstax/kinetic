@@ -10,4 +10,6 @@ RSpec.describe Stage, type: :model, multi_stage: true do
     expect(study1.stages.map(&:order).sort).to eq [0, 1]
     expect(study2.stages.map(&:order).sort).to eq [0, 1]
   end
+
+  # TODO any meaningful way to test around duration/points?
 end

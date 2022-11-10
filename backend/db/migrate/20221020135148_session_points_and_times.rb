@@ -6,10 +6,10 @@ class SessionPointsAndTimes < ActiveRecord::Migration[6.1]
     reversible do |dir|
       dir.up do
         Study.find_each do | study |
-          study.stages.update_all!(
+          study.stages.update_all(
             duration_minutes: study.duration_minutes.div(study.stages.size),
-            points: study.points.div(study.stages.size)
-          )
+            points: study.participation_points.div(study.stages.size)
+          ) if study.stages.any?
         end
       end
 
