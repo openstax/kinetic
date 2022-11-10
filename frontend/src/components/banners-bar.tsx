@@ -10,8 +10,8 @@ const Banner: React.FC<{
     banner: BannerMessage,
 }> = ({ banner, onRemove }) => (
     <Box className="py-2 d-flex justify-content-between">
-        <div></div>
-        <span className="align-self-center text-center">{banner.message}</span>
+        <div css={{ width: 16 }}></div>
+        <span className="align-self-center text-center px-2">{banner.message}</span>
         <Icon
             css={{ position: 'relative', top: '-15px', right: '-5px' }}
             icon="x"
