@@ -22,7 +22,7 @@ const Splash = styled(Box)({
     position: 'relative',
     height: 600,
     [media.mobile]: {
-        height: 285,
+        height: 400,
     },
 })
 
@@ -190,7 +190,7 @@ const LearnerDashboard = () => {
             <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 
-            <Splash direction='column' justify='center' height={`${useIsMobileDevice() ? '400' : '600'}px`} className="splash">
+            <Splash direction='column' justify='center' className="splash">
                 <SplashImage
                     preserveAspectRatio='xMidYMid slice'
                     css={{
