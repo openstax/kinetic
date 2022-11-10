@@ -24,7 +24,6 @@ const Banner: React.FC<{
 
 export const BannersBar: React.FC = () => {
     const [banners, removeBanner] = useBanners()
-    const isMobile = useIsMobileDevice()
     if (!banners.length) {
         return null
     }
