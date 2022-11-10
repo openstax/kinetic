@@ -53,6 +53,16 @@ $> heroku git:remote -a kinetic-web-dev -r dev
 ```bash
 $> heroku git:remote -a kinetic-web-prod -r prod
 ```
+
+### Deploying Homepage to Openstax CMS.
+
+Access the [cms](https://openstax.org/admin).  
+Grab the updated homepage HTML
+```
+./homepage/copy-to-clipboard
+```
+and paste it into the CMS for openstax/kinetic homepage
+
 ### OpenApi, Clients, and Bindings
 
 The Kinetic API is documented in the code using OpenApi.  OpenApi JSON can be accessed at `/api/v1/openapi`.
@@ -115,3 +125,6 @@ Call this to see who you are logged in as.
 ### Managing Banners & Rewards
 
 Be logged in as an admin, and go to `/admin`
+
+
+

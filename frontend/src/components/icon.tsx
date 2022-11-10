@@ -40,12 +40,10 @@ export const Icon = React.forwardRef<SVGSVGElement, React.PropsWithChildren<Icon
     forwardedProps,
     ref
 ) => {
-
     const {
         id, icon: iconProp, tooltip, onClick, children, busy, buttonStyles = {}, tooltipProps = {}, ...iconProps
     } = forwardedProps
 
-    //  ) => {
     const icon = busy ? 'spin' : iconProp
     const iconEl = (
         <IconifyIconComponent

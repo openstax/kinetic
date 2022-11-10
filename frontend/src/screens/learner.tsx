@@ -1,26 +1,29 @@
-import { React, useCallback, cx } from '@common'
+import { cx, React, useCallback } from '@common'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '../theme'
 import { Global } from '@emotion/react'
-import {
-    Box, RewardsProgressBar, TopNavBar, Footer,
-} from '@components'
+import { Box, Footer, RewardsProgressBar, TopNavBar } from '@components'
 import { useIsMobileDevice } from '@lib'
-import {
-    StudyTopicTags, studyTopicTagIDs, StudyTopicID,
-} from '@models'
-import { useLearnerStudies, StudyByTopics } from './learner/studies'
+import { StudyTopicID, studyTopicTagIDs, StudyTopicTags } from '@models'
+import { StudyByTopics, useLearnerStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
 import { SplashImage } from './learner/splash-image'
 import { StudyModal } from './studies/modal'
 import { StudyDetails } from './learner/details'
 import { Route, Routes, useNavigate } from 'react-router-dom'
+import { chunk } from 'lodash-es'
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCards, Pagination } from 'swiper';
 
 const Splash = styled(Box)({
     width: '100%',
     overflow: 'hidden',
     position: 'relative',
+    height: 600,
+    [media.mobile]: {
+        height: 285,
+    },
 })
 
 
@@ -39,24 +42,49 @@ const Grid = styled.div({
     [media.tablet]: {
         gridTemplateColumns: 'repeat(2, [col-start] minmax(100px, 1fr) [col-end])',
     },
-    [media.mobile]: {
-        display: 'flex',
-        '.col': {
-            maxWidth: '80vw',
-            minWidth: '80vw',
-        },
-    },
 })
 
 const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
     return (
-        <div className={cx('container-lg', 'studies', 'my-8', className)} >
+        <div className={cx('container-lg', 'studies', 'my-4', className)} >
             <h3 css={{ margin: '2rem 0' }}>{title}</h3>
             {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
             <Grid css={{ overflow: 'auto', paddingBottom: '10px' }} data-test-id="studies-listing">
                 {studies.map(s => <StudyCard onSelect={onSelect} study={s} key={s.id} />)}
             </Grid>
+        </div>
+    )
+}
+
+const MobileStudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
+    return (
+        <div className={cx('container-lg', 'studies', 'my-4', className)}>
+            <h3 className='py-2'>{title}</h3>
+            {children}
+            {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
+
+            {chunk(studies, 6).map((studyChunk, i) =>
+                <Swiper
+                    key={i}
+                    effect={'cards'}
+                    slidesPerView={'auto'}
+                    cardsEffect={{
+                        slideShadows: false,
+                        perSlideOffset: 14,
+                    }}
+                    centeredSlides={true}
+                    pagination
+                    modules={[EffectCards, Pagination]}
+                    className="pb-3 overflow-hidden"
+                >
+                    {studyChunk.map(s =>
+                        <SwiperSlide key={s.id} className="pb-1">
+                            <StudyCard onSelect={onSelect} study={s} />
+                        </SwiperSlide>
+                    )}
+                </Swiper>
+            )}
         </div>
     )
 }
@@ -117,7 +145,7 @@ const AllSubjects: FC<AllSubjectsProps> = ({
                 {studyTopicTagIDs
                     .filter((tag) => !!studies[tag]?.length)
                     .map((tag) => (
-                        <StudyList key={tag} onSelect={onSelect} title={StudyTopicTags[tag]} className={tag} studies={studies[tag] || []} />
+                        <MobileStudyList key={tag} onSelect={onSelect} title={StudyTopicTags[tag]} className={tag} studies={studies[tag] || []} />
                     ))
                 }
             </>
@@ -131,9 +159,45 @@ const AllSubjects: FC<AllSubjectsProps> = ({
     )
 }
 
+const HighlightedStudies: FCWOC<StudyListProps> = ({ onSelect, studies, title, className }) => {
+    if (useIsMobileDevice()) {
+        return (
+            <>
+                <MobileStudyList onSelect={onSelect} title={title} className={className} studies={studies} />
+            </>
+        )
+    }
+
+    return (
+        <StudyList onSelect={onSelect} title={title} className={className} studies={studies} />
+    )
+}
+
+const H = styled.h2({
+    fontSize: '48px',
+    lineHeight: '64px',
+    fontWeight: 700,
+    marginBottom: 0,
+    fontFamily: 'Helvetica Neue',
+    [media.mobile]: {
+        fontSize: '20px',
+        lineHeight: '24px',
+    },
+})
+
+const Sh = styled.h6({
+    fontFamily: 'Helvetica Neue',
+    marginBottom: 0,
+    fontSize: '18px',
+    lineHeight: '30px',
+    [media.mobile]: {
+        fontSize: '15px',
+        lineHeight: '18px',
+    },
+})
+
 const LearnerDashboard = () => {
     const nav = useNavigate()
-    const isMobile = useIsMobileDevice()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
     const {
         highlightedStudies, mandatoryStudy, allStudies, filter, onMandatoryClose, setFilter, studiesByTopic,
@@ -171,7 +235,7 @@ const LearnerDashboard = () => {
                 </div>
             </Splash >
 
-            <StudyList onSelect={onStudySelect} title="Highlighted Studies on Kinetic" className="highlighted" studies={highlightedStudies} />
+            <HighlightedStudies studies={highlightedStudies} title="Highlighted Studies on Kinetic" className="highlighted" onSelect={onStudySelect}/>
 
             <AllSubjects onSelect={onStudySelect} studies={studiesByTopic} filter={filter} setFilter={setFilter} />
 
