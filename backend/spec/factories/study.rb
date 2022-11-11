@@ -8,10 +8,10 @@ FactoryBot.define do
       title { nil }
     end
 
-    title_for_researchers { title || 'Title for researchers' }
-    title_for_participants { title || 'Title for participants' }
-    short_description { 'A short description' }
-    long_description { 'A long description' }
+    title_for_researchers { title || Faker::Lorem.paragraph_by_chars(number: rand(20..45)) }
+    title_for_participants { title || Faker::Lorem.paragraph_by_chars(number: rand(20..45)) }
+    short_description { Faker::Lorem.paragraph_by_chars(number: rand(40..120)) }
+    long_description { Faker::Lorem.paragraph_by_chars(number: rand(40..120)) }
     duration_minutes { 15 }
     tags { ['type:research_study'] }
     opens_at { 3.days.ago }

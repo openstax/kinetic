@@ -31,8 +31,8 @@ const Card = styled(Box)({
         height: 200,
     },
     [media.mobile]: {
-        minWidth: 250,
-        maxWidth: 250,
+        minWidth: 275,
+        maxWidth: 275,
         margin: '0 auto',
         padding: '1rem',
         height: '360px',
@@ -53,7 +53,7 @@ const Researchers: React.FC<StudyCardProps> = ({ study }) => {
     if (!names.length) return null
 
     return (
-        <p css={{ fontSize: 14, color: colors.blackText }}>{toSentence(names)}</p>
+        <span css={{ color: colors.blackText }}>{toSentence(names)}</span>
     )
 }
 
@@ -61,8 +61,8 @@ const Feedback: React.FC<StudyCardProps> = ({ study }) => {
     if (!study.feedbackDescription) return <span />
 
     return (
-        <Box align='center' gap margin="default">
-            <Icon className='fs-6' icon="feedback" color={colors.purple} />
+        <Box align='center' gap>
+            <Icon height={15} icon="feedback" color={colors.purple} />
             <span css={{ color: colors.darkText }}>Feedback Available</span>
         </Box>
     )
@@ -72,10 +72,10 @@ const MultiSession: React.FC<StudyCardProps> = ({ study }) => {
     if (!studyIsMultipart(study)) return <span />
 
     return (
-        <Box align='center' gap margin="default">
+        <Box align='center' gap>
             <Icon
+                height={15}
                 icon="multiStage"
-                className='fs-6'
                 color={colors.purple}
                 tooltipProps={{ displayType: 'tooltip' }}
                 tooltip="This study has multiple sessions. The other sessions will be released once available."
@@ -163,15 +163,17 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
             />
             <CompleteFlag study={study} />
             <MultiSessionFlag study={study} />
-            <Box justify='between' wrap margin={{ bottom: 'large', top: 'small' }} css={{ minHeight: 40, fontSize: '14px' }}>
+            <Box className="small" justify='between' wrap margin={{ bottom: 'default', top: 'default' }} css={{ minHeight: 40 }}>
                 <Feedback study={study} />
                 <MultiSession study={study} />
             </Box>
-            <h6 className='truncate-2'>
+            <h6>
                 {study.title}
             </h6>
-            <Researchers study={study} />
-            <p css={{ color: colors.grayText }}>{study.shortDescription}</p>
+            <Researchers className="xx-small" study={study} />
+            <p className="x-small" css={{ color: colors.grayText }}>
+                {study.shortDescription}
+            </p>
             <Box flex />
             <Box className='small' justify='between' wrap>
                 <Box gap>
@@ -187,7 +189,6 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
                     {study.participationPoints && <span>• {study.participationPoints}pts</span>}
                 </Box>
             </Box>
-
         </Card>
     )
 
