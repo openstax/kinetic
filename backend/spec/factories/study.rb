@@ -23,7 +23,6 @@ FactoryBot.define do
       study.researchers << researchers
     end
 
-    # TODO Add stages by defualt (num_stages = 2 above?)
     after(:create) do |study, evaluator|
       evaluator.num_stages.times do
         study.stages.create! attributes_for :stage
