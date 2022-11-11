@@ -4,9 +4,9 @@ const cheerio = require('cheerio');
 let data;
 
 try {
-  data = fs.readFileSync('./index.html', 'utf8')
+    data = fs.readFileSync('./index.html', 'utf8')
 } catch (err) {
-  console.error(err)
+    console.error(err)
 }
 
 const $ = cheerio.load(data);
@@ -14,5 +14,5 @@ const $ = cheerio.load(data);
 
 
 console.log(
-  $('body').html()
+    $('body').html()
 )
