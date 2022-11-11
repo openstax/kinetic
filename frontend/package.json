@@ -16,6 +16,7 @@
     "lint": "eslint src",
     "pf": "run-p typecheck lint",
     "page:research:copy": "ts-node --esm homepages/research/package.tsx",
+    "page:research:dev": "yarn start --open /homepages/research/",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
