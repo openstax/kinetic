@@ -56,9 +56,9 @@ $> heroku git:remote -a kinetic-web-prod -r prod
 
 To build and deploy to heroku from the terminal, assuming the remotes were named as above:
 ```bash
+$> git push dev main
 $> git push staging main
-$> git push staging dev
-$> git push staging prod
+$> git push prod main
 ```
 
 ### Deploying Homepage to Openstax CMS.
