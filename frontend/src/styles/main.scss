@@ -1,15 +1,24 @@
 $body-bg: #E5E5E5;
-
 $primary: #6922EA;
 $primary-bg: #fff;
 $link-color: #0d6efd;
 
 @import "./bootstrap";
 @import "flatpickr/dist/flatpickr.css";
+@import 'swiper/swiper-bundle.css';
 
 .btn-primary {
     color: $white;
     &:hover {
         color: $gray-200;
     }
+}
+
+.truncate-2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
