@@ -39,7 +39,7 @@ $> docker compose exec api rake db:migrate
 
 ### Deploying Kinetic
 
-Kinetic is currently hosted on Heroku using the Docker integration.  To deploy the application you need to add a git remote per the [heroku  instructions](https://devcenter.heroku.com/articles/git) and then `git push heroku main` (or whatever you've named your remote as).  
+Kinetic is currently hosted on Heroku using the Docker integration.  To deploy the application you need to add a git remote per the [heroku  instructions](https://devcenter.heroku.com/articles/git)
 
 Set up remotes (after authenticating with heroku) as such:  
 ```bash
@@ -52,6 +52,13 @@ $> heroku git:remote -a kinetic-web-dev -r dev
 
 ```bash
 $> heroku git:remote -a kinetic-web-prod -r prod
+```
+
+To build and deploy to heroku from the terminal, assuming the remotes were named as above:
+```bash
+$> git push staging main
+$> git push staging dev
+$> git push staging prod
 ```
 
 ### Deploying Homepage to Openstax CMS.
