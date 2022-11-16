@@ -119,8 +119,9 @@ export const ResearchFocusAreas = () => (
             </div>
             <div className="tab-pane fade" id="ai-ml" role="tabpanel" aria-labelledby="ai-ml-tab">
                 <p>
-                    In collaboration with leading researchers in the AI/ML in education space and the
-                    Digital Signal Processing research group at Rice University, we investigate how to
+                    In collaboration with leading researchers in the AI/ML in education space and the&nbsp;
+                    <a href='https://dsp.rice.edu/' target='_blank'>Digital Signal Processing research group</a>
+                    &nbsp;at Rice University, we investigate how to
                     effectively utilize AI/ML advancements to address crucial issues in learning and education.
                     Our research explores natural language processing for content generation, predictive models
                     for learning analytics, and hybrid models for generation of knowledge graphs. We aim to use
