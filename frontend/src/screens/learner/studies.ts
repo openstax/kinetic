@@ -1,8 +1,8 @@
 import { useEffect, useState, useMemo, useCallback } from '@common'
 import { useLocalstorageState } from 'rooks'
-import { tagOfType, BOOSTED_STUDIES } from '@models'
+import { tagOfType } from '@models'
 import { ParticipantStudy } from '@api'
-import { remove, sortBy, groupBy } from 'lodash'
+import { sortBy, groupBy } from 'lodash'
 import { useApi } from '@lib'
 import {
     isStudyLaunchable, StudyTopicID,
