@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useCallback } from '@common'
 import { useLocalstorageState } from 'rooks'
-import { tagOfType } from '@models'
+import { tagOfType, BOOSTED_STUDIES } from '@models'
 import { ParticipantStudy } from '@api'
 import { remove, sortBy, groupBy } from 'lodash'
 import { useApi } from '@lib'
@@ -53,8 +53,17 @@ export const useLearnerStudies = () => {
             return rnd * (s.completedAt ? 1 : -1)
         })
         setStudySort({ ...studySort })
-        // pick the last 3 eligible from the randomized list
-        const highlightedStudies = allStudies.filter(s => !s.isMandatory && !s.completedAt).slice(-1 * FEATURED_COUNT)
+        // find all studies that are elible to be featured
+        const eligibleStudies = allStudies.filter(s => !s.isMandatory && !s.completedAt)
+        // select 3 that are marked as featured
+        const featuredStudies = eligibleStudies
+            .filter(s => s.isFeatured).slice(-1 * FEATURED_COUNT)
+            .slice(-1 * FEATURED_COUNT)
+        // if we haven't found 3 marked as featured, pad out the list to get enough
+        const highlightedStudies = featuredStudies.concat(
+            featuredStudies.length == FEATURED_COUNT ? [] :
+                eligibleStudies.slice(-1 * (FEATURED_COUNT - featuredStudies.length))
+        )
 
         const studiesByTopic = groupBy(allStudies, (s) => tagOfType(s, 'topic') || 'topic:other') as any as StudyByTopics
         if (!studiesByTopic[filter]) {
