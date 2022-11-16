@@ -32,7 +32,6 @@ const Funders = () => {
     return (
         <div css={{ backgroundColor: colors.white }}>
             <Box direction="column" className='p-2'>
-                <h4 className="fw-bold">Support from Scientific Agencies</h4>
                 <div css={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -40,6 +39,7 @@ const Funders = () => {
                     margin: 'auto',
                     alignItems: 'center',
                 }}>
+                    <h3 className="fw-bold align-self-start">Support from Scientific Agencies</h3>
                     <Box justify='evenly'>
                         <Supporter target="_blank" href="https://ies.ed.gov/">
                             <SupporterImage alt="Institute of Education Sciences logo" src={IESLogoURL} />
