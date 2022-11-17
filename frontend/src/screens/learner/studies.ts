@@ -25,6 +25,16 @@ interface StudyState {
     studiesByTopic: StudyByTopics
 }
 
+
+// The rules for featured studies are:
+//   * select all the non-completed and not required (demographic survey) studies
+//   * Sort the list.  See if we've sorted the  above list in the last 30 days.
+//      * If we have, re-apply the sort
+//      * If not, sort it and remember how and when is was sorted
+//      * List is sorted randomly, but always moves completed studies to the end of the list
+//   * Find the first 3 studies that are marked as featured
+//   * If we didn't find 3, pick the remainder from the end of the sorted list
+
 export const useLearnerStudies = () => {
     const api = useApi()
     const [studySort, setStudySort] = useLocalstorageState<StudySort>('learner-studies-order', {
