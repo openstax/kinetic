@@ -141,7 +141,11 @@ class Api::V1::Participant::StudiesOpenApi
       key :type, :number
       key :description, 'How popular the study is on a fractional scale of 0.0 to 1.0'
     end
-
+    property :is_featured do
+      key :type, :boolean
+      key :description, 'Should this study be feautured more prominently?'
+      key :readOnly, true
+    end
     property :first_launched_at do
       key :type, :string
       key :format, 'date-time'

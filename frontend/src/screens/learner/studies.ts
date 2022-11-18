@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useCallback } from '@common'
 import { useLocalstorageState } from 'rooks'
 import { tagOfType } from '@models'
 import { ParticipantStudy } from '@api'
-import { remove, sortBy, groupBy } from 'lodash'
+import { sortBy, groupBy } from 'lodash'
 import { useApi } from '@lib'
 import {
     isStudyLaunchable, StudyTopicID,
@@ -24,6 +24,16 @@ interface StudyState {
     highlightedStudies: ParticipantStudy[]
     studiesByTopic: StudyByTopics
 }
+
+
+// The rules for featured studies are:
+//   * select all the non-completed and not required (demographic survey) studies
+//   * Sort the list.  See if we've sorted the  above list in the last 30 days.
+//      * If we have, re-apply the sort
+//      * If not, sort it and remember how and when is was sorted
+//      * List is sorted randomly, but always moves completed studies to the end of the list
+//   * Find the first 3 studies that are marked as featured
+//   * If we didn't find 3, pick the remainder from the end of the sorted list
 
 export const useLearnerStudies = () => {
     const api = useApi()
@@ -53,8 +63,17 @@ export const useLearnerStudies = () => {
             return rnd * (s.completedAt ? 1 : -1)
         })
         setStudySort({ ...studySort })
-        // pick the last 3 eligible from the randomized list
-        const highlightedStudies = allStudies.filter(s => !s.isMandatory && !s.completedAt).slice(-1 * FEATURED_COUNT)
+        // find all studies that are elible to be featured
+        const eligibleStudies = allStudies.filter(s => !s.isMandatory && !s.completedAt)
+        // select 3 that are marked as featured
+        const featuredStudies = eligibleStudies
+            .filter(s => s.isFeatured).slice(-1 * FEATURED_COUNT)
+            .slice(-1 * FEATURED_COUNT)
+        // if we haven't found 3 marked as featured, pad out the list to get enough
+        const highlightedStudies = featuredStudies.concat(
+            featuredStudies.length == FEATURED_COUNT ? [] :
+                eligibleStudies.slice(-1 * (FEATURED_COUNT - featuredStudies.length))
+        )
 
         const studiesByTopic = groupBy(allStudies, (s) => tagOfType(s, 'topic') || 'topic:other') as any as StudyByTopics
         if (!studiesByTopic[filter]) {

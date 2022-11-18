@@ -99,6 +99,12 @@ export interface ParticipantStudy {
      */
     popularityRating?: number;
     /**
+     * Should this study be feautured more prominently?
+     * @type {boolean}
+     * @memberof ParticipantStudy
+     */
+    readonly isFeatured?: boolean;
+    /**
      * When the study was launched; null means not launched
      * @type {Date}
      * @memberof ParticipantStudy
@@ -163,6 +169,7 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'durationMinutes': json['duration_minutes'],
         'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
         'popularityRating': !exists(json, 'popularity_rating') ? undefined : json['popularity_rating'],
+        'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
         'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (new Date(json['closes_at'])),
