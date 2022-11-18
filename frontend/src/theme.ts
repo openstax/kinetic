@@ -1,6 +1,7 @@
 
 export const colors = {
     pageBackground: '#f7f8fa',
+    lightGrayBackground: '#F1F1F1',
     // TODO Confirm if we want both or switch?
     //  Figma mockup has #F36B32 for orange
     orange: '#f47641',
@@ -22,6 +23,7 @@ export const colors = {
     blackText: '#424242',
     input: { border: '#ced4da' },
     line: '#cfcfcf',
+    linkText: '#026AA1',
     linkButtonIcon: '#DBDBDB',
     linkButtonIconHover: '#151B2C',
     white: '#ffffff',

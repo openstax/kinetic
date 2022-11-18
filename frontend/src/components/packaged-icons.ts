@@ -17,6 +17,7 @@ import rolodex from '@iconify-icons/bi/person-rolodex'
 import list from '@iconify-icons/bi/list'
 import multiStage from '@iconify-icons/bi/stack'
 import chatLeft from '@iconify-icons/bi/chat-left-fill'
+import boxArrowInUpRight from '@iconify-icons/bi/box-arrow-in-up-right'
 
 export const ICONS = {
     x,
@@ -38,4 +39,5 @@ export const ICONS = {
     right,
     multiStage,
     chatLeft,
+    boxArrowInUpRight,
 }
