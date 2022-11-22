@@ -319,7 +319,7 @@ export const Member: React.FC<{member: ResearchMember}> = ({ member }) => {
     const [show, setShow] = useState(false);
     return (
         <Box direction='column' align='center' className='text-center'>
-            <img alt={member.firstName} src='https://placedog.net/640/480?random' height={145} width={145}/>
+            <img alt={member.firstName} src={member.image} height={145} width={145}/>
             <Button as='a' type='button' onClick={() => setShow(true)}>
                 {member.firstName} {member.lastName}
             </Button>
@@ -360,9 +360,9 @@ export const MemberDetails: React.FC<{member: ResearchMember}> = ({ member }) =>
 export const MemberInfo: React.FC<{member: ResearchMember}> = ({ member }) => {
     return (
         <Box>
-            <img src={member.image} alt={member.title}/>
+            <img src={member.image} alt={member.firstName}/>
             <Box direction='column'>
-                <h4>{member.name}</h4>
+                <h4>{member.firstName} {member.lastName}</h4>
                 <p css={{ color: colors.grayText }}>
                     {member.title}
                 </p>

@@ -1,4 +1,28 @@
+import AndrewLan from './images/members/Andrew Lan.svg';
+import Brittany from './images/members/Brittany.svg';
+import Chris from './images/members/Chris.svg';
+import DanielleMcNamara from './images/members/Danielle McNamara.svg';
 import Debshila from './images/members/Debshila.svg';
+import Fabrizio from './images/members/Fabrizio.svg';
+import FredOswald from './images/members/Fred Oswald.svg';
+import Hossein from './images/members/Hossein.svg';
+import IrisG from './images/members/Iris G..svg';
+import IrisZ from './images/members/Iris Z..svg';
+import Jack from './images/members/Jack.svg';
+import Jeffrey from './images/members/Jeffrey.svg';
+import Karyssa from './images/members/Karyssa Courey.svg';
+import Katie from './images/members/Katie.svg';
+import Lucy from './images/members/Lucy.svg';
+import Makai from './images/members/Makai Ruffin.svg';
+import Margaret from './images/members/Margaret Beier.svg';
+import Nathan from './images/members/Nathan.svg';
+import PhilKortum from './images/members/Phil Kortum.svg';
+import Rich from './images/members/Rich.svg';
+import Ross from './images/members/Ross.svg';
+import Sabitha from './images/members/Sabitha.svg';
+import Shashank from './images/members/Shashank.svg';
+import Viki from './images/members/Viki.svg';
+import Zihan from './images/members/Zihan Liu.svg';
 
 export type Publication = {
     date: string;
@@ -315,7 +339,7 @@ export const researchMembers: ResearchMembers = {
             longTitle: 'Director of OpenStax, C. Sidney Burrus Professor of Electrical and Computer Engineering\n' +
                 'Professor, Statistics\n' +
                 'Professor, Computer Science\n',
-            image: '',
+            image: Rich,
             website: 'https://richb.rice.edu/',
             googleScholar: 'https://scholar.google.com/scholar?hl=en&as_sdt=0%2C44&q=richard+baraniuk&btnG=&oq=Richard+baran',
             linkedIn: 'https://www.linkedin.com/in/richard-baraniuk',
@@ -326,7 +350,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Debshila',
             lastName: 'Basu Mallick',
             title: 'Director of Research',
-            image: '',
+            image: Debshila,
             googleScholar: 'https://scholar.google.com/citations?user=Zjroh4UAAAAJ&hl=en',
             linkedIn: 'https://www.linkedin.com/in/debshila/',
             bio: 'Debshila is the Director of Research at OpenStax bringing a wealth of expertise in cognitive science, user experience, data science, and open education. Her work currently focuses on building technical and social components of research instrumentation for digital learning platforms.',
@@ -338,7 +362,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Brittany',
             lastName: 'Bradford',
             title: 'Sr. Research Analyst',
-            image: '',
+            image: Brittany,
             googleScholar: 'https://scholar.google.com/citations?user=Z0yrkzAAAAAJ&hl=en',
             linkedIn: 'https://www.linkedin.com/in/brittanybradford/',
             bio: 'Brittany\'s research interests include educational interventions, meta-cognition and self-regulation, STEM education, and behavioral finance (inspired by her former financial planning career).',
@@ -349,7 +373,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Katie',
             lastName: 'Bainbridge',
             title: 'Sr. Research Analyst',
-            image: '',
+            image: Katie,
             googleScholar: 'https://scholar.google.com/citations?user=n-anFIgAAAAJ&hl=en&authuser=1',
             linkedIn: 'https://www.linkedin.com/in/bainbridge303/',
             bio: 'Katie\'s research interests revolve around how technology can improve learning outcomes. Her prior research has focused on using video games to improve cognitive skills like visual attention and intuitive physics knowledge and non-cognitive skills like persistence and failure tolerance. She has taught at UCSB, CSU Channel Islands, and Sarah Lawrence College.',
@@ -362,7 +386,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Sabitha',
             lastName: 'Sudarshan',
             title: 'Research Analyst',
-            image: '',
+            image: Sabitha,
             googleScholar: 'https://scholar.google.com/citations?hl=en&user=cSdXMTsAAAAJ',
             linkedIn: 'https://in.linkedin.com/in/sabitha-sudarshan-49460515',
             bio: 'Sabitha\'s research interests include the impact and use of Human-Computer Interaction and Digital Media in digital education. Prior to her PhD, she worked in the advertising industry in India in strategic brand planning.',
@@ -374,7 +398,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Iris',
             lastName: 'Gonçalves',
             title: 'Product Manager',
-            image: '',
+            image: IrisG,
             linkedIn: 'https://www.linkedin.com/in/goncalvesi/',
             bio: 'Iris is a Certified Product Manager, Project Manager and Scrum Product Owner with extensive experience in Product Management and UI/UX Design for native Android/iOS and Web products. Iris is a dual Portuguese/British national who speaks 4 languages and so far has lived in Italy, Portugal, Netherlands and most recently London, UK.',
             education: 'MSc from the University College London (UCL);\n' +
@@ -384,7 +408,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Nathan',
             lastName: 'Stitt',
             title: 'Engineering Manager',
-            image: '',
+            image: Nathan,
             linkedIn: 'https://www.linkedin.com/in/nstitt',
             bio: 'Nathan\'s professional work focuses on creating web and mobile educational applications. He\'s a prolific open-source contributor for multiple languages and operating systems.',
         },
@@ -392,7 +416,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Ross',
             lastName: 'Reedstrom',
             title: 'Sr. Developer',
-            image: '',
+            image: Ross,
             linkedIn: 'https://www.linkedin.com/in/ross-reedstrom-68a8541',
             bio: 'Ross is a go-to person for research data storage and manipulation. Not long after arriving at Rice, he made the jump from being a computer guy among the biologists, to being a biologist among the computer guys, eventually finding his way to OpenStax.',
             education: 'PhD from the University of Wisconsin - Madison',
@@ -401,7 +425,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Chris',
             lastName: 'Bendel',
             title: 'Developer',
-            image: '',
+            image: Chris,
             linkedIn: 'https://www.linkedin.com/in/chrissbendel',
             bio: 'Chris is a full stack software developer with a background in web technologies. He is an adjunct professor teaching computer science courses at Champlain College in Vermont.',
             specialization: 'Computer Science and Innovation',
@@ -411,7 +435,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Viki',
             lastName: 'Zhu',
             title: 'UX Designer',
-            image: '',
+            image: Viki,
             linkedIn: 'https://www.linkedin.com/in/wenqi-vicky-zhu-9b436211b/',
             bio: 'Viki has experience in UX design within different areas like E-commerce, healthcare and education. She is interested in tackling complex and ambiguous problems and always advocates for users.',
             education: 'MFA from Savannah College of Art and Design',
@@ -420,7 +444,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Fabrizio',
             lastName: 'Chavez',
             title: 'UX Intern',
-            image: '',
+            image: Fabrizio,
             linkedIn: 'https://www.linkedin.com/in/fabrizio-chavez-b93925172/',
             bio: 'Fabrizio is a Human Computer Interaction practitioner. \n' +
                 'His expertise encompasses the use of traditional statistical analysis, machine learning methods, eye-tracking, and computer modeling of human performance to further understand the nuances of human interactions and ultimately support the design and development of user-friendly interfaces.\n',
@@ -431,9 +455,9 @@ export const researchMembers: ResearchMembers = {
         },
         {
             firstName: 'Jeffrey',
-            lastName: '',
+            lastName: 'Zhong',
             title: 'Research Intern',
-            image: '',
+            image: Jeffrey,
             linkedIn: 'https://www.linkedin.com/in/jeffrey-zhong/',
             bio: 'Jeffrey is an undergraduate research intern at OpenStax. As a first generation student, he works with and supports the research team as they work on analyzing and improving education. He is currently studying for his bachelor\'s degree at Rice University.',
             education: 'Undergraduate Student at Rice University, Department of Computer Science and Statistics',
@@ -442,7 +466,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Iris',
             lastName: 'Zhong',
             title: 'Data Science Intern',
-            image: '',
+            image: IrisZ,
             linkedIn: 'https://www.linkedin.com/in/shengqi-zhong-46049a165/',
             bio: 'Iris seeks to understand data in the education space. Her research interests include longitudinal data analysis, psychometrics, education technology, and developmental psychology.',
             researchInterest: 'Longitudinal data analysis, psychometrics, developmental psychology, language acquisition, education technology',
@@ -453,7 +477,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Jack',
             lastName: 'Wang',
             title: 'AI/ML Researcher',
-            image: '',
+            image: Jack,
             website: 'https://zw16.web.rice.edu/',
             googleScholar: 'https://scholar.google.com/citations?user=IbCALKcAAAAJ&hl=en',
             linkedIn: 'https://linkedin.com/in/jackzichaowang',
@@ -464,7 +488,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Lucy',
             lastName: 'Liu',
             title: 'AI/ML Researcher',
-            image: '',
+            image: Lucy,
             linkedIn: 'https://www.linkedin.com/in/naiming-liu-lucy0817',
             bio: 'Lucy is a third-year PhD student at Rice University advised by Dr. Richard Braniuk. She seeks to apply machine learning or natural language processing techniques for educational purposes.',
             researchInterest: 'Knowledge tracing, knowledge graph construction and generative models',
@@ -474,7 +498,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Hossein',
             lastName: 'Babei',
             title: 'AI/ML Researcher',
-            image: '',
+            image: Hossein,
             googleScholar: 'https://scholar.google.com/citations?hl=en&user=PuxS0ZkAAAAJ',
             bio: 'Hossein is a PhD student in Electrical & Computer Engineering at Rice University advised by Dr. Richard G. Baraniuk. He enjoys using causal inference to reliably predict the results of making interventions on a given system.',
             researchInterest: 'Causal Inference, Randomized Controlled Trials, Causal Analysis, Performative Prediction',
@@ -484,7 +508,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Shashank',
             lastName: 'Sonkar',
             title: 'AI/ML Researcher',
-            image: '',
+            image: Shashank,
             website: 'https://sites.google.com/view/shashanksonkar/',
             googleScholar: 'https://scholar.google.com/citations?user=4Rv56n4AAAAJ&hl=en',
             linkedIn: 'https://www.linkedin.com/in/shashanksonkar/',
@@ -498,7 +522,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Fred',
             lastName: 'Oswald',
             title: 'Professor of Psychological Sciences, Rice University',
-            image: '',
+            image: FredOswald,
             website: 'https://workforce.rice.edu/',
             googleScholar: 'https://scholar.google.com/citations?user=jWlqGZcAAAAJ&hl=en&oi=ao',
             linkedIn: 'https://www.linkedin.com/in/fred-oswald/',
@@ -510,7 +534,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Margaret',
             lastName: 'Beier',
             title: 'Professor of Psychological Sciences, Rice University',
-            image: '',
+            image: Margaret,
             website: 'http://beier.rice.edu/',
             googleScholar: 'https://scholar.google.com/citations?user=h9TnggYAAAAJ&hl=en',
             linkedIn: 'https://www.linkedin.com/in/margaret-beier-357786b/',
@@ -524,7 +548,7 @@ export const researchMembers: ResearchMembers = {
             lastName: 'McNamara',
             title: 'Professor of Psychology, Arizona State University',
             longTitle: 'Professor, Psychology; Director of the Science of Learning and Educational Technology (SoLET) laboratory at Arizona State University',
-            image: '',
+            image: DanielleMcNamara,
             website: 'https://adl.asu.edu/leadership/danielle-s-mcnamara',
             googleScholar: 'https://scholar.google.com/citations?hl=en&user=NOxLJQUAAAAJ',
             bio: 'Danielle\'s work focuses on reading comprehension and writing processes in learning: discovering new methods to improve students’ ability to understand challenging text, learn new information, and convey their thoughts and ideas in writing. Her lab\'s work integrates various approaches and methodologies including the development of game-based, intelligent tutoring systems (e.g., iSTART, Writing Pal), the development of natural language processing tools (e.g., iSTART, Writing Pal, Coh-Metrix, the Writing Assessment Tool), basic research to better understand cognitive and motivational processes involved in comprehension and writing, and the use of learning analytics across multiple contexts.',
@@ -538,7 +562,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Phil',
             lastName: 'Kortum',
             title: 'Associate Professor of Psychological Sciences, Rice University',
-            image: '',
+            image: PhilKortum,
             website: 'http://www.philkortum.com',
             googleScholar: 'https://scholar.google.com/citations?hl=en&user=BD7BLDgAAAAJ',
             linkedIn: 'https://www.linkedin.com/in/philip-kortum-81713b8/',
@@ -551,7 +575,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Andrew',
             lastName: 'Lan',
             title: 'Assistant Professor, University of Massachusetts Amherst',
-            image: '',
+            image: AndrewLan,
             website: 'https://people.umass.edu/~andrewlan/',
             googleScholar: 'https://scholar.google.com/citations?user=ZYc-LuMAAAAJ&hl=en',
             linkedIn: 'https://www.linkedin.com/in/andrew-lan-aa150017/',
@@ -564,7 +588,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Zihan',
             lastName: 'Liu',
             title: 'Postdoctoral Research Associate',
-            image: '',
+            image: Zihan,
             googleScholar: 'https://scholar.google.com/citations?hl=en&user=xG7gBNsAAAAJ',
             linkedIn: 'http://www.linkedin.com/in/psyzihanliu',
             bio: 'Zihan is a postdoctoral research associate working with Dr. Fred Oswald in the Organization & Workforce lab at Rice University. Her work focuses on understanding the role of individual differences in career development.',
@@ -575,7 +599,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Karyssa',
             lastName: 'Courey',
             title: 'Psychometrics researcher',
-            image: '',
+            image: Karyssa,
             googleScholar: 'https://scholar.google.com/citations?hl=en&user=TwDvpGYAAAAJ',
             linkedIn: 'https://www.linkedin.com/in/karyssa-courey/',
             bio: 'Karyssa is a PhD student in Industrial-Organizational psychology at Rice University. She is interested in applying Bayesian methods to study diversity, equity, and inclusion in organizations.',
@@ -586,7 +610,7 @@ export const researchMembers: ResearchMembers = {
             firstName: 'Makai',
             lastName: 'Ruffin',
             title: 'Adult skills and knowledge researcher',
-            image: '',
+            image: Makai,
             website: 'http://beier.rice.edu/lab-members/',
             googleScholar: 'https://scholar.google.com/citations?user=_mTA7CUAAAAJ&hl=en',
             linkedIn: 'https://www.linkedin.com/in/makairuffin/',
