@@ -1,3 +1,5 @@
+import Debshila from './images/members/Debshila.svg';
+
 export type Publication = {
     date: string;
     title: string;
@@ -227,23 +229,369 @@ export const researchFocusAreas: ResearchFocusAreas = {
 }
 
 export type ResearchMember = {
-    image: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     title: string;
+    bio: string;
+    longTitle?: string;
+    education?: string;
+    specialization?: string;
+    researchInterest?: string;
+    image: string;
+    linkedIn?: string;
+    googleScholar?: string;
+    website?: string;
 }
 
 export type ResearchMembers = {
     [key: string]: ResearchMember[]
 }
 
+export type AlumnusMember = {
+    name: string;
+    title: string;
+    linkedin: string;
+}
+
+export const alumni: AlumnusMember[] = [
+    {
+        name: 'Micaela McGlone',
+        title: 'Senior Associate Director, Liu Idea Lab for Innovation & Entrepreneurship',
+        linkedin: 'https://www.linkedin.com/in/micaelamcglone/',
+    },
+    {
+        name: 'Andrew Waters',
+        title: 'Director of Data Science, Pinnacle',
+        linkedin: 'https://www.linkedin.com/in/andrew-waters-710a14152/',
+    },
+    {
+        name: 'Phillip Grimaldi',
+        title: 'Senior Efficacy and Research Scientist, Khan Academy',
+        linkedin: 'https://www.linkedin.com/in/phillip-grimaldi',
+    },
+    {
+        name: 'Chris Kennedy',
+        title: 'Senior UX Designer, Academy Sports',
+        linkedin: 'https://www.linkedin.com/in/chriskennedydesigns',
+    },
+    {
+        name: 'Anoushka Agarwal',
+        title: 'HCI/HF Master\'s student, Rice University',
+        linkedin: 'https://www.linkedin.com/in/anoushka-agrawal/',
+    },
+    {
+        name: 'Jakob Valdez',
+        title: 'Semiconductor Design Engineer for DRAM devices, Micron',
+        linkedin: 'https://www.linkedin.com/in/jakob-valdez-5bb5a1198',
+    },
+    {
+        name: 'Jasmine Wu',
+        title: 'HCI/HF Master\'s student, Rice University',
+        linkedin: 'https://www.linkedin.com/in/xfw?trk=public_profile_browsemap',
+    },
+    {
+        name: 'Kyle Manning',
+        title: 'Data Scientist at SBIA',
+        linkedin: 'https://www.linkedin.com/in/manningkyle',
+    },
+    {
+        name: 'Yomar Cummings',
+        title: 'Product Development Analyst, Solugen',
+        linkedin: 'https://www.linkedin.com/in/yomar-cummings-9a7755138',
+    },
+    {
+        name: 'Cheng Peng',
+        title: 'Econ & CS Undergraduate Student, Rice University',
+        linkedin: 'https://www.linkedin.com/in/cheng-peng-11a39b180',
+    },
+];
+
 export const researchMembers: ResearchMembers = {
     current: [
-
+        {
+            firstName: 'Rich',
+            lastName: 'Baraniuk',
+            title: 'Director of OpenStax',
+            longTitle: 'Director of OpenStax, C. Sidney Burrus Professor of Electrical and Computer Engineering\n' +
+                'Professor, Statistics\n' +
+                'Professor, Computer Science\n',
+            image: '',
+            website: 'https://richb.rice.edu/',
+            googleScholar: 'https://scholar.google.com/scholar?hl=en&as_sdt=0%2C44&q=richard+baraniuk&btnG=&oq=Richard+baran',
+            linkedIn: 'https://www.linkedin.com/in/richard-baraniuk',
+            bio: 'Richard G. Baraniuk is the C. Sidney Burrus Professor of Electrical and Computer Engineering at Rice University, a member of the Digital Signal Processing (DSP) research group, and Founder/Director of OpenStax. He is also a joint faculty member in the Rice departments of Computer Science and Statistics.',
+            researchInterest: 'AI/ML in education, Open Educational Resources, Signal Processing, Machine Learning',
+        },
+        {
+            firstName: 'Debshila',
+            lastName: 'Basu Mallick',
+            title: 'Director of Research',
+            image: '',
+            googleScholar: 'https://scholar.google.com/citations?user=Zjroh4UAAAAJ&hl=en',
+            linkedIn: 'https://www.linkedin.com/in/debshila/',
+            bio: 'Debshila is the Director of Research at OpenStax bringing a wealth of expertise in cognitive science, user experience, data science, and open education. Her work currently focuses on building technical and social components of research instrumentation for digital learning platforms.',
+            researchInterest: 'Open Education Resources, Digital learning, Adaptive learning, diversity-equity-inclusion',
+            specialization: 'Psychology with a concentration in Systems and Cognitive Neuroscience',
+            education: 'MA and PhD from Rice University',
+        },
+        {
+            firstName: 'Brittany',
+            lastName: 'Bradford',
+            title: 'Sr. Research Analyst',
+            image: '',
+            googleScholar: 'https://scholar.google.com/citations?user=Z0yrkzAAAAAJ&hl=en',
+            linkedIn: 'https://www.linkedin.com/in/brittanybradford/',
+            bio: 'Brittany\'s research interests include educational interventions, meta-cognition and self-regulation, STEM education, and behavioral finance (inspired by her former financial planning career).',
+            researchInterest: 'Motivation, meta-cognition, STEM education',
+            education: 'PhD and MA from Rice University; BBA from Texas Christian University',
+        },
+        {
+            firstName: 'Katie',
+            lastName: 'Bainbridge',
+            title: 'Sr. Research Analyst',
+            image: '',
+            googleScholar: 'https://scholar.google.com/citations?user=n-anFIgAAAAJ&hl=en&authuser=1',
+            linkedIn: 'https://www.linkedin.com/in/bainbridge303/',
+            bio: 'Katie\'s research interests revolve around how technology can improve learning outcomes. Her prior research has focused on using video games to improve cognitive skills like visual attention and intuitive physics knowledge and non-cognitive skills like persistence and failure tolerance. She has taught at UCSB, CSU Channel Islands, and Sarah Lawrence College.',
+            researchInterest: 'Multimedia learning, games for learning, motivation in learning, cognitive psychology',
+            specialization: 'Psychological and Brain Sciences',
+            education: 'PhD and MA from UC Santa Barbara; \n' +
+                'BA from Sarah Lawrence College\n',
+        },
+        {
+            firstName: 'Sabitha',
+            lastName: 'Sudarshan',
+            title: 'Research Analyst',
+            image: '',
+            googleScholar: 'https://scholar.google.com/citations?hl=en&user=cSdXMTsAAAAJ',
+            linkedIn: 'https://in.linkedin.com/in/sabitha-sudarshan-49460515',
+            bio: 'Sabitha\'s research interests include the impact and use of Human-Computer Interaction and Digital Media in digital education. Prior to her PhD, she worked in the advertising industry in India in strategic brand planning.',
+            researchInterest: 'Human-Computer Interaction, Developmental Psychology',
+            specialization: 'Advertising',
+            education: 'PhD from UT Austin',
+        },
+        {
+            firstName: 'Iris',
+            lastName: 'Gonçalves',
+            title: 'Product Manager',
+            image: '',
+            linkedIn: 'https://www.linkedin.com/in/goncalvesi/',
+            bio: 'Iris is a Certified Product Manager, Project Manager and Scrum Product Owner with extensive experience in Product Management and UI/UX Design for native Android/iOS and Web products. Iris is a dual Portuguese/British national who speaks 4 languages and so far has lived in Italy, Portugal, Netherlands and most recently London, UK.',
+            education: 'MSc from the University College London (UCL);\n' +
+                'BSc from the University of Porto\n',
+        },
+        {
+            firstName: 'Nathan',
+            lastName: 'Stitt',
+            title: 'Engineering Manager',
+            image: '',
+            linkedIn: 'https://www.linkedin.com/in/nstitt',
+            bio: 'Nathan\'s professional work focuses on creating web and mobile educational applications. He\'s a prolific open-source contributor for multiple languages and operating systems.',
+        },
+        {
+            firstName: 'Ross',
+            lastName: 'Reedstrom',
+            title: 'Sr. Developer',
+            image: '',
+            linkedIn: 'https://www.linkedin.com/in/ross-reedstrom-68a8541',
+            bio: 'Ross is a go-to person for research data storage and manipulation. Not long after arriving at Rice, he made the jump from being a computer guy among the biologists, to being a biologist among the computer guys, eventually finding his way to OpenStax.',
+            education: 'PhD from the University of Wisconsin - Madison',
+        },
+        {
+            firstName: 'Chris',
+            lastName: 'Bendel',
+            title: 'Developer',
+            image: '',
+            linkedIn: 'https://www.linkedin.com/in/chrissbendel',
+            bio: 'Chris is a full stack software developer with a background in web technologies. He is an adjunct professor teaching computer science courses at Champlain College in Vermont.',
+            specialization: 'Computer Science and Innovation',
+            education: 'B.S. from Champlain College',
+        },
+        {
+            firstName: 'Viki',
+            lastName: 'Zhu',
+            title: 'UX Designer',
+            image: '',
+            linkedIn: 'https://www.linkedin.com/in/wenqi-vicky-zhu-9b436211b/',
+            bio: 'Viki has experience in UX design within different areas like E-commerce, healthcare and education. She is interested in tackling complex and ambiguous problems and always advocates for users.',
+            education: 'MFA from Savannah College of Art and Design',
+        },
+        {
+            firstName: 'Fabrizio',
+            lastName: 'Chavez',
+            title: 'UX Intern',
+            image: '',
+            linkedIn: 'https://www.linkedin.com/in/fabrizio-chavez-b93925172/',
+            bio: 'Fabrizio is a Human Computer Interaction practitioner. \n' +
+                'His expertise encompasses the use of traditional statistical analysis, machine learning methods, eye-tracking, and computer modeling of human performance to further understand the nuances of human interactions and ultimately support the design and development of user-friendly interfaces.\n',
+            researchInterest: 'Human Computer Interaction,\n' +
+                'Computational Modeling,\n' +
+                'Human Error\n',
+            education: 'Doctoral Student at Rice University, Department of Psychological Sciences',
+        },
+        {
+            firstName: 'Jeffrey',
+            lastName: '',
+            title: 'Research Intern',
+            image: '',
+            linkedIn: 'https://www.linkedin.com/in/jeffrey-zhong/',
+            bio: 'Jeffrey is an undergraduate research intern at OpenStax. As a first generation student, he works with and supports the research team as they work on analyzing and improving education. He is currently studying for his bachelor\'s degree at Rice University.',
+            education: 'Undergraduate Student at Rice University, Department of Computer Science and Statistics',
+        },
+        {
+            firstName: 'Iris',
+            lastName: 'Zhong',
+            title: 'Data Science Intern',
+            image: '',
+            linkedIn: 'https://www.linkedin.com/in/shengqi-zhong-46049a165/',
+            bio: 'Iris seeks to understand data in the education space. Her research interests include longitudinal data analysis, psychometrics, education technology, and developmental psychology.',
+            researchInterest: 'Longitudinal data analysis, psychometrics, developmental psychology, language acquisition, education technology',
+            specialization: 'Educational Data Science',
+            education: 'Master\'s Student at  Stanford University',
+        },
+        {
+            firstName: 'Jack',
+            lastName: 'Wang',
+            title: 'AI/ML Researcher',
+            image: '',
+            website: 'https://zw16.web.rice.edu/',
+            googleScholar: 'https://scholar.google.com/citations?user=IbCALKcAAAAJ&hl=en',
+            linkedIn: 'https://linkedin.com/in/jackzichaowang',
+            bio: 'Jack Wang is a PhD student in Electrical and Computer Engineering at Rice University, advised by Prof. Rich Baraniuk. Previously, he obtained B.S and M.Sc in 2016 and 2020, respectively, all from Rice University. His research interests lie at the intersection of ML/AI and education.',
+            education: 'Doctoral Student at Rice University, Department of Electrical and Computer Engineering',
+        },
+        {
+            firstName: 'Lucy',
+            lastName: 'Liu',
+            title: 'AI/ML Researcher',
+            image: '',
+            linkedIn: 'https://www.linkedin.com/in/naiming-liu-lucy0817',
+            bio: 'Lucy is a third-year PhD student at Rice University advised by Dr. Richard Braniuk. She seeks to apply machine learning or natural language processing techniques for educational purposes.',
+            researchInterest: 'Knowledge tracing, knowledge graph construction and generative models',
+            education: 'Doctoral Student at Rice University, Department of Electrical and Computer Engineering',
+        },
+        {
+            firstName: 'Hossein',
+            lastName: 'Babei',
+            title: 'AI/ML Researcher',
+            image: '',
+            googleScholar: 'https://scholar.google.com/citations?hl=en&user=PuxS0ZkAAAAJ',
+            bio: 'Hossein is a PhD student in Electrical & Computer Engineering at Rice University advised by Dr. Richard G. Baraniuk. He enjoys using causal inference to reliably predict the results of making interventions on a given system.',
+            researchInterest: 'Causal Inference, Randomized Controlled Trials, Causal Analysis, Performative Prediction',
+            education: 'Doctoral Student at Rice University, Department of Electrical and Computer Engineering',
+        },
+        {
+            firstName: 'Shashank',
+            lastName: 'Sonkar',
+            title: 'AI/ML Researcher',
+            image: '',
+            website: 'https://sites.google.com/view/shashanksonkar/',
+            googleScholar: 'https://scholar.google.com/citations?user=4Rv56n4AAAAJ&hl=en',
+            linkedIn: 'https://www.linkedin.com/in/shashanksonkar/',
+            bio: 'Shashank is a PhD student at Rice University advised by Prof. Richard Baraniuk. Understanding modern natural language processing models and their applications to education are the focus of his current study. His earlier work included modeling students\' knowledge development over time and effective knowledge graph learning.',
+            researchInterest: 'Understanding modern NLP models, Applications of NLP for Education',
+            education: 'Doctoral Student at Rice University, Department of Electrical and Computer Engineering',
+        },
     ],
     collaborating: [
-
-    ],
-    alumni: [
-
+        {
+            firstName: 'Fred',
+            lastName: 'Oswald',
+            title: 'Professor of Psychological Sciences, Rice University',
+            image: '',
+            website: 'https://workforce.rice.edu/',
+            googleScholar: 'https://scholar.google.com/citations?user=jWlqGZcAAAAJ&hl=en&oi=ao',
+            linkedIn: 'https://www.linkedin.com/in/fred-oswald/',
+            bio: 'Fred is a professor of industrial-organizational psychology. Currently, he is Chair of the Board on Human-Systems Integration (BOHSI) at the National Academy of Sciences, Chair of the Board of Scientific Affairs with the American Psychological Association, and Associate Editor at Journal of Applied Psychology.',
+            researchInterest: 'Measure development and psychometrics. Modeling the influence of individual differences on student success (e.g., personality, motivation, time management, knowledge, interests). Choosing a major. School-to-work transitions.',
+            education: 'MA and PhD from the University of Minnesota',
+        },
+        {
+            firstName: 'Margaret',
+            lastName: 'Beier',
+            title: 'Professor of Psychological Sciences, Rice University',
+            image: '',
+            website: 'http://beier.rice.edu/',
+            googleScholar: 'https://scholar.google.com/citations?user=h9TnggYAAAAJ&hl=en',
+            linkedIn: 'https://www.linkedin.com/in/margaret-beier-357786b/',
+            bio: 'Margaret is a professor of psychology and director of the Adult Skills and Knowledge (ASK) lab at Rice University. She is a fellow of the Association for Psychological Science and the Society for Industrial and Organizational Psychology. She is an associate editor at Work, Aging, and Retirement and the Journal of Business and Psychology.',
+            researchInterest: 'Individual differences in learning and development in educational and organizational settings, particularly as related to personality, ability, and age. Self-regulation and motivation in learning.',
+            education: 'MA and PhD from the Georgia Institute of Technology;\n' +
+                'BA from Colby College\n',
+        },
+        {
+            firstName: 'Danielle',
+            lastName: 'McNamara',
+            title: 'Professor of Psychology, Arizona State University',
+            longTitle: 'Professor, Psychology; Director of the Science of Learning and Educational Technology (SoLET) laboratory at Arizona State University',
+            image: '',
+            website: 'https://adl.asu.edu/leadership/danielle-s-mcnamara',
+            googleScholar: 'https://scholar.google.com/citations?hl=en&user=NOxLJQUAAAAJ',
+            bio: 'Danielle\'s work focuses on reading comprehension and writing processes in learning: discovering new methods to improve students’ ability to understand challenging text, learn new information, and convey their thoughts and ideas in writing. Her lab\'s work integrates various approaches and methodologies including the development of game-based, intelligent tutoring systems (e.g., iSTART, Writing Pal), the development of natural language processing tools (e.g., iSTART, Writing Pal, Coh-Metrix, the Writing Assessment Tool), basic research to better understand cognitive and motivational processes involved in comprehension and writing, and the use of learning analytics across multiple contexts.',
+            researchInterest: 'Literacy, reading and writing, game based learning',
+            specialization: 'Cognitive & Clinical Psychology',
+            education: 'Ph.D. from University of Colorado-Boulder;\n' +
+                'M.A. from Wichita State University, Kansas;\n' +
+                'B.A. from University of Kansas\n',
+        },
+        {
+            firstName: 'Phil',
+            lastName: 'Kortum',
+            title: 'Associate Professor of Psychological Sciences, Rice University',
+            image: '',
+            website: 'http://www.philkortum.com',
+            googleScholar: 'https://scholar.google.com/citations?hl=en&user=BD7BLDgAAAAJ',
+            linkedIn: 'https://www.linkedin.com/in/philip-kortum-81713b8/',
+            bio: 'Philip is an associate professor of psychology and director of the Human Factors Research Lab at Rice University.  He is a Fellow of the Human Factors Society, the Association for Psychological Science, and the National Academy of Inventors. He is the Editor of the Human Factors Method Series.',
+            researchInterest: 'Research and development of highly usable systems in the medical, voting, and educational domains, and in the characterization of measures of usability and usable systems.',
+            education: 'PhD from the University of Texas at Austin;\n' +
+                'MS from Northeastern University\n',
+        },
+        {
+            firstName: 'Andrew',
+            lastName: 'Lan',
+            title: 'Assistant Professor, University of Massachusetts Amherst',
+            image: '',
+            website: 'https://people.umass.edu/~andrewlan/',
+            googleScholar: 'https://scholar.google.com/citations?user=ZYc-LuMAAAAJ&hl=en',
+            linkedIn: 'https://www.linkedin.com/in/andrew-lan-aa150017/',
+            bio: 'Andrew is an Assistant Professor in the College of Information and Computer Sciences, University of Massachusetts Amherst, since Jan. 2019.\n',
+            researchInterest: 'AI algorithms for educational applications, including student modeling, content analysis and generation, instructor support, automated scoring and feedback, and personalization methods to maximize learning outcomes.',
+            specialization: 'Electrical and Computer Engineering',
+            education: 'PhD from Rice University',
+        },
+        {
+            firstName: 'Zihan',
+            lastName: 'Liu',
+            title: 'Postdoctoral Research Associate',
+            image: '',
+            googleScholar: 'https://scholar.google.com/citations?hl=en&user=xG7gBNsAAAAJ',
+            linkedIn: 'http://www.linkedin.com/in/psyzihanliu',
+            bio: 'Zihan is a postdoctoral research associate working with Dr. Fred Oswald in the Organization & Workforce lab at Rice University. Her work focuses on understanding the role of individual differences in career development.',
+            researchInterest: 'Individual differences, career development, leadership, workplace relationships',
+            education: 'MA and PhD from the University of Houston in Industrial-Organizational Psychology',
+        },
+        {
+            firstName: 'Karyssa',
+            lastName: 'Courey',
+            title: 'Psychometrics researcher',
+            image: '',
+            googleScholar: 'https://scholar.google.com/citations?hl=en&user=TwDvpGYAAAAJ',
+            linkedIn: 'https://www.linkedin.com/in/karyssa-courey/',
+            bio: 'Karyssa is a PhD student in Industrial-Organizational psychology at Rice University. She is interested in applying Bayesian methods to study diversity, equity, and inclusion in organizations.',
+            researchInterest: 'Bayesian analysis, psychometrics, diversity and fairness, and decision-making',
+            education: 'Doctoral Student at Rice University, Department of Psychological Sciences',
+        },
+        {
+            firstName: 'Makai',
+            lastName: 'Ruffin',
+            title: 'Adult skills and knowledge researcher',
+            image: '',
+            website: 'http://beier.rice.edu/lab-members/',
+            googleScholar: 'https://scholar.google.com/citations?user=_mTA7CUAAAAJ&hl=en',
+            linkedIn: 'https://www.linkedin.com/in/makairuffin/',
+            bio: '',
+            education: 'Doctoral Student at Rice University, Department of Psychological Sciences',
+        },
     ],
 };

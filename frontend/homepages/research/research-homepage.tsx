@@ -1,15 +1,25 @@
-import { Box, React, useState } from '@common'
+import { Box, cx, React, styled, useState } from '@common'
 
 import '../../src/index.css'
 import '../../src/styles/main.scss'
 import { colors } from '../../src/theme';
 import { Footer, Icon } from '@components';
 import 'bootstrap/dist/js/bootstrap.min'
-import { Publication, publications, ResearchArea, researchFocusAreas, ResearchMember } from './research-data';
+import {
+    alumni,
+    AlumnusMember,
+    Publication,
+    publications,
+    ResearchArea,
+    researchFocusAreas,
+    ResearchMember,
+    researchMembers,
+} from './research-data';
 import boxArrowInUpRight from '@iconify-icons/bi/box-arrow-in-up-right';
 import HowManyLettersYouRemember from '../../src/components/study-card-images/HowManyLettersYouRemember';
 import chevronDown from '@iconify-icons/bi/chevron-down';
 import chevronUp from '@iconify-icons/bi/chevron-up';
+import { Button, Modal } from '@restart/ui';
 
 export const ResearchHomepage = () => (
     <div css={{ backgroundColor: colors.white }}>
@@ -217,11 +227,15 @@ export const Publications = () => {
 export const PublicationItem: React.FC<{publication: Publication}> = ({ publication }) => (
     <Box direction='column' margin={{ top: 'xlarge' }}>
         <div>
-            <a className='fw-bold' href={publication.pdf} target='_blank'>{publication.title}</a>
+            <a className='fw-bold' href={publication.pdf} target='_blank'>
+                {publication.title}
+            </a>
         </div>
         <div>
             <span>{publication.date} &middot;&nbsp;</span>
-            <span css={{ color: colors.grayText }}>{publication.body}</span>
+            <span css={{ color: colors.grayText }}>
+                {publication.body}
+            </span>
         </div>
         <Box gap='xlarge'>
             <a className='text-decoration-none' href={publication.pdf} target='_blank'>
@@ -239,6 +253,16 @@ export const PublicationItem: React.FC<{publication: Publication}> = ({ publicat
         </Box>
     </Box>
 )
+
+const MemberGrid = styled.div`
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+`;
+
+const AlumniGrid = styled.div`
+
+`;
 
 export const Members = () => (
     <div css={{ backgroundColor: colors.lightGrayBackground }}>
@@ -264,23 +288,123 @@ export const Members = () => (
                     </button>
                 </li>
             </ul>
-            <div className="tab-content py-3">
+            <div className="tab-content px-2 py-5">
                 <div className="tab-pane fade show active" id="current" role="tabpanel" aria-labelledby="current-tab">
-
+                    <MemberGrid>
+                        {researchMembers['current'].map((member, index) =>
+                            <Member member={member} key={index}/>
+                        )}
+                    </MemberGrid>
                 </div>
                 <div className="tab-pane fade" id="collaborating" role="tabpanel" aria-labelledby="collaborating-tab">
-
+                    <MemberGrid>
+                        {researchMembers['collaborating'].map((member, index) =>
+                            <Member member={member} key={index}/>
+                        )}
+                    </MemberGrid>
                 </div>
                 <div className="tab-pane fade" id="alumni" role="tabpanel" aria-labelledby="alumni-tab">
-
+                    <AlumniGrid>
+                        {alumni.map((alumnus, index) =>
+                            <Alumnus alumnus={alumnus} key={index}/>
+                        )}
+                    </AlumniGrid>
                 </div>
             </div>
         </div>
     </div>
 )
 
-export const Member: React.FC<{member: ResearchMember}> = ({ member }) => (
-    <Box>
-        <img alt={member.name} src='http://cdn.akc.org/content/article-body-image/beagle2_cute_puppies.jpg' height={145} width={145}/>
+export const Member: React.FC<{member: ResearchMember}> = ({ member }) => {
+    const [show, setShow] = useState(false);
+    return (
+        <Box direction='column' align='center' className='text-center'>
+            <img alt={member.firstName} src='https://placedog.net/640/480?random' height={145} width={145}/>
+            <Button as='a' type='button' onClick={() => setShow(true)}>
+                {member.firstName} {member.lastName}
+            </Button>
+            <Modal
+                show={show}
+                className={cx('modal', 'fade', {
+                    show,
+                })}
+                style={{ display: 'block', pointerEvents: 'none', overflow: 'auto' }}
+                aria-labelledby="member-modal"
+                onHide={() => setShow(false)}
+                renderBackdrop={(props) => (
+                    <div className="modal-backdrop fade show" {...props} />
+                )}
+            >
+                <div className='modal-dialog-centered modal-dialog-scrollable h-auto mx-auto w-75'>
+                    <div className="modal-content" css={{ height: '100%' }}>
+                        <MemberDetails member={member}/>
+                    </div>
+                </div>
+            </Modal>
+        </Box>
+    )
+}
+
+export const MemberDetails: React.FC<{member: ResearchMember}> = ({ member }) => {
+    return (
+        <Box>
+            <MemberInfo member={member}/>
+            <MemberEducation member={member}/>
+            <MemberInterest member={member}/>
+            <MemberBio member={member}/>
+            <MemberLinks member={member}/>
+        </Box>
+    )
+}
+
+export const MemberInfo: React.FC<{member: ResearchMember}> = ({ member }) => {
+    return (
+        <Box>
+            <img src={member.image} alt={member.title}/>
+            <Box direction='column'>
+                <h4>{member.name}</h4>
+                <p css={{ color: colors.grayText }}>
+                    {member.title}
+                </p>
+            </Box>
+        </Box>
+    )
+}
+
+export const MemberEducation: React.FC<{member: ResearchMember}> = ({ member }) => {
+    return (
+        <Box direction='column'>
+            <h5>Education</h5>
+            <p></p>
+        </Box>
+    )
+}
+
+export const MemberInterest: React.FC<{member: ResearchMember}> = ({ member }) => {
+    return (
+        <Box>
+        </Box>
+    )
+}
+
+export const MemberBio: React.FC<{member: ResearchMember}> = ({ member }) => {
+    return (
+        <Box>
+        </Box>
+    )
+}
+
+export const MemberLinks: React.FC<{member: ResearchMember}> = ({ member }) => {
+    return (
+        <Box>
+        </Box>
+    )
+}
+
+
+export const Alumnus: React.FC<{alumnus: AlumnusMember}> = ({ alumnus }) => (
+    <Box gap='xxlarge'>
+        <a css={{ flex: 1 }} href={alumnus.linkedin}>{alumnus.name}</a>
+        <p css={{ flex: 5, color: colors.grayText }}>{alumnus.title}</p>
     </Box>
 )

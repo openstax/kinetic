@@ -51,7 +51,6 @@ const Modal: ModalI = ({
                 'modal-lg': large,
                 'modal-fullscreen': fullscreen,
                 'modal-small': small,
-
             })}>
                 <div className="modal-content" css={{ height: '100%' }}>
                     {header && header}
