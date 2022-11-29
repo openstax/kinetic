@@ -20,9 +20,11 @@ import HowManyLettersYouRemember from '../../src/components/study-card-images/Ho
 import chevronDown from '@iconify-icons/bi/chevron-down';
 import chevronUp from '@iconify-icons/bi/chevron-up';
 import { Button, Modal } from '@restart/ui';
+import { useIsMobileDevice } from '@lib';
+import Accordion from 'react-bootstrap/Accordion';
 
-export const ResearchHomepage = () => (
-    <div css={{ backgroundColor: colors.white, fontSize: '1rem', lineHeight: 1.5 }}>
+export const ResearchHomepage = () => {
+    return (<div css={{ backgroundColor: colors.white, fontSize: '1rem', lineHeight: 1.5 }}>
         <style>
             {`
                 .nav-tabs .nav-link.active {
@@ -37,18 +39,16 @@ export const ResearchHomepage = () => (
         <Header></Header>
         <Banner></Banner>
         <ColorBar></ColorBar>
-        <ResearchFocusAreas></ResearchFocusAreas>
-
+        <ResearchSection></ResearchSection>
         <Publications></Publications>
-
-        <Members></Members>
+        <MembersSection></MembersSection>
         <Footer includeFunders></Footer>
-    </div>
-)
+    </div>)
+}
 
 export const Header = () => (
     <div className="py-5" css={{ backgroundColor: colors.lightBlue }}>
-        <Box className='container' align='center'>
+        <Box direction={{ mobile: 'column' }} className='container' align='center'>
             <h1 className='fw-bolder' css={{ color: colors.white, flex: 3 }}>
                 Advancing multi-disciplinary research to improve learner success.
             </h1>
@@ -60,11 +60,11 @@ export const Header = () => (
 
 export const Banner = () => (
     <div className="py-2" css={{ backgroundColor: colors.lightTeal }}>
-        <Box className='container align-items-center' gap='xlarge'>
+        <Box direction={{ mobile: 'column' }} className='container align-items-center' gap='xlarge'>
             <h3 className='fw-bold text-center' css={{ color: colors.blackText, flex: 1 }}>
                 Calling all learning researchers!
             </h3>
-            <Box direction='column' css={{ flex: 4 }}>
+            <Box align={{ mobile: 'center' }} direction='column' css={{ flex: 4 }}>
                 <p>Learn about the research workflow on OpenStax Kinetic during office hours hosted with IES!</p>
                 <a className='text-decoration-none' href='https://ies.ed.gov/funding/technicalassistance.asp' target='_blank'>
                     <Box align='center'>
@@ -108,9 +108,25 @@ export const ColorBar = () => (
     </Box>
 )
 
+export const ResearchSection = () => {
+    const mobile = useIsMobileDevice();
+    return (
+        <div className='container py-5'>
+            <h2 className='py-2'>Areas of Research Focus</h2>
+            <p>
+                Our team has significant expertise in <strong>learning science, education research, and AI/ML
+                in education.</strong> We use a multidisciplinary approach to examine who our learners are,
+                what are they learning, and how are they learning; to provide appropriate supports when and
+                where learners need them. To enable large-scale rapid cycle research, we are developing Kinetic,
+                a research infrastructure connecting researchers with adult higher ed learners in the US.
+            </p>
+            {mobile ? <MobileResearchFocusAreas/> : <ResearchFocusAreas/>}
+        </div>
+    )
+}
+
 export const ResearchFocusAreas = () => (
-    <div className='container'>
-        <h2 className='pt-4 pb-2'>Areas of Research Focus</h2>
+    <div>
         <ul className="nav nav-tabs" id="research-areas" role="tablist">
             <li className="nav-item" role="presentation">
                 <button className="nav-link active" id="kinetic-tab" data-bs-toggle="tab" data-bs-target="#kinetic"
@@ -181,11 +197,73 @@ export const ResearchFocusAreas = () => (
     </div>
 )
 
+export const MobileResearchFocusAreas = () => {
+    return (
+        <div>
+            <Accordion>
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header>Research on OpenStax Kinetic</Accordion.Header>
+                    <Accordion.Body>
+                        <p>
+                            OpenStax Kinetic is a new research infrastructure that enables researchers to connect with real
+                            learners studying curricular content in authentic learning environments. Researchers can leverage
+                            Qualtrics to design a variety of studies (e.g., surveys, Randomized Control Trials, A/B/N tests)
+                            and make them available on Kinetic to <strong>US adult higher education learners.</strong>
+                            Kinetic researchers can effectively address 3 key questions in learning and how they interact:
+                        </p>
+                        <ol>
+                            <li><strong>Who is the learner?</strong></li>
+                            <li><strong>What are they learning?</strong></li>
+                            <li><strong>How are they learning?</strong></li>
+                        </ol>
+                        <hr/>
+                        {researchFocusAreas['kinetic'].map((researchArea, index) =>
+                            <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
+                        )}
+                    </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="1" css={{ backgroundColor: colors.white }}>
+                    <Accordion.Header>AI/ML in education</Accordion.Header>
+                    <Accordion.Body>
+                        <p>
+                            In collaboration with leading researchers in the AI/ML in education space and the&nbsp;
+                            <a href='https://dsp.rice.edu/' target='_blank'>Digital Signal Processing research group</a>
+                            &nbsp;at Rice University, we investigate how to
+                            effectively utilize AI/ML advancements to address crucial issues in learning and education.
+                            Our research explores natural language processing for content generation, predictive models
+                            for learning analytics, and hybrid models for generation of knowledge graphs. We aim to use
+                            a combination of these efforts to optimally personalize learning experiences for learners.
+                        </p>
+                        {researchFocusAreas['ai'].map((researchArea, index) =>
+                            <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
+                        )}
+                    </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="2">
+                    <Accordion.Header>Applied Education Research</Accordion.Header>
+                    <Accordion.Body>
+                        <p>
+                            This learner- and educator- centered initiative aims to promote educational equity.
+                            To this end, we engage with learners, educators, institutions, and the community and
+                            utilize participatory and mixed- research methods. By working with educators and learners,
+                            we identify issues that are most important for them and work toward evidence-based approaches
+                            to address them. Ultimately, we work with our product teams to build evidence-based learner
+                            supports that are iteratively refined.
+                        </p>
+                        {researchFocusAreas['education'].map((researchArea, index) =>
+                            <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
+                        )}
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
+        </div>
+    )
+}
+
 export const ResearchFocusArea: React.FC<{researchArea: ResearchArea}> = ({ researchArea }) => (
     <div className='py-1'>
-        <Box gap='large'>
-            {/* TODO Dynamic images */}
-            <HowManyLettersYouRemember css={{ flex: 2 }}/>
+        <Box gap='large' direction={{ mobile: 'column' }}>
+            <img src={researchArea.image} css={{ flex: 2 }} alt={researchArea.title}/>
             <Box direction='column' css={{ flex: 6 }}>
                 <h5 className='fw-bold'>{researchArea.title}</h5>
                 <p>{researchArea.description}</p>
@@ -197,7 +275,7 @@ export const ResearchFocusArea: React.FC<{researchArea: ResearchArea}> = ({ rese
                     </div>
                 }
             </Box>
-            <p css={{ flex: 1 }}>view more?</p>
+            {/*<p css={{ flex: 1 }}>view more?</p>*/}
         </Box>
         <hr/>
     </div>
@@ -237,7 +315,7 @@ export const PublicationItem: React.FC<{publication: Publication}> = ({ publicat
                 {publication.body}
             </span>
         </div>
-        <Box gap='xlarge'>
+        <Box gap='xlarge' className='mt-1'>
             <a className='text-decoration-none' href={publication.pdf} target='_blank'>
                 <Box align='center'>
                     Pdf&nbsp;
@@ -268,52 +346,96 @@ const AlumniGrid = styled.div`
 
 `;
 
-export const Members = () => (
-    <div css={{ backgroundColor: colors.lightGrayBackground }}>
-        <div className='container'>
+export const MembersSection = () => {
+    const isMobile = useIsMobileDevice();
+    return (
+        <div className='container' css={{ backgroundColor: colors.lightGrayBackground }}>
             <h2 className='pt-4 pb-2'>Team Members</h2>
-            <ul className="nav nav-tabs" id="team-members" role="tablist">
-                <li className="nav-item" role="presentation">
-                    <button className="nav-link active" id="current-tab" data-bs-toggle="tab" data-bs-target="#current"
-                        type="button" role="tab" aria-controls="current" aria-selected="true">
-                        Current Members
-                    </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                    <button className="nav-link" id="collaborating-tab" data-bs-toggle="tab" data-bs-target="#collaborating"
-                        type="button" role="tab" aria-controls="collaborating" aria-selected="false">
-                        Collaborating Researchers
-                    </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                    <button className="nav-link" id="alumni-tab" data-bs-toggle="tab" data-bs-target="#alumni"
-                        type="button" role="tab" aria-controls="alumni" aria-selected="false">
-                        Alumni
-                    </button>
-                </li>
-            </ul>
-            <div className="tab-content px-2 py-5">
-                <div className="tab-pane fade show active" id="current" role="tabpanel" aria-labelledby="current-tab">
-                    <MemberGrid>
-                        {researchMembers['current'].map((member, index) =>
-                            <Member member={member} key={index}/>
-                        )}
-                    </MemberGrid>
-                </div>
-                <div className="tab-pane fade" id="collaborating" role="tabpanel" aria-labelledby="collaborating-tab">
-                    <MemberGrid>
-                        {researchMembers['collaborating'].map((member, index) =>
-                            <Member member={member} key={index}/>
-                        )}
-                    </MemberGrid>
-                </div>
-                <div className="tab-pane fade" id="alumni" role="tabpanel" aria-labelledby="alumni-tab">
-                    <AlumniGrid>
+            {isMobile ? <MobileMembers/> : <Members/>}
+        </div>
+    )
+}
+
+export const MobileMembers = () => {
+    return (
+        <div>
+            <Accordion>
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header>Current Members</Accordion.Header>
+                    <Accordion.Body>
+                        <MemberGrid>
+                            {researchMembers['current'].map((member, index) =>
+                                <Member member={member} key={index}/>
+                            )}
+                        </MemberGrid>
+                    </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="1">
+                    <Accordion.Header>Collaborating Researchers</Accordion.Header>
+                    <Accordion.Body>
+                        <MemberGrid>
+                            {researchMembers['collaborating'].map((member, index) =>
+                                <Member member={member} key={index}/>
+                            )}
+                        </MemberGrid>
+                    </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="2">
+                    <Accordion.Header>Alumni</Accordion.Header>
+                    <Accordion.Body>
                         {alumni.map((alumnus, index) =>
                             <Alumnus alumnus={alumnus} key={index}/>
                         )}
-                    </AlumniGrid>
-                </div>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
+        </div>
+    )
+}
+
+export const Members = () => (
+    <div>
+        <ul className="nav nav-tabs" id="team-members" role="tablist">
+            <li className="nav-item" role="presentation">
+                <button className="nav-link active" id="current-tab" data-bs-toggle="tab" data-bs-target="#current"
+                    type="button" role="tab" aria-controls="current" aria-selected="true">
+                        Current Members
+                </button>
+            </li>
+            <li className="nav-item" role="presentation">
+                <button className="nav-link" id="collaborating-tab" data-bs-toggle="tab" data-bs-target="#collaborating"
+                    type="button" role="tab" aria-controls="collaborating" aria-selected="false">
+                        Collaborating Researchers
+                </button>
+            </li>
+            <li className="nav-item" role="presentation">
+                <button className="nav-link" id="alumni-tab" data-bs-toggle="tab" data-bs-target="#alumni"
+                    type="button" role="tab" aria-controls="alumni" aria-selected="false">
+                        Alumni
+                </button>
+            </li>
+        </ul>
+        <div className="tab-content px-2 py-5">
+            <div className="tab-pane fade show active" id="current" role="tabpanel" aria-labelledby="current-tab">
+                <MemberGrid>
+                    {researchMembers['current'].map((member, index) =>
+                        <Member member={member} key={index}/>
+                    )}
+                </MemberGrid>
+            </div>
+            <div className="tab-pane fade" id="collaborating" role="tabpanel" aria-labelledby="collaborating-tab">
+                <MemberGrid>
+                    {researchMembers['collaborating'].map((member, index) =>
+                        <Member member={member} key={index}/>
+                    )}
+                </MemberGrid>
+            </div>
+            <div className="tab-pane fade" id="alumni" role="tabpanel" aria-labelledby="alumni-tab">
+                <AlumniGrid>
+                    {alumni.map((alumnus, index) =>
+                        <Alumnus alumnus={alumnus} key={index}/>
+                    )}
+                </AlumniGrid>
             </div>
         </div>
     </div>
@@ -448,9 +570,8 @@ export const MemberLinks: React.FC<{member: ResearchMember}> = ({ member }) => {
     )
 }
 
-
 export const Alumnus: React.FC<{alumnus: AlumnusMember}> = ({ alumnus }) => (
-    <Box gap='xxlarge' justify='between'>
+    <Box direction={{ mobile: 'column' }} justify='center'>
         <a css={{ flex: 1 }} href={alumnus.linkedin}>{alumnus.name}</a>
         <p css={{ flex: 3, color: colors.grayText }}>{alumnus.title}</p>
     </Box>

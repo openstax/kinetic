@@ -23,6 +23,12 @@ import Sabitha from './images/members/Sabitha.svg';
 import Shashank from './images/members/Shashank.svg';
 import Viki from './images/members/Viki.svg';
 import Zihan from './images/members/Zihan Liu.svg';
+import UnderstandingLearners from './images/research-areas/understanding-learners.svg';
+import Kinetic from './images/research-areas/kinetic.svg';
+import LanguageModels from './images/research-areas/language-models.svg';
+import Ontology from './images/research-areas/ontology.svg';
+import Raise from './images/research-areas/raise.svg';
+import Equip from './images/research-areas/equip.svg';
 
 export type Publication = {
     date: string;
@@ -176,7 +182,7 @@ type CTA = {
 export type ResearchArea = {
     title: string;
     description: string;
-    image: string | null;
+    image: string;
     cta: CTA | null,
     github: string | null;
     publication: string | null;
@@ -191,7 +197,7 @@ export const researchFocusAreas: ResearchFocusAreas = {
         {
             title: 'Understanding learners',
             description: 'To understand who the learners are, Kinetic is building a library of measures of learner characteristics for vetted researchers to use in their research (e.g., as a focal or control variable). Kinetic’s Library of Learner Characteristics comprises studies that capture socio-demographics, cognitive, motivational, and other psychosocial characteristics of learners who participate in specific Kinetic activities. Moreover, these studies provide personalized feedback to support learners’ academic and career success.',
-            image: '',
+            image: UnderstandingLearners,
             cta: {
                 text: 'Learn more about Learner Characteristics library on Kinetic',
                 url: 'tbd',
@@ -202,7 +208,7 @@ export const researchFocusAreas: ResearchFocusAreas = {
         {
             title: 'Learning Research on Kinetic',
             description: 'On Kinetic, researchers can implement various study designs with single or multiple sessions. For example, researchers are currently exploring the effectiveness of different forms of multimedia lessons on knowledge retention in a randomized, four-condition, between-subjects study. In this and all our research, every condition prioritizes creating a positive learner experience in all aspects of the infrastructure.',
-            image: '',
+            image: Kinetic,
             cta: {
                 text: 'Interested in using Kinetic?',
                 url: 'https://openstax.org/kinetic/',
@@ -215,7 +221,7 @@ export const researchFocusAreas: ResearchFocusAreas = {
         {
             title: 'Towards Human-like Educational Question Generation with Large Language Models',
             description: 'In this work, we investigated the impact of various Pretrained Language Model prompting strategies on the quality of generated questions. With empirical evaluation, we identified the prompting strategy that is most likely to lead to high-quality generated questions. We demonstrate the utility of best-strategy generated questions by presenting these together with human-authored questions to a subject matter expert, who could not effectively distinguish between generated and human-authored questions.',
-            image: '',
+            image: LanguageModels,
             cta: null,
             github: 'https://github.com/openstax/research-question-generation-gpt3',
             publication: 'https://link.springer.com/chapter/10.1007/978-3-031-11644-5_13',
@@ -223,7 +229,7 @@ export const researchFocusAreas: ResearchFocusAreas = {
         {
             title: 'A Case Study in Bootstrapping Ontology Graphs from Textbooks',
             description: 'We aimed to address: to what extent can automated extraction and crowdsourcing techniques be combined to bootstrap the creation of comprehensive and accurate ontology knowledge graphs? By adapting the state-of-the-art language model BERT to the task, and leveraging a novel relationship selection task, we showed that even though it is difficult to achieve a high precision and recall, automated term extraction and crowdsourcing provide a way to bootstrap the ontology graph creation for further refinement and improvement through human effort.',
-            image: '',
+            image: Ontology,
             cta: null,
             github: 'https://openstax.github.io/research-kg-learning/akbc-2021/',
             publication: 'https://www.akbc.ws/2021/assets/pdfs/nDe2D8DDXKR.pdf',
@@ -233,7 +239,7 @@ export const researchFocusAreas: ResearchFocusAreas = {
         {
             title: 'Rice Algebra Initiative for Success and Equity (RAISE)',
             description: 'RAISE uses learning science research to drive efforts to close socioeconomic gaps in education achievement in Algebra 1. Through rapid-cycle research studies, we research and develop math solutions aimed at improving student achievement among underserved students and generating insights and tools for teaching and learning. RAISE is a Research Practice Partnership (RPP), with practicing teachers both informing our objectives and benefiting from our findings.',
-            image: '',
+            image: Raise,
             cta: {
                 text: 'Learn more about RAISE',
                 url: 'https://raise.rice.edu/',
@@ -244,7 +250,7 @@ export const researchFocusAreas: ResearchFocusAreas = {
         {
             title: 'Project Equip',
             description: 'Project Equip was a 3-yr collaboration among Rice’s education research centers (OpenStax, the Houston Education Research Consortium, and the Glasscock School of Continuing Studies) and Houston ISD. The program combined teacher professional development and classroom access to the OpenStax Tutor homework system to reduce inequities in AP course outcomes for underrepresented groups. After the Covid-19 pandemic and the shift to online learning, we pivoted the research to student and teacher support. Despite these challenges, teachers nevertheless significantly impacted how students used and benefited from Tutor.',
-            image: '',
+            image: Equip,
             cta: null,
             github: null,
             publication: null,
