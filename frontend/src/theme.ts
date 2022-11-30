@@ -5,6 +5,7 @@ export const colors = {
     // TODO Confirm if we want both or switch?
     //  Figma mockup has #F36B32 for orange
     orange: '#f47641',
+    primaryButton: '#D4450C',
     lightBlue: '#0DC0DC',
     darkBlue: '#151B2C',
     red: '#ca2026',

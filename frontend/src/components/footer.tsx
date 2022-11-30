@@ -28,7 +28,7 @@ const SupporterImage = styled.img({
     height: 'auto',
 })
 
-const Funders = () => {
+export const Funders = () => {
     return (
         <div css={{ backgroundColor: colors.white }}>
             <Box direction="column" className='p-2'>

@@ -1,10 +1,6 @@
 // a customized version of bs/bootstrap.scss
 // with only the items used in the project enabled
 @import "node_modules/bootstrap/scss/functions";
-@import "node_modules/bootstrap/scss/variables";
-@import "node_modules/bootstrap/scss/mixins";
-@import "node_modules/bootstrap/scss/maps";
-@import "node_modules/bootstrap/scss/utilities";
 
 $font-size-base: 1rem;
 $h1-font-size: $font-size-base * 3 !default;
@@ -78,11 +74,16 @@ $body-bg: #f6f8fa;
 
 $accordion-color: #424242;
 $accordion-button-bg: #ffffff;
-$accordion-bg: #ffffff;
+$accordion-bg: #f7f8fa;
 $accordion-button-active-bg: tint-color(#0DC0DC, 90%);
 $accordion-button-active-color: shade-color(#424242, 10%);
 $accordion-button-focus-border-color: #424242;
 $accordion-button-focus-box-shadow: #424242;
+
+@import "node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/mixins";
+@import "node_modules/bootstrap/scss/maps";
+@import "node_modules/bootstrap/scss/utilities";
 
 // scss-docs-start import-stack
 // Configuration

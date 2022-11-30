@@ -3,7 +3,7 @@ import { Box, cx, React, styled, useState } from '@common'
 import '../../src/index.css'
 import '../../src/styles/main.scss'
 import { colors, media } from '../../src/theme';
-import { Footer, Icon } from '@components';
+import { Funders, Icon } from '@components';
 import 'bootstrap/dist/js/bootstrap.min'
 import {
     alumni,
@@ -22,11 +22,13 @@ import chevronUp from '@iconify-icons/bi/chevron-up';
 import { Button, Modal } from '@restart/ui';
 import { useIsMobileDevice } from '@lib';
 import Accordion from 'react-bootstrap/Accordion';
+import { useRef } from 'react';
 
 export const ResearchHomepage = () => {
-    return (<div css={{ backgroundColor: colors.white, fontSize: '1rem', lineHeight: 1.5 }}>
-        <style>
-            {`
+    return (
+        <div css={{ backgroundColor: colors.white, fontSize: '1rem', lineHeight: 1.5 }}>
+            <style>
+                {`
                 .nav-tabs .nav-link.active {
                     color: #495057;
                     background-color: rgba(0,0,0,0) !important;
@@ -34,16 +36,18 @@ export const ResearchHomepage = () => {
                     border-color: rgba(0,0,0,0) rgba(0,0,0,0) #63A524 rgba(0,0,0,0);
                 }
             `}
-        </style>
+            </style>
 
-        <Header></Header>
-        <Banner></Banner>
-        <ColorBar></ColorBar>
-        <ResearchSection></ResearchSection>
-        <Publications></Publications>
-        <MembersSection></MembersSection>
-        <Footer includeFunders></Footer>
-    </div>)
+            <Header></Header>
+            <Banner></Banner>
+            <ColorBar></ColorBar>
+            <ResearchSection></ResearchSection>
+            <Publications></Publications>
+            <MembersSection></MembersSection>
+            <Funders></Funders>
+            <ContactUs></ContactUs>
+        </div>
+    )
 }
 
 export const Header = () => (
@@ -59,13 +63,13 @@ export const Header = () => (
 )
 
 export const Banner = () => (
-    <div className="py-2" css={{ backgroundColor: colors.lightTeal }}>
-        <Box direction={{ mobile: 'column' }} className='container align-items-center' gap='xlarge'>
-            <h3 className='fw-bold text-center' css={{ color: colors.blackText, flex: 1 }}>
+    <div className="py-4" css={{ backgroundColor: colors.lightTeal }}>
+        <Box direction={{ mobile: 'column' }} className='container align-items-center' gap='medium'>
+            <h4 className='fw-bold text-center' css={{ color: colors.blackText, flex: 1 }}>
                 Calling all learning researchers!
-            </h3>
+            </h4>
             <Box align={{ mobile: 'center' }} direction='column' css={{ flex: 4 }}>
-                <p>Learn about the research workflow on OpenStax Kinetic during office hours hosted with IES!</p>
+                <>Learn about the research workflow on OpenStax Kinetic during office hours hosted with IES!</>
                 <a className='text-decoration-none' href='https://ies.ed.gov/funding/technicalassistance.asp' target='_blank'>
                     <Box align='center'>
                         IES Office Hours
@@ -111,15 +115,17 @@ export const ColorBar = () => (
 export const ResearchSection = () => {
     const mobile = useIsMobileDevice();
     return (
-        <div className='container py-5'>
+        <div className='container py-4'>
             <h2 className='py-2'>Areas of Research Focus</h2>
-            <p>
+            {
+                mobile && <p>
                 Our team has significant expertise in <strong>learning science, education research, and AI/ML
                 in education.</strong> We use a multidisciplinary approach to examine who our learners are,
                 what are they learning, and how are they learning; to provide appropriate supports when and
                 where learners need them. To enable large-scale rapid cycle research, we are developing Kinetic,
                 a research infrastructure connecting researchers with adult higher ed learners in the US.
-            </p>
+                </p>
+            }
             {mobile ? <MobileResearchFocusAreas/> : <ResearchFocusAreas/>}
         </div>
     )
@@ -149,18 +155,20 @@ export const ResearchFocusAreas = () => (
         </ul>
         <div className="tab-content py-3">
             <div className="tab-pane fade show active" id="kinetic" role="tabpanel" aria-labelledby="kinetic-tab">
-                <p>
-                    OpenStax Kinetic is a new research infrastructure that enables researchers to connect with real
-                    learners studying curricular content in authentic learning environments. Researchers can leverage
-                    Qualtrics to design a variety of studies (e.g., surveys, Randomized Control Trials, A/B/N tests)
-                    and make them available on Kinetic to <strong>US adult higher education learners.</strong>
-                    Kinetic researchers can effectively address 3 key questions in learning and how they interact:
-                </p>
-                <ol>
-                    <li><strong>Who is the learner?</strong></li>
-                    <li><strong>What are they learning?</strong></li>
-                    <li><strong>How are they learning?</strong></li>
-                </ol>
+                <div className='py-2'>
+                    <p className='fs-5'>
+                        OpenStax Kinetic is a new research infrastructure that enables researchers to connect with real
+                        learners studying curricular content in authentic learning environments. Researchers can leverage
+                        Qualtrics to design a variety of studies (e.g., surveys, Randomized Control Trials, A/B/N tests)
+                        and make them available on Kinetic to <strong>US adult higher education learners.</strong>
+                        Kinetic researchers can effectively address 3 key questions in learning and how they interact:
+                    </p>
+                    <ol>
+                        <li><strong>Who is the learner?</strong></li>
+                        <li><strong>What are they learning?</strong></li>
+                        <li><strong>How are they learning?</strong></li>
+                    </ol>
+                </div>
                 <hr/>
                 {researchFocusAreas['kinetic'].map((researchArea, index) =>
                     <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
@@ -176,6 +184,7 @@ export const ResearchFocusAreas = () => (
                     for learning analytics, and hybrid models for generation of knowledge graphs. We aim to use
                     a combination of these efforts to optimally personalize learning experiences for learners.
                 </p>
+                <hr/>
                 {researchFocusAreas['ai'].map((researchArea, index) =>
                     <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
                 )}
@@ -189,6 +198,7 @@ export const ResearchFocusAreas = () => (
                     to address them. Ultimately, we work with our product teams to build evidence-based learner
                     supports that are iteratively refined.
                 </p>
+                <hr/>
                 {researchFocusAreas['education'].map((researchArea, index) =>
                     <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
                 )}
@@ -283,15 +293,26 @@ export const ResearchFocusArea: React.FC<{researchArea: ResearchArea}> = ({ rese
 
 export const Publications = () => {
     const [viewAll, setViewAll] = useState(false);
-    const publicationList = viewAll ? publications : publications.slice(0, 5);
+    const initialCount = useIsMobileDevice() ? 3 : 5;
+    const publicationList = viewAll ? publications : publications.slice(0, initialCount);
+
+    const publicationsRef = useRef<null | HTMLDivElement>(null);
+    const scrollToPublications = () => {
+        publicationsRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
     return (
-        <Box direction='column' className='container'>
-            <h2>Publications</h2>
+        <Box direction='column' className='container mt-3'>
+            <h2 ref={publicationsRef}>Publications</h2>
             {publicationList.map((publication, index) =>
                 <PublicationItem key={index} publication={publication}/>
             )}
             <p className='py-4 align-self-center'
-                onClick={() => setViewAll(!viewAll)}
+                onClick={() => {
+                    if (viewAll) {
+                        scrollToPublications()
+                    }
+                    setViewAll(!viewAll)
+                }}
                 css={{ cursor: 'pointer', color: colors.linkText }}
             >
                 <Icon icon={viewAll ? chevronUp : chevronDown}></Icon>
@@ -303,8 +324,8 @@ export const Publications = () => {
 }
 
 export const PublicationItem: React.FC<{publication: Publication}> = ({ publication }) => (
-    <Box direction='column' margin={{ top: 'xlarge' }}>
-        <div>
+    <Box direction='column' css={{ paddingTop: '.75rem', paddingBottom: '.75rem' }}>
+        <div className='mb-1'>
             <a className='fw-bold' href={publication.pdf} target='_blank'>
                 {publication.title}
             </a>
@@ -315,7 +336,7 @@ export const PublicationItem: React.FC<{publication: Publication}> = ({ publicat
                 {publication.body}
             </span>
         </div>
-        <Box gap='xlarge' className='mt-1'>
+        <Box gap='xlarge' className='mt-2'>
             <a className='text-decoration-none' href={publication.pdf} target='_blank'>
                 <Box align='center'>
                     Pdf&nbsp;
@@ -342,32 +363,59 @@ const MemberGrid = styled.div({
     },
 });
 
-const AlumniGrid = styled.div`
-
-`;
+const AlumniGrid = styled(Box)({
+    flexDirection: 'column',
+    [media.mobile]: {
+        textAlign: 'center',
+    },
+});
 
 export const MembersSection = () => {
     const isMobile = useIsMobileDevice();
     return (
-        <div className='container' css={{ backgroundColor: colors.lightGrayBackground }}>
-            <h2 className='pt-4 pb-2'>Team Members</h2>
-            {isMobile ? <MobileMembers/> : <Members/>}
+        <div css={{ backgroundColor: colors.lightGrayBackground }}>
+            <div className='container py-3' >
+                <h2 className='pt-4 pb-2'>Team Members</h2>
+                {isMobile ? <MobileMembers/> : <Members/>}
+            </div>
         </div>
     )
 }
 
 export const MobileMembers = () => {
+    const [viewAll, setViewAll] = useState(false);
+    const membersRef = useRef<null | HTMLDivElement>(null);
+    const scrollToMembers = () => {
+        membersRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    const members = viewAll ? researchMembers['current'] : researchMembers['current'].slice(0, 4);
     return (
         <div>
-            <Accordion>
-                <Accordion.Item eventKey="0">
-                    <Accordion.Header>Current Members</Accordion.Header>
+            <Accordion defaultActiveKey="0">
+                <Accordion.Item eventKey="0" >
+                    <Accordion.Header ref={membersRef}>Current Members</Accordion.Header>
                     <Accordion.Body>
                         <MemberGrid>
-                            {researchMembers['current'].map((member, index) =>
+                            {members.map((member, index) =>
                                 <Member member={member} key={index}/>
                             )}
                         </MemberGrid>
+
+                        <p className='py-4 align-self-center text-center'
+                            onClick={() => {
+                                if (viewAll) {
+                                    scrollToMembers()
+                                }
+                                setViewAll(!viewAll)
+                            }}
+                            css={{ cursor: 'pointer', color: colors.linkText }}
+                        >
+                            <Icon icon={viewAll ? chevronUp : chevronDown}></Icon>
+                            &nbsp;
+                            {viewAll ? 'View Less' : 'View All Current Members'}
+                        </p>
+
                     </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="1">
@@ -383,9 +431,11 @@ export const MobileMembers = () => {
                 <Accordion.Item eventKey="2">
                     <Accordion.Header>Alumni</Accordion.Header>
                     <Accordion.Body>
-                        {alumni.map((alumnus, index) =>
-                            <Alumnus alumnus={alumnus} key={index}/>
-                        )}
+                        <AlumniGrid>
+                            {alumni.map((alumnus, index) =>
+                                <Alumnus alumnus={alumnus} key={index}/>
+                            )}
+                        </AlumniGrid>
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
@@ -446,8 +496,8 @@ export const Member: React.FC<{member: ResearchMember}> = ({ member }) => {
     const [show, setShow] = useState(false);
     return (
         <Box direction='column' align='center' className='text-center'>
-            <img alt={member.firstName} src={member.image}/>
-            <Button as='a' type='button' onClick={() => setShow(true)}>
+            <img alt={member.firstName} src={member.image} onClick={() => setShow(true)}/>
+            <Button className='mt-2' as='a' type='button' onClick={() => setShow(true)}>
                 {member.firstName}
             </Button>
             <small>{member.title}</small>
@@ -471,7 +521,7 @@ export const Member: React.FC<{member: ResearchMember}> = ({ member }) => {
                         width: '90%',
                     },
                 }}>
-                    <div className="modal-content p-2 overflow-scroll">
+                    <div className="modal-content overflow-auto" css={{ padding: '1.75rem' }}>
                         <MemberDetails member={member}/>
                         <Icon icon="x" height={30} onClick={() => setShow(false)} css={{
                             position: 'absolute',
@@ -487,7 +537,7 @@ export const Member: React.FC<{member: ResearchMember}> = ({ member }) => {
 
 export const MemberDetails: React.FC<{member: ResearchMember}> = ({ member }) => {
     return (
-        <Box>
+        <Box css={{ fontSize: 15 }}>
             <Box direction='column' gap='medium'>
                 <MemberInfo member={member}/>
                 <MemberEducation member={member}/>
@@ -512,8 +562,8 @@ const MemberImage = styled.img({
 export const MemberInfo: React.FC<{member: ResearchMember}> = ({ member }) => {
     return (
         <Box align='center'>
-            <MemberImage className='mx-1' src={member.image} alt={member.firstName}/>
-            <Box direction='column'>
+            <MemberImage src={member.image} alt={member.firstName}/>
+            <Box direction='column' margin={{ left: '1.5rem' }}>
                 <h4>{member.firstName} {member.lastName}</h4>
                 <p css={{ color: colors.grayText }}>
                     {member.title}
@@ -575,4 +625,22 @@ export const Alumnus: React.FC<{alumnus: AlumnusMember}> = ({ alumnus }) => (
         <a css={{ flex: 1 }} href={alumnus.linkedin}>{alumnus.name}</a>
         <p css={{ flex: 3, color: colors.grayText }}>{alumnus.title}</p>
     </Box>
+)
+
+export const ContactUs = () => (
+    <div css={{ backgroundColor: colors.lightTeal }}>
+        <Box className='container py-4' direction={{ mobile: 'column' }} align='center' justify='center' gap='large'>
+            <h4>Connect with our Research Team</h4>
+            <Button as='a'
+                href='https://riceuniversity.co1.qualtrics.com/jfe/form/SV_6EbRsmpDb2Hs69w?jfefe=new'
+                target='_blank'
+                className='btn btn-lg'
+                css={{
+                    color: colors.white,
+                    backgroundColor: colors.primaryButton,
+                }}>
+                Contact Us
+            </Button>
+        </Box>
+    </div>
 )
