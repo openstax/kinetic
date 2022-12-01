@@ -155,7 +155,7 @@ export const ResearchFocusAreas = () => (
         <div className="tab-content py-3">
             <div className="tab-pane fade show active" id="kinetic" role="tabpanel" aria-labelledby="kinetic-tab">
                 <div className='py-2'>
-                    <p className='fs-5'>
+                    <p>
                         OpenStax Kinetic is a new research infrastructure that enables researchers to connect with real
                         learners studying curricular content in authentic learning environments. Researchers can leverage
                         Qualtrics to design a variety of studies (e.g., surveys, Randomized Control Trials, A/B/N tests)
