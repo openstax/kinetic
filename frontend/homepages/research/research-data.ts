@@ -23,12 +23,12 @@ import Sabitha from './images/members/Sabitha.svg';
 import Shashank from './images/members/Shashank.svg';
 import Viki from './images/members/Viki.svg';
 import Zihan from './images/members/Zihan Liu.svg';
-import UnderstandingLearners from './images/research-areas/understanding-learners.svg';
-import Kinetic from './images/research-areas/kinetic.svg';
-import LanguageModels from './images/research-areas/language-models.svg';
-import Ontology from './images/research-areas/ontology.svg';
-import Raise from './images/research-areas/raise.svg';
-import Equip from './images/research-areas/equip.svg';
+import UnderstandingLearners from './images/landing/understanding-learners.svg';
+import Kinetic from './images/landing/kinetic.svg';
+import LanguageModels from './images/landing/language-models.svg';
+import Ontology from './images/landing/ontology.svg';
+import Raise from './images/landing/raise.svg';
+import Equip from './images/landing/equip.svg';
 
 export type Publication = {
     date: string;

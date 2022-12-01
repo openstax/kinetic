@@ -50,8 +50,8 @@ export const Funders = () => {
                     </Box>
 
                     <div>
-                        <a href="https://openstax.org/foundation" className="mb-2">
-                            View Other Philanthropic Supporters
+                        <a href="https://openstax.org/foundation" className="mb-2" css={{ color: colors.linkText }}>
+                            <h5>View Other Philanthropic Supporters</h5>
                         </a>
 
                         <p className="x-small" css={{ color: colors.grayText }}>

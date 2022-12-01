@@ -16,17 +16,17 @@ import {
     researchMembers,
 } from './research-data';
 import boxArrowInUpRight from '@iconify-icons/bi/box-arrow-in-up-right';
-import HowManyLettersYouRemember from '../../src/components/study-card-images/HowManyLettersYouRemember';
 import chevronDown from '@iconify-icons/bi/chevron-down';
 import chevronUp from '@iconify-icons/bi/chevron-up';
 import { Button, Modal } from '@restart/ui';
 import { useIsMobileDevice } from '@lib';
 import Accordion from 'react-bootstrap/Accordion';
 import { useRef } from 'react';
+import BannerImage from './images/landing/banner-image.svg';
 
 export const ResearchHomepage = () => {
     return (
-        <div css={{ backgroundColor: colors.white, fontSize: '1rem', lineHeight: 1.5 }}>
+        <div css={{ backgroundColor: colors.white, fontSize: '1rem', lineHeight: 1.5, fontFamily: 'Helvetica Neue' }}>
             <style>
                 {`
                 .nav-tabs .nav-link.active {
@@ -56,8 +56,7 @@ export const Header = () => (
             <h1 className='fw-bolder' css={{ color: colors.white, flex: 3 }}>
                 Advancing multi-disciplinary research to improve learner success.
             </h1>
-            {/* TODO Update with correct image */}
-            <HowManyLettersYouRemember css={{ flex: 2 }}/>
+            <img src={BannerImage} alt='banner-image' css={{ flex: 2 }}/>
         </Box>
     </div>
 )
@@ -87,12 +86,12 @@ export const ColorBar = () => (
         <span css={{
             backgroundColor: colors.orange,
             height: 10,
-            width: '36%',
+            width: '35%',
         }}></span>
         <span css={{
             backgroundColor: colors.purple,
             height: 10,
-            width: '16%',
+            width: '15%',
         }}></span>
         <span css={{
             backgroundColor: colors.red,
@@ -102,12 +101,12 @@ export const ColorBar = () => (
         <span css={{
             backgroundColor: colors.yellow,
             height: 10,
-            width: '20%',
+            width: '25%',
         }}></span>
         <span css={{
             backgroundColor: colors.lightBlue,
             height: 10,
-            width: '18%',
+            width: '15%',
         }}></span>
     </Box>
 )
@@ -137,7 +136,7 @@ export const ResearchFocusAreas = () => (
             <li className="nav-item" role="presentation">
                 <button className="nav-link active" id="kinetic-tab" data-bs-toggle="tab" data-bs-target="#kinetic"
                     type="button" role="tab" aria-controls="kinetic" aria-selected="true">
-                    Research on OpenStax Kinetic
+                    Learning Research on OpenStax Kinetic
                 </button>
             </li>
             <li className="nav-item" role="presentation">
@@ -575,7 +574,7 @@ export const MemberInfo: React.FC<{member: ResearchMember}> = ({ member }) => {
 
 export const MemberEducation: React.FC<{member: ResearchMember}> = ({ member }) => {
     if (!member.education) {
-        return <></>;
+        return null;
     }
     return (
         <Box direction='column'>
@@ -591,7 +590,7 @@ export const MemberEducation: React.FC<{member: ResearchMember}> = ({ member }) 
 
 export const MemberResearchInterest: React.FC<{member: ResearchMember}> = ({ member }) => {
     if (!member.researchInterest) {
-        return <></>;
+        return null;
     }
     return (
         <Box direction='column'>
@@ -622,7 +621,7 @@ export const MemberLinks: React.FC<{member: ResearchMember}> = ({ member }) => {
 
 export const Alumnus: React.FC<{alumnus: AlumnusMember}> = ({ alumnus }) => (
     <Box direction={{ mobile: 'column' }} justify='center'>
-        <a css={{ flex: 1 }} href={alumnus.linkedin}>{alumnus.name}</a>
+        <a css={{ flex: 1 }} href={alumnus.linkedin} target='_blank'>{alumnus.name}</a>
         <p css={{ flex: 3, color: colors.grayText }}>{alumnus.title}</p>
     </Box>
 )
@@ -638,6 +637,10 @@ export const ContactUs = () => (
                 css={{
                     color: colors.white,
                     backgroundColor: colors.primaryButton,
+                    ':hover': {
+                        color: colors.white,
+                        backgroundColor: colors.primaryButton,
+                    },
                 }}>
                 Contact Us
             </Button>
