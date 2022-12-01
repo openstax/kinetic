@@ -15,7 +15,7 @@
     "test:watch": "chokidar 'specs/*.ts' --initial bin/env -c 'yarn run playwright test {path}'",
     "lint": "eslint src",
     "pf": "run-p typecheck lint",
-    "page:research:copy": "ts-node --esm homepages/research/package.tsx",
+    "page:research:copy": "./bin/vite-run homepages/research/package.tsx",
     "page:research:dev": "yarn start --open /homepages/research/",
     "typecheck": "tsc --noEmit"
   },

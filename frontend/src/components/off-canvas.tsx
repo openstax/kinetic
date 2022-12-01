@@ -1,18 +1,21 @@
 import { React, cx, useCallback, useState, useMemo, useEffect } from '@common'
 import { Icon, Box } from '@components'
 import { useEventListenerRef, useForkRef } from 'rooks'
-import BSOffcanvas from 'bootstrap/js/dist/offcanvas'
 import { uniqueId } from 'lodash-es'
 
 const useOffCanvas = ({ show, onHide }: { show: boolean, onHide?(): void }) => {
     const [isVisible, setVisible] = useState(false)
-    const [bs, setBs] = useState<BSOffcanvas | null>(null)
+    const [bsOffCanvas, setBSOffCanvas] = useState<any>()
+    useEffect(() => {
+        import('bootstrap/js/dist/offcanvas').then(setBSOffCanvas)
+    }, [])
+    const [bs, setBs] = useState<any | null>(null)
     const cbRef = useCallback((el: HTMLElement | null) => {
-        if (!el) return
-        const bs = BSOffcanvas.getOrCreateInstance(el)
+        if (!el || !bsOffCanvas) return
+        const bs = bsOffCanvas.getOrCreateInstance(el)
         bs
         setBs(bs)
-    }, [setBs])
+    }, [setBs, bsOffCanvas])
 
     const close = useCallback(() => {
         setVisible(false)
@@ -30,7 +33,7 @@ const useOffCanvas = ({ show, onHide }: { show: boolean, onHide?(): void }) => {
     useEffect(() => {
         if (!bs) return
         return () => bs.hide()
-    },[bs])
+    }, [bs])
 
     const eventRef = useEventListenerRef('hidden.bs.offcanvas', () => onHide?.())
     const ref = useForkRef(cbRef, eventRef)

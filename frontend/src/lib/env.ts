@@ -1,10 +1,14 @@
+
+const IS_SSR = Boolean(import.meta.env.SSR)
+
 const IS_DEV_MODE = import.meta.env.MODE == 'development'
-const IS_LOCAL = window.location.hostname == 'localhost'
+const IS_LOCAL = IS_SSR ? false : window.location.hostname == 'localhost'
 const API_ADDRESS = IS_LOCAL ? 'http://localhost:4006' : ''
 const API_VERSION = 1
-const IS_PRODUCTION = (window.location.host == 'kinetic.openstax.org')
+const IS_PRODUCTION = IS_SSR ? true : (window.location.host == 'kinetic.openstax.org')
 
 export const ENV = {
+    IS_SSR,
     IS_DEV_MODE,
     IS_PRODUCTION,
     IS_LOCAL,
@@ -18,7 +22,9 @@ export const ENV = {
     SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN || '',
 }
 
-window._MODELS = window._MODELS || {}
-window._MODELS.env = ENV
+if (!IS_SSR) {
+        window._MODELS = window._MODELS || {}
+        window._MODELS.env = ENV
+}
 
 Object.freeze(ENV)

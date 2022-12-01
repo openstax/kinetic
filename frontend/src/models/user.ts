@@ -12,8 +12,13 @@ export interface UserPayload {
 export class User {
 
     static bootstrap(env: EnvironmentUser) {
-        window._MODELS = window._MODELS || {}
-        const user = window._MODELS.user || (window._MODELS.user = new User())
+        let user: User
+        if (ENV.IS_SSR) {
+            user = new User()
+        } else {
+            window._MODELS = window._MODELS || {}
+            user = window._MODELS.user || (window._MODELS.user = new User())
+        }
         user.id = env.userId
         user.isAdmin = env.isAdministrator || false
         user.isResearcher = env.isResearcher || false
@@ -28,7 +33,7 @@ export class User {
     isResearcher: boolean = false
     name: string = ''
 
-    constructor(attrs?:any) {
+    constructor(attrs?: any) {
         if (attrs) {
             this.update(attrs)
         }
@@ -67,5 +72,7 @@ export class User {
 }
 
 export const ANON_USER = new User()
-window._MODELS = window._MODELS || {}
-window._MODELS.user = ANON_USER
+if (!ENV.IS_SSR) {
+    window._MODELS = window._MODELS || {}
+    window._MODELS.user = ANON_USER
+}
