@@ -7,7 +7,7 @@ require 'rails'
 require 'active_model/railtie'
 require 'active_job/railtie'
 require 'active_record/railtie'
-# require 'active_storage/engine'
+require 'active_storage/engine'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
 # require 'action_mailbox/engine'
@@ -21,7 +21,7 @@ require 'action_mailer/railtie'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-Dotenv.load('/etc/.env', '.env')
+Dotenv.load('/etc/.env', '.env', '.env.local')
 
 module Kinetic
   def self.allow_stubbed_authentication?
@@ -36,6 +36,8 @@ module Kinetic
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
 
+    config.active_storage.routes_prefix = '/files'
+    # config.active_storage.draw_routes = false
     # config.action_controller.default_protect_from_forgery = false
     # Configuration for the application, engines, and railties goes here.
     #

@@ -97,6 +97,9 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
+    activesupport_cache_database (0.3.0)
+      activerecord (>= 6.0)
+      activesupport (>= 6.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     aes_key_wrap (1.1.0)
@@ -111,9 +114,16 @@ GEM
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
+    aws-sdk-kms (1.58.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-route53 (1.62.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.116.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.4)
     aws-sdk-ssm (1.137.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
@@ -199,9 +209,12 @@ GEM
       moneta
       multi_json (>= 1.9.2)
       webrick
+    http-2-next (0.5.1)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
+    httpx (0.21.1)
+      http-2-next (>= 0.4.1)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
@@ -480,7 +493,9 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  activesupport_cache_database
   aws-sdk-route53
+  aws-sdk-s3 (~> 1.116)
   aws-sdk-ssm
   bootsnap (>= 1.4.4)
   byebug
@@ -488,6 +503,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
+  httpx (~> 0.21)
   listen (~> 3.3)
   lograge
   mailgun-ruby (~> 1.2.5)

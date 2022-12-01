@@ -1,0 +1,1149 @@
+{
+  "meta": {
+    "httpStatus": "200 - OK",
+    "requestId": "08deb460-4746-4f54-bd96-534631f815b5"
+  },
+  "result": {
+    "QuestionCount": "15",
+    "SurveyOptions": {
+      "BackButton": "true",
+      "SaveAndContinue": "true",
+      "SurveyProtection": "PublicSurvey",
+      "BallotBoxStuffingPrevention": "false",
+      "NoIndex": "Yes",
+      "SecureResponseFiles": "true",
+      "SurveyExpiration": "None",
+      "SurveyTermination": "DefaultMessage",
+      "Header": "",
+      "Footer": "",
+      "ProgressBarDisplay": "NoText",
+      "PartialData": "+1 month",
+      "ValidationMessage": null,
+      "PreviousButton": "Back",
+      "NextButton": "Next ",
+      "SurveyTitle": "Qualtrics Survey | Qualtrics Experience Management",
+      "SkinLibrary": "riceuniversity",
+      "SkinType": "templated",
+      "Skin": {
+        "brandingId": "5254102063",
+        "templateId": "*base",
+        "overrides": {
+          "progressBar": {
+            "position": "bottom"
+          },
+          "logo": {
+            "url": "https://riceuniversity.co1.qualtrics.com/CP/Graphic.php?IM=IM_erscOeGLT5k6OzA",
+            "banner": true
+          },
+          "colors": {
+            "primary": "#151B2C"
+          }
+        }
+      },
+      "NewScoring": 1,
+      "EOSMessage": "MS_bwNc1U7kzlZJ1r0",
+      "ShowExportTags": "false",
+      "CollectGeoLocation": "false",
+      "SurveyMetaDescription": "The most powerful, simple and trusted way to gather experience data. Start your journey to experience management and try a free account today.",
+      "PasswordProtection": "No",
+      "AnonymizeResponse": "No",
+      "RefererCheck": "No",
+      "BallotBoxStuffingPreventionBehavior": null,
+      "BallotBoxStuffingPreventionMessage": null,
+      "BallotBoxStuffingPreventionMessageLibrary": null,
+      "BallotBoxStuffingPreventionURL": null,
+      "RecaptchaV3": "false",
+      "ConfirmStart": false,
+      "AutoConfirmStart": false,
+      "RelevantID": "false",
+      "RelevantIDLockoutPeriod": "+30 days",
+      "UseCustomSurveyLinkCompletedMessage": null,
+      "SurveyLinkCompletedMessage": null,
+      "SurveyLinkCompletedMessageLibrary": null,
+      "ResponseSummary": "No",
+      "EOSMessageLibrary": "UR_3WatUrpqd1HbVNX",
+      "EOSRedirectURL": "https://dev.labs.openstax.org/study/land/1",
+      "EmailThankYou": "false",
+      "ThankYouEmailMessageLibrary": null,
+      "ThankYouEmailMessage": null,
+      "ValidateMessage": "false",
+      "ValidationMessageLibrary": null,
+      "InactiveSurvey": "DefaultMessage",
+      "PartialDeletion": null,
+      "PartialDataCloseAfter": "LastActivity",
+      "InactiveMessageLibrary": null,
+      "InactiveMessage": null,
+      "AvailableLanguages": {
+        "EN": []
+      },
+      "CustomStyles": [],
+      "SurveyName": "Kinetic-Demographic Questions",
+      "ProtectSelectionIds": true,
+      "SurveyLanguage": "EN",
+      "ActiveResponseSet": "RS_0P0pTKJgnvQ3dwq",
+      "SurveyStartDate": null,
+      "SurveyExpirationDate": null,
+      "SurveyCreationDate": "2021-08-23T14:35:55Z"
+    },
+    "SurveyID": "SV_6xGQzj4OBJnxGuy",
+    "SurveyName": "Kinetic-Demographic Questions",
+    "SurveyStatus": "Active",
+    "LastModified": "2022-06-24T14:37:12Z",
+    "BrandID": "riceuniversity",
+    "OwnerID": "UR_3WatUrpqd1HbVNX",
+    "LastAccessed": null,
+    "CreatorID": "UR_3WatUrpqd1HbVNX",
+    "LastActivated": "2021-08-23T14:49:41Z",
+    "Questions": {
+      "QID15": {
+        "QuestionText": "Click to write the question text",
+        "DefaultChoices": false,
+        "DataExportTag": "Q15",
+        "QuestionID": "QID15",
+        "QuestionType": "Meta",
+        "Selector": "Browser",
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText"
+        },
+        "QuestionDescription": "Click to write the question text",
+        "Choices": {
+          "1": {
+            "Display": "Browser",
+            "TextEntry": 1
+          },
+          "2": {
+            "Display": "Version",
+            "TextEntry": 1
+          },
+          "3": {
+            "Display": "Operating System",
+            "TextEntry": 1
+          },
+          "4": {
+            "Display": "Screen Resolution",
+            "TextEntry": 1
+          },
+          "5": {
+            "Display": "Flash Version",
+            "TextEntry": 1
+          },
+          "6": {
+            "Display": "Java Support",
+            "TextEntry": 1
+          },
+          "7": {
+            "Display": "User Agent",
+            "TextEntry": 1
+          }
+        },
+        "Validation": "None",
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 4,
+        "NextAnswerId": 1,
+        "QuestionText_Unsafe": "Click to write the question text"
+      },
+      "QID4": {
+        "QuestionText": "Did your parents attend college?",
+        "DefaultChoices": false,
+        "DataExportTag": "first-gen",
+        "QuestionType": "MC",
+        "Selector": "SAVR",
+        "SubSelector": "TX",
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText"
+        },
+        "QuestionDescription": "Did your parents attend college?",
+        "Choices": {
+          "3": {
+            "Display": "One of my parents attended college"
+          },
+          "4": {
+            "Display": "Both of my parents attended college"
+          },
+          "5": {
+            "Display": "Neither of my parents attended college"
+          },
+          "6": {
+            "Display": "Unsure"
+          },
+          "7": {
+            "Display": "Prefer not to say"
+          }
+        },
+        "ChoiceOrder": [
+          "3",
+          "4",
+          "5",
+          "6",
+          "7"
+        ],
+        "Validation": {
+          "Settings": {
+            "ForceResponse": "ON",
+            "ForceResponseType": "ON",
+            "Type": "None"
+          }
+        },
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 8,
+        "NextAnswerId": 1,
+        "QuestionID": "QID4",
+        "DataVisibility": {
+          "Private": false,
+          "Hidden": false
+        },
+        "QuestionText_Unsafe": "Did your parents attend college?"
+      },
+      "QID7": {
+        "QuestionText": "Have you ever qualified for free or reduced lunches through your school?",
+        "DefaultChoices": false,
+        "DataExportTag": "lunches",
+        "QuestionType": "MC",
+        "Selector": "SAVR",
+        "SubSelector": "TX",
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText"
+        },
+        "QuestionDescription": "Have you ever qualified for free or reduced lunches through your school?",
+        "Choices": {
+          "1": {
+            "Display": "Yes"
+          },
+          "2": {
+            "Display": "No"
+          },
+          "9": {
+            "Display": "Prefer not to say"
+          }
+        },
+        "ChoiceOrder": [
+          "1",
+          "2",
+          "9"
+        ],
+        "Validation": {
+          "Settings": {
+            "ForceResponse": "ON",
+            "ForceResponseType": "ON",
+            "Type": "None"
+          }
+        },
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 10,
+        "NextAnswerId": 1,
+        "QuestionID": "QID7",
+        "DataVisibility": {
+          "Private": false,
+          "Hidden": false
+        },
+        "QuestionText_Unsafe": "Have you ever qualified for free or reduced lunches through your school?"
+      },
+      "QID13": {
+        "QuestionText": "How did you find Kinetic?",
+        "DefaultChoices": false,
+        "DataExportTag": "kinetic_source",
+        "QuestionType": "MC",
+        "Selector": "SAVR",
+        "SubSelector": "TX",
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText"
+        },
+        "QuestionDescription": "How did you find Kinetic?",
+        "Choices": {
+          "1": {
+            "Display": "Teacher directed me"
+          },
+          "2": {
+            "Display": "Clicked a button on the OpenStax textbook"
+          },
+          "3": {
+            "Display": "From email"
+          },
+          "4": {
+            "Display": "From social media"
+          },
+          "5": {
+            "Display": "Heard from a friend/peer"
+          },
+          "6": {
+            "Display": "Other",
+            "TextEntry": "true",
+            "TextEntrySize": "Medium"
+          }
+        },
+        "ChoiceOrder": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6"
+        ],
+        "Validation": {
+          "Settings": {
+            "ForceResponse": "OFF",
+            "Type": "None"
+          }
+        },
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 7,
+        "NextAnswerId": 1,
+        "QuestionID": "QID13",
+        "DataVisibility": {
+          "Private": false,
+          "Hidden": false
+        },
+        "QuestionText_Unsafe": "How did you find Kinetic?"
+      },
+      "QID1": {
+        "QuestionText": "It is very important to us to ensure that we are providing equal access and opportunities to learners of all backgrounds. Your responses will help us understand where we can improve.&nbsp;\n<div><br></div>\n\n<div>\n<div>Please answer these brief questions about yourself as a student.</div>\n</div>",
+        "DefaultChoices": false,
+        "DataExportTag": "intro",
+        "QuestionID": "QID1",
+        "QuestionType": "DB",
+        "Selector": "TB",
+        "DataVisibility": {
+          "Private": false,
+          "Hidden": false
+        },
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText",
+          "TextPosition": "inline"
+        },
+        "QuestionDescription": "It is very important to us to ensure that we are providing equal access and opportunities to lear...",
+        "ChoiceOrder": [],
+        "Validation": {
+          "Settings": {
+            "Type": "None"
+          }
+        },
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 2,
+        "NextAnswerId": 6,
+        "QuestionText_Unsafe": "It is very important to us to ensure that we are providing equal access and opportunities to learners of all backgrounds. Your responses will help us understand where we can improve.&nbsp;\n<div><br></div>\n\n<div>\n<div>Please answer these brief questions about yourself as a student.</div>\n</div>"
+      },
+      "QID11": {
+        "QuestionText": "Please read the consent form below and answer the consent question. By selecting that you consent, you agree that the information below has been explained to you and all your current questions have been answered. You understand that you may ask questions about any aspect of this research study during the course of the study and in the future. By selecting that you consent on this form, you agree to participate in this research study.\n<div>&nbsp;</div>\n\n<div>&nbsp;</div>\n<iframe width=\"720\" src=\"https://docs.google.com/document/d/13EcFwMDaNAJjS6E2KTJfu8STkoLvD8QX/edit;embedded=true\" height=\"420\"></iframe>Click to write the question text",
+        "DataExportTag": "Q11",
+        "QuestionType": "MC",
+        "Selector": "SAVR",
+        "SubSelector": "TX",
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText"
+        },
+        "QuestionDescription": "Please read the consent form below and answer the consent question. By selecting that you consent...",
+        "Choices": {
+          "1": {
+            "Display": "I consent"
+          },
+          "2": {
+            "Display": "I do not consent"
+          }
+        },
+        "ChoiceOrder": [
+          "1",
+          "2"
+        ],
+        "Validation": {
+          "Settings": {
+            "ForceResponse": "OFF",
+            "Type": "None"
+          }
+        },
+        "Language": [],
+        "NextChoiceId": 4,
+        "NextAnswerId": 1,
+        "QuestionID": "QID11",
+        "QuestionText_Unsafe": "Please read the consent form below and answer the consent question. By selecting that you consent, you agree that the information below has been explained to you and all your current questions have been answered. You understand that you may ask questions about any aspect of this research study during the course of the study and in the future. By selecting that you consent on this form, you agree to participate in this research study.\n<div>&nbsp;</div>\n\n<div>&nbsp;</div>\n<iframe width=\"720\" src=\"https://docs.google.com/document/d/13EcFwMDaNAJjS6E2KTJfu8STkoLvD8QX/edit;embedded=true\" height=\"420\"></iframe>Click to write the question text"
+      },
+      "QID12": {
+        "QuestionText": "<div>Please read the consent form linked <a target=\"_blank\" rel=\"noopener\" href=\"https://drive.google.com/file/d/1EybpwE6zLOGsMG5xRXTarI0-_L3SCZ9X/view?usp=sharing\">here </a> and answer the consent question. Feel free to download a copy for your records.</div><div>&nbsp;</div>\n\n<div>By selecting that you consent, you agree that the information below has been explained to you and all your current questions have been answered. You understand that you may ask questions about any aspect of this research study during the course of the study and in the future. By selecting that you consent on this form, you agree to participate in this research study.&nbsp;</div>",
+        "DefaultChoices": false,
+        "DataExportTag": "consent_form",
+        "QuestionType": "MC",
+        "Selector": "SAVR",
+        "SubSelector": "TX",
+        "DataVisibility": {
+          "Private": false,
+          "Hidden": false
+        },
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText"
+        },
+        "QuestionDescription": "Please read the consent form linked here and answer the consent question. Feel free to download a...",
+        "Choices": {
+          "1": {
+            "Display": "I consent"
+          },
+          "2": {
+            "Display": "I do not consent"
+          }
+        },
+        "ChoiceOrder": [
+          1,
+          2
+        ],
+        "Validation": {
+          "Settings": {
+            "ForceResponse": "ON",
+            "ForceResponseType": "ON",
+            "Type": "None"
+          }
+        },
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 3,
+        "NextAnswerId": 1,
+        "QuestionID": "QID12",
+        "QuestionText_Unsafe": "<div>Please read the consent form linked <a target=\"_blank\" rel=\"noopener\" href=\"https://drive.google.com/file/d/1EybpwE6zLOGsMG5xRXTarI0-_L3SCZ9X/view?usp=sharing\">here </a> and answer the consent question. Feel free to download a copy for your records.</div><div>&nbsp;</div>\n\n<div>By selecting that you consent, you agree that the information below has been explained to you and all your current questions have been answered. You understand that you may ask questions about any aspect of this research study during the course of the study and in the future. By selecting that you consent on this form, you agree to participate in this research study.&nbsp;</div>"
+      },
+      "QID14": {
+        "QuestionText": "Timing",
+        "DefaultChoices": false,
+        "DataExportTag": "Q14",
+        "QuestionID": "QID14",
+        "QuestionType": "Timing",
+        "Selector": "PageTimer",
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText",
+          "MinSeconds": "0",
+          "MaxSeconds": "0"
+        },
+        "QuestionDescription": "Timing",
+        "Choices": {
+          "1": {
+            "Display": "First Click"
+          },
+          "2": {
+            "Display": "Last Click"
+          },
+          "3": {
+            "Display": "Page Submit"
+          },
+          "4": {
+            "Display": "Click Count"
+          }
+        },
+        "Validation": "None",
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 16,
+        "NextAnswerId": 1,
+        "QuestionText_Unsafe": "Timing"
+      },
+      "QID9": {
+        "QuestionText": "What is the highest grade or degree you have completed?",
+        "DefaultChoices": false,
+        "DataExportTag": "grade",
+        "QuestionType": "MC",
+        "Selector": "SAVR",
+        "SubSelector": "TX",
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText"
+        },
+        "QuestionDescription": "What is the highest grade or degree you have completed?",
+        "Choices": {
+          "4": {
+            "Display": "Have not completed high school"
+          },
+          "5": {
+            "Display": "High school diploma"
+          },
+          "6": {
+            "Display": "Associate’s degree or vocational certificate"
+          },
+          "7": {
+            "Display": "Bachelor’s degree"
+          },
+          "8": {
+            "Display": "Master’s degree or doctorate"
+          },
+          "9": {
+            "Display": "Prefer not to say"
+          }
+        },
+        "ChoiceOrder": [
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "Validation": {
+          "Settings": {
+            "ForceResponse": "ON",
+            "ForceResponseType": "ON",
+            "Type": "None"
+          }
+        },
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 10,
+        "NextAnswerId": 1,
+        "QuestionID": "QID9",
+        "DataVisibility": {
+          "Private": false,
+          "Hidden": false
+        },
+        "QuestionText_Unsafe": "What is the highest grade or degree you have completed?"
+      },
+      "QID6": {
+        "QuestionText": "What is the zip code of your primary residence? (Please enter 00000 if you prefer not to share or if you do not live in the US.)",
+        "DefaultChoices": false,
+        "DataExportTag": "zip",
+        "QuestionID": "QID6",
+        "QuestionType": "TE",
+        "Selector": "SL",
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText",
+          "InputWidth": 190,
+          "InputHeight": 29
+        },
+        "QuestionDescription": "What is the zip code of your primary residence? (Please enter 00000 if you prefer not to share or...",
+        "Validation": {
+          "Settings": {
+            "ForceResponse": "ON",
+            "ForceResponseType": "ON",
+            "Type": "ContentType",
+            "MinChars": "1",
+            "ContentType": "ValidZip",
+            "ValidDateType": "DateWithFormat",
+            "ValidPhoneType": "ValidUSPhone",
+            "ValidZipType": "ValidUSZip",
+            "ValidNumber": {
+              "Min": "",
+              "Max": "",
+              "NumDecimals": ""
+            }
+          }
+        },
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 4,
+        "NextAnswerId": 1,
+        "SearchSource": {
+          "AllowFreeResponse": "false"
+        },
+        "DataVisibility": {
+          "Private": false,
+          "Hidden": false
+        },
+        "QuestionText_Unsafe": "What is the zip code of your primary residence? (Please enter 00000 if you prefer not to share or if you do not live in the US.)"
+      },
+      "QID10": {
+        "QuestionText": "What is your current status? Check all that apply.",
+        "DefaultChoices": false,
+        "DataExportTag": "employed",
+        "QuestionType": "MC",
+        "Selector": "MAVR",
+        "SubSelector": "TX",
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText"
+        },
+        "QuestionDescription": "What is your current status? Check all that apply.",
+        "Choices": {
+          "4": {
+            "Display": "Student"
+          },
+          "5": {
+            "Display": "Employed"
+          },
+          "6": {
+            "Display": "Homemaker or caregiver"
+          },
+          "7": {
+            "Display": "Retired"
+          },
+          "8": {
+            "Display": "Other",
+            "TextEntry": "true"
+          },
+          "9": {
+            "Display": "Prefer not to say"
+          }
+        },
+        "ChoiceOrder": [
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "Validation": {
+          "Settings": {
+            "ForceResponse": "ON",
+            "ForceResponseType": "ON",
+            "Type": "None"
+          }
+        },
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 10,
+        "NextAnswerId": 1,
+        "QuestionID": "QID10",
+        "DataVisibility": {
+          "Private": false,
+          "Hidden": false
+        },
+        "QuestionText_Unsafe": "What is your current status? Check all that apply."
+      },
+      "QID3": {
+        "QuestionText": "What is your gender identity?",
+        "DefaultChoices": false,
+        "DataExportTag": "gender",
+        "QuestionType": "MC",
+        "Selector": "SAVR",
+        "SubSelector": "TX",
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText",
+          "Autoscale": {
+            "YScale": {
+              "Name": "maleFemale",
+              "Type": "likert",
+              "Reverse": false
+            }
+          }
+        },
+        "QuestionDescription": "What is your gender identity?",
+        "Choices": {
+          "1": {
+            "Display": "Male"
+          },
+          "2": {
+            "Display": "Female"
+          },
+          "3": {
+            "Display": "Non-binary / third gender"
+          },
+          "4": {
+            "Display": "Prefer not to say"
+          }
+        },
+        "ChoiceOrder": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "Validation": {
+          "Settings": {
+            "ForceResponse": "ON",
+            "ForceResponseType": "ON",
+            "Type": "None"
+          }
+        },
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 5,
+        "NextAnswerId": 1,
+        "QuestionID": "QID3",
+        "DataVisibility": {
+          "Private": false,
+          "Hidden": false
+        },
+        "QuestionText_Unsafe": "What is your gender identity?"
+      },
+      "QID8": {
+        "QuestionText": "What was the first language you learned to speak?",
+        "DefaultChoices": false,
+        "DataExportTag": "language",
+        "QuestionType": "MC",
+        "Selector": "SAVR",
+        "SubSelector": "TX",
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText"
+        },
+        "QuestionDescription": "What was the first language you learned to speak?",
+        "Choices": {
+          "1": {
+            "Display": "English"
+          },
+          "2": {
+            "Display": "Spanish"
+          },
+          "3": {
+            "Display": "Other",
+            "TextEntry": "true"
+          },
+          "7": {
+            "Display": "Prefer not to say"
+          }
+        },
+        "ChoiceOrder": [
+          "1",
+          "2",
+          "3",
+          "7"
+        ],
+        "Validation": {
+          "Settings": {
+            "ForceResponse": "ON",
+            "ForceResponseType": "ON",
+            "Type": "None"
+          }
+        },
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 8,
+        "NextAnswerId": 1,
+        "QuestionID": "QID8",
+        "DataVisibility": {
+          "Private": false,
+          "Hidden": false
+        },
+        "QuestionText_Unsafe": "What was the first language you learned to speak?"
+      },
+      "QID5": {
+        "QuestionText": "What year were you born?&nbsp;(Please enter 0000 if you prefer not to share.)",
+        "DefaultChoices": false,
+        "DataExportTag": "year",
+        "QuestionID": "QID5",
+        "QuestionType": "TE",
+        "Selector": "SL",
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText",
+          "InputWidth": 190,
+          "InputHeight": 29
+        },
+        "QuestionDescription": "What year were you born? (Please enter 0000 if you prefer not to share.)",
+        "Validation": {
+          "Settings": {
+            "ForceResponse": "ON",
+            "ForceResponseType": "ON",
+            "Type": "CustomValidation",
+            "MinChars": "0",
+            "TotalChars": "9",
+            "ContentType": null,
+            "ValidDateType": "DateWithFormat",
+            "ValidPhoneType": "ValidUSPhone",
+            "ValidZipType": "ValidUSZip",
+            "ValidNumber": {
+              "Min": "4",
+              "Max": "4",
+              "NumDecimals": "0"
+            },
+            "CustomValidation": {
+              "Logic": {
+                "0": {
+                  "0": {
+                    "QuestionID": "QID5",
+                    "QuestionIsInLoop": "no",
+                    "ChoiceLocator": "q://QID5/ChoiceTextEntryValue",
+                    "Operator": "MatchesRegex",
+                    "QuestionIDFromLocator": "QID5",
+                    "LeftOperand": "q://QID5/ChoiceTextEntryValue",
+                    "RightOperand": "^\\d{4}$",
+                    "Type": "Expression",
+                    "LogicType": "Question",
+                    "Description": "<span class=\"ConjDesc\">If</span> <span class=\"QuestionDesc\">What year were you born?&amp;nbsp;(Please enter 0000 if you prefer not to share.)</span> <span class=\"LeftOpDesc\">Text Response</span> <span class=\"OpDesc\">Matches Regex</span> <span class=\"RightOpDesc\"> ^\\d{4}$ </span>"
+                  },
+                  "Type": "If"
+                },
+                "Type": "BooleanExpression"
+              },
+              "Message": {
+                "messageID": "MS_d7nJ7aUwrigeviK",
+                "subMessageID": "VE_ERROR",
+                "libraryID": "UR_3WatUrpqd1HbVNX",
+                "description": "Error Text"
+              }
+            }
+          }
+        },
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 4,
+        "NextAnswerId": 1,
+        "SearchSource": {
+          "AllowFreeResponse": "false"
+        },
+        "DataVisibility": {
+          "Private": false,
+          "Hidden": false
+        },
+        "QuestionText_Unsafe": "What year were you born?&nbsp;(Please enter 0000 if you prefer not to share.)"
+      },
+      "QID2": {
+        "QuestionText": "Which racial/ethnic backgrounds do you identify as?",
+        "DefaultChoices": false,
+        "DataExportTag": "race",
+        "QuestionType": "MC",
+        "Selector": "MAVR",
+        "SubSelector": "TX",
+        "Configuration": {
+          "QuestionDescriptionOption": "UseText"
+        },
+        "QuestionDescription": "Which racial/ethnic backgrounds do you identify as?",
+        "Choices": {
+          "9": {
+            "Display": "White"
+          },
+          "10": {
+            "Display": "Black or African American"
+          },
+          "11": {
+            "Display": "American Indian or Alaska Native"
+          },
+          "12": {
+            "Display": "Asian"
+          },
+          "13": {
+            "Display": "Native Hawaiian or Pacific Islander"
+          },
+          "14": {
+            "Display": "Hispanic or Latinx"
+          },
+          "15": {
+            "Display": "Other"
+          },
+          "16": {
+            "Display": "Prefer not to say"
+          }
+        },
+        "ChoiceOrder": [
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16"
+        ],
+        "Validation": {
+          "Settings": {
+            "ForceResponse": "ON",
+            "ForceResponseType": "ON",
+            "Type": "None"
+          }
+        },
+        "GradingData": [],
+        "Language": [],
+        "NextChoiceId": 17,
+        "NextAnswerId": 1,
+        "QuestionID": "QID2",
+        "DataVisibility": {
+          "Private": false,
+          "Hidden": false
+        },
+        "QuestionText_Unsafe": "Which racial/ethnic backgrounds do you identify as?"
+      }
+    },
+    "Blocks": {
+      "BL_8vRtbeASa5fw5Se": {
+        "Type": "Default",
+        "Description": "Introduction",
+        "ID": "BL_8vRtbeASa5fw5Se",
+        "BlockElements": [
+          {
+            "Type": "Question",
+            "QuestionID": "QID1"
+          },
+          {
+            "Type": "Question",
+            "QuestionID": "QID15"
+          }
+        ],
+        "Options": {
+          "BlockLocking": "false",
+          "RandomizeQuestions": "false",
+          "BlockVisibility": "Expanded"
+        }
+      },
+      "BL_brbyKPn1n7Y2L9c": {
+        "Type": "Trash",
+        "Description": "Trash / Unused Questions",
+        "ID": "BL_brbyKPn1n7Y2L9c",
+        "BlockElements": [
+          {
+            "Type": "Question",
+            "QuestionID": "QID11"
+          },
+          {
+            "Type": "Question",
+            "QuestionID": "QID12"
+          },
+          {
+            "Type": "Question",
+            "QuestionID": "QID14"
+          }
+        ]
+      },
+      "BL_9SnRoK64I9xj9HM": {
+        "Type": "Standard",
+        "SubType": "",
+        "Description": "Financial Aid",
+        "ID": "BL_9SnRoK64I9xj9HM",
+        "BlockElements": [
+          {
+            "Type": "Question",
+            "QuestionID": "QID7"
+          }
+        ]
+      },
+      "BL_cBbnJX6iDJUtyZg": {
+        "Type": "Standard",
+        "SubType": "",
+        "Description": "Education",
+        "ID": "BL_cBbnJX6iDJUtyZg",
+        "BlockElements": [
+          {
+            "Type": "Question",
+            "QuestionID": "QID9"
+          },
+          {
+            "Type": "Page Break"
+          },
+          {
+            "Type": "Question",
+            "QuestionID": "QID4"
+          },
+          {
+            "Type": "Page Break"
+          },
+          {
+            "Type": "Question",
+            "QuestionID": "QID10"
+          }
+        ]
+      },
+      "BL_1C6BaRQ89gtgoFU": {
+        "Type": "Standard",
+        "SubType": "",
+        "Description": "Race/Age",
+        "ID": "BL_1C6BaRQ89gtgoFU",
+        "BlockElements": [
+          {
+            "Type": "Question",
+            "QuestionID": "QID5"
+          },
+          {
+            "Type": "Page Break"
+          },
+          {
+            "Type": "Question",
+            "QuestionID": "QID3"
+          },
+          {
+            "Type": "Page Break"
+          },
+          {
+            "Type": "Question",
+            "QuestionID": "QID2"
+          },
+          {
+            "Type": "Page Break"
+          },
+          {
+            "Type": "Question",
+            "QuestionID": "QID8"
+          }
+        ]
+      },
+      "BL_erZG426iLYJJGUS": {
+        "Type": "Standard",
+        "SubType": "",
+        "Description": "SES",
+        "ID": "BL_erZG426iLYJJGUS",
+        "BlockElements": [
+          {
+            "Type": "Question",
+            "QuestionID": "QID6"
+          }
+        ]
+      },
+      "BL_77FLNVZhgEOXrwy": {
+        "Type": "Standard",
+        "SubType": "",
+        "Description": "source",
+        "ID": "BL_77FLNVZhgEOXrwy",
+        "BlockElements": [
+          {
+            "Type": "Question",
+            "QuestionID": "QID13"
+          }
+        ]
+      }
+    },
+    "ResponseSets": {
+      "RS_0P0pTKJgnvQ3dwq": null
+    },
+    "SurveyFlow": {
+      "Type": "Root",
+      "FlowID": "FL_1",
+      "Flow": [
+        {
+          "Type": "Authenticator",
+          "FlowID": "FL_6",
+          "FilterDataFields": true,
+          "SSOOptions": {
+            "respondentMap": [
+              {
+                "key": "research_id",
+                "value": "research_id"
+              },
+              {
+                "key": "return_to_url",
+                "value": "return_to_url"
+              },
+              {
+                "key": "is_testing",
+                "value": "is_testing"
+              }
+            ],
+            "Type": "Token",
+            "token": {
+              "EncryptionMethod": "AES128",
+              "MacMethod": "md5",
+              "Leeway": 300,
+              "Key": "1wkgUd7A/kZFfroc"
+            },
+            "ldap": {
+              "Hostname": "ldap://",
+              "Port": "389",
+              "EmailField": "mail",
+              "Filter": "(sAMAccountName=%1)",
+              "FirstNameField": "givenname",
+              "LastNameField": "sn",
+              "ExternalDataReferenceField": ""
+            },
+            "UsePanel": "No",
+            "CaptureRespondentInfo": "Yes",
+            "UseSSO": "Yes",
+            "cas": []
+          },
+          "Options": {
+            "maxAttempts": 3,
+            "questionText": {
+              "SystemMessage": {
+                "Section": "ErrorCodes",
+                "Message": "EAUTH04"
+              }
+            },
+            "authenticationError": {
+              "SystemMessage": {
+                "Section": "ErrorCodes",
+                "Message": "EAUTH02"
+              }
+            },
+            "failedAuthenticationError": {
+              "SystemMessage": {
+                "Section": "ErrorCodes",
+                "Message": "EAUTH05"
+              }
+            },
+            "allowRetake": false,
+            "loadExistingSession": false,
+            "reauthenticateSession": false
+          },
+          "Flow": [
+            {
+              "Type": "EmbeddedData",
+              "FlowID": "FL_3",
+              "EmbeddedData": [
+                {
+                  "Description": "research_id",
+                  "Type": "Recipient",
+                  "Field": "research_id",
+                  "VariableType": "String",
+                  "DataVisibility": [],
+                  "AnalyzeText": false
+                },
+                {
+                  "Description": "return_to_url",
+                  "Type": "Recipient",
+                  "Field": "return_to_url",
+                  "VariableType": "String",
+                  "DataVisibility": [],
+                  "AnalyzeText": false
+                },
+                {
+                  "Description": "is_testing",
+                  "Type": "Recipient",
+                  "Field": "is_testing",
+                  "VariableType": "String",
+                  "DataVisibility": [],
+                  "AnalyzeText": false
+                }
+              ]
+            },
+            {
+              "Type": "Block",
+              "ID": "BL_8vRtbeASa5fw5Se",
+              "FlowID": "FL_2",
+              "Autofill": []
+            },
+            {
+              "Type": "Standard",
+              "ID": "BL_77FLNVZhgEOXrwy",
+              "FlowID": "FL_11",
+              "Autofill": []
+            },
+            {
+              "Type": "Standard",
+              "ID": "BL_1C6BaRQ89gtgoFU",
+              "FlowID": "FL_9",
+              "Autofill": []
+            },
+            {
+              "Type": "Standard",
+              "ID": "BL_cBbnJX6iDJUtyZg",
+              "FlowID": "FL_8",
+              "Autofill": []
+            },
+            {
+              "Type": "Standard",
+              "ID": "BL_9SnRoK64I9xj9HM",
+              "FlowID": "FL_7",
+              "Autofill": []
+            },
+            {
+              "Type": "Standard",
+              "ID": "BL_erZG426iLYJJGUS",
+              "FlowID": "FL_10",
+              "Autofill": []
+            }
+          ]
+        },
+        {
+          "Type": "EndSurvey",
+          "FlowID": "FL_4",
+          "EndingType": "Advanced",
+          "Options": {
+            "Advanced": "true",
+            "SurveyTermination": "Redirect",
+            "EOSRedirectURL": "${e://Field/return_to_url}?metadata[teacher_assigned]=${q://QID13/ChoiceDescription/1}"
+          }
+        }
+      ],
+      "Properties": {
+        "Count": 11,
+        "RemovedFieldsets": []
+      }
+    },
+    "Scoring": {
+      "ScoringCategories": [],
+      "ScoringCategoryGroups": [],
+      "ScoringSummaryCategory": null,
+      "ScoringSummaryAfterQuestions": 0,
+      "ScoringSummaryAfterSurvey": 0,
+      "DefaultScoringCategory": null,
+      "AutoScoringCategory": null
+    },
+    "ProjectInfo": {
+      "SurveyID": "SV_6xGQzj4OBJnxGuy",
+      "ProjectCategory": "CORE",
+      "ProjectType": null,
+      "CompositionType": null,
+      "ContentBundle": null
+    },
+    "BrandBaseURL": "https://riceuniversity.co1.qualtrics.com"
+  }
+}

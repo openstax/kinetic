@@ -247,4 +247,5 @@ class Api::V1::Researcher::StudiesOpenApi
       extend Api::V1::OpenApiResponses::ServerError
     end
   end
+
 end
