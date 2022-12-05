@@ -23,19 +23,22 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { useRef } from 'react';
 import BannerImage from './images/landing/banner-image.svg';
+import { SSRProvider } from '@restart/ui/ssr';
 
 export const ResearchHomepage = () => {
     return (
-        <div css={{ backgroundColor: colors.white, fontSize: '1rem', lineHeight: 1.5, fontFamily: 'Helvetica Neue' }}>
-            <Header></Header>
-            <Banner></Banner>
-            <ColorBar></ColorBar>
-            <ResearchSection></ResearchSection>
-            <Publications></Publications>
-            <MembersSection></MembersSection>
-            <Funders></Funders>
-            <ContactUs></ContactUs>
-        </div>
+        <SSRProvider>
+            <div css={{ backgroundColor: colors.white, fontSize: '1rem', lineHeight: 1.5, fontFamily: 'Helvetica Neue' }}>
+                <Header></Header>
+                <Banner></Banner>
+                <ColorBar></ColorBar>
+                <ResearchSection></ResearchSection>
+                <Publications></Publications>
+                <MembersSection></MembersSection>
+                <Funders></Funders>
+                <ContactUs></ContactUs>
+            </div>
+        </SSRProvider>
     )
 }
 

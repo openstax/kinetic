@@ -659,7 +659,7 @@
     "@babel/helper-validator-option" "^7.16.7"
     "@babel/plugin-transform-typescript" "^7.16.7"
 
-"@babel/runtime@^7.12.0", "@babel/runtime@^7.13.10", "@babel/runtime@^7.13.16", "@babel/runtime@^7.14.0", "@babel/runtime@^7.15.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.2", "@babel/runtime@^7.6.3", "@babel/runtime@^7.8.7":
+"@babel/runtime@^7.12.0", "@babel/runtime@^7.13.10", "@babel/runtime@^7.14.0", "@babel/runtime@^7.15.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.2", "@babel/runtime@^7.6.3", "@babel/runtime@^7.8.7":
   version "7.16.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.16.0.tgz#e27b977f2e2088ba24748bf99b5e1dece64e4f0b"
   integrity sha512-Nht8L0O8YCktmsDV6FqFue7vQLRx3Hb0B37lS5y0jDRqRxlBG4wIJHnf9/bgSE2UyipKFA01YtS+npRdTWBUyw==
@@ -1147,22 +1147,15 @@
     stack-utils "2.0.5"
     yazl "2.5.1"
 
-"@popperjs/core@^2.10.1", "@popperjs/core@^2.9.2":
-  version "2.10.2"
-  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.10.2.tgz#0798c03351f0dea1a5a4cabddf26a55a7cbee590"
-  integrity sha512-IXf3XA7+XyN7CP9gGh/XB0UxVMlvARGEgGXLubFICsUMGz6Q+DU+i4gGlpOxTjKvXjkJDJC8YdqdKkDj9qZHEQ==
-
 "@popperjs/core@^2.11.5":
   version "2.11.6"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
-"@react-aria/ssr@^3.0.1":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@react-aria/ssr/-/ssr-3.1.0.tgz#b7163e6224725c30121932a8d1422ef91d1fab22"
-  integrity sha512-RxqQKmE8sO7TGdrcSlHTcVzMP450hqowtBSd2bBS9oPlcokVkaGq28c3Rwa8ty5ctw4EBCjXqjP7xdcKMGDzug==
-  dependencies:
-    "@babel/runtime" "^7.6.2"
+"@popperjs/core@^2.9.2":
+  version "2.10.2"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.10.2.tgz#0798c03351f0dea1a5a4cabddf26a55a7cbee590"
+  integrity sha512-IXf3XA7+XyN7CP9gGh/XB0UxVMlvARGEgGXLubFICsUMGz6Q+DU+i4gGlpOxTjKvXjkJDJC8YdqdKkDj9qZHEQ==
 
 "@react-aria/ssr@^3.2.0":
   version "3.4.0"
@@ -1171,34 +1164,12 @@
   dependencies:
     "@babel/runtime" "^7.6.2"
 
-"@restart/hooks@^0.4.0":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@restart/hooks/-/hooks-0.4.1.tgz#716b1fd7a67650a6d4ed441b5d704b4f73ca2612"
-  integrity sha512-87UMGZcFwbj0Gr+8eEBAzL6H8xF5pMwq/S3LWeFK9cg4+lTqLFMsiVQFT4ncMJzqgpdD7T6ktF8PsEHeN2O+MQ==
-  dependencies:
-    dequal "^2.0.2"
-
 "@restart/hooks@^0.4.6", "@restart/hooks@^0.4.7":
   version "0.4.7"
   resolved "https://registry.yarnpkg.com/@restart/hooks/-/hooks-0.4.7.tgz#d79ca6472c01ce04389fc73d4a79af1b5e33cd39"
   integrity sha512-ZbjlEHcG+FQtpDPHd7i4FzNNvJf2enAwZfJbpM8CW7BhmOAbsHpZe3tsHwfQUrBuyrxWqPYp2x5UMnilWcY22A==
   dependencies:
     dequal "^2.0.2"
-
-"@restart/ui@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@restart/ui/-/ui-1.2.0.tgz#fb90251aa25f99b41ccedc78a91d2a15f3c5e0fb"
-  integrity sha512-oIh2t3tG8drZtZ9SlaV5CY6wGsUViHk8ZajjhcI+74IQHyWy+AnxDv8rJR5wVgsgcgrPBUvGNkC1AEdcGNPaLQ==
-  dependencies:
-    "@babel/runtime" "^7.13.16"
-    "@popperjs/core" "^2.10.1"
-    "@react-aria/ssr" "^3.0.1"
-    "@restart/hooks" "^0.4.0"
-    "@types/warning" "^3.0.0"
-    dequal "^2.0.2"
-    dom-helpers "^5.2.0"
-    uncontrollable "^7.2.1"
-    warning "^4.0.3"
 
 "@restart/ui@^1.4.1":
   version "1.4.1"

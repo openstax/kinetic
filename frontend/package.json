@@ -30,7 +30,7 @@
     "@iconify-icons/bi": "^1.2.2",
     "@iconify/react": "^3.2.1",
     "@playwright/test": "^1.20.2",
-    "@restart/ui": "^1.2.0",
+    "@restart/ui": "^1.4.1",
     "@sentry/react": "^7.11.1",
     "@sentry/tracing": "^7.11.1",
     "@types/bootstrap": "^5.1.9",
