@@ -64,7 +64,7 @@
     "react-popper": "^2.2.5",
     "react-router-dom": "^6.3.0",
     "react-select": "^5.2.2",
-    "rooks": "^5.11.0",
+    "rooks": "^7.4.2",
     "sass": "^1.49.11",
     "swiper": "^8.4.4",
     "ts-node": "^10.7.0",

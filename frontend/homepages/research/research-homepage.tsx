@@ -4,7 +4,6 @@ import '../../src/index.css'
 import '../../src/styles/main.scss'
 import { colors, media } from '../../src/theme';
 import { Funders, Icon } from '@components';
-import 'bootstrap/dist/js/bootstrap.min'
 import {
     alumni,
     AlumnusMember,
@@ -19,25 +18,15 @@ import boxArrowInUpRight from '@iconify-icons/bi/box-arrow-in-up-right';
 import chevronDown from '@iconify-icons/bi/chevron-down';
 import chevronUp from '@iconify-icons/bi/chevron-up';
 import { Button, Modal } from '@restart/ui';
-import { useIsMobileDevice } from '@lib';
 import Accordion from 'react-bootstrap/Accordion';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 import { useRef } from 'react';
 import BannerImage from './images/landing/banner-image.svg';
 
 export const ResearchHomepage = () => {
     return (
         <div css={{ backgroundColor: colors.white, fontSize: '1rem', lineHeight: 1.5, fontFamily: 'Helvetica Neue' }}>
-            <style>
-                {`
-                .nav-tabs .nav-link.active {
-                    color: #495057;
-                    background-color: rgba(0,0,0,0) !important;
-                    border-bottom-width: 4px;
-                    border-color: rgba(0,0,0,0) rgba(0,0,0,0) #63A524 rgba(0,0,0,0);
-                }
-            `}
-            </style>
-
             <Header></Header>
             <Banner></Banner>
             <ColorBar></ColorBar>
@@ -68,8 +57,8 @@ export const Banner = () => (
                 Calling all learning researchers!
             </h4>
             <Box align={{ mobile: 'center' }} direction='column' css={{ flex: 4 }}>
-                <>Learn about the research workflow on OpenStax Kinetic during office hours hosted with IES!</>
-                <a className='text-decoration-none' href='https://ies.ed.gov/funding/technicalassistance.asp' target='_blank'>
+                Learn about the research workflow on OpenStax Kinetic during office hours hosted with IES!
+                <a className='text-decoration-none text-center' href='https://ies.ed.gov/funding/technicalassistance.asp' target='_blank'>
                     <Box align='center'>
                         IES Office Hours
                         &nbsp;
@@ -112,68 +101,44 @@ export const ColorBar = () => (
 )
 
 export const ResearchSection = () => {
-    const mobile = useIsMobileDevice();
     return (
         <div className='container py-4'>
             <h2 className='py-2'>Areas of Research Focus</h2>
-            {
-                mobile && <p>
+            <p className='mobile'>
                 Our team has significant expertise in <strong>learning science, education research, and AI/ML
                 in education.</strong> We use a multidisciplinary approach to examine who our learners are,
                 what are they learning, and how are they learning; to provide appropriate supports when and
                 where learners need them. To enable large-scale rapid cycle research, we are developing Kinetic,
                 a research infrastructure connecting researchers with adult higher ed learners in the US.
-                </p>
-            }
-            {mobile ? <MobileResearchFocusAreas/> : <ResearchFocusAreas/>}
+            </p>
+            <MobileResearchFocusAreas/>
+            <ResearchFocusAreas/>
         </div>
     )
 }
 
 export const ResearchFocusAreas = () => (
-    <div>
-        <ul className="nav nav-tabs" id="research-areas" role="tablist">
-            <li className="nav-item" role="presentation">
-                <button className="nav-link active" id="kinetic-tab" data-bs-toggle="tab" data-bs-target="#kinetic"
-                    type="button" role="tab" aria-controls="kinetic" aria-selected="true">
-                    Learning Research on OpenStax Kinetic
-                </button>
-            </li>
-            <li className="nav-item" role="presentation">
-                <button className="nav-link" id="ai-tab" data-bs-toggle="tab" data-bs-target="#ai"
-                    type="button" role="tab" aria-controls="ai" aria-selected="false">
-                    AI/ML in education
-                </button>
-            </li>
-            <li className="nav-item" role="presentation">
-                <button className="nav-link" id="education-tab" data-bs-toggle="tab" data-bs-target="#education"
-                    type="button" role="tab" aria-controls="education" aria-selected="false">
-                    Applied Education Research
-                </button>
-            </li>
-        </ul>
-        <div className="tab-content py-3">
-            <div className="tab-pane fade show active" id="kinetic" role="tabpanel" aria-labelledby="kinetic-tab">
-                <div className='py-2'>
-                    <p>
-                        OpenStax Kinetic is a new research infrastructure that enables researchers to connect with real
-                        learners studying curricular content in authentic learning environments. Researchers can leverage
-                        Qualtrics to design a variety of studies (e.g., surveys, Randomized Control Trials, A/B/N tests)
-                        and make them available on Kinetic to <strong>US adult higher education learners.</strong>
-                        Kinetic researchers can effectively address 3 key questions in learning and how they interact:
-                    </p>
-                    <ol>
-                        <li><strong>Who is the learner?</strong></li>
-                        <li><strong>What are they learning?</strong></li>
-                        <li><strong>How are they learning?</strong></li>
-                    </ol>
-                </div>
+    <div className='desktop'>
+        <Tabs defaultActiveKey="kinetic">
+            <Tab eventKey="kinetic" title="Learning Research on OpenStax Kinetic"  className='pt-2'>
+                <p>
+                    OpenStax Kinetic is a new research infrastructure that enables researchers to connect with real
+                    learners studying curricular content in authentic learning environments. Researchers can leverage
+                    Qualtrics to design a variety of studies (e.g., surveys, Randomized Control Trials, A/B/N tests)
+                    and make them available on Kinetic to <strong>US adult higher education learners.</strong>
+                    Kinetic researchers can effectively address 3 key questions in learning and how they interact:
+                </p>
+                <ol>
+                    <li><strong>Who is the learner?</strong></li>
+                    <li><strong>What are they learning?</strong></li>
+                    <li><strong>How are they learning?</strong></li>
+                </ol>
                 <hr/>
                 {researchFocusAreas['kinetic'].map((researchArea, index) =>
                     <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
                 )}
-            </div>
-            <div className="tab-pane fade" id="ai" role="tabpanel" aria-labelledby="ai-tab">
+            </Tab>
+            <Tab eventKey="ai" title="AI/ML in education" className='pt-2'>
                 <p>
                     In collaboration with leading researchers in the AI/ML in education space and the&nbsp;
                     <a href='https://dsp.rice.edu/' target='_blank'>Digital Signal Processing research group</a>
@@ -187,8 +152,8 @@ export const ResearchFocusAreas = () => (
                 {researchFocusAreas['ai'].map((researchArea, index) =>
                     <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
                 )}
-            </div>
-            <div className="tab-pane fade" id="education" role="tabpanel" aria-labelledby="education-tab">
+            </Tab>
+            <Tab eventKey="education" title="Applied Education Research" className='pt-2'>
                 <p>
                     This learner- and educator- centered initiative aims to promote educational equity.
                     To this end, we engage with learners, educators, institutions, and the community and
@@ -201,17 +166,17 @@ export const ResearchFocusAreas = () => (
                 {researchFocusAreas['education'].map((researchArea, index) =>
                     <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
                 )}
-            </div>
-        </div>
+            </Tab>
+        </Tabs>
     </div>
 )
 
 export const MobileResearchFocusAreas = () => {
     return (
-        <div>
+        <div className='mobile'>
             <Accordion>
                 <Accordion.Item eventKey="0">
-                    <Accordion.Header>Research on OpenStax Kinetic</Accordion.Header>
+                    <Accordion.Header>Learning Research on OpenStax Kinetic</Accordion.Header>
                     <Accordion.Body>
                         <p>
                             OpenStax Kinetic is a new research infrastructure that enables researchers to connect with real
@@ -270,7 +235,7 @@ export const MobileResearchFocusAreas = () => {
 }
 
 export const ResearchFocusArea: React.FC<{researchArea: ResearchArea}> = ({ researchArea }) => (
-    <div className='py-1'>
+    <div className='py-2'>
         <Box gap='large' direction={{ mobile: 'column' }}>
             <img src={researchArea.image} css={{ flex: 2 }} alt={researchArea.title}/>
             <Box direction='column' css={{ flex: 6 }}>
@@ -292,7 +257,7 @@ export const ResearchFocusArea: React.FC<{researchArea: ResearchArea}> = ({ rese
 
 export const Publications = () => {
     const [viewAll, setViewAll] = useState(false);
-    const initialCount = useIsMobileDevice() ? 3 : 5;
+    const initialCount = 5;
     const publicationList = viewAll ? publications : publications.slice(0, initialCount);
 
     const publicationsRef = useRef<null | HTMLDivElement>(null);
@@ -305,7 +270,7 @@ export const Publications = () => {
             {publicationList.map((publication, index) =>
                 <PublicationItem key={index} publication={publication}/>
             )}
-            <p className='py-4 align-self-center'
+            <span className='py-4 align-self-center'
                 onClick={() => {
                     if (viewAll) {
                         scrollToPublications()
@@ -317,7 +282,7 @@ export const Publications = () => {
                 <Icon icon={viewAll ? chevronUp : chevronDown}></Icon>
                 &nbsp;
                 {viewAll ? 'View Less' : 'View All Publications'}
-            </p>
+            </span>
         </Box>
     )
 }
@@ -370,12 +335,12 @@ const AlumniGrid = styled(Box)({
 });
 
 export const MembersSection = () => {
-    const isMobile = useIsMobileDevice();
     return (
         <div css={{ backgroundColor: colors.lightGrayBackground }}>
             <div className='container py-3' >
                 <h2 className='pt-4 pb-2'>Team Members</h2>
-                {isMobile ? <MobileMembers/> : <Members/>}
+                <MobileMembers/>
+                <Members/>
             </div>
         </div>
     )
@@ -390,7 +355,7 @@ export const MobileMembers = () => {
 
     const members = viewAll ? researchMembers['current'] : researchMembers['current'].slice(0, 4);
     return (
-        <div>
+        <div className='mobile'>
             <Accordion defaultActiveKey="0">
                 <Accordion.Item eventKey="0" >
                     <Accordion.Header ref={membersRef}>Current Members</Accordion.Header>
@@ -443,50 +408,30 @@ export const MobileMembers = () => {
 }
 
 export const Members = () => (
-    <div>
-        <ul className="nav nav-tabs" id="team-members" role="tablist">
-            <li className="nav-item" role="presentation">
-                <button className="nav-link active" id="current-tab" data-bs-toggle="tab" data-bs-target="#current"
-                    type="button" role="tab" aria-controls="current" aria-selected="true">
-                        Current Members
-                </button>
-            </li>
-            <li className="nav-item" role="presentation">
-                <button className="nav-link" id="collaborating-tab" data-bs-toggle="tab" data-bs-target="#collaborating"
-                    type="button" role="tab" aria-controls="collaborating" aria-selected="false">
-                        Collaborating Researchers
-                </button>
-            </li>
-            <li className="nav-item" role="presentation">
-                <button className="nav-link" id="alumni-tab" data-bs-toggle="tab" data-bs-target="#alumni"
-                    type="button" role="tab" aria-controls="alumni" aria-selected="false">
-                        Alumni
-                </button>
-            </li>
-        </ul>
-        <div className="tab-content px-2 py-5">
-            <div className="tab-pane fade show active" id="current" role="tabpanel" aria-labelledby="current-tab">
+    <div className='desktop'>
+        <Tabs defaultActiveKey="current-members" >
+            <Tab eventKey="current-members" title="Current Members" className='px-2 py-5'>
                 <MemberGrid>
                     {researchMembers['current'].map((member, index) =>
                         <Member member={member} key={index}/>
                     )}
                 </MemberGrid>
-            </div>
-            <div className="tab-pane fade" id="collaborating" role="tabpanel" aria-labelledby="collaborating-tab">
+            </Tab>
+            <Tab eventKey="collaborating-members" title="Collaborating Researchers" className='px-2 py-5'>
                 <MemberGrid>
                     {researchMembers['collaborating'].map((member, index) =>
                         <Member member={member} key={index}/>
                     )}
                 </MemberGrid>
-            </div>
-            <div className="tab-pane fade" id="alumni" role="tabpanel" aria-labelledby="alumni-tab">
+            </Tab>
+            <Tab eventKey="alumni" title="Alumni" className='px-2 py-5'>
                 <AlumniGrid>
                     {alumni.map((alumnus, index) =>
                         <Alumnus alumnus={alumnus} key={index}/>
                     )}
                 </AlumniGrid>
-            </div>
-        </div>
+            </Tab>
+        </Tabs>
     </div>
 )
 

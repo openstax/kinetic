@@ -2,6 +2,7 @@ import { React } from '@common'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 
 import { ResearchHomepage } from './research-homepage'
+import { SSRProvider } from '@restart/ui/ssr';
 
 window.addEventListener('DOMContentLoaded', () => {
     const rootEl = document.getElementById('research-homepage')
@@ -10,9 +11,9 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     if (rootEl.childElementCount == 0) {
-        createRoot(rootEl).render(<ResearchHomepage />)
+        createRoot(rootEl).render(<SSRProvider><ResearchHomepage /></SSRProvider>)
     } else {
-        hydrateRoot(rootEl, <ResearchHomepage />)
+        hydrateRoot(rootEl, <SSRProvider><ResearchHomepage /></SSRProvider>)
     }
 
 });
