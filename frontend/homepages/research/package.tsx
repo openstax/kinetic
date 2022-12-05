@@ -1,6 +1,6 @@
 import fs from 'fs'
 import { load as loadHTML } from 'cheerio'
-
+import { spawn } from 'child_process'
 import { React } from '@common'
 import { ResearchHomepage } from './research-homepage'
 
@@ -34,5 +34,14 @@ export default function ssrRender() {
 
     $('#research-homepage').html(html)
 
-    fs.writeFileSync(`${DIR}/hydration-test.html`, $.html())
+    const contents = $.html()
+
+    fs.writeFileSync(`${DIR}/hydration-test.html`, contents)
+
+
+    const pbcopy = spawn('pbcopy')
+    pbcopy.stdin.write(contents)
+    pbcopy.stdin.end()
+
+    console.log('hydration-test.html was updated, and output copied to clipboard')
 }
