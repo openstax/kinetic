@@ -1,8 +1,9 @@
 import { React } from '@common'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { ResearchHomepage } from './research-homepage'
+import { whenDomReady } from '@lib'
 
-window.addEventListener('DOMContentLoaded', () => {
+whenDomReady().then(() => {
     const rootEl = document.getElementById('research-homepage')
     if (!rootEl) {
         throw 'root element was not found'
@@ -13,5 +14,4 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
         hydrateRoot(rootEl, <ResearchHomepage />)
     }
-
-});
+})

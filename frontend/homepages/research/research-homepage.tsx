@@ -1,7 +1,6 @@
 import { Box, cx, React, styled, useState } from '@common'
 
-import '../../src/index.css'
-import '../../src/styles/main.scss'
+import '../../src/styles/cms-page.scss'
 import { colors, media } from '../../src/theme';
 import { Funders, Icon } from '@components';
 import {
@@ -48,7 +47,7 @@ export const Header = () => (
             <h1 className='fw-bolder' css={{ color: colors.white, flex: 3 }}>
                 Advancing multi-disciplinary research to improve learner success.
             </h1>
-            <img src={BannerImage} alt='banner-image' css={{ flex: 2 }}/>
+            <img src={BannerImage} alt='banner-image' css={{ flex: 2 }} />
         </Box>
     </div>
 )
@@ -109,13 +108,13 @@ export const ResearchSection = () => {
             <h2 className='py-2'>Areas of Research Focus</h2>
             <p className='mobile'>
                 Our team has significant expertise in <strong>learning science, education research, and AI/ML
-                in education.</strong> We use a multidisciplinary approach to examine who our learners are,
+                    in education.</strong> We use a multidisciplinary approach to examine who our learners are,
                 what are they learning, and how are they learning; to provide appropriate supports when and
                 where learners need them. To enable large-scale rapid cycle research, we are developing Kinetic,
                 a research infrastructure connecting researchers with adult higher ed learners in the US.
             </p>
-            <MobileResearchFocusAreas/>
-            <ResearchFocusAreas/>
+            <MobileResearchFocusAreas />
+            <ResearchFocusAreas />
         </div>
     )
 }
@@ -123,7 +122,7 @@ export const ResearchSection = () => {
 export const ResearchFocusAreas = () => (
     <div className='desktop'>
         <Tabs defaultActiveKey="kinetic">
-            <Tab eventKey="kinetic" title="Learning Research on OpenStax Kinetic"  className='pt-2'>
+            <Tab eventKey="kinetic" title="Learning Research on OpenStax Kinetic" className='pt-2'>
                 <p>
                     OpenStax Kinetic is a new research infrastructure that enables researchers to connect with real
                     learners studying curricular content in authentic learning environments. Researchers can leverage
@@ -136,7 +135,7 @@ export const ResearchFocusAreas = () => (
                     <li><strong>What are they learning?</strong></li>
                     <li><strong>How are they learning?</strong></li>
                 </ol>
-                <hr/>
+                <hr />
                 {researchFocusAreas['kinetic'].map((researchArea, index) =>
                     <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
                 )}
@@ -151,7 +150,7 @@ export const ResearchFocusAreas = () => (
                     for learning analytics, and hybrid models for generation of knowledge graphs. We aim to use
                     a combination of these efforts to optimally personalize learning experiences for learners.
                 </p>
-                <hr/>
+                <hr />
                 {researchFocusAreas['ai'].map((researchArea, index) =>
                     <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
                 )}
@@ -165,7 +164,7 @@ export const ResearchFocusAreas = () => (
                     to address them. Ultimately, we work with our product teams to build evidence-based learner
                     supports that are iteratively refined.
                 </p>
-                <hr/>
+                <hr />
                 {researchFocusAreas['education'].map((researchArea, index) =>
                     <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
                 )}
@@ -193,7 +192,7 @@ export const MobileResearchFocusAreas = () => {
                             <li><strong>What are they learning?</strong></li>
                             <li><strong>How are they learning?</strong></li>
                         </ol>
-                        <hr/>
+                        <hr />
                         {researchFocusAreas['kinetic'].map((researchArea, index) =>
                             <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
                         )}
@@ -237,10 +236,10 @@ export const MobileResearchFocusAreas = () => {
     )
 }
 
-export const ResearchFocusArea: React.FC<{researchArea: ResearchArea}> = ({ researchArea }) => (
+export const ResearchFocusArea: React.FC<{ researchArea: ResearchArea }> = ({ researchArea }) => (
     <div className='py-2'>
         <Box gap='large' direction={{ mobile: 'column' }}>
-            <img src={researchArea.image} css={{ flex: 2 }} alt={researchArea.title}/>
+            <img src={researchArea.image} css={{ flex: 2 }} alt={researchArea.title} />
             <Box direction='column' css={{ flex: 6 }}>
                 <h5 className='fw-bold'>{researchArea.title}</h5>
                 <p>{researchArea.description}</p>
@@ -254,7 +253,7 @@ export const ResearchFocusArea: React.FC<{researchArea: ResearchArea}> = ({ rese
             </Box>
             {/*<p css={{ flex: 1 }}>view more?</p>*/}
         </Box>
-        <hr/>
+        <hr />
     </div>
 )
 
@@ -271,7 +270,7 @@ export const Publications = () => {
         <Box direction='column' className='container mt-3'>
             <h2 ref={publicationsRef}>Publications</h2>
             {publicationList.map((publication, index) =>
-                <PublicationItem key={index} publication={publication}/>
+                <PublicationItem key={index} publication={publication} />
             )}
             <span className='py-4 align-self-center'
                 onClick={() => {
@@ -290,7 +289,7 @@ export const Publications = () => {
     )
 }
 
-export const PublicationItem: React.FC<{publication: Publication}> = ({ publication }) => (
+export const PublicationItem: React.FC<{ publication: Publication }> = ({ publication }) => (
     <Box direction='column' css={{ paddingTop: '.75rem', paddingBottom: '.75rem' }}>
         <div className='mb-1'>
             <a className='fw-bold' href={publication.pdf} target='_blank'>
@@ -342,8 +341,8 @@ export const MembersSection = () => {
         <div css={{ backgroundColor: colors.lightGrayBackground }}>
             <div className='container py-3' >
                 <h2 className='pt-4 pb-2'>Team Members</h2>
-                <MobileMembers/>
-                <Members/>
+                <MobileMembers />
+                <Members />
             </div>
         </div>
     )
@@ -365,7 +364,7 @@ export const MobileMembers = () => {
                     <Accordion.Body>
                         <MemberGrid>
                             {members.map((member, index) =>
-                                <Member member={member} key={index}/>
+                                <Member member={member} key={index} />
                             )}
                         </MemberGrid>
 
@@ -390,7 +389,7 @@ export const MobileMembers = () => {
                     <Accordion.Body>
                         <MemberGrid>
                             {researchMembers['collaborating'].map((member, index) =>
-                                <Member member={member} key={index}/>
+                                <Member member={member} key={index} />
                             )}
                         </MemberGrid>
                     </Accordion.Body>
@@ -400,7 +399,7 @@ export const MobileMembers = () => {
                     <Accordion.Body>
                         <AlumniGrid>
                             {alumni.map((alumnus, index) =>
-                                <Alumnus alumnus={alumnus} key={index}/>
+                                <Alumnus alumnus={alumnus} key={index} />
                             )}
                         </AlumniGrid>
                     </Accordion.Body>
@@ -416,21 +415,21 @@ export const Members = () => (
             <Tab eventKey="current-members" title="Current Members" className='px-2 py-5'>
                 <MemberGrid>
                     {researchMembers['current'].map((member, index) =>
-                        <Member member={member} key={index}/>
+                        <Member member={member} key={index} />
                     )}
                 </MemberGrid>
             </Tab>
             <Tab eventKey="collaborating-members" title="Collaborating Researchers" className='px-2 py-5'>
                 <MemberGrid>
                     {researchMembers['collaborating'].map((member, index) =>
-                        <Member member={member} key={index}/>
+                        <Member member={member} key={index} />
                     )}
                 </MemberGrid>
             </Tab>
             <Tab eventKey="alumni" title="Alumni" className='px-2 py-5'>
                 <AlumniGrid>
                     {alumni.map((alumnus, index) =>
-                        <Alumnus alumnus={alumnus} key={index}/>
+                        <Alumnus alumnus={alumnus} key={index} />
                     )}
                 </AlumniGrid>
             </Tab>
@@ -439,11 +438,11 @@ export const Members = () => (
 )
 
 
-export const Member: React.FC<{member: ResearchMember}> = ({ member }) => {
+export const Member: React.FC<{ member: ResearchMember }> = ({ member }) => {
     const [show, setShow] = useState(false);
     return (
         <Box direction='column' align='center' className='text-center'>
-            <img alt={member.firstName} src={member.image} onClick={() => setShow(true)}/>
+            <img alt={member.firstName} src={member.image} onClick={() => setShow(true)} />
             <Button className='mt-2' as='a' type='button' onClick={() => setShow(true)}>
                 {member.firstName}
             </Button>
@@ -469,12 +468,12 @@ export const Member: React.FC<{member: ResearchMember}> = ({ member }) => {
                     },
                 }}>
                     <div className="modal-content overflow-auto" css={{ padding: '1.75rem' }}>
-                        <MemberDetails member={member}/>
+                        <MemberDetails member={member} />
                         <Icon icon="x" height={30} onClick={() => setShow(false)} css={{
                             position: 'absolute',
                             top: 5,
                             right: 5,
-                        }}/>
+                        }} />
                     </div>
                 </div>
             </Modal>
@@ -482,15 +481,15 @@ export const Member: React.FC<{member: ResearchMember}> = ({ member }) => {
     )
 }
 
-export const MemberDetails: React.FC<{member: ResearchMember}> = ({ member }) => {
+export const MemberDetails: React.FC<{ member: ResearchMember }> = ({ member }) => {
     return (
         <Box css={{ fontSize: 15 }}>
             <Box direction='column' gap='medium'>
-                <MemberInfo member={member}/>
-                <MemberEducation member={member}/>
-                <MemberResearchInterest member={member}/>
-                <MemberBio member={member}/>
-                <MemberLinks member={member}/>
+                <MemberInfo member={member} />
+                <MemberEducation member={member} />
+                <MemberResearchInterest member={member} />
+                <MemberBio member={member} />
+                <MemberLinks member={member} />
             </Box>
         </Box>
     )
@@ -506,10 +505,10 @@ const MemberImage = styled.img({
     },
 });
 
-export const MemberInfo: React.FC<{member: ResearchMember}> = ({ member }) => {
+export const MemberInfo: React.FC<{ member: ResearchMember }> = ({ member }) => {
     return (
         <Box align='center'>
-            <MemberImage src={member.image} alt={member.firstName}/>
+            <MemberImage src={member.image} alt={member.firstName} />
             <Box direction='column' margin={{ left: '1.5rem' }}>
                 <h4>{member.firstName} {member.lastName}</h4>
                 <p css={{ color: colors.grayText }}>
@@ -520,7 +519,7 @@ export const MemberInfo: React.FC<{member: ResearchMember}> = ({ member }) => {
     )
 }
 
-export const MemberEducation: React.FC<{member: ResearchMember}> = ({ member }) => {
+export const MemberEducation: React.FC<{ member: ResearchMember }> = ({ member }) => {
     if (!member.education) {
         return null;
     }
@@ -529,14 +528,14 @@ export const MemberEducation: React.FC<{member: ResearchMember}> = ({ member }) 
             <h5>Education</h5>
             <p>
                 {member.education}
-                <br/>
+                <br />
                 {member.specialization && <span css={{ color: colors.grayText }}>{member.specialization}</span>}
             </p>
         </Box>
     )
 }
 
-export const MemberResearchInterest: React.FC<{member: ResearchMember}> = ({ member }) => {
+export const MemberResearchInterest: React.FC<{ member: ResearchMember }> = ({ member }) => {
     if (!member.researchInterest) {
         return null;
     }
@@ -548,7 +547,7 @@ export const MemberResearchInterest: React.FC<{member: ResearchMember}> = ({ mem
     )
 }
 
-export const MemberBio: React.FC<{member: ResearchMember}> = ({ member }) => {
+export const MemberBio: React.FC<{ member: ResearchMember }> = ({ member }) => {
     return (
         <Box direction='column'>
             <h5>Bio</h5>
@@ -557,7 +556,7 @@ export const MemberBio: React.FC<{member: ResearchMember}> = ({ member }) => {
     )
 }
 
-export const MemberLinks: React.FC<{member: ResearchMember}> = ({ member }) => {
+export const MemberLinks: React.FC<{ member: ResearchMember }> = ({ member }) => {
     return (
         <Box gap='large'>
             {member.linkedIn && <a href={member.linkedIn} target='_blank'>Linkedin</a>}
@@ -567,7 +566,7 @@ export const MemberLinks: React.FC<{member: ResearchMember}> = ({ member }) => {
     )
 }
 
-export const Alumnus: React.FC<{alumnus: AlumnusMember}> = ({ alumnus }) => (
+export const Alumnus: React.FC<{ alumnus: AlumnusMember }> = ({ alumnus }) => (
     <Box direction={{ mobile: 'column' }} justify='center'>
         <a css={{ flex: 1 }} href={alumnus.linkedin} target='_blank'>{alumnus.name}</a>
         <p css={{ flex: 3, color: colors.grayText }}>{alumnus.title}</p>

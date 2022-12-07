@@ -1,5 +1,15 @@
 import { defineConfig } from 'vite'
 import reactRefresh from '@vitejs/plugin-react-refresh'
+import { resolve } from 'path'
+
+const input = {}
+const base = process.env.ASSETS_URL || 'https://kinetic-app-assets.s3.amazonaws.com/'
+
+if (process.env.BUILD_PAGE) {
+    input[process.env.BUILD_PAGE] = resolve(__dirname, `homepages/${process.env.BUILD_PAGE}/index.html`)
+} else {
+    input['main'] = resolve(__dirname, 'index.html')
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -7,6 +17,7 @@ export default defineConfig({
         jsxFactory: 'jsx',
         jsxInject: "import { jsx } from '@emotion/react'",
     },
+    base,
     plugins: [
         reactRefresh(),
     ],
@@ -24,6 +35,8 @@ export default defineConfig({
     },
     build: {
         manifest: true,
-        emptyOutDir: true,
+        rollupOptions: {
+            input,
+        },
     },
 })

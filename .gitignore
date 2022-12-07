@@ -7,3 +7,4 @@ backend/clients
 frontend/test-results
 .env*
 .idea
+frontend/homepages/hydration-test.html
