@@ -44,11 +44,11 @@ export default async function buildPage({ args }: any) {
         // will throw exception if upload fails
         await s3.send(new PutObjectCommand({
             Bucket: 'kinetic-app-assets',
-            ACL: 'public-read',
             Key: `assets/${asset}`,
             Body: stream,
             ContentType: lookup(asset) || 'application/octet-stream',
         }));
+        stream.close()
     }
 
     const pbcopy = spawn('pbcopy')
