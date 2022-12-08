@@ -32,9 +32,8 @@ body {
     padding: 6rem 1.5rem;
 }
 
-#research-homepage {
+.research-cms-root-page {
     @import "./cms-bootstrap.scss";
-
     background-color: #ffffff;
     font-family: "Helvetica Neue", sans-serif;
 
@@ -62,4 +61,5 @@ body {
             display: block;
         }
     }
+
 }
