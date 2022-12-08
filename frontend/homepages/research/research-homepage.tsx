@@ -24,6 +24,7 @@ import { useRef } from 'react';
 import BannerImage from './images/landing/banner-image.svg';
 import { SSRProvider } from '@restart/ui/ssr';
 import Modal from 'react-bootstrap/Modal';
+import { ENV } from '@lib';
 
 export const ResearchHomepage = () => {
     return (
@@ -428,8 +429,47 @@ export const Members = () => (
     </div>
 )
 
+const MemberModal: React.FC<{ member: ResearchMember, show: boolean, onHide(): void }> = ({ member, show, onHide }) => {
+    if (ENV.IS_SSR) return null
+
+    return (
+        <Modal
+            container={document.getElementById('research-homepage')}
+            show={show}
+            className={cx('modal', 'fade', {
+                show,
+            })}
+            onBackdropClick={onHide}
+            style={{ display: 'block', pointerEvents: 'none', overflow: 'auto' }}
+            onHide={onHide}
+            renderBackdrop={(props) => (
+                <div className={cx('modal-backdrop', 'fade', {
+                    show,
+                })} {...props} />
+            )}
+        >
+            <div className='modal-dialog modal-dialog-centered modal-dialog-scrollable mx-auto' css={{
+                width: '50%',
+                [media.mobile]: {
+                    width: '90%',
+                },
+            }}>
+                <div className="modal-content overflow-auto" css={{ padding: '1.75rem' }}>
+                    <MemberDetails member={member} />
+                    <Icon icon="x" height={30} onClick={onHide} css={{
+                        position: 'absolute',
+                        top: 5,
+                        right: 5,
+                    }} />
+                </div>
+            </div>
+        </Modal>
+    )
+
+}
 
 export const Member: React.FC<{ member: ResearchMember }> = ({ member }) => {
+
     const [show, setShow] = useState(false);
     return (
         <Box direction='column' align='center' className='text-center'>
@@ -438,22 +478,7 @@ export const Member: React.FC<{ member: ResearchMember }> = ({ member }) => {
                 {member.firstName}
             </Button>
             <small>{member.title}</small>
-            <Modal
-                show={show}
-                scrollable={true}
-                onHide={() => setShow(false)}
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-            >
-                <Modal.Body css={{ padding: '1.75rem' }}>
-                    <MemberDetails member={member} />
-                    <Icon icon="x" height={30} onClick={() => setShow(false)} css={{
-                        position: 'absolute',
-                        top: 5,
-                        right: 5,
-                    }} />
-                </Modal.Body>
-            </Modal>
+            <MemberModal member={member} show={show} onHide={() => setShow(false)} />
         </Box>
     )
 }
