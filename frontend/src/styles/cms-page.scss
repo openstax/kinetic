@@ -32,13 +32,12 @@ body {
     padding: 6rem 1.5rem;
 }
 
-//dialog, [role="dialog"] {
-//    background-color: #000 !important;
-//}
-
-@import "./cms-bootstrap.scss";
-
 #research-homepage {
+    @import "./cms-bootstrap.scss";
+
+    background-color: #ffffff;
+    font-family: "Helvetica Neue", sans-serif;
+
     .nav-tabs .nav-link.active {
         color: #495057;
         background-color: rgba(0,0,0,0) !important;

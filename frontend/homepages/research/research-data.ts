@@ -233,7 +233,7 @@ export const researchFocusAreas: ResearchFocusAreas = {
         {
             title: 'A Case Study in Bootstrapping Ontology Graphs from Textbooks',
             description: 'We aimed to address: to what extent can automated extraction and crowdsourcing techniques be combined to bootstrap the creation of comprehensive and accurate ontology knowledge graphs? By adapting the state-of-the-art language model BERT to the task, and leveraging a novel relationship selection task, we showed that even though it is difficult to achieve a high precision and recall, automated term extraction and crowdsourcing provide a way to bootstrap the ontology graph creation for further refinement and improvement through human effort.',
-            shortDescription: 'We investigated a combination of hybrid AI-crowdsourcing techniques for the creation of comprehensive and accurate ontology knowledge graphs. We are currently extending this work for ',
+            shortDescription: 'We adapted the state-of-the-art language model BERT, and leveraged a novel crowdsourced relationship selection task to show that we can use this hybrid AI-crowdsourcing approach to bootstrap the ontology graph creation for further refinement and improvement through human effort.',
             image: Ontology,
             cta: null,
             github: 'https://openstax.github.io/research-kg-learning/akbc-2021/',

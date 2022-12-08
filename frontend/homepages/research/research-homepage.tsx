@@ -16,23 +16,19 @@ import {
 import boxArrowInUpRight from '@iconify-icons/bi/box-arrow-in-up-right';
 import chevronDown from '@iconify-icons/bi/chevron-down';
 import chevronUp from '@iconify-icons/bi/chevron-up';
-import { Button } from '@restart/ui';
+import { Button, Modal } from '@restart/ui';
 import Accordion from 'react-bootstrap/Accordion';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { useRef } from 'react';
 import BannerImage from './images/landing/banner-image.svg';
 import { SSRProvider } from '@restart/ui/ssr';
-<<<<<<< HEAD
-import Modal from 'react-bootstrap/Modal';
-=======
 import { ENV } from '@lib';
->>>>>>> e06b8e5 (SSR protect and render modal inside #research-homepage)
 
 export const ResearchHomepage = () => {
     return (
         <SSRProvider>
-            <div css={{ backgroundColor: colors.white, fontFamily: 'Helvetica Neue' }}>
+            <div>
                 <Header></Header>
                 <Banner></Banner>
                 <ColorBar></ColorBar>
