@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import reactRefresh from '@vitejs/plugin-react-refresh'
 import { resolve } from 'path'
+import visualizer from 'rollup-plugin-visualizer'
 
 const input = {}
 const base = process.env.ASSETS_URL || 'https://kinetic-app-assets.s3.amazonaws.com/'
@@ -37,6 +38,15 @@ export default defineConfig({
         manifest: true,
         rollupOptions: {
             input,
+            plugins: [
+                    visualizer({
+                        filename: resolve(__dirname, 'dist/stats.html'),
+                        template: 'treemap', // sunburst|treemap|network
+                        sourcemap: false,
+                    }),
+
+            ],
         },
+
     },
 })
