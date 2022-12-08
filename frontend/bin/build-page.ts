@@ -49,6 +49,7 @@ export default async function buildPage({ args }: any) {
             Body: stream,
             ContentType: lookup(asset) || 'application/octet-stream',
         }));
+        stream.close()
     }
 
     const pbcopy = spawn('pbcopy')
