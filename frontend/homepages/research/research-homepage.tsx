@@ -2,7 +2,7 @@ import { Box, cx, React, styled, useState } from '@common'
 
 import '../../src/styles/cms-page.scss'
 import { colors, media } from '../../src/theme';
-import { Funders, Icon } from '@components';
+import { Funders, Icon, Modal } from '@components';
 import {
     alumni,
     AlumnusMember,
@@ -23,7 +23,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import { useRef } from 'react';
 import BannerImage from './images/landing/banner-image.svg';
 import { SSRProvider } from '@restart/ui/ssr';
-import Modal from 'react-bootstrap/Modal';
+
 import { ENV } from '@lib';
 
 export const ResearchHomepage = () => {
@@ -435,6 +435,7 @@ const MemberModal: React.FC<{ member: ResearchMember, show: boolean, onHide(): v
     return (
         <Modal
             container={document.getElementById('research-homepage')}
+            css={{ backgroundColor: 'transparent' }}
             show={show}
             className={cx('modal', 'fade', {
                 show,
