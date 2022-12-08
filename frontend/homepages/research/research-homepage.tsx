@@ -434,6 +434,7 @@ const MemberModal: React.FC<{ member: ResearchMember, show: boolean, onHide(): v
     return (
         <Modal
             container={document.getElementById('research-homepage')}
+            css={{ backgroundColor: 'transparent' }}
             show={show}
             className={cx('modal', 'fade', {
                 show,
