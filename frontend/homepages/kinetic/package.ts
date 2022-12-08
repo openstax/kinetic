@@ -12,7 +12,8 @@ try {
 const $ = cheerio.load(data);
 
 
-
 console.log(
     $('body').html()
 )
+
+export {}

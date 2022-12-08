@@ -16,18 +16,19 @@ import {
 import boxArrowInUpRight from '@iconify-icons/bi/box-arrow-in-up-right';
 import chevronDown from '@iconify-icons/bi/chevron-down';
 import chevronUp from '@iconify-icons/bi/chevron-up';
-import { Button, Modal } from '@restart/ui';
+import { Button } from '@restart/ui';
 import Accordion from 'react-bootstrap/Accordion';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { useRef } from 'react';
 import BannerImage from './images/landing/banner-image.svg';
 import { SSRProvider } from '@restart/ui/ssr';
+import Modal from 'react-bootstrap/Modal';
 
 export const ResearchHomepage = () => {
     return (
         <SSRProvider>
-            <div css={{ backgroundColor: colors.white, fontSize: '1rem', lineHeight: 1.5, fontFamily: 'Helvetica Neue' }}>
+            <div css={{ backgroundColor: colors.white, fontFamily: 'Helvetica Neue' }}>
                 <Header></Header>
                 <Banner></Banner>
                 <ColorBar></ColorBar>
@@ -42,7 +43,7 @@ export const ResearchHomepage = () => {
 }
 
 export const Header = () => (
-    <div className="py-5" css={{ backgroundColor: colors.lightBlue }}>
+    <div className="py-4" css={{ backgroundColor: colors.lightBlue }}>
         <Box direction={{ mobile: 'column' }} className='container' align='center'>
             <h1 className='fw-bolder' css={{ color: colors.white, flex: 3 }}>
                 Advancing multi-disciplinary research to improve learner success.
@@ -58,9 +59,9 @@ export const Banner = () => (
             <h4 className='fw-bold text-center' css={{ color: colors.blackText, flex: 1 }}>
                 Calling all learning researchers!
             </h4>
-            <Box align={{ mobile: 'center' }} direction='column' css={{ flex: 4 }}>
-                Learn about the research workflow on OpenStax Kinetic during office hours hosted with IES!
-                <a className='text-decoration-none text-center' href='https://ies.ed.gov/funding/technicalassistance.asp' target='_blank'>
+            <Box align={{ mobile: 'center' }} className='justify-content-center' direction='column' css={{ flex: 4 }}>
+                <span>Learn about the research workflow on OpenStax Kinetic during office hours hosted with IES!</span>
+                <a className='text-decoration-none' href='https://ies.ed.gov/funding/technicalassistance.asp' target='_blank'>
                     <Box align='center'>
                         IES Office Hours
                         &nbsp;
@@ -181,11 +182,9 @@ export const MobileResearchFocusAreas = () => {
                     <Accordion.Header>Learning Research on OpenStax Kinetic</Accordion.Header>
                     <Accordion.Body>
                         <p>
-                            OpenStax Kinetic is a new research infrastructure that enables researchers to connect with real
-                            learners studying curricular content in authentic learning environments. Researchers can leverage
-                            Qualtrics to design a variety of studies (e.g., surveys, Randomized Control Trials, A/B/N tests)
-                            and make them available on Kinetic to <strong>US adult higher education learners.</strong>
-                            Kinetic researchers can effectively address 3 key questions in learning and how they interact:
+                            OpenStax Kinetic research infrastructure enables researchers to connect with
+                            adult higher education learners in the US, studying curricular content in authentic
+                            learning environments while they leverage Qualtrics to various research methodologies.
                         </p>
                         <ol>
                             <li><strong>Who is the learner?</strong></li>
@@ -201,14 +200,9 @@ export const MobileResearchFocusAreas = () => {
                 <Accordion.Item eventKey="1" css={{ backgroundColor: colors.white }}>
                     <Accordion.Header>AI/ML in education</Accordion.Header>
                     <Accordion.Body>
-                        <p>
-                            In collaboration with leading researchers in the AI/ML in education space and the&nbsp;
-                            <a href='https://dsp.rice.edu/' target='_blank'>Digital Signal Processing research group</a>
-                            &nbsp;at Rice University, we investigate how to
-                            effectively utilize AI/ML advancements to address crucial issues in learning and education.
-                            Our research explores natural language processing for content generation, predictive models
-                            for learning analytics, and hybrid models for generation of knowledge graphs. We aim to use
-                            a combination of these efforts to optimally personalize learning experiences for learners.
+                        <p>Our research explores the use of a combination of natural language processing for
+                            content generation, predictive models for learning analytics, and hybrid models for
+                            generation of knowledge graphs to optimally personalize learning experiences for learners.
                         </p>
                         {researchFocusAreas['ai'].map((researchArea, index) =>
                             <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
@@ -220,11 +214,8 @@ export const MobileResearchFocusAreas = () => {
                     <Accordion.Body>
                         <p>
                             This learner- and educator- centered initiative aims to promote educational equity.
-                            To this end, we engage with learners, educators, institutions, and the community and
-                            utilize participatory and mixed- research methods. By working with educators and learners,
-                            we identify issues that are most important for them and work toward evidence-based approaches
-                            to address them. Ultimately, we work with our product teams to build evidence-based learner
-                            supports that are iteratively refined.
+                            By working with educators and learners, we identify issues that are most important for
+                            them and work toward evidence-based approaches to address them.
                         </p>
                         {researchFocusAreas['education'].map((researchArea, index) =>
                             <ResearchFocusArea researchArea={researchArea} key={index}></ResearchFocusArea>
@@ -242,7 +233,8 @@ export const ResearchFocusArea: React.FC<{ researchArea: ResearchArea }> = ({ re
             <img src={researchArea.image} css={{ flex: 2 }} alt={researchArea.title} />
             <Box direction='column' css={{ flex: 6 }}>
                 <h5 className='fw-bold'>{researchArea.title}</h5>
-                <p>{researchArea.description}</p>
+                <p className='desktop'>{researchArea.description}</p>
+                <p className='mobile'>{researchArea.shortDescription}</p>
                 {researchArea.cta &&
                     <div>
                         <a href={researchArea.cta?.url} target='_blank'>
@@ -251,7 +243,6 @@ export const ResearchFocusArea: React.FC<{ researchArea: ResearchArea }> = ({ re
                     </div>
                 }
             </Box>
-            {/*<p css={{ flex: 1 }}>view more?</p>*/}
         </Box>
         <hr />
     </div>
@@ -449,33 +440,19 @@ export const Member: React.FC<{ member: ResearchMember }> = ({ member }) => {
             <small>{member.title}</small>
             <Modal
                 show={show}
-                className={cx('modal', 'fade', {
-                    show,
-                })}
-                onBackdropClick={() => setShow(false)}
-                style={{ display: 'block', pointerEvents: 'none', overflow: 'auto' }}
+                scrollable={true}
                 onHide={() => setShow(false)}
-                renderBackdrop={(props) => (
-                    <div className={cx('modal-backdrop', 'fade', {
-                        show,
-                    })} {...props} />
-                )}
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
             >
-                <div className='modal-dialog modal-dialog-centered modal-dialog-scrollable mx-auto' css={{
-                    width: '50%',
-                    [media.mobile]: {
-                        width: '90%',
-                    },
-                }}>
-                    <div className="modal-content overflow-auto" css={{ padding: '1.75rem' }}>
-                        <MemberDetails member={member} />
-                        <Icon icon="x" height={30} onClick={() => setShow(false)} css={{
-                            position: 'absolute',
-                            top: 5,
-                            right: 5,
-                        }} />
-                    </div>
-                </div>
+                <Modal.Body css={{ padding: '1.75rem' }}>
+                    <MemberDetails member={member} />
+                    <Icon icon="x" height={30} onClick={() => setShow(false)} css={{
+                        position: 'absolute',
+                        top: 5,
+                        right: 5,
+                    }} />
+                </Modal.Body>
             </Modal>
         </Box>
     )

@@ -40,11 +40,11 @@ export default async function buildPage({ args }: any) {
     const assets = await fs.promises.readdir('dist/assets')
     for (const asset of assets) {
         const stream = fs.createReadStream(`dist/assets/${asset}`)
+        // eslint-disable-next-line no-console
         console.log(`upload ${asset}`)
         // will throw exception if upload fails
         await s3.send(new PutObjectCommand({
             Bucket: 'kinetic-app-assets',
-            ACL: 'public-read',
             Key: `assets/${asset}`,
             Body: stream,
             ContentType: lookup(asset) || 'application/octet-stream',
@@ -55,5 +55,6 @@ export default async function buildPage({ args }: any) {
     pbcopy.stdin.write(html)
     pbcopy.stdin.end()
 
+    // eslint-disable-next-line no-console
     console.log('\ntmp/page-hydration-test.html was created, and output copied to clipboard')
 }

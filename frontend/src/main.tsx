@@ -7,6 +7,7 @@ import { EnvironmentProvider } from './lib/environment-provider'
 import { AppRoutes } from './routes'
 import './lib/sentry'
 import './index.css'
+import './styles/bootstrap.scss'
 import './styles/main.scss'
 import { theme } from './theme'
 
