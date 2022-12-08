@@ -1,0 +1,28 @@
+@import "node_modules/bootstrap/scss/reboot";
+
+
+&{
+  // the Bootstrap reboot above places these styles on <body>
+  // we reset them on whatever element we're scoped under
+  @if $font-size-root != null {
+    @include font-size(var(--#{$prefix}root-font-size));
+  }
+
+  @if $enable-smooth-scroll {
+    @media (prefers-reduced-motion: no-preference) {
+      scroll-behavior: smooth;
+    }
+  }
+
+  margin: 0; // 1
+  font-family: var(--#{$prefix}body-font-family);
+  @include font-size(var(--#{$prefix}body-font-size));
+  font-weight: var(--#{$prefix}body-font-weight);
+  line-height: var(--#{$prefix}body-line-height);
+  color: var(--#{$prefix}body-color);
+  text-align: var(--#{$prefix}body-text-align);
+  background-color: var(--#{$prefix}body-bg); // 2
+  -webkit-text-size-adjust: 100%; // 3
+  -webkit-tap-highlight-color: rgba($black, 0); // 4
+}
+

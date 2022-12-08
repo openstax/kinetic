@@ -36,9 +36,9 @@ body {
 //    background-color: #000 !important;
 //}
 
-@import "./cms-bootstrap.scss";
 
-#research-homepage {
+.research-cms-root-page {
+    @import "./cms-bootstrap.scss";
     .nav-tabs .nav-link.active {
         color: #495057;
         background-color: rgba(0,0,0,0) !important;
@@ -63,4 +63,5 @@ body {
             display: block;
         }
     }
+
 }
