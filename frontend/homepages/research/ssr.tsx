@@ -20,6 +20,6 @@ export const render = () => {
 
     let { html, css, ids } = extractCritical(renderToString(element))
 
-    return `<style data-emotion="${key} ${ids.join(' ')}" data-s>${css}</style>\n<div id="research-homepage">${html}</div>`
+    return `<style data-emotion="${key} ${ids.join(' ')}" data-s>${css}</style>\n<div id="research-homepage" class="research-cms-root-page">${html}</div>`
 
 }
