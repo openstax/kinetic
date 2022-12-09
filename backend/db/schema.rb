@@ -75,7 +75,10 @@ ActiveRecord::Schema.define(version: 2022_11_29_224957) do
     t.datetime "completed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "launched_study_id", null: false
+    t.index ["launched_study_id"], name: "index_launched_stages_on_launched_study_id"
     t.index ["stage_id"], name: "index_launched_stages_on_stage_id"
+    t.index ["user_id", "stage_id", "launched_study_id"], name: "index_launched_stages_on_user_and_stage_and_launched_study", unique: true
   end
 
   create_table "launched_studies", force: :cascade do |t|
@@ -89,6 +92,7 @@ ActiveRecord::Schema.define(version: 2022_11_29_224957) do
     t.datetime "aborted_at"
     t.boolean "consent_granted"
     t.index ["study_id"], name: "index_launched_studies_on_study_id"
+    t.index ["user_id", "study_id", "consent_granted"], name: "index_launched_studies_on_user_id_and_study_id_and_consent", unique: true
   end
 
   create_table "participant_metadata", force: :cascade do |t|
@@ -98,17 +102,6 @@ ActiveRecord::Schema.define(version: 2022_11_29_224957) do
     t.datetime "created_at"
     t.index ["study_id"], name: "index_participant_metadata_on_study_id"
     t.index ["user_id"], name: "index_participant_metadata_on_user_id"
-  end
-
-  create_table "participant_preference", force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.boolean "cycle_deadlines_email", default: true, null: false
-    t.boolean "prize_cycle_email", default: true, null: false
-    t.boolean "study_available_email", default: true, null: false
-    t.boolean "session_available_email", default: true, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_participant_preference_on_user_id"
   end
 
   create_table "research_ids", id: :text, force: :cascade do |t|
@@ -147,8 +140,6 @@ ActiveRecord::Schema.define(version: 2022_11_29_224957) do
     t.string "title"
     t.string "description"
     t.float "available_after_days", default: 0.0, null: false
-    t.integer "duration_minutes", default: 0, null: false
-    t.integer "points", default: 0, null: false
     t.index ["order", "study_id"], name: "index_stages_on_order_and_study_id", unique: true
     t.index ["study_id"], name: "index_stages_on_study_id"
   end
@@ -158,6 +149,8 @@ ActiveRecord::Schema.define(version: 2022_11_29_224957) do
     t.string "title_for_participants", null: false
     t.text "short_description", null: false
     t.text "long_description", null: false
+    t.integer "duration_minutes", null: false
+    t.integer "participation_points"
     t.datetime "opens_at"
     t.datetime "closes_at"
     t.boolean "is_mandatory", default: false, null: false
@@ -207,6 +200,7 @@ ActiveRecord::Schema.define(version: 2022_11_29_224957) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "launched_stages", "launched_studies"
   add_foreign_key "launched_stages", "stages"
   add_foreign_key "launched_studies", "studies"
   add_foreign_key "participant_metadata", "studies"
