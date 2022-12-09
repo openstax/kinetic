@@ -36,6 +36,7 @@ module Kinetic
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
 
+    config.active_record.schema_format = :sql
     config.active_storage.routes_prefix = '/files'
     # config.active_storage.draw_routes = false
     # config.action_controller.default_protect_from_forgery = false
