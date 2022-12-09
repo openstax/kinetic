@@ -50,6 +50,7 @@ class Api::V1::Researcher::StudyResponsesOpenApi
       extend Api::V1::OpenApiResponses::UnprocessableEntityError
       extend Api::V1::OpenApiResponses::ServerError
     end
+  end
 
   openapi_path '/researcher/responses/{api_key}/fetch' do
     operation :post do

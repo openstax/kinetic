@@ -9,7 +9,7 @@ class Api::V1::Researcher::StudyResponsesController < ApplicationController
 
     api_binding = Api::V1::Bindings::StudyResponses.new(
       status: pending ? 'pending' : 'complete',
-      response_urls: responses.filter(&:is_complete).flat_map { |r| r.files.map{ |f| url_for(f) } }
+      response_urls: responses.filter(&:is_complete).flat_map { |r| r.files.map { |f| url_for(f) } }
     )
     render json: api_binding, status: :ok
   end
