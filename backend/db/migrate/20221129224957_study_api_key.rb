@@ -8,13 +8,18 @@ class StudyApiKey < ActiveRecord::Migration[6.1]
           from (values('ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789')) as symbols(characters)
           join generate_series(1, $1) on 1 = 1
           $$ language sql;
+
+          alter table studies add column api_key text not null default random_string(18);
         SQL
       end
       dir.down do
-        execute 'drop function random_string(int)'
+        execute <<-SQL
+           alter table studies drop column api_key;
+           drop function random_string(int);
+        SQL
       end
     end
 
-    add_column :studies, :api_key, :string, default: -> {'random_string(18)'}
+
   end
 end
