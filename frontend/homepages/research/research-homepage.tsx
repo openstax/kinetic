@@ -31,7 +31,6 @@ export const ResearchHomepage = () => {
             <div>
                 <Header></Header>
                 {/*<Banner></Banner>*/}
-                <ColorBar></ColorBar>
                 <ResearchSection></ResearchSection>
                 <Publications></Publications>
                 <MembersSection></MembersSection>
@@ -61,25 +60,26 @@ export const Header = () => (
 )
 
 // TODO Next banner will go up in January, we dont want to use this until then. Saving for later
-// export const Banner = () => (
-//     <div className="py-2" css={{ backgroundColor: colors.lightTeal }}>
-//         <Box direction={{ mobile: 'column' }} className='container align-items-center' gap='medium'>
-//             <h4 className='fw-bold text-center' css={{ color: colors.blackText, flex: 1 }}>
-//                 Calling all learning researchers!
-//             </h4>
-//             <Box align={{ mobile: 'center' }} className='justify-content-center' direction='column' css={{ flex: 4 }}>
-//                 <span>Learn about the research workflow on OpenStax Kinetic during office hours hosted with IES!</span>
-//                 <a className='text-decoration-none' href='https://ies.ed.gov/funding/technicalassistance.asp' target='_blank'>
-//                     <Box align='center'>
-//                         IES Office Hours
-//                         &nbsp;
-//                         <Icon icon={boxArrowInUpRight}></Icon>
-//                     </Box>
-//                 </a>
-//             </Box>
-//         </Box>
-//     </div>
-// )
+export const Banner = () => (
+    <div css={{ backgroundColor: colors.lightTeal }}>
+        <Box direction={{ mobile: 'column' }} className='container align-items-center py-2' gap='medium'>
+            <h4 className='fw-bold text-center' css={{ color: colors.blackText, flex: 1 }}>
+                Calling all learning researchers!
+            </h4>
+            <Box align={{ mobile: 'center' }} className='justify-content-center' direction='column' css={{ flex: 4 }}>
+                <span>Learn about the research workflow on OpenStax Kinetic during office hours hosted with IES!</span>
+                <a className='text-decoration-none' href='https://ies.ed.gov/funding/technicalassistance.asp' target='_blank'>
+                    <Box align='center'>
+                        IES Office Hours
+                        &nbsp;
+                        <Icon icon={boxArrowInUpRight}></Icon>
+                    </Box>
+                </a>
+            </Box>
+        </Box>
+        <ColorBar/>
+    </div>
+)
 
 export const ColorBar = () => (
     <Box>
