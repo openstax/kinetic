@@ -8,6 +8,7 @@ export const colors = {
     primaryButton: '#D4450C',
     lightBlue: '#0DC0DC',
     darkBlue: '#151B2C',
+    primaryBlue: '#002469',
     red: '#ca2026',
     teal: '#0dc0de',
     lightTeal: '#DBF3F8',

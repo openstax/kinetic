@@ -31,16 +31,12 @@ const SupporterImage = styled.img({
 export const Funders = () => {
     return (
         <div css={{ backgroundColor: colors.white }}>
-            <Box direction="column" className='p-2'>
+            <Box direction="column" align={{ mobile: 'center' }} className='py-2 container'>
                 <div css={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    maxWidth: '600px',
                     margin: 'auto',
-                    alignItems: 'center',
                 }}>
                     <h3 className="fw-bold align-self-start">Support from Scientific Agencies</h3>
-                    <Box justify='evenly'>
+                    <Box justify='center'>
                         <Supporter target="_blank" href="https://ies.ed.gov/">
                             <SupporterImage alt="Institute of Education Sciences logo" src={IESLogoURL} />
                         </Supporter>

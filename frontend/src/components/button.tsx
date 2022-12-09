@@ -95,7 +95,7 @@ export const Button = React.forwardRef<HTMLButtonElement,React.PropsWithChildren
             {...props}
         >
             {icon}
-            {iconOnly !== true && <span>{message}</span>}
+            {!iconOnly && <span>{message}</span>}
         </StyledButton>
     )
 })
