@@ -68,7 +68,7 @@ export const HeaderImage = styled.img({
 
 export const Header = () => (
     <div className="py-4" css={{ backgroundColor: colors.lightBlue }}>
-        <Box direction={{ mobile: 'column', tablet: 'column' }} className='container' align='center'>
+        <Box direction={{ mobile: 'column', tablet: 'column', desktop: 'row' }} className='container' align='center'>
             <h1 css={{ color: colors.white, flex: 5 }} className='fw-bolder'>
                 Advancing multi-disciplinary research to improve learner success.
             </h1>
