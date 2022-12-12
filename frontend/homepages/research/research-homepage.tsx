@@ -124,7 +124,7 @@ export const ResearchFocusAreas = () => (
                     OpenStax Kinetic is a new research infrastructure that enables researchers to connect with real
                     learners studying curricular content in authentic learning environments. Researchers can leverage
                     Qualtrics to design a variety of studies (e.g., surveys, Randomized Control Trials, A/B/N tests)
-                    and make them available on Kinetic to <strong>US adult higher education learners.</strong>
+                    and make them available on Kinetic to <strong>US adult higher education learners. </strong>
                     Kinetic researchers can effectively address 3 key questions in learning and how they interact:
                 </p>
                 <ol>
@@ -235,7 +235,7 @@ export const MobileResearchFocusAreas = () => {
 
 export const ResearchFocusArea: React.FC<{ researchArea: ResearchArea }> = ({ researchArea }) => (
     <div className='py-2'>
-        <Box gap='large' direction={{ mobile: 'column' }} className='py-2'>
+        <Box gap='xlarge' direction={{ mobile: 'column' }} className='py-2'>
             <ResearchAreaImage src={researchArea.image} alt={researchArea.title} />
             <Box direction='column' css={{ flex: 6 }}>
                 <h5 className='fw-bold'>{researchArea.title}</h5>
@@ -258,7 +258,9 @@ const ResearchAreaImage = styled.img({
     flex: 2,
     maxWidth: 250,
     height: '100%',
-    alignSelf: 'center',
+    [media.mobile]: {
+        alignSelf: 'center',
+    },
 });
 
 export const Publications = () => {
