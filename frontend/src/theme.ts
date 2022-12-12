@@ -2,9 +2,7 @@
 export const colors = {
     pageBackground: '#f7f8fa',
     lightGrayBackground: '#F1F1F1',
-    // TODO Confirm if we want both or switch?
-    //  Figma mockup has #F36B32 for orange
-    orange: '#f47641',
+    orange: '#F36B32',
     primaryButton: '#D4450C',
     lightBlue: '#0DC0DC',
     darkBlue: '#151B2C',

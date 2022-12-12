@@ -3,12 +3,12 @@
 @import "node_modules/bootstrap/scss/functions";
 
 $font-size-base: 1.6rem;
-$h1-font-size: $font-size-base * 3 !default;
-$h2-font-size: $font-size-base * 2.25 !default;
-$h3-font-size: $font-size-base * 1.5 !default;
-$h4-font-size: $font-size-base * 1.25 !default;
-$h5-font-size: $font-size-base * 1.125 !default;
-$h6-font-size: $font-size-base !default;
+$h1-font-size: $font-size-base * 3;
+$h2-font-size: $font-size-base * 2.25;
+$h3-font-size: $font-size-base * 1.5;
+$h4-font-size: $font-size-base * 1.25;
+$h5-font-size: $font-size-base * 1.125;
+$h6-font-size: $font-size-base;
 
 $font-sizes: (
     1: $h1-font-size,
@@ -79,6 +79,8 @@ $accordion-button-active-bg: tint-color(#0DC0DC, 90%);
 $accordion-button-active-color: shade-color(#424242, 10%);
 $accordion-button-focus-border-color: #424242;
 $accordion-button-focus-box-shadow: #424242;
+
+$container-padding-x: 4rem;
 
 @import "node_modules/bootstrap/scss/variables";
 @import "node_modules/bootstrap/scss/mixins";

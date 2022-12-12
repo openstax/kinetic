@@ -2,7 +2,7 @@ import { Box, cx, React, styled, useState } from '@common'
 
 import '../../src/styles/cms-page.scss'
 import { colors, media } from '../../src/theme';
-import { Funders, Icon } from '@components';
+import { Funders, Icon, OXColoredStripe } from '@components';
 import {
     alumni,
     AlumnusMember,
@@ -13,7 +13,6 @@ import {
     ResearchMember,
     researchMembers,
 } from './research-data';
-import boxArrowInUpRight from '@iconify-icons/bi/box-arrow-in-up-right';
 import chevronDown from '@iconify-icons/bi/chevron-down';
 import chevronUp from '@iconify-icons/bi/chevron-up';
 import { Button, Modal } from '@restart/ui';
@@ -29,29 +28,48 @@ export const ResearchHomepage = () => {
     return (
         <SSRProvider>
             <div>
-                <Header></Header>
+                <Header/>
                 {/*<Banner></Banner>*/}
-                <ResearchSection></ResearchSection>
-                <Publications></Publications>
-                <MembersSection></MembersSection>
-                <Funders></Funders>
-                <ContactUs></ContactUs>
+                <ResearchSection/>
+                <Publications/>
+                <MembersSection/>
+                <Funders/>
+                <ContactUs/>
             </div>
         </SSRProvider>
     )
 }
 
-export const HeaderImage = styled('img')({
-    width: '45%',
+export const Section: FCWC<{backgroundColor?: string}> = ({ children, backgroundColor= colors.white }) => {
+    return (
+        <div css={{
+            backgroundColor: backgroundColor,
+            padding: '60px 0',
+            [media.mobile]: {
+                padding: '50px 0',
+            },
+        }}>
+            <div className='container'>
+                {children}
+            </div>
+        </div>
+    )
+}
+
+export const HeaderImage = styled.img({
+    width: '35%',
     [media.mobile]: {
-        width: '100%',
+        width: '85%',
+    },
+    [media.tablet]: {
+        width: '85%',
     },
 })
 
 export const Header = () => (
     <div className="py-4" css={{ backgroundColor: colors.lightBlue }}>
-        <Box direction={{ mobile: 'column' }} className='container' align='center'>
-            <h1 className='fw-bolder' css={{ color: colors.white, flex: 3 }}>
+        <Box direction={{ mobile: 'column', tablet: 'column' }} className='container' align='center'>
+            <h1 css={{ color: colors.white, flex: 5 }} className='fw-bolder'>
                 Advancing multi-disciplinary research to improve learner success.
             </h1>
             <HeaderImage src={BannerImage} alt='banner-image' css={{ flex: 2 }} />
@@ -63,7 +81,7 @@ export const Header = () => (
 export const Banner = () => (
     <div css={{ backgroundColor: colors.lightTeal }}>
         <Box direction={{ mobile: 'column' }} className='container align-items-center py-2' gap='medium'>
-            <h4 className='fw-bold text-center' css={{ color: colors.blackText, flex: 1 }}>
+            <h4 className='fw-bold' css={{ color: colors.blackText, flex: 1 }}>
                 Calling all learning researchers!
             </h4>
             <Box align={{ mobile: 'center' }} className='justify-content-center' direction='column' css={{ flex: 4 }}>
@@ -72,48 +90,18 @@ export const Banner = () => (
                     <Box align='center'>
                         IES Office Hours
                         &nbsp;
-                        <Icon icon={boxArrowInUpRight}></Icon>
+                        <Icon icon='boxArrowInUpRight'></Icon>
                     </Box>
                 </a>
             </Box>
         </Box>
-        <ColorBar/>
+        <OXColoredStripe/>
     </div>
-)
-
-export const ColorBar = () => (
-    <Box>
-        <span css={{
-            backgroundColor: colors.orange,
-            height: 10,
-            width: '35%',
-        }}></span>
-        <span css={{
-            backgroundColor: colors.primaryBlue,
-            height: 10,
-            width: '15%',
-        }}></span>
-        <span css={{
-            backgroundColor: colors.red,
-            height: 10,
-            width: '10%',
-        }}></span>
-        <span css={{
-            backgroundColor: colors.yellow,
-            height: 10,
-            width: '25%',
-        }}></span>
-        <span css={{
-            backgroundColor: colors.lightBlue,
-            height: 10,
-            width: '15%',
-        }}></span>
-    </Box>
 )
 
 export const ResearchSection = () => {
     return (
-        <div className='container py-4'>
+        <Section backgroundColor={colors.lightGrayBackground}>
             <h2 className='py-2'>Areas of Research Focus</h2>
             <p className='mobile'>
                 Our team has significant expertise in <strong>learning science, education research, and AI/ML
@@ -124,7 +112,7 @@ export const ResearchSection = () => {
             </p>
             <MobileResearchFocusAreas />
             <ResearchFocusAreas />
-        </div>
+        </Section>
     )
 }
 
@@ -248,7 +236,7 @@ export const MobileResearchFocusAreas = () => {
 export const ResearchFocusArea: React.FC<{ researchArea: ResearchArea }> = ({ researchArea }) => (
     <div className='py-2'>
         <Box gap='large' direction={{ mobile: 'column' }} className='py-2'>
-            <img src={researchArea.image} css={{ flex: 2 }} alt={researchArea.title} />
+            <ResearchAreaImage src={researchArea.image} alt={researchArea.title} />
             <Box direction='column' css={{ flex: 6 }}>
                 <h5 className='fw-bold'>{researchArea.title}</h5>
                 <p className='desktop'>{researchArea.description}</p>
@@ -266,6 +254,13 @@ export const ResearchFocusArea: React.FC<{ researchArea: ResearchArea }> = ({ re
     </div>
 )
 
+const ResearchAreaImage = styled.img({
+    flex: 2,
+    maxWidth: 250,
+    height: '100%',
+    alignSelf: 'center',
+});
+
 export const Publications = () => {
     const [viewAll, setViewAll] = useState(false);
     let initialCount = 5;
@@ -279,31 +274,33 @@ export const Publications = () => {
         publicationsRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
     return (
-        <Box direction='column' className='container mt-2'>
-            <h2 ref={publicationsRef}>Publications</h2>
-            {publicationList.map((publication, index) =>
-                <PublicationItem key={index} publication={publication} />
-            )}
-            <span className='py-4 align-self-center'
-                onClick={() => {
-                    if (viewAll) {
-                        scrollToPublications()
-                    }
-                    setViewAll(!viewAll)
-                }}
-                css={{ cursor: 'pointer', color: colors.linkText }}
-            >
-                <Icon icon={viewAll ? chevronUp : chevronDown}></Icon>
+        <Section>
+            <Box direction='column'>
+                <h2 ref={publicationsRef}>Publications</h2>
+                {publicationList.map((publication, index) =>
+                    <PublicationItem key={index} publication={publication} />
+                )}
+                <span className='py-4 align-self-center'
+                    onClick={() => {
+                        if (viewAll) {
+                            scrollToPublications()
+                        }
+                        setViewAll(!viewAll)
+                    }}
+                    css={{ cursor: 'pointer', color: colors.linkText }}
+                >
+                    <Icon icon={viewAll ? chevronUp : chevronDown}></Icon>
                 &nbsp;
-                {viewAll ? 'View Less' : 'View All Publications'}
-            </span>
-        </Box>
+                    {viewAll ? 'View Less' : 'View All Publications'}
+                </span>
+            </Box>
+        </Section>
     )
 }
 
 export const PublicationItem: React.FC<{ publication: Publication }> = ({ publication }) => (
-    <Box direction='column' className='py-1'>
-        <div className='mb-1'>
+    <Box direction='column' className='py-2' css={{ lineHeight: 1.8 }}>
+        <div>
             <a className='fw-bold' href={publication.pdf} target='_blank'>
                 {publication.title}
             </a>
@@ -314,17 +311,17 @@ export const PublicationItem: React.FC<{ publication: Publication }> = ({ public
                 {publication.body}
             </span>
         </div>
-        <Box gap='xlarge' className='mt-1'>
+        <Box gap='xlarge'>
             <a className='text-decoration-none' href={publication.pdf} target='_blank'>
                 <Box align='center'>
                     Pdf&nbsp;
-                    <Icon icon={boxArrowInUpRight}></Icon>
+                    <Icon icon='boxArrowInUpRight'></Icon>
                 </Box>
             </a>
             {publication.github && <a className='text-decoration-none' href={publication.github} target='_blank'>
                 <Box align='center'>
                     Github
-                    <Icon icon={boxArrowInUpRight}></Icon>
+                    <Icon icon='boxArrowInUpRight'></Icon>
                 </Box>
             </a>}
         </Box>
@@ -350,13 +347,11 @@ const AlumniGrid = styled(Box)({
 
 export const MembersSection = () => {
     return (
-        <div css={{ backgroundColor: colors.lightGrayBackground }}>
-            <div className='container py-3' >
-                <h2 className='pt-4 pb-2'>Team Members</h2>
-                <MobileMembers />
-                <Members />
-            </div>
-        </div>
+        <Section backgroundColor={colors.lightGrayBackground}>
+            <h2 className='pt-4 pb-2'>Team Members</h2>
+            <MobileMembers />
+            <Members />
+        </Section>
     )
 }
 
@@ -457,7 +452,7 @@ const MemberModal: React.FC<{ member: ResearchMember, show: boolean, onHide(): v
             container={document.getElementById('research-homepage')}
             css={{ backgroundColor: 'transparent' }}
             show={show}
-            className={cx('modal', 'fade', {
+            className={cx('modal', 'modal-lg', 'fade', {
                 show,
             })}
             onBackdropClick={onHide}
@@ -469,13 +464,14 @@ const MemberModal: React.FC<{ member: ResearchMember, show: boolean, onHide(): v
                 })} {...props} />
             )}
         >
-            <div className='modal-dialog modal-dialog-centered modal-dialog-scrollable mx-auto' css={{
-                width: '50%',
-                [media.mobile]: {
-                    width: '90%',
-                },
-            }}>
-                <div className="modal-content overflow-auto" css={{ padding: '1.75rem' }}>
+            <div className='modal-dialog modal-dialog-centered modal-dialog-scrollable mx-auto'>
+                <div className="modal-content overflow-auto" css={{
+                    padding: '3rem',
+                    [media.mobile]: {
+                        padding: '2rem',
+                    },
+                    margin: '0 20px',
+                }}>
                     <MemberDetails member={member} />
                     <Icon icon="x" height={30} onClick={onHide} css={{
                         position: 'absolute',
@@ -493,7 +489,7 @@ export const Member: React.FC<{ member: ResearchMember }> = ({ member }) => {
     const [show, setShow] = useState(false);
     return (
         <Box direction='column' align='center' className='text-center'>
-            <img alt={member.firstName} src={member.image} onClick={() => setShow(true)} />
+            <img height={145} width={145} alt={member.firstName} src={member.image} onClick={() => setShow(true)} />
             <Button className='mt-2' as='a' type='button' onClick={() => setShow(true)}>
                 {member.firstName}
             </Button>
@@ -506,12 +502,15 @@ export const Member: React.FC<{ member: ResearchMember }> = ({ member }) => {
 export const MemberDetails: React.FC<{ member: ResearchMember }> = ({ member }) => {
     return (
         <Box css={{ fontSize: 15 }}>
-            <Box direction='column' gap='medium'>
-                <MemberInfo member={member} />
-                <MemberEducation member={member} />
-                <MemberResearchInterest member={member} />
-                <MemberBio member={member} />
-                <MemberLinks member={member} />
+            <Box gap='large'>
+                <MemberImage className='desktop' src={member.image} alt={member.firstName} />
+                <Box direction='column' gap='medium'>
+                    <MemberInfo member={member} />
+                    <MemberEducation member={member} />
+                    <MemberResearchInterest member={member} />
+                    <MemberBio member={member} />
+                    <MemberLinks member={member} />
+                </Box>
             </Box>
         </Box>
     )
@@ -524,14 +523,15 @@ const MemberImage = styled.img({
     [media.mobile]: {
         width: 75,
         height: 75,
+        marginRight: '2rem',
     },
 });
 
 export const MemberInfo: React.FC<{ member: ResearchMember }> = ({ member }) => {
     return (
         <Box align='center'>
-            <MemberImage src={member.image} alt={member.firstName} />
-            <Box direction='column' margin={{ left: '1.5rem' }}>
+            <MemberImage className='mobile' src={member.image} alt={member.firstName} />
+            <Box direction='column'>
                 <h4>{member.firstName} {member.lastName}</h4>
                 <p css={{ color: colors.grayText }}>
                     {member.title}
@@ -581,7 +581,7 @@ export const MemberBio: React.FC<{ member: ResearchMember }> = ({ member }) => {
 export const MemberLinks: React.FC<{ member: ResearchMember }> = ({ member }) => {
     return (
         <Box gap='large'>
-            {member.linkedIn && <a href={member.linkedIn} target='_blank'>Linkedin</a>}
+            {member.linkedIn && <a href={member.linkedIn} target='_blank'>LinkedIn</a>}
             {member.googleScholar && <a href={member.googleScholar} target='_blank'>Google Scholar</a>}
             {member.website && <a href={member.website} target='_blank'>Website</a>}
         </Box>

@@ -1,16 +1,12 @@
 import { cx, React } from '@common'
 import styled from '@emotion/styled'
 import { HelpLink, ResourceLinks } from './resource-links'
-import { colors } from '../theme'
+import { colors, media } from '../theme'
 import { Box, Col, Icon, Row } from '@components'
 
-// @ts-ignore
 import NSFLogoURL from '../images/nsf-logo.webp'
-// @ts-ignore
 import IESLogoURL from '../images/ies-logo.webp'
-// @ts-ignore
 import RiceLogoURL from '../images/rice-logo.png'
-// @ts-ignore
 import OpenStaxURL from '../images/openstax-logo.png'
 
 import fbIcon from '@iconify-icons/bi/facebook'
@@ -30,7 +26,13 @@ const SupporterImage = styled.img({
 
 export const Funders = () => {
     return (
-        <div css={{ backgroundColor: colors.white }}>
+        <div css={{
+            backgroundColor: colors.white,
+            padding: '60px 0',
+            [media.mobile]: {
+                padding: '50px 0',
+            },
+        }}>
             <Box direction="column" align={{ mobile: 'center' }} className='py-2 container'>
                 <div css={{
                     margin: 'auto',
