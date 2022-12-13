@@ -87,9 +87,10 @@ export const Banner = () => (
     </div>
 )
 
+
 export const ContactUs = () => (
-    <Section backgroundColor={colors.lightTeal}>
-        <Box className='py-3' direction={{ mobile: 'column' }} align='center' gap='xlarge'>
+    <div css={{ backgroundColor: colors.lightTeal }}>
+        <Box className='py-3 container' direction={{ mobile: 'column' }} align='center' gap='xlarge' css={{ maxWidth: '120rem !important' }}>
             <h3>Connect with our Research Team</h3>
             <Button
                 as='a'
@@ -103,5 +104,5 @@ export const ContactUs = () => (
                 Contact Us
             </Button>
         </Box>
-    </Section>
+    </div>
 )
