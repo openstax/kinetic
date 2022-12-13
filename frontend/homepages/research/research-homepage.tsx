@@ -58,7 +58,7 @@ export const Header = () => (
     <Section backgroundColor={colors.lightBlue}>
         <Box direction={{ mobile: 'column', tablet: 'column', desktop: 'row' }} align='center'>
             <h1 css={{ color: colors.white, flex: 5 }} className='fw-bolder'>
-                Advancing multi-disciplinary research to improve learner success.
+                Advancing interdisciplinary research in learning sciences, education, and allied disciplines, to improve learner success.
             </h1>
             <HeaderImage src={BannerImage} alt='banner-image' css={{ flex: 2 }} />
         </Box>
