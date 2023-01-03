@@ -3,7 +3,8 @@
 class Study < ApplicationRecord
   # list of fields to set to nil when they're ommited in an api udpate
   NULLABLE_FIELDS = %w[opens_at closes_at].freeze
-  has_many :study_researchers, dependent: :destroy
+  has_many :study_researchers, inverse_of: :study, dependent: :destroy
+  has_many :study_response_exports, inverse_of: :study, dependent: :destroy
   has_many :researchers, through: :study_researchers, dependent: :destroy
   # need the double quotes, order is a postgresql semi-reserved word
   has_many :stages, -> { order('"order"') }, dependent: :destroy
@@ -56,6 +57,14 @@ class Study < ApplicationRecord
     return incomplete_launch.stage if incomplete_launch.present?
 
     next_launchable_stage(user)
+  end
+
+  def fetch_responses(is_testing:)
+    resp = study_response_exports
+             .find_by(is_testing: is_testing, is_complete: false)
+
+    resp = study_response_exports.create(is_testing: is_testing) if resp.nil? || !resp.fresh?
+    resp.fetch
   end
 
 end
