@@ -17,7 +17,6 @@ export const TopNavBar: FCWOC<{ className?: string }> = ({ children, className }
                 <div className="container-lg">
                     <Box justify="between" align="center" gap padding={{ vertical: 'default' }}>
                         <NavbarLogoLink />
-                        {!isMobile && <BannersBar />}
                         {children}
                         <Box gap="xlarge">
                             {!isMobile && <Link to="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Studies</Link>}
@@ -30,7 +29,7 @@ export const TopNavBar: FCWOC<{ className?: string }> = ({ children, className }
                     </Box>
                 </div>
             </div>
-            {isMobile && <BannersBar />}
+            <BannersBar />
         </nav >
     )
 }

@@ -32,7 +32,7 @@ export const BannersBar: React.FC = () => {
             css={{
                 color: 'white',
                 fontFamily: 'Helvetica Neue',
-                backgroundColor: colors.darkTeal,
+                backgroundColor: colors.purple,
                 boxShadow: '0px 10px 20px -5px rgba(0, 0, 0, 0.08)',
             }}
         >
