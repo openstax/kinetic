@@ -32,8 +32,7 @@ jobs:
         working-directory: frontend
         run: $(npm bin)/wait-on http://localhost:4006/api/v1/openapi.json
       - name: Generate bindings
-        working-directory: frontend
-        run: yarn run generate-local-bindings
+        run: ./bin/update-bindings
       - name: Check for changes in bindings
         uses: tj-actions/verify-changed-files@v7.1
         id: verify-changed-files
