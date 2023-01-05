@@ -42,6 +42,9 @@ module Api::V1::Bindings
     # How popular the study is on a fractional scale of 0.0 to 1.0
     attr_accessor :popularity_rating
 
+    # Should this study be feautured more prominently?
+    attr_accessor :is_featured
+
     # When the study was launched; null means not launched
     attr_accessor :first_launched_at
 
@@ -75,6 +78,7 @@ module Api::V1::Bindings
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
         :'popularity_rating' => :'popularity_rating',
+        :'is_featured' => :'is_featured',
         :'first_launched_at' => :'first_launched_at',
         :'completed_at' => :'completed_at',
         :'closes_at' => :'closes_at',
@@ -102,6 +106,7 @@ module Api::V1::Bindings
         :'image_id' => :'String',
         :'benefits' => :'String',
         :'popularity_rating' => :'Float',
+        :'is_featured' => :'Boolean',
         :'first_launched_at' => :'Time',
         :'completed_at' => :'Time',
         :'closes_at' => :'Time',
@@ -169,6 +174,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'popularity_rating')
         self.popularity_rating = attributes[:'popularity_rating']
+      end
+
+      if attributes.key?(:'is_featured')
+        self.is_featured = attributes[:'is_featured']
       end
 
       if attributes.key?(:'first_launched_at')
@@ -251,6 +260,7 @@ module Api::V1::Bindings
           image_id == o.image_id &&
           benefits == o.benefits &&
           popularity_rating == o.popularity_rating &&
+          is_featured == o.is_featured &&
           first_launched_at == o.first_launched_at &&
           completed_at == o.completed_at &&
           closes_at == o.closes_at &&
@@ -269,7 +279,11 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
+<<<<<<< HEAD
       [id, title, short_description, long_description, tags, feedback_description, image_id, benefits, popularity_rating, first_launched_at, completed_at, closes_at, opted_out_at, researchers, stages, is_mandatory].hash
+=======
+      [id, title, short_description, long_description, tags, feedback_description, image_id, benefits, duration_minutes, participation_points, popularity_rating, is_featured, first_launched_at, completed_at, closes_at, opted_out_at, researchers, stages, is_mandatory].hash
+>>>>>>> main
     end
 
     # Builds the object from hash

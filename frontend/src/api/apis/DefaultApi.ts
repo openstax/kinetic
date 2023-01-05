@@ -66,6 +66,9 @@ import {
     Study,
     StudyFromJSON,
     StudyToJSON,
+    StudyResponses,
+    StudyResponsesFromJSON,
+    StudyResponsesToJSON,
     UpdateBanner,
     UpdateBannerFromJSON,
     UpdateBannerToJSON,
@@ -130,6 +133,14 @@ export interface GetParticipantStudyRequest {
 
 export interface GetStageRequest {
     id: number;
+}
+
+export interface GetStudyResponseDownloadRequest {
+    apiKey: string;
+}
+
+export interface GetStudyResponseStatusRequest {
+    apiKey: string;
 }
 
 export interface LandStudyRequest {
@@ -698,6 +709,66 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getStudies(initOverrides?: RequestInit): Promise<Studies> {
         const response = await this.getStudiesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Prepare response download
+     */
+    async getStudyResponseDownloadRaw(requestParameters: GetStudyResponseDownloadRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<StudyResponses>> {
+        if (requestParameters.apiKey === null || requestParameters.apiKey === undefined) {
+            throw new runtime.RequiredError('apiKey','Required parameter requestParameters.apiKey was null or undefined when calling getStudyResponseDownload.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researcher/responses/{api_key}/fetch`.replace(`{${"api_key"}}`, encodeURIComponent(String(requestParameters.apiKey))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudyResponsesFromJSON(jsonValue));
+    }
+
+    /**
+     * Prepare response download
+     */
+    async getStudyResponseDownload(requestParameters: GetStudyResponseDownloadRequest, initOverrides?: RequestInit): Promise<StudyResponses> {
+        const response = await this.getStudyResponseDownloadRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Retrives the status of response download
+     */
+    async getStudyResponseStatusRaw(requestParameters: GetStudyResponseStatusRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<StudyResponses>> {
+        if (requestParameters.apiKey === null || requestParameters.apiKey === undefined) {
+            throw new runtime.RequiredError('apiKey','Required parameter requestParameters.apiKey was null or undefined when calling getStudyResponseStatus.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researcher/responses/{api_key}/status`.replace(`{${"api_key"}}`, encodeURIComponent(String(requestParameters.apiKey))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudyResponsesFromJSON(jsonValue));
+    }
+
+    /**
+     * Retrives the status of response download
+     */
+    async getStudyResponseStatus(requestParameters: GetStudyResponseStatusRequest, initOverrides?: RequestInit): Promise<StudyResponses> {
+        const response = await this.getStudyResponseStatusRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

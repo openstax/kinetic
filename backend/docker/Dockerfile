@@ -10,6 +10,7 @@ RUN apt-get update && \
     openssh-server \
     build-essential \
     wget \
+    postgresql-client \
     # for openapi
     openjdk-11-jre-headless \
     && rm -rf /var/lib/apt/lists/*

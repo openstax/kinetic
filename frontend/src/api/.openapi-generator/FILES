@@ -29,6 +29,7 @@ models/Stage.ts
 models/StageUpdate.ts
 models/Studies.ts
 models/Study.ts
+models/StudyResponses.ts
 models/StudyUpdate.ts
 models/UpdateBanner.ts
 models/UpdatePreferences.ts
