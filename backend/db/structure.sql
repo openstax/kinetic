@@ -24,6 +24,8 @@ CREATE FUNCTION public.random_string(integer) RETURNS text
 
 SET default_tablespace = '';
 
+SET default_table_access_method = heap;
+
 --
 -- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: -
 --
@@ -418,7 +420,9 @@ CREATE TABLE public.stages (
     updated_at timestamp(6) with time zone NOT NULL,
     title character varying,
     description character varying,
-    available_after_days double precision DEFAULT 0.0 NOT NULL
+    available_after_days double precision DEFAULT 0.0 NOT NULL,
+    duration_minutes integer DEFAULT 0 NOT NULL,
+    points integer DEFAULT 0 NOT NULL
 );
 
 
@@ -451,8 +455,6 @@ CREATE TABLE public.studies (
     title_for_participants character varying NOT NULL,
     short_description text NOT NULL,
     long_description text NOT NULL,
-    duration_minutes integer NOT NULL,
-    participation_points integer,
     opens_at timestamp with time zone,
     closes_at timestamp with time zone,
     is_mandatory boolean DEFAULT false NOT NULL,
@@ -1112,6 +1114,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220824152243'),
 ('20220831143454'),
 ('20220912181638'),
+('20221020135148'),
 ('20221129153239'),
 ('20221129161350'),
 ('20221129202926'),
