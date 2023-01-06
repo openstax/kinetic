@@ -19,7 +19,7 @@ test('can create and edit a study', async ({ page }) => {
     await page.fill('[name=titleForParticipants]', title)
     await page.fill('[name=shortDescription]', 'short desc')
     await page.fill('[name=longDescription]', 'long desc')
-    await page.fill('[name=durationMinutes]', '42')
+    // await page.fill('[name=durationMinutes]', '42')
 
     await page.fill('#tags input', 'type:survey')
     await page.keyboard.press('Enter')
@@ -56,8 +56,8 @@ test('can create and edit a study', async ({ page }) => {
 
 
 test('can preview a study', async ({ page }) => {
-    interceptStudyLaunch({ page })
-    interceptStudyLand({ page })
+    await interceptStudyLaunch({ page })
+    await interceptStudyLand({ page })
 
     const studyName = faker.commerce.productDescription()
     const studyId = await createStudy({ page, name: studyName })

@@ -75,10 +75,6 @@ class Api::V1::Researcher::StudiesOpenApi
       key :type, :string
       key :description, 'Description of how the study benefits participants'
     end
-    property :duration_minutes do
-      key :type, :integer
-      key :description, 'The expected study duration in minutes.'
-    end
     property :is_hidden do
       key :type, :boolean
       key :description, 'Is the study hidden from participants'

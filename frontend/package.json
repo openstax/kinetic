@@ -13,6 +13,7 @@
     "test:ci": "bin/test-ci",
     "test": "bin/env playwright test",
     "test:watch": "chokidar 'specs/*.ts' --initial bin/env -c 'yarn run playwright test {path}'",
+    "test:debug": "PWDEBUG=1 yarn run test --workers=1",
     "lint": "eslint src",
     "pf": "run-p typecheck lint",
     "typecheck": "tsc --noEmit"

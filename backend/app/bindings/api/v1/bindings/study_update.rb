@@ -42,9 +42,6 @@ module Api::V1::Bindings
     # Description of how the study benefits participants
     attr_accessor :benefits
 
-    # The expected study duration in minutes.
-    attr_accessor :duration_minutes
-
     # Is the study hidden from participants
     attr_accessor :is_hidden
 
@@ -69,7 +66,6 @@ module Api::V1::Bindings
         :'feedback_description' => :'feedback_description',
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
-        :'duration_minutes' => :'duration_minutes',
         :'is_hidden' => :'is_hidden',
         :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
@@ -94,7 +90,6 @@ module Api::V1::Bindings
         :'feedback_description' => :'String',
         :'image_id' => :'String',
         :'benefits' => :'String',
-        :'duration_minutes' => :'Integer',
         :'is_hidden' => :'Boolean',
         :'opens_at' => :'Time',
         :'closes_at' => :'Time',
@@ -161,10 +156,6 @@ module Api::V1::Bindings
 
       if attributes.key?(:'benefits')
         self.benefits = attributes[:'benefits']
-      end
-
-      if attributes.key?(:'duration_minutes')
-        self.duration_minutes = attributes[:'duration_minutes']
       end
 
       if attributes.key?(:'is_hidden')
@@ -247,7 +238,6 @@ module Api::V1::Bindings
           feedback_description == o.feedback_description &&
           image_id == o.image_id &&
           benefits == o.benefits &&
-          duration_minutes == o.duration_minutes &&
           is_hidden == o.is_hidden &&
           opens_at == o.opens_at &&
           closes_at == o.closes_at &&
@@ -263,7 +253,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, duration_minutes, is_hidden, opens_at, closes_at, is_mandatory].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, is_hidden, opens_at, closes_at, is_mandatory].hash
     end
 
     # Builds the object from hash

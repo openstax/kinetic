@@ -99,22 +99,22 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
     // TODO when https://github.com/openstax/research/issues/204 is complete
     //  render this dynamically using study.stages
     if (studyIsMultipart(study)) {
-        const numStages = study.stages?.length || 1;
+        // const numStages = study.stages?.length || 1;
         return (
             <Box className='mb-1' direction='column'>
                 <Box gap>
                     <Icon icon="clock" color={colors.purple} />
                     <Box>
-                        <span>*Total: {study.durationMinutes}min</span>
-                        {study.participationPoints && <span>&nbsp;{study.participationPoints}pts</span>}
+                        {/*<span>*Total: {study.durationMinutes}min</span>*/}
+                        {/*{study.participationPoints && <span>&nbsp;{study.participationPoints}pts</span>}*/}
                     </Box>
                 </Box>
                 <Box css={{ color: colors.grayText }} direction='column'>
                     <small>
-                        Session 1: {study.durationMinutes / numStages}min {study.participationPoints && study.participationPoints / numStages}pts
+                        {/*Session 1: {study.durationMinutes / numStages}min {study.participationPoints && study.participationPoints / numStages}pts*/}
                     </small>
                     <small>
-                        Session 2: {study.durationMinutes / numStages}min {study.participationPoints && study.participationPoints / numStages}pts
+                        {/*Session 2: {study.durationMinutes / numStages}min {study.participationPoints && study.participationPoints / numStages}pts*/}
                     </small>
                 </Box>
             </Box>
@@ -124,8 +124,9 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
     return (
         <Box gap align="center" className='mb-1'>
             <Icon icon="clock" color={colors.purple} />
-            <div>{study.durationMinutes}min</div>
-            {study.participationPoints && <span> {study.participationPoints}pts</span>}
+            {/* TODO use stage points/duration */}
+            {/*<div>{study.durationMinutes}min</div>*/}
+            {/*{study.participationPoints && <span> {study.participationPoints}pts</span>}*/}
         </Box>
     )
 }

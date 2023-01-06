@@ -81,18 +81,6 @@ export interface ParticipantStudy {
      */
     benefits?: string;
     /**
-     * The expected study duration in minutes.
-     * @type {number}
-     * @memberof ParticipantStudy
-     */
-    durationMinutes: number;
-    /**
-     * How many points will be awarded for participation in the study
-     * @type {number}
-     * @memberof ParticipantStudy
-     */
-    participationPoints?: number;
-    /**
      * How popular the study is on a fractional scale of 0.0 to 1.0
      * @type {number}
      * @memberof ParticipantStudy
@@ -166,8 +154,6 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'feedbackDescription': !exists(json, 'feedback_description') ? undefined : json['feedback_description'],
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
-        'durationMinutes': json['duration_minutes'],
-        'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
         'popularityRating': !exists(json, 'popularity_rating') ? undefined : json['popularity_rating'],
         'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
@@ -197,8 +183,6 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'feedback_description': value.feedbackDescription,
         'image_id': value.imageId,
         'benefits': value.benefits,
-        'duration_minutes': value.durationMinutes,
-        'participation_points': value.participationPoints,
         'popularity_rating': value.popularityRating,
         'first_launched_at': value.firstLaunchedAt === undefined ? undefined : (value.firstLaunchedAt.toISOString()),
         'completed_at': value.completedAt === undefined ? undefined : (value.completedAt.toISOString()),

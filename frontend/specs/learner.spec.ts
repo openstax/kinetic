@@ -16,10 +16,10 @@ test('filtering & sorting', async ({ page }) => {
     const studyName = faker.commerce.productDescription()
 
     const firstStudyId = await createStudy({
-        page, mins: 5, points: 5, name: studyName, topic: 'memory',
+        page, name: studyName, topic: 'memory',
     })
     const secondStudyId = await createStudy({
-        page, mins: 15, points: 15, name: studyName, topic: 'learning',
+        page, name: studyName, topic: 'learning',
     })
 
     await goToPage({ page, path: '/studies', loginAs: 'user' })
@@ -60,7 +60,7 @@ test('launching study and testing completion', async ({ page }) => {
     await interceptStudyLaunch({ page })
 
     // note: 10 points is greater than the 5 points reward
-    const studyId = await createStudy({ page, points: 10, name: faker.commerce.productDescription() })
+    const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
     await goToPage({ page, path: '/studies', loginAs: 'user' })
 
     const firstStudyCard = page.locator('css=.studies.filtered >> [data-test-id="studies-listing"]').nth(0)
@@ -106,6 +106,7 @@ test('launching study and aborting it', async ({ page }) => {
 
     // now mark complete with consent granted
     await goToPage({ page, path: `/study/land/${studyId}?consent=true`, loginAs: 'user' })
+    await page.waitForTimeout(500)
     await expect(page).toMatchText(/marked as complete/)
     await page.click('testId=view-studies')
     await expect(page).toHaveSelector(`[data-study-id="${studyId}"][data-is-completed="true"]`)
@@ -124,6 +125,7 @@ test('launching study and completing with no consent', async ({ page }) => {
     await page.click('testId=launch-study')
 
     await goToPage({ page, path: `/study/land/${studyId}?consent=false`, loginAs: 'user' })
+    await page.waitForTimeout(500)
     await expect(page).not.toMatchText(/Points/)
     await expect(page).toMatchText(/marked as complete/)
 

@@ -1,7 +1,7 @@
 =begin
 #OpenStax Kinetic API
 
-#The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v1/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code!
+#The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v1/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
 
 The version of the OpenAPI document: 0.1.0
 
@@ -279,7 +279,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title, short_description, long_description, tags, feedback_description, image_id, benefits, duration_minutes, participation_points, popularity_rating, is_featured, first_launched_at, completed_at, closes_at, opted_out_at, researchers, stages, is_mandatory].hash
+      [id, title, short_description, long_description, tags, feedback_description, image_id, benefits, popularity_rating, is_featured, first_launched_at, completed_at, closes_at, opted_out_at, researchers, stages, is_mandatory].hash
     end
 
     # Builds the object from hash
