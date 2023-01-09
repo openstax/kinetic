@@ -4,7 +4,7 @@ class Api::V1::Participant::StudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
   COMMON_REQUIRED_STUDY_FIELDS = [
-    :title, :short_description, :tags
+    :title, :short_description, :tags, :total_points, :total_duration
   ].freeze
 
   add_components do
@@ -174,6 +174,14 @@ class Api::V1::Participant::StudiesOpenApi
       items do
         key :$ref, :PublicResearcher
       end
+    end
+    property :total_points do
+      key :type, :integer
+      key :description, 'The study\'s total point value.'
+    end
+    property :total_duration do
+      key :type, :integer
+      key :description, 'The study\'s total duration in minutes.'
     end
     property :stages do
       key :type, :array

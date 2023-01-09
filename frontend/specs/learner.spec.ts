@@ -3,7 +3,7 @@ import {
 } from './test'
 
 test('displays studies', async ({ page }) => {
-    const studyName = faker.commerce.productDescription()
+    const studyName = faker.commerce.productName()
 
     const studyId = await createStudy({ page, opensAt: dayjs().subtract(1, 'day'), name: studyName })
     await goToPage({ page, path: '/studies', loginAs: 'user' })
@@ -13,7 +13,7 @@ test('displays studies', async ({ page }) => {
 })
 
 test('filtering & sorting', async ({ page }) => {
-    const studyName = faker.commerce.productDescription()
+    const studyName = faker.commerce.productName()
 
     const firstStudyId = await createStudy({
         page, name: studyName, topic: 'memory',
@@ -37,7 +37,7 @@ test('filtering & sorting', async ({ page }) => {
 })
 
 test('it auto-launches mandatory studies', async ({ page }) => {
-    const studyName = faker.commerce.productDescription()
+    const studyName = faker.commerce.productName()
     const studyId = await createStudy({
         page,
         isMandatory: true,
@@ -59,8 +59,7 @@ test('launching study and testing completion', async ({ page }) => {
 
     await interceptStudyLaunch({ page })
 
-    // note: 10 points is greater than the 5 points reward
-    const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
+    const studyId = await createStudy({ page, name: faker.commerce.productName() })
     await goToPage({ page, path: '/studies', loginAs: 'user' })
 
     const firstStudyCard = page.locator('css=.studies.filtered >> [data-test-id="studies-listing"]').nth(0)
@@ -88,7 +87,7 @@ test('launching study and aborting it', async ({ page }) => {
 
     await interceptStudyLaunch({ page })
 
-    const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
+    const studyId = await createStudy({ page, name: faker.commerce.productName() })
     await goToPage({ page, path: `/studies/details/${studyId}`, loginAs: 'user' })
     await page.click('testId=launch-study')
 
@@ -120,7 +119,7 @@ test('launching study and completing with no consent', async ({ page }) => {
 
     await interceptStudyLaunch({ page })
 
-    const studyId = await createStudy({ page, name: faker.commerce.productDescription() })
+    const studyId = await createStudy({ page, name: faker.commerce.productName() })
     await goToPage({ page, path: `/studies/details/${studyId}`, loginAs: 'user' })
     await page.click('testId=launch-study')
 

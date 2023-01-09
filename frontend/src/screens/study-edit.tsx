@@ -151,6 +151,8 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate(): void }> = ({ study
                         <InputField name="description" id="description" label="Description" type="textarea" />
                         <InputField name="availableAfterDays" id="available_after"
                             type="number" label="Available After Days" hint="0 == immediately available" />
+                        <InputField name="durationMinutes" id="duration-minutes" label="Duration Minutes" type="number" />
+                        <InputField name="points" id="points" label="Participation Points" type="number" />
                         <SelectField
                             name="type" id="stage-type" label="Stage Type"
                             onChange={(opt) => setStageType(opt as StageType)}

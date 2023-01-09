@@ -59,7 +59,7 @@ test('can preview a study', async ({ page }) => {
     await interceptStudyLaunch({ page })
     await interceptStudyLand({ page })
 
-    const studyName = faker.commerce.productDescription()
+    const studyName = faker.commerce.productName()
     const studyId = await createStudy({ page, name: studyName })
     await goToPage({ page, path: `/study/edit/${studyId}`, loginAs: 'researcher' })
     await page.click('testId=preview-study-btn')
