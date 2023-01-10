@@ -19,7 +19,6 @@ test('can create and edit a study', async ({ page }) => {
     await page.fill('[name=titleForParticipants]', title)
     await page.fill('[name=shortDescription]', 'short desc')
     await page.fill('[name=longDescription]', 'long desc')
-    // await page.fill('[name=durationMinutes]', '42')
 
     await page.fill('#tags input', 'type:survey')
     await page.keyboard.press('Enter')

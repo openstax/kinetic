@@ -24,9 +24,9 @@ export function rewardPointsEarned(schedule: RewardsScheduleSegment[], studies: 
         if (study.completedAt &&
             study.completedAt > first.startAt &&
             study.completedAt < last.endAt &&
-            study.participationPoints
+            study.totalPoints
         ) {
-            return points + study.participationPoints
+            return points + study.totalPoints
         }
         return points
     }, 0)
@@ -36,18 +36,17 @@ export function rewardPointsEarned(schedule: RewardsScheduleSegment[], studies: 
 const calculatePoints = (segment: RewardsScheduleSegment, cycleStart: Date, studies: ParticipantStudy[]): number => {
     return studies.reduce((points, study) => {
         if (study.completedAt &&
-            study.participationPoints &&
+            study.totalPoints &&
             study.completedAt <= segment.endAt &&
             study.completedAt >= cycleStart
         ) {
-            return points + study.participationPoints
+            return points + study.totalPoints
         }
         return points
     }, 0)
 }
 
 export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
-    // studies.sort((a, b) => )
     const env = useEnvironment()
 
     const rs = sortBy(env?.config.rewardsSchedule || [], 'startAt')
@@ -60,7 +59,7 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
 
     const recentlyEarnedPoints = studies.find(s => (
         s.completedAt && dayjs(s.completedAt).isBetween(now.subtract(1, 'day'), now)
-    ))?.participationPoints || 0
+    ))?.totalPoints || 0
 
     const allEvents = rs.map((s, index) => {
         totalPoints += s.points

@@ -25,7 +25,7 @@ const Points: React.FC<StudyMessagingProps> = ({ study }) => {
             }}
 
         >
-            +{study.participationPoints}pts
+            +{study.totalPoints}pts
         </div>
     )
 }

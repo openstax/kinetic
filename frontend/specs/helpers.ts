@@ -128,8 +128,6 @@ export const createStudy = async ({
     await page.waitForTimeout(100)
     await page.fill('[name=shortDescription]', 'short desc')
     await page.fill('[name=longDescription]', 'long desc')
-    // await page.fill('[name=durationMinutes]', String(mins))
-    // await page.fill('[name=participationPoints]', String(points))
 
     await page.fill('#tags input', 'cog')
     await page.keyboard.press('Enter')
@@ -150,6 +148,8 @@ export const createStudy = async ({
 
     await page.waitForSelector('.modal-content')
     await page.fill('.modal-content >> input[name=title]', `${name} stage`)
+    await page.fill('.modal-content >> input[name=durationMinutes]', `15`)
+    await page.fill('.modal-content >> input[name=points]', `10`)
     await page.fill('.modal-content >> input[name=survey_id]', '1Q_RT12345')
     await page.fill('.modal-content >> input[name=secret_key]', '0123466789123456')
     await page.click('.modal-content >> testId=form-save-btn')

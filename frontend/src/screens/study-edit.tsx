@@ -151,7 +151,7 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate(): void }> = ({ study
                         <InputField name="description" id="description" label="Description" type="textarea" />
                         <InputField name="availableAfterDays" id="available_after"
                             type="number" label="Available After Days" hint="0 == immediately available" />
-                        <InputField name="durationMinutes" id="duration-minutes" label="Duration Minutes" type="number" />
+                        <InputField name="durationMinutes" id="duration-minutes" label="Duration in Minutes" type="number" />
                         <InputField name="points" id="points" label="Participation Points" type="number" />
                         <SelectField
                             name="type" id="stage-type" label="Stage Type"
@@ -255,8 +255,6 @@ function EditStudy() {
                 isMandatory: false,
                 shortDescription: '',
                 longDescription: '',
-                // durationMinutes: '' as any,
-                // participationPoints: '' as any,
                 tags: [],
             })
             setTimeout(() => { document.querySelector<HTMLInputElement>('#participants-title')?.focus() }, 100)
@@ -339,8 +337,6 @@ function EditStudy() {
                 <InputField name="titleForParticipants" id="participants-title" label="Title for participants" />
                 <InputField name="titleForResearchers" id="researchers-title" label="Title for researchers" />
 
-                {/*<InputField name="durationMinutes" id="duration-mins" label="Duration Minutes" type="number" />*/}
-                {/*<InputField name="participationPoints" id="points" label="Participation Points" type="number" />*/}
                 <InputField name="isMandatory" id="is-mandatory" label="Mandatory study" hint="(must be completed before any others)" type="checkbox" />
                 <SelectField
                     name="tags" id="tags" label="Tags"
