@@ -70,7 +70,6 @@ RSpec.describe UserNotifications, type: :mailer do
       email = ActionMailer::Base.deliveries.last
       expect(email.subject).to match 'Don’t miss out'
     end
-    # TODO update stage points
     study1.stages.first.update!(points: 10)
     user1_study1_launch_pad.launch
     user1_study1_launch_pad.land

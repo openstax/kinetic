@@ -38,7 +38,7 @@ RSpec.describe 'Studies', type: :request, api: :v1 do
     context 'when signed in as a researcher' do
       before { stub_current_user(researcher1) }
 
-      it 'works' do
+      it 'successfully creates a new study' do
         api_post 'researcher/studies', params: { study: valid_new_study_attributes }
         expect(response).to have_http_status(:created)
         expect(response_hash).to match(
