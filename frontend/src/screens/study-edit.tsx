@@ -136,6 +136,8 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate(): void }> = ({ study
                             title: Yup.string().required(),
                             survey_id: Yup.string().required(),
                             secret_key: Yup.string().required(),
+                            duration_minutes: Yup.number().required(),
+                            points: Yup.number().required(),
                             availableAfterDays: Yup.number().required(),
                         })}
                         initialValues={{
