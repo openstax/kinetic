@@ -39,6 +39,8 @@ test('can create and edit a study', async ({ page }) => {
     await page.fill('input[name=title]', `${title} stage`)
     await page.fill('[name=survey_id]', 'QR_1234')
     await page.fill('[name=secret_key]', '1234')
+    await page.fill('.modal-content >> input[name=durationMinutes]', `15`)
+    await page.fill('.modal-content >> input[name=points]', `10`)
     await page.click('testId=add-stage-modal >> testId=form-save-btn')
     expect(await page.textContent('tr.stage')).toContain(`${title} stage`)
 

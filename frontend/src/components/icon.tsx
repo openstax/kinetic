@@ -61,12 +61,13 @@ export const Icon = React.forwardRef<SVGSVGElement, React.PropsWithChildren<Icon
             ref={ref as any}
             icon={typeof icon === 'object' ? icon : ICONS[icon]}
             css={icon == 'spin' ? spinCSS : {}}
+            data-test-id={dti}
             {...iconProps}
         />
     )
     if (tooltip) {
         return (
-            <Popover popover={tooltip} {...tooltipProps}>
+            <Popover popover={tooltip} data-test-id={dti} {...tooltipProps}>
                 {iconEl}
             </Popover>
         )
