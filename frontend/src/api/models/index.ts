@@ -1,9 +1,14 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './AddAnalysis';
 export * from './AddBanner';
 export * from './AddReward';
 export * from './AddStage';
 export * from './AddStudy';
+export * from './Analysis';
+export * from './AnalysisListing';
+export * from './AnalysisResearcher';
+export * from './AnalysisUpdate';
 export * from './BannerMessage';
 export * from './BannerNotice';
 export * from './BannersListing';
@@ -19,6 +24,7 @@ export * from './ParticipantStudyStage';
 export * from './PublicResearcher';
 export * from './QualtricsStage';
 export * from './Researcher';
+export * from './Responses';
 export * from './Reward';
 export * from './RewardsListing';
 export * from './RewardsScheduleSegment';
@@ -27,8 +33,9 @@ export * from './Stage';
 export * from './StageUpdate';
 export * from './Studies';
 export * from './Study';
-export * from './StudyResponses';
+export * from './StudyAnalysis';
 export * from './StudyUpdate';
+export * from './UpdateAnalysis';
 export * from './UpdateBanner';
 export * from './UpdatePreferences';
 export * from './UpdateReward';

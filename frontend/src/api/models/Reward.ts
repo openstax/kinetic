@@ -57,6 +57,15 @@ export interface Reward {
     endAt?: string;
 }
 
+/**
+ * Check if a given object implements the Reward interface.
+ */
+export function instanceOfReward(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
+}
+
 export function RewardFromJSON(json: any): Reward {
     return RewardFromJSONTyped(json, false);
 }

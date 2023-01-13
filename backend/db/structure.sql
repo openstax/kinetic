@@ -145,8 +145,8 @@ CREATE TABLE public.activesupport_cache_entries (
 CREATE TABLE public.admins (
     id bigint NOT NULL,
     user_id uuid NOT NULL,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -170,14 +170,113 @@ ALTER SEQUENCE public.admins_id_seq OWNED BY public.admins.id;
 
 
 --
+-- Name: analyses; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.analyses (
+    id bigint NOT NULL,
+    title text NOT NULL,
+    description text NOT NULL,
+    repository_url text NOT NULL,
+    api_key text DEFAULT public.random_string(18),
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
+);
+
+
+--
+-- Name: analyses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.analyses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: analyses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.analyses_id_seq OWNED BY public.analyses.id;
+
+
+--
+-- Name: analysis_researchers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.analysis_researchers (
+    id bigint NOT NULL,
+    researcher_id bigint NOT NULL,
+    analysis_id bigint NOT NULL
+);
+
+
+--
+-- Name: analysis_researchers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.analysis_researchers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: analysis_researchers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.analysis_researchers_id_seq OWNED BY public.analysis_researchers.id;
+
+
+--
+-- Name: analysis_response_exports; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.analysis_response_exports (
+    id bigint NOT NULL,
+    analysis_id bigint NOT NULL,
+    is_complete boolean DEFAULT false,
+    is_empty boolean DEFAULT false,
+    is_testing boolean DEFAULT false,
+    metadata jsonb DEFAULT '{}'::jsonb,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
+);
+
+
+--
+-- Name: analysis_response_exports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.analysis_response_exports_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: analysis_response_exports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.analysis_response_exports_id_seq OWNED BY public.analysis_response_exports.id;
+
+
+--
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -222,10 +321,10 @@ CREATE TABLE public.launched_stages (
     id bigint NOT NULL,
     stage_id bigint NOT NULL,
     user_id uuid,
-    first_launched_at timestamp with time zone,
-    completed_at timestamp with time zone,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
+    first_launched_at timestamp without time zone,
+    completed_at timestamp without time zone,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -256,12 +355,12 @@ CREATE TABLE public.launched_studies (
     id bigint NOT NULL,
     study_id bigint NOT NULL,
     user_id uuid NOT NULL,
-    first_launched_at timestamp with time zone,
-    completed_at timestamp with time zone,
-    opted_out_at timestamp with time zone,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL,
-    aborted_at timestamp with time zone,
+    first_launched_at timestamp without time zone,
+    completed_at timestamp without time zone,
+    opted_out_at timestamp without time zone,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    aborted_at timestamp without time zone,
     consent_granted boolean
 );
 
@@ -294,7 +393,7 @@ CREATE TABLE public.participant_metadata (
     user_id uuid NOT NULL,
     study_id bigint NOT NULL,
     metadata jsonb,
-    created_at timestamp with time zone
+    created_at timestamp without time zone
 );
 
 
@@ -324,8 +423,8 @@ ALTER SEQUENCE public.participant_metadata_id_seq OWNED BY public.participant_me
 CREATE TABLE public.research_ids (
     id text NOT NULL,
     user_id uuid NOT NULL,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -339,8 +438,8 @@ CREATE TABLE public.researchers (
     name character varying,
     institution character varying,
     bio text,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -416,8 +515,8 @@ CREATE TABLE public.stages (
     study_id bigint NOT NULL,
     "order" integer NOT NULL,
     config jsonb NOT NULL,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
     title character varying,
     description character varying,
     available_after_days double precision DEFAULT 0.0 NOT NULL,
@@ -455,18 +554,17 @@ CREATE TABLE public.studies (
     title_for_participants character varying NOT NULL,
     short_description text NOT NULL,
     long_description text NOT NULL,
-    opens_at timestamp with time zone,
-    closes_at timestamp with time zone,
+    opens_at timestamp without time zone,
+    closes_at timestamp without time zone,
     is_mandatory boolean DEFAULT false NOT NULL,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
     tags character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     benefits character varying,
     feedback_description character varying,
     image_id character varying,
     completed_count integer DEFAULT 0 NOT NULL,
-    is_hidden boolean DEFAULT false NOT NULL,
-    api_key text DEFAULT public.random_string(18) NOT NULL
+    is_hidden boolean DEFAULT false NOT NULL
 );
 
 
@@ -490,6 +588,36 @@ ALTER SEQUENCE public.studies_id_seq OWNED BY public.studies.id;
 
 
 --
+-- Name: study_analyses; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.study_analyses (
+    id bigint NOT NULL,
+    study_id bigint NOT NULL,
+    analysis_id bigint NOT NULL
+);
+
+
+--
+-- Name: study_analyses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.study_analyses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: study_analyses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.study_analyses_id_seq OWNED BY public.study_analyses.id;
+
+
+--
 -- Name: study_researchers; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -497,8 +625,8 @@ CREATE TABLE public.study_researchers (
     id bigint NOT NULL,
     study_id bigint NOT NULL,
     researcher_id bigint NOT NULL,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
 );
 
 
@@ -519,41 +647,6 @@ CREATE SEQUENCE public.study_researchers_id_seq
 --
 
 ALTER SEQUENCE public.study_researchers_id_seq OWNED BY public.study_researchers.id;
-
-
---
--- Name: study_response_exports; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.study_response_exports (
-    id bigint NOT NULL,
-    study_id bigint NOT NULL,
-    is_complete boolean DEFAULT false,
-    is_empty boolean DEFAULT false,
-    is_testing boolean DEFAULT false,
-    metadata jsonb DEFAULT '{}'::jsonb,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
-);
-
-
---
--- Name: study_response_exports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.study_response_exports_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: study_response_exports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.study_response_exports_id_seq OWNED BY public.study_response_exports.id;
 
 
 --
@@ -620,6 +713,27 @@ ALTER TABLE ONLY public.admins ALTER COLUMN id SET DEFAULT nextval('public.admin
 
 
 --
+-- Name: analyses id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analyses ALTER COLUMN id SET DEFAULT nextval('public.analyses_id_seq'::regclass);
+
+
+--
+-- Name: analysis_researchers id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analysis_researchers ALTER COLUMN id SET DEFAULT nextval('public.analysis_researchers_id_seq'::regclass);
+
+
+--
+-- Name: analysis_response_exports id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analysis_response_exports ALTER COLUMN id SET DEFAULT nextval('public.analysis_response_exports_id_seq'::regclass);
+
+
+--
 -- Name: banners id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -676,17 +790,17 @@ ALTER TABLE ONLY public.studies ALTER COLUMN id SET DEFAULT nextval('public.stud
 
 
 --
+-- Name: study_analyses id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.study_analyses ALTER COLUMN id SET DEFAULT nextval('public.study_analyses_id_seq'::regclass);
+
+
+--
 -- Name: study_researchers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.study_researchers ALTER COLUMN id SET DEFAULT nextval('public.study_researchers_id_seq'::regclass);
-
-
---
--- Name: study_response_exports id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.study_response_exports ALTER COLUMN id SET DEFAULT nextval('public.study_response_exports_id_seq'::regclass);
 
 
 --
@@ -734,6 +848,30 @@ ALTER TABLE ONLY public.activesupport_cache_entries
 
 ALTER TABLE ONLY public.admins
     ADD CONSTRAINT admins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: analyses analyses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analyses
+    ADD CONSTRAINT analyses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: analysis_researchers analysis_researchers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analysis_researchers
+    ADD CONSTRAINT analysis_researchers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: analysis_response_exports analysis_response_exports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analysis_response_exports
+    ADD CONSTRAINT analysis_response_exports_pkey PRIMARY KEY (id);
 
 
 --
@@ -825,19 +963,19 @@ ALTER TABLE ONLY public.studies
 
 
 --
+-- Name: study_analyses study_analyses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.study_analyses
+    ADD CONSTRAINT study_analyses_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: study_researchers study_researchers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.study_researchers
     ADD CONSTRAINT study_researchers_pkey PRIMARY KEY (id);
-
-
---
--- Name: study_response_exports study_response_exports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.study_response_exports
-    ADD CONSTRAINT study_response_exports_pkey PRIMARY KEY (id);
 
 
 --
@@ -905,6 +1043,34 @@ CREATE UNIQUE INDEX index_admins_on_user_id ON public.admins USING btree (user_i
 
 
 --
+-- Name: index_analyses_on_api_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_analyses_on_api_key ON public.analyses USING btree (api_key);
+
+
+--
+-- Name: index_analysis_researchers_on_analysis_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_analysis_researchers_on_analysis_id ON public.analysis_researchers USING btree (analysis_id);
+
+
+--
+-- Name: index_analysis_researchers_on_researcher_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_analysis_researchers_on_researcher_id ON public.analysis_researchers USING btree (researcher_id);
+
+
+--
+-- Name: index_analysis_response_exports_on_analysis_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_analysis_response_exports_on_analysis_id ON public.analysis_response_exports USING btree (analysis_id);
+
+
+--
 -- Name: index_launched_stages_on_stage_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -912,24 +1078,10 @@ CREATE INDEX index_launched_stages_on_stage_id ON public.launched_stages USING b
 
 
 --
--- Name: index_launched_stages_on_user_id_and_stage_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_launched_stages_on_user_id_and_stage_id ON public.launched_stages USING btree (user_id, stage_id);
-
-
---
 -- Name: index_launched_studies_on_study_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_launched_studies_on_study_id ON public.launched_studies USING btree (study_id);
-
-
---
--- Name: index_launched_studies_on_user_id_and_study_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_launched_studies_on_user_id_and_study_id ON public.launched_studies USING btree (user_id, study_id);
 
 
 --
@@ -982,6 +1134,20 @@ CREATE INDEX index_studies_on_tags ON public.studies USING gin (tags);
 
 
 --
+-- Name: index_study_analyses_on_analysis_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_study_analyses_on_analysis_id ON public.study_analyses USING btree (analysis_id);
+
+
+--
+-- Name: index_study_analyses_on_study_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_study_analyses_on_study_id ON public.study_analyses USING btree (study_id);
+
+
+--
 -- Name: index_study_researchers_on_researcher_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1000,13 +1166,6 @@ CREATE UNIQUE INDEX index_study_researchers_on_researcher_id_and_study_id ON pub
 --
 
 CREATE INDEX index_study_researchers_on_study_id ON public.study_researchers USING btree (study_id);
-
-
---
--- Name: index_study_response_exports_on_study_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_study_response_exports_on_study_id ON public.study_response_exports USING btree (study_id);
 
 
 --
@@ -1033,6 +1192,14 @@ ALTER TABLE ONLY public.launched_stages
 
 
 --
+-- Name: study_analyses fk_rails_4612cd39fb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.study_analyses
+    ADD CONSTRAINT fk_rails_4612cd39fb FOREIGN KEY (analysis_id) REFERENCES public.analyses(id);
+
+
+--
 -- Name: participant_metadata fk_rails_66856d3593; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1046,6 +1213,22 @@ ALTER TABLE ONLY public.participant_metadata
 
 ALTER TABLE ONLY public.active_storage_variant_records
     ADD CONSTRAINT fk_rails_993965df05 FOREIGN KEY (blob_id) REFERENCES public.active_storage_blobs(id);
+
+
+--
+-- Name: analysis_researchers fk_rails_a9dd5a2de3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analysis_researchers
+    ADD CONSTRAINT fk_rails_a9dd5a2de3 FOREIGN KEY (researcher_id) REFERENCES public.researchers(id);
+
+
+--
+-- Name: analysis_response_exports fk_rails_b38dccc6ab; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analysis_response_exports
+    ADD CONSTRAINT fk_rails_b38dccc6ab FOREIGN KEY (analysis_id) REFERENCES public.analyses(id);
 
 
 --
@@ -1065,6 +1248,14 @@ ALTER TABLE ONLY public.active_storage_attachments
 
 
 --
+-- Name: study_analyses fk_rails_ca418fcf53; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.study_analyses
+    ADD CONSTRAINT fk_rails_ca418fcf53 FOREIGN KEY (study_id) REFERENCES public.studies(id);
+
+
+--
 -- Name: study_researchers fk_rails_cddbb420c1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1073,19 +1264,19 @@ ALTER TABLE ONLY public.study_researchers
 
 
 --
+-- Name: analysis_researchers fk_rails_dafb260cc2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analysis_researchers
+    ADD CONSTRAINT fk_rails_dafb260cc2 FOREIGN KEY (analysis_id) REFERENCES public.analyses(id);
+
+
+--
 -- Name: stages fk_rails_e8e18d02fd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.stages
     ADD CONSTRAINT fk_rails_e8e18d02fd FOREIGN KEY (study_id) REFERENCES public.studies(id);
-
-
---
--- Name: study_response_exports fk_rails_f4b95db086; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.study_response_exports
-    ADD CONSTRAINT fk_rails_f4b95db086 FOREIGN KEY (study_id) REFERENCES public.studies(id);
 
 
 --
@@ -1107,17 +1298,21 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211129180319'),
 ('20220110162620'),
 ('20220303160442'),
+('20220324192614'),
+('20220406201351'),
 ('20220407193306'),
+('20220407205649'),
 ('20220408162010'),
+('20220429195630'),
 ('20220810173840'),
 ('20220817161302'),
 ('20220824152243'),
 ('20220831143454'),
 ('20220912181638'),
-('20221020135148'),
 ('20221129153239'),
 ('20221129161350'),
 ('20221129202926'),
-('20221129224957');
+('20221129224957'),
+('20230109200606');
 
 

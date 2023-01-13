@@ -34,7 +34,7 @@ OpenStax::OpenApi.configure do |config| # rubocop:disable Metrics/BlockLength
 
   config.client_language_post_processing = {
     'typescript-fetch' => lambda do |opts|
-      FileUtils.mv Dir.glob("#{opts[:output_dir]}/*"), Rails.root.join('../frontend/src/api/')
+      FileUtils.cp_r Dir.glob("#{opts[:output_dir]}/*"), Rails.root.join('../frontend/src/api/')
     end
   }.symbolize_keys
 

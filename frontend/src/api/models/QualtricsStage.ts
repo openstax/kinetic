@@ -39,12 +39,26 @@ export interface QualtricsStage {
     secretKey: string;
 }
 
+
 /**
-* @export
-* @enum {string}
-*/
-export enum QualtricsStageTypeEnum {
-    Qualtrics = 'qualtrics'
+ * @export
+ */
+export const QualtricsStageTypeEnum = {
+    Qualtrics: 'qualtrics'
+} as const;
+export type QualtricsStageTypeEnum = typeof QualtricsStageTypeEnum[keyof typeof QualtricsStageTypeEnum];
+
+
+/**
+ * Check if a given object implements the QualtricsStage interface.
+ */
+export function instanceOfQualtricsStage(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "type" in value;
+    isInstance = isInstance && "url" in value;
+    isInstance = isInstance && "secretKey" in value;
+
+    return isInstance;
 }
 
 export function QualtricsStageFromJSON(json: any): QualtricsStage {

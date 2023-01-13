@@ -45,6 +45,15 @@ export interface BannerNotice {
     endAt?: string;
 }
 
+/**
+ * Check if a given object implements the BannerNotice interface.
+ */
+export function instanceOfBannerNotice(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
+}
+
 export function BannerNoticeFromJSON(json: any): BannerNotice {
     return BannerNoticeFromJSONTyped(json, false);
 }

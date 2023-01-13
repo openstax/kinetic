@@ -17,7 +17,7 @@ RSpec.describe QualtricsTestData do
   end
 
   it 'generates a CSV' do
-    allow(StudyResponseExport).to receive(:new_random_seed).and_return(42)
+    allow(AnalysisResponseExport).to receive(:new_random_seed).and_return(42)
     allow_any_instance_of(QualtricsApi).to(
       receive(:get)
         .with("survey-definitions/#{survey_id}")

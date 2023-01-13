@@ -13,14 +13,14 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ParticipantStudyStage } from './ParticipantStudyStage';
 import {
-    ParticipantStudyStage,
     ParticipantStudyStageFromJSON,
     ParticipantStudyStageFromJSONTyped,
     ParticipantStudyStageToJSON,
 } from './ParticipantStudyStage';
+import type { PublicResearcher } from './PublicResearcher';
 import {
-    PublicResearcher,
     PublicResearcherFromJSON,
     PublicResearcherFromJSONTyped,
     PublicResearcherToJSON,
@@ -146,6 +146,20 @@ export interface ParticipantStudy {
      * @memberof ParticipantStudy
      */
     isMandatory?: boolean;
+}
+
+/**
+ * Check if a given object implements the ParticipantStudy interface.
+ */
+export function instanceOfParticipantStudy(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "title" in value;
+    isInstance = isInstance && "shortDescription" in value;
+    isInstance = isInstance && "tags" in value;
+    isInstance = isInstance && "durationMinutes" in value;
+
+    return isInstance;
 }
 
 export function ParticipantStudyFromJSON(json: any): ParticipantStudy {

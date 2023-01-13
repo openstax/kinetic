@@ -13,8 +13,8 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { UserPreferences } from './UserPreferences';
 import {
-    UserPreferences,
     UserPreferencesFromJSON,
     UserPreferencesFromJSONTyped,
     UserPreferencesToJSON,
@@ -32,6 +32,15 @@ export interface UpdatePreferences {
      * @memberof UpdatePreferences
      */
     preferences?: UserPreferences;
+}
+
+/**
+ * Check if a given object implements the UpdatePreferences interface.
+ */
+export function instanceOfUpdatePreferences(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function UpdatePreferencesFromJSON(json: any): UpdatePreferences {

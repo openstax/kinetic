@@ -33,6 +33,15 @@ export interface ParticipantStudyCompletion {
     completedAt?: Date;
 }
 
+/**
+ * Check if a given object implements the ParticipantStudyCompletion interface.
+ */
+export function instanceOfParticipantStudyCompletion(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
+}
+
 export function ParticipantStudyCompletionFromJSON(json: any): ParticipantStudyCompletion {
     return ParticipantStudyCompletionFromJSONTyped(json, false);
 }

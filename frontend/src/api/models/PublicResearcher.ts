@@ -39,6 +39,15 @@ export interface PublicResearcher {
     bio?: string;
 }
 
+/**
+ * Check if a given object implements the PublicResearcher interface.
+ */
+export function instanceOfPublicResearcher(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
+}
+
 export function PublicResearcherFromJSON(json: any): PublicResearcher {
     return PublicResearcherFromJSONTyped(json, false);
 }

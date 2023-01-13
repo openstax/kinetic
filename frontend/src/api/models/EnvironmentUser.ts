@@ -39,6 +39,17 @@ export interface EnvironmentUser {
     readonly isResearcher: boolean;
 }
 
+/**
+ * Check if a given object implements the EnvironmentUser interface.
+ */
+export function instanceOfEnvironmentUser(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "isAdministrator" in value;
+    isInstance = isInstance && "isResearcher" in value;
+
+    return isInstance;
+}
+
 export function EnvironmentUserFromJSON(json: any): EnvironmentUser {
     return EnvironmentUserFromJSONTyped(json, false);
 }

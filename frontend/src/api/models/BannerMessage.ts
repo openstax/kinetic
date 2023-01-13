@@ -45,6 +45,19 @@ export interface BannerMessage {
     message: string;
 }
 
+/**
+ * Check if a given object implements the BannerMessage interface.
+ */
+export function instanceOfBannerMessage(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "startAt" in value;
+    isInstance = isInstance && "endAt" in value;
+    isInstance = isInstance && "message" in value;
+
+    return isInstance;
+}
+
 export function BannerMessageFromJSON(json: any): BannerMessage {
     return BannerMessageFromJSONTyped(json, false);
 }

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class Api::V1::Researcher::StudyResponsesOpenApi
+class Api::V1::Researcher::ResponsesOpenApi
   include OpenStax::OpenApi::Blocks
 
   openapi_component do
-    schema :StudyResponses do
+    schema :Responses do
       key :required, [:id, :status]
 
       property :status do
@@ -29,19 +29,19 @@ class Api::V1::Researcher::StudyResponsesOpenApi
   openapi_path '/researcher/responses/{api_key}/status' do
     operation :get do
       key :summary, 'Retrives the status of response download'
-      key :operationId, 'getStudyResponseStatus'
+      key :operationId, 'getResponseStatus'
       parameter do
         key :name, :api_key
         key :in, :path
-        key :description, 'Api key of the study.'
+        key :description, 'Api key of the analysis.'
         key :required, true
         key :schema, { type: :string }
       end
       response 200 do
-        key :description, 'Success.  Returns the status of study response export.'
+        key :description, 'Success.  Returns the status of analysis response export.'
         content 'application/json' do
           schema do
-            key :$ref, :StudyResponses
+            key :$ref, :Responses
           end
         end
       end
@@ -55,19 +55,19 @@ class Api::V1::Researcher::StudyResponsesOpenApi
   openapi_path '/researcher/responses/{api_key}/fetch' do
     operation :post do
       key :summary, 'Prepare response download'
-      key :operationId, 'getStudyResponseDownload'
+      key :operationId, 'getResponseDownload'
       parameter do
         key :name, :api_key
         key :in, :path
-        key :description, 'Api key of the study.'
+        key :description, 'Api key of the analysis.'
         key :required, true
         key :schema, { type: :string }
       end
       response 200 do
-        key :description, 'Success.  Returns the status of study response export.'
+        key :description, 'Success.  Returns the status of analysis response export.'
         content 'application/json' do
           schema do
-            key :$ref, :StudyResponses
+            key :$ref, :Responses
           end
         end
       end

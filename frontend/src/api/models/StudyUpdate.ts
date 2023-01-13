@@ -99,6 +99,15 @@ export interface StudyUpdate {
     isMandatory?: boolean;
 }
 
+/**
+ * Check if a given object implements the StudyUpdate interface.
+ */
+export function instanceOfStudyUpdate(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
+}
+
 export function StudyUpdateFromJSON(json: any): StudyUpdate {
     return StudyUpdateFromJSONTyped(json, false);
 }
