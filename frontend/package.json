@@ -9,10 +9,10 @@
     "build": "bin/env vite build",
     "testserver": "bin/env vite --strictPort",
     "serve": "bin/env vite preview",
-    "generate-local-bindings": "SECURE=false API_HOST=localhost:4006 ./bin/generate-api-bindings",
     "test:ci": "bin/test-ci",
     "test": "bin/env playwright test",
     "test:watch": "chokidar 'specs/*.ts' --initial bin/env -c 'yarn run playwright test {path}'",
+    "test:debug": "PWDEBUG=1 yarn run test --workers=1",
     "lint": "eslint src",
     "pf": "run-p typecheck lint",
     "typecheck": "tsc --noEmit"

@@ -14,9 +14,11 @@ Rails.application.routes.draw do
         resources :studies do
           post 'researcher/:user_id', to: 'study_researchers#create'
           delete 'researcher/:user_id', to: 'study_researchers#destroy'
-
           resources :stages, shallow: true, only: [:create, :show, :update, :destroy]
         end
+
+        post 'responses/:api_key/fetch', to: 'study_responses#fetch'
+        get 'responses/:api_key/status', to: 'study_responses#show'
       end
 
       namespace :participant do
@@ -66,7 +68,11 @@ Rails.application.routes.draw do
     get 'study/land/:study_id', as: :returning, via: :get, to: 'static#catchall'
   end
 
+  # mount ActiveStorage::Engine, at: '/files'
+
   match '/', via: :get, to: 'static#catchall'
-  match '*path', via: :get, to: 'static#catchall'
+  match '*path', via: :get, to: 'static#catchall', constraints: lambda { |req|
+    req.path.exclude? 'files'
+  }
 end
 # rubocop:enable Metrics/BlockLength

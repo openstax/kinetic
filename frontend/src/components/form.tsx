@@ -169,7 +169,7 @@ function SaveCancelBtn<T>({
                     primary
                 >Save</Button>
             </Box>
-        </Footer >
+        </Footer>
     )
 }
 

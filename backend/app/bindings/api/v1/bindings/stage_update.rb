@@ -30,6 +30,12 @@ module Api::V1::Bindings
     # The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
     attr_accessor :config
 
+    # How many points the stage is worth
+    attr_accessor :points
+
+    # How long the stage is (in minutes)
+    attr_accessor :duration_minutes
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -37,7 +43,9 @@ module Api::V1::Bindings
         :'title' => :'title',
         :'description' => :'description',
         :'available_after_days' => :'available_after_days',
-        :'config' => :'config'
+        :'config' => :'config',
+        :'points' => :'points',
+        :'duration_minutes' => :'duration_minutes'
       }
     end
 
@@ -53,7 +61,9 @@ module Api::V1::Bindings
         :'title' => :'String',
         :'description' => :'String',
         :'available_after_days' => :'Float',
-        :'config' => :'Object'
+        :'config' => :'Object',
+        :'points' => :'Float',
+        :'duration_minutes' => :'Float'
       }
     end
 
@@ -97,6 +107,14 @@ module Api::V1::Bindings
       if attributes.key?(:'config')
         self.config = attributes[:'config']
       end
+
+      if attributes.key?(:'points')
+        self.points = attributes[:'points']
+      end
+
+      if attributes.key?(:'duration_minutes')
+        self.duration_minutes = attributes[:'duration_minutes']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -126,7 +144,9 @@ module Api::V1::Bindings
           title == o.title &&
           description == o.description &&
           available_after_days == o.available_after_days &&
-          config == o.config
+          config == o.config &&
+          points == o.points &&
+          duration_minutes == o.duration_minutes
     end
 
     # @see the `==` method
@@ -138,7 +158,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [order, title, description, available_after_days, config].hash
+      [order, title, description, available_after_days, config, points, duration_minutes].hash
     end
 
     # Builds the object from hash

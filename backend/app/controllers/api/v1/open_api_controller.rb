@@ -39,6 +39,12 @@ class Api::V1::OpenApiController < ApplicationController
     end
   end
 
+  ENCLAVE_CLASSES = [
+    Api::V1::OpenApiResponses,
+    Api::V1::Researcher::StudyResponsesOpenApi,
+    self
+  ].freeze
+
   OPENAPI_CLASSES = [
     Api::V1::OpenApiResponses,
     Api::V1::PreferencesOpenApi,

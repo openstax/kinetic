@@ -12,7 +12,6 @@ FactoryBot.define do
     title_for_participants { title || Faker::Lorem.paragraph_by_chars(number: rand(20..45)) }
     short_description { Faker::Lorem.paragraph_by_chars(number: rand(40..120)) }
     long_description { Faker::Lorem.paragraph_by_chars(number: rand(40..120)) }
-    duration_minutes { 15 }
     tags { ['type:research_study'] }
     opens_at { 3.days.ago }
     closes_at { 3.days.from_now }

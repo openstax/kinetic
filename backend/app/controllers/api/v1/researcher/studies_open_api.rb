@@ -46,7 +46,7 @@ class Api::V1::Researcher::StudiesOpenApi
     end
     property :title_for_researchers do
       key :type, :string
-      key :description, 'An study name that only researchers see.'
+      key :description, 'The study name that only researchers see.'
       key :minLength, 1
     end
     property :short_description do
@@ -75,13 +75,9 @@ class Api::V1::Researcher::StudiesOpenApi
       key :type, :string
       key :description, 'Description of how the study benefits participants'
     end
-    property :duration_minutes do
-      key :type, :integer
-      key :description, 'The expected study duration in minutes.'
-    end
     property :is_hidden do
       key :type, :boolean
-      key :description, 'is the study hidden from participants'
+      key :description, 'Is the study hidden from participants'
     end
     property :opens_at do
       key :type, :string
@@ -98,10 +94,6 @@ class Api::V1::Researcher::StudiesOpenApi
     property :is_mandatory do
       key :type, :boolean
       key :description, 'Mandatory studies must be completed by all users'
-    end
-    property :participation_points do
-      key :type, :number
-      key :description, 'How many points will be awarded for participation in the study'
     end
   end
 
@@ -247,4 +239,5 @@ class Api::V1::Researcher::StudiesOpenApi
       extend Api::V1::OpenApiResponses::ServerError
     end
   end
+
 end

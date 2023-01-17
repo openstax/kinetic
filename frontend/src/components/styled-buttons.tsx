@@ -12,11 +12,11 @@ interface LinkButtonProps extends ButtonProps {
 
 export const StyledLinkButton = styled(Button)<ButtonProps>({
     svg: {
-        color: colors.linkButtonIcon,
+        color: colors.lightGray,
     },
     '&:hover': {
         svg: {
-            color: colors.linkButtonIconHover,
+            color: colors.blue,
         },
     },
 })

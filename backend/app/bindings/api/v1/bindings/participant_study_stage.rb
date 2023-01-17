@@ -33,6 +33,12 @@ module Api::V1::Bindings
     # Can the stage be launched
     attr_accessor :is_launchable
 
+    # How long the stage lasts
+    attr_accessor :duration_minutes
+
+    # How many points the stage is worth
+    attr_accessor :points
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -41,7 +47,9 @@ module Api::V1::Bindings
         :'description' => :'description',
         :'available_after_days' => :'available_after_days',
         :'is_completed' => :'is_completed',
-        :'is_launchable' => :'is_launchable'
+        :'is_launchable' => :'is_launchable',
+        :'duration_minutes' => :'duration_minutes',
+        :'points' => :'points'
       }
     end
 
@@ -58,7 +66,9 @@ module Api::V1::Bindings
         :'description' => :'String',
         :'available_after_days' => :'Float',
         :'is_completed' => :'Boolean',
-        :'is_launchable' => :'Boolean'
+        :'is_launchable' => :'Boolean',
+        :'duration_minutes' => :'Integer',
+        :'points' => :'Integer'
       }
     end
 
@@ -106,6 +116,14 @@ module Api::V1::Bindings
       if attributes.key?(:'is_launchable')
         self.is_launchable = attributes[:'is_launchable']
       end
+
+      if attributes.key?(:'duration_minutes')
+        self.duration_minutes = attributes[:'duration_minutes']
+      end
+
+      if attributes.key?(:'points')
+        self.points = attributes[:'points']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -131,7 +149,9 @@ module Api::V1::Bindings
           description == o.description &&
           available_after_days == o.available_after_days &&
           is_completed == o.is_completed &&
-          is_launchable == o.is_launchable
+          is_launchable == o.is_launchable &&
+          duration_minutes == o.duration_minutes &&
+          points == o.points
     end
 
     # @see the `==` method
@@ -143,7 +163,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [order, title, description, available_after_days, is_completed, is_launchable].hash
+      [order, title, description, available_after_days, is_completed, is_launchable, duration_minutes, points].hash
     end
 
     # Builds the object from hash

@@ -53,7 +53,7 @@ const Researchers: React.FC<StudyCardProps> = ({ study }) => {
     if (!names.length) return null
 
     return (
-        <span css={{ color: colors.blackText }}>{toSentence(names)}</span>
+        <span>{toSentence(names)}</span>
     )
 }
 
@@ -63,7 +63,7 @@ const Feedback: React.FC<StudyCardProps> = ({ study }) => {
     return (
         <Box align='center' gap>
             <Icon height={15} icon="feedback" color={colors.purple} />
-            <span css={{ color: colors.darkText }}>Feedback Available</span>
+            <span>Feedback Available</span>
         </Box>
     )
 }
@@ -80,7 +80,7 @@ const MultiSession: React.FC<StudyCardProps> = ({ study }) => {
                 tooltipProps={{ displayType: 'tooltip' }}
                 tooltip="This study has multiple sessions. The other sessions will be released once available."
             />
-            <span css={{ color: colors.darkText }}>Multi-Session</span>
+            <span>Multi-Session</span>
         </Box>
     )
 }
@@ -93,7 +93,6 @@ const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
             align="center"
             padding="default"
             css={{
-                color: colors.blackText,
                 backgroundColor: colors.green,
                 position: 'absolute',
                 borderBottomLeftRadius: 20,
@@ -114,7 +113,6 @@ const MultiSessionFlag: FC<StudyCardProps> = ({ study }) => {
     return (
         <div
             css={{
-                color: colors.blackText,
                 position: 'absolute',
                 borderBottomLeftRadius: 20,
                 borderTopLeftRadius: 20,
@@ -181,12 +179,12 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
                     {tagsOfType(study, 'subject').map(tag => <Tag key={tag} tag={tag} />)}
                 </Box>
                 <Box gap>
-                    <div css={{ marginLeft: '0.5rem' }}>
+                    {!!study.totalDuration && <div css={{ marginLeft: '0.5rem' }}>
                         {studyIsMultipart(study) && <span>*Total: </span>}
-                        {study.durationMinutes}min
-                    </div>
+                        {study.totalDuration}min
+                    </div>}
 
-                    {study.participationPoints && <span>• {study.participationPoints}pts</span>}
+                    {!!study.totalPoints && <span>• {study.totalPoints}pts</span>}
                 </Box>
             </Box>
         </Card>

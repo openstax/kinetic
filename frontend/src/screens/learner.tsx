@@ -51,7 +51,7 @@ const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies,
             {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
             <Grid css={{ overflow: 'auto', paddingBottom: '10px' }} data-test-id="studies-listing">
-                {studies.map(s => <StudyCard onSelect={onSelect} study={s} key={s.id} />)}
+                {studies.map((s) => <StudyCard onSelect={onSelect} study={s} key={s.id} />)}
             </Grid>
         </div>
     )
@@ -78,7 +78,7 @@ const MobileStudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, st
                     modules={[EffectCards, Pagination]}
                     className="pb-3 overflow-hidden"
                 >
-                    {studyChunk.map(s =>
+                    {studyChunk.map((s) =>
                         <SwiperSlide key={s.id} className="pb-1">
                             <StudyCard onSelect={onSelect} study={s} />
                         </SwiperSlide>

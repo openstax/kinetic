@@ -19,7 +19,6 @@ test('can create and edit a study', async ({ page }) => {
     await page.fill('[name=titleForParticipants]', title)
     await page.fill('[name=shortDescription]', 'short desc')
     await page.fill('[name=longDescription]', 'long desc')
-    await page.fill('[name=durationMinutes]', '42')
 
     await page.fill('#tags input', 'type:survey')
     await page.keyboard.press('Enter')
@@ -40,6 +39,8 @@ test('can create and edit a study', async ({ page }) => {
     await page.fill('input[name=title]', `${title} stage`)
     await page.fill('[name=survey_id]', 'QR_1234')
     await page.fill('[name=secret_key]', '1234')
+    await page.fill('.modal-content >> input[name=durationMinutes]', `15`)
+    await page.fill('.modal-content >> input[name=points]', `10`)
     await page.click('testId=add-stage-modal >> testId=form-save-btn')
     expect(await page.textContent('tr.stage')).toContain(`${title} stage`)
 
@@ -56,10 +57,10 @@ test('can create and edit a study', async ({ page }) => {
 
 
 test('can preview a study', async ({ page }) => {
-    interceptStudyLaunch({ page })
-    interceptStudyLand({ page })
+    await interceptStudyLaunch({ page })
+    await interceptStudyLand({ page })
 
-    const studyName = faker.commerce.productDescription()
+    const studyName = faker.commerce.productName()
     const studyId = await createStudy({ page, name: studyName })
     await goToPage({ page, path: `/study/edit/${studyId}`, loginAs: 'researcher' })
     await page.click('testId=preview-study-btn')

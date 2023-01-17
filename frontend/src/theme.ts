@@ -1,10 +1,12 @@
 
 export const colors = {
     pageBackground: '#f7f8fa',
-    orange: '#f47641',
-    darkBlue: '#151B2C',
+    orange: '#f47541',
+    blue: '#151B2C',
+    primaryBlue: '#002469',
     red: '#ca2026',
-    teal: '#0dc0de',
+    yellow: '#F4D019',
+    teal: '#0DC0DC',
     darkTeal: '#039AC4',
     purple: '#6922EA',
     gray: '#E8E8E8',
@@ -13,12 +15,8 @@ export const colors = {
     darkGray: '#989898',
     text: '#212529',
     grayText: '#848484',
-    darkText: '#151B2C',
-    blackText: '#424242',
     input: { border: '#ced4da' },
     line: '#cfcfcf',
-    linkButtonIcon: '#DBDBDB',
-    linkButtonIconHover: '#151B2C',
     white: '#ffffff',
 }
 

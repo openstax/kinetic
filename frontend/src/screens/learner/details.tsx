@@ -21,7 +21,7 @@ const Part: FCWC<{ title: string, icon: IconKey }> = ({
         <Box direction="column" margin={{ bottom: 'large' }}>
             <Box align='center' gap margin={{ vertical: 'default' }}>
                 <Icon icon={icon} color={colors.purple} />
-                <span css={{ color: colors.darkText }}>{title}</span>
+                <span>{title}</span>
             </Box>
             <div css={{ marginBottom: '0.5rem', color: colors.grayText }}>{children}</div>
         </Box>
@@ -86,7 +86,7 @@ const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
                     icon="multiStage"
                     color={colors.purple}
                 />
-                <span css={{ color: colors.darkText }}>Multi-Session</span>
+                <span>Multi-Session</span>
             </Box>
             <Box margin={{ vertical: 'large' }}>
                 <MultiSessionBar study={study} />
@@ -96,26 +96,22 @@ const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
 }
 
 const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
-    // TODO when https://github.com/openstax/research/issues/204 is complete
-    //  render this dynamically using study.stages
     if (studyIsMultipart(study)) {
-        const numStages = study.stages?.length || 1;
         return (
             <Box className='mb-1' direction='column'>
                 <Box gap>
                     <Icon icon="clock" color={colors.purple} />
                     <Box>
-                        <span>*Total: {study.durationMinutes}min</span>
-                        {study.participationPoints && <span>&nbsp;{study.participationPoints}pts</span>}
+                        <span>*Total: {study.totalDuration}min</span>
+                        {study.totalPoints && <span>&nbsp;{study.totalPoints}pts</span>}
                     </Box>
                 </Box>
                 <Box css={{ color: colors.grayText }} direction='column'>
-                    <small>
-                        Session 1: {study.durationMinutes / numStages}min {study.participationPoints && study.participationPoints / numStages}pts
-                    </small>
-                    <small>
-                        Session 2: {study.durationMinutes / numStages}min {study.participationPoints && study.participationPoints / numStages}pts
-                    </small>
+                    {study.stages?.map((stage, index) => (
+                        <small key={index}>
+                            Session {index + 1}: {stage.durationMinutes}min {stage.points}pts
+                        </small>
+                    ))}
                 </Box>
             </Box>
         )
@@ -124,15 +120,15 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
     return (
         <Box gap align="center" className='mb-1'>
             <Icon icon="clock" color={colors.purple} />
-            <div>{study.durationMinutes}min</div>
-            {study.participationPoints && <span> {study.participationPoints}pts</span>}
+            <div>{study.totalDuration}min</div>
+            {!!study.totalPoints && <span>{study.totalPoints}pts</span>}
         </Box>
     )
 }
 
 
 const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher }) => {
-    if (!researcher) return null
+    if (!researcher || !researcher.name) return null
 
     return (
         <Part icon="rolodex" title="About Researcher" >

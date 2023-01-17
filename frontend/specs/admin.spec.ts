@@ -16,8 +16,11 @@ test('displays panel only when allowed', async ({ page }) => {
 test('can add/update/delete banners', async ({ page }) => {
     const message = faker.commerce.productDescription()
     await goToPage({ page, path: '/admin/banners/', loginAs: 'admin' })
-    await page.click('testId=add-banner')
+    await page.waitForSelector('data-test-id=add-banner')
+    await page.waitForTimeout(200)
+    await page.click('data-test-id=add-banner')
     await page.waitForSelector('[data-banner-id="new"]')
+    await page.waitForTimeout(100)
 
     await setDateField({
         page, fieldName: 'dates', date: [dayjs().add(1, 'day'), dayjs().add(1, 'month')],

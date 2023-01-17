@@ -20,7 +20,7 @@ import { exists, mapValues } from '../runtime';
  */
 export interface Launch {
     /**
-     * The URL to send a user to to start a study stage
+     * The URL to send a user to start a study stage
      * @type {string}
      * @memberof Launch
      */

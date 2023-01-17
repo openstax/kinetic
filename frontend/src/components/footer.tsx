@@ -31,7 +31,7 @@ const SupporterImage = styled.img({
 const Funders = () => {
     return (
         <div css={{ backgroundColor: colors.white }}>
-            <Box direction="column" className='p-2'>
+            <Box direction="column" className='p-2 container-lg'>
                 <h4 className="fw-bold">Support from Scientific Agencies</h4>
                 <div css={{
                     display: 'flex',
@@ -49,15 +49,16 @@ const Funders = () => {
                         </Supporter>
                     </Box>
 
-                    <div>
-                        <a href="https://openstax.org/foundation" className="mb-2">
-                            View Other Philanthropic Supporters
-                        </a>
 
-                        <p className="x-small" css={{ color: colors.grayText }}>
-                            *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
-                        </p>
-                    </div>
+                </div>
+                <div>
+                    <a href="https://openstax.org/foundation" className="mb-2">
+                        View Other Philanthropic Supporters
+                    </a>
+
+                    <p className="x-small" css={{ color: colors.grayText }}>
+                        *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
+                    </p>
                 </div>
             </Box>
         </div>
@@ -66,7 +67,7 @@ const Funders = () => {
 
 export const MobileFooter: React.FC<{ className?: string, includeFunders?: boolean }> = () => {
     return (
-        <div css={{ backgroundColor: colors.darkBlue, color: 'white', a: { color: 'white' } }}>
+        <div css={{ backgroundColor: colors.blue, color: 'white', a: { color: 'white' } }}>
             <div className='container-lg'>
                 <Row className="py-1">
                     <Row className="py-1">
@@ -107,7 +108,7 @@ export const MobileFooter: React.FC<{ className?: string, includeFunders?: boole
 
 export const DesktopFooter: React.FC<{ className?: string, includeFunders?: boolean }> = () => {
     return (
-        <div css={{ backgroundColor: colors.darkBlue, color: 'white', a: { color: 'white' } }}>
+        <div css={{ backgroundColor: colors.blue, color: 'white', a: { color: 'white' } }}>
             <div className='container-lg'>
                 <Row css={{ padding: '20px 0' }}>
                     <Col auto direction="column">

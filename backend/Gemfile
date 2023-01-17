@@ -44,13 +44,16 @@ gem 'qualtrics_api',
 
 gem 'will_paginate', '~> 3.1.7'
 
+gem 'activesupport_cache_database'
+
+gem 'aws-sdk-s3', '~> 1.116'
+gem 'httpx', '~> 0.21'
 # API versioning and documentation
 gem 'openstax_api', '9.4.1'
 
 gem 'openstax_openapi',
     github: 'openstax/openapi-rails',
-    ref: 'c81c58b44ba3f88b7ce31e749b326e2b701a1945'
-# path: '../../openapi-rails'
+    ref: '3aee76409845d6e31ba2fd90a4f1152bc803ccf5'
 
 gem 'openstax_auth',
     github: 'openstax/auth-rails',
