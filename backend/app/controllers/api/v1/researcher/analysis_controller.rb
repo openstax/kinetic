@@ -3,11 +3,9 @@
 class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseController
 
   def index
-    analysis = current_researcher.analysis
+    analysis = current_researcher.analysis.includes(:study_analyses)
     response_binding = Api::V1::Bindings::AnalysisListing.new(
-      data: analysis.map do |a|
-              Api::V1::Bindings::Analysis.create_from_model(a)
-            end
+      data: analysis.map { |a| Api::V1::Bindings::Analysis.create_from_model(a) }
     )
     render json: response_binding, status: :ok
   end
@@ -22,9 +20,13 @@ class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseControl
     inbound_binding, error = bind(params.require(:analysis), Api::V1::Bindings::Analysis)
     render(json: error, status: error.status_code) and return if error
 
-    created = Analysis.new(inbound_binding.to_hash) do |analysis|
+    update = inbound_binding.to_hash
+    study_ids = update.delete(:studies)&.pluck(:study_id)
+
+    created = Analysis.new(update) do |analysis|
       analysis.researchers << current_researcher
       analysis.save!
+      analysis.reset_study_analysis_to_ids(study_ids)
     end
 
     response_binding = Api::V1::Bindings::Analysis.create_from_model(created)
@@ -37,14 +39,17 @@ class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseControl
 
     render(json: error, status: error.status_code) and return if error
 
-    analysis.update(inbound_binding.to_hash)
+    update = inbound_binding.to_hash
+
+    analysis.reset_study_analysis_to_ids(update.delete(:studies)&.pluck(:study_id))
+    analysis.update(update)
 
     if analysis.errors.any?
-      render(json: analysis.errors.full_messages.first,
-             status: 422) and return
+      render(json: analysis.errors.full_messages.first, status: 422) and return
     end
 
     response_binding = Api::V1::Bindings::Analysis.create_from_model(analysis)
     render json: response_binding, status: :ok
   end
+
 end
