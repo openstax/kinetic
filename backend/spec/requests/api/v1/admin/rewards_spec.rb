@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Reward', type: :request, api: :v1 do
+RSpec.describe 'Reward', api: :v1 do
   let(:path) { 'admin/rewards' }
 
   let(:admin) { create(:admin) }

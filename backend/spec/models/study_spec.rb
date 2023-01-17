@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Study, type: :model do
+RSpec.describe Study do
   let!(:opens_and_closes_study) { create(:study, title: 'a') }
   let!(:opens_and_closes_before_study) { create(:study, opens_at: 10.days.ago, closes_at: 3.days.ago, title: 'b') }
   let!(:opens_only_study) { create(:study, closes_at: nil, title: 'c') }
@@ -16,7 +16,7 @@ RSpec.describe Study, type: :model do
   end
 
   describe '#available?' do
-    it 'works' do
+    it 'has all available attributes' do
       expect(opens_and_closes_study).to be_available
       expect(opens_and_closes_before_study).not_to be_available
       expect(opens_only_study).to be_available

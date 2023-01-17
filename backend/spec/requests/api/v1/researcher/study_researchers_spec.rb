@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Study Researchers', type: :request, api: :v1 do
+RSpec.describe 'Study Researchers', api: :v1 do
 
   before { responses_not_exceptions! }
 
@@ -43,7 +43,7 @@ RSpec.describe 'Study Researchers', type: :request, api: :v1 do
     context 'when signed in as a researcher on the study' do
       before { stub_current_user(original_researcher) }
 
-      it 'works' do
+      it 'adds a researcher' do
         api_post path
         expect(response).to have_http_status(:created)
         expect(study.researchers.reload).to include(new_researcher)
@@ -84,7 +84,7 @@ RSpec.describe 'Study Researchers', type: :request, api: :v1 do
     context 'when signed in as a researcher on the study' do
       before { stub_current_user(original_researcher) }
 
-      it 'works' do
+      it 'removes researcher' do
         api_delete path
         expect(response).to have_http_status(:ok)
         expect(study.researchers.reload).not_to include(original_researcher)

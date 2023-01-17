@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Environment', type: :request, api: :v1 do
+RSpec.describe 'Environment', api: :v1 do
 
   let(:user_id) { SecureRandom.uuid }
   let(:researcher) { create(:researcher) }

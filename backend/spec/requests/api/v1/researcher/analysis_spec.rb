@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Analysis', type: :request, api: :v1 do
+RSpec.describe 'Analysis', api: :v1 do
 
   let(:researcher1) { create(:researcher) }
   let(:researcher2) { create(:researcher) }
@@ -35,7 +35,7 @@ RSpec.describe 'Analysis', type: :request, api: :v1 do
     context 'when signed in as a researcher' do
       before { stub_current_user(researcher1) }
 
-      it 'works' do
+      it 'sets the attributes' do
         api_post 'researcher/analysis', params: { analysis: valid_new_analysis_attributes }
         expect(response).to have_http_status(:created)
         expect(response_hash).to match(
@@ -109,7 +109,7 @@ RSpec.describe 'Analysis', type: :request, api: :v1 do
       it 'gives forbidden' do
         expect {
           api_put "researcher/analysis/#{analysis1.id}", params: { analysis: { title: 'hacked!' } }
-        }.not_to change { analysis1.reload; analysis1.title }
+        }.to not_change { analysis1.reload; analysis1.title }
         expect(response).to have_http_status(:forbidden)
       end
     end

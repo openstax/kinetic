@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Stages', type: :request, api: :v1 do
+RSpec.describe 'Stages', api: :v1 do
 
   before { responses_not_exceptions! }
 
@@ -106,7 +106,7 @@ RSpec.describe 'Stages', type: :request, api: :v1 do
     context 'when signed in as a researcher on the study' do
       before { stub_current_user(original_researcher) }
 
-      it 'works' do
+      it 'returns qualtrics' do
         api_get path
         expect(response).to have_http_status(:ok)
         expect(response_hash).to match(
@@ -212,7 +212,7 @@ RSpec.describe 'Stages', type: :request, api: :v1 do
     context 'when signed in as a researcher on the study' do
       before { stub_current_user(original_researcher) }
 
-      it 'works' do
+      it 'removes stages' do
         api_delete path
         expect(response).to have_http_status(:ok)
         expect(study.stages.reload).to be_empty
