@@ -52,7 +52,7 @@ RSpec.describe LaunchPad, multi_stage: true do
     end
 
     it 'does not error if the user tries to land multiple times' do
-      expect { user1_study1_launch_pad.land }.not_to raise_error(LandError)
+      expect { user1_study1_launch_pad.land }.not_to raise_error
     end
   end
 

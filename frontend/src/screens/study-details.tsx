@@ -113,7 +113,7 @@ export default function StudyDetails() {
                     <Box justify="between" align="start" direction="row" gap>
                         <Box flex><h3>{study.title}</h3></Box>
                         <Box align="center" gap justify="end" alignSelf="end">
-                            <h3 css={{ margin: 0, minWidth: 100 }}>{study.durationMinutes} min</h3>
+                            <h3 css={{ margin: 0, minWidth: 100 }}>{study.totalDuration} min</h3>
                             <LaunchStudyButton study={study}/>
                         </Box>
                     </Box>

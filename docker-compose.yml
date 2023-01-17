@@ -63,7 +63,7 @@ services:
   petstore:
     image: "swaggerapi/petstore"
     networks:
-      - "kinetic"
+      - kinetic
     environment:
       - SWAGGER_HOST=http://0.0.0.0:4008
       - SWAGGER_BASE_PATH=/api/v1

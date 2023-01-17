@@ -38,7 +38,6 @@ export const StudyValidationSchema = Yup.object().shape({
     titleForParticipants: Yup.string().required('Required'),
     shortDescription: Yup.string().required('Required'),
     longDescription: Yup.string().required('Required'),
-    durationMinutes: Yup.number().required('Required'),
     tags: Yup.array().of(Yup.string()).test(
         'has-type',
         'studies must have a type set',

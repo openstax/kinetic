@@ -67,6 +67,14 @@ class Api::V1::Researcher::StagesOpenApi
       key :description,  'The configuration for a particular kind of stage, e.g. Qualtrics.  ' \
                          'See `QualtricsStage`'
     end
+    property :points do
+      key :type, :number
+      key :description, 'How many points the stage is worth'
+    end
+    property :duration_minutes do
+      key :type, :number
+      key :description, 'How long the stage is (in minutes)'
+    end
   end
 
   openapi_path '/researcher/studies/{study_id}/stages' do

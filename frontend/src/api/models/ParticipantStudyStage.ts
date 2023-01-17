@@ -55,6 +55,18 @@ export interface ParticipantStudyStage {
      * @memberof ParticipantStudyStage
      */
     readonly isLaunchable?: boolean;
+    /**
+     * How long the stage lasts
+     * @type {number}
+     * @memberof ParticipantStudyStage
+     */
+    readonly durationMinutes?: number;
+    /**
+     * How many points the stage is worth
+     * @type {number}
+     * @memberof ParticipantStudyStage
+     */
+    readonly points?: number;
 }
 
 export function ParticipantStudyStageFromJSON(json: any): ParticipantStudyStage {
@@ -73,6 +85,8 @@ export function ParticipantStudyStageFromJSONTyped(json: any, ignoreDiscriminato
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
         'isCompleted': !exists(json, 'is_completed') ? undefined : json['is_completed'],
         'isLaunchable': !exists(json, 'is_launchable') ? undefined : json['is_launchable'],
+        'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
+        'points': !exists(json, 'points') ? undefined : json['points'],
     };
 }
 

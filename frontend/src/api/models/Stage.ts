@@ -55,6 +55,18 @@ export interface Stage {
      * @memberof Stage
      */
     config: object;
+    /**
+     * How many points the stage is worth
+     * @type {number}
+     * @memberof Stage
+     */
+    points?: number;
+    /**
+     * How long the stage is (in minutes)
+     * @type {number}
+     * @memberof Stage
+     */
+    durationMinutes?: number;
 }
 
 export function StageFromJSON(json: any): Stage {
@@ -73,6 +85,8 @@ export function StageFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
         'config': json['config'],
+        'points': !exists(json, 'points') ? undefined : json['points'],
+        'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
     };
 }
 
@@ -89,6 +103,8 @@ export function StageToJSON(value?: Stage | null): any {
         'description': value.description,
         'available_after_days': value.availableAfterDays,
         'config': value.config,
+        'points': value.points,
+        'duration_minutes': value.durationMinutes,
     };
 }
 

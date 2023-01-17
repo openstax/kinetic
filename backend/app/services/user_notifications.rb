@@ -56,8 +56,8 @@ class UserNotifications
       users.each do |uuid, user|
         points = LaunchedStudy
                    .where('completed_at >= ? and user_id = ?', first_reward.start_at, uuid)
-                   .joins(:study)
-                   .sum('studies.participation_points')
+                   .joins(study: :stages)
+                   .sum('stages.points')
         if points < points_needed
           UserMailer.with(user: user, reward: reward).upcoming_prize_cycle_deadline.deliver
         end

@@ -41,6 +41,8 @@ Rails.application.config.to_prepare do
       model.attributes_for_binding(self).tap do |attributes|
         attributes[:title] = model.title_for_participants
         attributes[:is_featured] = model.is_featured?
+        attributes[:total_points] = model.total_points
+        attributes[:total_duration] = model.total_duration
         attributes[:stages] = model.stages.map do |stage_model|
           Api::V1::Bindings::ParticipantStudyStage.create_from_model(stage_model, user)
         end

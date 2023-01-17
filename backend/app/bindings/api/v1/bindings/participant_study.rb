@@ -39,12 +39,6 @@ module Api::V1::Bindings
     # Description of how the study benefits participants
     attr_accessor :benefits
 
-    # The expected study duration in minutes.
-    attr_accessor :duration_minutes
-
-    # How many points will be awarded for participation in the study
-    attr_accessor :participation_points
-
     # How popular the study is on a fractional scale of 0.0 to 1.0
     attr_accessor :popularity_rating
 
@@ -66,6 +60,12 @@ module Api::V1::Bindings
     # The study's researchers.
     attr_accessor :researchers
 
+    # The study's total point value.
+    attr_accessor :total_points
+
+    # The study's total duration in minutes.
+    attr_accessor :total_duration
+
     # The study's stages.
     attr_accessor :stages
 
@@ -83,8 +83,6 @@ module Api::V1::Bindings
         :'feedback_description' => :'feedback_description',
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
-        :'duration_minutes' => :'duration_minutes',
-        :'participation_points' => :'participation_points',
         :'popularity_rating' => :'popularity_rating',
         :'is_featured' => :'is_featured',
         :'first_launched_at' => :'first_launched_at',
@@ -92,6 +90,8 @@ module Api::V1::Bindings
         :'closes_at' => :'closes_at',
         :'opted_out_at' => :'opted_out_at',
         :'researchers' => :'researchers',
+        :'total_points' => :'total_points',
+        :'total_duration' => :'total_duration',
         :'stages' => :'stages',
         :'is_mandatory' => :'is_mandatory'
       }
@@ -113,8 +113,6 @@ module Api::V1::Bindings
         :'feedback_description' => :'String',
         :'image_id' => :'String',
         :'benefits' => :'String',
-        :'duration_minutes' => :'Integer',
-        :'participation_points' => :'Float',
         :'popularity_rating' => :'Float',
         :'is_featured' => :'Boolean',
         :'first_launched_at' => :'Time',
@@ -122,6 +120,8 @@ module Api::V1::Bindings
         :'closes_at' => :'Time',
         :'opted_out_at' => :'Time',
         :'researchers' => :'Array<PublicResearcher>',
+        :'total_points' => :'Integer',
+        :'total_duration' => :'Integer',
         :'stages' => :'Array<ParticipantStudyStage>',
         :'is_mandatory' => :'Boolean'
       }
@@ -182,14 +182,6 @@ module Api::V1::Bindings
         self.benefits = attributes[:'benefits']
       end
 
-      if attributes.key?(:'duration_minutes')
-        self.duration_minutes = attributes[:'duration_minutes']
-      end
-
-      if attributes.key?(:'participation_points')
-        self.participation_points = attributes[:'participation_points']
-      end
-
       if attributes.key?(:'popularity_rating')
         self.popularity_rating = attributes[:'popularity_rating']
       end
@@ -218,6 +210,14 @@ module Api::V1::Bindings
         if (value = attributes[:'researchers']).is_a?(Array)
           self.researchers = value
         end
+      end
+
+      if attributes.key?(:'total_points')
+        self.total_points = attributes[:'total_points']
+      end
+
+      if attributes.key?(:'total_duration')
+        self.total_duration = attributes[:'total_duration']
       end
 
       if attributes.key?(:'stages')
@@ -251,8 +251,12 @@ module Api::V1::Bindings
         invalid_properties.push('invalid value for "tags", tags cannot be nil.')
       end
 
-      if @duration_minutes.nil?
-        invalid_properties.push('invalid value for "duration_minutes", duration_minutes cannot be nil.')
+      if @total_points.nil?
+        invalid_properties.push('invalid value for "total_points", total_points cannot be nil.')
+      end
+
+      if @total_duration.nil?
+        invalid_properties.push('invalid value for "total_duration", total_duration cannot be nil.')
       end
 
       invalid_properties
@@ -265,7 +269,8 @@ module Api::V1::Bindings
       return false if @title.nil?
       return false if @short_description.nil?
       return false if @tags.nil?
-      return false if @duration_minutes.nil?
+      return false if @total_points.nil?
+      return false if @total_duration.nil?
       true
     end
 
@@ -282,8 +287,6 @@ module Api::V1::Bindings
           feedback_description == o.feedback_description &&
           image_id == o.image_id &&
           benefits == o.benefits &&
-          duration_minutes == o.duration_minutes &&
-          participation_points == o.participation_points &&
           popularity_rating == o.popularity_rating &&
           is_featured == o.is_featured &&
           first_launched_at == o.first_launched_at &&
@@ -291,6 +294,8 @@ module Api::V1::Bindings
           closes_at == o.closes_at &&
           opted_out_at == o.opted_out_at &&
           researchers == o.researchers &&
+          total_points == o.total_points &&
+          total_duration == o.total_duration &&
           stages == o.stages &&
           is_mandatory == o.is_mandatory
     end
@@ -304,7 +309,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title, short_description, long_description, tags, feedback_description, image_id, benefits, duration_minutes, participation_points, popularity_rating, is_featured, first_launched_at, completed_at, closes_at, opted_out_at, researchers, stages, is_mandatory].hash
+      [id, title, short_description, long_description, tags, feedback_description, image_id, benefits, popularity_rating, is_featured, first_launched_at, completed_at, closes_at, opted_out_at, researchers, total_points, total_duration, stages, is_mandatory].hash
     end
 
     # Builds the object from hash

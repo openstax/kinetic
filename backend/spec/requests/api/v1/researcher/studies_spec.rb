@@ -15,8 +15,7 @@ RSpec.describe 'Studies', type: :request, api: :v1 do
         short_description: 'A short description',
         long_description: 'A longer description',
         is_mandatory: false,
-        tags: ['type:research_study'],
-        duration_minutes: 10
+        tags: ['type:research_study']
       }
     end
 
@@ -39,7 +38,7 @@ RSpec.describe 'Studies', type: :request, api: :v1 do
     context 'when signed in as a researcher' do
       before { stub_current_user(researcher1) }
 
-      it 'works' do
+      it 'successfully creates a new study' do
         api_post 'researcher/studies', params: { study: valid_new_study_attributes }
         expect(response).to have_http_status(:created)
         expect(response_hash).to match(
@@ -103,7 +102,7 @@ RSpec.describe 'Studies', type: :request, api: :v1 do
 
     context 'when logged out' do
       it 'gives unauthorized' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { duration_minutes: 2 } }
+        api_put "researcher/studies/#{study1.id}", params: { study: { is_mandatory: true } }
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -113,8 +112,8 @@ RSpec.describe 'Studies', type: :request, api: :v1 do
 
       it 'gives forbidden' do
         expect {
-          api_put "researcher/studies/#{study1.id}", params: { study: { duration_minutes: 2 } }
-        }.not_to change { study1.reload; study1.duration_minutes }
+          api_put "researcher/studies/#{study1.id}", params: { study: { is_mandatory: true } }
+        }.not_to change { study1.reload; study1.is_mandatory }
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -123,11 +122,11 @@ RSpec.describe 'Studies', type: :request, api: :v1 do
       before { stub_current_user(researcher1) }
 
       it 'updates the study' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { duration_minutes: 2 } }
+        api_put "researcher/studies/#{study1.id}", params: { study: { is_mandatory: true } }
 
         expect(response).to have_http_status(:success)
         expect(response_hash).to match(
-          a_hash_including(duration_minutes: 2)
+          a_hash_including(is_mandatory: true)
         )
       end
 

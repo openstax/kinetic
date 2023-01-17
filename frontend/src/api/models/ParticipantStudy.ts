@@ -81,18 +81,6 @@ export interface ParticipantStudy {
      */
     benefits?: string;
     /**
-     * The expected study duration in minutes.
-     * @type {number}
-     * @memberof ParticipantStudy
-     */
-    durationMinutes: number;
-    /**
-     * How many points will be awarded for participation in the study
-     * @type {number}
-     * @memberof ParticipantStudy
-     */
-    participationPoints?: number;
-    /**
      * How popular the study is on a fractional scale of 0.0 to 1.0
      * @type {number}
      * @memberof ParticipantStudy
@@ -135,6 +123,18 @@ export interface ParticipantStudy {
      */
     researchers?: Array<PublicResearcher>;
     /**
+     * The study's total point value.
+     * @type {number}
+     * @memberof ParticipantStudy
+     */
+    totalPoints: number;
+    /**
+     * The study's total duration in minutes.
+     * @type {number}
+     * @memberof ParticipantStudy
+     */
+    totalDuration: number;
+    /**
      * The study's stages.
      * @type {Array<ParticipantStudyStage>}
      * @memberof ParticipantStudy
@@ -166,8 +166,6 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'feedbackDescription': !exists(json, 'feedback_description') ? undefined : json['feedback_description'],
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
-        'durationMinutes': json['duration_minutes'],
-        'participationPoints': !exists(json, 'participation_points') ? undefined : json['participation_points'],
         'popularityRating': !exists(json, 'popularity_rating') ? undefined : json['popularity_rating'],
         'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
@@ -175,6 +173,8 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'closesAt': !exists(json, 'closes_at') ? undefined : (new Date(json['closes_at'])),
         'optedOutAt': !exists(json, 'opted_out_at') ? undefined : (new Date(json['opted_out_at'])),
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(PublicResearcherFromJSON)),
+        'totalPoints': json['total_points'],
+        'totalDuration': json['total_duration'],
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(ParticipantStudyStageFromJSON)),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
     };
@@ -197,14 +197,14 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'feedback_description': value.feedbackDescription,
         'image_id': value.imageId,
         'benefits': value.benefits,
-        'duration_minutes': value.durationMinutes,
-        'participation_points': value.participationPoints,
         'popularity_rating': value.popularityRating,
         'first_launched_at': value.firstLaunchedAt === undefined ? undefined : (value.firstLaunchedAt.toISOString()),
         'completed_at': value.completedAt === undefined ? undefined : (value.completedAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt.toISOString()),
         'opted_out_at': value.optedOutAt === undefined ? undefined : (value.optedOutAt.toISOString()),
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(PublicResearcherToJSON)),
+        'total_points': value.totalPoints,
+        'total_duration': value.totalDuration,
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(ParticipantStudyStageToJSON)),
         'is_mandatory': value.isMandatory,
     };

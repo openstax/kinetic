@@ -33,7 +33,8 @@ export interface IconProps extends Omit<IconifyIcon, 'icon' | 'body'> {
     tooltip?: React.ReactNode
     tooltipProps?: Omit<PopoverProps, 'children' | 'target' | 'popover'>
     buttonStyles?: CSSObject,
-    onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void
+    onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void,
+    'data-test-id'?: string
 }
 
 export const Icon = React.forwardRef<SVGSVGElement, React.PropsWithChildren<IconProps>>((
@@ -41,7 +42,16 @@ export const Icon = React.forwardRef<SVGSVGElement, React.PropsWithChildren<Icon
     ref
 ) => {
     const {
-        id, icon: iconProp, tooltip, onClick, children, busy, buttonStyles = {}, tooltipProps = {}, ...iconProps
+        id,
+        icon: iconProp,
+        tooltip,
+        onClick,
+        children,
+        busy,
+        buttonStyles = {},
+        tooltipProps = {},
+        ['data-test-id']: dti,
+        ...iconProps
     } = forwardedProps
 
     const icon = busy ? 'spin' : iconProp
@@ -51,12 +61,13 @@ export const Icon = React.forwardRef<SVGSVGElement, React.PropsWithChildren<Icon
             ref={ref as any}
             icon={typeof icon === 'object' ? icon : ICONS[icon]}
             css={icon == 'spin' ? spinCSS : {}}
+            data-test-id={dti}
             {...iconProps}
         />
     )
     if (tooltip) {
         return (
-            <Popover popover={tooltip} {...tooltipProps}>
+            <Popover popover={tooltip} data-test-id={dti} {...tooltipProps}>
                 {iconEl}
             </Popover>
         )
@@ -66,6 +77,7 @@ export const Icon = React.forwardRef<SVGSVGElement, React.PropsWithChildren<Icon
             <button
                 onClick={onClick}
                 disabled={busy}
+                data-test-id={dti}
                 css={Object.assign({
                     border: 'none',
                     padding: 0,
