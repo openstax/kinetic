@@ -26,7 +26,7 @@ class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseControl
     created = Analysis.new(update) do |analysis|
       analysis.researchers << current_researcher
       analysis.save!
-      analysis.reset_study_analysis_to_ids(study_ids)
+      analysis.reset_study_analysis_to_ids(study_ids) if study_ids.present?
     end
 
     response_binding = Api::V1::Bindings::Analysis.create_from_model(created)
@@ -40,8 +40,8 @@ class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseControl
     render(json: error, status: error.status_code) and return if error
 
     update = inbound_binding.to_hash
-
-    analysis.reset_study_analysis_to_ids(update.delete(:studies)&.pluck(:study_id))
+    study_ids = update.delete(:studies)&.pluck(:study_id)
+    analysis.reset_study_analysis_to_ids(study_ids) if study_ids.present?
     analysis.update(update)
 
     if analysis.errors.any?

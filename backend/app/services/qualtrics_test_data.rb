@@ -55,8 +55,6 @@ class QualtricsTestData
 
   def text_response(question)
     validation = question.dig('Validation', 'Settings') || {}
-    pp question
-    pp validation
     if validation['ValidNumber']
       if validation.dig('ValidNumber', 'Min').present? &&
          validation.dig('ValidNumber', 'Min') == validation.dig('ValidNumber', 'Max')

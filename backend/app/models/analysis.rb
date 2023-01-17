@@ -25,7 +25,7 @@ class Analysis < ApplicationRecord
     researchers.find { |r| r.study_researchers.exists?(study_id: id) }
   end
 
-  def reset_study_analysis_to_ids(ids=[])
+  def reset_study_analysis_to_ids(ids)
     study_analyses.destroy(
       study_analyses.reject { |sa| ids.find { |id| id == sa.study_id } }.to_a
     )
