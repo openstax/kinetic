@@ -8,6 +8,22 @@ $h3-font-size: $font-size-base * 1.5 !default;
 $h4-font-size: $font-size-base * 1.25 !default;
 $h5-font-size: $font-size-base * 1.125 !default;
 $h6-font-size: $font-size-base !default;
+$small-font-size: $font-size-base * .875 !default;
+$x-small-font-size: $font-size-base * .75 !default;
+$xx-small-font-size: $font-size-base * .6875 !default;
+$body-color: #424242;
+
+.small {
+    font-size: $small-font-size;
+}
+
+.x-small {
+    font-size: $x-small-font-size;
+}
+
+.xx-small {
+    font-size: $xx-small-font-size;
+}
 
 $font-sizes: (
     1: $h1-font-size,
@@ -17,18 +33,6 @@ $font-sizes: (
     5: $h5-font-size,
     6: $h6-font-size
 );
-
-.small {
-    font-size: $font-size-base * .875;
-}
-
-.x-small {
-    font-size: $font-size-base * .75;
-}
-
-.xx-small {
-    font-size: $font-size-base * .6875;
-}
 
 $spacer: 1rem;
 $spacers: ();

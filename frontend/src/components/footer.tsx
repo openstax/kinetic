@@ -67,7 +67,7 @@ const Funders = () => {
 
 export const MobileFooter: React.FC<{ className?: string, includeFunders?: boolean }> = () => {
     return (
-        <div css={{ backgroundColor: colors.darkBlue, color: 'white', a: { color: 'white' } }}>
+        <div css={{ backgroundColor: colors.blue, color: 'white', a: { color: 'white' } }}>
             <div className='container-lg'>
                 <Row className="py-1">
                     <Row className="py-1">
@@ -108,7 +108,7 @@ export const MobileFooter: React.FC<{ className?: string, includeFunders?: boole
 
 export const DesktopFooter: React.FC<{ className?: string, includeFunders?: boolean }> = () => {
     return (
-        <div css={{ backgroundColor: colors.darkBlue, color: 'white', a: { color: 'white' } }}>
+        <div css={{ backgroundColor: colors.blue, color: 'white', a: { color: 'white' } }}>
             <div className='container-lg'>
                 <Row css={{ padding: '20px 0' }}>
                     <Col auto direction="column">

@@ -21,7 +21,7 @@ const Part: FCWC<{ title: string, icon: IconKey }> = ({
         <Box direction="column" margin={{ bottom: 'large' }}>
             <Box align='center' gap margin={{ vertical: 'default' }}>
                 <Icon icon={icon} color={colors.purple} />
-                <span css={{ color: colors.darkText }}>{title}</span>
+                <span>{title}</span>
             </Box>
             <div css={{ marginBottom: '0.5rem', color: colors.grayText }}>{children}</div>
         </Box>
@@ -86,7 +86,7 @@ const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
                     icon="multiStage"
                     color={colors.purple}
                 />
-                <span css={{ color: colors.darkText }}>Multi-Session</span>
+                <span>Multi-Session</span>
             </Box>
             <Box margin={{ vertical: 'large' }}>
                 <MultiSessionBar study={study} />
