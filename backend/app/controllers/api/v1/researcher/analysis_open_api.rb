@@ -18,11 +18,7 @@ class Api::V1::Researcher::AnalysisOpenApi
     end
 
     schema :StudyAnalysis do
-      property :study_id do
-        key :required, true
-        key :type, :integer
-        key :description, 'ID of study'
-      end
+      key :required, %w[study_id]
     end
 
     schema :Analysis do
