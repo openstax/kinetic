@@ -1,18 +1,20 @@
 import { BannerMessage } from '@api'
 import { Box, Icon } from '@components'
-import { React } from '@common'
+import { cx, React } from '@common'
 import { useBanners } from '@models'
 import { colors } from '../theme'
+import { useIsMobileDevice } from '@lib';
 
 const Banner: React.FC<{
     onRemove: (b: BannerMessage) => void,
     banner: BannerMessage,
 }> = ({ banner, onRemove }) => (
     <Box className="py-2 d-flex justify-content-between">
-        <div css={{ width: 16 }}></div>
-        <span className="align-self-center text-center px-2">{banner.message}</span>
+        <span className={cx({ 'x-small': useIsMobileDevice() })}>
+            {banner.message}
+        </span>
         <Icon
-            css={{ position: 'relative', top: '-15px', right: '-5px' }}
+            height={25}
             icon="x"
             onClick={() => onRemove(banner)}
             color="white"
@@ -32,7 +34,7 @@ export const BannersBar: React.FC = () => {
             css={{
                 color: 'white',
                 fontFamily: 'Helvetica Neue',
-                backgroundColor: colors.darkTeal,
+                backgroundColor: colors.purple,
                 boxShadow: '0px 10px 20px -5px rgba(0, 0, 0, 0.08)',
             }}
         >
