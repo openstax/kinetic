@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-OpenStax::OpenApi.configure do |config|
+OpenStax::OpenApi.configure do |config| # rubocop:disable Metrics/BlockLength
   config.json_proc = lambda { |language, api_major_version|
     const = language == :r ? 'ENCLAVE' : 'OPENAPI'
     OpenStax::OpenApi.build_root_json(
@@ -34,7 +34,7 @@ OpenStax::OpenApi.configure do |config|
 
   config.client_language_post_processing = {
     'typescript-fetch' => lambda do |opts|
-      FileUtils.mv Dir.glob(opts[:output_dir] + '/*'), Rails.root.join('../frontend/src/api/')
+      FileUtils.cp_r Dir.glob("#{opts[:output_dir]}/*"), Rails.root.join('../frontend/src/api/')
     end
   }.symbolize_keys
 

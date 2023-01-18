@@ -41,7 +41,7 @@ class Api::V1::OpenApiController < ApplicationController
 
   ENCLAVE_CLASSES = [
     Api::V1::OpenApiResponses,
-    Api::V1::Researcher::StudyResponsesOpenApi,
+    Api::V1::Researcher::ResponsesOpenApi,
     self
   ].freeze
 
@@ -55,6 +55,8 @@ class Api::V1::OpenApiController < ApplicationController
     Api::V1::EnvironmentOpenApi,
     Api::V1::Admin::BannersOpenApi,
     Api::V1::Admin::RewardsOpenApi,
+    Api::V1::Researcher::AnalysisOpenApi,
+    Api::V1::Researcher::ResponsesOpenApi,
     self
   ].freeze
 

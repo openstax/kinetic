@@ -13,8 +13,8 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Study } from './Study';
 import {
-    Study,
     StudyFromJSON,
     StudyFromJSONTyped,
     StudyToJSON,
@@ -32,6 +32,15 @@ export interface AddStudy {
      * @memberof AddStudy
      */
     study?: Study;
+}
+
+/**
+ * Check if a given object implements the AddStudy interface.
+ */
+export function instanceOfAddStudy(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function AddStudyFromJSON(json: any): AddStudy {

@@ -2,8 +2,8 @@
 
 set -xe
 
-docker-compose run api bundle exec rake \
-  openstax_openapi:generate_client[1,r] \
-  openstax_openapi:generate_client[1,typescript-fetch] \
-  openstax_openapi:generate_model_bindings[1]
+cd backend
 
+./bin/rake openstax_openapi:generate_client[1,typescript-fetch]
+./bin/rake openstax_openapi:generate_client[1,r]
+./bin/rake openstax_openapi:generate_model_bindings[1]

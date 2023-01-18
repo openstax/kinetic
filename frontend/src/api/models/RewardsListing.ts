@@ -13,8 +13,8 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Reward } from './Reward';
 import {
-    Reward,
     RewardFromJSON,
     RewardFromJSONTyped,
     RewardToJSON,
@@ -32,6 +32,16 @@ export interface RewardsListing {
      * @memberof RewardsListing
      */
     data: Array<Reward>;
+}
+
+/**
+ * Check if a given object implements the RewardsListing interface.
+ */
+export function instanceOfRewardsListing(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "data" in value;
+
+    return isInstance;
 }
 
 export function RewardsListingFromJSON(json: any): RewardsListing {

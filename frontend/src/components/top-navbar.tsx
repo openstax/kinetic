@@ -6,7 +6,12 @@ import { Menu } from './menu'
 import { BannersBar } from './banners-bar'
 import { useCurrentUser, useEnvironment, useIsMobileDevice } from '@lib'
 
-export const TopNavBar: FCWOC<{ className?: string }> = ({ children, className }) => {
+interface TopNavBarProps {
+    className?: string
+    controls?: React.ReactElement,
+}
+
+export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, controls, className }) => {
     const env = useEnvironment()
     const user = useCurrentUser()
     const isMobile = useIsMobileDevice()
@@ -19,8 +24,9 @@ export const TopNavBar: FCWOC<{ className?: string }> = ({ children, className }
                         <NavbarLogoLink />
                         {!isMobile && <BannersBar />}
                         {children}
-                        <Box gap="xlarge">
+                        <Box gap="xlarge" align="center">
                             {!isMobile && <Link to="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Studies</Link>}
+                            {controls}
                             <Menu alignEnd >
                                 {isMobile && <li><Link className="dropdown-item" to="/studies">Studies</Link></li>}
                                 <li><Link className="dropdown-item" to="/account">My account</Link></li>

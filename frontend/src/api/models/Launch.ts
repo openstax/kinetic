@@ -27,6 +27,16 @@ export interface Launch {
     url: string;
 }
 
+/**
+ * Check if a given object implements the Launch interface.
+ */
+export function instanceOfLaunch(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "url" in value;
+
+    return isInstance;
+}
+
 export function LaunchFromJSON(json: any): Launch {
     return LaunchFromJSONTyped(json, false);
 }

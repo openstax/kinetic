@@ -33,6 +33,15 @@ export interface ServerError {
     messages?: Array<string>;
 }
 
+/**
+ * Check if a given object implements the ServerError interface.
+ */
+export function instanceOfServerError(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
+}
+
 export function ServerErrorFromJSON(json: any): ServerError {
     return ServerErrorFromJSONTyped(json, false);
 }

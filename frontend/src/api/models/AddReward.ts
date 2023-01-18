@@ -13,8 +13,8 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Reward } from './Reward';
 import {
-    Reward,
     RewardFromJSON,
     RewardFromJSONTyped,
     RewardToJSON,
@@ -32,6 +32,15 @@ export interface AddReward {
      * @memberof AddReward
      */
     reward?: Reward;
+}
+
+/**
+ * Check if a given object implements the AddReward interface.
+ */
+export function instanceOfAddReward(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function AddRewardFromJSON(json: any): AddReward {

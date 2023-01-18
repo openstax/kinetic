@@ -23,7 +23,7 @@ class QualtricsApi
 
   def get(path)
     resp = @http.get("#{Rails.application.secrets.qualtrics_api_url}/#{path}")
-    raise "request failed: #{resp.body}" unless resp.status == 200
+    raise "request failed: #{resp.status}" unless resp.status == 200
 
     JSON.parse(resp.body.read)
   end

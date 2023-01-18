@@ -13,8 +13,8 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ParticipantStudy } from './ParticipantStudy';
 import {
-    ParticipantStudy,
     ParticipantStudyFromJSON,
     ParticipantStudyFromJSONTyped,
     ParticipantStudyToJSON,
@@ -32,6 +32,15 @@ export interface ParticipantStudies {
      * @memberof ParticipantStudies
      */
     data?: Array<ParticipantStudy>;
+}
+
+/**
+ * Check if a given object implements the ParticipantStudies interface.
+ */
+export function instanceOfParticipantStudies(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function ParticipantStudiesFromJSON(json: any): ParticipantStudies {

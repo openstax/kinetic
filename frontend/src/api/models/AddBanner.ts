@@ -13,8 +13,8 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { BannerNotice } from './BannerNotice';
 import {
-    BannerNotice,
     BannerNoticeFromJSON,
     BannerNoticeFromJSONTyped,
     BannerNoticeToJSON,
@@ -32,6 +32,15 @@ export interface AddBanner {
      * @memberof AddBanner
      */
     banner?: BannerNotice;
+}
+
+/**
+ * Check if a given object implements the AddBanner interface.
+ */
+export function instanceOfAddBanner(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function AddBannerFromJSON(json: any): AddBanner {

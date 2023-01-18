@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-class Api::V1::Researcher::StudyResponsesController < ApplicationController
-  before_action :set_study
+class Api::V1::Researcher::ResponsesController < ApplicationController
+  before_action :set_analysis
 
   def show
-    responses = @study.study_response_exports.all
+    responses = @analysis.analysis_response_exports.all
     pending = responses.any? { |r| !r.is_complete }
 
-    api_binding = Api::V1::Bindings::StudyResponses.new(
+    api_binding = Api::V1::Bindings::Responses.new(
       status: pending ? 'pending' : 'complete',
       response_urls: responses.filter(&:is_complete).flat_map { |r| r.files.map { |f| url_for(f) } }
     )
@@ -15,15 +15,15 @@ class Api::V1::Researcher::StudyResponsesController < ApplicationController
   end
 
   def fetch
-    @study.fetch_responses(is_testing: @is_testing)
+    @analysis.fetch_responses(is_testing: @is_testing)
     show
   end
 
   protected
 
-  def set_study
+  def set_analysis
     # TODO: set is_testing only when coming from outside network
     @is_testing = true
-    @study = Study.find_by!(api_key: params[:api_key])
+    @analysis = Analysis.find_by!(api_key: params[:api_key])
   end
 end

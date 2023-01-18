@@ -51,6 +51,19 @@ export interface RewardsScheduleSegment {
     infoUrl?: string;
 }
 
+/**
+ * Check if a given object implements the RewardsScheduleSegment interface.
+ */
+export function instanceOfRewardsScheduleSegment(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "prize" in value;
+    isInstance = isInstance && "points" in value;
+    isInstance = isInstance && "startAt" in value;
+    isInstance = isInstance && "endAt" in value;
+
+    return isInstance;
+}
+
 export function RewardsScheduleSegmentFromJSON(json: any): RewardsScheduleSegment {
     return RewardsScheduleSegmentFromJSONTyped(json, false);
 }

@@ -13,8 +13,8 @@ export function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K> {
     return ret;
 }
 
-export function isNil(n: any) {
-    return n == null
+export function isNil(val: any): val is { val: null } | { val: undefined } {
+    return val == null
 }
 
 export function remove<T>(el: T, array: T[]): void {

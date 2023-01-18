@@ -32,13 +32,13 @@ jobs:
         working-directory: frontend
         run: $(npm bin)/wait-on http://localhost:4006/api/v1/openapi.json
       - name: Generate bindings
-        run: ./bin/update-bindings
+        run: docker compose exec api bundle exec rake openstax_openapi:generate_model_bindings[1]
       - name: Check for changes in bindings
         uses: tj-actions/verify-changed-files@v7.1
         id: verify-changed-files
         with:
           files: |
-             src/api
+             backend/app/bindings
       - name: Fail if bindings changed
         if: steps.verify-changed-files.outputs.files_changed == 'true'
         run: |

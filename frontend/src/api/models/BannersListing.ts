@@ -13,8 +13,8 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { BannerNotice } from './BannerNotice';
 import {
-    BannerNotice,
     BannerNoticeFromJSON,
     BannerNoticeFromJSONTyped,
     BannerNoticeToJSON,
@@ -32,6 +32,16 @@ export interface BannersListing {
      * @memberof BannersListing
      */
     data: Array<BannerNotice>;
+}
+
+/**
+ * Check if a given object implements the BannersListing interface.
+ */
+export function instanceOfBannersListing(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "data" in value;
+
+    return isInstance;
 }
 
 export function BannersListingFromJSON(json: any): BannersListing {

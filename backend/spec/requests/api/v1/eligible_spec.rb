@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Eligibility', type: :request, api: :v1 do
+RSpec.describe 'Eligibility', api: :v1 do
   it 'defaults to true' do
     get '/api/v1/eligibility'
     expect(response_hash).to include(eligible: true)

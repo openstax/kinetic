@@ -51,6 +51,16 @@ export interface Researcher {
     bio?: string;
 }
 
+/**
+ * Check if a given object implements the Researcher interface.
+ */
+export function instanceOfResearcher(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "userId" in value;
+
+    return isInstance;
+}
+
 export function ResearcherFromJSON(json: any): Researcher {
     return ResearcherFromJSONTyped(json, false);
 }

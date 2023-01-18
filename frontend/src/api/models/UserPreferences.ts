@@ -45,6 +45,15 @@ export interface UserPreferences {
     sessionAvailableEmail?: boolean;
 }
 
+/**
+ * Check if a given object implements the UserPreferences interface.
+ */
+export function instanceOfUserPreferences(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
+}
+
 export function UserPreferencesFromJSON(json: any): UserPreferences {
     return UserPreferencesFromJSONTyped(json, false);
 }

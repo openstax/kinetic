@@ -13,8 +13,8 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { NewStage } from './NewStage';
 import {
-    NewStage,
     NewStageFromJSON,
     NewStageFromJSONTyped,
     NewStageToJSON,
@@ -32,6 +32,15 @@ export interface AddStage {
      * @memberof AddStage
      */
     stage?: NewStage;
+}
+
+/**
+ * Check if a given object implements the AddStage interface.
+ */
+export function instanceOfAddStage(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function AddStageFromJSON(json: any): AddStage {

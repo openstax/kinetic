@@ -20,14 +20,16 @@ export const ErrorPage: React.FC<{ error: any }> = ({ error }) => {
     );
 }
 
-export const PageNotFound: React.FC = () => {
+export const PageNotFound: React.FC<{ name?: string }> = ({ name }) => {
     const location = useLocation();
+    const path = name || `page ${location.pathname}`
+
     return (
         <div className="invalid-page not-found">
             <OXColoredStripe />
             <div className="container pt-2">
                 <h1>
-                    Uh-oh, the page <code>{location.pathname}</code> was not found
+                    Uh-oh, the <code>{path}</code> was not found
                 </h1>
                 <LinkButton primary to="/">Go Home</LinkButton>
             </div>

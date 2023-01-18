@@ -1,6 +1,6 @@
 # Use non-slim to have git and build tools installed (faster for lots of runs
 # on CI)
-FROM ruby:3.0.3
+FROM ruby:3.0.5
 
 ARG bundler_version
 

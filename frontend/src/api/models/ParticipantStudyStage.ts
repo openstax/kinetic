@@ -69,6 +69,15 @@ export interface ParticipantStudyStage {
     readonly points?: number;
 }
 
+/**
+ * Check if a given object implements the ParticipantStudyStage interface.
+ */
+export function instanceOfParticipantStudyStage(value: object): boolean {
+    let isInstance = true;
+
+    return isInstance;
+}
+
 export function ParticipantStudyStageFromJSON(json: any): ParticipantStudyStage {
     return ParticipantStudyStageFromJSONTyped(json, false);
 }

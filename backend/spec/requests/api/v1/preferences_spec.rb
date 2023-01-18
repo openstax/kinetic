@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Environment', type: :request, api: :v1 do
+RSpec.describe 'Environment', api: :v1 do
 
   let(:user_id) { SecureRandom.uuid }
 
@@ -20,7 +20,7 @@ RSpec.describe 'Environment', type: :request, api: :v1 do
       it 'returns default preferences' do
         expect {
           get '/api/v1/preferences'
-        }.to change { UserPreferences.count }.by(0)
+        }.to not_change { UserPreferences.count }
         expect(response).to have_http_status(:ok)
         expect(response_hash).to match(
           a_hash_including(

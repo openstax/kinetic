@@ -34,9 +34,9 @@ RSpec.describe LaunchPad, multi_stage: true do
     it 'does not record launch' do
       expect {
         user1_study1_launch_pad.launch_url(preview: true)
-      }.to change { LaunchedStudy.count }.by(0)
-       .and change { LaunchedStage.count }.by(0)
-       .and change { ResearchId.count }.by(0)
+      }.to not_change { LaunchedStudy.count }
+       .and not_change { LaunchedStage.count }
+       .and not_change { ResearchId.count }
     end
   end
 
@@ -63,9 +63,9 @@ RSpec.describe LaunchPad, multi_stage: true do
       url = nil
       expect {
         url = user1_study1_launch_pad.launch_url
-      }.to change { LaunchedStudy.count }.by(0)
-       .and change { LaunchedStage.count }.by(0)
-       .and change { ResearchId.count }.by(0)
+      }.to not_change { LaunchedStudy.count }
+       .and not_change { LaunchedStage.count }
+       .and not_change { ResearchId.count }
 
       expect(url).to match(/ssotoken=/)
     end
@@ -73,7 +73,7 @@ RSpec.describe LaunchPad, multi_stage: true do
     it 'can land the first stage' do
       expect {
         user1_study1_launch_pad.land
-      }.to change { LaunchedStudy.complete.count }.by(0)
+      }.to not_change { LaunchedStudy.complete.count }
        .and change { LaunchedStage.complete.count }.by(1)
     end
   end
@@ -88,7 +88,7 @@ RSpec.describe LaunchPad, multi_stage: true do
       url = nil
       expect {
         url = user1_study1_launch_pad.launch_url
-      }.to change { LaunchedStudy.count }.by(0)
+      }.to not_change { LaunchedStudy.count }
        .and change { LaunchedStage.count }.by(1)
 
       expect(url).to match(/ssotoken=/)

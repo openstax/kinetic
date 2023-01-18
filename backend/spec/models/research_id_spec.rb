@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ResearchId, type: :model do
+RSpec.describe ResearchId do
   describe '#for_user_id' do
     it 'generates an id' do
       rid = described_class.for_user_id(SecureRandom.uuid)

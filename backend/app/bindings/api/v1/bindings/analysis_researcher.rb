@@ -14,44 +14,18 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class StudyResponses
-    # Status of the request
-    attr_accessor :status
+  class AnalysisResearcher
+    # UUID of researcher
+    attr_accessor :user_id
 
-    # URL(s) to download study responses from
-    attr_accessor :response_urls
-
-    # The reason for the request failure
-    attr_accessor :error
-
-    class EnumAttributeValidator
-      attr_reader :datatype
-      attr_reader :allowable_values
-
-      def initialize(datatype, allowable_values)
-        @allowable_values = allowable_values.map do |value|
-          case datatype.to_s
-          when /Integer/i
-            value.to_i
-          when /Float/i
-            value.to_f
-          else
-            value
-          end
-        end
-      end
-
-      def valid?(value)
-        !value || allowable_values.include?(value)
-      end
-    end
+    # Name of researcher
+    attr_accessor :name
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'status' => :'status',
-        :'response_urls' => :'response_urls',
-        :'error' => :'error'
+        :'user_id' => :'user_id',
+        :'name' => :'name'
       }
     end
 
@@ -63,9 +37,8 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'status' => :'String',
-        :'response_urls' => :'Array<String>',
-        :'error' => :'String'
+        :'user_id' => :'String',
+        :'name' => :'String'
       }
     end
 
@@ -79,29 +52,23 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::StudyResponses` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::AnalysisResearcher` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::StudyResponses`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::AnalysisResearcher`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'status')
-        self.status = attributes[:'status']
+      if attributes.key?(:'user_id')
+        self.user_id = attributes[:'user_id']
       end
 
-      if attributes.key?(:'response_urls')
-        if (value = attributes[:'response_urls']).is_a?(Array)
-          self.response_urls = value
-        end
-      end
-
-      if attributes.key?(:'error')
-        self.error = attributes[:'error']
+      if attributes.key?(:'name')
+        self.name = attributes[:'name']
       end
     end
 
@@ -109,30 +76,13 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @status.nil?
-        invalid_properties.push('invalid value for "status", status cannot be nil.')
-      end
-
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @status.nil?
-      status_validator = EnumAttributeValidator.new('String', ["pending", "complete", "error"])
-      return false unless status_validator.valid?(@status)
       true
-    end
-
-    # Custom attribute writer method checking allowed values (enum).
-    # @param [Object] status Object to be assigned
-    def status=(status)
-      validator = EnumAttributeValidator.new('String', ["pending", "complete", "error"])
-      unless validator.valid?(status)
-        fail ArgumentError, "invalid value for \"status\", must be one of #{validator.allowable_values}."
-      end
-      @status = status
     end
 
     # Checks equality by comparing each attribute.
@@ -140,9 +90,8 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          status == o.status &&
-          response_urls == o.response_urls &&
-          error == o.error
+          user_id == o.user_id &&
+          name == o.name
     end
 
     # @see the `==` method
@@ -154,7 +103,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [status, response_urls, error].hash
+      [user_id, name].hash
     end
 
     # Builds the object from hash

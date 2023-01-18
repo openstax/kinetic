@@ -13,14 +13,14 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Researcher } from './Researcher';
 import {
-    Researcher,
     ResearcherFromJSON,
     ResearcherFromJSONTyped,
     ResearcherToJSON,
 } from './Researcher';
+import type { Stage } from './Stage';
 import {
-    Stage,
     StageFromJSON,
     StageFromJSONTyped,
     StageToJSON,
@@ -134,6 +134,19 @@ export interface Study {
      * @memberof Study
      */
     stages?: Array<Stage>;
+}
+
+/**
+ * Check if a given object implements the Study interface.
+ */
+export function instanceOfStudy(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "titleForParticipants" in value;
+    isInstance = isInstance && "shortDescription" in value;
+    isInstance = isInstance && "tags" in value;
+
+    return isInstance;
 }
 
 export function StudyFromJSON(json: any): Study {

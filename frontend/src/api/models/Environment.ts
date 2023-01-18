@@ -13,20 +13,20 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { BannerMessage } from './BannerMessage';
 import {
-    BannerMessage,
     BannerMessageFromJSON,
     BannerMessageFromJSONTyped,
     BannerMessageToJSON,
 } from './BannerMessage';
+import type { EnvironmentUser } from './EnvironmentUser';
 import {
-    EnvironmentUser,
     EnvironmentUserFromJSON,
     EnvironmentUserFromJSONTyped,
     EnvironmentUserToJSON,
 } from './EnvironmentUser';
+import type { RewardsScheduleSegment } from './RewardsScheduleSegment';
 import {
-    RewardsScheduleSegment,
     RewardsScheduleSegmentFromJSON,
     RewardsScheduleSegmentFromJSONTyped,
     RewardsScheduleSegmentToJSON,
@@ -68,6 +68,20 @@ export interface Environment {
      * @memberof Environment
      */
     bannersSchedule: Array<BannerMessage>;
+}
+
+/**
+ * Check if a given object implements the Environment interface.
+ */
+export function instanceOfEnvironment(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "user" in value;
+    isInstance = isInstance && "accountsEnvName" in value;
+    isInstance = isInstance && "homepageUrl" in value;
+    isInstance = isInstance && "rewardsSchedule" in value;
+    isInstance = isInstance && "bannersSchedule" in value;
+
+    return isInstance;
 }
 
 export function EnvironmentFromJSON(json: any): Environment {

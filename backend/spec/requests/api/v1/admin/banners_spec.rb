@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Banner', type: :request, api: :v1 do
+RSpec.describe 'Banner', api: :v1 do
   let(:path) { 'admin/banners' }
 
   let(:admin) { create(:admin) }

@@ -69,6 +69,18 @@ export interface Stage {
     durationMinutes?: number;
 }
 
+/**
+ * Check if a given object implements the Stage interface.
+ */
+export function instanceOfStage(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "order" in value;
+    isInstance = isInstance && "config" in value;
+
+    return isInstance;
+}
+
 export function StageFromJSON(json: any): Stage {
     return StageFromJSONTyped(json, false);
 }

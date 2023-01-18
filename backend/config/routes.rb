@@ -17,8 +17,10 @@ Rails.application.routes.draw do
           resources :stages, shallow: true, only: [:create, :show, :update, :destroy]
         end
 
-        post 'responses/:api_key/fetch', to: 'study_responses#fetch'
-        get 'responses/:api_key/status', to: 'study_responses#show'
+        resources :analysis, except: [:destroy]
+
+        post 'responses/:api_key/fetch', to: 'responses#fetch'
+        get 'responses/:api_key/status', to: 'responses#show'
       end
 
       namespace :participant do

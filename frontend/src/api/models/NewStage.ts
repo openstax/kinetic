@@ -63,6 +63,16 @@ export interface NewStage {
     durationMinutes?: number;
 }
 
+/**
+ * Check if a given object implements the NewStage interface.
+ */
+export function instanceOfNewStage(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "config" in value;
+
+    return isInstance;
+}
+
 export function NewStageFromJSON(json: any): NewStage {
     return NewStageFromJSONTyped(json, false);
 }

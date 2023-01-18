@@ -93,6 +93,18 @@ export interface NewStudy {
     isMandatory?: boolean;
 }
 
+/**
+ * Check if a given object implements the NewStudy interface.
+ */
+export function instanceOfNewStudy(value: object): boolean {
+    let isInstance = true;
+    isInstance = isInstance && "titleForParticipants" in value;
+    isInstance = isInstance && "shortDescription" in value;
+    isInstance = isInstance && "tags" in value;
+
+    return isInstance;
+}
+
 export function NewStudyFromJSON(json: any): NewStudy {
     return NewStudyFromJSONTyped(json, false);
 }
