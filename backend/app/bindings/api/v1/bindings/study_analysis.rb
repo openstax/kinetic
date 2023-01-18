@@ -14,14 +14,14 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class AnalysisListing
-    # The analysis.
-    attr_accessor :data
+  class StudyAnalysis
+    # ID of study
+    attr_accessor :study_id
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'data' => :'data'
+        :'study_id' => :'study_id'
       }
     end
 
@@ -33,7 +33,7 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'data' => :'Array<Analysis>'
+        :'study_id' => :'Integer'
       }
     end
 
@@ -47,21 +47,19 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::AnalysisListing` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::StudyAnalysis` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::AnalysisListing`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::StudyAnalysis`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'data')
-        if (value = attributes[:'data']).is_a?(Array)
-          self.data = value
-        end
+      if attributes.key?(:'study_id')
+        self.study_id = attributes[:'study_id']
       end
     end
 
@@ -69,12 +67,17 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
+      if @study_id.nil?
+        invalid_properties.push('invalid value for "study_id", study_id cannot be nil.')
+      end
+
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
+      return false if @study_id.nil?
       true
     end
 
@@ -83,7 +86,7 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          data == o.data
+          study_id == o.study_id
     end
 
     # @see the `==` method
@@ -95,7 +98,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [data].hash
+      [study_id].hash
     end
 
     # Builds the object from hash
