@@ -1,11 +1,10 @@
 import { React, useEffect, useParams, useNavigate, useState } from '@common'
 import * as Yup from 'yup'
-import { useField } from 'formik'
 import { uniqBy, omit } from 'lodash-es'
 import {
     LoadingAnimation, Alert, EditingForm as Form, Modal,
     InputField, SelectField, DateTimeField, Row, Col, Icon,
-    LinkButton, Button, Box,
+    LinkButton, Button, Box, FormSubmitHandler, useField,
 } from '@components'
 import { StudyValidationSchema, TagLabels, isNewStudy, EditingStudy, isStudy } from '@models'
 import { Study, Stage } from '@api'
@@ -22,6 +21,13 @@ const QualtricsFields = () => (
         <InputField name="secret_key" id="key" label="Secret Key" />
     </React.Fragment>
 )
+
+const formStyles = {
+    '.form-control': {
+        backgroundColor: 'white',
+        minHeight: '3.5rem',
+    },
+}
 
 const AvailableStageFields = {
     qualtrics: {
@@ -109,7 +115,8 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate(): void }> = ({ study
                     },
                 },
             })
-            helpers.resetForm()
+
+            helpers.reset()
             setShowingModal(false)
             study.stages?.push(reply)
             onCreate()
@@ -129,6 +136,7 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate(): void }> = ({ study
             >
                 <Modal.Body>
                     <Form
+                        css={formStyles}
                         onSubmit={saveStage}
                         showControls
                         onCancel={onHide}
@@ -140,7 +148,7 @@ const AddStageModalIcon: React.FC<{ study: Study, onCreate(): void }> = ({ study
                             points: Yup.number().required(),
                             availableAfterDays: Yup.number().required(),
                         })}
-                        initialValues={{
+                        defaultValues={{
                             type: stageType,
                             url: '',
                             secret_key: '',
@@ -193,11 +201,7 @@ const StudyLandingUrl: React.FC<{ study: Study }> = ({ study }) => {
 
 export const StudyStages: React.FC<{ study: EditingStudy, onUpdate(): void }> = ({ study, onUpdate }) => {
     const api = useApi()
-    const [, meta] = useField({
-        type: 'array',
-        name: 'stages',
-        value: isStudy(study) ? (study?.stages || []).map(s => String(s.id)) : [],
-    })
+    const { fieldState } = useField('stages')
 
     if (!isStudy(study)) { return null }
 
@@ -219,7 +223,7 @@ export const StudyStages: React.FC<{ study: EditingStudy, onUpdate(): void }> = 
             </Row>
             <Row className="mb-2 stages-listing">
                 {!study.stages?.length && (
-                    <Col css={{ fontWeight: 'bold', color: meta.error ? 'red' : 'unset' }}>No stages have been defined</Col>
+                    <Col css={{ fontWeight: 'bold', color: fieldState.error ? 'red' : 'unset' }}>No stages have been defined</Col>
                 )}
                 <table className="table col-sm-12">
                     <thead>
@@ -280,7 +284,7 @@ function EditStudy() {
     const onCancel = () => {
         nav('/studies')
     }
-    const saveStudy = async (study: EditingStudy) => {
+    const saveStudy:FormSubmitHandler<EditingStudy> = async (study) => {
         try {
             if (isNew) {
                 const savedStudy = await api.addStudy({ addStudy: { study: study as any } })
@@ -303,7 +307,7 @@ function EditStudy() {
     )
 
     const tag_options = uniqBy(TAG_OPTIONS.concat(
-        study?.tags?.map(sto => ({ label: sto, value: sto }))
+        study?.tags?.map(sto => ({ label: sto, value: sto })) || []
     ), 'value')
     return (
         <div className="container studies mt-8">
@@ -321,10 +325,11 @@ function EditStudy() {
             </nav>
 
             <Form
+                css={formStyles}
                 onSubmit={saveStudy}
                 showControls
                 onCancel={onCancel}
-                initialValues={study}
+                defaultValues={study}
                 validationSchema={editingValidationSchema}
             >
                 <Alert warning={true} onDismiss={() => setError('')} message={error} />

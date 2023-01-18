@@ -2,9 +2,11 @@ import { React, useNavigate, useState, useParams } from '@common'
 import {
     Alert, EditingForm as Form, InputField, PageNotFound,
 } from '@components'
-import { AnalysisValidationSchema } from '@models'
 import { Analysis } from '@api'
+import { AnalysisValidationSchema } from '@models'
 import { useApi, errorToString } from '@lib'
+import { SelectedStudies } from './selected-studies'
+
 
 interface EditAnalysisProps {
     listing: Array<Analysis>
@@ -15,7 +17,9 @@ const newAnalysis: Analysis = {
     title: '',
     description: '',
     repositoryUrl: '',
+    studies: [],
 }
+
 
 export const EditAnalysis: FC<EditAnalysisProps> = ({ listing, onEditSuccess }) => {
     const { analysisId } = useParams<string>();
@@ -34,9 +38,9 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ listing, onEditSuccess }) 
     const saveAnalysis = async (analysis: Analysis) => {
         try {
             if (analysis.id) {
-                await api.updateAnalysis({ id: analysis.id, updateAnalysis: { analysis: analysis as any } })
+                await api.updateAnalysis({ id: analysis.id, updateAnalysis: { analysis } })
             } else {
-                const savedAnalysis = await api.addAnalysis({ addAnalysis: { analysis: analysis as any } })
+                const savedAnalysis = await api.addAnalysis({ addAnalysis: { analysis } })
                 nav(`/analysis/edit/${savedAnalysis.id}`)
             }
             onEditSuccess()
@@ -55,7 +59,7 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ listing, onEditSuccess }) 
                 showControls
                 onCancel={onCancel}
                 enableReinitialize
-                initialValues={analysis}
+                defaultValues={analysis}
                 validationSchema={AnalysisValidationSchema}
             >
                 <Alert warning={true} onDismiss={() => setError('')} message={error} />
@@ -63,6 +67,7 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ listing, onEditSuccess }) 
                 <InputField name="repositoryUrl" label="Repository URL" />
                 <InputField name="description" type="textarea" label="Description" />
                 {analysis.id && <InputField name="apiKey" label="Api Key" readOnly />}
+                <SelectedStudies />
             </Form>
 
         </div>

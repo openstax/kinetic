@@ -15,15 +15,13 @@ const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, on
         }
         onUpdate()
     }
-    const saveReward = async (reward: Reward, meta: any) => {
-        let reply
+    const saveReward = async (reward: Reward) => {
         try {
             if (reward.id) {
-                reply = await api.updateReward({ id: reward.id, updateReward: { reward } })
+                await api.updateReward({ id: reward.id, updateReward: { reward } })
             } else {
-                reply = await api.createReward({ addReward: { reward } })
+                await api.createReward({ addReward: { reward } })
             }
-            meta.resetForm(reply)
             onUpdate()
         } catch (e) { setError(String(e)) }
     }
@@ -47,7 +45,7 @@ const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, on
                         endAt: Yup.string().required(),
                         infoUrl: Yup.string().url(),
                     })}
-                    initialValues={reward}
+                    defaultValues={reward}
                 >
                     <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
 

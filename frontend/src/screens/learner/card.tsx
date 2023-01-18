@@ -77,7 +77,6 @@ const MultiSession: React.FC<StudyCardProps> = ({ study }) => {
                 height={15}
                 icon="multiStage"
                 color={colors.purple}
-                tooltipProps={{ displayType: 'tooltip' }}
                 tooltip="This study has multiple sessions. The other sessions will be released once available."
             />
             <span>Multi-Session</span>
