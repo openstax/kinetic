@@ -91,7 +91,7 @@ will generate code in the baseline, so if you don't want it committed move it el
 ### Testing accounts
 
 A few testing accounts may be created by running `rake demo-users`.  This will create:
-
+ * kinetic-adm-01@mailinator.com
  * kinetic-researcher-01@mailinator.com
  * kinetic-student-01@mailinator.com
  * kinetic-student-02@mailinator.com

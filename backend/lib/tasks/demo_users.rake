@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+ADMINS = [
+  '844bb404-cb2e-421b-b48e-05e6e2081387' # kinetic-adm-01@mailinator.com
+].freeze
+
 RESEARCHERS = [
   '572cc58d-0ab7-4dd4-bd62-ef8a11033ec7' # kinetic-researcher-01@mailinator.com
 ].freeze
@@ -12,6 +16,9 @@ PARTICIPANTS = [
 
 desc 'create demo user accounts if they do not exist'
 task :'demo-users', [:path, :run_mode] => :environment do |_, _args|
+  ADMINS.each do |uuid|
+    Admin.find_or_create_by(user_id: uuid)
+  end
   RESEARCHERS.each do |uuid|
     Researcher.find_or_create_by(user_id: uuid)
   end
