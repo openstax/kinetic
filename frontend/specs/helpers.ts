@@ -129,16 +129,16 @@ export const createStudy = async ({
     await page.fill('[name=shortDescription]', 'short desc')
     await page.fill('[name=longDescription]', 'long desc')
 
-    await page.fill('#tags input', 'cog')
+    await page.fill('input#tags', 'cog')
     await page.keyboard.press('Enter')
 
-    await page.fill('#tags input', 'cog')
+    await page.fill('input#tags', 'cog')
     await page.keyboard.press('Enter')
 
-    await page.fill('#tags input', `topic:${topic}`)
+    await page.fill('input#tags', `topic:${topic}`)
     await page.keyboard.press('Enter')
 
-    await page.fill('#tags input', `subject:${subject}`)
+    await page.fill('input#tags', `subject:${subject}`)
     await page.keyboard.press('Enter')
 
     await page.click('testId=form-save-btn')
