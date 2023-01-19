@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Stage < ApplicationRecord
-  belongs_to :study
+  belongs_to :study, inverse_of: :stages
 
   has_many :launches, class_name: 'LaunchedStage', foreign_key: :stage_id
 

@@ -1,6 +1,6 @@
 import { React } from '@common'
 import { colors } from '../theme'
-import { useFormikContext } from 'formik'
+
 import { useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { useCurrentUser, ENV } from '@lib'
@@ -30,27 +30,6 @@ export const LinkButton: React.FC<LinkButtonProps> = ({ to, children, ...props }
         </StyledLinkButton>
     )
 }
-
-export const SubmitButton: React.FC<ButtonProps> = ({
-    busyMessage = 'Submitting',
-    children,
-    ...props
-}) => {
-    const { isSubmitting } = useFormikContext()
-
-    return (
-        <Button
-            primary
-            busy={isSubmitting}
-            busyMessage={busyMessage}
-            type="submit"
-            {...props}
-        >
-            {children}
-        </Button>
-    )
-}
-
 
 export const LogoutButton: React.FC = () => {
     const user = useCurrentUser()

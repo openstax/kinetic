@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from 'boxible'
 import { components, OptionProps, SingleValueProps } from 'react-select';
-import { SelectField, SelectFieldProps } from '../select-field'
+import { SelectField, SelectFieldProps } from '@nathanstitt/sundry'
 import { CardImage, CardImages } from './images'
 
 type ImageOption = { value: string, ci: CardImage, label: string }

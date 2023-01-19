@@ -20,17 +20,11 @@ import { exists, mapValues } from '../runtime';
  */
 export interface StudyAnalysis {
     /**
-     * ID of analysis
-     * @type {number}
-     * @memberof StudyAnalysis
-     */
-    analysisId?: number;
-    /**
      * ID of study
      * @type {number}
      * @memberof StudyAnalysis
      */
-    studyId?: number;
+    studyId: number;
 }
 
 /**
@@ -38,6 +32,7 @@ export interface StudyAnalysis {
  */
 export function instanceOfStudyAnalysis(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "studyId" in value;
 
     return isInstance;
 }
@@ -52,8 +47,7 @@ export function StudyAnalysisFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
-        'analysisId': !exists(json, 'analysis_id') ? undefined : json['analysis_id'],
-        'studyId': !exists(json, 'study_id') ? undefined : json['study_id'],
+        'studyId': json['study_id'],
     };
 }
 
@@ -66,7 +60,6 @@ export function StudyAnalysisToJSON(value?: StudyAnalysis | null): any {
     }
     return {
         
-        'analysis_id': value.analysisId,
         'study_id': value.studyId,
     };
 }

@@ -20,9 +20,9 @@ test('can create and edit a study', async ({ page }) => {
     await page.fill('[name=shortDescription]', 'short desc')
     await page.fill('[name=longDescription]', 'long desc')
 
-    await page.fill('#tags input', 'type:survey')
+    await page.fill('input#tags', 'type:survey')
     await page.keyboard.press('Enter')
-    await page.fill('#tags input', 'topic:memory')
+    await page.fill('input#tags', 'topic:memory')
     await page.keyboard.press('Enter')
 
     await page.click('testId=form-save-btn')

@@ -1,5 +1,5 @@
 import { React, cx } from '@common'
-import { Box, Popover, Icon, SegmentedBar, Segment, segmentCircleStyle } from '@components'
+import { Box, Tooltip, Icon, SegmentedBar, Segment, segmentCircleStyle } from '@components'
 import {
     useRewardsSchedule,
     RewardsSegment,
@@ -97,20 +97,18 @@ const RewardSegment: React.FC<{
 
     if (segment.isFinal) {
         return (
-            <Popover
-                popover={popOverMessage(segment)}
-                displayType="tooltip"
+            <Tooltip
+                tooltip={popOverMessage(segment)}
                 css={popOverStyle}
             >
                 <GrandPrize segment={segment} />
-            </Popover>
+            </Tooltip>
         )
     }
 
     return (
         <>
-            <Popover
-                displayType="tooltip"
+            <Tooltip
                 className={cx({
                     past: segment.isPast,
                     future: segment.isFuture,
@@ -118,10 +116,10 @@ const RewardSegment: React.FC<{
                     achieved: segment.achieved,
                 })}
                 css={segmentCircleStyle}
-                popover={popOverMessage(segment)}
+                tooltip={popOverMessage(segment)}
             >
                 <span />
-            </Popover>
+            </Tooltip>
             <SegmentLabel segment={segment} />
         </>
     )

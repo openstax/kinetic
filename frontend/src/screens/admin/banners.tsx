@@ -13,15 +13,13 @@ const Banner: React.FC<{ banner: BannerNotice, onUpdate(): void }> = ({ banner, 
     const onDelete = () => {
         api.deleteBanner({ id: banner.id! }).then(onUpdate)
     }
-    const saveBanner = async (banner: BannerNotice, meta: any) => {
-        let reply: BannerNotice
+    const saveBanner = async (banner: BannerNotice) => {
         try {
             if (banner.id) {
-                reply = await api.updateBanner({ id: banner.id, updateBanner: { banner } })
+                await api.updateBanner({ id: banner.id, updateBanner: { banner } })
             } else {
-                reply = await api.createBanner({ addBanner: { banner } })
+                await api.createBanner({ addBanner: { banner } })
             }
-            meta.resetForm(reply)
             onUpdate()
         } catch (e) {
             setError(String(e))
@@ -47,7 +45,7 @@ const Banner: React.FC<{ banner: BannerNotice, onUpdate(): void }> = ({ banner, 
                         startAt: Yup.string().required(),
                         endAt: Yup.string().required(),
                     })}
-                    initialValues={banner}
+                    defaultValues={banner}
                 >
                     <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
                     <DateTimeField name="dates" withTime rangeNames={['startAt', 'endAt']} label="Date range" />

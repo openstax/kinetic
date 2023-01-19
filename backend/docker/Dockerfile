@@ -1,5 +1,5 @@
 FROM ruby:3.0.5
-
+ARG OPENAPI_VERSION=6.2.1
 ARG bundler_version
 
 RUN apt-get update && \
@@ -38,7 +38,7 @@ RUN gem install bundler --no-document --version $bundler_version && \
 
 ### openapi-codegen
 RUN mkdir /usr/lib/openapi-codegen && \
-  wget -q https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/5.3.0/openapi-generator-cli-5.3.0.jar -O \
+  wget -q https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/${OPENAPI_VERSION}/openapi-generator-cli-${OPENAPI_VERSION}.jar -O \
  /usr/lib/openapi-codegen/openapi-codegen-cli.jar && \
   echo "java -jar /usr/lib/openapi-codegen/openapi-codegen-cli.jar \$@" > /usr/bin/openapi-generator && \
   chmod a+x /usr/bin/openapi-generator

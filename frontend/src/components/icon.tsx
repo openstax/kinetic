@@ -1,98 +1,90 @@
 import * as React from 'react'
-import { keyframes, css, CSSObject } from '@emotion/react'
-import { Popover, PopoverProps } from './popover'
-import { Icon as IconifyIconComponent, IconifyIcon } from '@iconify/react'
-import { ICONS } from './packaged-icons'
+import {
+    IconProps as SundryIconProps,
+    Icon as SundryIcon,
 
-const spinKeyframes = keyframes`
-  from {
-    transform:rotate(0deg);
-  }
-  to {
-    transform:rotate(360deg);
-  }
-`
+    IconifyIcon,
+    IconifyIconDefinition,
+    setSundryIcons,
+} from '@nathanstitt/sundry'
 
-const spinCSS = css`
-    animation: 2s linear ${spinKeyframes} infinite;
-`
+import thumbsUp from '@iconify-icons/bi/hand-thumbs-up-fill'
+import exclamationTriangle from '@iconify-icons/bi/exclamation-triangle-fill'
+import xCircle from '@iconify-icons/bi/x-circle'
+import plusSquare from '@iconify-icons/bi/plus-square-fill'
+import exclamationCircle from '@iconify-icons/bi/exclamation-circle-fill'
+import clock from '@iconify-icons/bi/clock'
+import spin from '@iconify-icons/bi/arrow-clockwise'
+import minusSquare from '@iconify-icons/bi/dash-square'
 
-interface IconifyIconDefinition {
-    body: string
+
+import plusCircle from '@iconify-icons/bi/plus-circle'
+import close from '@iconify-icons/bi/x-square'
+import x from '@iconify-icons/bi/x'
+import back from '@iconify-icons/bi/chevron-double-left'
+import right from '@iconify-icons/bi/chevron-right'
+import tripleDot from '@iconify-icons/bi/three-dots'
+import cancel from '@iconify-icons/bi/x-circle'
+import trash from '@iconify-icons/bi/trash'
+import checkCircle from '@iconify-icons/bi/check-circle-fill'
+import feedback from '@iconify-icons/bi/chat-left-dots-fill'
+import search from '@iconify-icons/bi/search'
+import heart from '@iconify-icons/bi/heart-fill'
+import warning from '@iconify-icons/bi/exclamation-triangle-fill'
+import rolodex from '@iconify-icons/bi/person-rolodex'
+import list from '@iconify-icons/bi/list'
+import multiStage from '@iconify-icons/bi/stack'
+import chatLeft from '@iconify-icons/bi/chat-left-fill'
+
+
+const SUNDRY_PACKAGED_ICONS = {
+    thumbsUp,
+    exclamationCircle,
+    exclamationTriangle,
+    cancel: xCircle,
+    clock,
+    xCircle,
+    spin,
+    close,
+    plusSquare,
+    minusSquare,
+}
+setSundryIcons(SUNDRY_PACKAGED_ICONS)
+
+export const ICONS = {
+    ...SUNDRY_PACKAGED_ICONS,
+    x,
+    close,
+    clock,
+    back,
+    search,
+    plusCircle,
+    cancel,
+    trash,
+    tripleDot,
+    checkCircle,
+    spin,
+    feedback,
+    heart,
+    warning,
+    rolodex,
+    list,
+    right,
+    multiStage,
+    chatLeft,
 }
 
 export type IconKey = keyof typeof ICONS
+export type IconSpec = IconKey | IconifyIconDefinition | IconifyIcon
 
-export interface IconProps extends Omit<IconifyIcon, 'icon' | 'body'> {
-    id?: string
-    icon: IconKey | IconifyIconDefinition | IconifyIcon
-    title?: string
-    color?: string
-    className?: string
-    busy?: boolean
-    tooltip?: React.ReactNode
-    tooltipProps?: Omit<PopoverProps, 'children' | 'target' | 'popover'>
-    buttonStyles?: CSSObject,
-    onClick?: (ev: React.MouseEvent<HTMLButtonElement>) => void,
-    'data-test-id'?: string
+export interface IconProps extends Omit<SundryIconProps, 'icon'> {
+    icon: IconSpec
 }
 
-export const Icon = React.forwardRef<SVGSVGElement, React.PropsWithChildren<IconProps>>((
-    forwardedProps,
-    ref
-) => {
-    const {
-        id,
-        icon: iconProp,
-        tooltip,
-        onClick,
-        children,
-        busy,
-        buttonStyles = {},
-        tooltipProps = {},
-        ['data-test-id']: dti,
-        ...iconProps
-    } = forwardedProps
+export const Icon = React.forwardRef<SVGSVGElement, PropsWithOptionalChildren<IconProps>>((allProps, ref) => {
+    const { icon, ...props } = allProps
 
-    const icon = busy ? 'spin' : iconProp
-    const iconEl = (
-        <IconifyIconComponent
-            id={id}
-            ref={ref as any}
-            icon={typeof icon === 'object' ? icon : ICONS[icon]}
-            css={icon == 'spin' ? spinCSS : {}}
-            data-test-id={dti}
-            {...iconProps}
-        />
-    )
-    if (tooltip) {
-        return (
-            <Popover popover={tooltip} data-test-id={dti} {...tooltipProps}>
-                {iconEl}
-            </Popover>
-        )
-    }
-    if (onClick) {
-        return (
-            <button
-                onClick={onClick}
-                disabled={busy}
-                data-test-id={dti}
-                css={Object.assign({
-                    border: 'none',
-                    padding: 0,
-                    margin: 0,
-                    background: 'transparent',
-                    color: '#738694',
-                    transition: 'all 0.3s ease-out',
-                    ':hover': {
-                        color: '#292929',
-                    },
-                }, buttonStyles)}>
-                {iconEl}
-                {children}
-            </button>
-        )
-    }
-    return iconEl
+    return <SundryIcon {...props} ref={ref} icon={typeof icon === 'object' ? icon : ICONS[icon]} />
 })
+
+Icon.displayName = 'Icon'

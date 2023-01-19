@@ -2,11 +2,10 @@ import { React } from '@common'
 import styled from '@emotion/styled'
 import { colors } from '../theme'
 
-import { Field } from 'formik'
 import { useApi, useUserInfo, useEnvironment, useIsMobileDevice, useUserPreferences } from '@lib'
 import {
     TopNavBar, Box, Icon, HelpLink, LoadingAnimation, Footer, ResourceLinks,
-    Form, FormSaveButton,
+    Form, FormSaveButton, InputField,
 } from '@components'
 import { UserPreferences } from '@api'
 import CustomerSupportImage from '../components/customer-support-image'
@@ -112,7 +111,7 @@ export default function AdminHome() {
                     </label>)}
 
                     <Form
-                        initialValues={prefs}
+                        defaultValues={prefs}
                         onSubmit={savePrefs}
                     >
                         <h5 className="mt-5 mb-3 p-0">Email Notifications</h5>
@@ -121,22 +120,13 @@ export default function AdminHome() {
                             *Exception: when you win a prize on Kinetic, we will email you your gift card.
                         </p>
 
-                        <label className="check">
-                            <Field type="checkbox" name="cycleDeadlinesEmail" />
-                            Notify me of upcoming prize cycle deadlines
-                        </label >
-                        <label className="check">
-                            <Field type="checkbox" name="prizeCycleEmail" />
-                            Notify me of the start of a new prize cycle
-                        </label>
-                        <label className="check">
-                            <Field type="checkbox" name="studyAvailableEmail" />
-                            Notify me when a new study becomes available
-                        </label>
-                        <label className="check">
-                            <Field type="checkbox" name="sessionAvailableEmail" />
-                            Notify me when follow up sessions become available on multi-session studies
-                        </label>
+                        <InputField type="checkbox" name="cycleDeadlinesEmail" label="Notify me of upcoming prize cycle deadlines" />
+
+                        <InputField type="checkbox" name="prizeCycleEmail" label="Notify me of the start of a new prize cycle" />
+
+                        <InputField type="checkbox" name="studyAvailableEmail" label="Notify me when a new study becomes available" />
+
+                        <InputField type="checkbox" name="sessionAvailableEmail" label="Notify me when follow up sessions become available on multi-session studies" />
 
                         <FormSaveButton className="mt-3" primary>Update Preferences</FormSaveButton>
                     </Form >

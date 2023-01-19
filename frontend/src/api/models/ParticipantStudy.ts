@@ -157,7 +157,8 @@ export function instanceOfParticipantStudy(value: object): boolean {
     isInstance = isInstance && "title" in value;
     isInstance = isInstance && "shortDescription" in value;
     isInstance = isInstance && "tags" in value;
-    isInstance = isInstance && "durationMinutes" in value;
+    isInstance = isInstance && "totalPoints" in value;
+    isInstance = isInstance && "totalDuration" in value;
 
     return isInstance;
 }
