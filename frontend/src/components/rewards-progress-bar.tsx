@@ -205,8 +205,6 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                             </Segment>
                         ))}
                     </SegmentedBar>
-
-
                 </Box>
             </div>
         </nav >
