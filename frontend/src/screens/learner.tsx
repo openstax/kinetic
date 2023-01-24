@@ -28,10 +28,11 @@ const Splash = styled(Box)({
 
 const SplashHeader = styled.h1({
     maxWidth: '55%',
+    fontWeight: 700,
     [media.mobile]: {
         fontSize: 24,
-        fontWeight: 700,
         maxWidth: '80%',
+        marginTop: '2rem',
     },
 })
 
@@ -217,7 +218,7 @@ const LearnerDashboard = () => {
                         zIndex: -1,
                     }}
                 />
-                <Box className="container-lg h-100 mt-5" direction='column' gap='xxlarge'>
+                <Box className="container-lg h-100" direction='column' gap='xxlarge' justify={{ desktop: 'center' }}>
                     <SplashHeader>Level up to new ways of learning, and earn prizes!</SplashHeader>
                     <SplashText>
                             With Kinetic, participate in scientific research and learn tips and tricks to help you become a better learner. All while winning prizes!
