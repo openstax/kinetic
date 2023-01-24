@@ -24,21 +24,27 @@ const Card = styled(Box)({
     color: 'inherit',
     textDecoration: 'none',
     cursor: 'pointer',
+    minHeight: 450,
+    maxHeight: 450,
     '&:hover': {
         boxShadow: '0px 8px 10px rgba(0, 0, 0, 0.4)',
     },
     '.study-card-image': {
         height: 200,
+        minHeight: 200,
+        maxHeight: 200,
     },
     [media.mobile]: {
         minWidth: 275,
         maxWidth: 275,
         margin: '0 auto',
         padding: '1rem',
-        height: '360px',
+        minHeight: 360,
+        maxHeight: 360,
         '.study-card-image': {
             minHeight: '35%',
             maxHeight: '35%',
+            height: '35%',
         },
     },
 })
@@ -187,11 +193,10 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
                 {study.title}
             </h6>
             <Researchers className="xx-small" study={study} />
-            <p className="x-small" css={{ color: colors.grayText }}>
+            <small className={cx({ 'x-small': isMobile })} css={{ color: colors.grayText }}>
                 {study.shortDescription}
-            </p>
-            {/* TODO Fix this to bottom of card */}
-            <Box className={cx({ 'xx-small': isMobile })} justify='between' align='center' wrap>
+            </small>
+            <Box className={cx({ 'small': !isMobile, 'xx-small': isMobile }, 'mt-auto', 'pt-1')} justify='between' align='center' wrap>
                 <Box gap='small'>
                     <Tag tag={tagOfType(study, 'topic')} />
                     {tagsOfType(study, 'subject').slice(0, 1).map(tag => <Tag key={tag} tag={tag} />)}
@@ -207,5 +212,4 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
             </Box>
         </Card>
     )
-
 }
