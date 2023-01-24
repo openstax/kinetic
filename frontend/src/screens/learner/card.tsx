@@ -1,7 +1,7 @@
-import { React, useCallback } from '@common'
+import { cx, React, useCallback } from '@common'
 import { Box, Icon, MultiSessionBar } from '@components'
 import { get } from 'lodash'
-import { toSentence } from '@lib'
+import { toSentence, useIsMobileDevice } from '@lib'
 import { studyIsMultipart, TagLabels, tagOfType, tagsOfType } from '@models'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
@@ -35,7 +35,7 @@ const Card = styled(Box)({
         maxWidth: 275,
         margin: '0 auto',
         padding: '1rem',
-        height: '500px',
+        height: '360px',
         '.study-card-image': {
             minHeight: '35%',
             maxHeight: '35%',
@@ -53,7 +53,7 @@ const Researchers: React.FC<StudyCardProps> = ({ study }) => {
     if (!names.length) return null
 
     return (
-        <span>{toSentence(names)}</span>
+        <Box className='x-small' padding={{ bottom: 'small' }}>{toSentence(names)}</Box>
     )
 }
 
@@ -133,13 +133,35 @@ const MultiSessionFlag: FC<StudyCardProps> = ({ study }) => {
     )
 }
 
+const FeedbackMultiSession: FC<StudyCardProps> = ({ study }) => {
+    if (!study.feedbackDescription && !studyIsMultipart(study)) {
+        return (
+            <Box margin={{ top: 'default', bottom: 'default' }}></Box>
+        )
+    }
+    const isMobile = useIsMobileDevice();
+
+    return (
+        <Box
+            className={cx({ 'xx-small': isMobile })}
+            justify='between'
+            wrap
+            margin={{ bottom: 'default', top: 'default' }}
+            css={{ minHeight: 40 }}
+        >
+            <Feedback study={study} />
+            <MultiSession study={study} />
+        </Box>
+    )
+}
+
 export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantStudy): void }> = ({
     onSelect,
     study,
 }) => {
     const Image = CardImages[study.imageId || 'StemInterest'] || CardImages.StemInterest
-
-    const onClick = useCallback(() => onSelect(study), [onSelect])
+    const isMobile = useIsMobileDevice();
+    const onClick = useCallback(() => onSelect(study), [onSelect]);
     return (
         <Card
             as="a"
@@ -160,10 +182,7 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
             />
             <CompleteFlag study={study} />
             <MultiSessionFlag study={study} />
-            <Box className="small" justify='between' wrap margin={{ bottom: 'default', top: 'default' }} css={{ minHeight: 40 }}>
-                <Feedback study={study} />
-                <MultiSession study={study} />
-            </Box>
+            <FeedbackMultiSession study={study} />
             <h6>
                 {study.title}
             </h6>
@@ -171,13 +190,13 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
             <p className="x-small" css={{ color: colors.grayText }}>
                 {study.shortDescription}
             </p>
-            <Box flex />
-            <Box direction={{ mobile: 'column' }} justify='between' align={{ desktop: 'center' }}>
-                <Box gap>
+            {/* TODO Fix this to bottom of card */}
+            <Box className={cx({ 'xx-small': isMobile })} justify='between' align='center' wrap>
+                <Box gap='small'>
                     <Tag tag={tagOfType(study, 'topic')} />
-                    {tagsOfType(study, 'subject').map(tag => <Tag key={tag} tag={tag} />)}
+                    {tagsOfType(study, 'subject').slice(0, 1).map(tag => <Tag key={tag} tag={tag} />)}
                 </Box>
-                <Box className='small my-1' >
+                <Box>
                     {!!study.totalDuration && <div>
                         {studyIsMultipart(study) && <span>*Total: </span>}
                         {study.totalDuration}min

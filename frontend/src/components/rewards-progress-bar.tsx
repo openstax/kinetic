@@ -4,7 +4,7 @@ import {
     useRewardsSchedule,
     RewardsSegment,
 } from '@models'
-import { formatDate, toDayJS } from '@lib'
+import { formatDate, toDayJS, useIsMobileDevice } from '@lib'
 import { ParticipantStudy } from '@api'
 import { colors } from '../theme'
 import trophyFilledIcon from '@iconify-icons/bi/trophy-fill'
@@ -26,7 +26,7 @@ const SegmentLabel: React.FC<{ segment: RewardsSegment }> = ({ segment }) => {
             justify='center'
             align='center'
             className="explanation" css={{
-                fontSize: 12,
+                fontSize: useIsMobileDevice() ? 11 : 12,
                 color: segment.isCurrent ? 'black' : colors.darkGray,
             }}>
             <span>{segment.totalPoints}pts</span>
