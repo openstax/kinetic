@@ -139,7 +139,7 @@ const MultiSessionFlag: FC<StudyCardProps> = ({ study }) => {
     )
 }
 
-const FeedbackMultiSession: FC<StudyCardProps> = ({ study }) => {
+const FeedbackMultiSessionContainer: FC<StudyCardProps> = ({ study }) => {
     if (!study.feedbackDescription && !studyIsMultipart(study)) {
         return (
             <Box margin={{ top: 'default', bottom: 'default' }}></Box>
@@ -152,8 +152,8 @@ const FeedbackMultiSession: FC<StudyCardProps> = ({ study }) => {
             className={cx({ 'xx-small': isMobile })}
             justify='between'
             wrap
-            margin={{ bottom: 'default', top: 'default' }}
-            css={{ minHeight: 40 }}
+            margin={{ top: 'default' }}
+            css={{ minHeight: 35 }}
         >
             <Feedback study={study} />
             <MultiSession study={study} />
@@ -188,7 +188,7 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
             />
             <CompleteFlag study={study} />
             <MultiSessionFlag study={study} />
-            <FeedbackMultiSession study={study} />
+            <FeedbackMultiSessionContainer study={study} />
             <h6>
                 {study.title}
             </h6>
