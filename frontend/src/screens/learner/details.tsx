@@ -103,7 +103,7 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
                     <Icon icon="clock" color={colors.purple} />
                     <Box>
                         <span>*Total: {study.totalDuration}min</span>
-                        {study.totalPoints && <span>&nbsp;{study.totalPoints}pts</span>}
+                        {study.totalPoints && <span>&nbsp;&middot; {study.totalPoints}pts</span>}
                     </Box>
                 </Box>
                 <Box css={{ color: colors.grayText }} direction='column'>

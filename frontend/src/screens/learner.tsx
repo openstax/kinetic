@@ -26,6 +26,21 @@ const Splash = styled(Box)({
     },
 })
 
+const SplashHeader = styled.h1({
+    maxWidth: '55%',
+    [media.mobile]: {
+        fontSize: 20,
+        fontWeight: 700,
+        maxWidth: '90%',
+    },
+})
+
+const SplashText = styled.h4({
+    maxWidth: '55%',
+    [media.mobile]: {
+        fontSize: 15,
+    },
+})
 
 interface StudyListProps {
     studies: ParticipantStudy[],
@@ -202,14 +217,12 @@ const LearnerDashboard = () => {
                         zIndex: -1,
                     }}
                 />
-                <div className="container-lg">
-                    <div css={{ maxWidth: '55%', p: { marginBottom: 5 } }}>
-                        <h1>Level up to new ways of learning, and earn prizes!</h1>
-                        <h4>
+                <Box className="container-lg" direction='column' gap='xlarge'>
+                    <SplashHeader>Level up to new ways of learning, and earn prizes!</SplashHeader>
+                    <SplashText>
                             With Kinetic, participate in scientific research and learn tips and tricks to help you become a better learner. All while winning prizes!
-                        </h4>
-                    </div>
-                </div>
+                    </SplashText>
+                </Box>
             </Splash >
 
             <HighlightedStudies studies={highlightedStudies} title="Highlighted Studies on Kinetic" className="highlighted" onSelect={onStudySelect}/>

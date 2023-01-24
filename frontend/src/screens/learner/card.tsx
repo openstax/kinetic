@@ -35,7 +35,7 @@ const Card = styled(Box)({
         maxWidth: 275,
         margin: '0 auto',
         padding: '1rem',
-        height: '360px',
+        height: '500px',
         '.study-card-image': {
             minHeight: '35%',
             maxHeight: '35%',
@@ -172,18 +172,18 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
                 {study.shortDescription}
             </p>
             <Box flex />
-            <Box className='small' justify='between' wrap>
+            <Box direction={{ mobile: 'column' }} justify='between' align={{ desktop: 'center' }}>
                 <Box gap>
                     <Tag tag={tagOfType(study, 'topic')} />
                     {tagsOfType(study, 'subject').map(tag => <Tag key={tag} tag={tag} />)}
                 </Box>
-                <Box gap>
-                    {!!study.totalDuration && <div css={{ marginLeft: '0.5rem' }}>
+                <Box className='small my-1' >
+                    {!!study.totalDuration && <div>
                         {studyIsMultipart(study) && <span>*Total: </span>}
                         {study.totalDuration}min
                     </div>}
 
-                    {!!study.totalPoints && <span>• {study.totalPoints}pts</span>}
+                    {!!study.totalPoints && <span>&nbsp;&middot; {study.totalPoints}pts</span>}
                 </Box>
             </Box>
         </Card>
