@@ -40,7 +40,7 @@ export const Segment: FCWC<SegmentProps> = ({ children, className, percentage, .
         flex={{ grow: false, shrink: false, basis: `${percentage}%` }}
         className={cx('segment', className)}
         direction="column"
-        align="end"
+        align="center"
         {...boxProps}
     > {children}</SegmentWrapper >
 }
@@ -142,13 +142,8 @@ interface SegmentedBarProps {
 }
 
 export const SegmentedBar: FCWC<SegmentedBarProps> = ({ className, children, completedPercentage }) => {
-
     return (
-        <div css={{
-            display: 'flex',
-            flex: 1,
-            flexDirection: 'column',
-        }}>
+        <Box direction='column' flex>
             <div
                 className={cx('segmented-bar', className)}
                 css={{
@@ -180,6 +175,6 @@ export const SegmentedBar: FCWC<SegmentedBarProps> = ({ className, children, com
             }}>
                 {children}
             </div>
-        </div >
+        </Box >
     )
 }

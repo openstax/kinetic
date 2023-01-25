@@ -26,6 +26,22 @@ const Splash = styled(Box)({
     },
 })
 
+const SplashHeader = styled.h1({
+    maxWidth: '55%',
+    fontWeight: 700,
+    [media.mobile]: {
+        fontSize: 24,
+        maxWidth: '80%',
+        marginTop: '2rem',
+    },
+})
+
+const SplashText = styled.h4({
+    maxWidth: '55%',
+    [media.mobile]: {
+        fontSize: 15,
+    },
+})
 
 interface StudyListProps {
     studies: ParticipantStudy[],
@@ -46,7 +62,7 @@ const Grid = styled.div({
 
 const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
     return (
-        <div className={cx('container-lg', 'studies', 'my-4', className)} >
+        <div className={cx('container-lg', 'studies', 'my-3', className)} >
             <h3 css={{ margin: '2rem 0' }}>{title}</h3>
             {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
@@ -59,7 +75,7 @@ const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies,
 
 const MobileStudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
     return (
-        <div className={cx('container-lg', 'studies', 'my-4', className)}>
+        <div className={cx('container-lg', 'studies', 'my-3', className)}>
             <h3 className='py-2'>{title}</h3>
             {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
@@ -76,7 +92,7 @@ const MobileStudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, st
                     centeredSlides={true}
                     pagination
                     modules={[EffectCards, Pagination]}
-                    className="pb-3 overflow-hidden"
+                    className="pb-3 mb-2 overflow-hidden"
                 >
                     {studyChunk.map((s) =>
                         <SwiperSlide key={s.id} className="pb-1">
@@ -202,14 +218,12 @@ const LearnerDashboard = () => {
                         zIndex: -1,
                     }}
                 />
-                <div className="container-lg">
-                    <div css={{ maxWidth: '55%', p: { marginBottom: 5 } }}>
-                        <h1>Level up to new ways of learning, and earn prizes!</h1>
-                        <h4>
+                <Box className="container-lg h-100" direction='column' gap='xxlarge' justify={{ desktop: 'center' }}>
+                    <SplashHeader>Level up to new ways of learning, and earn prizes!</SplashHeader>
+                    <SplashText>
                             With Kinetic, participate in scientific research and learn tips and tricks to help you become a better learner. All while winning prizes!
-                        </h4>
-                    </div>
-                </div>
+                    </SplashText>
+                </Box>
             </Splash >
 
             <HighlightedStudies studies={highlightedStudies} title="Highlighted Studies on Kinetic" className="highlighted" onSelect={onStudySelect}/>
