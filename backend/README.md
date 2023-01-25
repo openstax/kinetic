@@ -43,4 +43,4 @@ $ /code> lefthook run pre-push
 ```rails c```
 
 ** Create data using `FactoryBot`
-```FactoryBot.create(:model_name)```
+```FactoryBot.create(:factory_name)```
