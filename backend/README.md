@@ -30,3 +30,17 @@ $ /code> lefthook run pre-push
 ```
 
 * ...
+
+
+
+** Getting into the backend terminal
+```docker compose exec api /bin/bash```
+
+** Tests
+```rspec```
+
+** Get into a rails console
+```rails c```
+
+** Create data using `FactoryBot`
+```FactoryBot.create(:factory_name)```

@@ -1,4 +1,4 @@
-import { React } from '@common'
+import { cx, React } from '@common'
 import styled from '@emotion/styled'
 import { colors } from '../theme'
 
@@ -19,7 +19,7 @@ import { UserPreferences } from '@api'
 import CustomerSupportImage from '../components/customer-support-image'
 
 
-const Wrapper = styled.div({
+const Wrapper = styled(Box)({
     h5: {
         paddingTop: 20,
         paddingBottom: 10,
@@ -49,16 +49,12 @@ const Wrapper = styled.div({
 })
 
 const SidebarWrapper = styled.div({
-    height: '100%',
-    paddingTop: 40,
-    backgroundColor: '#e9ecef',
     width: 300,
-    right: 0,
-    top: 0,
-    position: 'fixed',
-    padding: '120px 20px',
     display: 'flex',
     flexDirection: 'column',
+    paddingLeft: 80,
+    borderLeft: '1px solid grey',
+    height: 'auto',
     a: {
         color: colors.darkGray,
         fontSize: 18,
@@ -90,15 +86,11 @@ export default function AdminHome() {
     }
 
     return (
-        <Wrapper className="account" css={{
-            minHeight: '100vh', position: 'relative',
-        }}>
-            {!isMobile && <Sidebar />}
-            <TopNavBar className="fixed-top" />
+        <Wrapper direction='column' className="account">
+            <TopNavBar />
 
-            <div className="container-lg my-8 py-6">
-
-                <div css={{ maxWidth: '600px' }}>
+            <Box className="container-lg py-4" justify='between'>
+                <div >
                     <h2 className="mb-3">My Account</h2>
                     <Box justify='between' align="center">
                         <h5 className="mb-0 p-0">General</h5>
@@ -159,9 +151,10 @@ export default function AdminHome() {
                         <FormSaveButton className="mt-3 emailPreferencesUpdated" primary>Update Preferences</FormSaveButton>
                     </Form >
                 </div>
-            </div>
+                {!isMobile && <Sidebar />}
+            </Box >
 
-            <Footer />
+            <Footer className={cx({ 'fixed-bottom': !isMobile })}/>
         </Wrapper>
     )
 }

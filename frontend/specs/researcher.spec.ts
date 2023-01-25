@@ -82,8 +82,7 @@ test('can preview a study', async ({ page }) => {
     await frameHandle.evaluate((n, sid: number) => n.setAttribute('src', `/study/land/${sid}`), studyId)
 
     await frame.click('testId=view-studies')
-
-    await expect(page).not.toMatchText('.modal-header', studyName, { timeout: 1000 })
+    await expect(page.locator('.modal-header')).toHaveCount(0)
 
     await rmStudy({ page, studyId })
 })

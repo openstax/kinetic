@@ -1,10 +1,8 @@
-import { React, cx, useEffect, useState, useNavigate } from '@common'
+import { cx, React, useEffect, useNavigate, useState } from '@common'
 import { Studies, Study } from '@api'
-import {
-    Row, Col, Box, Icon, TopNavBar,
-} from '@components'
-import { useApi, formatDate } from '@lib'
-import { StudyStatus, getStatus, getStatusName } from '@models'
+import { Box, Col, Icon, Row, TopNavBar } from '@components'
+import { formatDate, useApi } from '@lib'
+import { getStatus, getStatusName, StudyStatus } from '@models'
 
 const StudyRow: React.FC<{ study: Study }> = ({ study }) => {
     const nav = useNavigate()
