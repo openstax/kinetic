@@ -81,10 +81,10 @@ const GrandPrize: React.FC<{ segment?: RewardsSegment }> = ({ segment }) => {
     return (
         <Box direction='column' align='center'>
             <Icon
-                css={{ background: 'white', marginTop: -10 }}
+                css={{ background: 'white', marginTop: -5 }}
                 color={segment.achieved ? colors.purple : colors.lightGray}
                 icon={segment.isCurrent ? trophyFilledIcon : trophyOutlineIcon}
-                height={30}
+                height={25}
             />
             <SegmentLabel segment={segment} />
         </Box>
@@ -194,7 +194,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                         {schedule.map((segment) => (
                             <Segment
                                 key={segment.index}
-                                margin={segment.isFinal ? { top: -5, left: FINAL_STEP_WIDTH } : {}}
+                                margin={segment.isFinal ? { left: FINAL_STEP_WIDTH } : {}}
                                 isFinal={segment.isFinal}
                                 percentage={(segment.points / totalPoints) * 100}
                             >

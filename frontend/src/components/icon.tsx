@@ -36,7 +36,6 @@ import list from '@iconify-icons/bi/list'
 import multiStage from '@iconify-icons/bi/stack'
 import chatLeft from '@iconify-icons/bi/chat-left-fill'
 
-
 const SUNDRY_PACKAGED_ICONS = {
     thumbsUp,
     exclamationCircle,
