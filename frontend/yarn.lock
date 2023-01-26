@@ -627,10 +627,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@nathanstitt/sundry@^0.0.42":
-  version "0.0.42"
-  resolved "https://registry.yarnpkg.com/@nathanstitt/sundry/-/sundry-0.0.42.tgz#8dbf892dbabdcb89b890d9900e773091223f2672"
-  integrity sha512-BB9e7wljOm7DqNEKBgnVHMnRvbX0PBXPgjpN1eRSLEfPvYt8GUgFnfund5lQnhJGZKHdhFKG7h/K8CN4wmu6lw==
+"@nathanstitt/sundry@^0.0.44":
+  version "0.0.44"
+  resolved "https://registry.yarnpkg.com/@nathanstitt/sundry/-/sundry-0.0.44.tgz#28b4df69c29188183c4daa16f92c9b2648617747"
+  integrity sha512-6T2Ge69tYGbuimP7D1nNxygXxjaQavlyrDItcGspJJUnv342t7r7jhrHrkEOA74Vx0rJTTZnZTmRQBoFoLxYZw==
   dependencies:
     "@hookform/resolvers" "^2.9"
     "@iconify-icons/bi" "^1.2.15"
