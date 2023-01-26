@@ -195,6 +195,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                             <Segment
                                 key={segment.index}
                                 margin={segment.isFinal ? { top: -5, left: FINAL_STEP_WIDTH } : {}}
+                                isFinal={segment.isFinal}
                                 percentage={(segment.points / totalPoints) * 100}
                             >
                                 <RewardSegment
