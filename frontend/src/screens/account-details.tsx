@@ -2,10 +2,18 @@ import { cx, React } from '@common'
 import styled from '@emotion/styled'
 import { colors } from '../theme'
 
-import { useApi, useUserInfo, useEnvironment, useIsMobileDevice, useUserPreferences } from '@lib'
+import { useApi, useEnvironment, useIsMobileDevice, useUserInfo, useUserPreferences } from '@lib'
 import {
-    TopNavBar, Box, Icon, HelpLink, LoadingAnimation, Footer, ResourceLinks,
-    Form, FormSaveButton, InputField,
+    Box,
+    Footer,
+    Form,
+    FormSaveButton,
+    HelpLink,
+    Icon,
+    InputField,
+    LoadingAnimation,
+    ResourceLinks,
+    TopNavBar,
 } from '@components'
 import { UserPreferences } from '@api'
 import CustomerSupportImage from '../components/customer-support-image'
@@ -112,25 +120,37 @@ export default function AdminHome() {
                             *Exception: when you win a prize on Kinetic, we will email you your gift card.
                         </p>
 
-                        <InputField type="checkbox"
+                        <InputField
+                            type="checkbox"
                             name="cycleDeadlinesEmail"
-                            label="Notify me of upcoming prize cycle deadlines" />
+                            className="prizeCycleDeadlineEmail"
+                            label="Notify me of upcoming prize cycle deadlines"
+                        />
 
-                        <InputField type="checkbox"
-                            name="prizeCycleEmail" label="Notify me of the start of a new prize cycle" />
+                        <InputField
+                            type="checkbox"
+                            name="prizeCycleEmail"
+                            className="newPrizeCycleEmail"
+                            label="Notify me of the start of a new prize cycle"
+                        />
 
-                        <InputField type="checkbox"
+                        <InputField
+                            type="checkbox"
                             name="studyAvailableEmail"
-                            label="Notify me when a new study becomes available" />
+                            className="newStudyEmail"
+                            label="Notify me when a new study becomes available"
+                        />
 
-                        <InputField type="checkbox"
+                        <InputField
+                            type="checkbox"
                             name="sessionAvailableEmail"
-                            label="Notify me when follow up sessions become available on multi-session studies" />
+                            className="followupMultiSessionEmail"
+                            label="Notify me when follow up sessions become available on multi-session studies"
+                        />
 
-                        <FormSaveButton className="mt-3" primary>Update Preferences</FormSaveButton>
+                        <FormSaveButton className="mt-3 emailPreferencesUpdated" primary>Update Preferences</FormSaveButton>
                     </Form >
                 </div>
-
                 {!isMobile && <Sidebar />}
             </Box >
 

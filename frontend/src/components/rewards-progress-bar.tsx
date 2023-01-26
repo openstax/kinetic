@@ -92,13 +92,15 @@ const GrandPrize: React.FC<{ segment?: RewardsSegment }> = ({ segment }) => {
 }
 
 const RewardSegment: React.FC<{
-    segment: RewardsSegment
-}> = ({ segment }) => {
+    segment: RewardsSegment,
+    className?: string
+}> = ({ segment, className }) => {
 
     if (segment.isFinal) {
         return (
             <Tooltip
                 tooltip={popOverMessage(segment)}
+                className={className}
                 css={popOverStyle}
             >
                 <GrandPrize segment={segment} />
@@ -114,7 +116,7 @@ const RewardSegment: React.FC<{
                     future: segment.isFuture,
                     current: segment.isCurrent,
                     achieved: segment.achieved,
-                })}
+                }, className)}
                 css={segmentCircleStyle}
                 tooltip={popOverMessage(segment)}
             >
@@ -195,12 +197,14 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                                 margin={segment.isFinal ? { top: -5, left: FINAL_STEP_WIDTH } : {}}
                                 percentage={(segment.points / totalPoints) * 100}
                             >
-                                <RewardSegment key={segment.index} segment={segment} />
+                                <RewardSegment
+                                    className={segment.isFinal ? 'rewardsPointGrand' : `rewardsPoint${segment.index + 1}`}
+                                    key={segment.index}
+                                    segment={segment}
+                                />
                             </Segment>
                         ))}
                     </SegmentedBar>
-
-
                 </Box>
             </div>
         </nav >
