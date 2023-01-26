@@ -154,7 +154,7 @@ export default function AdminHome() {
                 {!isMobile && <Sidebar />}
             </Box >
 
-            <Footer className={cx({ 'fixed-bottom': !isMobile })}/>
+            <Footer className={cx({ 'sticky-bottom': !isMobile })}/>
         </Wrapper>
     )
 }
