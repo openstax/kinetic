@@ -58,7 +58,7 @@ export const StudyModal:React.FC<StudyModalProps> = ({ onHide, study }) => {
             title={title}
             data-is-study-preview-modal={isPreview}
         >
-            <Modal.Body css={{ padding: 0 }}>
+            <Modal.Body css={{ padding: 0, minHeight: 'calc(100vh - 130px)' }}>
                 {isNil(studyUrl) && <LoadingAnimation />}
                 <Iframe url={studyUrl} onClose={onHide} />
             </Modal.Body>
