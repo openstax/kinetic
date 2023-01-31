@@ -20,6 +20,7 @@ import CustomerSupportImage from '../components/customer-support-image'
 
 
 const Wrapper = styled(Box)({
+    minHeight: '100vh',
     h5: {
         paddingTop: 20,
         paddingBottom: 10,
@@ -154,7 +155,7 @@ export default function AdminHome() {
                 {!isMobile && <Sidebar />}
             </Box >
 
-            <Footer className={cx({ 'sticky-bottom': !isMobile })}/>
+            <Footer className='mt-auto'/>
         </Wrapper>
     )
 }
