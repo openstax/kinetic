@@ -7,6 +7,7 @@ import { CSSObject } from '@emotion/react'
 interface SegmentProps extends BoxProps {
     percentage: number
     className?: string
+    isFinal?: boolean
 }
 
 const barWidth = 7
@@ -35,12 +36,18 @@ const segmentStyle: CSSObject = {
 
 const SegmentWrapper = styled(Box)(segmentStyle)
 
-export const Segment: FCWC<SegmentProps> = ({ children, className, percentage, ...boxProps }) => {
+export const Segment: FCWC<SegmentProps> = ({
+    children,
+    className,
+    percentage,
+    isFinal,
+    ...boxProps
+}) => {
     return <SegmentWrapper
         flex={{ grow: false, shrink: false, basis: `${percentage}%` }}
         className={cx('segment', className)}
         direction="column"
-        align="center"
+        align={isFinal ? 'end' : 'center'}
         {...boxProps}
     > {children}</SegmentWrapper >
 }
