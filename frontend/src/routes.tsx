@@ -13,7 +13,8 @@ const Researcher = loadAsync('Studies', () => import('./screens/researcher-home'
 const LearnerDashboard = loadAsync('Studies', () => import('./screens/learner'))
 const AdminHomepage = loadAsync('Admin', () => import('./screens/admin-home'))
 const AccountDetails = loadAsync('Account', () => import('./screens/account-details'))
-const AnalysisHomepage = loadAsync('Account', () => import('./screens/analysis'))
+const AnalysisHomepage = loadAsync('Analysis', () => import('./screens/analysis'))
+const ResearcherProfile = loadAsync('ResearcherProfile', () => import('./screens/researcher/researcher-profile'))
 
 const StudiesHomepage = () => {
     const user = useCurrentUser()
@@ -34,6 +35,7 @@ export const AppRoutes = () => {
                 <Route path="/study/land/:studyId" element={<StudyLanding />} />
                 <Route path={'/study/edit/:id'} element={<EditStudy />} />
                 <Route path="/account" element={<AccountDetails />} />
+                <Route path="/researcher-profile" element={<ResearcherProfile />} />
                 <Route path="/studies/*" element={<StudiesHomepage />} />
                 <Route path="/analysis/*" element={<AnalysisHomepage />} />
                 <Route path="/admin/*" element={<AdminHomepage />} />

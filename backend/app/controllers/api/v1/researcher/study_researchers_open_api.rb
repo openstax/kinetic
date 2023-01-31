@@ -27,6 +27,22 @@ class Api::V1::Researcher::StudyResearchersOpenApi
         key :type, :string
         key :description, 'The researcher\'s bio.'
       end
+      property :lab_page do
+        key :type, :string
+        key :description, 'The researcher\'s lab page.'
+      end
+      property :research_interest_1 do
+        key :type, :string
+        key :description, 'The researcher\'s interest (1).'
+      end
+      property :research_interest_2 do
+        key :type, :string
+        key :description, 'The researcher\'s interest (2).'
+      end
+      property :research_interest_3 do
+        key :type, :string
+        key :description, 'The researcher\'s interest (3).'
+      end
     end
   end
 

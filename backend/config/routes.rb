@@ -2,6 +2,7 @@
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
+  resources :researchers
   namespace :api do
     api_version(
       module: 'V1',

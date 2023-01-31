@@ -1,7 +1,7 @@
 =begin
 #OpenStax Kinetic API
 
-#The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v1/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code!
+#The Kinetic API for OpenStax.  Requests to this API should include `application/json` in the `Accept` header.  The desired API version is specified in the request URL, e.g. `[domain]/api/v1/researcher/studies`. While the API does support a default version, that version will change over time and therefore should not be used in production code! 
 
 The version of the OpenAPI document: 0.1.0
 
@@ -30,6 +30,18 @@ module Api::V1::Bindings
     # The researcher's bio.
     attr_accessor :bio
 
+    # The researcher's lab page.
+    attr_accessor :lab_page
+
+    # The researcher's interest (1).
+    attr_accessor :research_interest_1
+
+    # The researcher's interest (2).
+    attr_accessor :research_interest_2
+
+    # The researcher's interest (3).
+    attr_accessor :research_interest_3
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -37,7 +49,11 @@ module Api::V1::Bindings
         :'user_id' => :'user_id',
         :'name' => :'name',
         :'institution' => :'institution',
-        :'bio' => :'bio'
+        :'bio' => :'bio',
+        :'lab_page' => :'lab_page',
+        :'research_interest_1' => :'research_interest_1',
+        :'research_interest_2' => :'research_interest_2',
+        :'research_interest_3' => :'research_interest_3'
       }
     end
 
@@ -53,7 +69,11 @@ module Api::V1::Bindings
         :'user_id' => :'String',
         :'name' => :'String',
         :'institution' => :'String',
-        :'bio' => :'String'
+        :'bio' => :'String',
+        :'lab_page' => :'String',
+        :'research_interest_1' => :'String',
+        :'research_interest_2' => :'String',
+        :'research_interest_3' => :'String'
       }
     end
 
@@ -97,6 +117,22 @@ module Api::V1::Bindings
       if attributes.key?(:'bio')
         self.bio = attributes[:'bio']
       end
+
+      if attributes.key?(:'lab_page')
+        self.lab_page = attributes[:'lab_page']
+      end
+
+      if attributes.key?(:'research_interest_1')
+        self.research_interest_1 = attributes[:'research_interest_1']
+      end
+
+      if attributes.key?(:'research_interest_2')
+        self.research_interest_2 = attributes[:'research_interest_2']
+      end
+
+      if attributes.key?(:'research_interest_3')
+        self.research_interest_3 = attributes[:'research_interest_3']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -126,7 +162,11 @@ module Api::V1::Bindings
           user_id == o.user_id &&
           name == o.name &&
           institution == o.institution &&
-          bio == o.bio
+          bio == o.bio &&
+          lab_page == o.lab_page &&
+          research_interest_1 == o.research_interest_1 &&
+          research_interest_2 == o.research_interest_2 &&
+          research_interest_3 == o.research_interest_3
     end
 
     # @see the `==` method
@@ -138,7 +178,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, user_id, name, institution, bio].hash
+      [id, user_id, name, institution, bio, lab_page, research_interest_1, research_interest_2, research_interest_3].hash
     end
 
     # Builds the object from hash

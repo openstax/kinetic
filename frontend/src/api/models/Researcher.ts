@@ -49,6 +49,30 @@ export interface Researcher {
      * @memberof Researcher
      */
     bio?: string;
+    /**
+     * The researcher's lab page.
+     * @type {string}
+     * @memberof Researcher
+     */
+    labPage?: string;
+    /**
+     * The researcher's interest (1).
+     * @type {string}
+     * @memberof Researcher
+     */
+    researchInterest1?: string;
+    /**
+     * The researcher's interest (2).
+     * @type {string}
+     * @memberof Researcher
+     */
+    researchInterest2?: string;
+    /**
+     * The researcher's interest (3).
+     * @type {string}
+     * @memberof Researcher
+     */
+    researchInterest3?: string;
 }
 
 /**
@@ -76,6 +100,10 @@ export function ResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'name': !exists(json, 'name') ? undefined : json['name'],
         'institution': !exists(json, 'institution') ? undefined : json['institution'],
         'bio': !exists(json, 'bio') ? undefined : json['bio'],
+        'labPage': !exists(json, 'lab_page') ? undefined : json['lab_page'],
+        'researchInterest1': !exists(json, 'research_interest_1') ? undefined : json['research_interest_1'],
+        'researchInterest2': !exists(json, 'research_interest_2') ? undefined : json['research_interest_2'],
+        'researchInterest3': !exists(json, 'research_interest_3') ? undefined : json['research_interest_3'],
     };
 }
 
@@ -93,6 +121,10 @@ export function ResearcherToJSON(value?: Researcher | null): any {
         'name': value.name,
         'institution': value.institution,
         'bio': value.bio,
+        'lab_page': value.labPage,
+        'research_interest_1': value.researchInterest1,
+        'research_interest_2': value.researchInterest2,
+        'research_interest_3': value.researchInterest3,
     };
 }
 
