@@ -2,6 +2,7 @@
 /* eslint-disable */
 export * from './AddAnalysis';
 export * from './AddBanner';
+export * from './AddResearcher';
 export * from './AddReward';
 export * from './AddStage';
 export * from './AddStudy';
@@ -24,6 +25,7 @@ export * from './ParticipantStudyStage';
 export * from './PublicResearcher';
 export * from './QualtricsStage';
 export * from './Researcher';
+export * from './Researchers';
 export * from './Responses';
 export * from './Reward';
 export * from './RewardsListing';
@@ -38,6 +40,7 @@ export * from './StudyUpdate';
 export * from './UpdateAnalysis';
 export * from './UpdateBanner';
 export * from './UpdatePreferences';
+export * from './UpdateResearcher';
 export * from './UpdateReward';
 export * from './UpdateStage';
 export * from './UpdateStudy';

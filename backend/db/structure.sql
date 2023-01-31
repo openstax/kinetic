@@ -443,7 +443,8 @@ CREATE TABLE public.researchers (
     lab_page character varying,
     research_interest_1 character varying,
     research_interest_2 character varying,
-    research_interest_3 character varying
+    research_interest_3 character varying,
+    is_invite_pending boolean DEFAULT false NOT NULL
 );
 
 

@@ -2,7 +2,6 @@
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
-  resources :researchers
   namespace :api do
     api_version(
       module: 'V1',
@@ -44,6 +43,8 @@ Rails.application.routes.draw do
       resources :eligibility, only: [:index]
 
       resources :preferences, only: [:index, :create]
+
+      resources :researchers
 
       scope :diagnostics, controller: :diagnostics do
         get :exception

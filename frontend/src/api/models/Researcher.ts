@@ -73,6 +73,12 @@ export interface Researcher {
      * @memberof Researcher
      */
     researchInterest3?: string;
+    /**
+     * Is the researcher's invite pending.
+     * @type {boolean}
+     * @memberof Researcher
+     */
+    isInvitePending?: boolean;
 }
 
 /**
@@ -104,6 +110,7 @@ export function ResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'researchInterest1': !exists(json, 'research_interest_1') ? undefined : json['research_interest_1'],
         'researchInterest2': !exists(json, 'research_interest_2') ? undefined : json['research_interest_2'],
         'researchInterest3': !exists(json, 'research_interest_3') ? undefined : json['research_interest_3'],
+        'isInvitePending': !exists(json, 'is_invite_pending') ? undefined : json['is_invite_pending'],
     };
 }
 
@@ -125,6 +132,7 @@ export function ResearcherToJSON(value?: Researcher | null): any {
         'research_interest_1': value.researchInterest1,
         'research_interest_2': value.researchInterest2,
         'research_interest_3': value.researchInterest3,
+        'is_invite_pending': value.isInvitePending,
     };
 }
 

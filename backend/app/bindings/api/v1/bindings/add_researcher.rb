@@ -14,50 +14,13 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class Researcher
-    # The researcher's ID.
-    attr_accessor :id
-
-    # The researcher's user ID.
-    attr_accessor :user_id
-
-    # The researcher's name.
-    attr_accessor :name
-
-    # The researcher's institution.
-    attr_accessor :institution
-
-    # The researcher's bio.
-    attr_accessor :bio
-
-    # The researcher's lab page.
-    attr_accessor :lab_page
-
-    # The researcher's interest (1).
-    attr_accessor :research_interest_1
-
-    # The researcher's interest (2).
-    attr_accessor :research_interest_2
-
-    # The researcher's interest (3).
-    attr_accessor :research_interest_3
-
-    # Is the researcher's invite pending.
-    attr_accessor :is_invite_pending
+  class AddResearcher
+    attr_accessor :researcher
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'id' => :'id',
-        :'user_id' => :'user_id',
-        :'name' => :'name',
-        :'institution' => :'institution',
-        :'bio' => :'bio',
-        :'lab_page' => :'lab_page',
-        :'research_interest_1' => :'research_interest_1',
-        :'research_interest_2' => :'research_interest_2',
-        :'research_interest_3' => :'research_interest_3',
-        :'is_invite_pending' => :'is_invite_pending'
+        :'researcher' => :'researcher'
       }
     end
 
@@ -69,16 +32,7 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'id' => :'Integer',
-        :'user_id' => :'String',
-        :'name' => :'String',
-        :'institution' => :'String',
-        :'bio' => :'String',
-        :'lab_page' => :'String',
-        :'research_interest_1' => :'String',
-        :'research_interest_2' => :'String',
-        :'research_interest_3' => :'String',
-        :'is_invite_pending' => :'Boolean'
+        :'researcher' => :'Researcher'
       }
     end
 
@@ -92,55 +46,19 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::Researcher` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::AddResearcher` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::Researcher`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::AddResearcher`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'id')
-        self.id = attributes[:'id']
-      end
-
-      if attributes.key?(:'user_id')
-        self.user_id = attributes[:'user_id']
-      end
-
-      if attributes.key?(:'name')
-        self.name = attributes[:'name']
-      end
-
-      if attributes.key?(:'institution')
-        self.institution = attributes[:'institution']
-      end
-
-      if attributes.key?(:'bio')
-        self.bio = attributes[:'bio']
-      end
-
-      if attributes.key?(:'lab_page')
-        self.lab_page = attributes[:'lab_page']
-      end
-
-      if attributes.key?(:'research_interest_1')
-        self.research_interest_1 = attributes[:'research_interest_1']
-      end
-
-      if attributes.key?(:'research_interest_2')
-        self.research_interest_2 = attributes[:'research_interest_2']
-      end
-
-      if attributes.key?(:'research_interest_3')
-        self.research_interest_3 = attributes[:'research_interest_3']
-      end
-
-      if attributes.key?(:'is_invite_pending')
-        self.is_invite_pending = attributes[:'is_invite_pending']
+      if attributes.key?(:'researcher')
+        self.researcher = attributes[:'researcher']
       end
     end
 
@@ -148,17 +66,12 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @user_id.nil?
-        invalid_properties.push('invalid value for "user_id", user_id cannot be nil.')
-      end
-
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @user_id.nil?
       true
     end
 
@@ -167,16 +80,7 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          id == o.id &&
-          user_id == o.user_id &&
-          name == o.name &&
-          institution == o.institution &&
-          bio == o.bio &&
-          lab_page == o.lab_page &&
-          research_interest_1 == o.research_interest_1 &&
-          research_interest_2 == o.research_interest_2 &&
-          research_interest_3 == o.research_interest_3 &&
-          is_invite_pending == o.is_invite_pending
+          researcher == o.researcher
     end
 
     # @see the `==` method
@@ -188,7 +92,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, user_id, name, institution, bio, lab_page, research_interest_1, research_interest_2, research_interest_3, is_invite_pending].hash
+      [researcher].hash
     end
 
     # Builds the object from hash

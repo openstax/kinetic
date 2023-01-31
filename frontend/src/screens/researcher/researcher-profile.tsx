@@ -11,25 +11,34 @@ export default function ResearcherProfile() {
     return (
         <PageWrapper>
             <TopNavBar />
-
-            <Box direction='column' className='container-lg py-5'>
+            <Content className='container-lg py-5'>
                 <h3>My Account</h3>
-                <ProfileSection>A</ProfileSection>
-                <ProfileSection>B</ProfileSection>
-                <ProfileSection>C</ProfileSection>
-            </Box>
 
-            <Footer />
+                <Box>
+                    <Box direction='column'>
+                        <ProfileSection>AB</ProfileSection>
+                        <ProfileSection>B</ProfileSection>
+                        <ProfileSection>C</ProfileSection>
+                    </Box>
+                    <Resources>Test</Resources>
+                </Box>
+            </Content>
+
+            <Footer className='mt-auto' />
         </PageWrapper>
     )
 }
 
-const PageWrapper = styled.div({
+const PageWrapper = styled(Box)({
     backgroundColor: colors.pageBackground,
+    flexDirection: 'column',
+    height: '100vh',
+})
+
+const Content = styled.div({
 })
 
 const ProfileSection = styled(Box)({
-    flex: 6,
     backgroundColor: colors.white,
     marginTop: 20,
     marginBottom: 10,
@@ -37,5 +46,8 @@ const ProfileSection = styled(Box)({
 })
 
 const Resources = styled(Box)({
-    flex: 1,
+    backgroundColor: colors.white,
+    marginTop: 20,
+    marginBottom: 10,
+    padding: 30,
 })
