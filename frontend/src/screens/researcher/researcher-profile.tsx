@@ -1,4 +1,4 @@
-import { Alert, Box, Footer, HelpLink, Icon, InputField, ResourceLinks, SelectField, TopNavBar } from '@components';
+import { Alert, Box, cx, Footer, HelpLink, Icon, InputField, ResourceLinks, SelectField, TopNavBar } from '@components';
 import { React, styled, useNavigate, useState } from '@common';
 import { errorToString, useApi, useCurrentResearcher, useEnvironment } from '@lib';
 import { colors } from '../../theme';
@@ -42,11 +42,13 @@ export default function ResearcherProfile() {
                 </Box>
 
                 <Box justify='between' gap='xxlarge'>
-                    <Box direction='column' flex={{ grow: 12 }}>
+                    <Box direction='column'>
                         <ProfileSection className='researcher-profile'>
-                            <Box gap='xlarge' justify='between'>
-                                <Avatar researcher={researcher} />
-                                <ProfileForm researcher={researcher} />
+                            <Box gap='xlarge' className='container-fluid'>
+                                <Box className='col-3' justify='center'>
+                                    Avatar
+                                </Box>
+                                <ProfileForm researcher={researcher} className='col-9'/>
                             </Box>
                         </ProfileSection>
 
@@ -55,7 +57,7 @@ export default function ResearcherProfile() {
                             <TermsOfUse/>
                         </ProfileSection>
                     </Box>
-                    <Resources direction='column' flex={{ grow: 1 }}>
+                    <Resources direction='column'>
                         <ResourceLinks />
                         <CustomerSupportImage />
                         <HelpLink />
@@ -112,15 +114,16 @@ const TermsOfUse = () => {
     )
 }
 
-const Avatar: React.FC<{researcher: Researcher}> = ({ researcher }) => {
-    return (
-        <Box flex={{ grow: 1 }}>
-            Avatar
-        </Box>
-    )
+const formStyles = {
+    backgroundColor: 'white',
+    minHeight: '3.5rem',
+    button: {
+        width: 130,
+        justifyContent: 'center',
+    },
 }
 
-const ProfileForm: React.FC<{researcher: Researcher}> = ({ researcher }) => {
+const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ researcher, className }) => {
     console.log(researcher);
 
     const api = useApi()
@@ -146,19 +149,25 @@ const ProfileForm: React.FC<{researcher: Researcher}> = ({ researcher }) => {
     }
 
     return (
-        <Box flex={{ grow: 6 }} width='100%'>
-            <Form
-                onSubmit={saveResearcher}
-                showControls
-                onCancel={() => setEditing(false)}
-                enableReinitialize
-                readOnly={!editing}
-                defaultValues={researcher}
-                validationSchema={ResearcherValidationSchema}
-            >
-                <Alert warning={true} onDismiss={() => setError('')} message={error} />
+        <Form
+            onSubmit={saveResearcher}
+            className={cx(className, 'row')}
+            css={formStyles}
+            showControls
+            readOnly={!editing}
+            onCancel={() => setEditing(false)}
+            enableReinitialize
+            defaultValues={researcher}
+            validationSchema={ResearcherValidationSchema}
+        >
+            <Alert warning={true} onDismiss={() => setError('')} message={error} />
+
+            <div className='col-6'>
                 <h6>Name</h6>
-                <InputField disabled={!editing} name="name" label="Researcher Name" auto md={6}/>
+                <InputField name="name" label="Researcher Name"/>
+            </div>
+
+            <div className='col-6'>
                 <h6>Institution</h6>
                 <SelectField
                     name="institution" id="institution" label="Institution"
@@ -166,34 +175,53 @@ const ProfileForm: React.FC<{researcher: Researcher}> = ({ researcher }) => {
                     value={institution}
                     options={[{ value: 'rice', label: 'Rice' }]}
                     auto
-                    md={6}
                 />
-                <h6>Researcher Interest 1</h6>
-                <InputField name="researchInterest1" label="Research Interest 1" lg={4} />
-                <h6>Researcher Interest 2</h6>
-                <InputField name="researchInterest2" label="Research Interest 2" md={4} />
-                <h6>Researcher Interest 3</h6>
-                <InputField name="researchInterest3" label="Research Interest 3" md={4} />
+            </div>
 
+            <div className='col-4'>
+                <h6>Researcher Interest 1</h6>
+                <InputField name="researchInterest1" label="Research Interest 1" />
+            </div>
+
+            <div className='col-4'>
+                <h6>Researcher Interest 2</h6>
+                <InputField name="researchInterest2" label="Research Interest 2"/>
+            </div>
+
+            <div className='col-4'>
+                <h6>Researcher Interest 3</h6>
+                <InputField name="researchInterest3" label="Research Interest 3" />
+            </div>
+
+            <div>
                 <h6>Lab Page Link</h6>
                 <InputField name="labPage" label="Lab Page Link" />
+            </div>
 
+            <div>
+                <h6>Bio</h6>
                 <InputField name="bio" type="textarea" label="Bio" />
+            </div>
 
-                {!editing && <Button large primary data-test-id="form-edit-btn" onClick={() => setEditing(true)}> Edit Profile</Button>}
-                {editing &&
+            {!editing &&
                 <Box gap>
-                    <FormSaveButton large primary>
+                    <Button primary data-test-id="form-edit-btn" onClick={() => setEditing(true)}>
+                        Edit Profile
+                    </Button>
+                </Box>
+            }
+            {editing &&
+                <Box gap>
+                    <FormSaveButton primary>
                         Save
                     </FormSaveButton>
-                    <FormCancelButton large onClick={() => setEditing(false)}>
+                    <FormCancelButton onClick={() => setEditing(false)}>
                         Cancel
                     </FormCancelButton>
                 </Box>
-                }
-                <SelectedStudies />
-            </Form>
-        </Box>
+            }
+            <SelectedStudies />
+        </Form>
     );
 }
 
@@ -208,6 +236,8 @@ const Content = styled.div({
 
 const ProfileSection = styled(Box)({
     backgroundColor: colors.white,
+    border: '1px solid #DBDBDB',
+    borderRadius: 5,
     marginTop: 20,
     marginBottom: 10,
     padding: 30,
@@ -215,6 +245,9 @@ const ProfileSection = styled(Box)({
 
 const Resources = styled(Box)({
     height: '100%',
+    width: 300,
+    border: '1px solid #DBDBDB',
+    borderRadius: 5,
     backgroundColor: colors.white,
     marginTop: 20,
     marginBottom: 10,
