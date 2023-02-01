@@ -55,7 +55,6 @@ class Api::V1::ResearchersController < Api::V1::Researcher::BaseController
 
   protected
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_researcher
     @researcher = Researcher.find(params[:id])
   end

@@ -17,7 +17,6 @@ import * as runtime from '../runtime';
 import type {
   AddAnalysis,
   AddBanner,
-  AddResearcher,
   AddReward,
   AddStage,
   AddStudy,
@@ -53,8 +52,6 @@ import {
     AddAnalysisToJSON,
     AddBannerFromJSON,
     AddBannerToJSON,
-    AddResearcherFromJSON,
-    AddResearcherToJSON,
     AddRewardFromJSON,
     AddRewardToJSON,
     AddStageFromJSON,
@@ -135,10 +132,6 @@ export interface AddStudyRequest {
 
 export interface CreateBannerRequest {
     addBanner: AddBanner;
-}
-
-export interface CreateResearcherRequest {
-    addResearcher: AddResearcher;
 }
 
 export interface CreateRewardRequest {
@@ -413,39 +406,6 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Add a researcher
-     */
-    async createResearcherRaw(requestParameters: CreateResearcherRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Researcher>> {
-        if (requestParameters.addResearcher === null || requestParameters.addResearcher === undefined) {
-            throw new runtime.RequiredError('addResearcher','Required parameter requestParameters.addResearcher was null or undefined when calling createResearcher.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/researchers`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: AddResearcherToJSON(requestParameters.addResearcher),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResearcherFromJSON(jsonValue));
-    }
-
-    /**
-     * Add a researcher
-     */
-    async createResearcher(requestParameters: CreateResearcherRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Researcher> {
-        const response = await this.createResearcherRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Add a reward
      */
     async createRewardRaw(requestParameters: CreateRewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Reward>> {
@@ -652,6 +612,34 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getBanners(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BannersListing> {
         const response = await this.getBannersRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Retrieve the currently logged in researcher
+     * Retrieve the currently logged in researcher
+     */
+    async getCurrentResearcherRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Researcher>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researchers/m/e`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResearcherFromJSON(jsonValue));
+    }
+
+    /**
+     * Retrieve the currently logged in researcher
+     * Retrieve the currently logged in researcher
+     */
+    async getCurrentResearcher(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Researcher> {
+        const response = await this.getCurrentResearcherRaw(initOverrides);
         return await response.value();
     }
 

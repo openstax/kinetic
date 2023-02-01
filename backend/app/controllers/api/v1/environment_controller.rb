@@ -8,6 +8,7 @@ class Api::V1::EnvironmentController < Api::V1::BaseController
         is_administrator: Admin.where(user_id: current_user_uuid).any?,
         is_researcher: Researcher.where(user_id: current_user_uuid).any?
       },
+      researcher: Researcher.find_by(user_id: current_user_uuid),
       accounts_env_name: Rails.application.secrets.accounts[:env_name],
       homepage_url: Rails.application.secrets.homepage_url,
       banners_schedule: Banner.active.to_a || [],

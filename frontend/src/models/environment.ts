@@ -1,5 +1,5 @@
 import { API_CONFIGURATION, ENV } from '@lib'
-import { DefaultApi, Environment as ApiEnv } from '@api'
+import { DefaultApi, Environment as ApiEnv, Researcher } from '@api'
 import { retry } from '../lib/util'
 import { User } from './user'
 
@@ -21,9 +21,12 @@ export class Environment {
 
     user: User
 
+    researcher: Researcher | null
+
     constructor(config: ApiEnv) {
         this.config = config
         this.user = User.bootstrap(config.user)
+        this.researcher = config.researcher || null
     }
 
     get host() {

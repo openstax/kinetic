@@ -2,7 +2,6 @@
 /* eslint-disable */
 export * from './AddAnalysis';
 export * from './AddBanner';
-export * from './AddResearcher';
 export * from './AddReward';
 export * from './AddStage';
 export * from './AddStudy';

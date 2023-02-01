@@ -78,7 +78,7 @@ module Api::V1::Bindings
         :'research_interest_1' => :'String',
         :'research_interest_2' => :'String',
         :'research_interest_3' => :'String',
-        :'invite_code' => :'Boolean'
+        :'invite_code' => :'String'
       }
     end
 

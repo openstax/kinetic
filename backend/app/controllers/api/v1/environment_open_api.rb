@@ -30,6 +30,9 @@ class Api::V1::EnvironmentOpenApi
       property :user do
         key :$ref, :EnvironmentUser
       end
+      property :researcher do
+        key :$ref, :Researcher
+      end
       property :accounts_env_name do
         key :type, :string
         key :readOnly, true

@@ -69,10 +69,10 @@ export interface ResearcherUpdate {
     researchInterest3?: string;
     /**
      * The researcher's invite code.
-     * @type {boolean}
+     * @type {string}
      * @memberof ResearcherUpdate
      */
-    inviteCode?: boolean;
+    inviteCode?: string;
 }
 
 /**

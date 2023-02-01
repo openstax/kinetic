@@ -62,40 +62,40 @@ class Api::V1::ResearchersOpenApi
       key :description, 'The researcher\'s interest (3).'
     end
     property :invite_code do
-      key :type, :boolean
+      key :type, :string
       key :description, 'The researcher\'s invite code.'
     end
   end
 
   openapi_path '/researchers' do
-    operation :post do
-      key :summary, 'Add a researcher'
-      key :operationId, 'createResearcher'
-      request_body do
-        key :description, 'The researcher data'
-        key :required, true
-        content 'application/json' do
-          schema do
-            key :type, :object
-            key :title, :addResearcher
-            property :researcher do
-              key :required, true
-              key :$ref, :Researcher
-            end
-          end
-        end
-      end
-      response 201 do
-        key :description, 'Created.  Returns the created researcher.'
-        content 'application/json' do
-          schema { key :$ref, :Researcher }
-        end
-      end
-      extend Api::V1::OpenApiResponses::AuthenticationError
-      extend Api::V1::OpenApiResponses::ForbiddenError
-      extend Api::V1::OpenApiResponses::UnprocessableEntityError
-      extend Api::V1::OpenApiResponses::ServerError
-    end
+    # operation :post do
+    #   key :summary, 'Add a researcher'
+    #   key :operationId, 'createResearcher'
+    #   request_body do
+    #     key :description, 'The researcher data'
+    #     key :required, true
+    #     content 'application/json' do
+    #       schema do
+    #         key :type, :object
+    #         key :title, :addResearcher
+    #         property :researcher do
+    #           key :required, true
+    #           key :$ref, :Researcher
+    #         end
+    #       end
+    #     end
+    #   end
+    #   response 201 do
+    #     key :description, 'Created.  Returns the created researcher.'
+    #     content 'application/json' do
+    #       schema { key :$ref, :Researcher }
+    #     end
+    #   end
+    #   extend Api::V1::OpenApiResponses::AuthenticationError
+    #   extend Api::V1::OpenApiResponses::ForbiddenError
+    #   extend Api::V1::OpenApiResponses::UnprocessableEntityError
+    #   extend Api::V1::OpenApiResponses::ServerError
+    # end
 
     operation :get do
       key :summary, 'Retrieve list of all researchers'

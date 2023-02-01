@@ -41,6 +41,8 @@ export const useEnvironment = () => React.useContext(EnvironmentContext) as Envi
 
 export const useCurrentUser = () => useEnvironment()?.user || ANON_USER
 
+export const useCurrentResearcher = () => useEnvironment()?.researcher
+
 export const useUserInfo = () => {
     const env = useEnvironment()
     const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
