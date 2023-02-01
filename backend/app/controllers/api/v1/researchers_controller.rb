@@ -37,12 +37,13 @@ class Api::V1::ResearchersController < Api::V1::Researcher::BaseController
 
   # PATCH/PUT /researchers/1
   def update
-    inbound_binding, error = bind(params.require(:researcher), Api::V1::Bindings::Researcher)
+    inbound_binding, error = bind(params.require(:researcher), Api::V1::Bindings::ResearcherUpdate)
     render(json: error, status: error.status_code) and return if error
 
     # TODO Make sure avatar works
 
     @researcher.update!(inbound_binding.to_hash)
+    # response_binding = Api::V1::Bindings::Researcher.create_from_model(@researcher)
     render json: @researcher.to_api_binding(Api::V1::Bindings::Researcher), status: :ok
   end
 

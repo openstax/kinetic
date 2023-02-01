@@ -4,12 +4,11 @@ require 'rails_helper'
 
 RSpec.describe 'Researchers', api: :v1 do
   let(:researcher1) { create(:researcher) }
-  let(:researcher2) { create(:researcher) }
+  let(:researcher2) {FactoryBot.create(:researcher)}
 
   let(:valid_researcher_attributes) do
     {
       name: 'Researcher McResearcherson',
-      user_id: '00000000-0000-0000-0000-000000000001',
       bio: 'Pretty cool person who does things and also doesnt do things',
       institution: 'Fake University U',
       lab_page: 'https://google.com',
@@ -39,7 +38,12 @@ RSpec.describe 'Researchers', api: :v1 do
   end
 
   describe 'GET researchers' do
-
+    context 'when logged out' do
+      it 'gives unauthorized' do
+        api_get "researchers"
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 
   describe 'PATCH researchers/{id}' do
@@ -62,10 +66,10 @@ RSpec.describe 'Researchers', api: :v1 do
     end
 
     context 'when logged in as the researcher' do
-      before {stub_current_user(researcher1)}
+      before {stub_current_user(researcher2)}
 
       it 'updates a researcher' do
-        api_put "researchers/#{researcher1.id}", params: { researcher: valid_researcher_attributes }
+        api_put "researchers/#{researcher2.id}", params: { researcher: valid_researcher_attributes }
 
         expect(response).to have_http_status(:success)
         expect(response_hash).to match(a_hash_including(name: "Researcher McResearcherson"))

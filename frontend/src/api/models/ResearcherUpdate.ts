@@ -16,92 +16,85 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Researcher
+ * @interface ResearcherUpdate
  */
-export interface Researcher {
+export interface ResearcherUpdate {
     /**
      * The researcher's ID.
      * @type {number}
-     * @memberof Researcher
+     * @memberof ResearcherUpdate
      */
     id?: number;
     /**
-     * The researcher's user ID.
-     * @type {string}
-     * @memberof Researcher
-     */
-    userId?: string;
-    /**
      * The researcher's name.
      * @type {string}
-     * @memberof Researcher
+     * @memberof ResearcherUpdate
      */
     name?: string;
     /**
      * The researcher's institution.
      * @type {string}
-     * @memberof Researcher
+     * @memberof ResearcherUpdate
      */
     institution?: string;
     /**
      * The researcher's bio.
      * @type {string}
-     * @memberof Researcher
+     * @memberof ResearcherUpdate
      */
     bio?: string;
     /**
      * The researcher's lab page.
      * @type {string}
-     * @memberof Researcher
+     * @memberof ResearcherUpdate
      */
     labPage?: string;
     /**
      * The researcher's interest (1).
      * @type {string}
-     * @memberof Researcher
+     * @memberof ResearcherUpdate
      */
     researchInterest1?: string;
     /**
      * The researcher's interest (2).
      * @type {string}
-     * @memberof Researcher
+     * @memberof ResearcherUpdate
      */
     researchInterest2?: string;
     /**
      * The researcher's interest (3).
      * @type {string}
-     * @memberof Researcher
+     * @memberof ResearcherUpdate
      */
     researchInterest3?: string;
     /**
      * The researcher's invite code.
      * @type {boolean}
-     * @memberof Researcher
+     * @memberof ResearcherUpdate
      */
     inviteCode?: boolean;
 }
 
 /**
- * Check if a given object implements the Researcher interface.
+ * Check if a given object implements the ResearcherUpdate interface.
  */
-export function instanceOfResearcher(value: object): boolean {
+export function instanceOfResearcherUpdate(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function ResearcherFromJSON(json: any): Researcher {
-    return ResearcherFromJSONTyped(json, false);
+export function ResearcherUpdateFromJSON(json: any): ResearcherUpdate {
+    return ResearcherUpdateFromJSONTyped(json, false);
 }
 
-export function ResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean): Researcher {
+export function ResearcherUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResearcherUpdate {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'userId': !exists(json, 'user_id') ? undefined : json['user_id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'institution': !exists(json, 'institution') ? undefined : json['institution'],
         'bio': !exists(json, 'bio') ? undefined : json['bio'],
@@ -113,7 +106,7 @@ export function ResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     };
 }
 
-export function ResearcherToJSON(value?: Researcher | null): any {
+export function ResearcherUpdateToJSON(value?: ResearcherUpdate | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -123,7 +116,6 @@ export function ResearcherToJSON(value?: Researcher | null): any {
     return {
         
         'id': value.id,
-        'user_id': value.userId,
         'name': value.name,
         'institution': value.institution,
         'bio': value.bio,

@@ -14,12 +14,9 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class NewResearcher
+  class ResearcherUpdate
     # The researcher's ID.
     attr_accessor :id
-
-    # The researcher's user ID.
-    attr_accessor :user_id
 
     # The researcher's name.
     attr_accessor :name
@@ -49,7 +46,6 @@ module Api::V1::Bindings
     def self.attribute_map
       {
         :'id' => :'id',
-        :'user_id' => :'user_id',
         :'name' => :'name',
         :'institution' => :'institution',
         :'bio' => :'bio',
@@ -70,7 +66,6 @@ module Api::V1::Bindings
     def self.openapi_types
       {
         :'id' => :'Integer',
-        :'user_id' => :'String',
         :'name' => :'String',
         :'institution' => :'String',
         :'bio' => :'String',
@@ -78,7 +73,7 @@ module Api::V1::Bindings
         :'research_interest_1' => :'String',
         :'research_interest_2' => :'String',
         :'research_interest_3' => :'String',
-        :'invite_code' => :'String'
+        :'invite_code' => :'Boolean'
       }
     end
 
@@ -92,23 +87,19 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::NewResearcher` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::ResearcherUpdate` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::NewResearcher`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::ResearcherUpdate`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
       if attributes.key?(:'id')
         self.id = attributes[:'id']
-      end
-
-      if attributes.key?(:'user_id')
-        self.user_id = attributes[:'user_id']
       end
 
       if attributes.key?(:'name')
@@ -163,7 +154,6 @@ module Api::V1::Bindings
       return true if self.equal?(o)
       self.class == o.class &&
           id == o.id &&
-          user_id == o.user_id &&
           name == o.name &&
           institution == o.institution &&
           bio == o.bio &&
@@ -183,7 +173,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, user_id, name, institution, bio, lab_page, research_interest_1, research_interest_2, research_interest_3, invite_code].hash
+      [id, name, institution, bio, lab_page, research_interest_1, research_interest_2, research_interest_3, invite_code].hash
     end
 
     # Builds the object from hash
