@@ -1,9 +1,53 @@
 # frozen_string_literal: true
 
-class Api::V1::Researcher::ResearchersOpenApi
+class Api::V1::ResearchersOpenApi
   include OpenStax::OpenApi::Blocks
 
   openapi_component do
+    schema :NewResearcher do
+      property :id do
+        key :type, :integer
+        key :description, 'The researcher\'s ID.'
+      end
+      property :user_id do
+        key :type, :string
+        key :format, 'uuid'
+        key :description, 'The researcher\'s user ID.'
+      end
+      property :name do
+        key :type, :string
+        key :description, 'The researcher\'s name.'
+      end
+      property :institution do
+        key :type, :string
+        key :description, 'The researcher\'s institution.'
+      end
+      property :bio do
+        key :type, :string
+        key :description, 'The researcher\'s bio.'
+      end
+      property :lab_page do
+        key :type, :string
+        key :description, 'The researcher\'s lab page.'
+      end
+      property :research_interest_1 do
+        key :type, :string
+        key :description, 'The researcher\'s interest (1).'
+      end
+      property :research_interest_2 do
+        key :type, :string
+        key :description, 'The researcher\'s interest (2).'
+      end
+      property :research_interest_3 do
+        key :type, :string
+        key :description, 'The researcher\'s interest (3).'
+      end
+      property :invite_code do
+        key :type, :string
+        key :description, 'The researcher\'s invite code.'
+      end
+    end
+
     schema :Researcher do
       key :required, [:user_id]
       property :id do
@@ -43,16 +87,16 @@ class Api::V1::Researcher::ResearchersOpenApi
         key :type, :string
         key :description, 'The researcher\'s interest (3).'
       end
-      property :is_invite_pending do
+      property :invite_code do
         key :type, :boolean
-        key :description, 'Is the researcher\'s invite pending.'
+        key :description, 'The researcher\'s invite code.'
       end
     end
 
-    schema :Researchers do
+    schema :ResearchersList do
       property :data do
         key :type, :array
-        key :description, 'Researchers.'
+        key :description, 'The researchers.'
         items do
           key :$ref, :Researcher
         end
@@ -97,10 +141,10 @@ class Api::V1::Researcher::ResearchersOpenApi
       response 200 do
         key :description, 'Success.'
         content 'application/json' do
-          schema { key :$ref, :Researchers }
+          schema { key :$ref, :ResearchersList }
         end
-
       end
+      extend Api::V1::OpenApiResponses::AuthenticationError
       extend Api::V1::OpenApiResponses::UnprocessableEntityError
       extend Api::V1::OpenApiResponses::ServerError
     end

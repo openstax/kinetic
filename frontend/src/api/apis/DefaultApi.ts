@@ -31,7 +31,7 @@ import type {
   ParticipantStudy,
   ParticipantStudyCompletion,
   Researcher,
-  Researchers,
+  ResearchersList,
   Responses,
   Reward,
   RewardsListing,
@@ -81,8 +81,8 @@ import {
     ParticipantStudyCompletionToJSON,
     ResearcherFromJSON,
     ResearcherToJSON,
-    ResearchersFromJSON,
-    ResearchersToJSON,
+    ResearchersListFromJSON,
+    ResearchersListToJSON,
     ResponsesFromJSON,
     ResponsesToJSON,
     RewardFromJSON,
@@ -807,7 +807,7 @@ export class DefaultApi extends runtime.BaseAPI {
      * Returns listing of all researchers
      * Retrieve list of all researchers
      */
-    async getResearchersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Researchers>> {
+    async getResearchersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResearchersList>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -819,14 +819,14 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResearchersFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResearchersListFromJSON(jsonValue));
     }
 
     /**
      * Returns listing of all researchers
      * Retrieve list of all researchers
      */
-    async getResearchers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Researchers> {
+    async getResearchers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResearchersList> {
         const response = await this.getResearchersRaw(initOverrides);
         return await response.value();
     }

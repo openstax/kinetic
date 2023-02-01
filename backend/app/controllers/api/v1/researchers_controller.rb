@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-class Api::V1::Researcher::ResearchersController < Api::V1::Researcher::BaseController
+class Api::V1::ResearchersController < Api::V1::Researcher::BaseController
   before_action :set_researcher, only: [:show, :update, :destroy]
 
   # GET /researchers
   def index
     @researchers = Researcher.all
-    response_binding = Api::V1::Bindings::Researcher.new(
+    response_binding = Api::V1::Bindings::ResearchersList.new(
       data: @researchers.map do |researcher|
         Api::V1::Bindings::Researcher.create_from_model(researcher)
       end
@@ -21,15 +21,19 @@ class Api::V1::Researcher::ResearchersController < Api::V1::Researcher::BaseCont
   end
 
   # POST /researchers
-  def create
-    inbound_binding, error = bind(params.require(:researcher), Api::V1::Bindings::Researcher)
-    render(json: error, status: error.status_code) and return if error
-
-    researcher = Researcher.new(inbound_binding.to_hash)
-
-    render json: { errors: researcher.errors.full_messages }, status: 500 unless researcher.save
-    render json: inbound_binding, status: :created
-  end
+  # Unneeded for now
+  # def create
+  #   inbound_binding, error = bind(params.require(:researcher), Api::V1::Bindings::NewResearcher)
+  #   render(json: error, status: error.status_code) and return if error
+  #
+  #   # TODO How do we tie a user and researcher together?
+  #   created = Researcher.new(inbound_binding.to_hash) do |researcher|
+  #     researcher.save!
+  #   end
+  #
+  #   response_binding = Api::V1::Bindings::Researcher.create_from_model(created)
+  #   render json: response_binding, status: :created
+  # end
 
   # PATCH/PUT /researchers/1
   def update

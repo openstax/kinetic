@@ -14,7 +14,7 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class Researcher
+  class NewResearcher
     # The researcher's ID.
     attr_accessor :id
 
@@ -78,7 +78,7 @@ module Api::V1::Bindings
         :'research_interest_1' => :'String',
         :'research_interest_2' => :'String',
         :'research_interest_3' => :'String',
-        :'invite_code' => :'Boolean'
+        :'invite_code' => :'String'
       }
     end
 
@@ -92,13 +92,13 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::Researcher` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::NewResearcher` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::Researcher`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::NewResearcher`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
@@ -148,17 +148,12 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @user_id.nil?
-        invalid_properties.push('invalid value for "user_id", user_id cannot be nil.')
-      end
-
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @user_id.nil?
       true
     end
 

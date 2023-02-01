@@ -16,93 +16,92 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Researcher
+ * @interface NewResearcher
  */
-export interface Researcher {
+export interface NewResearcher {
     /**
      * The researcher's ID.
      * @type {number}
-     * @memberof Researcher
+     * @memberof NewResearcher
      */
     id?: number;
     /**
      * The researcher's user ID.
      * @type {string}
-     * @memberof Researcher
+     * @memberof NewResearcher
      */
-    userId: string;
+    userId?: string;
     /**
      * The researcher's name.
      * @type {string}
-     * @memberof Researcher
+     * @memberof NewResearcher
      */
     name?: string;
     /**
      * The researcher's institution.
      * @type {string}
-     * @memberof Researcher
+     * @memberof NewResearcher
      */
     institution?: string;
     /**
      * The researcher's bio.
      * @type {string}
-     * @memberof Researcher
+     * @memberof NewResearcher
      */
     bio?: string;
     /**
      * The researcher's lab page.
      * @type {string}
-     * @memberof Researcher
+     * @memberof NewResearcher
      */
     labPage?: string;
     /**
      * The researcher's interest (1).
      * @type {string}
-     * @memberof Researcher
+     * @memberof NewResearcher
      */
     researchInterest1?: string;
     /**
      * The researcher's interest (2).
      * @type {string}
-     * @memberof Researcher
+     * @memberof NewResearcher
      */
     researchInterest2?: string;
     /**
      * The researcher's interest (3).
      * @type {string}
-     * @memberof Researcher
+     * @memberof NewResearcher
      */
     researchInterest3?: string;
     /**
      * The researcher's invite code.
-     * @type {boolean}
-     * @memberof Researcher
+     * @type {string}
+     * @memberof NewResearcher
      */
-    inviteCode?: boolean;
+    inviteCode?: string;
 }
 
 /**
- * Check if a given object implements the Researcher interface.
+ * Check if a given object implements the NewResearcher interface.
  */
-export function instanceOfResearcher(value: object): boolean {
+export function instanceOfNewResearcher(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "userId" in value;
 
     return isInstance;
 }
 
-export function ResearcherFromJSON(json: any): Researcher {
-    return ResearcherFromJSONTyped(json, false);
+export function NewResearcherFromJSON(json: any): NewResearcher {
+    return NewResearcherFromJSONTyped(json, false);
 }
 
-export function ResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean): Researcher {
+export function NewResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean): NewResearcher {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'userId': json['user_id'],
+        'userId': !exists(json, 'user_id') ? undefined : json['user_id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'institution': !exists(json, 'institution') ? undefined : json['institution'],
         'bio': !exists(json, 'bio') ? undefined : json['bio'],
@@ -114,7 +113,7 @@ export function ResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     };
 }
 
-export function ResearcherToJSON(value?: Researcher | null): any {
+export function NewResearcherToJSON(value?: NewResearcher | null): any {
     if (value === undefined) {
         return undefined;
     }

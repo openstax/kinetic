@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :researcher do
     user_id { SecureRandom.uuid }
     name { Faker::Name.name }
-    bio { Faker::Lorem.sentences(number: 1) }
+    bio { Faker::Lorem.sentences(number: 2) }
     institution { Faker::University.name }
     lab_page { Faker::TvShows::SiliconValley.url }
     research_interest_1 { Faker::Hobby.activity }
