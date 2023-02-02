@@ -24,6 +24,9 @@ module Api::V1::Bindings
     # The researcher's name.
     attr_accessor :name
 
+    # The researcher's avatar.
+    attr_accessor :avatar
+
     # The researcher's institution.
     attr_accessor :institution
 
@@ -51,6 +54,7 @@ module Api::V1::Bindings
         :'id' => :'id',
         :'user_id' => :'user_id',
         :'name' => :'name',
+        :'avatar' => :'avatar',
         :'institution' => :'institution',
         :'bio' => :'bio',
         :'lab_page' => :'lab_page',
@@ -72,6 +76,7 @@ module Api::V1::Bindings
         :'id' => :'Integer',
         :'user_id' => :'String',
         :'name' => :'String',
+        :'avatar' => :'File',
         :'institution' => :'String',
         :'bio' => :'String',
         :'lab_page' => :'String',
@@ -113,6 +118,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'name')
         self.name = attributes[:'name']
+      end
+
+      if attributes.key?(:'avatar')
+        self.avatar = attributes[:'avatar']
       end
 
       if attributes.key?(:'institution')
@@ -165,6 +174,7 @@ module Api::V1::Bindings
           id == o.id &&
           user_id == o.user_id &&
           name == o.name &&
+          avatar == o.avatar &&
           institution == o.institution &&
           bio == o.bio &&
           lab_page == o.lab_page &&
@@ -183,7 +193,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, user_id, name, institution, bio, lab_page, research_interest_1, research_interest_2, research_interest_3, invite_code].hash
+      [id, user_id, name, avatar, institution, bio, lab_page, research_interest_1, research_interest_2, research_interest_3, invite_code].hash
     end
 
     # Builds the object from hash

@@ -18,6 +18,7 @@ interface ModalProps extends OverlayModalProps {
     large?: boolean
     small?: boolean
     closeBtn?: boolean
+    center?: boolean
 }
 
 
@@ -28,7 +29,17 @@ interface ModalI extends FCWC<ModalProps> {
 }
 
 const Modal: ModalI = ({
-    className, header, children, show, title, onHide, xlarge, large, small, fullscreen,
+    className,
+    header,
+    children,
+    show,
+    title,
+    onHide,
+    xlarge,
+    large,
+    small,
+    center,
+    fullscreen,
     scrollable = true,
     closeBtn = true,
     ...props
@@ -45,15 +56,15 @@ const Modal: ModalI = ({
             onBackdropClick={onHide}
         >
             <div className={cx('modal-dialog', {
+                'modal-dialog-centered': center,
                 'modal-dialog-scrollable': scrollable,
                 'modal-xl': xlarge,
                 'modal-fullscreen-lg-down': xlarge,
                 'modal-lg': large,
                 'modal-fullscreen': fullscreen,
                 'modal-small': small,
-
             })}>
-                <div className="modal-content" css={{ height: '100%' }}>
+                <div className="modal-content">
                     {header && header}
                     {title && (
                         <Modal.Header>

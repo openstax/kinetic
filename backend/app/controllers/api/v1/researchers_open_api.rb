@@ -34,6 +34,10 @@ class Api::V1::ResearchersOpenApi
       key :type, :string
       key :description, 'The researcher\'s name.'
     end
+    property :avatar do
+      key :type, :file
+      key :description, 'The researcher\'s avatar.'
+    end
     property :institution do
       key :type, :string
       key :description, 'The researcher\'s institution.'

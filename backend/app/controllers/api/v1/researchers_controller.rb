@@ -41,6 +41,9 @@ class Api::V1::ResearchersController < Api::V1::Researcher::BaseController
     render(json: error, status: error.status_code) and return if error
 
     # TODO Make sure avatar works
+    if params[:avatar]
+      @researcher.avatar.attach(params[:avatar])
+    end
 
     @researcher.update!(inbound_binding.to_hash)
     # response_binding = Api::V1::Bindings::Researcher.create_from_model(@researcher)

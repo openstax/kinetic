@@ -35,6 +35,7 @@ import rolodex from '@iconify-icons/bi/person-rolodex'
 import list from '@iconify-icons/bi/list'
 import multiStage from '@iconify-icons/bi/stack'
 import chatLeft from '@iconify-icons/bi/chat-left-fill'
+import cloudUpload from '@iconify-icons/bi/cloud-upload'
 
 
 const SUNDRY_PACKAGED_ICONS = {
@@ -72,6 +73,7 @@ export const ICONS = {
     right,
     multiStage,
     chatLeft,
+    cloudUpload,
 }
 
 export type IconKey = keyof typeof ICONS

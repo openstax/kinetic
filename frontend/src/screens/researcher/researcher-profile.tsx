@@ -1,14 +1,18 @@
-import { Alert, Box, cx, Footer, HelpLink, Icon, InputField, ResourceLinks, SelectField, TopNavBar } from '@components';
+import { Alert, Box, cx, Footer, Icon, InputField, ResourceLinks, SelectField, TopNavBar } from '@components';
 import { React, styled, useNavigate, useState } from '@common';
 import { errorToString, useApi, useCurrentResearcher, useEnvironment } from '@lib';
 import { colors } from '../../theme';
 import { Link } from 'react-router-dom';
-import { SelectedStudies } from '../analysis/selected-studies';
 import { Researcher } from '@api';
 import { Button, Form, FormCancelButton, FormSaveButton } from '@nathanstitt/sundry';
 import * as Yup from 'yup';
 import CustomerSupportImage from '../../components/customer-support-image';
 import RiceLogoURL from '../../images/rice-logo-darktext.png';
+import DefaultAvatar from '../../images/default-avatar.png';
+import FileUploader from '../../components/file-upload';
+// TODO Use modal from @components (sundry) when center fix is applied
+//  if relying on sundry modal we should remove the one in source
+import { Modal } from '../../components/modal';
 
 export const ResearcherValidationSchema = Yup.object().shape({
     name: Yup.string().required('Required'),
@@ -19,7 +23,6 @@ export const ResearcherValidationSchema = Yup.object().shape({
     labPage: Yup.string().url(),
     bio: Yup.string().required('Required'),
 })
-
 
 export default function ResearcherProfile() {
     const env = useEnvironment()
@@ -46,9 +49,7 @@ export default function ResearcherProfile() {
                         <Box direction='column' gap='xlarge'>
                             <ProfileSection className='researcher-profile'>
                                 <Box gap='xlarge' className='container-fluid'>
-                                    <Box className='col-3' justify='center'>
-                                        Avatar
-                                    </Box>
+                                    <Avatar researcher={researcher}/>
                                     <ProfileForm researcher={researcher} className='col-9'/>
                                 </Box>
                             </ProfileSection>
@@ -64,7 +65,7 @@ export default function ResearcherProfile() {
                 <Box className='col-3'>
                     <Resources direction='column' gap='small'>
                         <ResourceLinks />
-                        <Box gap='medium' className='mt-4'>
+                        <Box gap='medium' className='mt-2' align='center'>
                             <CustomerSupportImage height={100} />
                             <Box direction='column'>
                                 <h4>Need Help?</h4>
@@ -120,6 +121,85 @@ const TermsOfUse = () => {
                 <span>Check Details</span>
                 <Icon icon="right" />
             </Link>
+        </Box>
+    )
+}
+
+const AvatarImage = styled.img({
+    borderRadius: '50%',
+    padding: 25,
+    border: `1px solid ${colors.lightGray}`,
+    height: 150,
+    width: 150,
+})
+
+const AvatarPreview = styled.img({
+    borderRadius: '50%',
+    border: `1px solid ${colors.lightGray}`,
+    height: 200,
+    width: 200,
+})
+
+const Avatar: React.FC<{researcher: Researcher}> = ({ researcher }) => {
+    const api = useApi()
+    const [error, setError] = useState('')
+    const [editing, setEditing] = useState(false)
+    const imageURL = researcher.avatar || DefaultAvatar;
+    const [isShowingModal, setShowingModal] = useState(false)
+    const onHide = () => setShowingModal(false)
+
+    const saveResearcher = async (researcher: Researcher) => {
+        try {
+            if (!researcher.id) {
+                return;
+            }
+            await api.updateResearcher({
+                id: researcher.id,
+                updateResearcher: { researcher },
+            })
+        }
+        catch (err) {
+            setError(await errorToString(err))
+        }
+        setEditing(false)
+    }
+
+    const [preview, setPreview] = useState('');
+    const updatePreview = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setPreview(URL.createObjectURL(e.target.files[0]));
+        }
+    }
+
+    return (
+        <Box className='col-3' justify='start' direction='column'>
+            <Box onClick={() => setShowingModal(true)} direction='column' align='center' gap='large' css={{ cursor: 'pointer' }} >
+                <AvatarImage alt="User Avatar" src={imageURL}/>
+                <a className='links'>Upload Image</a>
+            </Box>
+
+            <Modal onHide={onHide} center show={isShowingModal} small data-test-id="update-avatar-modal" title='Update Avatar'>
+                <Modal.Body>
+                    <Form
+                        onSubmit={saveResearcher}
+                        showControls
+                        onCancel={onHide}
+                        defaultValues={{}}
+                        validationSchema={Yup.object().shape({
+                            avatar: Yup.string().required(),
+                        })}
+                    >
+                        <Box direction='column' align='center' justify='center' gap>
+                            {preview ?
+                                <AvatarPreview alt="User avatar preview" src={preview}/> :
+                                <Icon icon='cloudUpload' height={120}/>
+                            }
+
+                            <FileUploader name='avatar' onChange={updatePreview} accept='image/*' />
+                        </Box>
+                    </Form>
+                </Modal.Body>
+            </Modal>
         </Box>
     )
 }
@@ -244,17 +324,17 @@ const Content = styled(Box)({
 
 const ProfileSection = styled(Box)({
     backgroundColor: colors.white,
-    border: '1px solid #DBDBDB',
+    border: `1px solid ${colors.lightGray}`,
     borderRadius: 5,
     padding: 30,
 })
 
 const Resources = styled(Box)({
     width: '100%',
-    maxHeight: 300,
-    border: '1px solid #DBDBDB',
+    maxHeight: 250,
+    border: `1px solid ${colors.lightGray}`,
     marginTop: 40,
     borderRadius: 5,
     backgroundColor: colors.white,
-    padding: 30,
+    padding: 20,
 })
