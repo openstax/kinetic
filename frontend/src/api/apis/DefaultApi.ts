@@ -616,34 +616,6 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Retrieve the currently logged in researcher
-     * Retrieve the currently logged in researcher
-     */
-    async getCurrentResearcherRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Researcher>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/researchers/m/e`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResearcherFromJSON(jsonValue));
-    }
-
-    /**
-     * Retrieve the currently logged in researcher
-     * Retrieve the currently logged in researcher
-     */
-    async getCurrentResearcher(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Researcher> {
-        const response = await this.getCurrentResearcherRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Get info about the deployment environment 
      * Get info about the deployment environment
      */

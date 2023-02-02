@@ -32,35 +32,45 @@ export default function ResearcherProfile() {
     return (
         <PageWrapper>
             <TopNavBar />
-            <Content className='container-lg py-5'>
-                <Box justify='between'>
-                    <h3>My Account</h3>
-                    <Link to={`${env.accounts_url}`}>
-                        <span>Update Email & Password</span>
-                        <Icon icon="right" />
-                    </Link>
+            <Content className='container-lg py-5' gap='xlarge'>
+                <Box className='col-9' direction='column'>
+                    <Box justify='between' height='40px'>
+                        <h3>My Account</h3>
+                        <Link to={`${env.accounts_url}`}>
+                            <span>Update Email & Password</span>
+                            <Icon icon="right" />
+                        </Link>
+                    </Box>
+
+                    <Box justify='between' gap='xxlarge'>
+                        <Box direction='column' gap='xlarge'>
+                            <ProfileSection className='researcher-profile'>
+                                <Box gap='xlarge' className='container-fluid'>
+                                    <Box className='col-3' justify='center'>
+                                        Avatar
+                                    </Box>
+                                    <ProfileForm researcher={researcher} className='col-9'/>
+                                </Box>
+                            </ProfileSection>
+
+                            <ProfileSection direction='column' gap='xxlarge'>
+                                <IRB/>
+                                <TermsOfUse/>
+                            </ProfileSection>
+                        </Box>
+                    </Box>
                 </Box>
 
-                <Box justify='between' gap='xxlarge'>
-                    <Box direction='column'>
-                        <ProfileSection className='researcher-profile'>
-                            <Box gap='xlarge' className='container-fluid'>
-                                <Box className='col-3' justify='center'>
-                                    Avatar
-                                </Box>
-                                <ProfileForm researcher={researcher} className='col-9'/>
-                            </Box>
-                        </ProfileSection>
-
-                        <ProfileSection direction='column' gap='xxlarge'>
-                            <IRB/>
-                            <TermsOfUse/>
-                        </ProfileSection>
-                    </Box>
-                    <Resources direction='column'>
+                <Box className='col-3'>
+                    <Resources direction='column' gap='small'>
                         <ResourceLinks />
-                        <CustomerSupportImage />
-                        <HelpLink />
+                        <Box gap='medium' className='mt-4'>
+                            <CustomerSupportImage height={100} />
+                            <Box direction='column'>
+                                <h4>Need Help?</h4>
+                                <a target="_blank" href="https://openstax.org/contact">Contact us here</a>
+                            </Box>
+                        </Box>
                     </Resources>
                 </Box>
             </Content>
@@ -124,15 +134,12 @@ const formStyles = {
 }
 
 const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ researcher, className }) => {
-    console.log(researcher);
-
     const api = useApi()
     const [error, setError] = useState('')
     const [editing, setEditing] = useState(false)
     const [institution, setInstitution] = useState(researcher.institution)
 
     const saveResearcher = async (researcher: Researcher) => {
-        console.log('updating: ', researcher);
         try {
             if (!researcher.id) {
                 return;
@@ -149,6 +156,7 @@ const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ re
     }
 
     return (
+        // TODO use disabled prop on inputs
         <Form
             onSubmit={saveResearcher}
             className={cx(className, 'row')}
@@ -220,7 +228,6 @@ const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ re
                     </FormCancelButton>
                 </Box>
             }
-            <SelectedStudies />
         </Form>
     );
 }
@@ -231,25 +238,23 @@ const PageWrapper = styled(Box)({
     height: '100vh',
 })
 
-const Content = styled.div({
+const Content = styled(Box)({
+
 })
 
 const ProfileSection = styled(Box)({
     backgroundColor: colors.white,
     border: '1px solid #DBDBDB',
     borderRadius: 5,
-    marginTop: 20,
-    marginBottom: 10,
     padding: 30,
 })
 
 const Resources = styled(Box)({
-    height: '100%',
-    width: 300,
+    width: '100%',
+    maxHeight: 300,
     border: '1px solid #DBDBDB',
+    marginTop: 40,
     borderRadius: 5,
     backgroundColor: colors.white,
-    marginTop: 20,
-    marginBottom: 10,
     padding: 30,
 })

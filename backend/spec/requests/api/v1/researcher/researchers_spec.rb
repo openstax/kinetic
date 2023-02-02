@@ -9,6 +9,7 @@ RSpec.describe 'Researchers', api: :v1 do
   let(:valid_researcher_attributes) do
     {
       name: 'Researcher McResearcherson',
+      user_id: '00000000-0000-0000-0000-000000000001',
       bio: 'Pretty cool person who does things and also doesnt do things',
       institution: 'Fake University U',
       lab_page: 'https://google.com',

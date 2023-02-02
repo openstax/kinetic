@@ -18,6 +18,9 @@ module Api::V1::Bindings
     # The researcher's ID.
     attr_accessor :id
 
+    # The researcher's user ID.
+    attr_accessor :user_id
+
     # The researcher's name.
     attr_accessor :name
 
@@ -46,6 +49,7 @@ module Api::V1::Bindings
     def self.attribute_map
       {
         :'id' => :'id',
+        :'user_id' => :'user_id',
         :'name' => :'name',
         :'institution' => :'institution',
         :'bio' => :'bio',
@@ -66,6 +70,7 @@ module Api::V1::Bindings
     def self.openapi_types
       {
         :'id' => :'Integer',
+        :'user_id' => :'String',
         :'name' => :'String',
         :'institution' => :'String',
         :'bio' => :'String',
@@ -100,6 +105,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'id')
         self.id = attributes[:'id']
+      end
+
+      if attributes.key?(:'user_id')
+        self.user_id = attributes[:'user_id']
       end
 
       if attributes.key?(:'name')
@@ -154,6 +163,7 @@ module Api::V1::Bindings
       return true if self.equal?(o)
       self.class == o.class &&
           id == o.id &&
+          user_id == o.user_id &&
           name == o.name &&
           institution == o.institution &&
           bio == o.bio &&
@@ -173,7 +183,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, name, institution, bio, lab_page, research_interest_1, research_interest_2, research_interest_3, invite_code].hash
+      [id, user_id, name, institution, bio, lab_page, research_interest_1, research_interest_2, research_interest_3, invite_code].hash
     end
 
     # Builds the object from hash

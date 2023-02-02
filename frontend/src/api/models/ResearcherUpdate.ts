@@ -26,6 +26,12 @@ export interface ResearcherUpdate {
      */
     id?: number;
     /**
+     * The researcher's user ID.
+     * @type {string}
+     * @memberof ResearcherUpdate
+     */
+    userId?: string;
+    /**
      * The researcher's name.
      * @type {string}
      * @memberof ResearcherUpdate
@@ -95,6 +101,7 @@ export function ResearcherUpdateFromJSONTyped(json: any, ignoreDiscriminator: bo
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'userId': !exists(json, 'user_id') ? undefined : json['user_id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'institution': !exists(json, 'institution') ? undefined : json['institution'],
         'bio': !exists(json, 'bio') ? undefined : json['bio'],
@@ -116,6 +123,7 @@ export function ResearcherUpdateToJSON(value?: ResearcherUpdate | null): any {
     return {
         
         'id': value.id,
+        'user_id': value.userId,
         'name': value.name,
         'institution': value.institution,
         'bio': value.bio,

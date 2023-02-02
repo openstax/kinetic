@@ -22,9 +22,6 @@ class Api::V1::ResearchersOpenApi
       key :type, :integer
       key :description, 'The researcher\'s ID.'
     end
-  end
-
-  add_properties(:Researcher) do
     property :user_id do
       key :type, :string
       key :format, 'uuid'
