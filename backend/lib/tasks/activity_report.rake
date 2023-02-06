@@ -21,6 +21,7 @@ namespace :report do
     launches = LaunchedStage
                  .joins(:research_id, stage: :study)
                  .where('first_launched_at >= ?', (args[:months_ago] || 1).to_i.months.ago)
+
     launches.each do |launch|
       user_uuids[launch.user_id] = nil
     end
@@ -32,7 +33,8 @@ namespace :report do
     csv = CSV.new($stdout)
     csv << [
       'Study ID',
-      'Study Name',
+      'Participant Title',
+      'Researcher Title',
       'Stage ID',
       'Stage Order',
       'Stage Points',
@@ -59,6 +61,7 @@ namespace :report do
       csv << [
         launch.stage.study.id,
         launch.stage.study.title_for_participants,
+        launch.stage.study.title_for_researchers,
         launch.stage.id,
         launch.stage.order,
         launch.stage.points,
