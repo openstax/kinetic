@@ -17,7 +17,7 @@ class Api::V1::ResearchersOpenApi
     end
   end
 
-  add_properties(:ResearcherUpdate, :Researcher) do
+  add_properties(:Researcher, :ResearcherUpdate) do
     property :id do
       key :type, :integer
       key :description, 'The researcher\'s ID.'
@@ -27,15 +27,17 @@ class Api::V1::ResearchersOpenApi
       key :format, 'uuid'
       key :description, 'The researcher\'s user ID.'
     end
-  end
-
-  add_properties(:Researcher, :ResearcherUpdate) do
     property :name do
       key :type, :string
       key :description, 'The researcher\'s name.'
     end
+    property :avatar_url do
+      key :type, :string
+      key :description, 'The researcher\'s avatar URL.'
+    end
     property :avatar do
-      key :type, :file
+      key :type, :string
+      key :format, 'binary'
       key :description, 'The researcher\'s avatar.'
     end
     property :institution do
@@ -128,19 +130,14 @@ class Api::V1::ResearchersOpenApi
       request_body do
         key :description, 'The researcher data'
         key :required, true
-        content 'application/json' do
+        content 'multipart/form-data' do
           schema do
-            key :type, :object
-            key :title, :updateResearcher
-            property :researcher do
-              key :required, true
-              key :$ref, :Researcher
-            end
+            key :$ref, :Researcher
           end
         end
       end
       response 201 do
-        key :description, 'Updated.  Returns the researcher.'
+        key :description, 'Updated. Returns the researcher.'
         content 'application/json' do
           schema { key :$ref, :Researcher }
         end

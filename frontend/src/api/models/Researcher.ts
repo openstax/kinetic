@@ -38,11 +38,17 @@ export interface Researcher {
      */
     name?: string;
     /**
-     * The researcher's avatar.
-     * @type {any}
+     * The researcher's avatar URL.
+     * @type {string}
      * @memberof Researcher
      */
-    avatar?: any;
+    avatarUrl?: string;
+    /**
+     * The researcher's avatar.
+     * @type {Blob}
+     * @memberof Researcher
+     */
+    avatar?: Blob;
     /**
      * The researcher's institution.
      * @type {string}
@@ -109,6 +115,7 @@ export function ResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'id': !exists(json, 'id') ? undefined : json['id'],
         'userId': !exists(json, 'user_id') ? undefined : json['user_id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
+        'avatarUrl': !exists(json, 'avatar_url') ? undefined : json['avatar_url'],
         'avatar': !exists(json, 'avatar') ? undefined : json['avatar'],
         'institution': !exists(json, 'institution') ? undefined : json['institution'],
         'bio': !exists(json, 'bio') ? undefined : json['bio'],
@@ -132,6 +139,7 @@ export function ResearcherToJSON(value?: Researcher | null): any {
         'id': value.id,
         'user_id': value.userId,
         'name': value.name,
+        'avatar_url': value.avatarUrl,
         'avatar': value.avatar,
         'institution': value.institution,
         'bio': value.bio,

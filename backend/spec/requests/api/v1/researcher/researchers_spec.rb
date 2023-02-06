@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Researchers', api: :v1 do
-  let(:researcher1) { create(:researcher) }
-  let(:researcher2) {FactoryBot.create(:researcher)}
+  let(:researcher1) {create(:researcher, :with_avatar)}
+  let(:researcher2) {create(:researcher, :with_avatar)}
 
   let(:valid_researcher_attributes) do
     {
@@ -76,8 +76,10 @@ RSpec.describe 'Researchers', api: :v1 do
         expect(response_hash).to match(a_hash_including(name: "Researcher McResearcherson"))
       end
 
+      let(:file_upload) { fixture_file_upload(file_fixture('tela.jpg'), 'image/jpg') }
       it 'updates a researchers avatar' do
-
+        api_put "researchers/#{researcher2.id}", params: { researcher: valid_researcher_attributes, avatar: file_upload}
+        expect(response).to have_http_status(:success)
       end
     end
   end

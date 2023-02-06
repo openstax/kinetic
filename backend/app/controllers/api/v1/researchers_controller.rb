@@ -20,34 +20,19 @@ class Api::V1::ResearchersController < Api::V1::Researcher::BaseController
     render json: response_binding, status: :ok
   end
 
-  # POST /researchers
-  # Unneeded for now
-  # def create
-  #   inbound_binding, error = bind(params.require(:researcher), Api::V1::Bindings::NewResearcher)
-  #   render(json: error, status: error.status_code) and return if error
-  #
-  #   # TODO How do we tie a user and researcher together?
-  #   created = Researcher.new(inbound_binding.to_hash) do |researcher|
-  #     researcher.save!
-  #   end
-  #
-  #   response_binding = Api::V1::Bindings::Researcher.create_from_model(created)
-  #   render json: response_binding, status: :created
-  # end
-
   # PATCH/PUT /researchers/1
   def update
-    inbound_binding, error = bind(params.require(:researcher), Api::V1::Bindings::ResearcherUpdate)
+    # TODO @nathan this blows up on:
+    #  NoMethodError (undefined method `build_from_hash' for File:Class):
+    inbound_binding, error = bind(params, Api::V1::Bindings::ResearcherUpdate)
     render(json: error, status: error.status_code) and return if error
-
-    # TODO Make sure avatar works
     if params[:avatar]
       @researcher.avatar.attach(params[:avatar])
     end
 
-    @researcher.update!(inbound_binding.to_hash)
-    # response_binding = Api::V1::Bindings::Researcher.create_from_model(@researcher)
-    render json: @researcher.to_api_binding(Api::V1::Bindings::Researcher), status: :ok
+    # @researcher.update!(inbound_binding.to_hash)
+    response_binding = Api::V1::Bindings::Researcher.create_from_model(@researcher)
+    render json: response_binding, status: :ok
   end
 
   # DELETE /researchers/1

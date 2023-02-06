@@ -27,9 +27,8 @@ export const ResearcherValidationSchema = Yup.object().shape({
 export default function ResearcherProfile() {
     const env = useEnvironment()
     const researcher = useCurrentResearcher()
-
     if (!researcher) {
-        return useNavigate()('/');
+        return <></>
     }
 
     return (
@@ -127,47 +126,46 @@ const TermsOfUse = () => {
 
 const AvatarImage = styled.img({
     borderRadius: '50%',
-    padding: 25,
     border: `1px solid ${colors.lightGray}`,
     height: 150,
     width: 150,
 })
 
-const AvatarPreview = styled.img({
-    borderRadius: '50%',
-    border: `1px solid ${colors.lightGray}`,
-    height: 200,
-    width: 200,
-})
-
 const Avatar: React.FC<{researcher: Researcher}> = ({ researcher }) => {
     const api = useApi()
-    const [error, setError] = useState('')
-    const [editing, setEditing] = useState(false)
-    const imageURL = researcher.avatar || DefaultAvatar;
+    // const [error, setError] = useState('')
+    // const [editing, setEditing] = useState(false)
+    // TODO base path?
+    const imageURL = `http://localhost:4006${researcher.avatarUrl}` || DefaultAvatar;
+    const [avatar, setAvatar] = useState<string | Blob>('')
     const [isShowingModal, setShowingModal] = useState(false)
     const onHide = () => setShowingModal(false)
 
     const saveResearcher = async (researcher: Researcher) => {
+        const formData = new FormData()
+        formData.append('avatar', avatar)
         try {
             if (!researcher.id) {
                 return;
             }
             await api.updateResearcher({
                 id: researcher.id,
-                updateResearcher: { researcher },
+                // updateResearcher: { researcher },
+            }, {
+                body: formData,
             })
+            onHide()
         }
         catch (err) {
-            setError(await errorToString(err))
+            // setError(await errorToString(err))
         }
-        setEditing(false)
+        // setEditing(false)
     }
 
-    const [preview, setPreview] = useState('');
-    const updatePreview = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
-            setPreview(URL.createObjectURL(e.target.files[0]));
+            const file = e.target.files[0]
+            setAvatar(file)
         }
     }
 
@@ -184,18 +182,10 @@ const Avatar: React.FC<{researcher: Researcher}> = ({ researcher }) => {
                         onSubmit={saveResearcher}
                         showControls
                         onCancel={onHide}
-                        defaultValues={{}}
-                        validationSchema={Yup.object().shape({
-                            avatar: Yup.string().required(),
-                        })}
+                        defaultValues={researcher}
                     >
                         <Box direction='column' align='center' justify='center' gap>
-                            {preview ?
-                                <AvatarPreview alt="User avatar preview" src={preview}/> :
-                                <Icon icon='cloudUpload' height={120}/>
-                            }
-
-                            <FileUploader name='avatar' onChange={updatePreview} accept='image/*' />
+                            <FileUploader name='avatar' onChange={updateImage} accept='image/*' />
                         </Box>
                     </Form>
                 </Modal.Body>
@@ -236,7 +226,6 @@ const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ re
     }
 
     return (
-        // TODO use disabled prop on inputs
         <Form
             onSubmit={saveResearcher}
             className={cx(className, 'row')}
@@ -261,7 +250,7 @@ const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ re
                     name="institution" id="institution" label="Institution"
                     onChange={(opt: string) => setInstitution(opt)}
                     value={institution}
-                    options={[{ value: 'rice', label: 'Rice' }]}
+                    options={[{ value: 'Rice', label: 'Rice' }]}
                     auto
                 />
             </div>
@@ -337,4 +326,7 @@ const Resources = styled(Box)({
     borderRadius: 5,
     backgroundColor: colors.white,
     padding: 20,
+    'a': {
+        color: colors.grayText,
+    },
 })

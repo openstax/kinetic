@@ -41,7 +41,6 @@ import type {
   UpdateAnalysis,
   UpdateBanner,
   UpdatePreferences,
-  UpdateResearcher,
   UpdateReward,
   UpdateStage,
   UpdateStudy,
@@ -100,8 +99,6 @@ import {
     UpdateBannerToJSON,
     UpdatePreferencesFromJSON,
     UpdatePreferencesToJSON,
-    UpdateResearcherFromJSON,
-    UpdateResearcherToJSON,
     UpdateRewardFromJSON,
     UpdateRewardToJSON,
     UpdateStageFromJSON,
@@ -211,7 +208,18 @@ export interface UpdatePreferencesRequest {
 
 export interface UpdateResearcherRequest {
     id: number;
-    updateResearcher: UpdateResearcher;
+    id2?: number;
+    userId?: string;
+    name?: string;
+    avatarUrl?: string;
+    avatar?: Blob;
+    institution?: string;
+    bio?: string;
+    labPage?: string;
+    researchInterest1?: string;
+    researchInterest2?: string;
+    researchInterest3?: string;
+    inviteCode?: string;
 }
 
 export interface UpdateRewardRequest {
@@ -1193,22 +1201,80 @@ export class DefaultApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateResearcher.');
         }
 
-        if (requestParameters.updateResearcher === null || requestParameters.updateResearcher === undefined) {
-            throw new runtime.RequiredError('updateResearcher','Required parameter requestParameters.updateResearcher was null or undefined when calling updateResearcher.');
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        headerParameters['Content-Type'] = 'application/json';
+        const consumes: runtime.Consume[] = [
+            { contentType: 'multipart/form-data' },
+        ];
+        // @ts-ignore: canConsumeForm may be unused
+        const canConsumeForm = runtime.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): any };
+        let useForm = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new URLSearchParams();
+        }
+
+        if (requestParameters.id2 !== undefined) {
+            formParams.append('id', requestParameters.id2 as any);
+        }
+
+        if (requestParameters.userId !== undefined) {
+            formParams.append('user_id', requestParameters.userId as any);
+        }
+
+        if (requestParameters.name !== undefined) {
+            formParams.append('name', requestParameters.name as any);
+        }
+
+        if (requestParameters.avatarUrl !== undefined) {
+            formParams.append('avatar_url', requestParameters.avatarUrl as any);
+        }
+
+        if (requestParameters.avatar !== undefined) {
+            formParams.append('avatar', requestParameters.avatar as any);
+        }
+
+        if (requestParameters.institution !== undefined) {
+            formParams.append('institution', requestParameters.institution as any);
+        }
+
+        if (requestParameters.bio !== undefined) {
+            formParams.append('bio', requestParameters.bio as any);
+        }
+
+        if (requestParameters.labPage !== undefined) {
+            formParams.append('lab_page', requestParameters.labPage as any);
+        }
+
+        if (requestParameters.researchInterest1 !== undefined) {
+            formParams.append('research_interest_1', requestParameters.researchInterest1 as any);
+        }
+
+        if (requestParameters.researchInterest2 !== undefined) {
+            formParams.append('research_interest_2', requestParameters.researchInterest2 as any);
+        }
+
+        if (requestParameters.researchInterest3 !== undefined) {
+            formParams.append('research_interest_3', requestParameters.researchInterest3 as any);
+        }
+
+        if (requestParameters.inviteCode !== undefined) {
+            formParams.append('invite_code', requestParameters.inviteCode as any);
+        }
 
         const response = await this.request({
             path: `/researchers/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateResearcherToJSON(requestParameters.updateResearcher),
+            body: formParams,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ResearcherFromJSON(jsonValue));

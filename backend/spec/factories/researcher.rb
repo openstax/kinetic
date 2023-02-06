@@ -10,5 +10,12 @@ FactoryBot.define do
     research_interest_1 { Faker::Hobby.activity }
     research_interest_2 { Faker::Hobby.activity }
     research_interest_3 { Faker::Hobby.activity }
+    trait :with_avatar do
+      after :build do |researcher|
+        file_name = 'tela.jpg'
+        file_path = Rails.root.join('spec', 'fixtures', 'files', file_name)
+        researcher.avatar.attach(io: File.open(file_path), filename: file_name, content_type: 'image/jpg')
+      end
+    end
   end
 end
