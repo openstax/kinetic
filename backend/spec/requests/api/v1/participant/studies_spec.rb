@@ -53,7 +53,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
           tags: study2.tags,
           researchers: a_collection_containing_exactly(
             {
-              name: study2.researchers.first.name,
+              first_name: study2.researchers.first.first_name,
               institution: kind_of(String),
               bio: kind_of(String)
             }
@@ -121,7 +121,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
             tags: study2.tags,
             researchers: a_collection_containing_exactly(
               {
-                name: study2.researchers.first.name,
+                first_name: study2.researchers.first.first_name,
                 institution: kind_of(String),
                 bio: kind_of(String)
               }

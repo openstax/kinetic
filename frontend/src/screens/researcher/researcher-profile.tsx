@@ -239,12 +239,16 @@ const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ re
         >
             <Alert warning={true} onDismiss={() => setError('')} message={error} />
 
-            <div className='col-6'>
-                <h6>Name</h6>
-                <InputField name="name" label="Researcher Name"/>
+            <div className='col-4'>
+                <h6>First Name</h6>
+                <InputField name="firstName" label="First Name"/>
+            </div>
+            <div className='col-4'>
+                <h6>Last Name</h6>
+                <InputField name="lastName" label="Last Name"/>
             </div>
 
-            <div className='col-6'>
+            <div className='col-4'>
                 <h6>Institution</h6>
                 <SelectField
                     name="institution" id="institution" label="Institution"

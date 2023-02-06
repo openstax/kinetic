@@ -138,7 +138,7 @@ export default function StudyDetails() {
                             About the researcher
                         </h5>
                         <b>
-                            {researcher.name}
+                            {researcher.firstName} {researcher.lastName}
                         </b>
                         <b className="text-black-50 mt-1">
                             {researcher.institution}

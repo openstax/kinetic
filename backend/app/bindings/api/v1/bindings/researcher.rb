@@ -21,8 +21,11 @@ module Api::V1::Bindings
     # The researcher's user ID.
     attr_accessor :user_id
 
-    # The researcher's name.
-    attr_accessor :name
+    # The researcher's first name.
+    attr_accessor :first_name
+
+    # The researcher's last name.
+    attr_accessor :last_name
 
     # The researcher's avatar URL.
     attr_accessor :avatar_url
@@ -56,7 +59,8 @@ module Api::V1::Bindings
       {
         :'id' => :'id',
         :'user_id' => :'user_id',
-        :'name' => :'name',
+        :'first_name' => :'first_name',
+        :'last_name' => :'last_name',
         :'avatar_url' => :'avatar_url',
         :'avatar' => :'avatar',
         :'institution' => :'institution',
@@ -79,7 +83,8 @@ module Api::V1::Bindings
       {
         :'id' => :'Integer',
         :'user_id' => :'String',
-        :'name' => :'String',
+        :'first_name' => :'String',
+        :'last_name' => :'String',
         :'avatar_url' => :'String',
         :'avatar' => :'File',
         :'institution' => :'String',
@@ -121,8 +126,12 @@ module Api::V1::Bindings
         self.user_id = attributes[:'user_id']
       end
 
-      if attributes.key?(:'name')
-        self.name = attributes[:'name']
+      if attributes.key?(:'first_name')
+        self.first_name = attributes[:'first_name']
+      end
+
+      if attributes.key?(:'last_name')
+        self.last_name = attributes[:'last_name']
       end
 
       if attributes.key?(:'avatar_url')
@@ -182,7 +191,8 @@ module Api::V1::Bindings
       self.class == o.class &&
           id == o.id &&
           user_id == o.user_id &&
-          name == o.name &&
+          first_name == o.first_name &&
+          last_name == o.last_name &&
           avatar_url == o.avatar_url &&
           avatar == o.avatar &&
           institution == o.institution &&
@@ -203,7 +213,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, user_id, name, avatar_url, avatar, institution, bio, lab_page, research_interest_1, research_interest_2, research_interest_3, invite_code].hash
+      [id, user_id, first_name, last_name, avatar_url, avatar, institution, bio, lab_page, research_interest_1, research_interest_2, research_interest_3, invite_code].hash
     end
 
     # Builds the object from hash

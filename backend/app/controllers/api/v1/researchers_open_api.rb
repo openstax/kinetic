@@ -27,9 +27,13 @@ class Api::V1::ResearchersOpenApi
       key :format, 'uuid'
       key :description, 'The researcher\'s user ID.'
     end
-    property :name do
+    property :first_name do
       key :type, :string
-      key :description, 'The researcher\'s name.'
+      key :description, 'The researcher\'s first name.'
+    end
+    property :last_name do
+      key :type, :string
+      key :description, 'The researcher\'s last name.'
     end
     property :avatar_url do
       key :type, :string

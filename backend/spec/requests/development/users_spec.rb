@@ -37,7 +37,7 @@ RSpec.describe 'Development Users' do
       expect(response_hash.with_indifferent_access).to match(
         a_hash_including(
           'researchers' => a_collection_containing_exactly(
-            { 'user_id' => researcher.user_id, name: researcher.name }
+            { 'user_id' => researcher.user_id, first_name: researcher.first_name }
           ),
           'admins' => a_collection_containing_exactly(
             { 'user_id' => admin.user_id, 'name' => 'admin' }

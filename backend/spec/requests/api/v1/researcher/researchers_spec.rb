@@ -61,7 +61,7 @@ RSpec.describe 'Researchers', api: :v1 do
       it 'gives forbidden' do
         expect {
           api_put "researchers/#{researcher1.id}", params: { researcher: valid_researcher_attributes }
-        }.not_to change { researcher1.reload; researcher1.name }
+        }.not_to change { researcher1.reload; researcher1.first_name }
         expect(response).to have_http_status(:forbidden)
       end
     end

@@ -42,7 +42,10 @@ class Development::UsersController < ApplicationController
     users = {}
     Researcher.all.each do |researcher|
       users[:researchers] ||= []
-      users[:researchers].push(researcher.slice('user_id', 'name'))
+      users[:researchers].push({
+        user_id: researcher.user_id,
+        name: researcher.first_name + ' ' + researcher.last_name
+      })
     end
 
     Admin.all.each do |admin|

@@ -210,7 +210,8 @@ export interface UpdateResearcherRequest {
     id: number;
     id2?: number;
     userId?: string;
-    name?: string;
+    firstName?: string;
+    lastName?: string;
     avatarUrl?: string;
     avatar?: Blob;
     institution?: string;
@@ -1229,8 +1230,12 @@ export class DefaultApi extends runtime.BaseAPI {
             formParams.append('user_id', requestParameters.userId as any);
         }
 
-        if (requestParameters.name !== undefined) {
-            formParams.append('name', requestParameters.name as any);
+        if (requestParameters.firstName !== undefined) {
+            formParams.append('first_name', requestParameters.firstName as any);
+        }
+
+        if (requestParameters.lastName !== undefined) {
+            formParams.append('last_name', requestParameters.lastName as any);
         }
 
         if (requestParameters.avatarUrl !== undefined) {

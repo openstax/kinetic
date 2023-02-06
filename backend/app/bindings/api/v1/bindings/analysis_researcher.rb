@@ -18,14 +18,18 @@ module Api::V1::Bindings
     # UUID of researcher
     attr_accessor :user_id
 
-    # Name of researcher
-    attr_accessor :name
+    # First name of researcher
+    attr_accessor :first_name
+
+    # Last name of researcher
+    attr_accessor :last_name
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'user_id' => :'user_id',
-        :'name' => :'name'
+        :'first_name' => :'first_name',
+        :'last_name' => :'last_name'
       }
     end
 
@@ -38,7 +42,8 @@ module Api::V1::Bindings
     def self.openapi_types
       {
         :'user_id' => :'String',
-        :'name' => :'String'
+        :'first_name' => :'String',
+        :'last_name' => :'String'
       }
     end
 
@@ -67,8 +72,12 @@ module Api::V1::Bindings
         self.user_id = attributes[:'user_id']
       end
 
-      if attributes.key?(:'name')
-        self.name = attributes[:'name']
+      if attributes.key?(:'first_name')
+        self.first_name = attributes[:'first_name']
+      end
+
+      if attributes.key?(:'last_name')
+        self.last_name = attributes[:'last_name']
       end
     end
 
@@ -91,7 +100,8 @@ module Api::V1::Bindings
       return true if self.equal?(o)
       self.class == o.class &&
           user_id == o.user_id &&
-          name == o.name
+          first_name == o.first_name &&
+          last_name == o.last_name
     end
 
     # @see the `==` method
@@ -103,7 +113,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [user_id, name].hash
+      [user_id, first_name, last_name].hash
     end
 
     # Builds the object from hash
