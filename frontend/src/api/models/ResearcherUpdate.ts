@@ -48,13 +48,7 @@ export interface ResearcherUpdate {
      * @type {string}
      * @memberof ResearcherUpdate
      */
-    avatarUrl?: string;
-    /**
-     * The researcher's avatar.
-     * @type {Blob}
-     * @memberof ResearcherUpdate
-     */
-    avatar?: Blob;
+    readonly avatarUrl?: string;
     /**
      * The researcher's institution.
      * @type {string}
@@ -123,7 +117,6 @@ export function ResearcherUpdateFromJSONTyped(json: any, ignoreDiscriminator: bo
         'firstName': !exists(json, 'first_name') ? undefined : json['first_name'],
         'lastName': !exists(json, 'last_name') ? undefined : json['last_name'],
         'avatarUrl': !exists(json, 'avatar_url') ? undefined : json['avatar_url'],
-        'avatar': !exists(json, 'avatar') ? undefined : json['avatar'],
         'institution': !exists(json, 'institution') ? undefined : json['institution'],
         'bio': !exists(json, 'bio') ? undefined : json['bio'],
         'labPage': !exists(json, 'lab_page') ? undefined : json['lab_page'],
@@ -147,8 +140,6 @@ export function ResearcherUpdateToJSON(value?: ResearcherUpdate | null): any {
         'user_id': value.userId,
         'first_name': value.firstName,
         'last_name': value.lastName,
-        'avatar_url': value.avatarUrl,
-        'avatar': value.avatar,
         'institution': value.institution,
         'bio': value.bio,
         'lab_page': value.labPage,

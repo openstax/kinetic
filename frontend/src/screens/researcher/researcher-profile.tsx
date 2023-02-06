@@ -1,5 +1,5 @@
 import { Alert, Box, cx, Footer, Icon, InputField, ResourceLinks, SelectField, TopNavBar } from '@components';
-import { React, styled, useNavigate, useState } from '@common';
+import { React, styled, useState } from '@common';
 import { errorToString, useApi, useCurrentResearcher, useEnvironment } from '@lib';
 import { colors } from '../../theme';
 import { Link } from 'react-router-dom';
@@ -15,7 +15,8 @@ import FileUploader from '../../components/file-upload';
 import { Modal } from '../../components/modal';
 
 export const ResearcherValidationSchema = Yup.object().shape({
-    name: Yup.string().required('Required'),
+    firstName: Yup.string().required('Required'),
+    lastName: Yup.string().required('Required'),
     institution: Yup.string().required('Required'),
     researchInterest1: Yup.string(),
     researchInterest2: Yup.string(),
@@ -133,33 +134,20 @@ const AvatarImage = styled.img({
 
 const Avatar: React.FC<{researcher: Researcher}> = ({ researcher }) => {
     const api = useApi()
-    // const [error, setError] = useState('')
-    // const [editing, setEditing] = useState(false)
-    // TODO base path?
-    const imageURL = `http://localhost:4006${researcher.avatarUrl}` || DefaultAvatar;
-    const [avatar, setAvatar] = useState<string | Blob>('')
+    const imageURL = researcher.avatarUrl || DefaultAvatar;
+    const [avatar, setAvatar] = useState<Blob>()
     const [isShowingModal, setShowingModal] = useState(false)
     const onHide = () => setShowingModal(false)
 
     const saveResearcher = async (researcher: Researcher) => {
-        const formData = new FormData()
-        formData.append('avatar', avatar)
-        try {
-            if (!researcher.id) {
-                return;
-            }
-            await api.updateResearcher({
-                id: researcher.id,
-                // updateResearcher: { researcher },
-            }, {
-                body: formData,
-            })
-            onHide()
+        if (!researcher.id) {
+            return;
         }
-        catch (err) {
-            // setError(await errorToString(err))
-        }
-        // setEditing(false)
+        await api.updateResearcherAvatar({
+            id: researcher.id,
+            avatar,
+        })
+        onHide()
     }
 
     const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -239,16 +227,16 @@ const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ re
         >
             <Alert warning={true} onDismiss={() => setError('')} message={error} />
 
-            <div className='col-4'>
+            <div className='col-6'>
                 <h6>First Name</h6>
                 <InputField name="firstName" label="First Name"/>
             </div>
-            <div className='col-4'>
+            <div className='col-6'>
                 <h6>Last Name</h6>
                 <InputField name="lastName" label="Last Name"/>
             </div>
 
-            <div className='col-4'>
+            <div className='col-12'>
                 <h6>Institution</h6>
                 <SelectField
                     name="institution" id="institution" label="Institution"
@@ -259,18 +247,16 @@ const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ re
                 />
             </div>
 
+            <h6>Research Interests</h6>
             <div className='col-4'>
-                <h6>Researcher Interest 1</h6>
                 <InputField name="researchInterest1" label="Research Interest 1" />
             </div>
 
             <div className='col-4'>
-                <h6>Researcher Interest 2</h6>
                 <InputField name="researchInterest2" label="Research Interest 2"/>
             </div>
 
             <div className='col-4'>
-                <h6>Researcher Interest 3</h6>
                 <InputField name="researchInterest3" label="Research Interest 3" />
             </div>
 

@@ -24,7 +24,7 @@ export interface Researcher {
      * @type {number}
      * @memberof Researcher
      */
-    id?: number;
+    id: number;
     /**
      * The researcher's user ID.
      * @type {string}
@@ -48,13 +48,7 @@ export interface Researcher {
      * @type {string}
      * @memberof Researcher
      */
-    avatarUrl?: string;
-    /**
-     * The researcher's avatar.
-     * @type {Blob}
-     * @memberof Researcher
-     */
-    avatar?: Blob;
+    readonly avatarUrl?: string;
     /**
      * The researcher's institution.
      * @type {string}
@@ -104,6 +98,7 @@ export interface Researcher {
  */
 export function instanceOfResearcher(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
 
     return isInstance;
 }
@@ -118,12 +113,11 @@ export function ResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'],
         'userId': !exists(json, 'user_id') ? undefined : json['user_id'],
         'firstName': !exists(json, 'first_name') ? undefined : json['first_name'],
         'lastName': !exists(json, 'last_name') ? undefined : json['last_name'],
         'avatarUrl': !exists(json, 'avatar_url') ? undefined : json['avatar_url'],
-        'avatar': !exists(json, 'avatar') ? undefined : json['avatar'],
         'institution': !exists(json, 'institution') ? undefined : json['institution'],
         'bio': !exists(json, 'bio') ? undefined : json['bio'],
         'labPage': !exists(json, 'lab_page') ? undefined : json['lab_page'],
@@ -147,8 +141,6 @@ export function ResearcherToJSON(value?: Researcher | null): any {
         'user_id': value.userId,
         'first_name': value.firstName,
         'last_name': value.lastName,
-        'avatar_url': value.avatarUrl,
-        'avatar': value.avatar,
         'institution': value.institution,
         'bio': value.bio,
         'lab_page': value.labPage,

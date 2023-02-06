@@ -41,6 +41,7 @@ import type {
   UpdateAnalysis,
   UpdateBanner,
   UpdatePreferences,
+  UpdateResearcher,
   UpdateReward,
   UpdateStage,
   UpdateStudy,
@@ -99,6 +100,8 @@ import {
     UpdateBannerToJSON,
     UpdatePreferencesFromJSON,
     UpdatePreferencesToJSON,
+    UpdateResearcherFromJSON,
+    UpdateResearcherToJSON,
     UpdateRewardFromJSON,
     UpdateRewardToJSON,
     UpdateStageFromJSON,
@@ -208,19 +211,12 @@ export interface UpdatePreferencesRequest {
 
 export interface UpdateResearcherRequest {
     id: number;
-    id2?: number;
-    userId?: string;
-    firstName?: string;
-    lastName?: string;
-    avatarUrl?: string;
+    updateResearcher: UpdateResearcher;
+}
+
+export interface UpdateResearcherAvatarRequest {
+    id: number;
     avatar?: Blob;
-    institution?: string;
-    bio?: string;
-    labPage?: string;
-    researchInterest1?: string;
-    researchInterest2?: string;
-    researchInterest3?: string;
-    inviteCode?: string;
 }
 
 export interface UpdateRewardRequest {
@@ -1202,6 +1198,43 @@ export class DefaultApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateResearcher.');
         }
 
+        if (requestParameters.updateResearcher === null || requestParameters.updateResearcher === undefined) {
+            throw new runtime.RequiredError('updateResearcher','Required parameter requestParameters.updateResearcher was null or undefined when calling updateResearcher.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/researchers/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateResearcherToJSON(requestParameters.updateResearcher),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResearcherFromJSON(jsonValue));
+    }
+
+    /**
+     * Update a researcher
+     */
+    async updateResearcher(requestParameters: UpdateResearcherRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Researcher> {
+        const response = await this.updateResearcherRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update a researcher\'s avatar
+     */
+    async updateResearcherAvatarRaw(requestParameters: UpdateResearcherAvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateResearcherAvatar.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -1222,75 +1255,26 @@ export class DefaultApi extends runtime.BaseAPI {
             formParams = new URLSearchParams();
         }
 
-        if (requestParameters.id2 !== undefined) {
-            formParams.append('id', requestParameters.id2 as any);
-        }
-
-        if (requestParameters.userId !== undefined) {
-            formParams.append('user_id', requestParameters.userId as any);
-        }
-
-        if (requestParameters.firstName !== undefined) {
-            formParams.append('first_name', requestParameters.firstName as any);
-        }
-
-        if (requestParameters.lastName !== undefined) {
-            formParams.append('last_name', requestParameters.lastName as any);
-        }
-
-        if (requestParameters.avatarUrl !== undefined) {
-            formParams.append('avatar_url', requestParameters.avatarUrl as any);
-        }
-
         if (requestParameters.avatar !== undefined) {
             formParams.append('avatar', requestParameters.avatar as any);
         }
 
-        if (requestParameters.institution !== undefined) {
-            formParams.append('institution', requestParameters.institution as any);
-        }
-
-        if (requestParameters.bio !== undefined) {
-            formParams.append('bio', requestParameters.bio as any);
-        }
-
-        if (requestParameters.labPage !== undefined) {
-            formParams.append('lab_page', requestParameters.labPage as any);
-        }
-
-        if (requestParameters.researchInterest1 !== undefined) {
-            formParams.append('research_interest_1', requestParameters.researchInterest1 as any);
-        }
-
-        if (requestParameters.researchInterest2 !== undefined) {
-            formParams.append('research_interest_2', requestParameters.researchInterest2 as any);
-        }
-
-        if (requestParameters.researchInterest3 !== undefined) {
-            formParams.append('research_interest_3', requestParameters.researchInterest3 as any);
-        }
-
-        if (requestParameters.inviteCode !== undefined) {
-            formParams.append('invite_code', requestParameters.inviteCode as any);
-        }
-
         const response = await this.request({
-            path: `/researchers/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'PUT',
+            path: `/researchers/{id}/avatar_upload`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: formParams,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResearcherFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
-     * Update a researcher
+     * Update a researcher\'s avatar
      */
-    async updateResearcher(requestParameters: UpdateResearcherRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Researcher> {
-        const response = await this.updateResearcherRaw(requestParameters, initOverrides);
-        return await response.value();
+    async updateResearcherAvatar(requestParameters: UpdateResearcherAvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.updateResearcherAvatarRaw(requestParameters, initOverrides);
     }
 
     /**

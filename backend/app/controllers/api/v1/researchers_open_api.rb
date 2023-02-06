@@ -5,7 +5,16 @@ class Api::V1::ResearchersOpenApi
 
   openapi_component do
     schema :ResearcherUpdate
-    schema :Researcher
+    schema :Researcher do
+      key :required, [:id]
+    end
+    schema :AvatarUpload do
+      property :avatar do
+        key :type, :string
+        key :format, 'binary'
+        key :description, 'The researcher\'s avatar.'
+      end
+    end
     schema :ResearchersList do
       property :data do
         key :type, :array
@@ -38,11 +47,7 @@ class Api::V1::ResearchersOpenApi
     property :avatar_url do
       key :type, :string
       key :description, 'The researcher\'s avatar URL.'
-    end
-    property :avatar do
-      key :type, :string
-      key :format, 'binary'
-      key :description, 'The researcher\'s avatar.'
+      key :readOnly, true
     end
     property :institution do
       key :type, :string
@@ -75,35 +80,6 @@ class Api::V1::ResearchersOpenApi
   end
 
   openapi_path '/researchers' do
-    # operation :post do
-    #   key :summary, 'Add a researcher'
-    #   key :operationId, 'createResearcher'
-    #   request_body do
-    #     key :description, 'The researcher data'
-    #     key :required, true
-    #     content 'application/json' do
-    #       schema do
-    #         key :type, :object
-    #         key :title, :addResearcher
-    #         property :researcher do
-    #           key :required, true
-    #           key :$ref, :Researcher
-    #         end
-    #       end
-    #     end
-    #   end
-    #   response 201 do
-    #     key :description, 'Created.  Returns the created researcher.'
-    #     content 'application/json' do
-    #       schema { key :$ref, :Researcher }
-    #     end
-    #   end
-    #   extend Api::V1::OpenApiResponses::AuthenticationError
-    #   extend Api::V1::OpenApiResponses::ForbiddenError
-    #   extend Api::V1::OpenApiResponses::UnprocessableEntityError
-    #   extend Api::V1::OpenApiResponses::ServerError
-    # end
-
     operation :get do
       key :summary, 'Retrieve list of all researchers'
       key :description, 'Returns listing of all researchers'
@@ -120,6 +96,34 @@ class Api::V1::ResearchersOpenApi
     end
   end
 
+  openapi_path '/researchers/{id}/avatar_upload' do
+    operation :post do
+      key :summary, "Update a researcher's avatar"
+      key :operationId, 'updateResearcherAvatar'
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'ID of the researcher to update.'
+        key :required, true
+        key :schema, { type: :integer }
+      end
+      request_body do
+        key :description, 'The researcher avatar'
+        key :required, true
+        content 'multipart/form-data' do
+          schema { key :$ref, :AvatarUpload }
+        end
+      end
+      response 200 do
+        key :description, 'Success.'
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+  end
+
   openapi_path '/researchers/{id}' do
     operation :put do
       key :summary, 'Update a researcher'
@@ -127,16 +131,21 @@ class Api::V1::ResearchersOpenApi
       parameter do
         key :name, :id
         key :in, :path
-        key :description, 'ID of the researcher to delete.'
+        key :description, 'ID of the researcher to update.'
         key :required, true
         key :schema, { type: :integer }
       end
       request_body do
         key :description, 'The researcher data'
         key :required, true
-        content 'multipart/form-data' do
+        content 'application/json' do
+          # schema { key :$ref, :ResearcherUpdate }
           schema do
-            key :$ref, :Researcher
+            key :type, :object
+            key :title, :updateResearcher
+            property :researcher do
+              key :$ref, :ResearcherUpdate
+            end
           end
         end
       end

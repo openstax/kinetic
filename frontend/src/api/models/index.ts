@@ -40,6 +40,7 @@ export * from './StudyUpdate';
 export * from './UpdateAnalysis';
 export * from './UpdateBanner';
 export * from './UpdatePreferences';
+export * from './UpdateResearcher';
 export * from './UpdateReward';
 export * from './UpdateStage';
 export * from './UpdateStudy';

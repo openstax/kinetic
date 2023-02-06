@@ -5,7 +5,7 @@ FactoryBot.define do
     user_id { SecureRandom.uuid }
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    bio { Faker::Lorem.sentences(number: 2) }
+    bio { Faker::Hipster.sentences }
     institution { Faker::University.name }
     lab_page { Faker::TvShows::SiliconValley.url }
     research_interest_1 { Faker::Hobby.activity }

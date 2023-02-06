@@ -44,7 +44,9 @@ Rails.application.routes.draw do
 
       resources :preferences, only: [:index, :create]
 
-      resources :researchers
+      resources :researchers do
+        post 'avatar_upload'
+      end
 
       scope :diagnostics, controller: :diagnostics do
         get :exception

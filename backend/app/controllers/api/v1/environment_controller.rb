@@ -2,6 +2,7 @@
 
 class Api::V1::EnvironmentController < Api::V1::BaseController
   def index
+    researcher = Researcher.find_by(user_id: current_user_uuid)
     render status: :ok, json: Api::V1::Bindings::Environment.new(
       user: {
         user_id: current_user_uuid,
@@ -10,7 +11,7 @@ class Api::V1::EnvironmentController < Api::V1::BaseController
       },
       # TODO Doesn't work with no user
       # researcher: Api::V1::Bindings::Researcher.create_from_model(Researcher.find_by(user_id: current_user_uuid)),
-      researcher: Researcher.find_by(user_id: current_user_uuid),
+      researcher: researcher ? Api::V1::Bindings::Researcher.create_from_model(researcher) : nil,
       accounts_env_name: Rails.application.secrets.accounts[:env_name],
       homepage_url: Rails.application.secrets.homepage_url,
       banners_schedule: Banner.active.to_a || [],

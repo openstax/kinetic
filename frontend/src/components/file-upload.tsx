@@ -20,7 +20,7 @@ const FileUploader: FC<FileUploadProps> = ({
     text = 'Upload Image',
 }) => {
     const hiddenFileInput = React.useRef<HTMLInputElement>(null);
-    const [file, setFile] = useState<string | Blob>('')
+    const [file, setFile] = useState<Blob>()
     const [preview, setPreview] = useState('');
     const [dragActive, setDragActive] = React.useState(false);
 

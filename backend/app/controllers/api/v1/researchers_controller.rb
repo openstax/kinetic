@@ -20,17 +20,21 @@ class Api::V1::ResearchersController < Api::V1::Researcher::BaseController
     render json: response_binding, status: :ok
   end
 
-  # PATCH/PUT /researchers/1
-  def update
-    # TODO @nathan this blows up on:
-    #  NoMethodError (undefined method `build_from_hash' for File:Class):
-    inbound_binding, error = bind(params, Api::V1::Bindings::ResearcherUpdate)
-    render(json: error, status: error.status_code) and return if error
+  # POST /researchers/1/avatar_upload
+  def avatar_upload
+    @researcher = Researcher.find(params[:researcher_id])
     if params[:avatar]
       @researcher.avatar.attach(params[:avatar])
     end
+    head :ok
+  end
 
-    # @researcher.update!(inbound_binding.to_hash)
+  # PATCH/PUT /researchers/1
+  def update
+    inbound_binding, error = bind(params.require(:researcher), Api::V1::Bindings::ResearcherUpdate)
+    render(json: error, status: error.status_code) and return if error
+
+    @researcher.update!(inbound_binding.to_hash)
     response_binding = Api::V1::Bindings::Researcher.create_from_model(@researcher)
     render json: response_binding, status: :ok
   end

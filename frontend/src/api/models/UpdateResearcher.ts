@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { Researcher } from './Researcher';
+import type { ResearcherUpdate } from './ResearcherUpdate';
 import {
-    ResearcherFromJSON,
-    ResearcherFromJSONTyped,
-    ResearcherToJSON,
-} from './Researcher';
+    ResearcherUpdateFromJSON,
+    ResearcherUpdateFromJSONTyped,
+    ResearcherUpdateToJSON,
+} from './ResearcherUpdate';
 
 /**
  * 
@@ -28,10 +28,10 @@ import {
 export interface UpdateResearcher {
     /**
      * 
-     * @type {Researcher}
+     * @type {ResearcherUpdate}
      * @memberof UpdateResearcher
      */
-    researcher?: Researcher;
+    researcher?: ResearcherUpdate;
 }
 
 /**
@@ -53,7 +53,7 @@ export function UpdateResearcherFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'researcher': !exists(json, 'researcher') ? undefined : ResearcherFromJSON(json['researcher']),
+        'researcher': !exists(json, 'researcher') ? undefined : ResearcherUpdateFromJSON(json['researcher']),
     };
 }
 
@@ -66,7 +66,7 @@ export function UpdateResearcherToJSON(value?: UpdateResearcher | null): any {
     }
     return {
         
-        'researcher': ResearcherToJSON(value.researcher),
+        'researcher': ResearcherUpdateToJSON(value.researcher),
     };
 }
 
