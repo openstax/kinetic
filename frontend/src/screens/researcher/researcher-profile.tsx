@@ -4,7 +4,7 @@ import { errorToString, useApi, useCurrentResearcher, useEnvironment } from '@li
 import { colors } from '../../theme';
 import { Link } from 'react-router-dom';
 import { Researcher } from '@api';
-import { Button, Form, FormCancelButton, FormSaveButton } from '@nathanstitt/sundry';
+import { Button, Form, FormCancelButton, FormSaveButton, Tooltip } from '@nathanstitt/sundry';
 import * as Yup from 'yup';
 import CustomerSupportImage from '../../components/customer-support-image';
 import RiceLogoURL from '../../images/rice-logo-darktext.png';
@@ -15,7 +15,7 @@ import FileUploader from '../../components/file-upload';
 import { Modal } from '../../components/modal';
 
 export const ResearcherValidationSchema = Yup.object().shape({
-    firstName: Yup.string().required('Required'),
+    firstName: Yup.string().required('Required').max(50),
     lastName: Yup.string().required('Required'),
     institution: Yup.string().required('Required'),
     researchInterest1: Yup.string(),
@@ -35,7 +35,7 @@ export default function ResearcherProfile() {
     return (
         <PageWrapper>
             <TopNavBar />
-            <Content className='container-lg py-5' gap='xlarge'>
+            <Box className='container-lg py-5' gap='xlarge'>
                 <Box className='col-9' direction='column'>
                     <Box justify='between' height='40px'>
                         <h3>My Account</h3>
@@ -49,14 +49,14 @@ export default function ResearcherProfile() {
                         <Box direction='column' gap='xlarge'>
                             <ProfileSection className='researcher-profile'>
                                 <Box gap='xlarge' className='container-fluid'>
-                                    <Avatar researcher={researcher}/>
+                                    <Avatar />
                                     <ProfileForm researcher={researcher} className='col-9'/>
                                 </Box>
                             </ProfileSection>
 
                             <ProfileSection direction='column' gap='xxlarge'>
                                 <IRB/>
-                                <TermsOfUse/>
+                                {/*<TermsOfUse/>*/}
                             </ProfileSection>
                         </Box>
                     </Box>
@@ -74,7 +74,7 @@ export default function ResearcherProfile() {
                         </Box>
                     </Resources>
                 </Box>
-            </Content>
+            </Box>
 
             <Footer className='mt-auto' />
         </PageWrapper>
@@ -85,45 +85,46 @@ const IRB = () => {
     return (
         <Box justify='between'>
             <h6>IRB Detail</h6>
-            <Box css={{ border: '1px solid grey', padding: 10 }} className='small' direction='column' gap>
-                <Box gap='large'>
-                    <img alt="Rice University logo" height="50" src={RiceLogoURL}/>
-                    <Box direction='column'>
+            <Box css={{ border: '1px solid grey', padding: 15, width: 350 }} className='small' direction='column' gap>
+                <Box justify='between'>
+                    <img alt="Rice University logo" css={{ width: 100 }} src={RiceLogoURL} className='col-6 img-fluid'/>
+                    <Box direction='column' className='col-6'>
                         <span>IRB Number: DSA5CSA4</span>
                         <span css={{ color: colors.grayText }}>Expires on 12/31/2025</span>
                     </Box>
                 </Box>
                 <Box direction='column'>
                     <Box justify='between'>
-                        <span>Principal Investigator:</span>
-                        <span>First Name Last Name</span>
+                        <span className='col-6'>Principal Investigator:</span>
+                        <span className='col-6'>Richard G Baraniuk</span>
                     </Box>
                     <Box justify='between'>
-                        <div>Institution Name:</div>
-                        <div>Rice University</div>
+                        <div className='col-6'>Institution Name:</div>
+                        <div className='col-6'>Rice University</div>
                     </Box>
                 </Box>
             </Box>
-            <Link to='/'>
+            <a href='https://drive.google.com/file/d/1x1M8EcrOOu5U1ZQAtVmhvH3DkTlhtc8I/view' target='_blank'>
                 <span>Check Details</span>
                 <Icon icon="right" />
-            </Link>
+            </a>
         </Box>
     )
 }
 
-const TermsOfUse = () => {
-    return (
-        <Box justify='between'>
-            <h6>Terms of Use</h6>
-            <p>Guidelines for Kinetic use</p>
-            <Link to='/'>
-                <span>Check Details</span>
-                <Icon icon="right" />
-            </Link>
-        </Box>
-    )
-}
+// Will be used in the future
+// const TermsOfUse = () => {
+//     return (
+//         <Box justify='between'>
+//             <h6>Terms of Use</h6>
+//             <p>Guidelines for Kinetic use</p>
+//             <Link to='/'>
+//                 <span>Check Details</span>
+//                 <Icon icon="right" />
+//             </Link>
+//         </Box>
+//     )
+// }
 
 const AvatarImage = styled.img({
     borderRadius: '50%',
@@ -132,8 +133,12 @@ const AvatarImage = styled.img({
     width: 150,
 })
 
-const Avatar: React.FC<{researcher: Researcher}> = ({ researcher }) => {
+const Avatar: React.FC = () => {
     const api = useApi()
+    const [researcher, setResearcher] = useState(useCurrentResearcher())
+    if (!researcher) {
+        return <></>
+    }
     const imageURL = researcher.avatarUrl || DefaultAvatar;
     const [avatar, setAvatar] = useState<Blob>()
     const [isShowingModal, setShowingModal] = useState(false)
@@ -143,25 +148,29 @@ const Avatar: React.FC<{researcher: Researcher}> = ({ researcher }) => {
         if (!researcher.id) {
             return;
         }
-        await api.updateResearcherAvatar({
+        const r = await api.updateResearcherAvatar({
             id: researcher.id,
             avatar,
         })
+        setResearcher(r)
         onHide()
     }
 
-    const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const file = e.target.files[0]
-            setAvatar(file)
-        }
+    const updateImage = (file: File) => {
+        setAvatar(file)
     }
 
     return (
         <Box className='col-3' justify='start' direction='column'>
             <Box onClick={() => setShowingModal(true)} direction='column' align='center' gap='large' css={{ cursor: 'pointer' }} >
                 <AvatarImage alt="User Avatar" src={imageURL}/>
-                <a className='links'>Upload Image</a>
+
+                <Box align='baseline' gap>
+                    <a className='links'>Upload Image</a>
+                    <Tooltip tooltip='Upload a picture that best introduces you to learners'>
+                        <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={14}/>
+                    </Tooltip>
+                </Box>
             </Box>
 
             <Modal onHide={onHide} center show={isShowingModal} small data-test-id="update-avatar-modal" title='Update Avatar'>
@@ -213,6 +222,11 @@ const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ re
         setEditing(false)
     }
 
+    const validate = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const max = e.target.maxLength;
+
+    }
+
     return (
         <Form
             onSubmit={saveResearcher}
@@ -229,8 +243,9 @@ const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ re
 
             <div className='col-6'>
                 <h6>First Name</h6>
-                <InputField name="firstName" label="First Name"/>
+                <InputField name="firstName" label="First Name" maxLength={50} onChange={validate}/>
             </div>
+
             <div className='col-6'>
                 <h6>Last Name</h6>
                 <InputField name="lastName" label="Last Name"/>
@@ -266,7 +281,13 @@ const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ re
             </div>
 
             <div>
-                <h6>Bio</h6>
+                <Box align='baseline' gap>
+                    <h6 className='field-title'>Bio</h6>
+                    <Tooltip tooltip='Your biography'>
+                        <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={16}/>
+                    </Tooltip>
+                </Box>
+
                 <InputField name="bio" type="textarea" label="Bio" />
             </div>
 
@@ -295,10 +316,6 @@ const PageWrapper = styled(Box)({
     backgroundColor: colors.pageBackground,
     flexDirection: 'column',
     height: '100vh',
-})
-
-const Content = styled(Box)({
-
 })
 
 const ProfileSection = styled(Box)({

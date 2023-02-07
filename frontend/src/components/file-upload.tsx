@@ -8,19 +8,16 @@ export interface FileUploadProps {
     name: string
     accept: string
     text?: string
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-    // onSave: () => void
+    onChange: (file: File) => void
 }
 
 const FileUploader: FC<FileUploadProps> = ({
     name,
     accept,
     onChange,
-    // onSave,
     text = 'Upload Image',
 }) => {
     const hiddenFileInput = React.useRef<HTMLInputElement>(null);
-    const [file, setFile] = useState<Blob>()
     const [preview, setPreview] = useState('');
     const [dragActive, setDragActive] = React.useState(false);
 
@@ -44,17 +41,16 @@ const FileUploader: FC<FileUploadProps> = ({
         setDragActive(false);
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             const f = e.dataTransfer.files[0]
-            setFile(f)
             setPreview(URL.createObjectURL(f))
+            onChange(f)
         }
     };
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        onChange(event)
-        if (event.target.files && event.target.files.length > 0) {
-            const f = event.target.files[0]
-            setFile(f)
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const f = e.target.files[0]
             setPreview(URL.createObjectURL(f))
+            onChange(f)
         }
     };
     return (

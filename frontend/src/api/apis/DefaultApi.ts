@@ -1230,7 +1230,7 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Update a researcher\'s avatar
      */
-    async updateResearcherAvatarRaw(requestParameters: UpdateResearcherAvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async updateResearcherAvatarRaw(requestParameters: UpdateResearcherAvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Researcher>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateResearcherAvatar.');
         }
@@ -1267,14 +1267,15 @@ export class DefaultApi extends runtime.BaseAPI {
             body: formParams,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResearcherFromJSON(jsonValue));
     }
 
     /**
      * Update a researcher\'s avatar
      */
-    async updateResearcherAvatar(requestParameters: UpdateResearcherAvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.updateResearcherAvatarRaw(requestParameters, initOverrides);
+    async updateResearcherAvatar(requestParameters: UpdateResearcherAvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Researcher> {
+        const response = await this.updateResearcherAvatarRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

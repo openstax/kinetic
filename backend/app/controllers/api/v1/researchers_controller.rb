@@ -25,8 +25,9 @@ class Api::V1::ResearchersController < Api::V1::Researcher::BaseController
     @researcher = Researcher.find(params[:researcher_id])
     if params[:avatar]
       @researcher.avatar.attach(params[:avatar])
+      @researcher.reload
     end
-    head :ok
+    render json: Api::V1::Bindings::Researcher.create_from_model(@researcher), status: :ok
   end
 
   # PATCH/PUT /researchers/1

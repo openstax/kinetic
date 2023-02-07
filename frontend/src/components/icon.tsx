@@ -36,6 +36,7 @@ import list from '@iconify-icons/bi/list'
 import multiStage from '@iconify-icons/bi/stack'
 import chatLeft from '@iconify-icons/bi/chat-left-fill'
 import cloudUpload from '@iconify-icons/bi/cloud-upload'
+import questionCircleFill from '@iconify-icons/bi/question-circle-fill'
 
 
 const SUNDRY_PACKAGED_ICONS = {
@@ -74,6 +75,7 @@ export const ICONS = {
     multiStage,
     chatLeft,
     cloudUpload,
+    questionCircleFill,
 }
 
 export type IconKey = keyof typeof ICONS

@@ -114,8 +114,11 @@ class Api::V1::ResearchersOpenApi
           schema { key :$ref, :AvatarUpload }
         end
       end
-      response 200 do
-        key :description, 'Success.'
+      response 201 do
+        key :description, 'Updated. Returns the researcher.'
+        content 'application/json' do
+          schema { key :$ref, :Researcher }
+        end
       end
       extend Api::V1::OpenApiResponses::AuthenticationError
       extend Api::V1::OpenApiResponses::ForbiddenError
