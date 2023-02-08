@@ -20,7 +20,7 @@ export const ResearcherValidationSchema = Yup.object().shape({
     researchInterest1: Yup.string().max(25),
     researchInterest2: Yup.string().max(25),
     researchInterest3: Yup.string().max(25),
-    labPage: Yup.string().url(),
+    labPage: Yup.string().required('Required').url(),
     bio: Yup.string().required('Required').max(250),
 })
 
@@ -178,7 +178,7 @@ const Avatar: React.FC = () => {
                 <AvatarImage alt="User Avatar" src={imageURL}/>
 
                 <Box align='baseline' gap>
-                    <a className='links'>Upload Image</a>
+                    <a className='links'>{researcher.avatarUrl ? 'Change Image' : 'Upload Image'}</a>
                     <Tooltip tooltip='Upload a picture that best introduces you to learners'>
                         <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={14}/>
                     </Tooltip>
@@ -201,7 +201,7 @@ const Avatar: React.FC = () => {
                         defaultValues={researcher}
                     >
                         <Box direction='column' align='center' justify='center' gap>
-                            <FileUploader name='avatar' onChange={updateImage} accept='image/*' />
+                            <FileUploader name='avatar' onChange={updateImage} accept='image/jpg, image/png' />
                         </Box>
                     </Form>
                 </Modal.Body>
@@ -335,6 +335,11 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
             <div className='mt-1'>
                 <h6>Lab Page Link</h6>
                 <InputField name="labPage" />
+                <div className="invalid-feedback">
+                    <Icon icon="warning" color='red' height={18}></Icon>
+                    &nbsp;
+                    Please enter a valid URL
+                </div>
             </div>
 
             <div className='mb-1 mt-1'>
