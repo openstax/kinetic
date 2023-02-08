@@ -28,8 +28,11 @@ export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, controls, className
                             {controls}
                             <Menu alignEnd >
                                 {isMobile && <li><Link className="dropdown-item" to="/studies">Studies</Link></li>}
-                                <li><Link className="dropdown-item" to="/account">My Account</Link></li>
-                                {user.isResearcher && <li><Link className="dropdown-item" to="/researcher-profile">Profile</Link></li>}
+
+                                {user.isResearcher ?
+                                    <li><Link className="dropdown-item" to="/researcher-profile">Profile</Link></li> :
+                                    <li><Link className="dropdown-item" to="/account">My Account</Link></li>
+                                }
                                 <li><a className="dropdown-item" href={env.logoutURL} onClick={() => user.logout()}>Log out</a></li>
                             </Menu>
                         </Box>

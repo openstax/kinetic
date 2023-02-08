@@ -1,8 +1,7 @@
-import { Alert, Box, cx, Footer, Icon, InputField, ResourceLinks, SelectField, TopNavBar } from '@components';
+import { Box, cx, Footer, HelpLink, Icon, InputField, ResourceLinks, SelectField, TopNavBar } from '@components';
 import { React, styled, useState } from '@common';
-import { errorToString, useApi, useCurrentResearcher, useEnvironment } from '@lib';
+import { useApi, useCurrentResearcher, useEnvironment } from '@lib';
 import { colors } from '../../theme';
-import { Link } from 'react-router-dom';
 import { Researcher } from '@api';
 import { Button, Form, FormCancelButton, FormSaveButton, Tooltip } from '@nathanstitt/sundry';
 import * as Yup from 'yup';
@@ -16,18 +15,31 @@ import { Modal } from '../../components/modal';
 
 export const ResearcherValidationSchema = Yup.object().shape({
     firstName: Yup.string().required('Required').max(50),
-    lastName: Yup.string().required('Required'),
+    lastName: Yup.string().required('Required').max(50),
     institution: Yup.string().required('Required'),
-    researchInterest1: Yup.string(),
-    researchInterest2: Yup.string(),
-    researchInterest3: Yup.string(),
+    researchInterest1: Yup.string().max(25),
+    researchInterest2: Yup.string().max(25),
+    researchInterest3: Yup.string().max(25),
     labPage: Yup.string().url(),
-    bio: Yup.string().required('Required'),
+    bio: Yup.string().required('Required').max(250),
 })
+
+const institutionList = [
+    { value: 'Arizona State University', label: 'Arizona State University' },
+    { value: 'Georgia State University', label: 'Georgia State University' },
+    { value: 'Mississippi State University', label: 'Mississippi State University' },
+    { value: 'Rice University', label: 'Rice University' },
+    { value: 'University of California, Santa Barbara', label: 'University of California, Santa Barbara' },
+    { value: 'University of Florida', label: 'University of Florida' },
+    { value: 'University of Massachusetts, Amherst', label: 'University of Massachusetts, Amherst' },
+    { value: 'University of North Dakota', label: 'University of North Dakota' },
+    { value: 'University of Pennsylvania', label: 'University of Pennsylvania' },
+];
 
 export default function ResearcherProfile() {
     const env = useEnvironment()
     const researcher = useCurrentResearcher()
+
     if (!researcher) {
         return <></>
     }
@@ -39,22 +51,23 @@ export default function ResearcherProfile() {
                 <Box className='col-9' direction='column'>
                     <Box justify='between' height='40px'>
                         <h3>My Account</h3>
-                        <Link to={`${env.accounts_url}`}>
+                        <a href={`${env.accounts_url}`} target='_blank'>
                             <span>Update Email & Password</span>
                             <Icon icon="right" />
-                        </Link>
+                        </a>
                     </Box>
 
                     <Box justify='between' gap='xxlarge'>
                         <Box direction='column' gap='xlarge'>
                             <ProfileSection className='researcher-profile'>
-                                <Box gap='xlarge' className='container-fluid'>
+                                <Box gap='large' className='container-fluid'>
                                     <Avatar />
-                                    <ProfileForm researcher={researcher} className='col-9'/>
+                                    <ProfileForm className='col-10'/>
                                 </Box>
                             </ProfileSection>
 
-                            <ProfileSection direction='column' gap='xxlarge'>
+                            <ProfileSection direction='column' gap='large'>
+                                <h5 className='fw-bolder'>Research Agreements</h5>
                                 <IRB/>
                                 {/*<TermsOfUse/>*/}
                             </ProfileSection>
@@ -65,11 +78,10 @@ export default function ResearcherProfile() {
                 <Box className='col-3'>
                     <Resources direction='column' gap='small'>
                         <ResourceLinks />
-                        <Box gap='medium' className='mt-2' align='center'>
-                            <CustomerSupportImage height={100} />
+                        <Box gap='medium' className='mt-1' align='center'>
+                            <CustomerSupportImage height={120} />
                             <Box direction='column'>
-                                <h4>Need Help?</h4>
-                                <a target="_blank" href="https://openstax.org/contact">Contact us here</a>
+                                <HelpLink/>
                             </Box>
                         </Box>
                     </Resources>
@@ -85,15 +97,15 @@ const IRB = () => {
     return (
         <Box justify='between'>
             <h6>IRB Detail</h6>
-            <Box css={{ border: '1px solid grey', padding: 15, width: 350 }} className='small' direction='column' gap>
+            <Box css={{ border: '1px solid grey', padding: 15, width: 400 }} direction='column' gap>
                 <Box justify='between'>
-                    <img alt="Rice University logo" css={{ width: 100 }} src={RiceLogoURL} className='col-6 img-fluid'/>
-                    <Box direction='column' className='col-6'>
-                        <span>IRB Number: DSA5CSA4</span>
-                        <span css={{ color: colors.grayText }}>Expires on 12/31/2025</span>
+                    <img alt="Rice University logo" css={{ width: 120, height: 50 }} src={RiceLogoURL} className='col-6'/>
+                    <Box direction='column' className='col-6 x-small'>
+                        <span>IRB Number: IRB-FY2022-19</span>
+                        <span css={{ color: colors.grayText }}>Expires on 09-01-2026</span>
                     </Box>
                 </Box>
-                <Box direction='column'>
+                <Box direction='column' className='small'>
                     <Box justify='between'>
                         <span className='col-6'>Principal Investigator:</span>
                         <span className='col-6'>Richard G Baraniuk</span>
@@ -129,8 +141,8 @@ const IRB = () => {
 const AvatarImage = styled.img({
     borderRadius: '50%',
     border: `1px solid ${colors.lightGray}`,
-    height: 150,
-    width: 150,
+    height: 125,
+    width: 125,
 })
 
 const Avatar: React.FC = () => {
@@ -161,7 +173,7 @@ const Avatar: React.FC = () => {
     }
 
     return (
-        <Box className='col-3' justify='start' direction='column'>
+        <Box className='col-2' justify='start' direction='column'>
             <Box onClick={() => setShowingModal(true)} direction='column' align='center' gap='large' css={{ cursor: 'pointer' }} >
                 <AvatarImage alt="User Avatar" src={imageURL}/>
 
@@ -173,7 +185,14 @@ const Avatar: React.FC = () => {
                 </Box>
             </Box>
 
-            <Modal onHide={onHide} center show={isShowingModal} small data-test-id="update-avatar-modal" title='Update Avatar'>
+            <Modal
+                onHide={onHide}
+                center
+                show={isShowingModal}
+                large
+                data-test-id="update-avatar-modal"
+                title='Update Avatar'
+            >
                 <Modal.Body>
                     <Form
                         onSubmit={saveResearcher}
@@ -191,40 +210,70 @@ const Avatar: React.FC = () => {
     )
 }
 
-const formStyles = {
-    backgroundColor: 'white',
-    minHeight: '3.5rem',
-    button: {
-        width: 130,
-        justifyContent: 'center',
-    },
-}
-
-const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ researcher, className }) => {
+const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
     const api = useApi()
-    const [error, setError] = useState('')
+    const [researcher, setResearcher] = useState(useCurrentResearcher())
+    if (!researcher) {
+        return <></>
+    }
     const [editing, setEditing] = useState(false)
+    const [counts, setCounts] = useState<{[key: string]: string}>({
+        ['firstName']: `${researcher.firstName?.length} / 50`,
+        ['lastName']: `${researcher.lastName?.length} / 50`,
+        ['researchInterest1']: `${researcher.researchInterest1?.length} / 25`,
+        ['researchInterest2']: `${researcher.researchInterest2?.length} / 25`,
+        ['researchInterest3']: `${researcher.researchInterest3?.length} / 25`,
+        ['bio']: `${researcher.bio?.length} / 250`,
+    })
     const [institution, setInstitution] = useState(researcher.institution)
+
+    const formStyles = {
+        button: {
+            width: 130,
+            justifyContent: 'center',
+        },
+        '.form-control': {
+            backgroundColor: editing ? 'transparent' : `${colors.lightGray} !important`,
+        },
+    }
 
     const saveResearcher = async (researcher: Researcher) => {
         try {
             if (!researcher.id) {
                 return;
             }
-            await api.updateResearcher({
+            const r = await api.updateResearcher({
                 id: researcher.id,
                 updateResearcher: { researcher },
             })
+            setResearcher(r)
         }
         catch (err) {
-            setError(await errorToString(err))
+            console.error(err) // eslint-disable-line no-console
         }
         setEditing(false)
     }
 
-    const validate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const validateCount = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const current = e.target.value.length;
         const max = e.target.maxLength;
+        const name = e.target.name;
+        setCounts({
+            ...counts,
+            [name]: `${current} / ${max}`,
+        })
+    }
 
+    const onCancel = () => {
+        setEditing(false)
+        setCounts({
+            ['firstName']: `${researcher.firstName?.length} / 50`,
+            ['lastName']: `${researcher.lastName?.length} / 50`,
+            ['researchInterest1']: `${researcher.researchInterest1?.length} / 25`,
+            ['researchInterest2']: `${researcher.researchInterest2?.length} / 25`,
+            ['researchInterest3']: `${researcher.researchInterest3?.length} / 25`,
+            ['bio']: `${researcher.bio?.length} / 250`,
+        })
     }
 
     return (
@@ -232,55 +281,63 @@ const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ re
             onSubmit={saveResearcher}
             className={cx(className, 'row')}
             css={formStyles}
-            showControls
             readOnly={!editing}
-            onCancel={() => setEditing(false)}
-            enableReinitialize
+            onCancel={onCancel}
             defaultValues={researcher}
             validationSchema={ResearcherValidationSchema}
         >
-            <Alert warning={true} onDismiss={() => setError('')} message={error} />
-
             <div className='col-6'>
                 <h6>First Name</h6>
-                <InputField name="firstName" label="First Name" maxLength={50} onChange={validate}/>
+                <InputField name="firstName" maxLength={50}  onChange={validateCount} />
+                <small>{counts['firstName']}</small>
             </div>
 
             <div className='col-6'>
                 <h6>Last Name</h6>
-                <InputField name="lastName" label="Last Name"/>
+                <InputField name="lastName" maxLength={50} onChange={validateCount}/>
+                <small>{counts['lastName']}</small>
             </div>
 
-            <div className='col-12'>
+            <div className='col-12 mt-1'>
                 <h6>Institution</h6>
                 <SelectField
-                    name="institution" id="institution" label="Institution"
+                    name="institution" id="institution"
+                    label='Institution'
+                    placeholder='Select Option'
                     onChange={(opt: string) => setInstitution(opt)}
                     value={institution}
-                    options={[{ value: 'Rice', label: 'Rice' }]}
+                    options={institutionList}
                     auto
                 />
             </div>
 
-            <h6>Research Interests</h6>
+            <Box align='baseline' gap>
+                <h6>Research Interests</h6>
+                <Tooltip tooltip='Examples: Multimedia Learning; AI in Education; Adaptive Tutoring Systems'>
+                    <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={16}/>
+                </Tooltip>
+            </Box>
             <div className='col-4'>
-                <InputField name="researchInterest1" label="Research Interest 1" />
+                <InputField name="researchInterest1" maxLength={25} onChange={validateCount}/>
+                <small>{counts['researchInterest1']}</small>
             </div>
 
             <div className='col-4'>
-                <InputField name="researchInterest2" label="Research Interest 2"/>
+                <InputField name="researchInterest2" maxLength={25} onChange={validateCount}/>
+                <small>{counts['researchInterest2']}</small>
             </div>
 
             <div className='col-4'>
-                <InputField name="researchInterest3" label="Research Interest 3" />
+                <InputField name="researchInterest3" maxLength={25} onChange={validateCount}/>
+                <small>{counts['researchInterest3']}</small>
             </div>
 
-            <div>
+            <div className='mt-1'>
                 <h6>Lab Page Link</h6>
-                <InputField name="labPage" label="Lab Page Link" />
+                <InputField name="labPage" />
             </div>
 
-            <div>
+            <div className='mb-1 mt-1'>
                 <Box align='baseline' gap>
                     <h6 className='field-title'>Bio</h6>
                     <Tooltip tooltip='Your biography'>
@@ -288,7 +345,8 @@ const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ re
                     </Tooltip>
                 </Box>
 
-                <InputField name="bio" type="textarea" label="Bio" />
+                <InputField name="bio" type="textarea" maxLength={250} onChange={validateCount}/>
+                <small>{counts['bio']}</small>
             </div>
 
             {!editing &&
@@ -303,7 +361,7 @@ const ProfileForm: React.FC<{researcher: Researcher, className: string}> = ({ re
                     <FormSaveButton primary>
                         Save
                     </FormSaveButton>
-                    <FormCancelButton onClick={() => setEditing(false)}>
+                    <FormCancelButton onClick={onCancel}>
                         Cancel
                     </FormCancelButton>
                 </Box>

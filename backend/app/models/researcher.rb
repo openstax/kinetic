@@ -10,4 +10,10 @@ class Researcher < ApplicationRecord
   has_one_attached :avatar
 
   validates :user_id, uuid: true, uniqueness: true
+
+  def avatar_url
+    if avatar.attached?
+      Rails.application.routes.url_helpers.url_for(avatar)
+    end
+  end
 end

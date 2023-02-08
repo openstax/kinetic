@@ -627,10 +627,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@nathanstitt/sundry@^0.0.44":
-  version "0.0.44"
-  resolved "https://registry.yarnpkg.com/@nathanstitt/sundry/-/sundry-0.0.44.tgz#28b4df69c29188183c4daa16f92c9b2648617747"
-  integrity sha512-6T2Ge69tYGbuimP7D1nNxygXxjaQavlyrDItcGspJJUnv342t7r7jhrHrkEOA74Vx0rJTTZnZTmRQBoFoLxYZw==
+"@nathanstitt/sundry@^0.0.49":
+  version "0.0.49"
+  resolved "https://registry.yarnpkg.com/@nathanstitt/sundry/-/sundry-0.0.49.tgz#24e55f069bc780c697bd8afac1ff4af7a1342cbb"
+  integrity sha512-ouOqU7hsM8x/lk420J6jaxGuWTkG/mjqOgW1+1wyI3SbnQUJg+zhQ+0vwfz+yNcwfCRckkt8/9pks3tlWp9vDA==
   dependencies:
     "@hookform/resolvers" "^2.9"
     "@iconify-icons/bi" "^1.2.15"
@@ -641,7 +641,6 @@
     "@restart/hooks" "^0.4.7"
     "@restart/ui" "^1.4"
     boxible "^1.7"
-    dayjs "^1.11"
     flatpickr "^4.6"
     graphql "^16.6"
     react-hook-form "^7.41"
@@ -1589,11 +1588,6 @@ data-urls@^3.0.1:
     abab "^2.0.6"
     whatwg-mimetype "^3.0.0"
     whatwg-url "^11.0.0"
-
-dayjs@^1.11:
-  version "1.11.7"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.7.tgz#4b296922642f70999544d1144a2c25730fce63e2"
-  integrity sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==
 
 debug@4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.2, debug@^4.3.4:
   version "4.3.4"

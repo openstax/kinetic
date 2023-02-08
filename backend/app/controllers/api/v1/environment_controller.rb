@@ -7,10 +7,8 @@ class Api::V1::EnvironmentController < Api::V1::BaseController
       user: {
         user_id: current_user_uuid,
         is_administrator: Admin.where(user_id: current_user_uuid).any?,
-        is_researcher: Researcher.where(user_id: current_user_uuid).any?
+        is_researcher: !!researcher
       },
-      # TODO Doesn't work with no user
-      # researcher: Api::V1::Bindings::Researcher.create_from_model(Researcher.find_by(user_id: current_user_uuid)),
       researcher: researcher ? Api::V1::Bindings::Researcher.create_from_model(researcher) : nil,
       accounts_env_name: Rails.application.secrets.accounts[:env_name],
       homepage_url: Rails.application.secrets.homepage_url,
