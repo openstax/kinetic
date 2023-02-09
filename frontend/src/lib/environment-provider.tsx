@@ -48,8 +48,8 @@ export const useCurrentResearcher = () => {
         return null;
     }
     // Default to OpenStax accounts first/last name if blank
-    researcher.firstName = researcher.firstName || userInfo?.first_name
-    researcher.lastName = researcher.lastName || userInfo?.last_name
+    researcher.firstName = !researcher.firstName ? userInfo?.first_name : researcher.firstName
+    researcher.lastName = !researcher.lastName ? userInfo?.last_name : researcher.lastName
     return researcher
 }
 
