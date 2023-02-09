@@ -43,9 +43,9 @@ class Development::UsersController < ApplicationController
     Researcher.all.each do |researcher|
       users[:researchers] ||= []
       users[:researchers].push({
-        user_id: researcher.user_id,
-        name: researcher.first_name + ' ' + researcher.last_name
-      })
+                                 user_id: researcher.user_id,
+                                 name: "#{researcher.first_name} #{researcher.last_name}"
+                               })
     end
 
     Admin.all.each do |admin|

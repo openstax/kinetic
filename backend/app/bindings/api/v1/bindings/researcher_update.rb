@@ -40,13 +40,13 @@ module Api::V1::Bindings
     attr_accessor :lab_page
 
     # The researcher's interest (1).
-    attr_accessor :research_interest_1
+    attr_accessor :research_interest1
 
     # The researcher's interest (2).
-    attr_accessor :research_interest_2
+    attr_accessor :research_interest2
 
     # The researcher's interest (3).
-    attr_accessor :research_interest_3
+    attr_accessor :research_interest3
 
     # The researcher's invite code.
     attr_accessor :invite_code
@@ -62,9 +62,9 @@ module Api::V1::Bindings
         :'institution' => :'institution',
         :'bio' => :'bio',
         :'lab_page' => :'lab_page',
-        :'research_interest_1' => :'research_interest_1',
-        :'research_interest_2' => :'research_interest_2',
-        :'research_interest_3' => :'research_interest_3',
+        :'research_interest1' => :'research_interest1',
+        :'research_interest2' => :'research_interest2',
+        :'research_interest3' => :'research_interest3',
         :'invite_code' => :'invite_code'
       }
     end
@@ -85,9 +85,9 @@ module Api::V1::Bindings
         :'institution' => :'String',
         :'bio' => :'String',
         :'lab_page' => :'String',
-        :'research_interest_1' => :'String',
-        :'research_interest_2' => :'String',
-        :'research_interest_3' => :'String',
+        :'research_interest1' => :'String',
+        :'research_interest2' => :'String',
+        :'research_interest3' => :'String',
         :'invite_code' => :'String'
       }
     end
@@ -145,16 +145,16 @@ module Api::V1::Bindings
         self.lab_page = attributes[:'lab_page']
       end
 
-      if attributes.key?(:'research_interest_1')
-        self.research_interest_1 = attributes[:'research_interest_1']
+      if attributes.key?(:'research_interest1')
+        self.research_interest1 = attributes[:'research_interest1']
       end
 
-      if attributes.key?(:'research_interest_2')
-        self.research_interest_2 = attributes[:'research_interest_2']
+      if attributes.key?(:'research_interest2')
+        self.research_interest2 = attributes[:'research_interest2']
       end
 
-      if attributes.key?(:'research_interest_3')
-        self.research_interest_3 = attributes[:'research_interest_3']
+      if attributes.key?(:'research_interest3')
+        self.research_interest3 = attributes[:'research_interest3']
       end
 
       if attributes.key?(:'invite_code')
@@ -188,9 +188,9 @@ module Api::V1::Bindings
           institution == o.institution &&
           bio == o.bio &&
           lab_page == o.lab_page &&
-          research_interest_1 == o.research_interest_1 &&
-          research_interest_2 == o.research_interest_2 &&
-          research_interest_3 == o.research_interest_3 &&
+          research_interest1 == o.research_interest1 &&
+          research_interest2 == o.research_interest2 &&
+          research_interest3 == o.research_interest3 &&
           invite_code == o.invite_code
     end
 
@@ -203,7 +203,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, user_id, first_name, last_name, avatar_url, institution, bio, lab_page, research_interest_1, research_interest_2, research_interest_3, invite_code].hash
+      [id, user_id, first_name, last_name, avatar_url, institution, bio, lab_page, research_interest1, research_interest2, research_interest3, invite_code].hash
     end
 
     # Builds the object from hash

@@ -17,7 +17,7 @@ Layout/EmptyLinesAroundBlockBody:
 
 Layout/LineLength:
   Max: 100
-  IgnoredPatterns: ['(\A|\s)#']
+  AllowedPatterns: ['(\A|\s)#']
 
 Metrics/AbcSize:
   Max: 50
@@ -26,7 +26,7 @@ Naming/PredicateName:
   Enabled: false
 
 Metrics/ClassLength:
-  Max: 300
+  Max: 500
   CountAsOne: ['heredoc']
 
 Metrics/MethodLength:
@@ -69,7 +69,7 @@ Style/RegexpLiteral:
   AllowInnerSlashes: true
 
 Style/SymbolProc:
-  IgnoredMethods:
+  AllowedMethods:
     - respond_to
     - define_method
 

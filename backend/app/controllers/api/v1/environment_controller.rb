@@ -7,7 +7,7 @@ class Api::V1::EnvironmentController < Api::V1::BaseController
       user: {
         user_id: current_user_uuid,
         is_administrator: Admin.where(user_id: current_user_uuid).any?,
-        is_researcher: !!researcher
+        is_researcher: !researcher.nil?
       },
       researcher: researcher ? Api::V1::Bindings::Researcher.create_from_model(researcher) : nil,
       accounts_env_name: Rails.application.secrets.accounts[:env_name],

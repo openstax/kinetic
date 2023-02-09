@@ -61,15 +61,15 @@ class Api::V1::ResearchersOpenApi
       key :type, :string
       key :description, 'The researcher\'s lab page.'
     end
-    property :research_interest_1 do
+    property :research_interest1 do
       key :type, :string
       key :description, 'The researcher\'s interest (1).'
     end
-    property :research_interest_2 do
+    property :research_interest2 do
       key :type, :string
       key :description, 'The researcher\'s interest (2).'
     end
-    property :research_interest_3 do
+    property :research_interest3 do
       key :type, :string
       key :description, 'The researcher\'s interest (3).'
     end

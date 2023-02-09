@@ -103,7 +103,7 @@ const FileUploader: FC<FileUploadProps> = ({
                 </Box>
             }
             {preview && <FormSaveButton disabled={!!error} primary>
-                Save
+                Save Changes
             </FormSaveButton>}
             {!!error && <span css={{ color: 'red' }}>{error}</span>}
             <input

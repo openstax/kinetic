@@ -120,9 +120,9 @@ export function ResearcherUpdateFromJSONTyped(json: any, ignoreDiscriminator: bo
         'institution': !exists(json, 'institution') ? undefined : json['institution'],
         'bio': !exists(json, 'bio') ? undefined : json['bio'],
         'labPage': !exists(json, 'lab_page') ? undefined : json['lab_page'],
-        'researchInterest1': !exists(json, 'research_interest_1') ? undefined : json['research_interest_1'],
-        'researchInterest2': !exists(json, 'research_interest_2') ? undefined : json['research_interest_2'],
-        'researchInterest3': !exists(json, 'research_interest_3') ? undefined : json['research_interest_3'],
+        'researchInterest1': !exists(json, 'research_interest1') ? undefined : json['research_interest1'],
+        'researchInterest2': !exists(json, 'research_interest2') ? undefined : json['research_interest2'],
+        'researchInterest3': !exists(json, 'research_interest3') ? undefined : json['research_interest3'],
         'inviteCode': !exists(json, 'invite_code') ? undefined : json['invite_code'],
     };
 }
@@ -143,9 +143,9 @@ export function ResearcherUpdateToJSON(value?: ResearcherUpdate | null): any {
         'institution': value.institution,
         'bio': value.bio,
         'lab_page': value.labPage,
-        'research_interest_1': value.researchInterest1,
-        'research_interest_2': value.researchInterest2,
-        'research_interest_3': value.researchInterest3,
+        'research_interest1': value.researchInterest1,
+        'research_interest2': value.researchInterest2,
+        'research_interest3': value.researchInterest3,
         'invite_code': value.inviteCode,
     };
 }
