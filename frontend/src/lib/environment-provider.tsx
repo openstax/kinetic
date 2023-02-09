@@ -41,17 +41,7 @@ export const useEnvironment = () => React.useContext(EnvironmentContext) as Envi
 
 export const useCurrentUser = () => useEnvironment()?.user || ANON_USER
 
-export const useCurrentResearcher = () => {
-    const userInfo = useUserInfo()
-    const researcher = useEnvironment()?.researcher
-    if (!researcher) {
-        return null;
-    }
-    // Default to OpenStax accounts first/last name if blank
-    researcher.firstName = !researcher.firstName ? userInfo?.first_name : researcher.firstName
-    researcher.lastName = !researcher.lastName ? userInfo?.last_name : researcher.lastName
-    return researcher
-}
+export const useCurrentResearcher = () => useEnvironment()?.researcher
 
 export const useUserInfo = () => {
     const env = useEnvironment()

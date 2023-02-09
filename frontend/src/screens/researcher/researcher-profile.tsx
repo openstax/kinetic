@@ -1,6 +1,6 @@
 import { Box, cx, Footer, HelpLink, Icon, InputField, ResourceLinks, SelectField, TopNavBar } from '@components';
 import { React, styled, useState } from '@common';
-import { useApi, useCurrentResearcher, useEnvironment } from '@lib';
+import { useApi, useCurrentResearcher, useEnvironment, useUserInfo } from '@lib';
 import { colors } from '../../theme';
 import { Researcher } from '@api';
 import { Button, Form, FormCancelButton, FormSaveButton, Select, Tooltip } from '@nathanstitt/sundry';
@@ -229,10 +229,17 @@ const CharacterCount: React.FC<{count: number, max: number}> = ({ count, max }) 
 
 const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
     const api = useApi()
+
     const [researcher, setResearcher] = useState(useCurrentResearcher())
+
     if (!researcher) {
         return <></>
     }
+    const userInfo = useUserInfo()
+    // Default to OpenStax accounts first/last name if blank
+    researcher.firstName = researcher.firstName || userInfo?.first_name
+    researcher.lastName = researcher.lastName || userInfo?.last_name
+
     const formCountDefaults = {
         ['firstName']: researcher.firstName?.length || 0,
         ['lastName']: researcher.lastName?.length || 0,
@@ -319,13 +326,14 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
 
             <div className='col-12 mt-1'>
                 <h6>Institution</h6>
-                <Select
+                <SelectField
                     name="institution"
                     isDisabled={!editing}
-                    id="institution"
+                    isClearable={true}
                     placeholder={editing ? 'Select Option' : ''}
-                    onChange={(opt: string) => setInstitution(opt)}
+                    onChange={(value: string) => setInstitution(value)}
                     value={institution}
+                    defaultValue={institution}
                     options={institutionList}
                 />
             </div>
@@ -339,7 +347,6 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
             <div className='col-4'>
                 <InputField
                     name="researchInterest1"
-                    maxLength={25}
                     onChange={validateCount}
                 />
                 <CharacterCount count={counts['researchInterest1']} max={25} />
@@ -348,7 +355,6 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
             <div className='col-4'>
                 <InputField
                     name="researchInterest2"
-                    maxLength={25}
                     onChange={validateCount}
                 />
                 <CharacterCount count={counts['researchInterest2']} max={25} />
@@ -357,7 +363,6 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
             <div className='col-4'>
                 <InputField
                     name="researchInterest3"
-                    maxLength={25}
                     onChange={validateCount}
                 />
                 <CharacterCount count={counts['researchInterest3']} max={25} />
@@ -384,7 +389,6 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
                 <InputField
                     name="bio"
                     type="textarea"
-                    maxLength={250}
                     placeholder='Please add a brief bio to share with learners'
                     onChange={validateCount}
                 />
