@@ -17,7 +17,7 @@ export const HelpLink = () => {
         <>
             <h4>Need Help?</h4>
             {isResearcher ?
-                <a target="_blank" href="mailto:kinetic@openstax.org">Contact us at kinetic@openstax.org</a> :
+                <span>Contact us at <a target="_blank" href="mailto:kinetic@openstax.org">kinetic@openstax.org</a></span> :
                 <a target="_blank" href="https://openstax.org/contact">Contact us here</a>
             }
         </>

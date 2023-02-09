@@ -31,7 +31,7 @@ const FileUploader: FC<FileUploadProps> = ({
             setError('')
             return false
         } else {
-            setError(`${f.type} is not supported. Please upload only jpeg or png`)
+            setError(`“Image format not supported, please upload only jpg or png files”`)
             return true
         }
     }

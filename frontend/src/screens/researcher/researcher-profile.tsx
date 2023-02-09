@@ -3,7 +3,7 @@ import { React, styled, useState } from '@common';
 import { useApi, useCurrentResearcher, useEnvironment } from '@lib';
 import { colors } from '../../theme';
 import { Researcher } from '@api';
-import { Button, Form, FormCancelButton, FormSaveButton, Tooltip } from '@nathanstitt/sundry';
+import { Button, Form, FormCancelButton, FormSaveButton, Select, Tooltip } from '@nathanstitt/sundry';
 import * as Yup from 'yup';
 import CustomerSupportImage from '../../components/customer-support-image';
 import RiceLogoURL from '../../images/rice-logo-darktext.png';
@@ -14,14 +14,14 @@ import FileUploader from '../../components/file-upload';
 import { Modal } from '../../components/modal';
 
 export const ResearcherValidationSchema = Yup.object().shape({
-    firstName: Yup.string().required('Required').max(50),
-    lastName: Yup.string().required('Required').max(50),
-    institution: Yup.string().required('Required'),
+    firstName: Yup.string().max(50),
+    lastName: Yup.string().max(50),
+    institution: Yup.string(),
     researchInterest1: Yup.string().max(25),
     researchInterest2: Yup.string().max(25),
     researchInterest3: Yup.string().max(25),
-    labPage: Yup.string().required('Required').url(),
-    bio: Yup.string().required('Required').max(250),
+    labPage: Yup.string().url(),
+    bio: Yup.string().max(250),
 })
 
 const institutionList = [
@@ -47,8 +47,8 @@ export default function ResearcherProfile() {
     return (
         <PageWrapper>
             <TopNavBar />
-            <Box className='container-lg py-5' gap='xlarge'>
-                <Box className='col-9' direction='column'>
+            <Box className='container-lg py-5' justify='between'>
+                <Box className='col-9' css={{ paddingRight: '2rem' }} direction='column'>
                     <Box justify='between' height='40px'>
                         <h3>My Account</h3>
                         <a href={`${env.accounts_url}`} target='_blank'>
@@ -75,11 +75,11 @@ export default function ResearcherProfile() {
                     </Box>
                 </Box>
 
-                <Box className='col-3'>
+                <Box className='col-3 pl-3'>
                     <Resources direction='column' gap='small'>
                         <ResourceLinks />
                         <Box gap='medium' className='mt-1' align='center'>
-                            <CustomerSupportImage height={120} />
+                            <CustomerSupportImage height={100} />
                             <Box direction='column'>
                                 <HelpLink/>
                             </Box>
@@ -95,31 +95,37 @@ export default function ResearcherProfile() {
 
 const IRB = () => {
     return (
-        <Box justify='between'>
-            <h6>IRB Detail</h6>
-            <Box css={{ border: '1px solid grey', padding: 15, width: 400 }} direction='column' gap>
-                <Box justify='between'>
-                    <img alt="Rice University logo" css={{ width: 120, height: 50 }} src={RiceLogoURL} className='col-6'/>
-                    <Box direction='column' className='col-6 x-small'>
-                        <span>IRB Number: IRB-FY2022-19</span>
-                        <span css={{ color: colors.grayText }}>Expires on 09-01-2026</span>
-                    </Box>
-                </Box>
-                <Box direction='column' className='small'>
+        <Box gap='large' className='container-fluid'>
+            <div className='col-2'>
+                <h6>IRB Detail</h6>
+            </div>
+            <Box className='col-8'>
+                <Box direction='column' gap css={{ border: '1px solid grey', padding: 15, width: 400 }}>
                     <Box justify='between'>
-                        <span className='col-6'>Principal Investigator:</span>
-                        <span className='col-6'>Richard G Baraniuk</span>
+                        <img alt="Rice University logo" css={{ width: 120, height: 50 }} src={RiceLogoURL} className='col-6'/>
+                        <Box direction='column' className='col-6 x-small'>
+                            <span>IRB Number: IRB-FY2022-19</span>
+                            <span css={{ color: colors.grayText }}>Expires on 09-01-2026</span>
+                        </Box>
                     </Box>
-                    <Box justify='between'>
-                        <div className='col-6'>Institution Name:</div>
-                        <div className='col-6'>Rice University</div>
+                    <Box direction='column' className='small'>
+                        <Box justify='between'>
+                            <span className='col-6'>Principal Investigator:</span>
+                            <span className='col-6'>Richard G Baraniuk</span>
+                        </Box>
+                        <Box justify='between'>
+                            <div className='col-6'>Institution Name:</div>
+                            <div className='col-6'>Rice University</div>
+                        </Box>
                     </Box>
                 </Box>
             </Box>
-            <a href='https://drive.google.com/file/d/1x1M8EcrOOu5U1ZQAtVmhvH3DkTlhtc8I/view' target='_blank'>
-                <span>Check Details</span>
-                <Icon icon="right" />
-            </a>
+            <Box className='col-2'>
+                <a href='https://drive.google.com/file/d/1x1M8EcrOOu5U1ZQAtVmhvH3DkTlhtc8I/view' target='_blank'>
+                    <span>Check Details</span>
+                    <Icon icon="right" />
+                </a>
+            </Box>
         </Box>
     )
 }
@@ -138,14 +144,6 @@ const IRB = () => {
 //     )
 // }
 
-const AvatarImage = styled.img({
-    borderRadius: '50%',
-    border: `1px solid ${colors.lightGray}`,
-    padding: 25,
-    height: 125,
-    width: 125,
-})
-
 const Avatar: React.FC = () => {
     const api = useApi()
     const [researcher, setResearcher] = useState(useCurrentResearcher())
@@ -153,6 +151,13 @@ const Avatar: React.FC = () => {
         return <></>
     }
     const imageURL = researcher.avatarUrl || DefaultAvatar;
+    const AvatarImage = styled.img({
+        borderRadius: '50%',
+        border: `1px solid ${colors.lightGray}`,
+        padding: researcher.avatarUrl ? 0 : 25,
+        height: 125,
+        width: 125,
+    })
     const [avatar, setAvatar] = useState<Blob>()
     const [isShowingModal, setShowingModal] = useState(false)
     const onHide = () => setShowingModal(false)
@@ -237,6 +242,9 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
         '.form-control': {
             backgroundColor: editing ? 'transparent' : `${colors.lightGray} !important`,
         },
+        '.select': {
+            backgroundColor: editing ? 'transparent' : `${colors.lightGray} !important`,
+        },
     }
 
     const saveResearcher = async (researcher: Researcher) => {
@@ -284,57 +292,59 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
             <div className='col-6'>
                 <h6>First Name</h6>
                 <InputField name="firstName" maxLength={50} onChange={validateCount} />
-                <small>{counts['firstName']}</small>
+                <small css={{ color: colors.grayText }}>{counts['firstName']}</small>
             </div>
 
             <div className='col-6'>
                 <h6>Last Name</h6>
                 <InputField name="lastName" maxLength={50} onChange={validateCount}/>
-                <small>{counts['lastName']}</small>
+                <small css={{ color: colors.grayText }}>{counts['lastName']}</small>
             </div>
 
             <div className='col-12 mt-1'>
                 <h6>Institution</h6>
-                <SelectField
-                    name="institution" id="institution"
-                    label='Institution'
-                    placeholder='Select Option'
+                <Select
+                    name="institution"
+                    isDisabled={!editing}
+                    id="institution"
+                    placeholder={editing ? 'Select Option' : ''}
                     onChange={(opt: string) => setInstitution(opt)}
                     value={institution}
                     options={institutionList}
-                    auto
                 />
             </div>
 
-            <h6>Research Interests</h6>
+            <Box align='baseline' gap className='mt-1'>
+                <h6>Research Interests</h6>
+                <Tooltip tooltip='Examples: Multimedia Learning; AI in Education; Adaptive Tutoring Systems'>
+                    <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={16}/>
+                </Tooltip>
+            </Box>
             <div className='col-4'>
                 <InputField
                     name="researchInterest1"
-                    placeholder='Multimedia Learning'
                     maxLength={25}
                     onChange={validateCount}
                 />
-                <small>{counts['researchInterest1']}</small>
+                <small css={{ color: colors.grayText }}>{counts['researchInterest1']}</small>
             </div>
 
             <div className='col-4'>
                 <InputField
                     name="researchInterest2"
-                    placeholder='AI in Education'
                     maxLength={25}
                     onChange={validateCount}
                 />
-                <small>{counts['researchInterest2']}</small>
+                <small css={{ color: colors.grayText }}>{counts['researchInterest2']}</small>
             </div>
 
             <div className='col-4'>
                 <InputField
                     name="researchInterest3"
-                    placeholder='Adaptive Tutoring Systems'
                     maxLength={25}
                     onChange={validateCount}
                 />
-                <small>{counts['researchInterest3']}</small>
+                <small css={{ color: colors.grayText }}>{counts['researchInterest3']}</small>
             </div>
 
             <div className='mt-1'>
@@ -350,13 +360,19 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
             <div className='mb-1 mt-1'>
                 <Box align='baseline' gap>
                     <h6 className='field-title'>Bio</h6>
-                    <Tooltip tooltip='Your biography'>
+                    <Tooltip tooltip='Simplify your research description for mass appeal'>
                         <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={16}/>
                     </Tooltip>
                 </Box>
 
-                <InputField name="bio" type="textarea" maxLength={250} onChange={validateCount}/>
-                <small>{counts['bio']}</small>
+                <InputField
+                    name="bio"
+                    type="textarea"
+                    maxLength={250}
+                    placeholder='Please add a brief bio to share with learners'
+                    onChange={validateCount}
+                />
+                <small css={{ color: colors.grayText }}>{counts['bio']}</small>
             </div>
 
             {!editing &&
@@ -394,7 +410,6 @@ const ProfileSection = styled(Box)({
 })
 
 const Resources = styled(Box)({
-    width: '100%',
     maxHeight: 250,
     border: `1px solid ${colors.lightGray}`,
     marginTop: 40,

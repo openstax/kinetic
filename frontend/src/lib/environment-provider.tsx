@@ -43,11 +43,12 @@ export const useCurrentUser = () => useEnvironment()?.user || ANON_USER
 
 export const useCurrentResearcher = () => {
     const userInfo = useUserInfo()
+    const researcher = useEnvironment()?.researcher
     // Default to OpenStax accounts first/last name
     return {
-        firstName: userInfo?.first_name,
-        lastName: userInfo?.last_name,
-        ...useEnvironment()?.researcher,
+        ...researcher,
+        firstName: researcher?.firstName || userInfo?.first_name,
+        lastName: researcher?.lastName || userInfo?.last_name,
     } as Researcher
 }
 
