@@ -30,14 +30,16 @@ RSpec.describe 'Development Users' do
   describe 'users list' do
     let!(:admin) { create(:admin) }
     let!(:researcher) { create(:researcher) }
-
     it 'returns all users' do
       get '/development/users'
       expect(response).to have_http_status(:ok)
       expect(response_hash.with_indifferent_access).to match(
         a_hash_including(
           'researchers' => a_collection_containing_exactly(
-            { 'user_id' => researcher.user_id, first_name: researcher.first_name }
+            a_hash_including({
+              user_id: researcher.user_id,
+              first_name: researcher.first_name
+            })
           ),
           'admins' => a_collection_containing_exactly(
             { 'user_id' => admin.user_id, 'name' => 'admin' }

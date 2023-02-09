@@ -216,15 +216,16 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
     if (!researcher) {
         return <></>
     }
+    const formCountDefaults = {
+        ['firstName']: `${researcher.firstName?.length || 0} / 50`,
+        ['lastName']: `${researcher.lastName?.length || 0} / 50`,
+        ['researchInterest1']: `${researcher.researchInterest1?.length || 0} / 25`,
+        ['researchInterest2']: `${researcher.researchInterest2?.length|| 0} / 25`,
+        ['researchInterest3']: `${researcher.researchInterest3?.length || 0} / 25`,
+        ['bio']: `${researcher.bio?.length || 0} / 250`,
+    }
     const [editing, setEditing] = useState(false)
-    const [counts, setCounts] = useState<{[key: string]: string}>({
-        ['firstName']: `${researcher.firstName?.length} / 50`,
-        ['lastName']: `${researcher.lastName?.length} / 50`,
-        ['researchInterest1']: `${researcher.researchInterest1?.length} / 25`,
-        ['researchInterest2']: `${researcher.researchInterest2?.length} / 25`,
-        ['researchInterest3']: `${researcher.researchInterest3?.length} / 25`,
-        ['bio']: `${researcher.bio?.length} / 250`,
-    })
+    const [counts, setCounts] = useState<{[key: string]: string}>(formCountDefaults)
     const [institution, setInstitution] = useState(researcher.institution)
 
     const formStyles = {
@@ -266,14 +267,7 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
 
     const onCancel = () => {
         setEditing(false)
-        setCounts({
-            ['firstName']: `${researcher.firstName?.length} / 50`,
-            ['lastName']: `${researcher.lastName?.length} / 50`,
-            ['researchInterest1']: `${researcher.researchInterest1?.length} / 25`,
-            ['researchInterest2']: `${researcher.researchInterest2?.length} / 25`,
-            ['researchInterest3']: `${researcher.researchInterest3?.length} / 25`,
-            ['bio']: `${researcher.bio?.length} / 250`,
-        })
+        setCounts(formCountDefaults)
     }
 
     return (
@@ -311,30 +305,40 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
                 />
             </div>
 
-            <Box align='baseline' gap>
-                <h6>Research Interests</h6>
-                <Tooltip tooltip='Examples: Multimedia Learning; AI in Education; Adaptive Tutoring Systems'>
-                    <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={16}/>
-                </Tooltip>
-            </Box>
+            <h6>Research Interests</h6>
             <div className='col-4'>
-                <InputField name="researchInterest1" maxLength={25} onChange={validateCount}/>
+                <InputField
+                    name="researchInterest1"
+                    placeholder='Multimedia Learning'
+                    maxLength={25}
+                    onChange={validateCount}
+                />
                 <small>{counts['researchInterest1']}</small>
             </div>
 
             <div className='col-4'>
-                <InputField name="researchInterest2" maxLength={25} onChange={validateCount}/>
+                <InputField
+                    name="researchInterest2"
+                    placeholder='AI in Education'
+                    maxLength={25}
+                    onChange={validateCount}
+                />
                 <small>{counts['researchInterest2']}</small>
             </div>
 
             <div className='col-4'>
-                <InputField name="researchInterest3" maxLength={25} onChange={validateCount}/>
+                <InputField
+                    name="researchInterest3"
+                    placeholder='Adaptive Tutoring Systems'
+                    maxLength={25}
+                    onChange={validateCount}
+                />
                 <small>{counts['researchInterest3']}</small>
             </div>
 
             <div className='mt-1'>
                 <h6>Lab Page Link</h6>
-                <InputField name="labPage" />
+                <InputField placeholder='https://' name="labPage" />
                 <div className="invalid-feedback">
                     <Icon icon="warning" color='red' height={18}></Icon>
                     &nbsp;
