@@ -44,12 +44,13 @@ export const useCurrentUser = () => useEnvironment()?.user || ANON_USER
 export const useCurrentResearcher = () => {
     const userInfo = useUserInfo()
     const researcher = useEnvironment()?.researcher
-    // Default to OpenStax accounts first/last name
-    return {
-        ...researcher,
-        firstName: researcher?.firstName || userInfo?.first_name,
-        lastName: researcher?.lastName || userInfo?.last_name,
-    } as Researcher
+    if (!researcher) {
+        return null;
+    }
+    // Default to OpenStax accounts first/last name if blank
+    researcher.firstName = researcher.firstName || userInfo?.first_name
+    researcher.lastName = researcher.lastName || userInfo?.last_name
+    return researcher
 }
 
 export const useUserInfo = () => {
