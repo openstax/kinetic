@@ -288,7 +288,7 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
         >
             <div className='col-6'>
                 <h6>First Name</h6>
-                <InputField name="firstName" maxLength={50}  onChange={validateCount} />
+                <InputField name="firstName" maxLength={50} onChange={validateCount} />
                 <small>{counts['firstName']}</small>
             </div>
 

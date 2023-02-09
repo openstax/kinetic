@@ -8,9 +8,9 @@ FactoryBot.define do
     bio { Faker::Hipster.sentences }
     institution { Faker::University.name }
     lab_page { Faker::TvShows::SiliconValley.url }
-    research_interest_1 { Faker::Hobby.activity }
-    research_interest_2 { Faker::Hobby.activity }
-    research_interest_3 { Faker::Hobby.activity }
+    research_interest1 { Faker::Hobby.activity }
+    research_interest2 { Faker::Hobby.activity }
+    research_interest3 { Faker::Hobby.activity }
     trait :with_avatar do
       after :build do |researcher|
         file_name = 'tela.jpg'

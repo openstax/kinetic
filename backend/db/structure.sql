@@ -442,9 +442,9 @@ CREATE TABLE public.researchers (
     lab_page character varying,
     first_name character varying,
     last_name character varying,
-    research_interest_1 character varying,
-    research_interest_2 character varying,
-    research_interest_3 character varying,
+    research_interest1 character varying,
+    research_interest2 character varying,
+    research_interest3 character varying,
     invite_code character varying
 );
 

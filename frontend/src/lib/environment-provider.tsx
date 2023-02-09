@@ -4,7 +4,7 @@ import { LoadingAnimation, IncorrectUser, ErrorPage } from '@components'
 import { useLocation } from 'react-router-dom'
 import { ENV } from './env'
 import { useApi } from './api-config'
-import { UserPreferences } from '@api'
+import { Researcher, UserPreferences } from '@api'
 
 export const EnvironmentContext = React.createContext<Environment | null>(null)
 
@@ -41,7 +41,15 @@ export const useEnvironment = () => React.useContext(EnvironmentContext) as Envi
 
 export const useCurrentUser = () => useEnvironment()?.user || ANON_USER
 
-export const useCurrentResearcher = () => useEnvironment()?.researcher
+export const useCurrentResearcher = () => {
+    const userInfo = useUserInfo()
+    // Default to OpenStax accounts first/last name
+    return {
+        firstName: userInfo?.first_name,
+        lastName: userInfo?.last_name,
+        ...useEnvironment()?.researcher,
+    } as Researcher
+}
 
 export const useUserInfo = () => {
     const env = useEnvironment()

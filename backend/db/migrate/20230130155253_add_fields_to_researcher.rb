@@ -3,9 +3,9 @@ class AddFieldsToResearcher < ActiveRecord::Migration[6.1]
     add_column :researchers, :lab_page, :string
     add_column :researchers, :first_name, :string
     add_column :researchers, :last_name, :string
-    add_column :researchers, :research_interest_1, :string
-    add_column :researchers, :research_interest_2, :string
-    add_column :researchers, :research_interest_3, :string
+    add_column :researchers, :research_interest1, :string
+    add_column :researchers, :research_interest2, :string
+    add_column :researchers, :research_interest3, :string
     add_column :researchers, :invite_code, :string
 
     reversible do |dir|
