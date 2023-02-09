@@ -30,6 +30,7 @@ RSpec.describe 'Development Users' do
   describe 'users list' do
     let!(:admin) { create(:admin) }
     let!(:researcher) { create(:researcher) }
+
     it 'returns all users' do
       get '/development/users'
       expect(response).to have_http_status(:ok)

@@ -14,7 +14,7 @@ interface UserCardProps {
 const UserCard:React.FC<UserCardProps> = ({ users, type, becomeUser }) => {
 
     if (!users[type]?.length) return null
-
+    console.log(users);
     return (
         <div className="col-6">
             <div className="card">

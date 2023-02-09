@@ -8,7 +8,8 @@ return unless Kinetic.allow_stubbed_authentication?
 class Development::UsersController < ApplicationController
   MOCK_USERS = [
     { user_id: '00000000-0000-0000-0000-000000000001', role: 'admin', name: 'Admin Uno' },
-    { user_id: '00000000-0000-0000-0000-000000000001', role: 'researcher', name: 'Researcher Uno' },
+    { user_id: '00000000-0000-0000-0000-000000000001', role: 'researcher', name: 'Researcher Uno',
+      first_name: 'Cool', last_name: 'Person' },
     { user_id: '00000000-0000-0000-0000-000000000002', role: 'user', name: 'User Uno' },
     { user_id: '00000000-0000-0000-0000-000000000003', role: 'user', name: 'User Dos' },
     { user_id: '00000000-0000-0000-0000-000000000004', role: 'user', name: 'User Tres' },
@@ -42,11 +43,14 @@ class Development::UsersController < ApplicationController
     users = {}
     Researcher.all.each do |researcher|
       users[:researchers] ||= []
-      users[:researchers].push({
-        user_id: researcher.user_id,
-        first_name: researcher.first_name,
-        last_name: researcher.last_name
-      })
+      users[:researchers].push(
+        {
+          user_id: researcher.user_id,
+          first_name: researcher.first_name,
+          last_name: researcher.last_name,
+          name: "#{researcher.first_name} #{researcher.last_name}"
+        }
+      )
     end
 
     Admin.all.each do |admin|
