@@ -216,6 +216,17 @@ const Avatar: React.FC = () => {
     )
 }
 
+const CharacterCount: React.FC<{count: number, max: number}> = ({ count, max }) => {
+    return (
+        (count > max) ?
+            <Box css={{ color: colors.red }} align='center' gap='small'>
+                <Icon icon="warning" height={16} />
+                <small>{count} / {max} character</small>
+            </Box> :
+            <small css={{ color: colors.grayText }}>{count} / {max} character</small>
+    )
+}
+
 const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
     const api = useApi()
     const [researcher, setResearcher] = useState(useCurrentResearcher())
@@ -223,15 +234,15 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
         return <></>
     }
     const formCountDefaults = {
-        ['firstName']: `${researcher.firstName?.length || 0} / 50`,
-        ['lastName']: `${researcher.lastName?.length || 0} / 50`,
-        ['researchInterest1']: `${researcher.researchInterest1?.length || 0} / 25`,
-        ['researchInterest2']: `${researcher.researchInterest2?.length|| 0} / 25`,
-        ['researchInterest3']: `${researcher.researchInterest3?.length || 0} / 25`,
-        ['bio']: `${researcher.bio?.length || 0} / 250`,
+        ['firstName']: researcher.firstName?.length || 0,
+        ['lastName']: researcher.lastName?.length || 0,
+        ['researchInterest1']: researcher.researchInterest1?.length || 0,
+        ['researchInterest2']: researcher.researchInterest2?.length|| 0,
+        ['researchInterest3']: researcher.researchInterest3?.length || 0,
+        ['bio']: researcher.bio?.length || 0,
     }
     const [editing, setEditing] = useState(false)
-    const [counts, setCounts] = useState<{[key: string]: string}>(formCountDefaults)
+    const [counts, setCounts] = useState<{[key: string]: number}>(formCountDefaults)
     const [institution, setInstitution] = useState(researcher.institution)
 
     const formStyles = {
@@ -266,11 +277,10 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
 
     const validateCount = (e: React.ChangeEvent<HTMLInputElement>) => {
         const current = e.target.value.length;
-        const max = e.target.maxLength;
         const name = e.target.name;
         setCounts({
             ...counts,
-            [name]: `${current} / ${max}`,
+            [name]: current,
         })
     }
 
@@ -291,14 +301,20 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
         >
             <div className='col-6'>
                 <h6>First Name</h6>
-                <InputField name="firstName" maxLength={50} onChange={validateCount} />
-                <small css={{ color: colors.grayText }}>{counts['firstName']}</small>
+                <InputField
+                    name="firstName"
+                    onChange={validateCount}
+                />
+                <CharacterCount count={counts['firstName']} max={50} />
             </div>
 
             <div className='col-6'>
                 <h6>Last Name</h6>
-                <InputField name="lastName" maxLength={50} onChange={validateCount}/>
-                <small css={{ color: colors.grayText }}>{counts['lastName']}</small>
+                <InputField
+                    name="lastName"
+                    onChange={validateCount}
+                />
+                <CharacterCount count={counts['lastName']} max={50} />
             </div>
 
             <div className='col-12 mt-1'>
@@ -326,7 +342,7 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
                     maxLength={25}
                     onChange={validateCount}
                 />
-                <small css={{ color: colors.grayText }}>{counts['researchInterest1']}</small>
+                <CharacterCount count={counts['researchInterest1']} max={25} />
             </div>
 
             <div className='col-4'>
@@ -335,7 +351,7 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
                     maxLength={25}
                     onChange={validateCount}
                 />
-                <small css={{ color: colors.grayText }}>{counts['researchInterest2']}</small>
+                <CharacterCount count={counts['researchInterest2']} max={25} />
             </div>
 
             <div className='col-4'>
@@ -344,7 +360,7 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
                     maxLength={25}
                     onChange={validateCount}
                 />
-                <small css={{ color: colors.grayText }}>{counts['researchInterest3']}</small>
+                <CharacterCount count={counts['researchInterest3']} max={25} />
             </div>
 
             <div className='mt-1'>
@@ -372,7 +388,7 @@ const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
                     placeholder='Please add a brief bio to share with learners'
                     onChange={validateCount}
                 />
-                <small css={{ color: colors.grayText }}>{counts['bio']}</small>
+                <CharacterCount count={counts['bio']} max={250} />
             </div>
 
             {!editing &&

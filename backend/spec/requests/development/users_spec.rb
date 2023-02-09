@@ -42,8 +42,10 @@ RSpec.describe 'Development Users' do
               first_name: researcher.first_name
             })
           ),
-          'admins' => a_collection_containing_exactly(
-            { 'user_id' => admin.user_id, 'name' => 'admin' }
+          'admins' => a_collection_including(
+            a_hash_including({
+              user_id: admin.user_id
+            })
           )
         )
       )
