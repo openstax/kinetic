@@ -141,6 +141,7 @@ const IRB = () => {
 const AvatarImage = styled.img({
     borderRadius: '50%',
     border: `1px solid ${colors.lightGray}`,
+    padding: 25,
     height: 125,
     width: 125,
 })
