@@ -28,7 +28,7 @@ const Iframe:React.FC<{ url?: string, onClose: StudyModalProps['onHide'] }> = ({
 
     if (isNil(url)) return null
 
-    return <iframe id="study" css={{ height: '100%', width: '100%', overflow: 'scroll' }} src={url} />
+    return <iframe id="study" css={{ minHeight: 'calc(100vh - 130px)', width: '100%', overflow: 'scroll' }} src={url} />
 }
 
 export const StudyModal:React.FC<StudyModalProps> = ({ onHide, study }) => {

@@ -38,7 +38,6 @@ import chatLeft from '@iconify-icons/bi/chat-left-fill'
 import cloudUpload from '@iconify-icons/bi/cloud-upload'
 import questionCircleFill from '@iconify-icons/bi/question-circle-fill'
 
-
 const SUNDRY_PACKAGED_ICONS = {
     thumbsUp,
     exclamationCircle,

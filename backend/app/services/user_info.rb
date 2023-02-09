@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# the dev admin user query for testing:
+# JSON.parse(OpenStax::Accounts::Api.search_accounts("uuid:aaa560a1-e828-48fb-b9a8-d01e9aec71d0").response.body)
+
 class UserInfo
 
   def self.email_for_account(account)
