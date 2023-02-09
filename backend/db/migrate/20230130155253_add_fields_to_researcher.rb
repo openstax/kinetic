@@ -11,7 +11,7 @@ class AddFieldsToResearcher < ActiveRecord::Migration[6.1]
     reversible do |dir|
       dir.up do
         Researcher.find_each do | researcher |
-          names = researcher.name.split(/ /, 2)
+          names = researcher.name ? researcher.name.split(/ /, 2) : ['', '']
           researcher.update!(
             first_name: names[0],
             last_name: names[1]
