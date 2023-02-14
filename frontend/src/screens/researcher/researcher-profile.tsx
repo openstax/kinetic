@@ -73,11 +73,11 @@ export default function ResearcherProfile() {
 
 const IRB = () => {
     return (
-        <Box gap='large' className='container-fluid'>
+        <Box gap='large' className='container-fluid row'>
             <Col sm={2}>
                 <h6>IRB Detail</h6>
             </Col>
-            <Col sm={8}>
+            <Col sm={7}>
                 <Box direction='column' gap css={{ border: '1px solid grey', padding: 15, width: 400 }}>
                     <Box justify='between'>
                         <img alt="Rice University logo" css={{ width: 120, height: 50 }} src={RiceLogoURL} className='col-6'/>

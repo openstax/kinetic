@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { React, useState } from '@common';
+import { React, styled, useState } from '@common';
 import { useApi, useCurrentResearcher, useUserInfo } from '@lib';
 import { colors } from '../../theme';
 import { Researcher } from '@api';
@@ -30,28 +30,32 @@ const institutionList = [
 ];
 
 const CharacterCount: React.FC<{count: number, max: number}> = ({ count, max }) => {
-    return (
-        (count > max) ?
+    if (count > max) {
+        return (
             <Box css={{ color: colors.red }} align='center' gap='small'>
                 <Icon icon="warning" height={16} />
                 <small>{count} / {max} character</small>
-            </Box> :
-            <small css={{ color: colors.grayText }}>{count} / {max} character</small>
+            </Box>
+        )
+    }
+
+    return (
+        <small css={{ color: colors.grayText }}>{count} / {max} character</small>
     )
 }
 
-const formStyles = (editing: boolean) => ({
+const StyledForm = styled(Form<Researcher>)(({ readOnly }) => ({
     button: {
         width: 130,
         justifyContent: 'center',
     },
     '.form-control': {
-        backgroundColor: editing ? 'transparent' : `${colors.lightGray} !important`,
+        backgroundColor: readOnly ? colors.lightGray : 'transparent',
     },
     '.select': {
-        backgroundColor: editing ? 'transparent' : `${colors.lightGray} !important`,
+        backgroundColor: readOnly ? colors.lightGray : 'transparent',
     },
-})
+}))
 
 export const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
     const api = useApi()
@@ -110,12 +114,11 @@ export const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
     }
 
     return (
-        <Form
+        <StyledForm
             onSubmit={saveResearcher}
             className={cx(className, 'row')}
             readOnly={!editing}
             onCancel={onCancel}
-            css={formStyles(editing)}
             defaultValues={researcher}
             validationSchema={ResearcherValidationSchema}
         >
@@ -141,7 +144,6 @@ export const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
                 <h6>Institution</h6>
                 <SelectField
                     name="institution"
-                    isDisabled={!editing}
                     isClearable={true}
                     placeholder={editing ? 'Select Option' : ''}
                     onChange={(value: string) => setInstitution(value)}
@@ -225,6 +227,6 @@ export const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
                     </FormCancelButton>
                 </Box>
             }
-        </Form>
+        </StyledForm>
     );
 }
