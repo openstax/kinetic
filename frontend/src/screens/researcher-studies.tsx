@@ -73,7 +73,7 @@ const NavTabs = styled.ul({
     },
 })
 
-export default function ResearcherDashboard() {
+export default function ResearcherStudies() {
     const api = useApi()
     const nav = useNavigate()
     const [studies, setStudies] = useState<Studies>()

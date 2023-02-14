@@ -30,6 +30,7 @@
     "@nathanstitt/sundry": "^0.0.44",
     "@sentry/react": "^7.11.1",
     "@sentry/tracing": "^7.11.1",
+    "@tanstack/react-table": "^8.7.9",
     "@types/bootstrap": "^5.1.9",
     "@types/loadjs": "^4.0.1",
     "@types/lodash-es": "^4.17.6",
