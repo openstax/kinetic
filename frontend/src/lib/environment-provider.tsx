@@ -1,10 +1,10 @@
 import { React, useEffect, useState } from '@common'
-import { Environment, ANON_USER, UserInfo } from '@models'
-import { LoadingAnimation, IncorrectUser, ErrorPage } from '@components'
+import { ANON_USER, Environment, UserInfo } from '@models'
+import { ErrorPage, IncorrectUser, LoadingAnimation } from '@components'
 import { useLocation } from 'react-router-dom'
 import { ENV } from './env'
 import { useApi } from './api-config'
-import { Researcher, UserPreferences } from '@api'
+import { UserPreferences } from '@api'
 
 export const EnvironmentContext = React.createContext<Environment | null>(null)
 
