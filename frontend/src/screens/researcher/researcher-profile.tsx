@@ -35,9 +35,12 @@ export default function ResearcherProfile() {
                     <Box justify='between' gap='xxlarge'>
                         <Box direction='column' gap='xlarge'>
                             <ProfileSection className='researcher-profile'>
-                                <Box gap='large' className='container-fluid'>
-                                    <Avatar />
-                                    <ProfileForm className='col-10'/>
+                                <Box direction='column'>
+                                    <h5 className='fw-bolder pb-2'>Researcher Profile</h5>
+                                    <Box gap='large' className='container-fluid'>
+                                        <Avatar />
+                                        <ProfileForm className='col-10'/>
+                                    </Box>
                                 </Box>
                             </ProfileSection>
 
