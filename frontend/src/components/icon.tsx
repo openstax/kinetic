@@ -19,6 +19,7 @@ import minusSquare from '@iconify-icons/bi/dash-square'
 
 
 import plusCircle from '@iconify-icons/bi/plus-circle'
+import plus from '@iconify-icons/bi/plus'
 import close from '@iconify-icons/bi/x-square'
 import x from '@iconify-icons/bi/x'
 import back from '@iconify-icons/bi/chevron-double-left'
@@ -46,6 +47,7 @@ const SUNDRY_PACKAGED_ICONS = {
     spin,
     close,
     plusSquare,
+    plus,
     minusSquare,
 }
 setSundryIcons(SUNDRY_PACKAGED_ICONS)

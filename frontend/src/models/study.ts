@@ -10,26 +10,26 @@ export type EditingStudy = NewStudy | Study
 export type SavedStudy = Study | ParticipantStudy
 
 export enum StudyStatus {
-    Active = 'Active', // eslint-disable-line no-unused-vars
-    Scheduled = 'Scheduled', // eslint-disable-line no-unused-vars
+    Launched = 'Launched', // eslint-disable-line no-unused-vars
+    Draft = 'Draft', // eslint-disable-line no-unused-vars
     Completed = 'Completed', // eslint-disable-line no-unused-vars
 }
 
 export const getStatus = (study: Study): StudyStatus => {
     const now = new Date()
     if (study.opensAt && study.opensAt > now) {
-        return StudyStatus.Scheduled
+        return StudyStatus.Draft
     }
     if (study.closesAt && study.closesAt < now) {
         return StudyStatus.Completed
     }
-    return StudyStatus.Active
+    return StudyStatus.Launched
 }
 
 export const getStatusName = (study: Study): string => {
     const status = getStatus(study)
-    if (status == StudyStatus.Active) return 'Active'
-    if (status == StudyStatus.Scheduled) return 'Scheduled'
+    if (status == StudyStatus.Launched) return 'Launched'
+    if (status == StudyStatus.Draft) return 'Draft'
     if (status == StudyStatus.Completed) return 'Completed'
     return ''
 }
