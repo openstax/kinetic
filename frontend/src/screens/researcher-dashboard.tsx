@@ -54,7 +54,7 @@ const StudiesTable: React.FC<{ studies: Study[] }> = ({ studies }) => {
 }
 
 
-export default function ResearcherHome() {
+export default function ResearcherDashboard() {
     const api = useApi()
     const nav = useNavigate()
     const [studies, setStudies] = useState<Studies>()

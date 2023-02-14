@@ -9,7 +9,7 @@ const Home = loadAsync('Homepage', () => import('./screens/homepage'))
 const Dev = loadAsync('Dev', () => import('./screens/dev'))
 const StudyLanding = loadAsync('Study Landing Page', () => import('./screens/study-landing'))
 const EditStudy = loadAsync('Edit Study Details', () => import('./screens/study-edit'))
-const Researcher = loadAsync('Studies', () => import('./screens/researcher-home'))
+const ResearcherDashboard = loadAsync('Studies', () => import('./screens/researcher-dashboard'))
 const LearnerDashboard = loadAsync('Studies', () => import('./screens/learner'))
 const AdminHomepage = loadAsync('Admin', () => import('./screens/admin-home'))
 const AccountDetails = loadAsync('Account', () => import('./screens/account-details'))
@@ -17,7 +17,7 @@ const AnalysisHomepage = loadAsync('Account', () => import('./screens/analysis')
 
 const StudiesHomepage = () => {
     const user = useCurrentUser()
-    return user.isResearcher ? <Researcher /> : <LearnerDashboard />
+    return user.isResearcher ? <ResearcherDashboard /> : <LearnerDashboard />
 }
 
 export const AppRoutes = () => {
