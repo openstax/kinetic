@@ -7,12 +7,18 @@ return unless Kinetic.allow_stubbed_authentication?
 
 class Development::UsersController < ApplicationController
   MOCK_USERS = [
-    { user_id: '00000000-0000-0000-0000-000000000000', role: 'admin', first_name: 'Admin', last_name: 'Uno', name: 'Admin Uno' },
-    { user_id: '00000000-0000-0000-0000-000000000001', role: 'researcher', name: 'Researcher Uno', first_name: 'Researcher', last_name: 'Uno' },
-    { user_id: '00000000-0000-0000-0000-000000000002', role: 'user', name: 'User Uno', first_name: 'User', last_name: 'Uno' },
-    { user_id: '00000000-0000-0000-0000-000000000003', role: 'user', name: 'User Dos', first_name: 'User', last_name: 'Dos' },
-    { user_id: '00000000-0000-0000-0000-000000000004', role: 'user', name: 'User Tres', first_name: 'User', last_name: 'Tres' },
-    { user_id: '00000000-0000-0000-0000-000000000005', role: 'user', name: 'User Cuatro', first_name: 'User', last_name: 'Cuatro' }
+    { user_id: '00000000-0000-0000-0000-000000000000', role: 'admin', first_name: 'Admin',
+      last_name: 'Uno', name: 'Admin Uno' },
+    { user_id: '00000000-0000-0000-0000-000000000001', role: 'researcher', name: 'Researcher Uno',
+      first_name: 'Researcher', last_name: 'Uno' },
+    { user_id: '00000000-0000-0000-0000-000000000002', role: 'user', name: 'User Uno',
+      first_name: 'User', last_name: 'Uno' },
+    { user_id: '00000000-0000-0000-0000-000000000003', role: 'user', name: 'User Dos',
+      first_name: 'User', last_name: 'Dos' },
+    { user_id: '00000000-0000-0000-0000-000000000004', role: 'user', name: 'User Tres',
+      first_name: 'User', last_name: 'Tres' },
+    { user_id: '00000000-0000-0000-0000-000000000005', role: 'user', name: 'User Cuatro',
+      first_name: 'User', last_name: 'Cuatro' }
   ].freeze
 
   before_action :validate_not_real_production # belt and suspenders
@@ -53,18 +59,7 @@ class Development::UsersController < ApplicationController
   end
 
   def user_info
-    u = nil?
-    mock_user = MOCK_USERS.find { |user| user[:user_id] == current_user_uuid }
-    researcher = researchers.find { |u| u[:user_id] == current_user_uuid }
-    admin = admins.find { |u| u[:user_id] == current_user_uuid }
-
-    if mock_user
-      u = mock_user
-    elsif researcher
-      u = researcher
-    elsif admin
-      u = admin
-    end
+    u = find_user
 
     if u.nil?
       head :not_found
@@ -111,6 +106,23 @@ class Development::UsersController < ApplicationController
         name: 'Admin McAdminFace'
       }
     end
+  end
+
+  def find_user
+    u = nil?
+    mock_user = MOCK_USERS.find { |user| user[:user_id] == current_user_uuid }
+    researcher = researchers.find { |r| r[:user_id] == current_user_uuid }
+    admin = admins.find { |a| a[:user_id] == current_user_uuid }
+
+    if mock_user
+      u = mock_user
+    elsif researcher
+      u = researcher
+    elsif admin
+      u = admin
+    end
+
+    u
   end
 
 end
