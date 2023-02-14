@@ -21,7 +21,7 @@ export default function ResearcherProfile() {
 
     return (
         <PageWrapper>
-            <TopNavBar />
+            <TopNavBar showBanner={false}/>
             <Box className='container-lg py-5' justify='between'>
                 <Col sm={9} css={{ paddingRight: '2rem' }} direction='column'>
                     <Box justify='between' height='40px'>
