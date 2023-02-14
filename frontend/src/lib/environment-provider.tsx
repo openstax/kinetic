@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from '@common'
-import { Environment, ANON_USER, UserInfo } from '@models'
-import { LoadingAnimation, IncorrectUser, ErrorPage } from '@components'
+import { ANON_USER, Environment, UserInfo } from '@models'
+import { ErrorPage, IncorrectUser, LoadingAnimation } from '@components'
 import { useLocation } from 'react-router-dom'
 import { ENV } from './env'
 import { useApi } from './api-config'
@@ -40,6 +40,8 @@ export const EnvironmentProvider: FCWC = ({ children }) => {
 export const useEnvironment = () => React.useContext(EnvironmentContext) as Environment
 
 export const useCurrentUser = () => useEnvironment()?.user || ANON_USER
+
+export const useCurrentResearcher = () => useEnvironment()?.researcher
 
 export const useUserInfo = () => {
     const env = useEnvironment()

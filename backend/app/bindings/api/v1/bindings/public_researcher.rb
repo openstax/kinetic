@@ -15,8 +15,11 @@ require 'time'
 
 module Api::V1::Bindings
   class PublicResearcher
-    # The researcher's name.
-    attr_accessor :name
+    # The researcher's first name.
+    attr_accessor :first_name
+
+    # The researcher's last name.
+    attr_accessor :last_name
 
     # The researcher's institution.
     attr_accessor :institution
@@ -27,7 +30,8 @@ module Api::V1::Bindings
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'name' => :'name',
+        :'first_name' => :'first_name',
+        :'last_name' => :'last_name',
         :'institution' => :'institution',
         :'bio' => :'bio'
       }
@@ -41,7 +45,8 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'name' => :'String',
+        :'first_name' => :'String',
+        :'last_name' => :'String',
         :'institution' => :'String',
         :'bio' => :'String'
       }
@@ -68,8 +73,12 @@ module Api::V1::Bindings
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'name')
-        self.name = attributes[:'name']
+      if attributes.key?(:'first_name')
+        self.first_name = attributes[:'first_name']
+      end
+
+      if attributes.key?(:'last_name')
+        self.last_name = attributes[:'last_name']
       end
 
       if attributes.key?(:'institution')
@@ -99,7 +108,8 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          name == o.name &&
+          first_name == o.first_name &&
+          last_name == o.last_name &&
           institution == o.institution &&
           bio == o.bio
     end
@@ -113,7 +123,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [name, institution, bio].hash
+      [first_name, last_name, institution, bio].hash
     end
 
     # Builds the object from hash

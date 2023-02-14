@@ -9,9 +9,10 @@ import { useCurrentUser, useEnvironment, useIsMobileDevice } from '@lib'
 interface TopNavBarProps {
     className?: string
     controls?: React.ReactElement,
+    showBanner?: boolean
 }
 
-export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, controls, className }) => {
+export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, controls, className, showBanner = true }) => {
     const env = useEnvironment()
     const user = useCurrentUser()
     const isMobile = useIsMobileDevice()
@@ -28,14 +29,18 @@ export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, controls, className
                             {controls}
                             <Menu alignEnd >
                                 {isMobile && <li><Link className="dropdown-item" to="/studies">Studies</Link></li>}
-                                <li><Link className="dropdown-item" to="/account">My account</Link></li>
+
+                                {user.isResearcher ?
+                                    <li><Link className="dropdown-item" to="/researcher-profile">My Account</Link></li> :
+                                    <li><Link className="dropdown-item" to="/account">My Account</Link></li>
+                                }
                                 <li><a className="dropdown-item" href={env.logoutURL} onClick={() => user.logout()}>Log out</a></li>
                             </Menu>
                         </Box>
                     </Box>
                 </div>
             </div>
-            <BannersBar />
+            {showBanner && <BannersBar />}
         </nav >
     )
 }

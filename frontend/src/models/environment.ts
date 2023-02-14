@@ -1,12 +1,27 @@
 import { API_CONFIGURATION, ENV } from '@lib'
-import { DefaultApi, Environment as ApiEnv } from '@api'
+import { DefaultApi, Environment as ApiEnv, Researcher } from '@api'
 import { retry } from '../lib/util'
 import { User } from './user'
 
 export interface UserInfo {
     id: string
     full_name: string
+    first_name: string
+    last_name: string
     contact_infos: Array<{ type: string, value: string }>
+    faculty_status: string
+    is_administrator: boolean
+    is_not_gdpr_location: boolean
+    is_test: boolean
+    name: string
+    needs_complete_edu_profile: boolean
+    opt_out_of_cookies: boolean
+    school_location: string
+    school_type: string
+    self_reported_role: string
+    support_identifier: string
+    using_openstax: boolean
+    uuid: string
 }
 
 export class Environment {
@@ -21,9 +36,12 @@ export class Environment {
 
     user: User
 
+    researcher: Researcher | null
+
     constructor(config: ApiEnv) {
         this.config = config
         this.user = User.bootstrap(config.user)
+        this.researcher = config.researcher || null
     }
 
     get host() {

@@ -25,6 +25,12 @@ import {
     EnvironmentUserFromJSONTyped,
     EnvironmentUserToJSON,
 } from './EnvironmentUser';
+import type { Researcher } from './Researcher';
+import {
+    ResearcherFromJSON,
+    ResearcherFromJSONTyped,
+    ResearcherToJSON,
+} from './Researcher';
 import type { RewardsScheduleSegment } from './RewardsScheduleSegment';
 import {
     RewardsScheduleSegmentFromJSON,
@@ -44,6 +50,12 @@ export interface Environment {
      * @memberof Environment
      */
     user: EnvironmentUser;
+    /**
+     * 
+     * @type {Researcher}
+     * @memberof Environment
+     */
+    researcher?: Researcher;
     /**
      * 
      * @type {string}
@@ -95,6 +107,7 @@ export function EnvironmentFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'user': EnvironmentUserFromJSON(json['user']),
+        'researcher': !exists(json, 'researcher') ? undefined : ResearcherFromJSON(json['researcher']),
         'accountsEnvName': json['accounts_env_name'],
         'homepageUrl': json['homepage_url'],
         'rewardsSchedule': ((json['rewards_schedule'] as Array<any>).map(RewardsScheduleSegmentFromJSON)),
@@ -112,6 +125,7 @@ export function EnvironmentToJSON(value?: Environment | null): any {
     return {
         
         'user': EnvironmentUserToJSON(value.user),
+        'researcher': ResearcherToJSON(value.researcher),
         'rewards_schedule': ((value.rewardsSchedule as Array<any>).map(RewardsScheduleSegmentToJSON)),
         'banners_schedule': ((value.bannersSchedule as Array<any>).map(BannerMessageToJSON)),
     };

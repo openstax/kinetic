@@ -7,12 +7,18 @@ return unless Kinetic.allow_stubbed_authentication?
 
 class Development::UsersController < ApplicationController
   MOCK_USERS = [
-    { user_id: '00000000-0000-0000-0000-000000000001', role: 'admin', name: 'Admin Uno' },
-    { user_id: '00000000-0000-0000-0000-000000000001', role: 'researcher', name: 'Researcher Uno' },
-    { user_id: '00000000-0000-0000-0000-000000000002', role: 'user', name: 'User Uno' },
-    { user_id: '00000000-0000-0000-0000-000000000003', role: 'user', name: 'User Dos' },
-    { user_id: '00000000-0000-0000-0000-000000000004', role: 'user', name: 'User Tres' },
-    { user_id: '00000000-0000-0000-0000-000000000005', role: 'user', name: 'User Cuatro' }
+    { user_id: '00000000-0000-0000-0000-000000000000', role: 'admin', first_name: 'Admin',
+      last_name: 'Uno', name: 'Admin Uno' },
+    { user_id: '00000000-0000-0000-0000-000000000001', role: 'researcher', name: 'Researcher Uno',
+      first_name: 'Researcher', last_name: 'Uno' },
+    { user_id: '00000000-0000-0000-0000-000000000002', role: 'user', name: 'User Uno',
+      first_name: 'User', last_name: 'Uno' },
+    { user_id: '00000000-0000-0000-0000-000000000003', role: 'user', name: 'User Dos',
+      first_name: 'User', last_name: 'Dos' },
+    { user_id: '00000000-0000-0000-0000-000000000004', role: 'user', name: 'User Tres',
+      first_name: 'User', last_name: 'Tres' },
+    { user_id: '00000000-0000-0000-0000-000000000005', role: 'user', name: 'User Cuatro',
+      first_name: 'User', last_name: 'Cuatro' }
   ].freeze
 
   before_action :validate_not_real_production # belt and suspenders
@@ -40,15 +46,8 @@ class Development::UsersController < ApplicationController
 
   def index
     users = {}
-    Researcher.all.each do |researcher|
-      users[:researchers] ||= []
-      users[:researchers].push(researcher.slice('user_id', 'name'))
-    end
-
-    Admin.all.each do |admin|
-      users[:admins] ||= []
-      users[:admins].push({ user_id: admin.user_id, name: 'admin' })
-    end
+    users[:researchers] ||= researchers
+    users[:admins] ||= admins
     users[:users] = MOCK_USERS.filter { |u| u[:role] == 'user' }
     render json: users, status: :ok
   end
@@ -60,18 +59,70 @@ class Development::UsersController < ApplicationController
   end
 
   def user_info
-    user = MOCK_USERS.find { |u| u[:user_id] == current_user_uuid }
-    if user.nil?
+    u = find_user
+
+    if u.nil?
       head :not_found
       return
     end
 
     render json: {
-      id: user[:user_id],
-      full_name: user[:name],
+      id: u[:user_id],
+      full_name: u[:name],
+      first_name: u[:first_name],
+      last_name: u[:last_name],
       contact_infos: [{
-        type: 'EmailAddress', value: "#{user[:name].parameterize}@test.openstax.org"
+        type: 'EmailAddress', value: "#{u[:name].parameterize}@test.openstax.org"
       }]
     }
   end
+
+  protected
+
+  def real_users
+    users = []
+    users.push(researchers)
+    users.push(admins)
+    users
+  end
+
+  def researchers
+    Researcher.all.map do |researcher|
+      {
+        user_id: researcher.user_id,
+        first_name: researcher.first_name,
+        last_name: researcher.last_name,
+        name: "#{researcher.first_name} #{researcher.last_name}"
+      }
+    end
+  end
+
+  def admins
+    Admin.all.map do |admin|
+      {
+        user_id: admin.user_id,
+        first_name: 'Admin',
+        last_name: 'McAdminFace',
+        name: 'Admin McAdminFace'
+      }
+    end
+  end
+
+  def find_user
+    u = nil?
+    mock_user = MOCK_USERS.find { |user| user[:user_id] == current_user_uuid }
+    researcher = researchers.find { |r| r[:user_id] == current_user_uuid }
+    admin = admins.find { |a| a[:user_id] == current_user_uuid }
+
+    if mock_user
+      u = mock_user
+    elsif researcher
+      u = researcher
+    elsif admin
+      u = admin
+    end
+
+    u
+  end
+
 end

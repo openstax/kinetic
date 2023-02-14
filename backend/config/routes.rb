@@ -44,6 +44,10 @@ Rails.application.routes.draw do
 
       resources :preferences, only: [:index, :create]
 
+      resources :researchers do
+        post 'avatar_upload'
+      end
+
       scope :diagnostics, controller: :diagnostics do
         get :exception
         get 'status_code/:status_code', action: :status_code

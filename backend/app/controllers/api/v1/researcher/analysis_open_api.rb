@@ -11,9 +11,13 @@ class Api::V1::Researcher::AnalysisOpenApi
         key :type, :string
         key :description, 'UUID of researcher'
       end
-      property :name do
+      property :first_name do
         key :type, :string
-        key :description, 'Name of researcher'
+        key :description, 'First name of researcher'
+      end
+      property :last_name do
+        key :type, :string
+        key :description, 'Last name of researcher'
       end
     end
 

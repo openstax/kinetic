@@ -38,9 +38,13 @@ class Api::V1::Participant::StudiesOpenApi
     end
 
     schema :PublicResearcher do
-      property :name do
+      property :first_name do
         key :type, :string
-        key :description, 'The researcher\'s name.'
+        key :description, 'The researcher\'s first name.'
+      end
+      property :last_name do
+        key :type, :string
+        key :description, 'The researcher\'s last name.'
       end
       property :institution do
         key :type, :string

@@ -1,4 +1,5 @@
 import { React } from '@common'
+import { useCurrentUser } from '@lib';
 
 export const ResourceLinks = () => {
     return (
@@ -11,10 +12,14 @@ export const ResourceLinks = () => {
 }
 
 export const HelpLink = () => {
+    const isResearcher = useCurrentUser().isResearcher
     return (
         <>
             <h4>Need Help?</h4>
-            <a target="_blank" href="https://openstax.org/contact">Contact us here</a>
+            {isResearcher ?
+                <span>Contact us at <a target="_blank" href="mailto:kinetic@openstax.org">kinetic@openstax.org</a></span> :
+                <a target="_blank" href="https://openstax.org/contact">Contact us here</a>
+            }
         </>
     )
 }

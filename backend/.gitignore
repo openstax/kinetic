@@ -15,6 +15,7 @@
 !/tmp/.keep
 
 /coverage/*
+/storage
 
 /.env
 
