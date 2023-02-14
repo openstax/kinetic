@@ -98,7 +98,7 @@ const IRB = () => {
                     </Box>
                 </Box>
             </Col>
-            <Col sm={2}>
+            <Col sm={2} css={{ marginLeft: 'auto' }}>
                 <a href='https://drive.google.com/file/d/1x1M8EcrOOu5U1ZQAtVmhvH3DkTlhtc8I/view' target='_blank'>
                     <span>Check Details</span>
                     <Icon icon="right" />
