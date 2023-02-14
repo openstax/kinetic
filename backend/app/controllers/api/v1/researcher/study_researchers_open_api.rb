@@ -3,33 +3,6 @@
 class Api::V1::Researcher::StudyResearchersOpenApi
   include OpenStax::OpenApi::Blocks
 
-  openapi_component do
-    schema :Researcher do
-      key :required, [:user_id]
-      property :id do
-        key :type, :integer
-        key :description, 'The researcher\'s ID.'
-      end
-      property :user_id do
-        key :type, :string
-        key :format, 'uuid'
-        key :description, 'The researcher\'s user ID.'
-      end
-      property :name do
-        key :type, :string
-        key :description, 'The researcher\'s name.'
-      end
-      property :institution do
-        key :type, :string
-        key :description, 'The researcher\'s institution.'
-      end
-      property :bio do
-        key :type, :string
-        key :description, 'The researcher\'s bio.'
-      end
-    end
-  end
-
   openapi_path '/researcher/studies/{study_id}/researcher/{user_id}' do
     operation :post do
       key :summary, 'Add a researcher to a study'

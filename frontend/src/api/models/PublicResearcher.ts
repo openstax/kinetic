@@ -20,11 +20,17 @@ import { exists, mapValues } from '../runtime';
  */
 export interface PublicResearcher {
     /**
-     * The researcher's name.
+     * The researcher's first name.
      * @type {string}
      * @memberof PublicResearcher
      */
-    name?: string;
+    firstName?: string;
+    /**
+     * The researcher's last name.
+     * @type {string}
+     * @memberof PublicResearcher
+     */
+    lastName?: string;
     /**
      * The researcher's institution.
      * @type {string}
@@ -58,7 +64,8 @@ export function PublicResearcherFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
+        'firstName': !exists(json, 'first_name') ? undefined : json['first_name'],
+        'lastName': !exists(json, 'last_name') ? undefined : json['last_name'],
         'institution': !exists(json, 'institution') ? undefined : json['institution'],
         'bio': !exists(json, 'bio') ? undefined : json['bio'],
     };
@@ -73,7 +80,8 @@ export function PublicResearcherToJSON(value?: PublicResearcher | null): any {
     }
     return {
         
-        'name': value.name,
+        'first_name': value.firstName,
+        'last_name': value.lastName,
         'institution': value.institution,
         'bio': value.bio,
     };

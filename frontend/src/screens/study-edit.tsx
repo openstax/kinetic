@@ -195,7 +195,6 @@ const StageRow: React.FC<{ stage: Stage, onDelete(s: Stage): void }> = ({ stage,
 }
 
 const StudyLandingUrl: React.FC<{ study: Study }> = ({ study }) => {
-
     return <pre>{`${window.location.origin}/study/land/${study.id}`}</pre>
 }
 

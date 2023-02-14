@@ -55,7 +55,7 @@ const Tag: React.FC<{ tag?: string }> = ({ tag }) => (
 )
 
 const Researchers: React.FC<StudyCardProps> = ({ study }) => {
-    const names: string[] = (study.researchers?.map(r => r.name || '') || []).filter(Boolean)
+    const names: string[] = (study.researchers?.map(r => `${r.firstName} ${r.lastName}` || '') || []).filter(Boolean)
     if (!names.length) return null
 
     return (

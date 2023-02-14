@@ -45,7 +45,6 @@ RSpec.describe 'Reward', api: :v1 do
         )
       end
     end
-
   end
 
   describe 'POST' do

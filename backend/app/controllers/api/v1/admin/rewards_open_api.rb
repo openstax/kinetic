@@ -76,7 +76,7 @@ class Api::V1::Admin::RewardsOpenApi
     end
 
     operation :get do
-      key :summary, 'Retrive list of all rewards'
+      key :summary, 'Retrieve list of all rewards'
       key :description, <<~DESC
         Returns listing of all rewards, expired or not
       DESC

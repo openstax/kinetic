@@ -128,13 +128,13 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
 
 
 const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher }) => {
-    if (!researcher || !researcher.name) return null
+    if (!researcher || !researcher.firstName || !researcher.lastName) return null
 
     return (
         <Part icon="rolodex" title="About Researcher" >
             <Box direction="column">
                 <Box gap>
-                    <span>{researcher.name}</span>
+                    <span>{researcher.firstName} {researcher.lastName}</span>
                     <span>{researcher.institution}</span>
                 </Box>
                 <p>{researcher.bio}</p>

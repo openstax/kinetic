@@ -43,7 +43,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
     context 'when signed in' do
       before { stub_current_user(user1_id) }
 
-      it 'returns a launched study study' do
+      it 'returns a launched study' do
         api_get "participant/studies/#{study2.id}"
         expect(response).to have_http_status(:success)
         expect(response_hash).to match a_hash_including(
@@ -52,11 +52,11 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
           short_description: study2.short_description,
           tags: study2.tags,
           researchers: a_collection_containing_exactly(
-            {
-              name: study2.researchers.first.name,
+            a_hash_including({
+              first_name: study2.researchers.first.first_name,
               institution: kind_of(String),
               bio: kind_of(String)
-            }
+            })
           ),
           first_launched_at: kind_of(String)
         )
@@ -95,7 +95,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
     context 'when signed in' do
       before { stub_current_user(user1_id) }
 
-      it 'return studies' do
+      it 'returns studies' do
         api_get 'participant/studies'
         expect(response).to have_http_status(:success)
         expect(response_hash[:data]).to match a_collection_containing_exactly(
@@ -106,11 +106,11 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
             tags: study1.tags,
             popularity_rating: a_value_within(0.1).of(0.0),
             researchers: a_collection_containing_exactly(
-              {
-                name: kind_of(String),
+              a_hash_including({
+                first_name: kind_of(String),
                 institution: kind_of(String),
                 bio: kind_of(String)
-              }
+              })
             )
           ),
           a_hash_including(
@@ -120,11 +120,11 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
             popularity_rating: a_value_within(0.1).of(0.33),
             tags: study2.tags,
             researchers: a_collection_containing_exactly(
-              {
-                name: study2.researchers.first.name,
+              a_hash_including({
+                first_name: study2.researchers.first.first_name,
                 institution: kind_of(String),
                 bio: kind_of(String)
-              }
+              })
             ),
             first_launched_at: kind_of(String)
           ),

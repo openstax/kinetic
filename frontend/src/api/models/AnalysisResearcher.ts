@@ -26,11 +26,17 @@ export interface AnalysisResearcher {
      */
     userId?: string;
     /**
-     * Name of researcher
+     * First name of researcher
      * @type {string}
      * @memberof AnalysisResearcher
      */
-    name?: string;
+    firstName?: string;
+    /**
+     * Last name of researcher
+     * @type {string}
+     * @memberof AnalysisResearcher
+     */
+    lastName?: string;
 }
 
 /**
@@ -53,7 +59,8 @@ export function AnalysisResearcherFromJSONTyped(json: any, ignoreDiscriminator: 
     return {
         
         'userId': !exists(json, 'user_id') ? undefined : json['user_id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
+        'firstName': !exists(json, 'first_name') ? undefined : json['first_name'],
+        'lastName': !exists(json, 'last_name') ? undefined : json['last_name'],
     };
 }
 
@@ -67,7 +74,8 @@ export function AnalysisResearcherToJSON(value?: AnalysisResearcher | null): any
     return {
         
         'user_id': value.userId,
-        'name': value.name,
+        'first_name': value.firstName,
+        'last_name': value.lastName,
     };
 }
 

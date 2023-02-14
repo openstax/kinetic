@@ -17,6 +17,8 @@ module Api::V1::Bindings
   class Environment
     attr_accessor :user
 
+    attr_accessor :researcher
+
     attr_accessor :accounts_env_name
 
     attr_accessor :homepage_url
@@ -31,6 +33,7 @@ module Api::V1::Bindings
     def self.attribute_map
       {
         :'user' => :'user',
+        :'researcher' => :'researcher',
         :'accounts_env_name' => :'accounts_env_name',
         :'homepage_url' => :'homepage_url',
         :'rewards_schedule' => :'rewards_schedule',
@@ -47,6 +50,7 @@ module Api::V1::Bindings
     def self.openapi_types
       {
         :'user' => :'EnvironmentUser',
+        :'researcher' => :'Researcher',
         :'accounts_env_name' => :'String',
         :'homepage_url' => :'String',
         :'rewards_schedule' => :'Array<RewardsScheduleSegment>',
@@ -77,6 +81,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'user')
         self.user = attributes[:'user']
+      end
+
+      if attributes.key?(:'researcher')
+        self.researcher = attributes[:'researcher']
       end
 
       if attributes.key?(:'accounts_env_name')
@@ -164,6 +172,7 @@ module Api::V1::Bindings
       return true if self.equal?(o)
       self.class == o.class &&
           user == o.user &&
+          researcher == o.researcher &&
           accounts_env_name == o.accounts_env_name &&
           homepage_url == o.homepage_url &&
           rewards_schedule == o.rewards_schedule &&
@@ -179,7 +188,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [user, accounts_env_name, homepage_url, rewards_schedule, banners_schedule].hash
+      [user, researcher, accounts_env_name, homepage_url, rewards_schedule, banners_schedule].hash
     end
 
     # Builds the object from hash
