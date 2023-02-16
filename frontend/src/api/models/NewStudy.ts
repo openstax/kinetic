@@ -91,7 +91,27 @@ export interface NewStudy {
      * @memberof NewStudy
      */
     isMandatory?: boolean;
+    /**
+     * Status of the study
+     * @type {string}
+     * @memberof NewStudy
+     */
+    status?: NewStudyStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const NewStudyStatusEnum = {
+    Active: 'active',
+    Paused: 'paused',
+    Scheduled: 'scheduled',
+    Draft: 'draft',
+    Completed: 'completed'
+} as const;
+export type NewStudyStatusEnum = typeof NewStudyStatusEnum[keyof typeof NewStudyStatusEnum];
+
 
 /**
  * Check if a given object implements the NewStudy interface.
@@ -127,6 +147,7 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
     };
 }
 
@@ -151,6 +172,7 @@ export function NewStudyToJSON(value?: NewStudy | null): any {
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'is_mandatory': value.isMandatory,
+        'status': value.status,
     };
 }
 

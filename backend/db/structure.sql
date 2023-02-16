@@ -570,7 +570,8 @@ CREATE TABLE public.studies (
     feedback_description character varying,
     image_id character varying,
     completed_count integer DEFAULT 0 NOT NULL,
-    is_hidden boolean DEFAULT false NOT NULL
+    is_hidden boolean DEFAULT false NOT NULL,
+    status integer DEFAULT 0
 );
 
 
@@ -1331,6 +1332,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221129202926'),
 ('20221129224957'),
 ('20230109200606'),
-('20230130155253');
+('20230130155253'),
+('20230216162207');
 
 

@@ -111,6 +111,12 @@ export interface Study {
      */
     isMandatory?: boolean;
     /**
+     * Status of the study
+     * @type {string}
+     * @memberof Study
+     */
+    status?: StudyStatusEnum;
+    /**
      * The URL to which stages should return after completing
      * @type {string}
      * @memberof Study
@@ -135,6 +141,20 @@ export interface Study {
      */
     stages?: Array<Stage>;
 }
+
+
+/**
+ * @export
+ */
+export const StudyStatusEnum = {
+    Active: 'active',
+    Paused: 'paused',
+    Scheduled: 'scheduled',
+    Draft: 'draft',
+    Completed: 'completed'
+} as const;
+export type StudyStatusEnum = typeof StudyStatusEnum[keyof typeof StudyStatusEnum];
+
 
 /**
  * Check if a given object implements the Study interface.
@@ -172,6 +192,7 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
         'returnUrl': !exists(json, 'return_url') ? undefined : json['return_url'],
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
@@ -200,6 +221,7 @@ export function StudyToJSON(value?: Study | null): any {
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'is_mandatory': value.isMandatory,
+        'status': value.status,
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(ResearcherToJSON)),
         'first_launched_at': value.firstLaunchedAt === undefined ? undefined : (value.firstLaunchedAt.toISOString()),
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),

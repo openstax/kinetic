@@ -38,6 +38,12 @@ import multiStage from '@iconify-icons/bi/stack'
 import chatLeft from '@iconify-icons/bi/chat-left-fill'
 import cloudUpload from '@iconify-icons/bi/cloud-upload'
 import questionCircleFill from '@iconify-icons/bi/question-circle-fill'
+import arrowLeftRight from '@iconify-icons/bi/arrow-left-right'
+import arrowUpDown from '@iconify-icons/bi/arrow-up-down'
+import arrowLeft from '@iconify-icons/bi/arrow-left';
+import arrowRight from '@iconify-icons/bi/arrow-right';
+import arrowUp from '@iconify-icons/bi/arrow-up';
+import arrowDown from '@iconify-icons/bi/arrow-down';
 
 const SUNDRY_PACKAGED_ICONS = {
     thumbsUp,
@@ -77,6 +83,12 @@ export const ICONS = {
     chatLeft,
     cloudUpload,
     questionCircleFill,
+    arrowUpDown,
+    arrowLeftRight,
+    arrowLeft,
+    arrowRight,
+    arrowUp,
+    arrowDown,
 }
 
 export type IconKey = keyof typeof ICONS

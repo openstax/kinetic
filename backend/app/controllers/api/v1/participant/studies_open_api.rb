@@ -198,6 +198,11 @@ class Api::V1::Participant::StudiesOpenApi
       key :type, :boolean
       key :description, 'Mandatory studies must be completed by all users'
     end
+    property :status do
+      key :type, :string
+      key :description, 'Status of the study'
+      key :enum, %w[active paused scheduled draft completed]
+    end
   end
 
   openapi_path '/participant/studies/{id}' do

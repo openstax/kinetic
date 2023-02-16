@@ -146,7 +146,27 @@ export interface ParticipantStudy {
      * @memberof ParticipantStudy
      */
     isMandatory?: boolean;
+    /**
+     * Status of the study
+     * @type {string}
+     * @memberof ParticipantStudy
+     */
+    status?: ParticipantStudyStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const ParticipantStudyStatusEnum = {
+    Active: 'active',
+    Paused: 'paused',
+    Scheduled: 'scheduled',
+    Draft: 'draft',
+    Completed: 'completed'
+} as const;
+export type ParticipantStudyStatusEnum = typeof ParticipantStudyStatusEnum[keyof typeof ParticipantStudyStatusEnum];
+
 
 /**
  * Check if a given object implements the ParticipantStudy interface.
@@ -192,6 +212,7 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'totalDuration': json['total_duration'],
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(ParticipantStudyStageFromJSON)),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
     };
 }
 
@@ -222,6 +243,7 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'total_duration': value.totalDuration,
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(ParticipantStudyStageToJSON)),
         'is_mandatory': value.isMandatory,
+        'status': value.status,
     };
 }
 

@@ -20,6 +20,8 @@ class Study < ApplicationRecord
   # Delete researchers to avoid them complaining about not leaving a researcher undeleted
   before_destroy(prepend: true) { study_researchers.delete_all }
 
+  enum status: [ :active, :paused, :scheduled, :draft, :completed ]
+
   arel = Study.arel_table
 
   scope :available, -> {
@@ -30,6 +32,18 @@ class Study < ApplicationRecord
       .where(arel[:closes_at].eq(nil).or(
                arel[:closes_at].gteq(Time.now)))
   }
+
+  def get_status
+    if status == 'paused' || status == 'draft' || status == 'scheduled'
+      status
+    elsif !opens_at.nil? && opens_at > DateTime.now
+      'draft'
+    elsif !closes_at.nil? && closes_at < DateTime.now
+      'completed'
+    else
+      'active'
+    end
+  end
 
   def total_points
     stages.sum(:points)
