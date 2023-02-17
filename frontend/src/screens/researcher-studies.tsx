@@ -19,6 +19,14 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import { Tooltip } from '@nathanstitt/sundry';
+import { Link } from 'react-router-dom';
+import AtoZ from '../images/icons/atoz.png'
+import ZtoA from '../images/icons/ztoa.png'
+import AtoZDefault from '../images/icons/atozdefault.png'
+import SortDefault from '../images/icons/sort.png'
+import SortUp from '../images/icons/sortup.png'
+import SortDown from '../images/icons/sortdown.png'
+import 'bootstrap/js/dist/dropdown'
 
 declare module '@tanstack/table-core' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,35 +43,14 @@ const StyledHeader = styled('th')({
     borderBottom: `3px solid ${colors.lightGray}`,
 });
 
-const UpDown: React.FC<{direction: string}> = ({ direction }) => {
-    return (
-        <Box>
-            <Icon icon="arrowUp" />
-            <Icon icon="arrowDown" />
-        </Box>
-    )
-}
-
-const LeftRight: React.FC<{direction: string}> = ({ direction }) => {
-    return (
-        <Box direction='column'>
-            <Icon icon="arrowUpDown">
-
-            </Icon>
-            {/*<Icon icon="arrowRight" height={12} />*/}
-            {/*<Icon icon="arrowLeft" height={12} />*/}
-        </Box>
-    )
-}
-
 const SortIcon: React.FC<{header: Header<Study, unknown> }> = ({ header }) => {
     if (header.column.columnDef.meta?.type == 'text') {
         return (
             <span>
                 {{
-                    asc: <Box> A ↑ Z</Box>,
-                    desc: <Box> A ↓ Z</Box>,
-                    false: '__',
+                    asc: <img src={AtoZ} alt='A to Z'/>,
+                    desc: <img src={ZtoA} alt='Z to A' />,
+                    false: <img src={AtoZDefault} alt='AtoZDefault' />,
                 }[header.column.getIsSorted() as string] ?? null}
             </span>
         )
@@ -72,20 +59,21 @@ const SortIcon: React.FC<{header: Header<Study, unknown> }> = ({ header }) => {
     return (
         <span>
             {{
-                asc: <Box> A ↑ Z</Box>,
-                desc: <Box> A ↓ Z</Box>,
-                false: '__',
+                asc: <img src={SortUp} alt='sort ascending'/>,
+                desc: <img src={SortDown} alt='sort descending' />,
+                false: <img src={SortDefault} alt='sort default' />,
             }[header.column.getIsSorted() as string] ?? null}
         </span>
     )
 }
 
 const TableHeader: React.FC<{header: Header<Study, unknown> }> = ({ header }) => {
+    const canSort = header.column.getCanSort()
     return (
         <StyledHeader css={{ width: header.getSize() }}>
             <span
-                onClick={() => header.column.toggleSorting()}
-                className={cx('header-text', { 'cursor-pointer': header.column.getCanSort() })}
+                onClick={() => canSort && header.column.toggleSorting()}
+                className={cx('header-text', { 'cursor-pointer': canSort })}
                 css={{ cursor: header.column.getCanSort() ? 'pointer' : 'auto' }}
             >
                 <Box gap>
@@ -93,7 +81,7 @@ const TableHeader: React.FC<{header: Header<Study, unknown> }> = ({ header }) =>
                         header.column.columnDef.header,
                         header.getContext()
                     )}
-                    <SortIcon header={header} />
+                    {canSort && <SortIcon header={header} />}
                 </Box>
             </span>
         </StyledHeader>
@@ -112,10 +100,7 @@ const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
             {row.getVisibleCells().map((cell) => {
                 return (
                     <td key={cell.id}>
-                        {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                        )}
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                 );
             })}
@@ -170,7 +155,7 @@ const StatusFilters: React.FC<{
 
 const StyledLabel = styled.span({
     borderRadius: 20,
-    padding: '4px 8px',
+    padding: '4px 12px',
     color: colors.grayerText,
 })
 
@@ -191,11 +176,61 @@ const StatusLabel: React.FC<{status: string}> = ({ status }) => {
     }
 }
 
-const StudiesTable: React.FC<{ studies: Study[], isLaunched: boolean }> = ({ studies, isLaunched }) => {
-    // TODO Allow empty state on grid
-    if (!studies.length) return null
-    // console.log(studies);
+const NoData: React.FC = () => {
+    return (
+        <Box direction='column' align='center' justify='center' className='mt-10' gap='large'>
+            <h3 css={{ color: colors.lightGray }}>
+                No data
+            </h3>
+            <span>
+                <Link to='/study/edit/new' css={{ color: colors.purple }} className='fw-bold'>
+                    + Create your first study
+                </Link>
+                <span> and start to collect data</span>
+            </span>
+        </Box>
+    )
+}
 
+const Actions = styled(Box)({
+    'svg': {
+        cursor: 'pointer',
+    },
+})
+
+const ActionColumn: React.FC<{study: Study}> = ({ study }) => {
+    return (
+        <Actions gap='xlarge' justify='center' align='center'>
+            <div>
+                <Icon icon="pencilFill" height={20} color={colors.purple}/>
+            </div>
+            {/*conditional pause or play*/}
+            <div>
+                <Icon icon="playFill" height={20} color={colors.purple}/>
+            </div>
+            <div>
+                <Icon
+                    icon="tripleDotVertical"
+                    height={20}
+                    id="action-menu-button"
+                    className='dropdown-toggle'
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                />
+                <ul className="dropdown-menu" aria-labelledby="action-menu-button">
+                    <li>
+                        <a className="dropdown-item" href="#">Edit Study</a>
+                    </li>
+                    <li>
+                        <a className="dropdown-item" href="#" css={{ color: colors.red }}>Delete</a>
+                    </li>
+                </ul>
+            </div>
+        </Actions>
+    )
+}
+
+const StudiesTable: React.FC<{ studies: Study[], isLaunched: boolean }> = ({ studies, isLaunched }) => {
     const columns = React.useMemo<ColumnDef<Study, any>[]>(() => [
         {
             accessorKey: 'titleForResearchers',
@@ -205,11 +240,11 @@ const StudiesTable: React.FC<{ studies: Study[], isLaunched: boolean }> = ({ stu
                 type: 'text',
             },
             cell: (info) => {
+                const studyId = info.row.original.id;
                 return (
-                    // TODO Should this be a link?
-                    <span css={{ color: colors.purple, borderBottom: `1px solid ${colors.purple}` }}>
+                    <Link to={`/study/edit/${studyId}`} css={{ color: colors.purple }}>
                         {info.getValue()}
-                    </span>
+                    </Link>
                 )
             },
         },
@@ -236,14 +271,15 @@ const StudiesTable: React.FC<{ studies: Study[], isLaunched: boolean }> = ({ stu
         },
         {
             accessorKey: 'sampleSize',
+            size: 175,
             header: () => {
                 return (
-                    <div css={{ position: 'relative' }}>
-                        <span>Sample Size</span>
-                        <Tooltip tooltip='Total number of study completions / desired sample size' css={{ position: 'absolute', top: 0, right: 0 }}>
+                    <Box gap>
+                        <Tooltip tooltip='Total number of study completions / desired sample size'>
                             <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={16}/>
                         </Tooltip>
-                    </div>
+                        <span>Sample Size</span>
+                    </Box>
                 )
             },
         },
@@ -255,7 +291,8 @@ const StudiesTable: React.FC<{ studies: Study[], isLaunched: boolean }> = ({ stu
         {
             accessorKey: 'action',
             header: () => <span>Action</span>,
-            cell: info => info.getValue(),
+            enableSorting: false,
+            cell: info => <ActionColumn study={info.row.original} />,
         },
     ], [])
 
@@ -282,7 +319,8 @@ const StudiesTable: React.FC<{ studies: Study[], isLaunched: boolean }> = ({ stu
         <Box direction='column' className='mt-2'>
             {isLaunched && <StatusFilters table={table} className='my-2'/>}
             <table data-test-id="studies-table" className='w-100'>
-                <thead>
+                {/* TODO Play with height ? */}
+                <thead css={{ height: 40 }}>
                     <tr>
                         {table.getFlatHeaders().map((header) =>
                             <TableHeader header={header} key={header.id} />
@@ -295,6 +333,7 @@ const StudiesTable: React.FC<{ studies: Study[], isLaunched: boolean }> = ({ stu
                     )}
                 </tbody>
             </table>
+            {!table.getRowModel().rows.length && <NoData/>}
         </Box>
     )
 }
@@ -366,7 +405,7 @@ export default function ResearcherStudies() {
                 </NavTabs>
                 <StudiesTable studies={displayingStudies} isLaunched={currentStatus === StudyStatus.Launched}/>
             </div>
-        </div >
+        </div>
     )
 }
 
