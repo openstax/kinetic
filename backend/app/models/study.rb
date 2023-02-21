@@ -53,7 +53,7 @@ class Study < ApplicationRecord
     stages.sum(:duration_minutes)
   end
 
-  def available?
+  def available?d
     !is_hidden? && opens_at && Time.now > opens_at && (closes_at.nil? || Time.now <= closes_at)
   end
 

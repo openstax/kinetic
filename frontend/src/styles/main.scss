@@ -7,6 +7,10 @@ $link-color: #0d6efd;
 @import "flatpickr/dist/flatpickr.css";
 @import 'swiper/swiper-bundle.css';
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 .btn-primary {
     color: $white;
     &:hover {
