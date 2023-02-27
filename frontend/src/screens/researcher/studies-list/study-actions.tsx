@@ -1,8 +1,8 @@
 import { React, styled, useNavigate } from '@common';
-import { Box, Icon, IconProps } from '@components';
-import { Researcher, Study, StudyStatusEnum } from '@api';
+import { Box, Icon } from '@components';
+import { Study, StudyStatusEnum } from '@api';
 import { colors } from '../../../theme';
-import { Button, dayjs, Form, Modal } from '@nathanstitt/sundry';
+import { Button, dayjs, Modal } from '@nathanstitt/sundry';
 import { useApi } from '@lib';
 import { CellContext } from '@tanstack/react-table';
 import { NotificationType } from './study-action-notification';
@@ -101,9 +101,9 @@ const ActionModalContent: FC<{
                     header="Resume Study"
                     warning={false}
                     body="The study you wish to resume has passed the original closing date. Please choose one of the options below."
-                    cancelText='End Study'
                     actionText='Adjust Closing Date'
                     onSubmit={() => nav(`/study/edit/${study.id}`)}
+                    cancelText='End Study'
                     onCancel={() => {
                         updateStudy(study, StudyStatusEnum.Completed)
                         onHide()
@@ -199,31 +199,21 @@ export const ActionColumn: React.FC<{
         setShowModal(false)
     }
 
-    const showEndStudy = study.status !== StudyStatusEnum.Completed
+    const editDisabled = study.status === StudyStatusEnum.Completed
+    const pauseDisabled = study.status !== StudyStatusEnum.Active
+    const resumeDisabled = study.status !== StudyStatusEnum.Paused
+
+    const showEndStudy =
+        study.status === StudyStatusEnum.Paused ||
+        (study.status !== StudyStatusEnum.Completed && study.status === StudyStatusEnum.Active)
+
     const showReopen = study.status === StudyStatusEnum.Completed
 
-    const editDisabled = study.status === StudyStatusEnum.Completed
-    const pauseDisabled =
+    const showDelete =
         study.status === StudyStatusEnum.Draft ||
         study.status === StudyStatusEnum.Scheduled
-
-    const resumeDisabled =
-        study.status === StudyStatusEnum.Draft ||
-        study.status === StudyStatusEnum.Scheduled
-
-    const endStudyDisabled =
-        study.status === StudyStatusEnum.Draft ||
-        study.status === StudyStatusEnum.Scheduled
-
-    const deleteDisabled =
-        study.status === StudyStatusEnum.Scheduled
-
-    const reopenDisabled =
-        study.status !== StudyStatusEnum.Completed
-
 
     const showResumeButton = study.status === StudyStatusEnum.Paused
-    // const showPauseButton = study.status === StudyStatusEnum.Active
 
     return (
         <Box gap='xlarge' justify='center' align='center'>
@@ -288,15 +278,17 @@ export const ActionColumn: React.FC<{
                             </span>
                         </li>
                     }
-                    <li>
-                        <span
-                            className="dropdown-item cursor-pointer"
-                            css={{ color: colors.red }}
-                            onClick={() => setAndShowModal(ModalType.Delete)}
-                        >
+                    {showDelete &&
+                        <li>
+                            <span
+                                className="dropdown-item cursor-pointer"
+                                css={{ color: colors.red }}
+                                onClick={() => setAndShowModal(ModalType.Delete)}
+                            >
                             Delete
-                        </span>
-                    </li>
+                            </span>
+                        </li>
+                    }
                 </ul>
             </div>
             <Modal center show={showModal} large onHide={onHide}>
