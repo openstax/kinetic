@@ -1,10 +1,11 @@
 import { cx, React, styled, useNavigate, useState } from '@common'
-import { Box, Button, Icon, TopNavBar } from '@components'
+import { Box, Button, Footer, Icon, TopNavBar } from '@components'
 import { StudyStatus } from '@models'
 import { colors } from '../../../theme';
 import 'bootstrap/js/dist/dropdown'
 import { StudiesTable } from './studies-table';
 import { ColumnFiltersState } from '@tanstack/react-table';
+import { ActionNotification, useActionNotifications } from './study-action-notification';
 
 const NavTabs = styled.ul({
     padding: '1rem 0',
@@ -32,6 +33,8 @@ export default function ResearcherStudies() {
         { id: 'status', value: ['active', 'paused', 'scheduled'] },
     ])
 
+    const { notifications, addNotification, dismissNotification } = useActionNotifications()
+
     const setStatus = (ev: React.MouseEvent<HTMLAnchorElement>) => {
         const status = ev.currentTarget.dataset.status! as StudyStatus
         setCurrentStatus(status)
@@ -50,10 +53,10 @@ export default function ResearcherStudies() {
 
     return (
         <div className="studies">
-            <TopNavBar showBanner={false}/>
-            {/* TODO Notifications */}
-            {/*<ActionNotification />*/}
-            <div className="container-lg mt-8">
+            <TopNavBar hideBanner/>
+            <div className="container-lg h-100 py-4">
+                <ActionNotification notifications={notifications} onDismiss={dismissNotification}/>
+
                 <Box align="center" justify="between">
                     <h3 className='fw-bold'>Studies</h3>
                     <Button
@@ -83,26 +86,14 @@ export default function ResearcherStudies() {
                         </a>
                     </li>
                 </NavTabs>
-                <StudiesTable filters={filters} setFilters={setFilters} isLaunched={currentStatus === StudyStatus.Launched}/>
+                <StudiesTable
+                    filters={filters}
+                    setFilters={setFilters}
+                    isLaunched={currentStatus === StudyStatus.Launched}
+                    addNotification={addNotification}
+                />
             </div>
-        </div>
-    )
-}
-
-const ActionNotification = () => {
-    return (
-        <div aria-live="polite" aria-atomic="true" className="d-flex justify-content-center align-items-center w-100">
-            <div className="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                <div className="toast-header">
-                    <img src="..." className="rounded me-2" alt="..."/>
-                    <strong className="me-auto">Bootstrap</strong>
-                    <small>11 mins ago</small>
-                    <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div className="toast-body">
-                    Hello, world! This is a toast message.
-                </div>
-            </div>
+            <Footer className='fixed-bottom' />
         </div>
     )
 }

@@ -1,5 +1,5 @@
-import { cx, React, styled, useState } from '@common';
-import { Study } from '@api';
+import { cx, React, styled } from '@common';
+import { Study, StudyStatusEnum } from '@api';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -28,6 +28,7 @@ import SortDefault from '../../../images/icons/sort.png';
 import { ActionColumn } from './study-actions';
 import { useFetchStudies } from '@models';
 import { Dispatch, SetStateAction } from 'react';
+import { NotificationType } from './study-action-notification';
 
 declare module '@tanstack/table-core' {
     interface ColumnMeta<TData extends RowData, TValue> { // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -102,7 +103,12 @@ const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
         <StyledRow key={row.id}>
             {row.getVisibleCells().map((cell) => {
                 return (
-                    <td key={cell.id}>
+                    <td key={cell.id} css={{
+                        maxWidth: 250,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                    }}>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                 );
@@ -198,11 +204,13 @@ const NoData: React.FC = () => {
 export const StudiesTable: React.FC<{
     isLaunched: boolean,
     filters: ColumnFiltersState,
-    setFilters: Dispatch<SetStateAction<ColumnFiltersState>>
+    setFilters: Dispatch<SetStateAction<ColumnFiltersState>>,
+    addNotification: (message: string, type?: NotificationType) => void
 }> = ({
     isLaunched,
     filters,
     setFilters,
+    addNotification,
 }) => {
     const { studies, setStudies } = useFetchStudies()
     const [sorting, setSorting] = React.useState<SortingState>([])
@@ -210,14 +218,17 @@ export const StudiesTable: React.FC<{
         {
             accessorKey: 'titleForResearchers',
             header: () => <span>Title</span>,
-            size: 400,
+            size: 350,
             meta: {
                 type: 'text',
             },
             cell: (info) => {
                 const studyId = info.row.original.id;
                 return (
-                    <Link to={`/study/edit/${studyId}`} css={{ color: colors.purple }}>
+                    <Link
+                        to={`/study/edit/${studyId}`}
+                        css={{ color: colors.purple }}
+                    >
                         {info.getValue()}
                     </Link>
                 )
@@ -236,13 +247,18 @@ export const StudiesTable: React.FC<{
         },
         {
             accessorKey: 'opensAt',
-            header: () => <span>Opens On</span>,
+            header: () => <span>Opens on</span>,
             cell: (info) => toDayJS(info.getValue() as Date).format('MM/DD/YYYY'),
         },
         {
             accessorKey: 'closesAt',
-            header: () => <span>Closes On</span>,
-            cell: (info) => toDayJS(info.getValue() as Date).format('MM/DD/YYYY'),
+            header: () => <span>Closes on</span>,
+            cell: (info) => {
+                if (info.row.original.status === StudyStatusEnum.Paused) {
+                    return '-'
+                }
+                return toDayJS(info.getValue() as Date).format('MM/DD/YYYY')
+            },
         },
         {
             accessorKey: 'sampleSize',
@@ -255,6 +271,17 @@ export const StudiesTable: React.FC<{
                         </Tooltip>
                         <span>Sample Size</span>
                     </Box>
+                )
+            },
+            cell: (info) => {
+                const study = info.row.original;
+                if (study.completedCount == 0 || study.targetSampleSize == 0) {
+                    return null
+                }
+                return (
+                    <span>
+                        {study.completedCount}/{study.targetSampleSize}
+                    </span>
                 )
             },
         },
@@ -270,12 +297,18 @@ export const StudiesTable: React.FC<{
                     </Box>
                 )
             },
+            cell: (info) => {
+                const study = info.row.original;
+                return (
+                    <span>-</span>
+                )
+            },
         },
         {
             accessorKey: 'action',
             header: () => <span>Action</span>,
             enableSorting: false,
-            cell: info => <ActionColumn study={info.row.original} cell={info} />,
+            cell: info => <ActionColumn study={info.row.original} cell={info} addNotification={addNotification}/>,
         },
     ], [])
 

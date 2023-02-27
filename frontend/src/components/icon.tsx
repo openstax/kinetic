@@ -46,6 +46,7 @@ import arrowUp from '@iconify-icons/bi/arrow-up'
 import arrowDown from '@iconify-icons/bi/arrow-down'
 import pencilFill from '@iconify-icons/bi/pencil-fill'
 import pause from '@iconify-icons/bi/pause'
+import pauseFill from '@iconify-icons/bi/pause-fill'
 import playFill from '@iconify-icons/bi/play-fill'
 
 const SUNDRY_PACKAGED_ICONS = {
@@ -95,6 +96,7 @@ export const ICONS = {
     arrowDown,
     pencilFill,
     pause,
+    pauseFill,
     playFill,
 }
 
@@ -104,6 +106,7 @@ export type IconSpec = IconKey | IconifyIconDefinition | IconifyIcon
 export interface IconProps extends Omit<SundryIconProps, 'icon'> {
     icon: IconSpec
     id?: string
+    disabled?: boolean
 }
 
 export const Icon = React.forwardRef<SVGSVGElement, PropsWithOptionalChildren<IconProps>>((allProps, ref) => {

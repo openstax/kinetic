@@ -9,10 +9,10 @@ import { useCurrentUser, useEnvironment, useIsMobileDevice } from '@lib'
 interface TopNavBarProps {
     className?: string
     controls?: React.ReactElement,
-    showBanner?: boolean
+    hideBanner?: boolean
 }
 
-export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, controls, className, showBanner = true }) => {
+export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, controls, className, hideBanner = false }) => {
     const env = useEnvironment()
     const user = useCurrentUser()
     const isMobile = useIsMobileDevice()
@@ -40,7 +40,7 @@ export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, controls, className
                     </Box>
                 </div>
             </div>
-            {showBanner && <BannersBar />}
+            {!hideBanner && <BannersBar />}
         </nav >
     )
 }

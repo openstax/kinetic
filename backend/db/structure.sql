@@ -571,7 +571,8 @@ CREATE TABLE public.studies (
     image_id character varying,
     completed_count integer DEFAULT 0 NOT NULL,
     is_hidden boolean DEFAULT false NOT NULL,
-    status integer DEFAULT 0
+    status integer DEFAULT 0,
+    target_sample_size integer DEFAULT 0
 );
 
 

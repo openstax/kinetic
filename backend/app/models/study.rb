@@ -8,7 +8,7 @@ class Study < ApplicationRecord
   # need the double quotes, order is a postgresql semi-reserved word
   has_many :stages, -> { order('"order"') }, inverse_of: :study, dependent: :destroy
   has_many :launched_stages, through: :stages
-  has_many :launched_studies
+  has_many :launched_studies, counter_cache: true
 
   has_many :study_analysis
   has_many :analysis, through: :study_analysis
@@ -20,7 +20,7 @@ class Study < ApplicationRecord
   # Delete researchers to avoid them complaining about not leaving a researcher undeleted
   before_destroy(prepend: true) { study_researchers.delete_all }
 
-  enum status: [ :active, :paused, :scheduled, :draft, :completed ]
+  enum status: [ :draft, :active, :paused, :scheduled, :completed ]
 
   arel = Study.arel_table
 
@@ -53,7 +53,7 @@ class Study < ApplicationRecord
     stages.sum(:duration_minutes)
   end
 
-  def available?d
+  def available?
     !is_hidden? && opens_at && Time.now > opens_at && (closes_at.nil? || Time.now <= closes_at)
   end
 

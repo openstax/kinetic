@@ -1,10 +1,11 @@
 import { React, styled, useNavigate } from '@common';
-import { Box, Icon } from '@components';
-import { Study, StudyStatusEnum } from '@api';
+import { Box, Icon, IconProps } from '@components';
+import { Researcher, Study, StudyStatusEnum } from '@api';
 import { colors } from '../../../theme';
-import { Button, Modal } from '@nathanstitt/sundry';
+import { Button, dayjs, Form, Modal } from '@nathanstitt/sundry';
 import { useApi } from '@lib';
 import { CellContext } from '@tanstack/react-table';
+import { NotificationType } from './study-action-notification';
 
 const ModalType = {
     Pause: 'pauseStudy',
@@ -16,31 +17,58 @@ const ModalType = {
 
 type ModalTypeEnum = typeof ModalType[keyof typeof ModalType];
 
+const actionText = (type: ModalTypeEnum) => {
+    switch (type) {
+        case ModalType.Pause:
+            return 'paused'
+        case ModalType.End:
+            return 'ended'
+        case ModalType.Delete:
+            return 'deleted'
+        case ModalType.Resume:
+            return 'resumed'
+        case ModalType.Reopen:
+            return 'reopened'
+        default:
+            return 'updated'
+    }
+}
+
 const ActionModalContent: FC<{
     study: Study,
     modalType: string,
     onHide: () => void,
-    cell: CellContext<Study, any>
-}> = ({ study , modalType, onHide, cell }) => {
+    cell: CellContext<Study, any>,
+    addNotification: (message: string, type?: NotificationType) => void
+}> = ({ study , modalType, onHide, cell, addNotification }) => {
     const api = useApi()
+    const nav = useNavigate()
+
     const updateStudy = (study: Study, status: StudyStatusEnum) => {
+        const oldStatus = study.status
         try {
-            study.status = status;
-            api.updateStudy({ id: study.id, updateStudy: { study: study as any } }).then((study) => {
-                cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
-            })
+            study.status = status
+            api.updateStudy({ id: study.id, updateStudy: { study: study as any } })
+                .then((study) => {
+                    cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
+                    addNotification(`Study ${study.titleForResearchers} has been ${actionText(modalType)}`)
+                })
         }
         catch (err) {
+            study.status = oldStatus
+            addNotification(String(err), 'error')
             console.error(err) // eslint-disable-line no-console
         }
         onHide()
     }
 
-    // TODO How to deal with HIDDEN vs DELETED?
     const deleteStudy = (study: Study) => {
         try {
+            study.isHidden = true
             api.deleteStudy({ studyId: study.id })
         } catch (err) {
+            study.isHidden = false
+            addNotification(String(err), 'error')
             console.error(err) // eslint-disable-line no-console
         }
         onHide()
@@ -52,11 +80,37 @@ const ActionModalContent: FC<{
                 header="Pause Study"
                 warning={true}
                 body="This action will pause the study and participants will no longer be able to view it until you resume."
-                cancelText='Keep active'
-                actionText='Pause now'
+                cancelText='Keep Study Active'
+                actionText='Pause Study'
                 onSubmit={() => updateStudy(study, StudyStatusEnum.Paused)}
-                onHide={onHide}
+                onCancel={onHide}
             />
+        case ModalType.Resume:
+            if (dayjs().isBefore(dayjs(study.closesAt))) {
+                return <StudyActionContainer
+                    header="Resume Study"
+                    warning={false}
+                    body="This action will render the study visible to learners and open for participation."
+                    cancelText='Keep Study Paused'
+                    actionText='Resume Study'
+                    onSubmit={() => updateStudy(study, StudyStatusEnum.Active)}
+                    onCancel={onHide}
+                />
+            } else {
+                return <StudyActionContainer
+                    header="Resume Study"
+                    warning={false}
+                    body="The study you wish to resume has passed the original closing date. Please choose one of the options below."
+                    cancelText='End Study'
+                    actionText='Adjust Closing Date'
+                    onSubmit={() => nav(`/study/edit/${study.id}`)}
+                    onCancel={() => {
+                        updateStudy(study, StudyStatusEnum.Completed)
+                        onHide()
+                    }}
+                />
+            }
+
         case ModalType.End:
             return <StudyActionContainer
                 header='End Study'
@@ -65,17 +119,7 @@ const ActionModalContent: FC<{
                 cancelText='Keep active'
                 actionText='End now'
                 onSubmit={() => updateStudy(study, StudyStatusEnum.Completed)}
-                onHide={onHide}
-            />
-        case ModalType.Resume:
-            return <StudyActionContainer
-                header="Resume Study"
-                warning={false}
-                body="This action will render the study visible to learners and open for participation."
-                cancelText='Keep paused'
-                actionText='Resume now'
-                onSubmit={() => updateStudy(study, StudyStatusEnum.Active)}
-                onHide={onHide}
+                onCancel={onHide}
             />
         case ModalType.Reopen:
             return <StudyActionContainer
@@ -85,7 +129,7 @@ const ActionModalContent: FC<{
                 cancelText='Cancel'
                 actionText='Reopen'
                 onSubmit={() => updateStudy(study, StudyStatusEnum.Active)}
-                onHide={onHide}
+                onCancel={onHide}
             />
         case ModalType.Delete:
             return <StudyActionContainer
@@ -95,7 +139,7 @@ const ActionModalContent: FC<{
                 cancelText='No, keep it'
                 actionText='Yes, delete it'
                 onSubmit={() => deleteStudy(study)}
-                onHide={onHide}
+                onCancel={onHide}
             />
         default:
             return null
@@ -109,9 +153,9 @@ const StudyActionContainer: FC<{
     cancelText: string,
     actionText: string,
     onSubmit: () => void,
-    onHide: () => void
+    onCancel: () => void
 }> = ({
-    warning, header, body, cancelText, actionText, onSubmit, onHide,
+    warning, header, body, cancelText, actionText, onSubmit, onCancel,
 }) => {
     return (
         <Box direction='column' className='py-8 px-16' gap='large' align='center'>
@@ -123,7 +167,7 @@ const StudyActionContainer: FC<{
                 {body}
             </div>
             <Box gap='xlarge'>
-                <Button css={{ width: 180, justifyContent: 'center' }} outline primary onClick={onHide}>
+                <Button css={{ width: 180, justifyContent: 'center' }} outline primary onClick={onCancel}>
                     {cancelText}
                 </Button>
                 <Button css={{ width: 180, justifyContent: 'center' }} primary onClick={onSubmit}>
@@ -134,16 +178,16 @@ const StudyActionContainer: FC<{
     )
 }
 
-const Actions = styled(Box)({
-    'svg': {
-        cursor: 'pointer',
-    },
-    '.disabled': {
-        color: colors.lightGray,
-    },
-})
+const ActionIcon = styled(Icon)(({ disabled }) => ({
+    color: disabled ? colors.lightGray : colors.purple,
+    cursor: disabled ? 'default' : 'pointer',
+}))
 
-export const ActionColumn: React.FC<{study: Study, cell: CellContext<Study, any>}> = ({ study, cell }) => {
+export const ActionColumn: React.FC<{
+    study: Study,
+    cell: CellContext<Study, any>,
+    addNotification: (message: string, type?: NotificationType) => void
+}> = ({ study, cell, addNotification }) => {
     const nav = useNavigate()
     const [modalType, setModalType] = React.useState<ModalTypeEnum>('')
     const [showModal, setShowModal] = React.useState<boolean>(false)
@@ -155,41 +199,60 @@ export const ActionColumn: React.FC<{study: Study, cell: CellContext<Study, any>
         setShowModal(false)
     }
 
-    const pauseEnabled = study.status !== StudyStatusEnum.Scheduled && study.status !== StudyStatusEnum.Draft
-    const resumeEnabled = study.status === StudyStatusEnum.Draft || study.status === StudyStatusEnum.Scheduled
-    const endStudyDisabled = study.status === StudyStatusEnum.Draft
     const showEndStudy = study.status !== StudyStatusEnum.Completed
     const showReopen = study.status === StudyStatusEnum.Completed
+
+    const editDisabled = study.status === StudyStatusEnum.Completed
+    const pauseDisabled =
+        study.status === StudyStatusEnum.Draft ||
+        study.status === StudyStatusEnum.Scheduled
+
+    const resumeDisabled =
+        study.status === StudyStatusEnum.Draft ||
+        study.status === StudyStatusEnum.Scheduled
+
+    const endStudyDisabled =
+        study.status === StudyStatusEnum.Draft ||
+        study.status === StudyStatusEnum.Scheduled
+
+    const deleteDisabled =
+        study.status === StudyStatusEnum.Scheduled
+
+    const reopenDisabled =
+        study.status !== StudyStatusEnum.Completed
+
+
     const showResumeButton = study.status === StudyStatusEnum.Paused
+    // const showPauseButton = study.status === StudyStatusEnum.Active
 
     return (
-        <Actions gap='xlarge' justify='center' align='center'>
+        <Box gap='xlarge' justify='center' align='center'>
             <div>
-                <Icon
+                <ActionIcon
                     icon="pencilFill"
-                    tooltip="Edit Study"
+                    disabled={editDisabled}
                     height={20}
-                    color={colors.purple}
-                    onClick={() => nav(`/study/edit/${study.id}`)}
+                    tooltip={!editDisabled && 'Edit Study'}
+                    onClick={() => !editDisabled && nav(`/study/edit/${study.id}`)}
                 />
             </div>
             <div>
                 {showResumeButton &&
-                    <Icon
+                    <ActionIcon
                         icon="playFill"
-                        tooltip="Resume Study"
+                        tooltip={!resumeDisabled && 'Resume Study'}
                         height={20}
-                        color={colors.purple}
-                        onClick={() => setAndShowModal(ModalType.Resume)}
+                        disabled={resumeDisabled}
+                        onClick={() => !resumeDisabled && setAndShowModal(ModalType.Resume)}
                     />
                 }
                 {!showResumeButton &&
-                    <Icon
-                        icon="pause"
-                        tooltip="Pause Study"
+                    <ActionIcon
+                        icon="pauseFill"
+                        tooltip={!pauseDisabled && 'Pause Study'}
                         height={20}
-                        color={colors.purple}
-                        onClick={() => setAndShowModal(ModalType.Pause)}
+                        disabled={pauseDisabled}
+                        onClick={() => !pauseDisabled && setAndShowModal(ModalType.Pause)}
                     />
                 }
             </div>
@@ -202,6 +265,7 @@ export const ActionColumn: React.FC<{study: Study, cell: CellContext<Study, any>
                     className='dropdown-toggle'
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
+                    css={{ cursor: 'pointer' }}
                 />
                 <ul className="dropdown-menu" aria-labelledby="action-menu-button">
                     {showEndStudy &&
@@ -237,9 +301,15 @@ export const ActionColumn: React.FC<{study: Study, cell: CellContext<Study, any>
             </div>
             <Modal center show={showModal} large onHide={onHide}>
                 <Modal.Body>
-                    <ActionModalContent modalType={modalType} study={study} onHide={onHide} cell={cell} />
+                    <ActionModalContent
+                        modalType={modalType}
+                        study={study}
+                        onHide={onHide}
+                        cell={cell}
+                        addNotification={addNotification}
+                    />
                 </Modal.Body>
             </Modal>
-        </Actions>
+        </Box>
     )
 }

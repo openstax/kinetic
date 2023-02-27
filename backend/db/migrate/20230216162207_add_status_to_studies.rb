@@ -1,6 +1,7 @@
 class AddStatusToStudies < ActiveRecord::Migration[6.1]
   def change
     add_column :studies, :status, :integer, default: 0
+    add_column :studies, :target_sample_size, :integer, default: 0
 
     reversible do |dir|
       dir.up do

@@ -92,6 +92,18 @@ export interface NewStudy {
      */
     isMandatory?: boolean;
     /**
+     * Number of times this study has been completed
+     * @type {number}
+     * @memberof NewStudy
+     */
+    readonly completedCount?: number;
+    /**
+     * Desired sample size set by researcher
+     * @type {number}
+     * @memberof NewStudy
+     */
+    targetSampleSize?: number;
+    /**
      * Status of the study
      * @type {string}
      * @memberof NewStudy
@@ -147,6 +159,8 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
+        'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
+        'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
         'status': !exists(json, 'status') ? undefined : json['status'],
     };
 }
@@ -172,6 +186,7 @@ export function NewStudyToJSON(value?: NewStudy | null): any {
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'is_mandatory': value.isMandatory,
+        'target_sample_size': value.targetSampleSize,
         'status': value.status,
     };
 }
