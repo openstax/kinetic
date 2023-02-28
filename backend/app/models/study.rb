@@ -33,7 +33,7 @@ class Study < ApplicationRecord
                arel[:closes_at].gteq(Time.now)))
   }
 
-  def status
+  def study_status
     if %w[draft paused scheduled].include? status
       status
     elsif !opens_at.nil? && opens_at > DateTime.now
