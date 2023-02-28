@@ -572,7 +572,8 @@ CREATE TABLE public.studies (
     completed_count integer DEFAULT 0 NOT NULL,
     is_hidden boolean DEFAULT false NOT NULL,
     status integer DEFAULT 0,
-    target_sample_size integer DEFAULT 0
+    target_sample_size integer DEFAULT 0,
+    view_count integer DEFAULT 0
 );
 
 

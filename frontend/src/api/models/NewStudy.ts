@@ -104,6 +104,18 @@ export interface NewStudy {
      */
     targetSampleSize?: number;
     /**
+     * How many times the study has been viewed
+     * @type {number}
+     * @memberof NewStudy
+     */
+    viewCount?: number;
+    /**
+     * How many times the study has been launched
+     * @type {number}
+     * @memberof NewStudy
+     */
+    readonly launchedCount?: number;
+    /**
      * Status of the study
      * @type {string}
      * @memberof NewStudy
@@ -161,6 +173,8 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
         'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
+        'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
+        'launchedCount': !exists(json, 'launched_count') ? undefined : json['launched_count'],
         'status': !exists(json, 'status') ? undefined : json['status'],
     };
 }
@@ -187,6 +201,7 @@ export function NewStudyToJSON(value?: NewStudy | null): any {
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'is_mandatory': value.isMandatory,
         'target_sample_size': value.targetSampleSize,
+        'view_count': value.viewCount,
         'status': value.status,
     };
 }

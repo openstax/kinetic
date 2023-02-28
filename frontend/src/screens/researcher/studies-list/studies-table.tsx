@@ -213,7 +213,10 @@ export const StudiesTable: React.FC<{
     addNotification,
 }) => {
     const { studies, setStudies } = useFetchStudies()
-    const [sorting, setSorting] = React.useState<SortingState>([])
+    const [sorting, setSorting] = React.useState<SortingState>([{
+        id: 'opensAt',
+        desc: false,
+    }])
     const columns = React.useMemo<ColumnDef<Study, any>[]>(() => [
         {
             accessorKey: 'titleForResearchers',
@@ -254,7 +257,7 @@ export const StudiesTable: React.FC<{
             accessorKey: 'closesAt',
             header: () => <span>Closes on</span>,
             cell: (info) => {
-                if (info.row.original.status === StudyStatusEnum.Paused) {
+                if (info.row.original.status === StudyStatusEnum.Paused || !info.getValue()) {
                     return '-'
                 }
                 return toDayJS(info.getValue() as Date).format('MM/DD/YYYY')
@@ -266,10 +269,10 @@ export const StudiesTable: React.FC<{
             header: () => {
                 return (
                     <Box gap>
-                        <Tooltip tooltip='Total number of study completions / desired sample size'>
-                            <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={16}/>
-                        </Tooltip>
                         <span>Sample Size</span>
+                        <Tooltip tooltip='Total number of study completions / desired sample size' css={{ display: 'flex' }}>
+                            <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={12}/>
+                        </Tooltip>
                     </Box>
                 )
             },
@@ -290,17 +293,23 @@ export const StudiesTable: React.FC<{
             header: () => {
                 return (
                     <Box gap>
-                        <Tooltip tooltip='Participants who clicked ‘Begin Study’ / Total number of study previews'>
-                            <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={16}/>
-                        </Tooltip>
                         <span>Take Rate</span>
+                        <Box>
+                            <Tooltip tooltip='Participants who clicked ‘Begin Study’ / Total number of study previews' css={{ display: 'flex' }}>
+                                <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={12}/>
+                            </Tooltip>
+                        </Box>
                     </Box>
                 )
             },
             cell: (info) => {
                 const study = info.row.original;
+                if (!study.viewCount) {
+                    return <span>-</span>
+                }
+                const percentage = Math.round((study.launchedCount || 0) / study.viewCount)
                 return (
-                    <span>-</span>
+                    <span>{percentage}%</span>
                 )
             },
         },

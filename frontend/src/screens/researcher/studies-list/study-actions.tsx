@@ -74,6 +74,10 @@ const ActionModalContent: FC<{
         onHide()
     }
 
+    const deleteText = study.status === StudyStatusEnum.Active ?
+        'This action will delete the study and all data collected thus far. This is permanent and cannot be undone. Are you sure?' :
+        'This action will delete the study draft. This is permanent and cannot be undone. Are you sure?'
+
     switch(modalType) {
         case ModalType.Pause:
             return <StudyActionContainer
@@ -110,35 +114,34 @@ const ActionModalContent: FC<{
                     }}
                 />
             }
-
         case ModalType.End:
             return <StudyActionContainer
                 header='End Study'
                 warning={true}
                 body="This action will set the study status as 'Completed', rendering it no longer visible to participants."
-                cancelText='Keep active'
-                actionText='End now'
+                cancelText='Keep Study Active'
+                actionText='End Study'
                 onSubmit={() => updateStudy(study, StudyStatusEnum.Completed)}
+                onCancel={onHide}
+            />
+        case ModalType.Delete:
+            return <StudyActionContainer
+                header="Delete Study"
+                warning={true}
+                body={deleteText}
+                cancelText='No, keep the study'
+                actionText='Yes, delete the study'
+                onSubmit={() => deleteStudy(study)}
                 onCancel={onHide}
             />
         case ModalType.Reopen:
             return <StudyActionContainer
                 header="Reopen Study"
                 warning={false}
-                body='This action will re-open the study and make it visible to learners and open for participation.'
-                cancelText='Cancel'
-                actionText='Reopen'
+                body='This action will re-open the study, making it visible to learners and open for participation. Data collection will resume.'
+                cancelText='Keep Study Closed'
+                actionText='Reopen Study'
                 onSubmit={() => updateStudy(study, StudyStatusEnum.Active)}
-                onCancel={onHide}
-            />
-        case ModalType.Delete:
-            return <StudyActionContainer
-                header="Delete Draft"
-                warning={true}
-                body='This action will delete the draft. This is permanent and cannot be undone.'
-                cancelText='No, keep it'
-                actionText='Yes, delete it'
-                onSubmit={() => deleteStudy(study)}
                 onCancel={onHide}
             />
         default:

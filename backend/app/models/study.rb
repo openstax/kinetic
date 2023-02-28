@@ -20,7 +20,7 @@ class Study < ApplicationRecord
   # Delete researchers to avoid them complaining about not leaving a researcher undeleted
   before_destroy(prepend: true) { study_researchers.delete_all }
 
-  enum status: [ :draft, :active, :paused, :scheduled, :completed ]
+  enum status: [:draft, :active, :paused, :scheduled, :completed]
 
   arel = Study.arel_table
 
@@ -33,8 +33,8 @@ class Study < ApplicationRecord
                arel[:closes_at].gteq(Time.now)))
   }
 
-  def get_status
-    if status == 'paused' || status == 'draft' || status == 'scheduled'
+  def status
+    if %w[draft paused scheduled].include? status
       status
     elsif !opens_at.nil? && opens_at > DateTime.now
       'draft'
@@ -59,6 +59,10 @@ class Study < ApplicationRecord
 
   def can_delete?
     launched_studies.none?
+  end
+
+  def launched_count
+    launched_studies.size
   end
 
   def is_featured?

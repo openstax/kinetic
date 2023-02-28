@@ -152,6 +152,12 @@ export interface ParticipantStudy {
      * @memberof ParticipantStudy
      */
     status?: ParticipantStudyStatusEnum;
+    /**
+     * How many times the study has been viewed
+     * @type {number}
+     * @memberof ParticipantStudy
+     */
+    viewCount?: number;
 }
 
 
@@ -213,6 +219,7 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(ParticipantStudyStageFromJSON)),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'status': !exists(json, 'status') ? undefined : json['status'],
+        'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
     };
 }
 
@@ -244,6 +251,7 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(ParticipantStudyStageToJSON)),
         'is_mandatory': value.isMandatory,
         'status': value.status,
+        'view_count': value.viewCount,
     };
 }
 

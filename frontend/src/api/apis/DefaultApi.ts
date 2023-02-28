@@ -195,6 +195,11 @@ export interface RemoveResearcherFromStudyRequest {
     userId: string;
 }
 
+export interface StudyStatsRequest {
+    id: number;
+    view?: boolean;
+}
+
 export interface UpdateAnalysisRequest {
     id: number;
     updateAnalysis?: UpdateAnalysis;
@@ -1083,6 +1088,42 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async removeResearcherFromStudy(requestParameters: RemoveResearcherFromStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.removeResearcherFromStudyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Stats include view count, etc.
+     * Track stats for a study
+     */
+    async studyStatsRaw(requestParameters: StudyStatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ParticipantStudy>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling studyStats.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.view !== undefined) {
+            queryParameters['view'] = requestParameters.view;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/participant/studies/{id}/stats`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ParticipantStudyFromJSON(jsonValue));
+    }
+
+    /**
+     * Stats include view count, etc.
+     * Track stats for a study
+     */
+    async studyStats(requestParameters: StudyStatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ParticipantStudy> {
+        const response = await this.studyStatsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

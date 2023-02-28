@@ -2,7 +2,7 @@
 
 class Api::V1::Participant::StudiesController < Api::V1::BaseController
   before_action :render_unauthorized_unless_signed_in!
-  before_action :set_study, only: [:launch, :land]
+  before_action :set_study, only: [:launch, :land, :stats]
 
   def index
     launched_studies = current_user.launched_studies.includes(:stages, study: [:researchers])
@@ -35,6 +35,14 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
       response_binding = Api::V1::Bindings::Launch.new(url: url)
       render json: response_binding, status: :ok
     end
+  end
+
+  def stats
+    return unless params[:view]
+
+    @study.increment(:view_count, 1).save
+
+    render json: @study
   end
 
   def land

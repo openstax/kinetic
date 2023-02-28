@@ -20,10 +20,10 @@ Rails.application.config.to_prepare do
         Api::V1::Bindings::Stage.create_from_model(stage_model)
       end
 
-      attributes[:status] = model.get_status
+      attributes[:status] = model.status
+      attributes[:launched_count] = model.launched_count
 
       new(attributes)
     end
   end
-
 end

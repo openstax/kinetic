@@ -75,6 +75,9 @@ module Api::V1::Bindings
     # Status of the study
     attr_accessor :status
 
+    # How many times the study has been viewed
+    attr_accessor :view_count
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -119,7 +122,8 @@ module Api::V1::Bindings
         :'total_duration' => :'total_duration',
         :'stages' => :'stages',
         :'is_mandatory' => :'is_mandatory',
-        :'status' => :'status'
+        :'status' => :'status',
+        :'view_count' => :'view_count'
       }
     end
 
@@ -150,7 +154,8 @@ module Api::V1::Bindings
         :'total_duration' => :'Integer',
         :'stages' => :'Array<ParticipantStudyStage>',
         :'is_mandatory' => :'Boolean',
-        :'status' => :'String'
+        :'status' => :'String',
+        :'view_count' => :'Float'
       }
     end
 
@@ -260,6 +265,10 @@ module Api::V1::Bindings
       if attributes.key?(:'status')
         self.status = attributes[:'status']
       end
+
+      if attributes.key?(:'view_count')
+        self.view_count = attributes[:'view_count']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -341,7 +350,8 @@ module Api::V1::Bindings
           total_duration == o.total_duration &&
           stages == o.stages &&
           is_mandatory == o.is_mandatory &&
-          status == o.status
+          status == o.status &&
+          view_count == o.view_count
     end
 
     # @see the `==` method
@@ -353,7 +363,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title, short_description, long_description, tags, feedback_description, image_id, benefits, popularity_rating, is_featured, first_launched_at, completed_at, closes_at, opted_out_at, researchers, total_points, total_duration, stages, is_mandatory, status].hash
+      [id, title, short_description, long_description, tags, feedback_description, image_id, benefits, popularity_rating, is_featured, first_launched_at, completed_at, closes_at, opted_out_at, researchers, total_points, total_duration, stages, is_mandatory, status, view_count].hash
     end
 
     # Builds the object from hash

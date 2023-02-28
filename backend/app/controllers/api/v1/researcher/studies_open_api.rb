@@ -104,6 +104,15 @@ class Api::V1::Researcher::StudiesOpenApi
       key :type, :number
       key :description, 'Desired sample size set by researcher'
     end
+    property :view_count do
+      key :type, :number
+      key :description, 'How many times the study has been viewed'
+    end
+    property :launched_count do
+      key :type, :number
+      key :description, 'How many times the study has been launched'
+      key :readOnly, true
+    end
     property :status do
       key :type, :string
       key :description, 'Status of the study'
