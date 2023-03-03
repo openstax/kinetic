@@ -286,6 +286,9 @@ export const StudiesTable: React.FC<{
                 if (study.completedCount == 0 || study.targetSampleSize == 0) {
                     return null
                 }
+                if (currentStatus === StudyStatus.Completed) {
+                    return <span>{study.completedCount}</span>
+                }
                 return (
                     <span>
                         {study.completedCount}/{study.targetSampleSize}
