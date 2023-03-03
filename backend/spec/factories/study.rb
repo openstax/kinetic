@@ -5,7 +5,7 @@ FactoryBot.define do
     transient do
       researchers { [] }
       num_stages { 0 }
-      title { nil }
+      title { Faker::Lorem.paragraph_by_chars(number: rand(20..45)) }
     end
 
     title_for_researchers { title || Faker::Lorem.paragraph_by_chars(number: rand(20..45)) }
@@ -13,8 +13,8 @@ FactoryBot.define do
     short_description { Faker::Lorem.paragraph_by_chars(number: rand(40..120)) }
     long_description { Faker::Lorem.paragraph_by_chars(number: rand(40..120)) }
     tags { ['type:research_study'] }
-    opens_at { 3.days.ago }
-    closes_at { 3.days.from_now }
+    opens_at { 30.days.ago }
+    closes_at { 30.days.from_now }
 
     after(:create) do |study, evaluator|
       researchers = [evaluator.researchers].flatten.compact

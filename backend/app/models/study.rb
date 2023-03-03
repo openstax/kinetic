@@ -20,7 +20,7 @@ class Study < ApplicationRecord
   # Delete researchers to avoid them complaining about not leaving a researcher undeleted
   before_destroy(prepend: true) { study_researchers.delete_all }
 
-  enum status: [:draft, :active, :paused, :scheduled, :completed]
+  enum status: [:draft, :active, :paused, :scheduled, :completed], _default: 'draft'
 
   arel = Study.arel_table
 
@@ -34,15 +34,30 @@ class Study < ApplicationRecord
   }
 
   def study_status
-    if %w[draft paused scheduled].include? status
-      status
-    elsif !opens_at.nil? && opens_at > DateTime.now
+    if is_draft
       'draft'
-    elsif !closes_at.nil? && closes_at < DateTime.now
+    elsif status == 'paused'
+      'paused'
+    elsif is_completed
       'completed'
+    elsif is_scheduled
+      'scheduled'
     else
-      'active'
+      status
     end
+  end
+
+  def is_draft
+    opens_at.nil? && status == 'draft'
+  end
+
+  def is_completed
+    # Add sample size check to completed once the user can populate that data
+    !closes_at.nil? && (status == 'active' && closes_at < DateTime.now)
+  end
+
+  def is_scheduled
+    !opens_at.nil? && opens_at > DateTime.now
   end
 
   def total_points

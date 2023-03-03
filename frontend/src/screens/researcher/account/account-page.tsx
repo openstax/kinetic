@@ -1,17 +1,17 @@
 import { Box, Footer, HelpLink, Icon, ResourceLinks, TopNavBar } from '@components';
 import { React, styled, useState } from '@common';
 import { useApi, useCurrentResearcher, useEnvironment } from '@lib';
-import { colors } from '../../theme';
+import { colors } from '../../../theme';
 import { Researcher } from '@api';
 import { Col, Form, Modal, Tooltip } from '@nathanstitt/sundry';
-import CustomerSupportImage from '../../components/customer-support-image';
-import RiceLogoURL from '../../images/rice-logo-darktext.png';
-import DefaultAvatar from '../../images/default-avatar.png';
-import FileUploader from '../../components/file-upload';
-import { ProfileForm } from './researcher-account-form';
+import CustomerSupportImage from '../../../components/customer-support-image';
+import RiceLogoURL from '../../../images/rice-logo-darktext.png';
+import DefaultAvatar from '../../../images/default-avatar.png';
+import FileUploader from '../../../components/file-upload';
+import { AccountForm } from './account-form';
 
 
-export default function ResearcherProfile() {
+export default function AccountPage() {
     const env = useEnvironment()
     const researcher = useCurrentResearcher()
 
@@ -39,7 +39,7 @@ export default function ResearcherProfile() {
                                     <h5 className='fw-bolder pb-2'>Researcher Profile</h5>
                                     <Box gap='large' className='container-fluid'>
                                         <Avatar />
-                                        <ProfileForm className='col-10'/>
+                                        <AccountForm className='col-10'/>
                                     </Box>
                                 </Box>
                             </ProfileSection>

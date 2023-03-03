@@ -89,6 +89,7 @@ export default function ResearcherStudies() {
                 <StudiesTable
                     filters={filters}
                     setFilters={setFilters}
+                    currentStatus={currentStatus}
                     isLaunched={currentStatus === StudyStatus.Launched}
                     addNotification={addNotification}
                 />

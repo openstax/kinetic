@@ -14,7 +14,7 @@ const LearnerDashboard = loadAsync('Studies', () => import('./screens/learner'))
 const AdminHomepage = loadAsync('Admin', () => import('./screens/admin-home'))
 const AccountDetails = loadAsync('Account', () => import('./screens/account-details'))
 const AnalysisHomepage = loadAsync('Analysis', () => import('./screens/analysis'))
-const ResearcherProfile = loadAsync('ResearcherProfile', () => import('./screens/researcher/researcher-profile'))
+const ResearcherProfile = loadAsync('ResearcherProfile', () => import('./screens/researcher/account/account-page'))
 
 const StudiesHomepage = () => {
     const user = useCurrentUser()

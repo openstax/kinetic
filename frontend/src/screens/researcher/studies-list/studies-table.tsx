@@ -18,17 +18,17 @@ import { Link } from 'react-router-dom';
 import { colors } from '../../../theme';
 import { toDayJS } from '@lib';
 import { Box, Icon } from '@components';
-import { Tooltip } from '@nathanstitt/sundry';
 import AtoZ from '../../../images/icons/atoz.png';
 import ZtoA from '../../../images/icons/ztoa.png';
 import AtoZDefault from '../../../images/icons/atozdefault.png';
 import SortUp from '../../../images/icons/sortup.png';
 import SortDown from '../../../images/icons/sortdown.png';
 import SortDefault from '../../../images/icons/sort.png';
-import { ActionColumn } from './study-actions';
-import { useFetchStudies } from '@models';
+import { StudyStatus, useFetchStudies } from '@models';
 import { Dispatch, SetStateAction } from 'react';
 import { NotificationType } from './study-action-notification';
+import { Tooltip } from '@nathanstitt/sundry';
+import { ActionColumn } from './study-actions';
 
 declare module '@tanstack/table-core' {
     interface ColumnMeta<TData extends RowData, TValue> { // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -205,19 +205,22 @@ export const StudiesTable: React.FC<{
     isLaunched: boolean,
     filters: ColumnFiltersState,
     setFilters: Dispatch<SetStateAction<ColumnFiltersState>>,
-    addNotification: (message: string, type?: NotificationType) => void
+    addNotification: (message: string, type?: NotificationType) => void,
+    currentStatus: StudyStatus
 }> = ({
     isLaunched,
     filters,
     setFilters,
     addNotification,
+    currentStatus,
 }) => {
     const { studies, setStudies } = useFetchStudies()
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: 'opensAt',
         desc: false,
     }])
-    const columns = React.useMemo<ColumnDef<Study, any>[]>(() => [
+
+    const columns: ColumnDef<Study, any>[] = [
         {
             accessorKey: 'titleForResearchers',
             header: () => <span>Title</span>,
@@ -255,7 +258,7 @@ export const StudiesTable: React.FC<{
         },
         {
             accessorKey: 'closesAt',
-            header: () => <span>Closes on</span>,
+            header: () => <span>{currentStatus === StudyStatus.Completed ? 'Closed on' : 'Closes on'}</span>,
             cell: (info) => {
                 if (info.row.original.status === StudyStatusEnum.Paused || !info.getValue()) {
                     return '-'
@@ -269,10 +272,12 @@ export const StudiesTable: React.FC<{
             header: () => {
                 return (
                     <Box gap>
-                        <span>Sample Size</span>
-                        <Tooltip tooltip='Total number of study completions / desired sample size' css={{ display: 'flex' }}>
-                            <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={12}/>
-                        </Tooltip>
+                        <span># Participants</span>
+                        {currentStatus !== StudyStatus.Completed &&
+                            <Tooltip tooltip='Total number of study completions / desired sample size' css={{ display: 'flex' }}>
+                                <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={12}/>
+                            </Tooltip>
+                        }
                     </Box>
                 )
             },
@@ -319,7 +324,7 @@ export const StudiesTable: React.FC<{
             enableSorting: false,
             cell: info => <ActionColumn study={info.row.original} cell={info} addNotification={addNotification}/>,
         },
-    ], [])
+    ]
 
     const table: Table<Study> = useReactTable({
         data: studies,

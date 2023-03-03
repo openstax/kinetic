@@ -44,14 +44,14 @@ const ActionModalContent: FC<{
     const api = useApi()
     const nav = useNavigate()
 
-    const updateStudy = (study: Study, status: StudyStatusEnum) => {
+    const updateStudy = (study: Study, status: StudyStatusEnum, message: string) => {
         const oldStatus = study.status
         try {
             study.status = status
             api.updateStudy({ id: study.id, updateStudy: { study: study as any } })
                 .then((study) => {
                     cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
-                    addNotification(`Study ${study.titleForResearchers} has been ${actionText(modalType)}`)
+                    addNotification(message)
                 })
         }
         catch (err) {
@@ -62,10 +62,12 @@ const ActionModalContent: FC<{
         onHide()
     }
 
-    const deleteStudy = (study: Study) => {
+    const deleteStudy = (study: Study, message: string) => {
         try {
             study.isHidden = true
-            api.deleteStudy({ studyId: study.id })
+            api.deleteStudy({ studyId: study.id }).then(() => {
+                addNotification(message)
+            })
         } catch (err) {
             study.isHidden = false
             addNotification(String(err), 'error')
@@ -73,10 +75,6 @@ const ActionModalContent: FC<{
         }
         onHide()
     }
-
-    const deleteText = study.status === StudyStatusEnum.Active ?
-        'This action will delete the study and all data collected thus far. This is permanent and cannot be undone. Are you sure?' :
-        'This action will delete the study draft. This is permanent and cannot be undone. Are you sure?'
 
     switch(modalType) {
         case ModalType.Pause:
@@ -86,7 +84,11 @@ const ActionModalContent: FC<{
                 body="This action will pause the study and participants will no longer be able to view it until you resume."
                 cancelText='Keep Study Active'
                 actionText='Pause Study'
-                onSubmit={() => updateStudy(study, StudyStatusEnum.Paused)}
+                onSubmit={() => updateStudy(
+                    study,
+                    StudyStatusEnum.Paused,
+                    `Study ${study.titleForResearchers} has been paused.`
+                )}
                 onCancel={onHide}
             />
         case ModalType.Resume:
@@ -97,7 +99,11 @@ const ActionModalContent: FC<{
                     body="This action will render the study visible to learners and open for participation."
                     cancelText='Keep Study Paused'
                     actionText='Resume Study'
-                    onSubmit={() => updateStudy(study, StudyStatusEnum.Active)}
+                    onSubmit={() => updateStudy(
+                        study,
+                        StudyStatusEnum.Active,
+                        `Study ${study.titleForResearchers} has been resumed.`
+                    )}
                     onCancel={onHide}
                 />
             } else {
@@ -109,7 +115,11 @@ const ActionModalContent: FC<{
                     onSubmit={() => nav(`/study/edit/${study.id}`)}
                     cancelText='End Study'
                     onCancel={() => {
-                        updateStudy(study, StudyStatusEnum.Completed)
+                        updateStudy(
+                            study,
+                            StudyStatusEnum.Completed,
+                            `Study ${study.titleForResearchers} has been manually closed. It can now be found under 'Completed' studies`
+                        )
                         onHide()
                     }}
                 />
@@ -121,27 +131,40 @@ const ActionModalContent: FC<{
                 body="This action will set the study status as 'Completed', rendering it no longer visible to participants."
                 cancelText='Keep Study Active'
                 actionText='End Study'
-                onSubmit={() => updateStudy(study, StudyStatusEnum.Completed)}
+                onSubmit={() => updateStudy(
+                    study,
+                    StudyStatusEnum.Completed,
+                    `Study ${study.titleForResearchers} has been manually closed. It can now be found under 'Completed' studies`
+                )}
                 onCancel={onHide}
             />
         case ModalType.Delete:
             return <StudyActionContainer
                 header="Delete Study"
                 warning={true}
-                body={deleteText}
+                body={study.status === StudyStatusEnum.Scheduled ?
+                    'This action will delete the study and all data collected thus far. This is permanent and cannot be undone. Are you sure?' :
+                    'This action will delete the study draft. This is permanent and cannot be undone. Are you sure?'
+                }
                 cancelText='No, keep the study'
                 actionText='Yes, delete the study'
-                onSubmit={() => deleteStudy(study)}
+                onSubmit={() => deleteStudy(
+                    study,
+                    study.status === StudyStatusEnum.Scheduled ?
+                        `Scheduled study ${study.titleForResearchers} has been deleted.` :
+                        `Study draft ${study.titleForResearchers} has been deleted.`
+                )}
                 onCancel={onHide}
             />
         case ModalType.Reopen:
+            {/* TODO on submit, route to new study creation flow -> researcher facing info page */}
             return <StudyActionContainer
                 header="Reopen Study"
                 warning={false}
-                body='This action will re-open the study, making it visible to learners and open for participation. Data collection will resume.'
-                cancelText='Keep Study Closed'
+                body="Reopening the study will make it visible to participants and data collection will resume. 'Reopen Study' will prompt you to review your study parameters before relaunch."
                 actionText='Reopen Study'
-                onSubmit={() => updateStudy(study, StudyStatusEnum.Active)}
+                onSubmit={() => nav(`/study/edit/${study.id}`)}
+                cancelText='Keep Study Closed'
                 onCancel={onHide}
             />
         default:
