@@ -42,7 +42,6 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   def destroy
     @study.update!(is_hidden: true)
     head :ok
-    # render json: @study, status: :ok
   end
 
   protected

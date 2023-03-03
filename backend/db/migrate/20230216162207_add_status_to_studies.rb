@@ -14,9 +14,7 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
                    else
                      :active
                    end
-          study.update!(
-            status: status
-          )
+          study.update!(status: status)
         end
       end
 
