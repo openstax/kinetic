@@ -57,7 +57,7 @@ const StyledForm = styled(Form<Researcher>)(({ readOnly }) => ({
     },
 }))
 
-export const AccountForm: React.FC<{className?: string}> = ({ className }) => {
+export const ResearcherAccountForm: React.FC<{className?: string}> = ({ className }) => {
     const api = useApi()
 
     const [researcher, setResearcher] = useState(useCurrentResearcher())

@@ -8,10 +8,10 @@ import CustomerSupportImage from '../../../components/customer-support-image';
 import RiceLogoURL from '../../../images/rice-logo-darktext.png';
 import DefaultAvatar from '../../../images/default-avatar.png';
 import FileUploader from '../../../components/file-upload';
-import { AccountForm } from './account-form';
+import { ResearcherAccountForm } from './researcher-account-form';
 
 
-export default function AccountPage() {
+export default function ResearcherAccountPage() {
     const env = useEnvironment()
     const researcher = useCurrentResearcher()
 
@@ -34,12 +34,12 @@ export default function AccountPage() {
 
                     <Box justify='between' gap='xxlarge'>
                         <Box direction='column' gap='xlarge'>
-                            <ProfileSection className='researcher-profile'>
+                            <ProfileSection className='researcher-account'>
                                 <Box direction='column'>
                                     <h5 className='fw-bolder pb-2'>Researcher Profile</h5>
                                     <Box gap='large' className='container-fluid'>
                                         <Avatar />
-                                        <AccountForm className='col-10'/>
+                                        <ResearcherAccountForm className='col-10'/>
                                     </Box>
                                 </Box>
                             </ProfileSection>
