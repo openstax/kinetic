@@ -58,7 +58,9 @@ export default function ResearcherStudies() {
                 <ActionNotification notifications={notifications} onDismiss={dismissNotification}/>
 
                 <Box align="center" justify="between">
-                    <h3 className='fw-bold'>Studies</h3>
+                    <h3 className='fw-bold' data-test-id='studies-table-header'>
+                        Studies
+                    </h3>
                     <Button
                         primary
                         data-test-id="add-study"
