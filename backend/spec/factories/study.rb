@@ -15,7 +15,7 @@ FactoryBot.define do
     tags { ['type:research_study'] }
     opens_at { 30.days.ago }
     closes_at { 30.days.from_now }
-    is_mandatory {false}
+    is_mandatory { false }
 
     after(:create) do |study, evaluator|
       researchers = [evaluator.researchers].flatten.compact
