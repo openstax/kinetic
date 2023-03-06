@@ -17,23 +17,6 @@ const ModalType = {
 
 type ModalTypeEnum = typeof ModalType[keyof typeof ModalType];
 
-const actionText = (type: ModalTypeEnum) => {
-    switch (type) {
-        case ModalType.Pause:
-            return 'paused'
-        case ModalType.End:
-            return 'ended'
-        case ModalType.Delete:
-            return 'deleted'
-        case ModalType.Resume:
-            return 'resumed'
-        case ModalType.Reopen:
-            return 'reopened'
-        default:
-            return 'updated'
-    }
-}
-
 const ActionModalContent: FC<{
     study: Study,
     modalType: string,
