@@ -21,6 +21,17 @@ const newAnalysis: Analysis = {
 }
 
 
+const EditorInfo: FC<{ analysis: Analysis }> = ({ analysis }) => {
+    if (!analysis.id) return null
+
+    return (
+        <div>
+            <InputField name="apiKey" label="Api Key" readOnly />
+            <a target="kinetic-workspaces-editor" href={`https://workspaces.kinetic.sandbox.openstax.org/edit/${analysis.id}`} >Edit Code</a>
+        </div>
+    )
+}
+
 export const EditAnalysis: FC<EditAnalysisProps> = ({ listing, onEditSuccess }) => {
     const { analysisId } = useParams<string>();
     const analysis =  (!analysisId || analysisId == 'new') ?
@@ -62,11 +73,12 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ listing, onEditSuccess }) 
                 defaultValues={analysis}
                 validationSchema={AnalysisValidationSchema}
             >
+
                 <Alert warning={true} onDismiss={() => setError('')} message={error} />
                 <InputField autoFocus name="title" label="Title" />
                 <InputField name="repositoryUrl" label="Repository URL" />
                 <InputField name="description" type="textarea" label="Description" />
-                {analysis.id && <InputField name="apiKey" label="Api Key" readOnly />}
+                <EditorInfo analysis={analysis} />
                 <SelectedStudies />
             </Form>
 
