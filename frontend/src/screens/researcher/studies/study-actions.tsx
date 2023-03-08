@@ -47,9 +47,10 @@ const ActionModalContent: FC<{
 
     const deleteStudy = (study: Study, message: string) => {
         try {
-            study.isHidden = true
             api.deleteStudy({ studyId: study.id }).then(() => {
                 addNotification(message)
+                study.isHidden = true
+                cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
             })
         } catch (err) {
             study.isHidden = false

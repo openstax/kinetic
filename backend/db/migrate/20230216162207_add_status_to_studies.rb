@@ -7,6 +7,11 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
     reversible do |dir|
       dir.up do
         Study.find_each do | study |
+          # TODO
+          #  closed_at < DateTime.now => Completed
+          #  opens_at > DateTime.now => Scheduled
+          #  default => active
+          #  if no PI or other  conditions from iris, set to draft
           status = if !study.opens_at.nil? && study.opens_at > DateTime.now
                      :draft
                    elsif !study.closes_at.nil? && study.closes_at < DateTime.now

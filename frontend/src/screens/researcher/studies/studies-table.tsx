@@ -20,7 +20,7 @@ import { toDayJS } from '@lib';
 import { Box, Icon } from '@components';
 import AtoZ from '../../../images/icons/atoz.png';
 import ZtoA from '../../../images/icons/ztoa.png';
-import AtoZDefault from '../../../images/icons/atozdefault.png';
+import AZDefault from '../../../images/icons/azdefault.png';
 import SortUp from '../../../images/icons/sortup.png';
 import SortDown from '../../../images/icons/sortdown.png';
 import SortDefault from '../../../images/icons/sort.png';
@@ -54,7 +54,7 @@ const SortIcon: React.FC<{header: Header<Study, unknown> }> = ({ header }) => {
                 {{
                     asc: <img src={AtoZ} alt='A to Z'/>,
                     desc: <img src={ZtoA} alt='Z to A' />,
-                    false: <img src={AtoZDefault} alt='AtoZDefault' />,
+                    false: <img src={AZDefault} alt='AtoZDefault' />,
                 }[header.column.getIsSorted() as string] ?? null}
             </span>
         )
@@ -192,10 +192,13 @@ const NoData: React.FC = () => {
                 No data
             </h3>
             <span>
-                <Link to='/study/edit/new' css={{ color: colors.purple }} className='fw-bold'>
-                    + Create your first study
+                <Link
+                    to='/study/edit/new'
+                    css={{ color: colors.purple }}
+                    className='fw-bold'
+                >
+                    + Create your first research study on Kinetic
                 </Link>
-                <span> and start to collect data</span>
             </span>
         </Box>
     )
@@ -303,7 +306,7 @@ export const StudiesTable: React.FC<{
                     <Box gap>
                         <span>Take Rate</span>
                         <Box>
-                            <Tooltip tooltip='Participants who clicked ‘Begin Study’ / Total number of study previews' css={{ display: 'flex' }}>
+                            <Tooltip tooltip='Rate of Participants who clicked ‘Begin Study’ against Total number of study previews' css={{ display: 'flex' }}>
                                 <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={12}/>
                             </Tooltip>
                         </Box>
@@ -344,7 +347,7 @@ export const StudiesTable: React.FC<{
         meta: {
             updateData: (rowIndex, columnId, value) => {
                 setStudies(oldStudies =>
-                    oldStudies?.map((row, index) => {
+                    oldStudies?.filter(study => !study.isHidden).map((row, index) => {
                         if (index === rowIndex) {
                             return {
                                 ...oldStudies[rowIndex]!,
