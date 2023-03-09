@@ -1,6 +1,6 @@
 import { React, useNavigate, useState, useParams } from '@common'
 import {
-    Alert, EditingForm as Form, InputField, PageNotFound,
+    Alert, EditingForm as Form, InputField, PageNotFound, Box,
 } from '@components'
 import { Analysis } from '@api'
 import { AnalysisValidationSchema } from '@models'
@@ -25,10 +25,13 @@ const EditorInfo: FC<{ analysis: Analysis }> = ({ analysis }) => {
     if (!analysis.id) return null
 
     return (
-        <div>
+        <Box align="center" justify="around">
             <InputField name="apiKey" label="Api Key" readOnly />
-            <a target="kinetic-workspaces-editor" href={`https://workspaces.kinetic.sandbox.openstax.org/edit/${analysis.id}`} >Edit Code</a>
-        </div>
+            <a
+                className="btn btn-primary" target="kinetic-workspaces-editor"
+                href={`https://workspaces.kinetic.sandbox.openstax.org/edit/${analysis.id}`}
+            >Edit Code</a>
+        </Box>
     )
 }
 
@@ -75,10 +78,10 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ listing, onEditSuccess }) 
             >
 
                 <Alert warning={true} onDismiss={() => setError('')} message={error} />
+                <EditorInfo analysis={analysis} />
                 <InputField autoFocus name="title" label="Title" />
                 <InputField name="repositoryUrl" label="Repository URL" />
                 <InputField name="description" type="textarea" label="Description" />
-                <EditorInfo analysis={analysis} />
                 <SelectedStudies />
             </Form>
 
