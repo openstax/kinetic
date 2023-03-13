@@ -1,7 +1,7 @@
 import { React, styled, useNavigate } from '@common';
 import { Box, Icon } from '@components';
 import { Study, StudyStatusEnum } from '@api';
-import { colors } from '../../../theme';
+import { colors } from '../../../../theme';
 import { Button, dayjs, Modal } from '@nathanstitt/sundry';
 import { useApi } from '@lib';
 import { CellContext } from '@tanstack/react-table';

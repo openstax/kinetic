@@ -14,6 +14,8 @@ class Study < ApplicationRecord
   has_many :analysis, through: :study_analysis
 
   has_one  :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
+  has_one :researcher_pi, class_name: 'Researcher', dependent: :destroy
+  has_one :researcher_lead, class_name: 'Researcher', dependent: :destroy
 
   scope :multi_stage, -> { joins(:stages).group('studies.id').having('count(study_id) > 1') }
 

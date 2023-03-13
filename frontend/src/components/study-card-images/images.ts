@@ -6,11 +6,17 @@ export type CardImageProps = SVGProps<SVGSVGElement>
 export interface CardImage {
     title: string
     image: React.FC<CardImageProps>
+    category?: 'Personality' | 'Memory' | 'Learning' | 'School & Future Career'
+    imageId?: string
 }
 
 
 export const CardImages: Record<string, CardImage> = {
-    AbilityBeliefs: { title: 'Ability Beliefs', image: loadAsync('image', () => import('./WhatAreYourAbilityBeliefs')) },
+    AbilityBeliefs: {
+        title: 'Ability Beliefs',
+        image: loadAsync('image', () => import('./WhatAreYourAbilityBeliefs')),
+        category: 'Learning',
+    },
     AnxiousPersonNew: { title: 'Anxious Person New', image: loadAsync('image', () => import('./AnxiouPersonNew')) },
     AreYouAnxiousPerson: { title: 'Are You an Anxious Person', image: loadAsync('image', () => import('./AreYouAnxiousPerson01')) },
     AreYouSuperReader: { title: 'Are You a Super Reader', image: loadAsync('image', () => import('./AreYouSuperReader01')) },
@@ -37,3 +43,10 @@ export const CardImages: Record<string, CardImage> = {
     StemInterest: { title: 'Stem Interest', image: loadAsync('image', () => import('./StemInterest01')) },
     UncoverAchievementLearning: { title: 'Uncover Achievement Learning', image: loadAsync('image', () => import('./UncoverAchievementLearning01')) },
 }
+
+export const cardImages = Object.entries(CardImages).map(([k, v]) => {
+    return {
+        imageId: k,
+        ...v,
+    }
+})

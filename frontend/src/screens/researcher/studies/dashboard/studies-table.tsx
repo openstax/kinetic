@@ -15,20 +15,21 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import { Link } from 'react-router-dom';
-import { colors } from '../../../theme';
+import { colors } from '../../../../theme';
 import { toDayJS } from '@lib';
 import { Box, Icon } from '@components';
-import AtoZ from '../../../images/icons/atoz.png';
-import ZtoA from '../../../images/icons/ztoa.png';
-import AZDefault from '../../../images/icons/azdefault.png';
-import SortUp from '../../../images/icons/sortup.png';
-import SortDown from '../../../images/icons/sortdown.png';
-import SortDefault from '../../../images/icons/sort.png';
+import AtoZ from '../../../../images/icons/atoz.png';
+import ZtoA from '../../../../images/icons/ztoa.png';
+import AZDefault from '../../../../images/icons/azdefault.png';
+import SortUp from '../../../../images/icons/sortup.png';
+import SortDown from '../../../../images/icons/sortdown.png';
+import SortDefault from '../../../../images/icons/sort.png';
 import { StudyStatus, useFetchStudies } from '@models';
 import { Dispatch, SetStateAction } from 'react';
 import { NotificationType } from './study-action-notification';
 import { Tooltip } from '@nathanstitt/sundry';
 import { ActionColumn } from './study-actions';
+import { ImageLibrary } from '../edit/image-library';
 
 declare module '@tanstack/table-core' {
     interface ColumnMeta<TData extends RowData, TValue> { // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -217,6 +218,10 @@ export const StudiesTable: React.FC<{
     addNotification,
     currentStatus,
 }) => {
+    // TODO Remove just for testing
+
+    // TODO Remove just for testing
+
     const { studies, setStudies } = useFetchStudies()
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: 'opensAt',
@@ -363,6 +368,7 @@ export const StudiesTable: React.FC<{
 
     return (
         <Box direction='column' className='mt-2'>
+            <ImageLibrary show={true} onHide={() => console.log('hide')} onSelect={(imageId) => console.log(imageId)}/>
             {isLaunched && <StatusFilters table={table} className='my-2'/>}
             <table data-test-id="studies-table" className='w-100'>
                 <thead css={{ height: 40 }}>

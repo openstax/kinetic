@@ -1,7 +1,7 @@
 import { cx, React, styled, useNavigate, useState } from '@common'
 import { Box, Button, Footer, Icon, TopNavBar } from '@components'
 import { StudyStatus } from '@models'
-import { colors } from '../../../theme';
+import { colors } from '../../../../theme';
 import 'bootstrap/js/dist/dropdown'
 import { StudiesTable } from './studies-table';
 import { ColumnFiltersState } from '@tanstack/react-table';
@@ -73,17 +73,17 @@ export default function ResearcherStudies() {
                 </Box>
                 <NavTabs className="nav nav-tabs">
                     <li className="nav-item">
-                        <a href="#" onClick={setStatus} data-status="Launched" className={cx('nav-link', { active: currentStatus == StudyStatus.Launched })}>
+                        <a href="frontend/src/screens/researcher/studies#" onClick={setStatus} data-status="Launched" className={cx('nav-link', { active: currentStatus == StudyStatus.Launched })}>
                             <h4>Launched</h4>
                         </a>
                     </li>
                     <li className="nav-item">
-                        <a href="#" onClick={setStatus} data-status="Draft" className={cx('nav-link', { active: currentStatus == StudyStatus.Draft })}>
+                        <a href="frontend/src/screens/researcher/studies#" onClick={setStatus} data-status="Draft" className={cx('nav-link', { active: currentStatus == StudyStatus.Draft })}>
                             <h4>Draft</h4>
                         </a>
                     </li>
                     <li className="nav-item">
-                        <a href="#" onClick={setStatus} data-status="Completed" className={cx('nav-link', { active: currentStatus == StudyStatus.Completed })}>
+                        <a href="frontend/src/screens/researcher/studies#" onClick={setStatus} data-status="Completed" className={cx('nav-link', { active: currentStatus == StudyStatus.Completed })}>
                             <h4>Completed</h4>
                         </a>
                     </li>
