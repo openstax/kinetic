@@ -218,10 +218,6 @@ export const StudiesTable: React.FC<{
     addNotification,
     currentStatus,
 }) => {
-    // TODO Remove just for testing
-
-    // TODO Remove just for testing
-
     const { studies, setStudies } = useFetchStudies()
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: 'opensAt',
