@@ -53,7 +53,13 @@ const ImageCard: FC<{
     return (
         <div
             css={{ position: 'relative', cursor: 'pointer' }}
-            onClick={() => onSelect(image.imageId)}
+            onClick={() => {
+                if (image.imageId === selectedImage) {
+                    onSelect('')
+                } else {
+                    onSelect(image.imageId)
+                }
+            }}
         >
             <image.image width={250} height={140} css={{
                 border: `1px solid ${colors.lightGray}`,
@@ -93,7 +99,7 @@ export const ImageLibrary: FC<{
                         direction='column'
                         css={{
                             backgroundColor: colors.pageBackground,
-                            padding: `30px 15px`,
+                            padding: `20px 15px`,
                         }}
                         gap='large'
                     >
@@ -104,23 +110,32 @@ export const ImageLibrary: FC<{
                         <CategoryLink onClick={() => setCategory('School & Future Career')}>School & Future Career</CategoryLink>
                     </Col>
                     <Col sm={10} direction='column'>
-                        <Box css={{ padding: `30px 15px`, height: '100%' }} direction='column'>
+                        <Box css={{ padding: 20, height: '100%' }} direction='column'>
                             <h4>{category}</h4>
-                            <ImageCardContainer wrap gap='xlarge' justify='center'>
+                            <ImageCardContainer wrap gap='xlarge' justify='evenly'>
                                 {cardImages.map(cardImage => (
                                     <ImageCard
+                                        key={cardImage.imageId}
                                         image={cardImage}
                                         selectedImage={selectedImage}
-                                        onSelect={(imageId?: string) => imageId && setSelectedImage(imageId)}
+                                        onSelect={(imageId?: string) => setSelectedImage(imageId || '')}
                                     />
                                 ))}
                             </ImageCardContainer>
                         </Box>
                         <Box gap='xlarge' css={{ padding: `10px 20px` }} alignSelf='end'>
-                            <Button large css={{ width: 170, justifyContent: 'center' }}>
+                            <Button
+                                className='btn-researcher-secondary'
+                                css={{ width: 170, justifyContent: 'center' }}
+                            >
                                 Cancel
                             </Button>
-                            <Button disabled={!selectedImage} large primary css={{ width: 170, justifyContent: 'center' }}>
+                            <Button
+                                className='btn-researcher-primary'
+                                disabled={!selectedImage}
+                                css={{ width: 170, justifyContent: 'center' }}
+                                onClick={() => onSelect(selectedImage)}
+                            >
                                 Select
                             </Button>
                         </Box>
