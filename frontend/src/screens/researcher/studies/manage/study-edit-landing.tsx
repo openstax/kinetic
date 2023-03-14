@@ -1,4 +1,4 @@
-import { React, useNavigate } from '@common'
+import { React } from '@common'
 
 export default function StudyEditLanding() {
     return (
