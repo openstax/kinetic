@@ -29,7 +29,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { NotificationType } from './study-action-notification';
 import { Tooltip } from '@nathanstitt/sundry';
 import { ActionColumn } from './study-actions';
-import { ImageLibrary } from '../manage/image-library';
+import { ImageLibrary } from '../create/image-library';
 
 declare module '@tanstack/table-core' {
     interface ColumnMeta<TData extends RowData, TValue> { // eslint-disable-line @typescript-eslint/no-unused-vars

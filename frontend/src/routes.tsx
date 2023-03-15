@@ -15,7 +15,8 @@ const AdminHomepage = loadAsync('Admin', () => import('./screens/admin-home'))
 const AccountDetails = loadAsync('Account', () => import('./screens/account-details'))
 const AnalysisHomepage = loadAsync('Analysis', () => import('./screens/analysis'))
 const ResearcherAccountPage = loadAsync('Researcher Account Page', () => import('./screens/researcher/account/researcher-account-page'))
-const StudyEditLanding = loadAsync('Study Edit Landing Page', () => import('./screens/researcher/studies/manage/study-edit-landing'))
+const StudyEditLanding = loadAsync('Study Edit Landing Page', () => import('./screens/researcher/studies/create/study-edit-landing'))
+const ResearcherStudyLanding = loadAsync('New Study Landing Page', () => import('./screens/researcher/studies/create/researcher-study-landing'))
 
 const StudiesHomepage = () => {
     const user = useCurrentUser()
@@ -34,7 +35,8 @@ export const AppRoutes = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/dev/*" element={<Dev />} />
                 <Route path="/study/land/:studyId" element={<StudyLanding />} />
-                <Route path="/study/edit/:id" element={<EditStudy />} />
+                {/*<Route path="/study/edit/:id" element={<EditStudy />} />*/}
+                <Route path="/study/edit/:id" element={<ResearcherStudyLanding />} />
                 <Route path="/study/edit/:id/land" element={<StudyEditLanding />} />
                 <Route path="/study/edit/:id/about-researcher" element={<EditStudy />} />
                 <Route path="/study/edit/:id/researcher-info" element={<EditStudy />} />
