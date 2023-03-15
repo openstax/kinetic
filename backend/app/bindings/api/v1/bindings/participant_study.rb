@@ -72,6 +72,34 @@ module Api::V1::Bindings
     # Mandatory studies must be completed by all users
     attr_accessor :is_mandatory
 
+    # Status of the study
+    attr_accessor :status
+
+    # How many times the study has been viewed
+    attr_accessor :view_count
+
+    class EnumAttributeValidator
+      attr_reader :datatype
+      attr_reader :allowable_values
+
+      def initialize(datatype, allowable_values)
+        @allowable_values = allowable_values.map do |value|
+          case datatype.to_s
+          when /Integer/i
+            value.to_i
+          when /Float/i
+            value.to_f
+          else
+            value
+          end
+        end
+      end
+
+      def valid?(value)
+        !value || allowable_values.include?(value)
+      end
+    end
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -93,7 +121,9 @@ module Api::V1::Bindings
         :'total_points' => :'total_points',
         :'total_duration' => :'total_duration',
         :'stages' => :'stages',
-        :'is_mandatory' => :'is_mandatory'
+        :'is_mandatory' => :'is_mandatory',
+        :'status' => :'status',
+        :'view_count' => :'view_count'
       }
     end
 
@@ -123,7 +153,9 @@ module Api::V1::Bindings
         :'total_points' => :'Integer',
         :'total_duration' => :'Integer',
         :'stages' => :'Array<ParticipantStudyStage>',
-        :'is_mandatory' => :'Boolean'
+        :'is_mandatory' => :'Boolean',
+        :'status' => :'String',
+        :'view_count' => :'Float'
       }
     end
 
@@ -229,6 +261,14 @@ module Api::V1::Bindings
       if attributes.key?(:'is_mandatory')
         self.is_mandatory = attributes[:'is_mandatory']
       end
+
+      if attributes.key?(:'status')
+        self.status = attributes[:'status']
+      end
+
+      if attributes.key?(:'view_count')
+        self.view_count = attributes[:'view_count']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -271,7 +311,19 @@ module Api::V1::Bindings
       return false if @tags.nil?
       return false if @total_points.nil?
       return false if @total_duration.nil?
+      status_validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "completed"])
+      return false unless status_validator.valid?(@status)
       true
+    end
+
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] status Object to be assigned
+    def status=(status)
+      validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "completed"])
+      unless validator.valid?(status)
+        fail ArgumentError, "invalid value for \"status\", must be one of #{validator.allowable_values}."
+      end
+      @status = status
     end
 
     # Checks equality by comparing each attribute.
@@ -297,7 +349,9 @@ module Api::V1::Bindings
           total_points == o.total_points &&
           total_duration == o.total_duration &&
           stages == o.stages &&
-          is_mandatory == o.is_mandatory
+          is_mandatory == o.is_mandatory &&
+          status == o.status &&
+          view_count == o.view_count
     end
 
     # @see the `==` method
@@ -309,7 +363,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title, short_description, long_description, tags, feedback_description, image_id, benefits, popularity_rating, is_featured, first_launched_at, completed_at, closes_at, opted_out_at, researchers, total_points, total_duration, stages, is_mandatory].hash
+      [id, title, short_description, long_description, tags, feedback_description, image_id, benefits, popularity_rating, is_featured, first_launched_at, completed_at, closes_at, opted_out_at, researchers, total_points, total_duration, stages, is_mandatory, status, view_count].hash
     end
 
     # Builds the object from hash

@@ -109,8 +109,6 @@ interface createStudyArgs {
     opensAt?: dayjs.Dayjs,
 }
 
-export const RESEARCH_HOMEPAGE = 'https://openstax.org/research'
-
 export const createStudy = async ({
     page, name,
     isMandatory = false,

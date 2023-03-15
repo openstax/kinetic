@@ -95,6 +95,29 @@ class Api::V1::Researcher::StudiesOpenApi
       key :type, :boolean
       key :description, 'Mandatory studies must be completed by all users'
     end
+    property :completed_count do
+      key :type, :number
+      key :description, 'Number of times this study has been completed'
+      key :readOnly, true
+    end
+    property :target_sample_size do
+      key :type, :number
+      key :description, 'Desired sample size set by researcher'
+    end
+    property :view_count do
+      key :type, :number
+      key :description, 'How many times the study has been viewed'
+    end
+    property :launched_count do
+      key :type, :number
+      key :description, 'How many times the study has been launched'
+      key :readOnly, true
+    end
+    property :status do
+      key :type, :string
+      key :description, 'Status of the study'
+      key :enum, %w[active paused scheduled draft completed]
+    end
   end
 
   add_properties(:Study) do

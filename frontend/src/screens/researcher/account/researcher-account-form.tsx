@@ -1,19 +1,19 @@
 import * as Yup from 'yup';
 import { React, styled, useState } from '@common';
 import { useApi, useCurrentResearcher, useUserInfo } from '@lib';
-import { colors } from '../../theme';
+import { colors } from '../../../theme';
 import { Researcher } from '@api';
 import { Button, Form, FormCancelButton, FormSaveButton, Tooltip } from '@nathanstitt/sundry';
 import { Box, cx, Icon, InputField, SelectField } from '@components';
 
+const urlRegex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
 export const ResearcherValidationSchema = Yup.object().shape({
     firstName: Yup.string().max(50),
     lastName: Yup.string().max(50),
-    institution: Yup.string(),
     researchInterest1: Yup.string().max(25),
     researchInterest2: Yup.string().max(25),
     researchInterest3: Yup.string().max(25),
-    labPage: Yup.string().url(),
+    labPage: Yup.string().matches(urlRegex, 'Enter a valid URL'),
     bio: Yup.string().max(250),
 })
 
@@ -57,7 +57,7 @@ const StyledForm = styled(Form<Researcher>)(({ readOnly }) => ({
     },
 }))
 
-export const ProfileForm: React.FC<{className?: string}> = ({ className }) => {
+export const ResearcherAccountForm: React.FC<{className?: string}> = ({ className }) => {
     const api = useApi()
 
     const [researcher, setResearcher] = useState(useCurrentResearcher())

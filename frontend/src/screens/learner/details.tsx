@@ -1,4 +1,4 @@
-import { React, useState, useCallback, useNavigate, useParams } from '@common'
+import { React, useState, useCallback, useNavigate, useParams, useEffect } from '@common'
 import { ParticipantStudy, PublicResearcher } from '@api'
 import { LaunchStudy, isStudyLaunchable, StudyTopicID, StudyTopicTags, tagOfType, studyIsMultipart } from '@models'
 import { useApi, dayjs } from '@lib'
@@ -147,9 +147,19 @@ const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher })
 export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
     const { studyId: sid } = useParams<{ studyId: string }>()
     const nav = useNavigate()
+    const api = useApi()
     const studyId = Number(sid || '')
     const study = studies.find(s => s.id === studyId)
     const onHide = useCallback(() => nav('/studies'), [nav])
+
+    useEffect(() => {
+        if (study) {
+            api.studyStats({
+                id: study.id,
+                view: true,
+            })
+        }
+    }, [study])
 
     if (!study) return null
 

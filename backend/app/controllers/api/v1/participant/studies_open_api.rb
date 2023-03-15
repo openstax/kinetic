@@ -198,6 +198,15 @@ class Api::V1::Participant::StudiesOpenApi
       key :type, :boolean
       key :description, 'Mandatory studies must be completed by all users'
     end
+    property :status do
+      key :type, :string
+      key :description, 'Status of the study'
+      key :enum, %w[active paused scheduled draft completed]
+    end
+    property :view_count do
+      key :type, :number
+      key :description, 'How many times the study has been viewed'
+    end
   end
 
   openapi_path '/participant/studies/{id}' do
@@ -294,6 +303,39 @@ class Api::V1::Participant::StudiesOpenApi
         key :description, 'Success.  Returns study completion status.'
         content 'application/json' do
           schema { key :$ref, :ParticipantStudyCompletion }
+        end
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+  end
+
+  openapi_path '/participant/studies/{id}/stats' do
+    operation :put do
+      key :summary, 'Track stats for a study'
+      key :description, 'Stats include view count, etc.'
+      key :operationId, 'studyStats'
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'ID of the study to track.'
+        key :required, true
+        key :schema, { type: :integer }
+      end
+      parameter do
+        key :name, :view
+        key :in, :query
+        key :description, 'Command to increment view_count on a study'
+        key :required, false
+        key :schema, { type: :boolean }
+      end
+
+      response 200 do
+        key :description, 'Success.  Returns study with updated view count.'
+        content 'application/json' do
+          schema { key :$ref, :ParticipantStudy }
         end
       end
       extend Api::V1::OpenApiResponses::AuthenticationError

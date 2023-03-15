@@ -97,7 +97,7 @@ RSpec.describe 'Studies', api: :v1 do
     end
   end
 
-  describe 'PATCH researcher/study' do
+  describe 'PUT researcher/study' do
     let!(:study1) { create(:study, researchers: researcher1) }
 
     context 'when logged out' do
@@ -128,6 +128,41 @@ RSpec.describe 'Studies', api: :v1 do
         expect(response_hash).to match(
           a_hash_including(is_mandatory: true)
         )
+      end
+
+      it 'updates the study\'s status to completed' do
+        api_put "researcher/studies/#{study1.id}", params: { study: { status: 'completed' } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match(a_hash_including(status: 'completed'))
+      end
+
+      it 'updates the study\'s status to scheduled' do
+        api_put "researcher/studies/#{study1.id}", params: { study: { status: 'scheduled' } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match(a_hash_including(status: 'scheduled'))
+      end
+
+      it 'updates the study\'s status to active' do
+        api_put "researcher/studies/#{study1.id}", params: { study: { status: 'active' } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match(a_hash_including(status: 'active'))
+      end
+
+      it 'updates the study\'s status to draft' do
+        api_put "researcher/studies/#{study1.id}", params: { study: { status: 'draft' } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match(a_hash_including(status: 'draft'))
+      end
+
+      it 'updates the study\'s status to paused' do
+        api_put "researcher/studies/#{study1.id}", params: { study: { status: 'paused' } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match(a_hash_including(status: 'paused'))
       end
 
       it 'cannot blank required fields' do

@@ -1,4 +1,4 @@
-import { omit } from "lodash-es"
+import { omit } from 'lodash-es'
 
 export const StudyTypeTags = {
     'type:research': 'Research Study',
@@ -14,7 +14,7 @@ export const StudyTopicTags = {
     'topic:personality': 'Personality',
     'topic:memory': 'Memory',
     'topic:learning': 'Learning',
-    'topic:career': 'School & Future Career',
+    'topic:career': 'School & Career',
     'topic:other': 'Others',
 }
 type StudyTopicTagsT = typeof StudyTopicTags

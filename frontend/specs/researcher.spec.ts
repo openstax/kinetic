@@ -5,6 +5,7 @@ import {
 
 test('can create and edit a study', async ({ page }) => {
     const title = faker.company.catchPhrase()
+
     await loginAs({ page, login: 'researcher' })
 
     expect(await page.textContent('.studies')).toContain('Studies')
@@ -17,8 +18,9 @@ test('can create and edit a study', async ({ page }) => {
 
     expect(await page.$('[name=titleForParticipants].is-invalid')).toBeDefined()
     await page.fill('[name=titleForParticipants]', title)
-    await page.fill('[name=shortDescription]', 'short desc')
-    await page.fill('[name=longDescription]', 'long desc')
+    await page.fill('[name=titleForResearchers]', title)
+    await page.fill('[name=shortDescription]', faker.lorem.words(10))
+    await page.fill('[name=longDescription]', faker.lorem.words(20))
 
     await page.fill('input#tags', 'type:survey')
     await page.keyboard.press('Enter')
@@ -34,6 +36,8 @@ test('can create and edit a study', async ({ page }) => {
 
     expect(await page.getAttribute('[name=titleForParticipants]', 'value')).toBe(title)
     await page.fill('[name=titleForParticipants]', `${title} - UPDATED`)
+    expect(await page.getAttribute('[name=titleForResearchers]', 'value')).toBe(title)
+    await page.fill('[name=titleForResearchers]', `${title} - UPDATED`)
 
     await page.click('testId=add-stage')
     await page.fill('input[name=title]', `${title} stage`)
@@ -50,7 +54,7 @@ test('can create and edit a study', async ({ page }) => {
     await page.click('testId=back-to-studies')
 
     await page.waitForLoadState('networkidle')
-    await expect(page).toMatchText('testId=studies-table', RegExp(title))
+    await expect(page).toMatchText('testId=studies-table-header', 'Studies')
 
     await rmStudy({ page, studyId })
 })

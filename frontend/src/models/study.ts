@@ -1,35 +1,36 @@
 
 import * as Yup from 'yup'
 import {
-    NewStudy, Study, DefaultApi, ParticipantStudy,
+    NewStudy, Study, DefaultApi, ParticipantStudy, Studies,
 } from '@api'
-import { isNil, dayjs } from '@lib'
+import { isNil, dayjs, useApi } from '@lib'
 import { StudyTypeTags } from './tags'
+import { useEffect, useState } from '@common';
 
 export type EditingStudy = NewStudy | Study
 export type SavedStudy = Study | ParticipantStudy
 
 export enum StudyStatus {
-    Active = 'Active', // eslint-disable-line no-unused-vars
-    Scheduled = 'Scheduled', // eslint-disable-line no-unused-vars
+    Launched = 'Launched', // eslint-disable-line no-unused-vars
+    Draft = 'Draft', // eslint-disable-line no-unused-vars
     Completed = 'Completed', // eslint-disable-line no-unused-vars
 }
 
 export const getStatus = (study: Study): StudyStatus => {
     const now = new Date()
     if (study.opensAt && study.opensAt > now) {
-        return StudyStatus.Scheduled
+        return StudyStatus.Draft
     }
     if (study.closesAt && study.closesAt < now) {
         return StudyStatus.Completed
     }
-    return StudyStatus.Active
+    return StudyStatus.Launched
 }
 
 export const getStatusName = (study: Study): string => {
     const status = getStatus(study)
-    if (status == StudyStatus.Active) return 'Active'
-    if (status == StudyStatus.Scheduled) return 'Scheduled'
+    if (status == StudyStatus.Launched) return 'Launched'
+    if (status == StudyStatus.Draft) return 'Draft'
     if (status == StudyStatus.Completed) return 'Completed'
     return ''
 }
@@ -104,4 +105,20 @@ export function studyTypeName(study: SavedStudy): string {
 
 export function studyIsMultipart(study: ParticipantStudy): boolean {
     return Boolean(study.stages && study.stages.length > 1)
+}
+
+export const useFetchStudies = () => {
+    const api = useApi()
+    const [studies, setStudies] = useState<Study[]>([])
+    const fetchStudies = () => {
+        useEffect(() => {
+            api.getStudies().then(res => {
+                setStudies((res.data || []).filter(study => !study.isHidden))
+            })
+        }, [])
+    }
+
+    fetchStudies()
+
+    return { studies, setStudies, fetchStudies }
 }

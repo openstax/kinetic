@@ -570,7 +570,12 @@ CREATE TABLE public.studies (
     feedback_description character varying,
     image_id character varying,
     completed_count integer DEFAULT 0 NOT NULL,
-    is_hidden boolean DEFAULT false NOT NULL
+    is_hidden boolean DEFAULT false NOT NULL,
+    status integer DEFAULT 0,
+    target_sample_size integer DEFAULT 0,
+    view_count integer DEFAULT 0,
+    researcher_pi_id bigint,
+    researcher_lead_id bigint
 );
 
 
@@ -1147,6 +1152,20 @@ CREATE INDEX index_stages_on_study_id ON public.stages USING btree (study_id);
 
 
 --
+-- Name: index_studies_on_researcher_lead_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_studies_on_researcher_lead_id ON public.studies USING btree (researcher_lead_id);
+
+
+--
+-- Name: index_studies_on_researcher_pi_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_studies_on_researcher_pi_id ON public.studies USING btree (researcher_pi_id);
+
+
+--
 -- Name: index_studies_on_tags; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1193,6 +1212,14 @@ CREATE INDEX index_study_researchers_on_study_id ON public.study_researchers USI
 --
 
 CREATE INDEX index_user_preferences_on_user_id ON public.user_preferences USING btree (user_id);
+
+
+--
+-- Name: studies fk_rails_037d7b4fac; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.studies
+    ADD CONSTRAINT fk_rails_037d7b4fac FOREIGN KEY (researcher_lead_id) REFERENCES public.researchers(id);
 
 
 --
@@ -1300,6 +1327,14 @@ ALTER TABLE ONLY public.stages
 
 
 --
+-- Name: studies fk_rails_f36ee2254f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.studies
+    ADD CONSTRAINT fk_rails_f36ee2254f FOREIGN KEY (researcher_pi_id) REFERENCES public.researchers(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -1331,6 +1366,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221129202926'),
 ('20221129224957'),
 ('20230109200606'),
-('20230130155253');
+('20230130155253'),
+('20230216162207');
 
 

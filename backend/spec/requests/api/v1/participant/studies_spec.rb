@@ -242,4 +242,23 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
       end
     end
   end
+
+  describe 'PUT participants/studies/{id}/stats' do
+    context 'when logged out' do
+      it 'gives unauthorized' do
+        api_put "participant/studies/#{study1.id}/stats"
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when signed in' do
+      before { stub_current_user(user1_id) }
+
+      it 'increments the study\'s view count by 1' do
+        api_put "participant/studies/#{study1.id}/stats?view=true"
+        expect(response).to have_http_status(:ok)
+        expect(response_hash).to match a_hash_including(view_count: study1.view_count + 1)
+      end
+    end
+  end
 end

@@ -27,6 +27,7 @@ Rails.application.routes.draw do
         resources :studies, only: [:index, :show] do
           put :launch
           put :land
+          put :stats
           delete :opt_out
         end
       end
