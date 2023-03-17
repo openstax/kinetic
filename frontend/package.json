@@ -57,6 +57,7 @@
     "ts-node": "^10.7.0",
     "url-parse": "^1.5.10",
     "use-local-storage-state": "^17.0.0",
+    "vite-plugin-svgr": "^2.4.0",
     "wait-on": "^6.0.1",
     "whatwg-fetch": "^3.6.2"
   },

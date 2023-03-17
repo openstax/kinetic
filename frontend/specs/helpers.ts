@@ -109,6 +109,7 @@ interface createStudyArgs {
     opensAt?: dayjs.Dayjs,
 }
 
+// TODO Rewrite create study tests after new screens
 export const createStudy = async ({
     page, name,
     isMandatory = false,

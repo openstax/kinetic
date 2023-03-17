@@ -64,7 +64,7 @@ export default function ResearcherStudies() {
                     <Button
                         primary
                         data-test-id="add-study"
-                        onClick={() => nav('/study/edit/new')}
+                        onClick={() => nav('/study/create')}
                         className='fw-bold'
                     >
                         <Icon icon="plus" height={28}></Icon>

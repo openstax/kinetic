@@ -8,14 +8,14 @@ import { analytics } from './lib/analytics'
 const Home = loadAsync('Homepage', () => import('./screens/homepage'))
 const Dev = loadAsync('Dev', () => import('./screens/dev'))
 const StudyLanding = loadAsync('Study Landing Page', () => import('./screens/study-landing'))
-const EditStudy = loadAsync('Edit Study Details', () => import('./screens/study-edit'))
+// const EditStudy = loadAsync('Edit Study Details', () => import('./screens/study-edit'))
 const ResearcherStudies = loadAsync('Studies', () => import('./screens/researcher/studies/dashboard/researcher-studies'))
 const LearnerDashboard = loadAsync('Studies', () => import('./screens/learner'))
 const AdminHomepage = loadAsync('Admin', () => import('./screens/admin-home'))
 const AccountDetails = loadAsync('Account', () => import('./screens/account-details'))
 const AnalysisHomepage = loadAsync('Analysis', () => import('./screens/analysis'))
 const ResearcherAccountPage = loadAsync('Researcher Account Page', () => import('./screens/researcher/account/researcher-account-page'))
-const StudyEditLanding = loadAsync('Study Edit Landing Page', () => import('./screens/researcher/studies/create/study-edit-landing'))
+const EditStudy = loadAsync('Edit Study Page', () => import('./screens/researcher/studies/create/edit-study'))
 const ResearcherStudyLanding = loadAsync('New Study Landing Page', () => import('./screens/researcher/studies/create/researcher-study-landing'))
 
 const StudiesHomepage = () => {
@@ -36,8 +36,8 @@ export const AppRoutes = () => {
                 <Route path="/dev/*" element={<Dev />} />
                 <Route path="/study/land/:studyId" element={<StudyLanding />} />
                 {/*<Route path="/study/edit/:id" element={<EditStudy />} />*/}
-                <Route path="/study/edit/:id" element={<ResearcherStudyLanding />} />
-                <Route path="/study/edit/:id/land" element={<StudyEditLanding />} />
+                <Route path="/study/create" element={<ResearcherStudyLanding />} />
+                <Route path="/study/edit/:id" element={<EditStudy />} />
                 <Route path="/study/edit/:id/about-researcher" element={<EditStudy />} />
                 <Route path="/study/edit/:id/researcher-info" element={<EditStudy />} />
                 <Route path="/study/edit/:id/learner-info" element={<EditStudy />} />

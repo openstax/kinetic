@@ -7,6 +7,10 @@ $link-color: #0d6efd;
 @import "flatpickr/dist/flatpickr.css";
 @import 'swiper/swiper-bundle.css';
 
+html, body {
+    height: 100%
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
@@ -46,11 +50,11 @@ $link-color: #0d6efd;
     --bs-btn-font-weight: 600;
     --bs-btn-color: #255ED3;
     --bs-btn-bg: var(--bs-white);
-    --bs-btn-border-color: var(--bs-white);
+    --bs-btn-border-color: #255ED3;
     --bs-btn-border-radius: .5rem;
     --bs-btn-hover-color: #255ED3;
     --bs-btn-hover-bg: #{shade-color(#FFF, 10%)};
-    --bs-btn-hover-border-color: #{shade-color(#FFF, 10%)};
+    --bs-btn-hover-border-color: #{shade-color(#255ED3, 10%)};
     --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
     --bs-btn-active-color: var(--bs-btn-hover-color);
     --bs-btn-active-bg: #{shade-color(#FFF, 20%)};

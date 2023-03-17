@@ -13,6 +13,7 @@ import xCircle from '@iconify-icons/bi/x-circle'
 import plusSquare from '@iconify-icons/bi/plus-square-fill'
 import exclamationCircle from '@iconify-icons/bi/exclamation-circle-fill'
 import clock from '@iconify-icons/bi/clock'
+import clockFill from '@iconify-icons/bi/clock-fill'
 import spin from '@iconify-icons/bi/arrow-clockwise'
 import minusSquare from '@iconify-icons/bi/dash-square'
 
@@ -48,6 +49,7 @@ import pencilFill from '@iconify-icons/bi/pencil-fill'
 import pause from '@iconify-icons/bi/pause'
 import pauseFill from '@iconify-icons/bi/pause-fill'
 import playFill from '@iconify-icons/bi/play-fill'
+import chevronLeft from '@iconify-icons/bi/chevron-left'
 
 const SUNDRY_PACKAGED_ICONS = {
     thumbsUp,
@@ -69,6 +71,7 @@ export const ICONS = {
     x,
     close,
     clock,
+    clockFill,
     back,
     search,
     plusCircle,
@@ -98,6 +101,7 @@ export const ICONS = {
     pause,
     pauseFill,
     playFill,
+    chevronLeft,
 }
 
 export type IconKey = keyof typeof ICONS

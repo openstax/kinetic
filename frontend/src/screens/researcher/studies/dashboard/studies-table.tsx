@@ -29,7 +29,6 @@ import { Dispatch, SetStateAction } from 'react';
 import { NotificationType } from './study-action-notification';
 import { Tooltip } from '@nathanstitt/sundry';
 import { ActionColumn } from './study-actions';
-import { ImageLibrary } from '../create/image-library';
 
 declare module '@tanstack/table-core' {
     interface ColumnMeta<TData extends RowData, TValue> { // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -194,7 +193,7 @@ const NoData: React.FC = () => {
             </h3>
             <span>
                 <Link
-                    to='/study/edit/new'
+                    to='/study/create'
                     css={{ color: colors.purple }}
                     className='fw-bold'
                 >
