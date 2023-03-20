@@ -27,7 +27,7 @@ const getLineColor = (step: Step, currentStepIndex: number, finalStep: boolean =
     return colors.lightGray
 }
 
-export const ProgressBar: FC<{currentStep: Step}> = ({ currentStep }) => {
+export const ProgressBar: FC<{currentStep: Step, setStepIndex: (index: number) => void}> = ({ currentStep, setStepIndex }) => {
     return (
         <Box width='100%'>
             {steps.map((step) => {
@@ -42,10 +42,13 @@ export const ProgressBar: FC<{currentStep: Step}> = ({ currentStep }) => {
                             }}
                             justify='center'
                             align='center'
+                            onClick={() => setStepIndex(step.index)}
                         >
                             <StepIcon step={step} currentIndex={currentStep.index} />
                         </Box>
-                        <small className='x-small' css={{ alignSelf: 'center' }}>{step.text}</small>
+                        <small className='x-small' css={{ alignSelf: 'center' }} onClick={() => setStepIndex(step.index)}>
+                            {step.text}
+                        </small>
                     </Box>
                 )
             })}

@@ -44,6 +44,7 @@ html, body {
     --bs-btn-active-color: var(--bs-btn-hover-color);
     --bs-btn-active-bg: #{shade-color(#255ED3, 20%)};
     --bs-btn-active-border-color: #{shade-color(#255ED3, 20%)};
+    --bs-btn-disabled-bg: #{shade-color(#DBDBDB, 10%)}
 }
 
 .btn-researcher-secondary {
@@ -59,4 +60,5 @@ html, body {
     --bs-btn-active-color: var(--bs-btn-hover-color);
     --bs-btn-active-bg: #{shade-color(#FFF, 20%)};
     --bs-btn-active-border-color: #{shade-color(#FFF, 20%)};
+    --bs-btn-disabled-bg: #{shade-color(#DBDBDB, 10%)}
 }

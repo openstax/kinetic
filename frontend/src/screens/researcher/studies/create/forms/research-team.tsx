@@ -1,9 +1,11 @@
 import { Box, React, useState } from '@common';
 import { Icon } from '@components';
 import { colors } from '@theme';
-import { Col, InputField } from '@nathanstitt/sundry';
+import { Button, Col, InputField } from '@nathanstitt/sundry';
+import { IRB } from '../../../account/researcher-account-page';
+import { EditingStudy } from '@models';
 
-export default function ResearchTeam() {
+export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
     const [piMyself, setPiMyself] = useState<boolean>(false)
     const [leadMyself, setLeadMyself] = useState<boolean>(false)
 
@@ -23,22 +25,70 @@ export default function ResearchTeam() {
                     <small>Invite the study PI as a collaborator, and enable them to view and manage the study from their own account</small>
                 </Col>
 
-                <Col sm={5} direction='column' align='start' gap>
+                <Col sm={4} direction='column' align='start' gap>
                     <Box gap='medium'>
                         <input type="checkbox" checked={piMyself} onChange={() => setPiMyself(!piMyself)}/>
                         <span>This will be myself</span>
                     </Box>
-
-                    {/*<InputField name='researcher_pi' disabled={piMyself} type='text'/>*/}
+                    <InputField
+                        name='researcher_pi'
+                        disabled={piMyself}
+                        type='text'
+                        label='Institutional Email Address'
+                        width='100%'
+                    />
                 </Col>
 
-                <Col sm={3} direction='column' align='start' gap='large'>
+                <Col sm={4} direction='column' align='start' justify='center' gap='large'>
+                    <InviteCollaborator disabled={piMyself}/>
+                </Col>
+            </Box>
+
+            <Box gap='xlarge'>
+                <Col sm={3} direction='column' gap>
+                    <h6>Postdoc/Student Lead*</h6>
+                    <small>Invite the study lead as a collaborator, and enable them to view and manage the study from their own account</small>
+                </Col>
+
+                <Col sm={4} direction='column' align='start' gap>
                     <Box gap='medium'>
-                        <input type="checkbox" checked={piMyself} onChange={() => setPiMyself(!piMyself)}/>
+                        <input type="checkbox" checked={leadMyself} onChange={() => setLeadMyself(!leadMyself)}/>
                         <span>This will be myself</span>
                     </Box>
+                    <InputField
+                        name='lead_pi'
+                        disabled={leadMyself}
+                        type='text'
+                        placeholder='Institutional Email Address'
+                        width='100%'
+                    />
+                </Col>
+
+                <Col sm={4} direction='column' align='start' justify='center' gap='large'>
+                    <InviteCollaborator disabled={leadMyself}/>
+                </Col>
+            </Box>
+
+            <Box gap='xlarge'>
+                <Col sm={3} direction='column' gap>
+                    <h6>IRB Detail</h6>
+                </Col>
+
+                <Col sm={5} direction='column' align='start' gap>
+                    <IRB/>
                 </Col>
             </Box>
         </Box>
+    )
+}
+
+const InviteCollaborator: FC<{disabled: boolean}> = ({ disabled }) => {
+    const invite = () => {
+
+    }
+    return (
+        <Button className='btn-researcher-secondary' disabled={disabled} onClick={()=> {}}>
+            Invite Collaborator
+        </Button>
     )
 }
