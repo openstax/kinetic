@@ -29,139 +29,127 @@ import {
 /**
  * 
  * @export
- * @interface NewStudy
+ * @interface BaseStudy
  */
-export interface NewStudy {
-    /**
-     * Desired sample size set by researcher
-     * @type {number}
-     * @memberof NewStudy
-     */
-    targetSampleSize?: number;
-    /**
-     * How many times the study has been launched
-     * @type {number}
-     * @memberof NewStudy
-     */
-    readonly launchedCount?: number;
+export interface BaseStudy {
     /**
      * The study name that participants see.
      * @type {string}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
-    titleForParticipants: string;
+    titleForParticipants?: string;
     /**
      * The study name that only researchers see.
      * @type {string}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     titleForResearchers?: string;
     /**
      * A short study description.
      * @type {string}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
-    shortDescription: string;
+    shortDescription?: string;
     /**
      * A long study description.
      * @type {string}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     longDescription?: string;
     /**
      * The tags of the study object, used for grouping and filtering.
      * @type {Array<string>}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
-    tags: Array<string>;
+    tags?: Array<string>;
     /**
      * Description of feedback displayed to the user upon study completion
      * @type {string}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     feedbackDescription?: string;
     /**
      * Freeform id of image that should be displayed on study card
      * @type {string}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     imageId?: string;
     /**
      * Description of how the study benefits participants
      * @type {string}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     benefits?: string;
     /**
      * Is the study hidden from participants
      * @type {boolean}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     isHidden?: boolean;
     /**
      * When the study opens for participation; null means not open.
      * @type {Date}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     opensAt?: Date | null;
     /**
      * When the study closes for participation; null means does not close.
      * @type {Date}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     closesAt?: Date | null;
     /**
      * When the study was launched; null means not launched
      * @type {Date}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     firstLaunchedAt?: Date;
     /**
      * 
      * @type {Researcher}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     researcherPi?: Researcher;
     /**
      * 
      * @type {Researcher}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     researcherLead?: Researcher;
     /**
      * Mandatory studies must be completed by all users
      * @type {boolean}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     isMandatory?: boolean;
     /**
      * Status of the study
      * @type {string}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
-    status?: NewStudyStatusEnum;
+    status?: BaseStudyStatusEnum;
     /**
      * How many times the study has been viewed
      * @type {number}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     viewCount?: number;
     /**
      * Number of times this study has been completed
      * @type {number}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     readonly completedCount?: number;
     /**
      * The type of study
      * @type {string}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     studyType?: string;
     /**
      * The study's stages.
      * @type {Array<Stage>}
-     * @memberof NewStudy
+     * @memberof BaseStudy
      */
     stages?: Array<Stage>;
 }
@@ -170,45 +158,40 @@ export interface NewStudy {
 /**
  * @export
  */
-export const NewStudyStatusEnum = {
+export const BaseStudyStatusEnum = {
     Active: 'active',
     Paused: 'paused',
     Scheduled: 'scheduled',
     Draft: 'draft',
     Completed: 'completed'
 } as const;
-export type NewStudyStatusEnum = typeof NewStudyStatusEnum[keyof typeof NewStudyStatusEnum];
+export type BaseStudyStatusEnum = typeof BaseStudyStatusEnum[keyof typeof BaseStudyStatusEnum];
 
 
 /**
- * Check if a given object implements the NewStudy interface.
+ * Check if a given object implements the BaseStudy interface.
  */
-export function instanceOfNewStudy(value: object): boolean {
+export function instanceOfBaseStudy(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "titleForParticipants" in value;
-    isInstance = isInstance && "shortDescription" in value;
-    isInstance = isInstance && "tags" in value;
 
     return isInstance;
 }
 
-export function NewStudyFromJSON(json: any): NewStudy {
-    return NewStudyFromJSONTyped(json, false);
+export function BaseStudyFromJSON(json: any): BaseStudy {
+    return BaseStudyFromJSONTyped(json, false);
 }
 
-export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): NewStudy {
+export function BaseStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): BaseStudy {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
-        'launchedCount': !exists(json, 'launched_count') ? undefined : json['launched_count'],
-        'titleForParticipants': json['title_for_participants'],
+        'titleForParticipants': !exists(json, 'title_for_participants') ? undefined : json['title_for_participants'],
         'titleForResearchers': !exists(json, 'title_for_researchers') ? undefined : json['title_for_researchers'],
-        'shortDescription': json['short_description'],
+        'shortDescription': !exists(json, 'short_description') ? undefined : json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
-        'tags': json['tags'],
+        'tags': !exists(json, 'tags') ? undefined : json['tags'],
         'feedbackDescription': !exists(json, 'feedback_description') ? undefined : json['feedback_description'],
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
@@ -227,7 +210,7 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     };
 }
 
-export function NewStudyToJSON(value?: NewStudy | null): any {
+export function BaseStudyToJSON(value?: BaseStudy | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -236,7 +219,6 @@ export function NewStudyToJSON(value?: NewStudy | null): any {
     }
     return {
         
-        'target_sample_size': value.targetSampleSize,
         'title_for_participants': value.titleForParticipants,
         'title_for_researchers': value.titleForResearchers,
         'short_description': value.shortDescription,

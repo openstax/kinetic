@@ -44,6 +44,18 @@ export interface NewStage {
      */
     availableAfterDays?: number;
     /**
+     * Has the stage been launched
+     * @type {boolean}
+     * @memberof NewStage
+     */
+    readonly isCompleted?: boolean;
+    /**
+     * Can the stage be launched
+     * @type {boolean}
+     * @memberof NewStage
+     */
+    readonly isLaunchable?: boolean;
+    /**
      * The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
      * @type {object}
      * @memberof NewStage
@@ -87,6 +99,8 @@ export function NewStageFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'title': !exists(json, 'title') ? undefined : json['title'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
+        'isCompleted': !exists(json, 'is_completed') ? undefined : json['is_completed'],
+        'isLaunchable': !exists(json, 'is_launchable') ? undefined : json['is_launchable'],
         'config': json['config'],
         'points': !exists(json, 'points') ? undefined : json['points'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],

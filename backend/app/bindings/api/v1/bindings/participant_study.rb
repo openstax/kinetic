@@ -18,13 +18,34 @@ module Api::V1::Bindings
     # The study ID.
     attr_accessor :id
 
-    # The study title that participants see.
-    attr_accessor :title
+    # How popular the study is on a fractional scale of 0.0 to 1.0
+    attr_accessor :popularity_rating
 
-    # The shorty study description that participants see.
+    # Should this study be feautured more prominently?
+    attr_accessor :is_featured
+
+    # When the study was completed; null means not completed.
+    attr_accessor :completed_at
+
+    # When the study was opted-out of; null means not opted out.
+    attr_accessor :opted_out_at
+
+    # The study's total point value.
+    attr_accessor :total_points
+
+    # The study's total duration in minutes.
+    attr_accessor :total_duration
+
+    # The study name that participants see.
+    attr_accessor :title_for_participants
+
+    # The study name that only researchers see.
+    attr_accessor :title_for_researchers
+
+    # A short study description.
     attr_accessor :short_description
 
-    # The long study description that participants see.
+    # A long study description.
     attr_accessor :long_description
 
     # The tags of the study object, used for grouping and filtering.
@@ -39,35 +60,21 @@ module Api::V1::Bindings
     # Description of how the study benefits participants
     attr_accessor :benefits
 
-    # How popular the study is on a fractional scale of 0.0 to 1.0
-    attr_accessor :popularity_rating
+    # Is the study hidden from participants
+    attr_accessor :is_hidden
 
-    # Should this study be feautured more prominently?
-    attr_accessor :is_featured
+    # When the study opens for participation; null means not open.
+    attr_accessor :opens_at
+
+    # When the study closes for participation; null means does not close.
+    attr_accessor :closes_at
 
     # When the study was launched; null means not launched
     attr_accessor :first_launched_at
 
-    # When the study was completed; null means not completed.
-    attr_accessor :completed_at
+    attr_accessor :researcher_pi
 
-    # When the study ends; null means open indefinitely.
-    attr_accessor :closes_at
-
-    # When the study was opted-out of; null means not opted out.
-    attr_accessor :opted_out_at
-
-    # The study's researchers.
-    attr_accessor :researchers
-
-    # The study's total point value.
-    attr_accessor :total_points
-
-    # The study's total duration in minutes.
-    attr_accessor :total_duration
-
-    # The study's stages.
-    attr_accessor :stages
+    attr_accessor :researcher_lead
 
     # Mandatory studies must be completed by all users
     attr_accessor :is_mandatory
@@ -77,6 +84,15 @@ module Api::V1::Bindings
 
     # How many times the study has been viewed
     attr_accessor :view_count
+
+    # Number of times this study has been completed
+    attr_accessor :completed_count
+
+    # The type of study
+    attr_accessor :study_type
+
+    # The study's stages.
+    attr_accessor :stages
 
     class EnumAttributeValidator
       attr_reader :datatype
@@ -104,26 +120,32 @@ module Api::V1::Bindings
     def self.attribute_map
       {
         :'id' => :'id',
-        :'title' => :'title',
+        :'popularity_rating' => :'popularity_rating',
+        :'is_featured' => :'is_featured',
+        :'completed_at' => :'completed_at',
+        :'opted_out_at' => :'opted_out_at',
+        :'total_points' => :'total_points',
+        :'total_duration' => :'total_duration',
+        :'title_for_participants' => :'title_for_participants',
+        :'title_for_researchers' => :'title_for_researchers',
         :'short_description' => :'short_description',
         :'long_description' => :'long_description',
         :'tags' => :'tags',
         :'feedback_description' => :'feedback_description',
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
-        :'popularity_rating' => :'popularity_rating',
-        :'is_featured' => :'is_featured',
-        :'first_launched_at' => :'first_launched_at',
-        :'completed_at' => :'completed_at',
+        :'is_hidden' => :'is_hidden',
+        :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
-        :'opted_out_at' => :'opted_out_at',
-        :'researchers' => :'researchers',
-        :'total_points' => :'total_points',
-        :'total_duration' => :'total_duration',
-        :'stages' => :'stages',
+        :'first_launched_at' => :'first_launched_at',
+        :'researcher_pi' => :'researcher_pi',
+        :'researcher_lead' => :'researcher_lead',
         :'is_mandatory' => :'is_mandatory',
         :'status' => :'status',
-        :'view_count' => :'view_count'
+        :'view_count' => :'view_count',
+        :'completed_count' => :'completed_count',
+        :'study_type' => :'study_type',
+        :'stages' => :'stages'
       }
     end
 
@@ -136,33 +158,48 @@ module Api::V1::Bindings
     def self.openapi_types
       {
         :'id' => :'Integer',
-        :'title' => :'String',
+        :'popularity_rating' => :'Float',
+        :'is_featured' => :'Boolean',
+        :'completed_at' => :'Time',
+        :'opted_out_at' => :'Time',
+        :'total_points' => :'Integer',
+        :'total_duration' => :'Integer',
+        :'title_for_participants' => :'String',
+        :'title_for_researchers' => :'String',
         :'short_description' => :'String',
         :'long_description' => :'String',
         :'tags' => :'Array<String>',
         :'feedback_description' => :'String',
         :'image_id' => :'String',
         :'benefits' => :'String',
-        :'popularity_rating' => :'Float',
-        :'is_featured' => :'Boolean',
-        :'first_launched_at' => :'Time',
-        :'completed_at' => :'Time',
+        :'is_hidden' => :'Boolean',
+        :'opens_at' => :'Time',
         :'closes_at' => :'Time',
-        :'opted_out_at' => :'Time',
-        :'researchers' => :'Array<PublicResearcher>',
-        :'total_points' => :'Integer',
-        :'total_duration' => :'Integer',
-        :'stages' => :'Array<ParticipantStudyStage>',
+        :'first_launched_at' => :'Time',
+        :'researcher_pi' => :'Researcher',
+        :'researcher_lead' => :'Researcher',
         :'is_mandatory' => :'Boolean',
         :'status' => :'String',
-        :'view_count' => :'Float'
+        :'view_count' => :'Float',
+        :'completed_count' => :'Float',
+        :'study_type' => :'String',
+        :'stages' => :'Array<Stage>'
       }
     end
 
     # List of attributes with nullable: true
     def self.openapi_nullable
       Set.new([
+        :'opens_at',
+        :'closes_at',
       ])
+    end
+
+    # List of class defined in allOf (OpenAPI v3)
+    def self.openapi_all_of
+      [
+      :'BaseStudy'
+      ]
     end
 
     # Initializes the object
@@ -184,8 +221,36 @@ module Api::V1::Bindings
         self.id = attributes[:'id']
       end
 
-      if attributes.key?(:'title')
-        self.title = attributes[:'title']
+      if attributes.key?(:'popularity_rating')
+        self.popularity_rating = attributes[:'popularity_rating']
+      end
+
+      if attributes.key?(:'is_featured')
+        self.is_featured = attributes[:'is_featured']
+      end
+
+      if attributes.key?(:'completed_at')
+        self.completed_at = attributes[:'completed_at']
+      end
+
+      if attributes.key?(:'opted_out_at')
+        self.opted_out_at = attributes[:'opted_out_at']
+      end
+
+      if attributes.key?(:'total_points')
+        self.total_points = attributes[:'total_points']
+      end
+
+      if attributes.key?(:'total_duration')
+        self.total_duration = attributes[:'total_duration']
+      end
+
+      if attributes.key?(:'title_for_participants')
+        self.title_for_participants = attributes[:'title_for_participants']
+      end
+
+      if attributes.key?(:'title_for_researchers')
+        self.title_for_researchers = attributes[:'title_for_researchers']
       end
 
       if attributes.key?(:'short_description')
@@ -214,48 +279,28 @@ module Api::V1::Bindings
         self.benefits = attributes[:'benefits']
       end
 
-      if attributes.key?(:'popularity_rating')
-        self.popularity_rating = attributes[:'popularity_rating']
+      if attributes.key?(:'is_hidden')
+        self.is_hidden = attributes[:'is_hidden']
       end
 
-      if attributes.key?(:'is_featured')
-        self.is_featured = attributes[:'is_featured']
-      end
-
-      if attributes.key?(:'first_launched_at')
-        self.first_launched_at = attributes[:'first_launched_at']
-      end
-
-      if attributes.key?(:'completed_at')
-        self.completed_at = attributes[:'completed_at']
+      if attributes.key?(:'opens_at')
+        self.opens_at = attributes[:'opens_at']
       end
 
       if attributes.key?(:'closes_at')
         self.closes_at = attributes[:'closes_at']
       end
 
-      if attributes.key?(:'opted_out_at')
-        self.opted_out_at = attributes[:'opted_out_at']
+      if attributes.key?(:'first_launched_at')
+        self.first_launched_at = attributes[:'first_launched_at']
       end
 
-      if attributes.key?(:'researchers')
-        if (value = attributes[:'researchers']).is_a?(Array)
-          self.researchers = value
-        end
+      if attributes.key?(:'researcher_pi')
+        self.researcher_pi = attributes[:'researcher_pi']
       end
 
-      if attributes.key?(:'total_points')
-        self.total_points = attributes[:'total_points']
-      end
-
-      if attributes.key?(:'total_duration')
-        self.total_duration = attributes[:'total_duration']
-      end
-
-      if attributes.key?(:'stages')
-        if (value = attributes[:'stages']).is_a?(Array)
-          self.stages = value
-        end
+      if attributes.key?(:'researcher_lead')
+        self.researcher_lead = attributes[:'researcher_lead']
       end
 
       if attributes.key?(:'is_mandatory')
@@ -269,6 +314,20 @@ module Api::V1::Bindings
       if attributes.key?(:'view_count')
         self.view_count = attributes[:'view_count']
       end
+
+      if attributes.key?(:'completed_count')
+        self.completed_count = attributes[:'completed_count']
+      end
+
+      if attributes.key?(:'study_type')
+        self.study_type = attributes[:'study_type']
+      end
+
+      if attributes.key?(:'stages')
+        if (value = attributes[:'stages']).is_a?(Array)
+          self.stages = value
+        end
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -279,8 +338,20 @@ module Api::V1::Bindings
         invalid_properties.push('invalid value for "id", id cannot be nil.')
       end
 
-      if @title.nil?
-        invalid_properties.push('invalid value for "title", title cannot be nil.')
+      if @total_points.nil?
+        invalid_properties.push('invalid value for "total_points", total_points cannot be nil.')
+      end
+
+      if @total_duration.nil?
+        invalid_properties.push('invalid value for "total_duration", total_duration cannot be nil.')
+      end
+
+      if !@title_for_participants.nil? && @title_for_participants.to_s.length < 1
+        invalid_properties.push('invalid value for "title_for_participants", the character length must be great than or equal to 1.')
+      end
+
+      if !@title_for_researchers.nil? && @title_for_researchers.to_s.length < 1
+        invalid_properties.push('invalid value for "title_for_researchers", the character length must be great than or equal to 1.')
       end
 
       if @short_description.nil?
@@ -291,14 +362,6 @@ module Api::V1::Bindings
         invalid_properties.push('invalid value for "tags", tags cannot be nil.')
       end
 
-      if @total_points.nil?
-        invalid_properties.push('invalid value for "total_points", total_points cannot be nil.')
-      end
-
-      if @total_duration.nil?
-        invalid_properties.push('invalid value for "total_duration", total_duration cannot be nil.')
-      end
-
       invalid_properties
     end
 
@@ -306,14 +369,45 @@ module Api::V1::Bindings
     # @return true if the model is valid
     def valid?
       return false if @id.nil?
-      return false if @title.nil?
-      return false if @short_description.nil?
-      return false if @tags.nil?
       return false if @total_points.nil?
       return false if @total_duration.nil?
+      return false if !@title_for_participants.nil? && @title_for_participants.to_s.length < 1
+      return false if !@title_for_researchers.nil? && @title_for_researchers.to_s.length < 1
+      return false if @short_description.nil?
+      return false if @tags.nil?
       status_validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "completed"])
       return false unless status_validator.valid?(@status)
       true
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] title_for_participants Value to be assigned
+    def title_for_participants=(title_for_participants)
+      if !title_for_participants.nil? && title_for_participants.to_s.length < 1
+        fail ArgumentError, 'invalid value for "title_for_participants", the character length must be great than or equal to 1.'
+      end
+
+      @title_for_participants = title_for_participants
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] title_for_researchers Value to be assigned
+    def title_for_researchers=(title_for_researchers)
+      if !title_for_researchers.nil? && title_for_researchers.to_s.length < 1
+        fail ArgumentError, 'invalid value for "title_for_researchers", the character length must be great than or equal to 1.'
+      end
+
+      @title_for_researchers = title_for_researchers
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] tags Value to be assigned
+    def tags=(tags)
+      if tags.nil?
+        fail ArgumentError, 'tags cannot be nil'
+      end
+
+      @tags = tags
     end
 
     # Custom attribute writer method checking allowed values (enum).
@@ -332,26 +426,32 @@ module Api::V1::Bindings
       return true if self.equal?(o)
       self.class == o.class &&
           id == o.id &&
-          title == o.title &&
+          popularity_rating == o.popularity_rating &&
+          is_featured == o.is_featured &&
+          completed_at == o.completed_at &&
+          opted_out_at == o.opted_out_at &&
+          total_points == o.total_points &&
+          total_duration == o.total_duration &&
+          title_for_participants == o.title_for_participants &&
+          title_for_researchers == o.title_for_researchers &&
           short_description == o.short_description &&
           long_description == o.long_description &&
           tags == o.tags &&
           feedback_description == o.feedback_description &&
           image_id == o.image_id &&
           benefits == o.benefits &&
-          popularity_rating == o.popularity_rating &&
-          is_featured == o.is_featured &&
-          first_launched_at == o.first_launched_at &&
-          completed_at == o.completed_at &&
+          is_hidden == o.is_hidden &&
+          opens_at == o.opens_at &&
           closes_at == o.closes_at &&
-          opted_out_at == o.opted_out_at &&
-          researchers == o.researchers &&
-          total_points == o.total_points &&
-          total_duration == o.total_duration &&
-          stages == o.stages &&
+          first_launched_at == o.first_launched_at &&
+          researcher_pi == o.researcher_pi &&
+          researcher_lead == o.researcher_lead &&
           is_mandatory == o.is_mandatory &&
           status == o.status &&
-          view_count == o.view_count
+          view_count == o.view_count &&
+          completed_count == o.completed_count &&
+          study_type == o.study_type &&
+          stages == o.stages
     end
 
     # @see the `==` method
@@ -363,7 +463,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title, short_description, long_description, tags, feedback_description, image_id, benefits, popularity_rating, is_featured, first_launched_at, completed_at, closes_at, opted_out_at, researchers, total_points, total_duration, stages, is_mandatory, status, view_count].hash
+      [id, popularity_rating, is_featured, completed_at, opted_out_at, total_points, total_duration, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, is_hidden, opens_at, closes_at, first_launched_at, researcher_pi, researcher_lead, is_mandatory, status, view_count, completed_count, study_type, stages].hash
     end
 
     # Builds the object from hash

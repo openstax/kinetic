@@ -1,10 +1,10 @@
 import * as Yup from 'yup';
 import { React, styled, useState } from '@common';
 import { useApi, useCurrentResearcher, useUserInfo } from '@lib';
-import { colors } from '../../../theme';
+import { colors } from '@theme';
 import { Researcher } from '@api';
 import { Button, Form, FormCancelButton, FormSaveButton, Tooltip } from '@nathanstitt/sundry';
-import { Box, cx, Icon, InputField, SelectField } from '@components';
+import { Box, CharacterCount, cx, Icon, InputField, SelectField } from '@components';
 
 const urlRegex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
 export const ResearcherValidationSchema = Yup.object().shape({
@@ -28,21 +28,6 @@ const institutionList = [
     { value: 'University of North Dakota', label: 'University of North Dakota' },
     { value: 'University of Pennsylvania', label: 'University of Pennsylvania' },
 ];
-
-const CharacterCount: React.FC<{count: number, max: number}> = ({ count, max }) => {
-    if (count > max) {
-        return (
-            <Box css={{ color: colors.red }} align='center' gap='small'>
-                <Icon icon="warning" height={16} />
-                <small>{count} / {max} character</small>
-            </Box>
-        )
-    }
-
-    return (
-        <small css={{ color: colors.grayText }}>{count} / {max} character</small>
-    )
-}
 
 const StyledForm = styled(Form<Researcher>)(({ readOnly }) => ({
     button: {
@@ -70,16 +55,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
     researcher.firstName = researcher.firstName || userInfo?.first_name
     researcher.lastName = researcher.lastName || userInfo?.last_name
 
-    const formCountDefaults = {
-        ['firstName']: researcher.firstName?.length || 0,
-        ['lastName']: researcher.lastName?.length || 0,
-        ['researchInterest1']: researcher.researchInterest1?.length || 0,
-        ['researchInterest2']: researcher.researchInterest2?.length|| 0,
-        ['researchInterest3']: researcher.researchInterest3?.length || 0,
-        ['bio']: researcher.bio?.length || 0,
-    }
     const [editing, setEditing] = useState(false)
-    const [counts, setCounts] = useState<{[key: string]: number}>(formCountDefaults)
     const [institution, setInstitution] = useState(researcher.institution)
 
     const saveResearcher = async (researcher: Researcher) => {
@@ -99,18 +75,8 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
         setEditing(false)
     }
 
-    const validateCount = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const current = e.target.value.length;
-        const name = e.target.name;
-        setCounts({
-            ...counts,
-            [name]: current,
-        })
-    }
-
     const onCancel = () => {
         setEditing(false)
-        setCounts(formCountDefaults)
     }
 
     return (
@@ -124,20 +90,14 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
         >
             <div className='col-6'>
                 <h6>First Name</h6>
-                <InputField
-                    name="firstName"
-                    onChange={validateCount}
-                />
-                <CharacterCount count={counts['firstName']} max={50} />
+                <InputField name="firstName"/>
+                <CharacterCount max={50} name={'firstName'} />
             </div>
 
             <div className='col-6'>
                 <h6>Last Name</h6>
-                <InputField
-                    name="lastName"
-                    onChange={validateCount}
-                />
-                <CharacterCount count={counts['lastName']} max={50} />
+                <InputField name="lastName"/>
+                <CharacterCount max={50} name='lastName' />
             </div>
 
             <div className='col-12 mt-1'>
@@ -161,26 +121,18 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
             </Box>
             <div className='col-4'>
                 <InputField
-                    name="researchInterest1"
-                    onChange={validateCount}
-                />
-                <CharacterCount count={counts['researchInterest1']} max={25} />
+                    name="researchInterest1" />
+                <CharacterCount max={25} name='researchInterest1' />
             </div>
 
             <div className='col-4'>
-                <InputField
-                    name="researchInterest2"
-                    onChange={validateCount}
-                />
-                <CharacterCount count={counts['researchInterest2']} max={25} />
+                <InputField name="researchInterest2" />
+                <CharacterCount max={25} name='researchInterest2' />
             </div>
 
             <div className='col-4'>
-                <InputField
-                    name="researchInterest3"
-                    onChange={validateCount}
-                />
-                <CharacterCount count={counts['researchInterest3']} max={25} />
+                <InputField name="researchInterest3" />
+                <CharacterCount max={25} name='researchInterest3' />
             </div>
 
             <div className='mt-1'>
@@ -205,9 +157,8 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
                     name="bio"
                     type="textarea"
                     placeholder='Please add a brief bio to share with learners'
-                    onChange={validateCount}
                 />
-                <CharacterCount count={counts['bio']} max={250} />
+                <CharacterCount max={250} name={'bio'} />
             </div>
 
             {!editing &&

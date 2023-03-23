@@ -21,7 +21,7 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
                 <h3 className='fw-bold'>Internal Details</h3>
                 <Box gap align='center'>
                     <Icon height={20} color={colors.kineticResearcher} icon='clockFill'/>
-                    <span>ETA: 5 min</span>
+                    <span>ETA: 2 min</span>
                 </Box>
             </Box>
 
@@ -31,12 +31,10 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
                     <small>This is an internal title only visible to researchers. It can adopt a more technical language</small>
                 </Col>
 
-                <Col sm={4} direction='column' align='start' gap>
+                <Col sm={4} direction='column' gap>
                     <InputField
                         name='titleForResearchers'
                         type='textarea'
-                        label='Institutional Email Address'
-                        width='100%'
                     />
                 </Col>
             </Box>
@@ -52,7 +50,7 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
                         name="studyType"
                         isClearable={true}
                         onChange={(value: string) => setStudyType(value)}
-                        // value={study.}
+                        // value={study.studyType}
                         defaultValue={studyType}
                         options={studyTypes}
                     />

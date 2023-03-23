@@ -27,6 +27,12 @@ module Api::V1::Bindings
     # How many days after previous stage will this become available
     attr_accessor :available_after_days
 
+    # Has the stage been launched
+    attr_accessor :is_completed
+
+    # Can the stage be launched
+    attr_accessor :is_launchable
+
     # The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
     attr_accessor :config
 
@@ -43,6 +49,8 @@ module Api::V1::Bindings
         :'title' => :'title',
         :'description' => :'description',
         :'available_after_days' => :'available_after_days',
+        :'is_completed' => :'is_completed',
+        :'is_launchable' => :'is_launchable',
         :'config' => :'config',
         :'points' => :'points',
         :'duration_minutes' => :'duration_minutes'
@@ -61,6 +69,8 @@ module Api::V1::Bindings
         :'title' => :'String',
         :'description' => :'String',
         :'available_after_days' => :'Float',
+        :'is_completed' => :'Boolean',
+        :'is_launchable' => :'Boolean',
         :'config' => :'Object',
         :'points' => :'Float',
         :'duration_minutes' => :'Float'
@@ -104,6 +114,14 @@ module Api::V1::Bindings
         self.available_after_days = attributes[:'available_after_days']
       end
 
+      if attributes.key?(:'is_completed')
+        self.is_completed = attributes[:'is_completed']
+      end
+
+      if attributes.key?(:'is_launchable')
+        self.is_launchable = attributes[:'is_launchable']
+      end
+
       if attributes.key?(:'config')
         self.config = attributes[:'config']
       end
@@ -144,6 +162,8 @@ module Api::V1::Bindings
           title == o.title &&
           description == o.description &&
           available_after_days == o.available_after_days &&
+          is_completed == o.is_completed &&
+          is_launchable == o.is_launchable &&
           config == o.config &&
           points == o.points &&
           duration_minutes == o.duration_minutes
@@ -158,7 +178,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [order, title, description, available_after_days, config, points, duration_minutes].hash
+      [order, title, description, available_after_days, is_completed, is_launchable, config, points, duration_minutes].hash
     end
 
     # Builds the object from hash

@@ -12,6 +12,7 @@ export * from './AnalysisUpdate';
 export * from './BannerMessage';
 export * from './BannerNotice';
 export * from './BannersListing';
+export * from './BaseStudy';
 export * from './Environment';
 export * from './EnvironmentUser';
 export * from './Launch';

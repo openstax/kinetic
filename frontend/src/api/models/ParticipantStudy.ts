@@ -13,18 +13,18 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { ParticipantStudyStage } from './ParticipantStudyStage';
+import type { Researcher } from './Researcher';
 import {
-    ParticipantStudyStageFromJSON,
-    ParticipantStudyStageFromJSONTyped,
-    ParticipantStudyStageToJSON,
-} from './ParticipantStudyStage';
-import type { PublicResearcher } from './PublicResearcher';
+    ResearcherFromJSON,
+    ResearcherFromJSONTyped,
+    ResearcherToJSON,
+} from './Researcher';
+import type { Stage } from './Stage';
 import {
-    PublicResearcherFromJSON,
-    PublicResearcherFromJSONTyped,
-    PublicResearcherToJSON,
-} from './PublicResearcher';
+    StageFromJSON,
+    StageFromJSONTyped,
+    StageToJSON,
+} from './Stage';
 
 /**
  * 
@@ -39,19 +39,61 @@ export interface ParticipantStudy {
      */
     id: number;
     /**
-     * The study title that participants see.
+     * How popular the study is on a fractional scale of 0.0 to 1.0
+     * @type {number}
+     * @memberof ParticipantStudy
+     */
+    popularityRating?: number;
+    /**
+     * Should this study be feautured more prominently?
+     * @type {boolean}
+     * @memberof ParticipantStudy
+     */
+    readonly isFeatured?: boolean;
+    /**
+     * When the study was completed; null means not completed.
+     * @type {Date}
+     * @memberof ParticipantStudy
+     */
+    completedAt?: Date;
+    /**
+     * When the study was opted-out of; null means not opted out.
+     * @type {Date}
+     * @memberof ParticipantStudy
+     */
+    optedOutAt?: Date;
+    /**
+     * The study's total point value.
+     * @type {number}
+     * @memberof ParticipantStudy
+     */
+    totalPoints: number;
+    /**
+     * The study's total duration in minutes.
+     * @type {number}
+     * @memberof ParticipantStudy
+     */
+    totalDuration: number;
+    /**
+     * The study name that participants see.
      * @type {string}
      * @memberof ParticipantStudy
      */
-    title: string;
+    titleForParticipants?: string;
     /**
-     * The shorty study description that participants see.
+     * The study name that only researchers see.
+     * @type {string}
+     * @memberof ParticipantStudy
+     */
+    titleForResearchers?: string;
+    /**
+     * A short study description.
      * @type {string}
      * @memberof ParticipantStudy
      */
     shortDescription: string;
     /**
-     * The long study description that participants see.
+     * A long study description.
      * @type {string}
      * @memberof ParticipantStudy
      */
@@ -81,17 +123,23 @@ export interface ParticipantStudy {
      */
     benefits?: string;
     /**
-     * How popular the study is on a fractional scale of 0.0 to 1.0
-     * @type {number}
-     * @memberof ParticipantStudy
-     */
-    popularityRating?: number;
-    /**
-     * Should this study be feautured more prominently?
+     * Is the study hidden from participants
      * @type {boolean}
      * @memberof ParticipantStudy
      */
-    readonly isFeatured?: boolean;
+    isHidden?: boolean;
+    /**
+     * When the study opens for participation; null means not open.
+     * @type {Date}
+     * @memberof ParticipantStudy
+     */
+    opensAt?: Date | null;
+    /**
+     * When the study closes for participation; null means does not close.
+     * @type {Date}
+     * @memberof ParticipantStudy
+     */
+    closesAt?: Date | null;
     /**
      * When the study was launched; null means not launched
      * @type {Date}
@@ -99,47 +147,17 @@ export interface ParticipantStudy {
      */
     firstLaunchedAt?: Date;
     /**
-     * When the study was completed; null means not completed.
-     * @type {Date}
+     * 
+     * @type {Researcher}
      * @memberof ParticipantStudy
      */
-    completedAt?: Date;
+    researcherPi?: Researcher;
     /**
-     * When the study ends; null means open indefinitely.
-     * @type {Date}
+     * 
+     * @type {Researcher}
      * @memberof ParticipantStudy
      */
-    closesAt?: Date;
-    /**
-     * When the study was opted-out of; null means not opted out.
-     * @type {Date}
-     * @memberof ParticipantStudy
-     */
-    optedOutAt?: Date;
-    /**
-     * The study's researchers.
-     * @type {Array<PublicResearcher>}
-     * @memberof ParticipantStudy
-     */
-    researchers?: Array<PublicResearcher>;
-    /**
-     * The study's total point value.
-     * @type {number}
-     * @memberof ParticipantStudy
-     */
-    totalPoints: number;
-    /**
-     * The study's total duration in minutes.
-     * @type {number}
-     * @memberof ParticipantStudy
-     */
-    totalDuration: number;
-    /**
-     * The study's stages.
-     * @type {Array<ParticipantStudyStage>}
-     * @memberof ParticipantStudy
-     */
-    stages?: Array<ParticipantStudyStage>;
+    researcherLead?: Researcher;
     /**
      * Mandatory studies must be completed by all users
      * @type {boolean}
@@ -158,6 +176,24 @@ export interface ParticipantStudy {
      * @memberof ParticipantStudy
      */
     viewCount?: number;
+    /**
+     * Number of times this study has been completed
+     * @type {number}
+     * @memberof ParticipantStudy
+     */
+    readonly completedCount?: number;
+    /**
+     * The type of study
+     * @type {string}
+     * @memberof ParticipantStudy
+     */
+    studyType?: string;
+    /**
+     * The study's stages.
+     * @type {Array<Stage>}
+     * @memberof ParticipantStudy
+     */
+    stages?: Array<Stage>;
 }
 
 
@@ -180,11 +216,10 @@ export type ParticipantStudyStatusEnum = typeof ParticipantStudyStatusEnum[keyof
 export function instanceOfParticipantStudy(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "title" in value;
-    isInstance = isInstance && "shortDescription" in value;
-    isInstance = isInstance && "tags" in value;
     isInstance = isInstance && "totalPoints" in value;
     isInstance = isInstance && "totalDuration" in value;
+    isInstance = isInstance && "shortDescription" in value;
+    isInstance = isInstance && "tags" in value;
 
     return isInstance;
 }
@@ -200,26 +235,32 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
     return {
         
         'id': json['id'],
-        'title': json['title'],
+        'popularityRating': !exists(json, 'popularity_rating') ? undefined : json['popularity_rating'],
+        'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
+        'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
+        'optedOutAt': !exists(json, 'opted_out_at') ? undefined : (new Date(json['opted_out_at'])),
+        'totalPoints': json['total_points'],
+        'totalDuration': json['total_duration'],
+        'titleForParticipants': !exists(json, 'title_for_participants') ? undefined : json['title_for_participants'],
+        'titleForResearchers': !exists(json, 'title_for_researchers') ? undefined : json['title_for_researchers'],
         'shortDescription': json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
         'tags': json['tags'],
         'feedbackDescription': !exists(json, 'feedback_description') ? undefined : json['feedback_description'],
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
-        'popularityRating': !exists(json, 'popularity_rating') ? undefined : json['popularity_rating'],
-        'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
+        'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
+        'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
+        'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
-        'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
-        'closesAt': !exists(json, 'closes_at') ? undefined : (new Date(json['closes_at'])),
-        'optedOutAt': !exists(json, 'opted_out_at') ? undefined : (new Date(json['opted_out_at'])),
-        'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(PublicResearcherFromJSON)),
-        'totalPoints': json['total_points'],
-        'totalDuration': json['total_duration'],
-        'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(ParticipantStudyStageFromJSON)),
+        'researcherPi': !exists(json, 'researcher_pi') ? undefined : ResearcherFromJSON(json['researcher_pi']),
+        'researcherLead': !exists(json, 'researcher_lead') ? undefined : ResearcherFromJSON(json['researcher_lead']),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'status': !exists(json, 'status') ? undefined : json['status'],
         'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
+        'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
+        'studyType': !exists(json, 'study_type') ? undefined : json['study_type'],
+        'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
     };
 }
 
@@ -233,25 +274,30 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
     return {
         
         'id': value.id,
-        'title': value.title,
+        'popularity_rating': value.popularityRating,
+        'completed_at': value.completedAt === undefined ? undefined : (value.completedAt.toISOString()),
+        'opted_out_at': value.optedOutAt === undefined ? undefined : (value.optedOutAt.toISOString()),
+        'total_points': value.totalPoints,
+        'total_duration': value.totalDuration,
+        'title_for_participants': value.titleForParticipants,
+        'title_for_researchers': value.titleForResearchers,
         'short_description': value.shortDescription,
         'long_description': value.longDescription,
         'tags': value.tags,
         'feedback_description': value.feedbackDescription,
         'image_id': value.imageId,
         'benefits': value.benefits,
-        'popularity_rating': value.popularityRating,
+        'is_hidden': value.isHidden,
+        'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
+        'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'first_launched_at': value.firstLaunchedAt === undefined ? undefined : (value.firstLaunchedAt.toISOString()),
-        'completed_at': value.completedAt === undefined ? undefined : (value.completedAt.toISOString()),
-        'closes_at': value.closesAt === undefined ? undefined : (value.closesAt.toISOString()),
-        'opted_out_at': value.optedOutAt === undefined ? undefined : (value.optedOutAt.toISOString()),
-        'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(PublicResearcherToJSON)),
-        'total_points': value.totalPoints,
-        'total_duration': value.totalDuration,
-        'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(ParticipantStudyStageToJSON)),
+        'researcher_pi': ResearcherToJSON(value.researcherPi),
+        'researcher_lead': ResearcherToJSON(value.researcherLead),
         'is_mandatory': value.isMandatory,
         'status': value.status,
         'view_count': value.viewCount,
+        'study_type': value.studyType,
+        'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),
     };
 }
 

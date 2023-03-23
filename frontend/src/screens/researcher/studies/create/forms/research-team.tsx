@@ -15,7 +15,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                 <h3 className='fw-bold'>Research Team</h3>
                 <Box gap align='center'>
                     <Icon height={20} color={colors.kineticResearcher} icon='clockFill'/>
-                    <span>ETA: 5 min</span>
+                    <span>ETA: 2 min</span>
                 </Box>
             </Box>
 
@@ -25,17 +25,17 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                     <small>Invite the study PI as a collaborator, and enable them to view and manage the study from their own account</small>
                 </Col>
 
-                <Col sm={4} direction='column' align='start' gap>
+                <Col sm={4} direction='column' gap>
                     <Box gap='medium'>
                         <input type="checkbox" checked={piMyself} onChange={() => setPiMyself(!piMyself)}/>
                         <span>This will be myself</span>
                     </Box>
+
                     <InputField
-                        name='researcher_pi'
+                        name='researcherPi'
                         disabled={piMyself}
                         type='text'
-                        label='Institutional Email Address'
-                        width='100%'
+                        placeholder='Institutional Email Address'
                     />
                 </Col>
 
@@ -50,17 +50,16 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                     <small>Invite the study lead as a collaborator, and enable them to view and manage the study from their own account</small>
                 </Col>
 
-                <Col sm={4} direction='column' align='start' gap>
+                <Col sm={4} direction='column' gap>
                     <Box gap='medium'>
                         <input type="checkbox" checked={leadMyself} onChange={() => setLeadMyself(!leadMyself)}/>
                         <span>This will be myself</span>
                     </Box>
                     <InputField
-                        name='lead_pi'
+                        name='researcherLead'
                         disabled={leadMyself}
                         type='text'
                         placeholder='Institutional Email Address'
-                        width='100%'
                     />
                 </Col>
 
@@ -74,7 +73,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                     <h6>IRB Detail</h6>
                 </Col>
 
-                <Col sm={5} direction='column' align='start' gap>
+                <Col sm={4} direction='column' align='start' gap>
                     <IRB/>
                 </Col>
             </Box>
@@ -87,8 +86,11 @@ const InviteCollaborator: FC<{disabled: boolean}> = ({ disabled }) => {
 
     }
     return (
-        <Button className='btn-researcher-secondary' disabled={disabled} onClick={()=> {}}>
-            Invite Collaborator
-        </Button>
+        <div>
+            <Button className='btn-researcher-secondary' disabled={disabled} onClick={()=> {}}>
+                Invite Collaborator
+            </Button>
+
+        </div>
     )
 }

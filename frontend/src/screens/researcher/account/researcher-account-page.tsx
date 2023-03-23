@@ -50,7 +50,7 @@ export default function ResearcherAccountPage() {
                                     <Col sm={2}>
                                         <h6>IRB Detail</h6>
                                     </Col>
-                                    <Col sm={7}>
+                                    <Col sm={6}>
                                         <IRB/>
                                     </Col>
                                     <Col sm={2} css={{ marginLeft: 'auto' }}>
@@ -86,7 +86,7 @@ export default function ResearcherAccountPage() {
 
 export const IRB = () => {
     return (
-        <Box direction='column' gap css={{ border: '1px solid grey', padding: 15, width: 400 }}>
+        <Box direction='column' gap css={{ border: '1px solid grey', padding: 15, width: '100%' }}>
             <Box justify='between'>
                 <img alt="Rice University logo" css={{ width: 120, height: 50 }} src={RiceLogoURL} className='col-6'/>
                 <Box direction='column' className='col-6 x-small'>

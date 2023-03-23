@@ -14,13 +14,7 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class NewStudy
-    # Desired sample size set by researcher
-    attr_accessor :target_sample_size
-
-    # How many times the study has been launched
-    attr_accessor :launched_count
-
+  class BaseStudy
     # The study name that participants see.
     attr_accessor :title_for_participants
 
@@ -104,8 +98,6 @@ module Api::V1::Bindings
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'target_sample_size' => :'target_sample_size',
-        :'launched_count' => :'launched_count',
         :'title_for_participants' => :'title_for_participants',
         :'title_for_researchers' => :'title_for_researchers',
         :'short_description' => :'short_description',
@@ -137,8 +129,6 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'target_sample_size' => :'Float',
-        :'launched_count' => :'Float',
         :'title_for_participants' => :'String',
         :'title_for_researchers' => :'String',
         :'short_description' => :'String',
@@ -170,35 +160,20 @@ module Api::V1::Bindings
       ])
     end
 
-    # List of class defined in allOf (OpenAPI v3)
-    def self.openapi_all_of
-      [
-      :'BaseStudy'
-      ]
-    end
-
     # Initializes the object
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::NewStudy` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::BaseStudy` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::NewStudy`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::BaseStudy`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
-
-      if attributes.key?(:'target_sample_size')
-        self.target_sample_size = attributes[:'target_sample_size']
-      end
-
-      if attributes.key?(:'launched_count')
-        self.launched_count = attributes[:'launched_count']
-      end
 
       if attributes.key?(:'title_for_participants')
         self.title_for_participants = attributes[:'title_for_participants']
@@ -289,24 +264,12 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @title_for_participants.nil?
-        invalid_properties.push('invalid value for "title_for_participants", title_for_participants cannot be nil.')
-      end
-
-      if @title_for_participants.to_s.length < 1
+      if !@title_for_participants.nil? && @title_for_participants.to_s.length < 1
         invalid_properties.push('invalid value for "title_for_participants", the character length must be great than or equal to 1.')
       end
 
       if !@title_for_researchers.nil? && @title_for_researchers.to_s.length < 1
         invalid_properties.push('invalid value for "title_for_researchers", the character length must be great than or equal to 1.')
-      end
-
-      if @short_description.nil?
-        invalid_properties.push('invalid value for "short_description", short_description cannot be nil.')
-      end
-
-      if @tags.nil?
-        invalid_properties.push('invalid value for "tags", tags cannot be nil.')
       end
 
       invalid_properties
@@ -315,11 +278,8 @@ module Api::V1::Bindings
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @title_for_participants.nil?
-      return false if @title_for_participants.to_s.length < 1
+      return false if !@title_for_participants.nil? && @title_for_participants.to_s.length < 1
       return false if !@title_for_researchers.nil? && @title_for_researchers.to_s.length < 1
-      return false if @short_description.nil?
-      return false if @tags.nil?
       status_validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "completed"])
       return false unless status_validator.valid?(@status)
       true
@@ -328,11 +288,7 @@ module Api::V1::Bindings
     # Custom attribute writer method with validation
     # @param [Object] title_for_participants Value to be assigned
     def title_for_participants=(title_for_participants)
-      if title_for_participants.nil?
-        fail ArgumentError, 'title_for_participants cannot be nil'
-      end
-
-      if title_for_participants.to_s.length < 1
+      if !title_for_participants.nil? && title_for_participants.to_s.length < 1
         fail ArgumentError, 'invalid value for "title_for_participants", the character length must be great than or equal to 1.'
       end
 
@@ -352,10 +308,6 @@ module Api::V1::Bindings
     # Custom attribute writer method with validation
     # @param [Object] tags Value to be assigned
     def tags=(tags)
-      if tags.nil?
-        fail ArgumentError, 'tags cannot be nil'
-      end
-
       @tags = tags
     end
 
@@ -374,8 +326,6 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          target_sample_size == o.target_sample_size &&
-          launched_count == o.launched_count &&
           title_for_participants == o.title_for_participants &&
           title_for_researchers == o.title_for_researchers &&
           short_description == o.short_description &&
@@ -407,7 +357,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [target_sample_size, launched_count, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, is_hidden, opens_at, closes_at, first_launched_at, researcher_pi, researcher_lead, is_mandatory, status, view_count, completed_count, study_type, stages].hash
+      [title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, is_hidden, opens_at, closes_at, first_launched_at, researcher_pi, researcher_lead, is_mandatory, status, view_count, completed_count, study_type, stages].hash
     end
 
     # Builds the object from hash

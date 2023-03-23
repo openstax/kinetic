@@ -178,6 +178,10 @@ export interface GetStageRequest {
     id: number;
 }
 
+export interface GetStudyRequest {
+    id: number;
+}
+
 export interface LandStudyRequest {
     id: number;
     aborted?: LandStudyAbortedEnum;
@@ -946,6 +950,38 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getStudies(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Studies> {
         const response = await this.getStudiesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get a single study
+     * Get a single study
+     */
+    async getStudyRaw(requestParameters: GetStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Study>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getStudy.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researcher/studies/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudyFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a single study
+     * Get a single study
+     */
+    async getStudy(requestParameters: GetStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Study> {
+        const response = await this.getStudyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

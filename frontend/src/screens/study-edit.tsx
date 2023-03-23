@@ -283,7 +283,7 @@ function EditStudy() {
     const onCancel = () => {
         nav('/studies')
     }
-    const saveStudy:FormSubmitHandler<EditingStudy> = async (study) => {
+    const saveStudy: FormSubmitHandler<EditingStudy> = async (study) => {
         try {
             if (isNew) {
                 const savedStudy = await api.addStudy({ addStudy: { study: study as any } })
@@ -302,7 +302,6 @@ function EditStudy() {
         Yup.object().shape({
             stages: Yup.array().min(1).required(),
         })
-
     )
 
     const tag_options = uniqBy(TAG_OPTIONS.concat(
@@ -363,4 +362,4 @@ function EditStudy() {
     )
 }
 
-export default EditStudy
+export default Edittudy

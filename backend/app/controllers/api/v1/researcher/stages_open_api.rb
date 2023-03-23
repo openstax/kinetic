@@ -62,6 +62,16 @@ class Api::V1::Researcher::StagesOpenApi
       key :type, :number
       key :description, 'How many days after previous stage will this become available'
     end
+    property :is_completed do
+      key :type, :boolean
+      key :description, 'Has the stage been launched'
+      key :readOnly, true
+    end
+    property :is_launchable do
+      key :type, :boolean
+      key :description, 'Can the stage be launched'
+      key :readOnly, true
+    end
     property :config do
       key :type, :object
       key :description,  'The configuration for a particular kind of stage, e.g. Qualtrics.  ' \

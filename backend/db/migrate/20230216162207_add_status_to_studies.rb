@@ -5,6 +5,8 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
     add_column :studies, :view_count, :integer, default: 0
     add_reference :studies, :researcher_pi, foreign_key: { to_table: :researchers }
     add_reference :studies, :researcher_lead, foreign_key: { to_table: :researchers }
+    add_column :studies, :study_type, :string
+
 
     reversible do |dir|
       dir.up do

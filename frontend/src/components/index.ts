@@ -22,6 +22,8 @@ export * from './resource-links'
 export * from './segment-bar'
 export * from './multi-session-bar'
 
+export * from './form/character-count'
+
 import { Footer } from './footer'
 import { Icon, IconProps, IconKey } from './icon'
 

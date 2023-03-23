@@ -4,7 +4,7 @@ import ActiveStep from '@images/icons/active-step.svg'
 import CompletedStep from '@images/icons/completed-step.svg'
 import OptionalStep from '@images/icons/optional-step.svg'
 import DisabledStep from '@images/icons/disabled-step.svg'
-import { Step, steps } from './edit-study';
+import { Step } from './edit-study';
 
 
 const getLineColor = (step: Step, currentStepIndex: number, finalStep: boolean = false) => {
@@ -27,7 +27,11 @@ const getLineColor = (step: Step, currentStepIndex: number, finalStep: boolean =
     return colors.lightGray
 }
 
-export const ProgressBar: FC<{currentStep: Step, setStepIndex: (index: number) => void}> = ({ currentStep, setStepIndex }) => {
+export const ProgressBar: FC<{
+    steps: Step[],
+    currentStep: Step,
+    setStepIndex: (index: number) => void
+}> = ({ steps, currentStep, setStepIndex }) => {
     return (
         <Box width='100%'>
             {steps.map((step) => {

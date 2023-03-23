@@ -18,6 +18,15 @@ module Api::V1::Bindings
     # The study ID.
     attr_accessor :id
 
+    # Desired sample size set by researcher
+    attr_accessor :target_sample_size
+
+    # How many times the study has been launched
+    attr_accessor :launched_count
+
+    # The URL to which stages should return after completing
+    attr_accessor :return_url
+
     # The study name that participants see.
     attr_accessor :title_for_participants
 
@@ -51,32 +60,27 @@ module Api::V1::Bindings
     # When the study closes for participation; null means does not close.
     attr_accessor :closes_at
 
+    # When the study was launched; null means not launched
+    attr_accessor :first_launched_at
+
+    attr_accessor :researcher_pi
+
+    attr_accessor :researcher_lead
+
     # Mandatory studies must be completed by all users
     attr_accessor :is_mandatory
-
-    # Number of times this study has been completed
-    attr_accessor :completed_count
-
-    # Desired sample size set by researcher
-    attr_accessor :target_sample_size
-
-    # How many times the study has been viewed
-    attr_accessor :view_count
-
-    # How many times the study has been launched
-    attr_accessor :launched_count
 
     # Status of the study
     attr_accessor :status
 
-    # The URL to which stages should return after completing
-    attr_accessor :return_url
+    # How many times the study has been viewed
+    attr_accessor :view_count
 
-    # The study's researchers.
-    attr_accessor :researchers
+    # Number of times this study has been completed
+    attr_accessor :completed_count
 
-    # When the study was launched; null means not launched
-    attr_accessor :first_launched_at
+    # The type of study
+    attr_accessor :study_type
 
     # The study's stages.
     attr_accessor :stages
@@ -107,6 +111,9 @@ module Api::V1::Bindings
     def self.attribute_map
       {
         :'id' => :'id',
+        :'target_sample_size' => :'target_sample_size',
+        :'launched_count' => :'launched_count',
+        :'return_url' => :'return_url',
         :'title_for_participants' => :'title_for_participants',
         :'title_for_researchers' => :'title_for_researchers',
         :'short_description' => :'short_description',
@@ -118,15 +125,14 @@ module Api::V1::Bindings
         :'is_hidden' => :'is_hidden',
         :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
-        :'is_mandatory' => :'is_mandatory',
-        :'completed_count' => :'completed_count',
-        :'target_sample_size' => :'target_sample_size',
-        :'view_count' => :'view_count',
-        :'launched_count' => :'launched_count',
-        :'status' => :'status',
-        :'return_url' => :'return_url',
-        :'researchers' => :'researchers',
         :'first_launched_at' => :'first_launched_at',
+        :'researcher_pi' => :'researcher_pi',
+        :'researcher_lead' => :'researcher_lead',
+        :'is_mandatory' => :'is_mandatory',
+        :'status' => :'status',
+        :'view_count' => :'view_count',
+        :'completed_count' => :'completed_count',
+        :'study_type' => :'study_type',
         :'stages' => :'stages'
       }
     end
@@ -140,6 +146,9 @@ module Api::V1::Bindings
     def self.openapi_types
       {
         :'id' => :'Integer',
+        :'target_sample_size' => :'Float',
+        :'launched_count' => :'Float',
+        :'return_url' => :'String',
         :'title_for_participants' => :'String',
         :'title_for_researchers' => :'String',
         :'short_description' => :'String',
@@ -151,15 +160,14 @@ module Api::V1::Bindings
         :'is_hidden' => :'Boolean',
         :'opens_at' => :'Time',
         :'closes_at' => :'Time',
-        :'is_mandatory' => :'Boolean',
-        :'completed_count' => :'Float',
-        :'target_sample_size' => :'Float',
-        :'view_count' => :'Float',
-        :'launched_count' => :'Float',
-        :'status' => :'String',
-        :'return_url' => :'String',
-        :'researchers' => :'Array<Researcher>',
         :'first_launched_at' => :'Time',
+        :'researcher_pi' => :'Researcher',
+        :'researcher_lead' => :'Researcher',
+        :'is_mandatory' => :'Boolean',
+        :'status' => :'String',
+        :'view_count' => :'Float',
+        :'completed_count' => :'Float',
+        :'study_type' => :'String',
         :'stages' => :'Array<Stage>'
       }
     end
@@ -170,6 +178,13 @@ module Api::V1::Bindings
         :'opens_at',
         :'closes_at',
       ])
+    end
+
+    # List of class defined in allOf (OpenAPI v3)
+    def self.openapi_all_of
+      [
+      :'BaseStudy'
+      ]
     end
 
     # Initializes the object
@@ -189,6 +204,18 @@ module Api::V1::Bindings
 
       if attributes.key?(:'id')
         self.id = attributes[:'id']
+      end
+
+      if attributes.key?(:'target_sample_size')
+        self.target_sample_size = attributes[:'target_sample_size']
+      end
+
+      if attributes.key?(:'launched_count')
+        self.launched_count = attributes[:'launched_count']
+      end
+
+      if attributes.key?(:'return_url')
+        self.return_url = attributes[:'return_url']
       end
 
       if attributes.key?(:'title_for_participants')
@@ -237,42 +264,36 @@ module Api::V1::Bindings
         self.closes_at = attributes[:'closes_at']
       end
 
+      if attributes.key?(:'first_launched_at')
+        self.first_launched_at = attributes[:'first_launched_at']
+      end
+
+      if attributes.key?(:'researcher_pi')
+        self.researcher_pi = attributes[:'researcher_pi']
+      end
+
+      if attributes.key?(:'researcher_lead')
+        self.researcher_lead = attributes[:'researcher_lead']
+      end
+
       if attributes.key?(:'is_mandatory')
         self.is_mandatory = attributes[:'is_mandatory']
-      end
-
-      if attributes.key?(:'completed_count')
-        self.completed_count = attributes[:'completed_count']
-      end
-
-      if attributes.key?(:'target_sample_size')
-        self.target_sample_size = attributes[:'target_sample_size']
-      end
-
-      if attributes.key?(:'view_count')
-        self.view_count = attributes[:'view_count']
-      end
-
-      if attributes.key?(:'launched_count')
-        self.launched_count = attributes[:'launched_count']
       end
 
       if attributes.key?(:'status')
         self.status = attributes[:'status']
       end
 
-      if attributes.key?(:'return_url')
-        self.return_url = attributes[:'return_url']
+      if attributes.key?(:'view_count')
+        self.view_count = attributes[:'view_count']
       end
 
-      if attributes.key?(:'researchers')
-        if (value = attributes[:'researchers']).is_a?(Array)
-          self.researchers = value
-        end
+      if attributes.key?(:'completed_count')
+        self.completed_count = attributes[:'completed_count']
       end
 
-      if attributes.key?(:'first_launched_at')
-        self.first_launched_at = attributes[:'first_launched_at']
+      if attributes.key?(:'study_type')
+        self.study_type = attributes[:'study_type']
       end
 
       if attributes.key?(:'stages')
@@ -377,6 +398,9 @@ module Api::V1::Bindings
       return true if self.equal?(o)
       self.class == o.class &&
           id == o.id &&
+          target_sample_size == o.target_sample_size &&
+          launched_count == o.launched_count &&
+          return_url == o.return_url &&
           title_for_participants == o.title_for_participants &&
           title_for_researchers == o.title_for_researchers &&
           short_description == o.short_description &&
@@ -388,15 +412,14 @@ module Api::V1::Bindings
           is_hidden == o.is_hidden &&
           opens_at == o.opens_at &&
           closes_at == o.closes_at &&
-          is_mandatory == o.is_mandatory &&
-          completed_count == o.completed_count &&
-          target_sample_size == o.target_sample_size &&
-          view_count == o.view_count &&
-          launched_count == o.launched_count &&
-          status == o.status &&
-          return_url == o.return_url &&
-          researchers == o.researchers &&
           first_launched_at == o.first_launched_at &&
+          researcher_pi == o.researcher_pi &&
+          researcher_lead == o.researcher_lead &&
+          is_mandatory == o.is_mandatory &&
+          status == o.status &&
+          view_count == o.view_count &&
+          completed_count == o.completed_count &&
+          study_type == o.study_type &&
           stages == o.stages
     end
 
@@ -409,7 +432,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, is_hidden, opens_at, closes_at, is_mandatory, completed_count, target_sample_size, view_count, launched_count, status, return_url, researchers, first_launched_at, stages].hash
+      [id, target_sample_size, launched_count, return_url, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, is_hidden, opens_at, closes_at, first_launched_at, researcher_pi, researcher_lead, is_mandatory, status, view_count, completed_count, study_type, stages].hash
     end
 
     # Builds the object from hash

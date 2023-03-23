@@ -1,13 +1,12 @@
 import { cx, React, useCallback } from '@common'
 import { Box, Icon, MultiSessionBar } from '@components'
 import { get } from 'lodash'
-import { toSentence, useIsMobileDevice } from '@lib'
-import { studyIsMultipart, TagLabels, tagOfType, tagsOfType } from '@models'
+import { useIsMobileDevice } from '@lib'
+import { EditingStudy, studyIsMultipart, TagLabels, tagOfType, tagsOfType } from '@models'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
-import { CardImages } from '../../components/study-card-images/images'
-
-import { colors, media } from '../../theme'
+import { CardImages } from '../../components/study-card-images'
+import { colors, media } from '@theme'
 
 interface StudyCardProps {
     study: ParticipantStudy
@@ -54,12 +53,13 @@ const Tag: React.FC<{ tag?: string }> = ({ tag }) => (
     tag ? <span className="badge text-dark" css={{ borderRadius: 8, background: colors.gray }}>{get(TagLabels, tag, tag)}</span> : null
 )
 
-const Researchers: React.FC<StudyCardProps> = ({ study }) => {
-    const names: string[] = (study.researchers?.map(r => `${r.firstName} ${r.lastName}` || '') || []).filter(Boolean)
-    if (!names.length) return null
+const Researcher: React.FC<StudyCardProps> = ({ study }) => {
+    if (!study.researcherPi) return null
 
     return (
-        <Box className='x-small' padding={{ bottom: 'small' }}>{toSentence(names)}</Box>
+        <Box className='x-small' padding={{ bottom: 'small' }}>
+            {study.researcherPi?.firstName} {study.researcherPi?.lastName}
+        </Box>
     )
 }
 
@@ -161,6 +161,27 @@ const FeedbackMultiSessionContainer: FC<StudyCardProps> = ({ study }) => {
     )
 }
 
+const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
+    const isMobile = useIsMobileDevice();
+
+    return (
+        <Box className={cx({ 'small': !isMobile, 'xx-small': isMobile }, 'mt-auto', 'pt-1')} justify='between' align='center' wrap>
+            <Box gap='small'>
+                <Tag tag={tagOfType(study, 'topic')} />
+                {tagsOfType(study, 'subject').slice(0, 1).map(tag => <Tag key={tag} tag={tag} />)}
+            </Box>
+            <Box>
+                {!!study.totalDuration && <div>
+                    {studyIsMultipart(study) && <span>*Total: </span>}
+                    {study.totalDuration}min
+                </div>}
+
+                {!!study.totalPoints && <span>&nbsp;&middot; {study.totalPoints}pts</span>}
+            </Box>
+        </Box>
+    )
+}
+
 export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantStudy): void }> = ({
     onSelect,
     study,
@@ -168,6 +189,7 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
     const Image = CardImages[study.imageId || 'StemInterest'] || CardImages.StemInterest
     const isMobile = useIsMobileDevice();
     const onClick = useCallback(() => onSelect(study), [onSelect]);
+
     return (
         <Card
             as="a"
@@ -189,27 +211,42 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
             <CompleteFlag study={study} />
             <MultiSessionFlag study={study} />
             <FeedbackMultiSessionContainer study={study} />
-            <h6>
-                {study.title}
-            </h6>
-            <Researchers className="xx-small" study={study} />
+            <h6>{study.titleForParticipants}</h6>
+            <Researcher className="xx-small" study={study} />
             <small className={cx({ 'x-small': isMobile })} css={{ color: colors.grayText }}>
                 {study.shortDescription}
             </small>
-            <Box className={cx({ 'small': !isMobile, 'xx-small': isMobile }, 'mt-auto', 'pt-1')} justify='between' align='center' wrap>
-                <Box gap='small'>
-                    <Tag tag={tagOfType(study, 'topic')} />
-                    {tagsOfType(study, 'subject').slice(0, 1).map(tag => <Tag key={tag} tag={tag} />)}
-                </Box>
-                <Box>
-                    {!!study.totalDuration && <div>
-                        {studyIsMultipart(study) && <span>*Total: </span>}
-                        {study.totalDuration}min
-                    </div>}
+            <PointsAndDuration study={study} />
+        </Card>
+    )
+}
 
-                    {!!study.totalPoints && <span>&nbsp;&middot; {study.totalPoints}pts</span>}
-                </Box>
-            </Box>
+export const StudyCardPreview: FC<{study: EditingStudy}> = ({ study }) => {
+    const Image = CardImages[study.imageId || 'StemInterest']
+    const isMobile = useIsMobileDevice();
+
+    return (
+        <Card
+            className="col study"
+            direction='column'
+        >
+            <Image.image
+                name={Image.title}
+                className='study-card-image'
+                css={{
+                    border: `1px solid ${colors.lightGray}`,
+                    borderRadius: 8,
+                }}
+            />
+            <CompleteFlag study={study as ParticipantStudy} />
+            <MultiSessionFlag study={study as ParticipantStudy} />
+            <FeedbackMultiSessionContainer study={study as ParticipantStudy} />
+            <h6>{study.titleForParticipants}</h6>
+            <Researcher className="xx-small" study={study as ParticipantStudy} />
+            <small className={cx({ 'x-small': isMobile })} css={{ color: colors.grayText }}>
+                {study.shortDescription}
+            </small>
+            <PointsAndDuration study={study as ParticipantStudy} />
         </Card>
     )
 }

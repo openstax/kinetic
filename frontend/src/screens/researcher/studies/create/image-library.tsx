@@ -1,6 +1,6 @@
 import { Button, Col, Modal } from '@nathanstitt/sundry';
 import { Box, React, styled, useState } from '@common';
-import { colors } from '../../../../theme';
+import { colors } from '@theme';
 import { CardImage, cardImages } from '../../../../components/study-card-images/images';
 
 const CategoryLink = styled.small({
@@ -80,7 +80,7 @@ const ImageCardContainer = styled(Box)({
 export const ImageLibrary: FC<{
     show: boolean,
     onHide: () => void,
-    onSelect: (imageId: string) => string
+    onSelect: (imageId: string) => void
 }> = ({ show, onHide, onSelect }) => {
     const [category, setCategory] = useState<string>('Personality')
     const [selectedImage, setSelectedImage] = useState<string>('')
@@ -127,6 +127,7 @@ export const ImageLibrary: FC<{
                             <Button
                                 className='btn-researcher-secondary'
                                 css={{ width: 170, justifyContent: 'center' }}
+                                onClick={() => onHide()}
                             >
                                 Cancel
                             </Button>
@@ -134,7 +135,10 @@ export const ImageLibrary: FC<{
                                 className='btn-researcher-primary'
                                 disabled={!selectedImage}
                                 css={{ width: 170, justifyContent: 'center' }}
-                                onClick={() => onSelect(selectedImage)}
+                                onClick={() => {
+                                    onSelect(selectedImage)
+                                    onHide()
+                                }}
                             >
                                 Select
                             </Button>
