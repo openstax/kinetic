@@ -29,7 +29,7 @@ const EditorInfo: FC<{ analysis: Analysis }> = ({ analysis }) => {
             <InputField name="apiKey" label="Api Key" readOnly />
             <a
                 className="btn btn-primary" target="kinetic-workspaces-editor"
-                href={`https://workspaces.kinetic.sandbox.openstax.org/edit/${analysis.id}`}
+                href={`https://workspaces.kinetic.sandbox.openstax.org/editor/#${analysis.id}`}
             >Edit Code</a>
         </Box>
     )
@@ -37,7 +37,7 @@ const EditorInfo: FC<{ analysis: Analysis }> = ({ analysis }) => {
 
 export const EditAnalysis: FC<EditAnalysisProps> = ({ listing, onEditSuccess }) => {
     const { analysisId } = useParams<string>();
-    const analysis =  (!analysisId || analysisId == 'new') ?
+    const analysis = (!analysisId || analysisId == 'new') ?
         newAnalysis : listing.find(a => String(a.id) == analysisId)
 
     const nav = useNavigate()
