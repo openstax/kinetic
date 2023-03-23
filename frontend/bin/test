@@ -14,4 +14,4 @@ do
     esac
 done
 
-$(npm bin)/playwright test --config playwright.config.ts --reporter=list $@
+yarn run playwright test --config playwright.config.ts --reporter=list $@
