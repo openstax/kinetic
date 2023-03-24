@@ -60,9 +60,8 @@ module Api::V1::Bindings
     # When the study was launched; null means not launched
     attr_accessor :first_launched_at
 
-    attr_accessor :researcher_pi
-
-    attr_accessor :researcher_lead
+    # The study's researchers.
+    attr_accessor :researchers
 
     # Mandatory studies must be completed by all users
     attr_accessor :is_mandatory
@@ -122,8 +121,7 @@ module Api::V1::Bindings
         :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
         :'first_launched_at' => :'first_launched_at',
-        :'researcher_pi' => :'researcher_pi',
-        :'researcher_lead' => :'researcher_lead',
+        :'researchers' => :'researchers',
         :'is_mandatory' => :'is_mandatory',
         :'status' => :'status',
         :'view_count' => :'view_count',
@@ -156,8 +154,7 @@ module Api::V1::Bindings
         :'opens_at' => :'Time',
         :'closes_at' => :'Time',
         :'first_launched_at' => :'Time',
-        :'researcher_pi' => :'Researcher',
-        :'researcher_lead' => :'Researcher',
+        :'researchers' => :'Array<Researcher>',
         :'is_mandatory' => :'Boolean',
         :'status' => :'String',
         :'view_count' => :'Float',
@@ -259,12 +256,10 @@ module Api::V1::Bindings
         self.first_launched_at = attributes[:'first_launched_at']
       end
 
-      if attributes.key?(:'researcher_pi')
-        self.researcher_pi = attributes[:'researcher_pi']
-      end
-
-      if attributes.key?(:'researcher_lead')
-        self.researcher_lead = attributes[:'researcher_lead']
+      if attributes.key?(:'researchers')
+        if (value = attributes[:'researchers']).is_a?(Array)
+          self.researchers = value
+        end
       end
 
       if attributes.key?(:'is_mandatory')
@@ -375,8 +370,7 @@ module Api::V1::Bindings
           opens_at == o.opens_at &&
           closes_at == o.closes_at &&
           first_launched_at == o.first_launched_at &&
-          researcher_pi == o.researcher_pi &&
-          researcher_lead == o.researcher_lead &&
+          researchers == o.researchers &&
           is_mandatory == o.is_mandatory &&
           status == o.status &&
           view_count == o.view_count &&
@@ -394,7 +388,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, target_sample_size, launched_count, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, is_hidden, opens_at, closes_at, first_launched_at, researcher_pi, researcher_lead, is_mandatory, status, view_count, completed_count, study_type, stages].hash
+      [id, target_sample_size, launched_count, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, is_hidden, opens_at, closes_at, first_launched_at, researchers, is_mandatory, status, view_count, completed_count, study_type, stages].hash
     end
 
     # Builds the object from hash

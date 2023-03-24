@@ -23,6 +23,7 @@ export * from './segment-bar'
 export * from './multi-session-bar'
 
 export * from './form/character-count'
+export * from './form/field-error-message'
 
 import { Footer } from './footer'
 import { Icon, IconProps, IconKey } from './icon'

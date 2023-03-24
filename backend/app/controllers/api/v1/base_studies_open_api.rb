@@ -62,13 +62,12 @@ class Api::V1::BaseStudiesOpenApi
         key :format, 'date-time'
         key :description, 'When the study was launched; null means not launched'
       end
-      property :researcher_pi do
-        key :$ref, :Researcher
-        key :description, 'The study\`s primary investogator'
-      end
-      property :researcher_lead do
-        key :$ref, :Researcher
-        key :description, 'The study\`s lead investigator'
+      property :researchers do
+        key :type, :array
+        key :description, 'The study\'s researchers.'
+        items do
+          key :$ref, :Researcher
+        end
       end
       property :is_mandatory do
         key :type, :boolean

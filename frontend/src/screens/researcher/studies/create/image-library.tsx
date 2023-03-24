@@ -80,9 +80,10 @@ const ImageCardContainer = styled(Box)({
 export const ImageLibrary: FC<{
     show: boolean,
     onHide: () => void,
-    onSelect: (imageId: string) => void
-}> = ({ show, onHide, onSelect }) => {
-    const [category, setCategory] = useState<string>('Personality')
+    onSelect: (imageId: string) => void,
+    currentImage: string
+}> = ({ show, onHide, onSelect, currentImage }) => {
+    const [category, setCategory] = useState<string>(currentImage)
     const [selectedImage, setSelectedImage] = useState<string>('')
     return (
         <Modal

@@ -91,7 +91,25 @@ export interface ResearcherUpdate {
      * @memberof ResearcherUpdate
      */
     inviteCode?: string;
+    /**
+     * Researchers role
+     * @type {string}
+     * @memberof ResearcherUpdate
+     */
+    role?: ResearcherUpdateRoleEnum;
 }
+
+
+/**
+ * @export
+ */
+export const ResearcherUpdateRoleEnum = {
+    Member: 'member',
+    Pi: 'pi',
+    Lead: 'lead'
+} as const;
+export type ResearcherUpdateRoleEnum = typeof ResearcherUpdateRoleEnum[keyof typeof ResearcherUpdateRoleEnum];
+
 
 /**
  * Check if a given object implements the ResearcherUpdate interface.
@@ -124,6 +142,7 @@ export function ResearcherUpdateFromJSONTyped(json: any, ignoreDiscriminator: bo
         'researchInterest2': !exists(json, 'research_interest2') ? undefined : json['research_interest2'],
         'researchInterest3': !exists(json, 'research_interest3') ? undefined : json['research_interest3'],
         'inviteCode': !exists(json, 'invite_code') ? undefined : json['invite_code'],
+        'role': !exists(json, 'role') ? undefined : json['role'],
     };
 }
 
@@ -147,6 +166,7 @@ export function ResearcherUpdateToJSON(value?: ResearcherUpdate | null): any {
         'research_interest2': value.researchInterest2,
         'research_interest3': value.researchInterest3,
         'invite_code': value.inviteCode,
+        'role': value.role,
     };
 }
 

@@ -1,6 +1,6 @@
 import { EditingStudy } from '@models';
 import { Box, React, useState } from '@common';
-import { Icon, CharacterCount, SelectField } from '@components';
+import { Icon, CharacterCount, SelectField, FieldErrorMessage } from '@components';
 import { colors } from '@theme';
 import { Button, Col, InputField, useFormContext } from '@nathanstitt/sundry';
 import { ImageLibrary } from '../image-library';
@@ -8,8 +8,8 @@ import { StudyCardPreview } from '../../../../learner/card';
 
 export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
     const [showImagePicker, setShowImagePicker] = useState<boolean>(false)
-    const studyPreview = useFormContext().watch() as EditingStudy
-    const { setValue } = useFormContext()
+    const { setValue, watch } = useFormContext()
+    const studyPreview = watch() as EditingStudy
 
     return (
         <Box className='mt-6' gap='xlarge'>
@@ -19,7 +19,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                         <h3 className='fw-bold'>Participant View</h3>
                         <Box gap align='center'>
                             <Icon height={20} color={colors.kineticResearcher} icon='clockFill'/>
-                            <span>ETA: 5 min</span>
+                            <span>ETA: 10 min</span>
                         </Box>
                     </Box>
 
@@ -32,6 +32,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                         <Col sm={6} direction='column' gap>
                             <div>
                                 <InputField name='titleForParticipants' />
+                                <FieldErrorMessage name='titleForParticipants' />
                                 <CharacterCount max={45} name='titleForParticipants' />
                             </div>
                         </Col>
@@ -171,12 +172,13 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                                 show={showImagePicker}
                                 onHide={() => setShowImagePicker(false)}
                                 onSelect={(imageId) => setValue('imageId', imageId)}
+                                currentImage={watch('imageId')}
                             />
                             <input
                                 type='text'
                                 className='d-none'
                                 name='imageId'
-                                defaultValue={useFormContext().watch('imageId')}
+                                defaultValue={watch('imageId')}
                             />
                         </Col>
                     </Box>

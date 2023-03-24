@@ -129,17 +129,11 @@ export interface Study {
      */
     firstLaunchedAt?: Date;
     /**
-     * 
-     * @type {Researcher}
+     * The study's researchers.
+     * @type {Array<Researcher>}
      * @memberof Study
      */
-    researcherPi?: Researcher;
-    /**
-     * 
-     * @type {Researcher}
-     * @memberof Study
-     */
-    researcherLead?: Researcher;
+    researchers?: Array<Researcher>;
     /**
      * Mandatory studies must be completed by all users
      * @type {boolean}
@@ -231,8 +225,7 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
-        'researcherPi': !exists(json, 'researcher_pi') ? undefined : ResearcherFromJSON(json['researcher_pi']),
-        'researcherLead': !exists(json, 'researcher_lead') ? undefined : ResearcherFromJSON(json['researcher_lead']),
+        'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'status': !exists(json, 'status') ? undefined : json['status'],
         'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
@@ -264,8 +257,7 @@ export function StudyToJSON(value?: Study | null): any {
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'first_launched_at': value.firstLaunchedAt === undefined ? undefined : (value.firstLaunchedAt.toISOString()),
-        'researcher_pi': ResearcherToJSON(value.researcherPi),
-        'researcher_lead': ResearcherToJSON(value.researcherLead),
+        'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(ResearcherToJSON)),
         'is_mandatory': value.isMandatory,
         'status': value.status,
         'view_count': value.viewCount,

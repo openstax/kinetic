@@ -1,8 +1,8 @@
 import { EditingStudy } from '@models';
 import { React, Box, useState } from '@common';
-import { Icon } from '@components';
+import { FieldErrorMessage, Icon } from '@components';
 import { colors } from '@theme';
-import { Col, InputField, SelectField } from '@nathanstitt/sundry';
+import { Col, InputField, SelectField, useFormContext, useFormState } from '@nathanstitt/sundry';
 
 const studyTypes = [
     { value: 'Cognitive Tasks & Assessments', label: 'Cognitive Tasks & Assessments' },
@@ -36,6 +36,7 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
                         name='titleForResearchers'
                         type='textarea'
                     />
+                    <FieldErrorMessage name='titleForResearchers' />
                 </Col>
             </Box>
 

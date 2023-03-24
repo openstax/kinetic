@@ -10,7 +10,7 @@ import { StudyValidationSchema, TagLabels, isNewStudy, EditingStudy, isStudy } f
 import { Study, Stage } from '@api'
 import { useApi, errorToString, useForceUpdate, pick, remove } from '@lib'
 import { StudyModal } from './studies/modal'
-import { CardImagesSelector } from '../components/study-card-images/selector'
+import { CardImagesSelector } from '../components/study-card-images'
 
 const TAG_OPTIONS = Object.keys(TagLabels).map((t) => ({
     label: t, value: t,

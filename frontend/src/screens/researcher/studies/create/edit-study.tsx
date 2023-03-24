@@ -10,8 +10,7 @@ import { ResearchTeam } from './forms/research-team';
 import { InternalDetails } from './forms/internal-details';
 import { ParticipantView } from './forms/participant-view';
 import { AdditionalSessions } from './forms/additional-sessions';
-import { NewStudy } from '@api';
-import * as string_decoder from 'string_decoder';
+import { Study } from '@api';
 
 export type StepKey =
     'research-team' |
@@ -34,23 +33,38 @@ export interface Step {
     disabled?: boolean
     primaryAction?: Action
     secondaryAction?: Action
-    nextStep?: () => void
-    previousStep?: () => void
     backAction?: () => void
     saveAsDraft?: (study: EditingStudy, isNew: boolean) => void
-    // primaryAction?: () => void
 }
 
-const StudyValidationSchema = Yup.object().shape({
-    researcherPi: Yup.string().email(),
-    researcherLead: Yup.string().email(),
-    // lastName: Yup.string().max(50),
-    // researchInterest1: Yup.string().max(25),
-    // researchInterest2: Yup.string().max(25),
-    // researchInterest3: Yup.string().max(25),
-    // labPage: Yup.string().matches(urlRegex, 'Enter a valid URL'),
-    // bio: Yup.string().max(250),
-})
+const getValidationSchema = (studies: Study[]) => {
+    return Yup.object().shape({
+        researcherPi: Yup.string().email(),
+        researcherLead: Yup.string().email(),
+        titleForResearchers: Yup.string().max(45).required()
+            .test(
+                'Unique',
+                'This study title is already in use. Please change your study title to make it unique.',
+                (value) => {
+                    if (!studies.length) {
+                        return true
+                    }
+                    return studies?.every(study => study.titleForResearchers?.toLowerCase() !== value?.toLowerCase())
+                }
+            ),
+        titleForParticipants: Yup.string().max(45).required()
+            .test(
+                'Unique',
+                'This study title is already in use. Please change your study title to make it unique.',
+                (value) => {
+                    if (!studies.length) {
+                        return true
+                    }
+                    return studies.every(study => study.titleForParticipants?.toLowerCase() !== value?.toLowerCase())
+                }
+            ),
+    })
+}
 
 const renderCurrentStep = (index: number, study: EditingStudy) => {
     switch(index) {
@@ -75,6 +89,7 @@ export default function EditStudy() {
     const nav = useNavigate()
     const api = useApi()
     const [study, setStudy] = useState<EditingStudy | null>()
+    const [allStudies, setAllStudies] = useState<Study[]>([])
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
 
@@ -92,25 +107,23 @@ export default function EditStudy() {
     }
 
     useEffect(() => {
-        // TODO
-        if (isNew) {
-            setStudy({
-                titleForParticipants: '',
-                isMandatory: false,
-                shortDescription: '',
-                longDescription: '',
-                tags: [],
-            })
-            return
-        }
-
-
         api.getStudies().then(studies => {
+            setAllStudies(studies.data || [])
+            if (isNew) {
+                setStudy({
+                    titleForParticipants: '',
+                    titleForResearchers: '',
+                    isMandatory: false,
+                    shortDescription: '',
+                    longDescription: '',
+                    tags: [],
+                })
+                return
+            }
             const study = studies.data?.find(s => s.id == Number(id))
             if (study) {
                 setStudy(study)
-            }
-            else {
+            } else {
                 // setError('study was not found')
             }
         })
@@ -120,8 +133,6 @@ export default function EditStudy() {
         return <LoadingAnimation message="Loading study details" />
     }
 
-    // TODO Fill in actions
-    // TODO Eventually route to # paths?
     const steps: Step[] = [
         {
             index: 0,
@@ -129,18 +140,39 @@ export default function EditStudy() {
             key: 'research-team',
             backAction: undefined,
             saveAsDraft: saveAsDraft,
+            primaryAction: {
+                text: 'Continue',
+                action: () => {
+                    // save study?
+                    setStepIndex(1)
+                },
+            },
         },
         {
             index: 1,
             text: 'Internal Details',
             key: 'internal-details',
             saveAsDraft: saveAsDraft,
+            primaryAction: {
+                text: 'Continue',
+                action: () => {
+                    // save study?
+                    setStepIndex(2)
+                },
+            },
         },
         {
             index: 2,
             text: 'Participant View',
             key: 'participant-view',
             saveAsDraft: saveAsDraft,
+            primaryAction: {
+                text: 'Continue',
+                action: () => {
+                    // save study?
+                    setStepIndex(2)
+                },
+            },
         },
         {
             index: 3,
@@ -181,7 +213,7 @@ export default function EditStudy() {
                     </Col>
                 </Box>
 
-                <StudyForm study={study}>
+                <StudyForm study={study} studies={allStudies}>
                     {renderCurrentStep(stepIndex, study)}
                 </StudyForm>
             </div>
@@ -190,10 +222,13 @@ export default function EditStudy() {
     )
 }
 
-const StudyForm: FCWC<{study: EditingStudy}> = ({ study, children }) => {
+const StudyForm: FCWC<{
+    study: EditingStudy,
+    studies: Study[]
+}> = ({ study, studies, children }) => {
     return (
         <Form
-            validationSchema={StudyValidationSchema}
+            validationSchema={getValidationSchema(studies)}
             defaultValues={study}
             onSubmit={() => {}}
             onCancel={() => {}}

@@ -3,6 +3,7 @@
 class StudyResearcher < ApplicationRecord
   belongs_to :study
   belongs_to :researcher
+  enum role: [:member, :pi, :lead], _default: 'member'
 
   before_destroy :check_destroy_leaves_another_researcher_in_study
 

@@ -3,10 +3,18 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
     add_column :studies, :status, :integer, default: 0
     add_column :studies, :target_sample_size, :integer, default: 0
     add_column :studies, :view_count, :integer, default: 0
-    add_reference :studies, :researcher_pi, foreign_key: { to_table: :researchers }
-    add_reference :studies, :researcher_lead, foreign_key: { to_table: :researchers }
     add_column :studies, :study_type, :string
+    add_column :studies, :study_topic, :string
+    add_column :study_researchers, :role, :integer, default: 0
 
+    # create_table :study_invites do |t|
+    #   t.references :study, null: false, foreign_key: true
+    #   t.references :researcher, null: false, foreign_key: true
+    #   t.string :email, null: false
+    #   t.boolean :pending, default: true, null: false
+    #   t.timestamps
+    # end
+    # add_index :study_invites, [:researcher_id, :study_id], unique: true
 
     reversible do |dir|
       dir.up do

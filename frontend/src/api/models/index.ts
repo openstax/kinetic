@@ -37,6 +37,7 @@ export * from './StageUpdate';
 export * from './Studies';
 export * from './Study';
 export * from './StudyAnalysis';
+export * from './StudyResearcher';
 export * from './StudyUpdate';
 export * from './UpdateAnalysis';
 export * from './UpdateBanner';

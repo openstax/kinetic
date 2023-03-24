@@ -77,6 +77,11 @@ class Api::V1::ResearchersOpenApi
       key :type, :string
       key :description, 'The researcher\'s invite code.'
     end
+    property :role do
+      key :type, :string
+      key :description, 'Researchers role'
+      key :enum, %w[member pi lead]
+    end
   end
 
   openapi_path '/researchers' do

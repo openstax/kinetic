@@ -51,6 +51,31 @@ module Api::V1::Bindings
     # The researcher's invite code.
     attr_accessor :invite_code
 
+    # Researchers role
+    attr_accessor :role
+
+    class EnumAttributeValidator
+      attr_reader :datatype
+      attr_reader :allowable_values
+
+      def initialize(datatype, allowable_values)
+        @allowable_values = allowable_values.map do |value|
+          case datatype.to_s
+          when /Integer/i
+            value.to_i
+          when /Float/i
+            value.to_f
+          else
+            value
+          end
+        end
+      end
+
+      def valid?(value)
+        !value || allowable_values.include?(value)
+      end
+    end
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -65,7 +90,8 @@ module Api::V1::Bindings
         :'research_interest1' => :'research_interest1',
         :'research_interest2' => :'research_interest2',
         :'research_interest3' => :'research_interest3',
-        :'invite_code' => :'invite_code'
+        :'invite_code' => :'invite_code',
+        :'role' => :'role'
       }
     end
 
@@ -88,7 +114,8 @@ module Api::V1::Bindings
         :'research_interest1' => :'String',
         :'research_interest2' => :'String',
         :'research_interest3' => :'String',
-        :'invite_code' => :'String'
+        :'invite_code' => :'String',
+        :'role' => :'String'
       }
     end
 
@@ -160,6 +187,10 @@ module Api::V1::Bindings
       if attributes.key?(:'invite_code')
         self.invite_code = attributes[:'invite_code']
       end
+
+      if attributes.key?(:'role')
+        self.role = attributes[:'role']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -177,7 +208,19 @@ module Api::V1::Bindings
     # @return true if the model is valid
     def valid?
       return false if @id.nil?
+      role_validator = EnumAttributeValidator.new('String', ["member", "pi", "lead"])
+      return false unless role_validator.valid?(@role)
       true
+    end
+
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] role Object to be assigned
+    def role=(role)
+      validator = EnumAttributeValidator.new('String', ["member", "pi", "lead"])
+      unless validator.valid?(role)
+        fail ArgumentError, "invalid value for \"role\", must be one of #{validator.allowable_values}."
+      end
+      @role = role
     end
 
     # Checks equality by comparing each attribute.
@@ -196,7 +239,8 @@ module Api::V1::Bindings
           research_interest1 == o.research_interest1 &&
           research_interest2 == o.research_interest2 &&
           research_interest3 == o.research_interest3 &&
-          invite_code == o.invite_code
+          invite_code == o.invite_code &&
+          role == o.role
     end
 
     # @see the `==` method
@@ -208,7 +252,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, user_id, first_name, last_name, avatar_url, institution, bio, lab_page, research_interest1, research_interest2, research_interest3, invite_code].hash
+      [id, user_id, first_name, last_name, avatar_url, institution, bio, lab_page, research_interest1, research_interest2, research_interest3, invite_code, role].hash
     end
 
     # Builds the object from hash

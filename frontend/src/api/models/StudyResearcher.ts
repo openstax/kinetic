@@ -16,116 +16,116 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Researcher
+ * @interface StudyResearcher
  */
-export interface Researcher {
+export interface StudyResearcher {
     /**
      * The researcher's ID.
      * @type {number}
-     * @memberof Researcher
+     * @memberof StudyResearcher
      */
     id: number;
     /**
      * The researcher's user ID.
      * @type {string}
-     * @memberof Researcher
+     * @memberof StudyResearcher
      */
     userId?: string;
     /**
      * The researcher's first name.
      * @type {string}
-     * @memberof Researcher
+     * @memberof StudyResearcher
      */
     firstName?: string;
     /**
      * The researcher's last name.
      * @type {string}
-     * @memberof Researcher
+     * @memberof StudyResearcher
      */
     lastName?: string;
     /**
      * The researcher's avatar URL.
      * @type {string}
-     * @memberof Researcher
+     * @memberof StudyResearcher
      */
     readonly avatarUrl?: string;
     /**
      * The researcher's institution.
      * @type {string}
-     * @memberof Researcher
+     * @memberof StudyResearcher
      */
     institution?: string;
     /**
      * The researcher's bio.
      * @type {string}
-     * @memberof Researcher
+     * @memberof StudyResearcher
      */
     bio?: string;
     /**
      * The researcher's lab page.
      * @type {string}
-     * @memberof Researcher
+     * @memberof StudyResearcher
      */
     labPage?: string;
     /**
      * The researcher's interest (1).
      * @type {string}
-     * @memberof Researcher
+     * @memberof StudyResearcher
      */
     researchInterest1?: string;
     /**
      * The researcher's interest (2).
      * @type {string}
-     * @memberof Researcher
+     * @memberof StudyResearcher
      */
     researchInterest2?: string;
     /**
      * The researcher's interest (3).
      * @type {string}
-     * @memberof Researcher
+     * @memberof StudyResearcher
      */
     researchInterest3?: string;
     /**
      * The researcher's invite code.
      * @type {string}
-     * @memberof Researcher
+     * @memberof StudyResearcher
      */
     inviteCode?: string;
     /**
      * Researchers role
      * @type {string}
-     * @memberof Researcher
+     * @memberof StudyResearcher
      */
-    role?: ResearcherRoleEnum;
+    role?: StudyResearcherRoleEnum;
 }
 
 
 /**
  * @export
  */
-export const ResearcherRoleEnum = {
+export const StudyResearcherRoleEnum = {
     Member: 'member',
     Pi: 'pi',
     Lead: 'lead'
 } as const;
-export type ResearcherRoleEnum = typeof ResearcherRoleEnum[keyof typeof ResearcherRoleEnum];
+export type StudyResearcherRoleEnum = typeof StudyResearcherRoleEnum[keyof typeof StudyResearcherRoleEnum];
 
 
 /**
- * Check if a given object implements the Researcher interface.
+ * Check if a given object implements the StudyResearcher interface.
  */
-export function instanceOfResearcher(value: object): boolean {
+export function instanceOfStudyResearcher(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
 
     return isInstance;
 }
 
-export function ResearcherFromJSON(json: any): Researcher {
-    return ResearcherFromJSONTyped(json, false);
+export function StudyResearcherFromJSON(json: any): StudyResearcher {
+    return StudyResearcherFromJSONTyped(json, false);
 }
 
-export function ResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean): Researcher {
+export function StudyResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean): StudyResearcher {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -147,7 +147,7 @@ export function ResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     };
 }
 
-export function ResearcherToJSON(value?: Researcher | null): any {
+export function StudyResearcherToJSON(value?: StudyResearcher | null): any {
     if (value === undefined) {
         return undefined;
     }

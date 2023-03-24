@@ -213,7 +213,10 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
             <FeedbackMultiSessionContainer study={study} />
             <h6>{study.titleForParticipants}</h6>
             <Researcher className="xx-small" study={study} />
-            <small className={cx({ 'x-small': isMobile })} css={{ color: colors.grayText }}>
+            <small
+                className={cx({ 'x-small': isMobile })}
+                css={{ color: colors.grayText, overflowWrap: 'anywhere' }}
+            >
                 {study.shortDescription}
             </small>
             <PointsAndDuration study={study} />
@@ -243,7 +246,10 @@ export const StudyCardPreview: FC<{study: EditingStudy}> = ({ study }) => {
             <FeedbackMultiSessionContainer study={study as ParticipantStudy} />
             <h6>{study.titleForParticipants}</h6>
             <Researcher className="xx-small" study={study as ParticipantStudy} />
-            <small className={cx({ 'x-small': isMobile })} css={{ color: colors.grayText }}>
+            <small
+                className={cx({ 'x-small': isMobile })}
+                css={{ color: colors.grayText, overflowWrap: 'anywhere' }}
+            >
                 {study.shortDescription}
             </small>
             <PointsAndDuration study={study as ParticipantStudy} />
