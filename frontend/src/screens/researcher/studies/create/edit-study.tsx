@@ -1,16 +1,17 @@
 import { Box, React, useEffect, useNavigate, useParams, useState } from '@common'
 import { useApi, useQueryParam } from '@lib';
 import { EditingStudy } from '@models';
-import { Icon, LoadingAnimation, TopNavBar } from '@components';
+import { LoadingAnimation, TopNavBar } from '@components';
 import { ProgressBar } from './progress-bar';
 import { ExitButton } from './researcher-study-landing';
-import { Button, Col, Form, Yup } from '@nathanstitt/sundry';
-import { Link } from 'react-router-dom';
+import { Col, Form, useFormContext, Yup } from '@nathanstitt/sundry';
 import { ResearchTeam } from './forms/research-team';
 import { InternalDetails } from './forms/internal-details';
 import { ParticipantView } from './forms/participant-view';
 import { AdditionalSessions } from './forms/additional-sessions';
 import { Study } from '@api';
+import { ActionFooter } from './action-footer';
+import tr from '@faker-js/faker/locales/tr';
 
 export type StepKey =
     'research-team' |
@@ -34,14 +35,11 @@ export interface Step {
     primaryAction?: Action
     secondaryAction?: Action
     backAction?: () => void
-    saveAsDraft?: (study: EditingStudy, isNew: boolean) => void
 }
 
 const getValidationSchema = (studies: Study[]) => {
     return Yup.object().shape({
-        researcherPi: Yup.string().email(),
-        researcherLead: Yup.string().email(),
-        titleForResearchers: Yup.string().max(45).required()
+        titleForResearchers: Yup.string().max(45)
             .test(
                 'Unique',
                 'This study title is already in use. Please change your study title to make it unique.',
@@ -51,8 +49,28 @@ const getValidationSchema = (studies: Study[]) => {
                     }
                     return studies?.every(study => study.titleForResearchers?.toLowerCase() !== value?.toLowerCase())
                 }
-            ),
-        titleForParticipants: Yup.string().max(45).required()
+            ).when('step', {
+                is: 2,
+                then: (s) => s.required('Required'),
+            }),
+        // researcherPi: Yup.string().email(),
+        // researcherLead: Yup.string().email(),
+        stages: Yup.array().required().of(
+            Yup.object({
+                points: Yup.number(),
+                duration: Yup.number(),
+                // feedbackTypes: Yup.array().min(1, 'At least one'),
+                feedbackTypes: Yup.array().test(
+                    'At least one',
+                    'Select at least one item',
+                    (value) => {
+                        return value && value.length
+                    }
+                ),
+                // feedbackTypes: Yup.boolean().oneOf([true], 'Must select one'),
+            })
+        ),
+        titleForParticipants: Yup.string().max(45).required('Required')
             .test(
                 'Unique',
                 'This study title is already in use. Please change your study title to make it unique.',
@@ -84,27 +102,12 @@ const renderCurrentStep = (index: number, study: EditingStudy) => {
 }
 
 export default function EditStudy() {
-    const [stepIndex, setStepIndex] = useState<number>(+useQueryParam('step') || 0)
-
-    const nav = useNavigate()
     const api = useApi()
     const [study, setStudy] = useState<EditingStudy | null>()
     const [allStudies, setAllStudies] = useState<Study[]>([])
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
 
-    const saveAsDraft = async (study: EditingStudy, isNew: boolean) => {
-        if (isNew) {
-            const savedStudy = await api.addStudy({
-                addStudy: {
-                    study: study as any,
-                },
-            })
-            nav(`/study/edit/${savedStudy.id}?step=${stepIndex}`)
-        } else {
-            await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
-        }
-    }
 
     useEffect(() => {
         api.getStudies().then(studies => {
@@ -113,10 +116,10 @@ export default function EditStudy() {
                 setStudy({
                     titleForParticipants: '',
                     titleForResearchers: '',
-                    isMandatory: false,
                     shortDescription: '',
                     longDescription: '',
                     tags: [],
+                    stages: [],
                 })
                 return
             }
@@ -133,149 +136,156 @@ export default function EditStudy() {
         return <LoadingAnimation message="Loading study details" />
     }
 
-    const steps: Step[] = [
-        {
-            index: 0,
-            text: 'Research Team',
-            key: 'research-team',
-            backAction: undefined,
-            saveAsDraft: saveAsDraft,
-            primaryAction: {
-                text: 'Continue',
-                action: () => {
-                    // save study?
-                    setStepIndex(1)
-                },
-            },
-        },
-        {
-            index: 1,
-            text: 'Internal Details',
-            key: 'internal-details',
-            saveAsDraft: saveAsDraft,
-            primaryAction: {
-                text: 'Continue',
-                action: () => {
-                    // save study?
-                    setStepIndex(2)
-                },
-            },
-        },
-        {
-            index: 2,
-            text: 'Participant View',
-            key: 'participant-view',
-            saveAsDraft: saveAsDraft,
-            primaryAction: {
-                text: 'Continue',
-                action: () => {
-                    // save study?
-                    setStepIndex(2)
-                },
-            },
-        },
-        {
-            index: 3,
-            text: 'Additional Sessions (optional)',
-            key: 'additional-sessions',
-            optional: true,
-            saveAsDraft: saveAsDraft,
-        },
-        {
-            index: 4,
-            text: 'Waiting Period',
-            key: 'waiting-period',
-            disabled: true,
-            saveAsDraft: undefined,
-        },
-        {
-            index: 5,
-            text: 'Finalize Study',
-            key: 'finalize-study',
-            disabled: true,
-            saveAsDraft: undefined,
-        },
-    ]
-
     return (
         <Box direction='column' className='edit-study vh-100'>
             <TopNavBar hideBanner/>
-            <div className="container-lg py-4 mb-10 h-100">
-                <Box justify='between'>
-                    <Col sm={1}>
-                        <span></span>
-                    </Col>
-                    <Col sm={10}>
-                        <ProgressBar steps={steps} currentStep={steps[stepIndex]} setStepIndex={setStepIndex}/>
-                    </Col>
-                    <Col sm={1}>
-                        <ExitButton/>
-                    </Col>
-                </Box>
-
-                <StudyForm study={study} studies={allStudies}>
-                    {renderCurrentStep(stepIndex, study)}
-                </StudyForm>
-            </div>
-            <ActionFooter currentStep={steps[stepIndex]} setStepIndex={setStepIndex}/>
+            <StudyForm study={study} studies={allStudies}>
+                <FormContent study={study} />
+            </StudyForm>
         </Box>
     )
 }
 
-const StudyForm: FCWC<{
-    study: EditingStudy,
-    studies: Study[]
-}> = ({ study, studies, children }) => {
+const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, studies, children }) => {
     return (
         <Form
             validationSchema={getValidationSchema(studies)}
-            defaultValues={study}
+            defaultValues={{ ...study, step: 0 }}
             onSubmit={() => {}}
             onCancel={() => {}}
+            className='h-100'
         >
             {children}
         </Form>
     )
 }
 
-const ActionFooter: FC<{
-    currentStep: Step,
-    setStepIndex: (index: number) => void
-}> = ({ currentStep, setStepIndex }) => {
-    const nextStep = () => {
-        setStepIndex(currentStep.index + 1)
+const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
+    // const [stepIndex, setStepIndex] = useState<number>(+useQueryParam('step') || 0)
+    const { watch, setValue } = useFormContext()
+    const currentStep = watch('step')
+    console.log(currentStep)
+    const id = useParams<{ id: string }>().id
+    const isNew = 'new' === id
+    const nav = useNavigate()
+    const api = useApi()
+
+    const saveStudy = async (study: EditingStudy) => {
+        if (isNew) {
+            const savedStudy = await api.addStudy({
+                addStudy: {
+                    study: study as any,
+                },
+            })
+            nav(`/study/edit/${savedStudy.id}?step=${currentStep}`)
+        } else {
+            await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
+        }
     }
 
-    const prevStep = () => {
-        setStepIndex(currentStep.index - 1)
-    }
+    const steps: Step[] = [
+        {
+            index: 0,
+            text: 'Research Team',
+            key: 'research-team',
+            primaryAction: {
+                text: 'Continue',
+                action: () => {
+                    // save study?
+                    setValue('step', 1)
+                    // setStepIndex(1)
+                },
+            },
+            secondaryAction: {
+                text: 'Save as draft',
+                action: () => saveStudy(watch() as EditingStudy),
+            },
+        },
+        {
+            index: 1,
+            text: 'Internal Details',
+            key: 'internal-details',
+            backAction: () => setValue('step', 0),
+            primaryAction: {
+                text: 'Continue',
+                action: () => {
+                    // save study?
+                    setValue('step', 2)
+                },
+            },
+            secondaryAction: {
+                text: 'Save as draft',
+                action: () => saveStudy(watch() as EditingStudy),
+            },
+        },
+        {
+            index: 2,
+            text: 'Participant View',
+            key: 'participant-view',
+            backAction: () => setValue('step', 1),
+            primaryAction: {
+                text: 'Continue',
+                action: () => {
+                    // save study?
+                    setValue('step', 3)
+                },
+            },
+            secondaryAction: {
+                text: 'Save as draft',
+                action: () => saveStudy(watch() as EditingStudy),
+
+            },
+        },
+        {
+            index: 3,
+            text: 'Additional Sessions (optional)',
+            key: 'additional-sessions',
+            backAction: () => setValue('step', 2),
+            optional: true,
+            primaryAction: {
+                text: 'Continue',
+                action: () => {
+                    // save study?
+                    setValue('step', 4)
+                },
+            },
+            secondaryAction: {
+                text: 'Save as draft',
+                action: () => saveStudy(watch() as EditingStudy),
+            },
+        },
+        {
+            index: 4,
+            text: 'Waiting Period',
+            key: 'waiting-period',
+            disabled: true,
+        },
+        {
+            index: 5,
+            text: 'Finalize Study',
+            key: 'finalize-study',
+            disabled: true,
+        },
+    ]
+
     return (
-        <Box className='sticky-bottom bg-white' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
-            <Box className='container-lg' align='center' justify='between'>
-                {currentStep.index !== 0 ? <Link to=''>
-                    <Box align='center' gap='small' onClick={() => {prevStep()}}>
-                        <Icon icon='chevronLeft'></Icon>
-                        <span>Back</span>
-                    </Box>
-                </Link> : <span></span>}
-
-                <Box align='center' gap='large'>
-                    <Button
-                        className='btn-researcher-secondary'
-                        css={{ width: 170, justifyContent: 'center' }}
-                        onClick={() => {}}
-                    >
-                        Save as draft
-                    </Button>
-                    <Button
-                        className='btn-researcher-primary'
-                        css={{ width: 170, justifyContent: 'center' }}
-                        onClick={() => nextStep()}
-                    >
-                        Continue
-                    </Button>
+        <Box direction='column' justify='between' className='h-100'>
+            <div className="container-lg py-4 mb-10">
+                <Box justify='between'>
+                    <Col sm={1}>
+                        <span></span>
+                    </Col>
+                    <Col sm={10}>
+                        <ProgressBar steps={steps} currentStep={steps[currentStep]} setStepIndex={(i) => setValue('step', i)}/>
+                    </Col>
+                    <Col sm={1}>
+                        <ExitButton/>
+                    </Col>
                 </Box>
-            </Box>
+
+                {renderCurrentStep(currentStep, study)}
+            </div>
+            <ActionFooter step={steps[currentStep]} />
         </Box>
     )
 }

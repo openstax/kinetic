@@ -527,7 +527,8 @@ CREATE TABLE public.stages (
     description character varying,
     available_after_days double precision DEFAULT 0.0 NOT NULL,
     duration_minutes integer DEFAULT 0 NOT NULL,
-    points integer DEFAULT 0 NOT NULL
+    points integer DEFAULT 0 NOT NULL,
+    feedback_types character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -567,7 +568,6 @@ CREATE TABLE public.studies (
     updated_at timestamp(6) with time zone NOT NULL,
     tags character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     benefits character varying,
-    feedback_description character varying,
     image_id character varying,
     completed_count integer DEFAULT 0 NOT NULL,
     is_hidden boolean DEFAULT false NOT NULL,
@@ -575,7 +575,8 @@ CREATE TABLE public.studies (
     target_sample_size integer DEFAULT 0,
     view_count integer DEFAULT 0,
     study_type character varying,
-    study_topic character varying
+    study_topic character varying,
+    study_subject character varying
 );
 
 
@@ -1136,6 +1137,13 @@ CREATE UNIQUE INDEX index_research_ids_on_user_id ON public.research_ids USING b
 --
 
 CREATE UNIQUE INDEX index_researchers_on_user_id ON public.researchers USING btree (user_id);
+
+
+--
+-- Name: index_stages_on_feedback_types; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_stages_on_feedback_types ON public.stages USING gin (feedback_types);
 
 
 --

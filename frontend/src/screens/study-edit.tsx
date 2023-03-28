@@ -362,4 +362,4 @@ function EditStudy() {
     )
 }
 
-export default Edittudy
+export default EditStudy

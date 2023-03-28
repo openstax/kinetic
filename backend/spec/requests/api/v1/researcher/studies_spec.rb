@@ -7,6 +7,17 @@ RSpec.describe 'Studies', api: :v1 do
   let(:researcher1) { create(:researcher) }
   let(:researcher2) { create(:researcher) }
 
+  describe 'Update nested fields' do
+    let!(:study) { create(:study, researchers: researcher1) }
+    let(:stage) { create(:stage) }
+
+    it 'updates stages?' do
+      binding = Api::V1::Bindings::StudyUpdate.new({ title_for_researchers: 'Test', stages: [ stage ] })
+      binding.update_model!(study)
+      pp study.stages
+    end
+  end
+
   describe 'POST researcher/studies' do
     let(:valid_new_study_attributes) do
       {

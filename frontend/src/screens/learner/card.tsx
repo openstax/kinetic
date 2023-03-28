@@ -7,6 +7,7 @@ import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { CardImages } from '../../components/study-card-images'
 import { colors, media } from '@theme'
+import { Image } from '@faker-js/faker/image';
 
 interface StudyCardProps {
     study: ParticipantStudy
@@ -48,17 +49,17 @@ const Card = styled(Box)({
     },
 })
 
-
 const Tag: React.FC<{ tag?: string }> = ({ tag }) => (
     tag ? <span className="badge text-dark" css={{ borderRadius: 8, background: colors.gray }}>{get(TagLabels, tag, tag)}</span> : null
 )
 
 const Researcher: React.FC<StudyCardProps> = ({ study }) => {
-    if (!study.researcherPi) return null
+    const pi = study.researchers?.find(r => r.role === 'pi')
+    if (!pi) return null
 
     return (
         <Box className='x-small' padding={{ bottom: 'small' }}>
-            {study.researcherPi?.firstName} {study.researcherPi?.lastName}
+            {pi.firstName} {pi.lastName}
         </Box>
     )
 }
@@ -186,8 +187,6 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
     onSelect,
     study,
 }) => {
-    const Image = CardImages[study.imageId || 'StemInterest'] || CardImages.StemInterest
-    const isMobile = useIsMobileDevice();
     const onClick = useCallback(() => onSelect(study), [onSelect]);
 
     return (
@@ -200,6 +199,17 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
             data-is-completed={!!study.completedAt}
             onClick={onClick}
         >
+            <CardContent study={study} />
+        </Card>
+    )
+}
+
+const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
+    const Image = CardImages[study.imageId || 'StemInterest'] || CardImages.StemInterest
+    const isMobile = useIsMobileDevice();
+
+    return (
+        <>
             <Image.image
                 name={Image.title}
                 className='study-card-image'
@@ -220,39 +230,14 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
                 {study.shortDescription}
             </small>
             <PointsAndDuration study={study} />
-        </Card>
+        </>
     )
 }
 
 export const StudyCardPreview: FC<{study: EditingStudy}> = ({ study }) => {
-    const Image = CardImages[study.imageId || 'StemInterest']
-    const isMobile = useIsMobileDevice();
-
     return (
-        <Card
-            className="col study"
-            direction='column'
-        >
-            <Image.image
-                name={Image.title}
-                className='study-card-image'
-                css={{
-                    border: `1px solid ${colors.lightGray}`,
-                    borderRadius: 8,
-                }}
-            />
-            <CompleteFlag study={study as ParticipantStudy} />
-            <MultiSessionFlag study={study as ParticipantStudy} />
-            <FeedbackMultiSessionContainer study={study as ParticipantStudy} />
-            <h6>{study.titleForParticipants}</h6>
-            <Researcher className="xx-small" study={study as ParticipantStudy} />
-            <small
-                className={cx({ 'x-small': isMobile })}
-                css={{ color: colors.grayText, overflowWrap: 'anywhere' }}
-            >
-                {study.shortDescription}
-            </small>
-            <PointsAndDuration study={study as ParticipantStudy} />
+        <Card className="col study" direction='column'>
+            <CardContent study={study as ParticipantStudy} />
         </Card>
     )
 }

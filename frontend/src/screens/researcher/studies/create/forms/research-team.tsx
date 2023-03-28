@@ -70,7 +70,6 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                         type='text'
                         placeholder='Institutional Email Address'
                     />
-
                 </Col>
 
                 <Col sm={4} direction='column' align='start' justify='center' gap='large'>

@@ -1,6 +1,6 @@
 import { EditingStudy } from '@models';
-import { Box, React, useState } from '@common';
-import { Icon, CharacterCount, SelectField, FieldErrorMessage } from '@components';
+import { Box, React, styled, useState } from '@common';
+import { CharacterCount, FieldErrorMessage, Icon, SelectField } from '@components';
 import { colors } from '@theme';
 import { Button, Col, InputField, useFormContext } from '@nathanstitt/sundry';
 import { ImageLibrary } from '../image-library';
@@ -8,7 +8,7 @@ import { StudyCardPreview } from '../../../../learner/card';
 
 export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
     const [showImagePicker, setShowImagePicker] = useState<boolean>(false)
-    const { setValue, watch } = useFormContext()
+    const { setValue, watch, register, getFieldState } = useFormContext()
     const studyPreview = watch() as EditingStudy
 
     return (
@@ -101,15 +101,15 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                         <Col sm={6} direction='column'>
                             <Box direction='column'>
                                 <Box gap>
-                                    <input type='radio' id='5' name='pointsAndDuration'  />
+                                    <input type='radio' id='5' name='pointsAndDuration'/>
                                     <label htmlFor="5">5 minutes: 10 pts</label>
                                 </Box>
                                 <Box gap>
-                                    <input type='radio' id='15' name='pointsAndDuration'  />
+                                    <input type='radio' id='15' name='pointsAndDuration' />
                                     <label htmlFor="15">15 minutes: 20 pts</label>
                                 </Box>
                                 <Box gap>
-                                    <input type='radio' id='25' name='pointsAndDuration'  />
+                                    <input type='radio' id='25' name='pointsAndDuration' />
                                     <label htmlFor="25">25 minutes: 30pts</label>
                                 </Box>
                             </Box>
@@ -122,24 +122,29 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                             <small>Share with participants what type of feedback to expect at the end of the study. Preferred feedback indicated.</small>
                         </Col>
 
-                        <Col sm={6} direction='column' gap='small'>
+                        <Col sm={6} direction='column' gap='medium'>
                             <Box direction='column'>
                                 <Box gap>
-                                    <input type='checkbox' id='score' name='feedbackScore' />
+                                    <input {...register('stages.0.feedbackTypes')} type='checkbox' id='score' value='score' />
                                     <label htmlFor="score">Score</label>
                                 </Box>
                                 <Box gap>
-                                    <input type='checkbox' id='debrief' name='feedbackDebrief' />
+                                    <input {...register('stages.0.feedbackTypes')} type='checkbox' id='debrief' value='debrief' />
                                     <label htmlFor="debrief">Debrief</label>
                                 </Box>
                                 <Box gap>
-                                    <input type='checkbox' id='personalized' name='feedbackPersonalized' />
+                                    <input {...register('stages.0.feedbackTypes')} type='checkbox' id='personalized' value='personalized' />
                                     <label htmlFor="personalized">Personalized</label>
                                 </Box>
                                 <Box gap>
-                                    <input type='checkbox' id='general' name='feedbackGeneral' />
+                                    <input {...register('stages.0.feedbackTypes')} type='checkbox' id='general' value='general' />
                                     <label htmlFor="general">General</label>
+
                                 </Box>
+                                <span className='error'>test
+                                    {console.log(getFieldState('stages.0.feedbackTypes'))}
+                                    {/*{getFieldState('stages.0.feedbackTypes').error?.message}*/}
+                                </span>
                             </Box>
                         </Col>
                     </Box>

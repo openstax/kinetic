@@ -6,7 +6,6 @@ import OptionalStep from '@images/icons/optional-step.svg'
 import DisabledStep from '@images/icons/disabled-step.svg'
 import { Step } from './edit-study';
 
-
 const getLineColor = (step: Step, currentStepIndex: number, finalStep: boolean = false) => {
     if (finalStep) {
         if (step.index === currentStepIndex) {
@@ -27,6 +26,7 @@ const getLineColor = (step: Step, currentStepIndex: number, finalStep: boolean =
     return colors.lightGray
 }
 
+// TODO remove onclick / setStepIndex after dev (just a dev superpower)
 export const ProgressBar: FC<{
     steps: Step[],
     currentStep: Step,
