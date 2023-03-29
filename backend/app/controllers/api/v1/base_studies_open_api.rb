@@ -98,6 +98,20 @@ class Api::V1::BaseStudiesOpenApi
           key :$ref, :Stage
         end
       end
+      property :target_sample_size do
+        key :type, :number
+        key :description, 'Desired sample size set by researcher'
+      end
+      property :launched_count do
+        key :type, :number
+        key :description, 'How many times the study has been launched'
+        key :readOnly, true
+      end
+      property :return_url do
+        key :type, :string
+        key :description, 'The URL to which stages should return after completing'
+        key :readOnly, true
+      end
     end
   end
 end

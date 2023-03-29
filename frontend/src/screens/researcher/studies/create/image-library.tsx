@@ -1,7 +1,7 @@
 import { Button, Col, Modal } from '@nathanstitt/sundry';
 import { Box, React, styled, useState } from '@common';
 import { colors } from '@theme';
-import { CardImage, cardImages } from '../../../../components/study-card-images/images';
+import { cardImages, Category, getImageUrl, imageCategories } from '../../../../components/study-card-images/card-images';
 
 const CategoryLink = styled.small({
     cursor: 'pointer',
@@ -46,26 +46,26 @@ const CheckedCircle = () => (
 )
 
 const ImageCard: FC<{
-    image: CardImage,
+    imageId: string,
     selectedImage: string,
     onSelect: (imageId?: string) => void
-}> = ({ image, selectedImage, onSelect }) => {
+}> = ({ imageId, selectedImage, onSelect }) => {
     return (
         <div
             css={{ position: 'relative', cursor: 'pointer' }}
             onClick={() => {
-                if (image.imageId === selectedImage) {
+                if (imageId === selectedImage) {
                     onSelect('')
                 } else {
-                    onSelect(image.imageId)
+                    onSelect(imageId)
                 }
             }}
         >
-            <image.image width={250} height={140} css={{
+            <img src={getImageUrl(imageId)} alt={imageId} width={250} height={140} css={{
                 border: `1px solid ${colors.lightGray}`,
                 padding: `0 25px`,
             }}/>
-            {selectedImage === image.imageId ? <CheckedCircle/> : <UncheckedCircle/>}
+            {selectedImage === imageId ? <CheckedCircle/> : <UncheckedCircle/>}
         </div>
     )
 }
@@ -83,8 +83,8 @@ export const ImageLibrary: FC<{
     onSelect: (imageId: string) => void,
     currentImage: string
 }> = ({ show, onHide, onSelect, currentImage }) => {
-    const [category, setCategory] = useState<string>(currentImage)
-    const [selectedImage, setSelectedImage] = useState<string>('')
+    const [category, setCategory] = useState<Category>('Personality')
+    const [selectedImage, setSelectedImage] = useState<string>(currentImage)
     return (
         <Modal
             onHide={onHide}
@@ -105,19 +105,20 @@ export const ImageLibrary: FC<{
                         gap='large'
                     >
                         <h6>Category</h6>
-                        <CategoryLink onClick={() => setCategory('Personality')}>Personality</CategoryLink>
-                        <CategoryLink onClick={() => setCategory('Memory')}>Memory</CategoryLink>
-                        <CategoryLink onClick={() => setCategory('Learning')}>Learning</CategoryLink>
-                        <CategoryLink onClick={() => setCategory('School & Future Career')}>School & Future Career</CategoryLink>
+                        {imageCategories.map(c =>
+                            <CategoryLink key={c} onClick={() => setCategory(c)}>
+                                {c}
+                            </CategoryLink>
+                        )}
                     </Col>
                     <Col sm={10} direction='column'>
                         <Box css={{ padding: 20, height: '100%' }} direction='column'>
                             <h4>{category}</h4>
                             <ImageCardContainer wrap gap='xlarge' justify='evenly'>
-                                {cardImages.map(cardImage => (
+                                {cardImages.filter(i => i.category.includes(category)).map(cardImage => (
                                     <ImageCard
                                         key={cardImage.imageId}
-                                        image={cardImage}
+                                        imageId={cardImage.imageId}
                                         selectedImage={selectedImage}
                                         onSelect={(imageId?: string) => setSelectedImage(imageId || '')}
                                     />

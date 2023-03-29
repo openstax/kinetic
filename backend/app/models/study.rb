@@ -20,6 +20,8 @@ class Study < ApplicationRecord
   # Delete researchers to avoid them complaining about not leaving a researcher undeleted
   before_destroy(prepend: true) { study_researchers.delete_all }
 
+  accepts_nested_attributes_for :stages
+
   enum status: [:draft, :active, :paused, :scheduled, :completed], _default: 'draft'
 
   arel = Study.arel_table

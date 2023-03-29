@@ -1,5 +1,5 @@
 import { EditingStudy } from '@models';
-import { Box, React, styled, useState } from '@common';
+import { Box, React, useState } from '@common';
 import { CharacterCount, FieldErrorMessage, Icon, SelectField } from '@components';
 import { colors } from '@theme';
 import { Button, Col, InputField, useFormContext } from '@nathanstitt/sundry';
@@ -8,9 +8,8 @@ import { StudyCardPreview } from '../../../../learner/card';
 
 export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
     const [showImagePicker, setShowImagePicker] = useState<boolean>(false)
-    const { setValue, watch, register, getFieldState } = useFormContext()
+    const { setValue, watch, register } = useFormContext()
     const studyPreview = watch() as EditingStudy
-
     return (
         <Box className='mt-6' gap='xlarge'>
             <Col sm={8}>
@@ -101,15 +100,15 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                         <Col sm={6} direction='column'>
                             <Box direction='column'>
                                 <Box gap>
-                                    <input type='radio' id='5' name='pointsAndDuration'/>
+                                    <input type='radio' id='5' name='durationAndPoints'/>
                                     <label htmlFor="5">5 minutes: 10 pts</label>
                                 </Box>
                                 <Box gap>
-                                    <input type='radio' id='15' name='pointsAndDuration' />
+                                    <input type='radio' id='15' name='durationAndPoints' />
                                     <label htmlFor="15">15 minutes: 20 pts</label>
                                 </Box>
                                 <Box gap>
-                                    <input type='radio' id='25' name='pointsAndDuration' />
+                                    <input type='radio' id='25' name='durationAndPoints' />
                                     <label htmlFor="25">25 minutes: 30pts</label>
                                 </Box>
                             </Box>
@@ -125,7 +124,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                         <Col sm={6} direction='column' gap='medium'>
                             <Box direction='column'>
                                 <Box gap>
-                                    <input {...register('stages.0.feedbackTypes')} type='checkbox' id='score' value='score' />
+                                    <input {...register('stages.0.feedbackTypes')} name='stages.0.feedbackTypes' type='checkbox' id='score' value='score' />
                                     <label htmlFor="score">Score</label>
                                 </Box>
                                 <Box gap>
@@ -139,12 +138,8 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                                 <Box gap>
                                     <input {...register('stages.0.feedbackTypes')} type='checkbox' id='general' value='general' />
                                     <label htmlFor="general">General</label>
-
                                 </Box>
-                                <span className='error'>test
-                                    {console.log(getFieldState('stages.0.feedbackTypes'))}
-                                    {/*{getFieldState('stages.0.feedbackTypes').error?.message}*/}
-                                </span>
+                                <FieldErrorMessage name='stages[0].feedbackTypes'/>
                             </Box>
                         </Col>
                     </Box>

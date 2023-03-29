@@ -146,6 +146,24 @@ export interface BaseStudy {
      * @memberof BaseStudy
      */
     stages?: Array<Stage>;
+    /**
+     * Desired sample size set by researcher
+     * @type {number}
+     * @memberof BaseStudy
+     */
+    targetSampleSize?: number;
+    /**
+     * How many times the study has been launched
+     * @type {number}
+     * @memberof BaseStudy
+     */
+    readonly launchedCount?: number;
+    /**
+     * The URL to which stages should return after completing
+     * @type {string}
+     * @memberof BaseStudy
+     */
+    readonly returnUrl?: string;
 }
 
 
@@ -200,6 +218,9 @@ export function BaseStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
         'studyType': !exists(json, 'study_type') ? undefined : json['study_type'],
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
+        'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
+        'launchedCount': !exists(json, 'launched_count') ? undefined : json['launched_count'],
+        'returnUrl': !exists(json, 'return_url') ? undefined : json['return_url'],
     };
 }
 
@@ -230,6 +251,7 @@ export function BaseStudyToJSON(value?: BaseStudy | null): any {
         'view_count': value.viewCount,
         'study_type': value.studyType,
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),
+        'target_sample_size': value.targetSampleSize,
     };
 }
 

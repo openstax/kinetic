@@ -18,12 +18,6 @@ module Api::V1::Bindings
     # The study ID.
     attr_accessor :id
 
-    # Desired sample size set by researcher
-    attr_accessor :target_sample_size
-
-    # How many times the study has been launched
-    attr_accessor :launched_count
-
     # The study name that participants see.
     attr_accessor :title_for_participants
 
@@ -81,6 +75,15 @@ module Api::V1::Bindings
     # The study's stages.
     attr_accessor :stages
 
+    # Desired sample size set by researcher
+    attr_accessor :target_sample_size
+
+    # How many times the study has been launched
+    attr_accessor :launched_count
+
+    # The URL to which stages should return after completing
+    attr_accessor :return_url
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -107,8 +110,6 @@ module Api::V1::Bindings
     def self.attribute_map
       {
         :'id' => :'id',
-        :'target_sample_size' => :'target_sample_size',
-        :'launched_count' => :'launched_count',
         :'title_for_participants' => :'title_for_participants',
         :'title_for_researchers' => :'title_for_researchers',
         :'short_description' => :'short_description',
@@ -127,7 +128,10 @@ module Api::V1::Bindings
         :'view_count' => :'view_count',
         :'completed_count' => :'completed_count',
         :'study_type' => :'study_type',
-        :'stages' => :'stages'
+        :'stages' => :'stages',
+        :'target_sample_size' => :'target_sample_size',
+        :'launched_count' => :'launched_count',
+        :'return_url' => :'return_url'
       }
     end
 
@@ -140,8 +144,6 @@ module Api::V1::Bindings
     def self.openapi_types
       {
         :'id' => :'Integer',
-        :'target_sample_size' => :'Float',
-        :'launched_count' => :'Float',
         :'title_for_participants' => :'String',
         :'title_for_researchers' => :'String',
         :'short_description' => :'String',
@@ -160,7 +162,10 @@ module Api::V1::Bindings
         :'view_count' => :'Float',
         :'completed_count' => :'Float',
         :'study_type' => :'String',
-        :'stages' => :'Array<Stage>'
+        :'stages' => :'Array<Stage>',
+        :'target_sample_size' => :'Float',
+        :'launched_count' => :'Float',
+        :'return_url' => :'String'
       }
     end
 
@@ -196,14 +201,6 @@ module Api::V1::Bindings
 
       if attributes.key?(:'id')
         self.id = attributes[:'id']
-      end
-
-      if attributes.key?(:'target_sample_size')
-        self.target_sample_size = attributes[:'target_sample_size']
-      end
-
-      if attributes.key?(:'launched_count')
-        self.launched_count = attributes[:'launched_count']
       end
 
       if attributes.key?(:'title_for_participants')
@@ -287,6 +284,18 @@ module Api::V1::Bindings
           self.stages = value
         end
       end
+
+      if attributes.key?(:'target_sample_size')
+        self.target_sample_size = attributes[:'target_sample_size']
+      end
+
+      if attributes.key?(:'launched_count')
+        self.launched_count = attributes[:'launched_count']
+      end
+
+      if attributes.key?(:'return_url')
+        self.return_url = attributes[:'return_url']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -356,8 +365,6 @@ module Api::V1::Bindings
       return true if self.equal?(o)
       self.class == o.class &&
           id == o.id &&
-          target_sample_size == o.target_sample_size &&
-          launched_count == o.launched_count &&
           title_for_participants == o.title_for_participants &&
           title_for_researchers == o.title_for_researchers &&
           short_description == o.short_description &&
@@ -376,7 +383,10 @@ module Api::V1::Bindings
           view_count == o.view_count &&
           completed_count == o.completed_count &&
           study_type == o.study_type &&
-          stages == o.stages
+          stages == o.stages &&
+          target_sample_size == o.target_sample_size &&
+          launched_count == o.launched_count &&
+          return_url == o.return_url
     end
 
     # @see the `==` method
@@ -388,7 +398,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, target_sample_size, launched_count, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, is_hidden, opens_at, closes_at, first_launched_at, researchers, is_mandatory, status, view_count, completed_count, study_type, stages].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, is_hidden, opens_at, closes_at, first_launched_at, researchers, is_mandatory, status, view_count, completed_count, study_type, stages, target_sample_size, launched_count, return_url].hash
     end
 
     # Builds the object from hash

@@ -4,7 +4,9 @@ class Api::V1::Researcher::StudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
   COMMON_REQUIRED_STUDY_FIELDS = [
-    :title_for_participants, :description_for_participants, :short_description, :tags
+    :title_for_participants,
+    :short_description,
+    :tags
   ].freeze
 
   openapi_component do
@@ -53,26 +55,6 @@ class Api::V1::Researcher::StudiesOpenApi
     end
   end
 
-  add_properties(:Study, :NewStudy, :StudyUpdate) do
-    property :target_sample_size do
-      key :type, :number
-      key :description, 'Desired sample size set by researcher'
-    end
-    property :launched_count do
-      key :type, :number
-      key :description, 'How many times the study has been launched'
-      key :readOnly, true
-    end
-  end
-
-  add_properties(:Study) do
-    property :return_url do
-      key :type, :string
-      key :description, 'The URL to which stages should return after completing'
-      key :readOnly, true
-    end
-  end
-
   openapi_path '/researcher/studies' do
     operation :post do
       key :summary, 'Add a study'
@@ -86,7 +68,7 @@ class Api::V1::Researcher::StudiesOpenApi
             key :title, :addStudy
             property :study do
               key :required, true
-              key :$ref, :Study
+              key :$ref, :NewStudy
             end
           end
         end

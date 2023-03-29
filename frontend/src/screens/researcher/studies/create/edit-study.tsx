@@ -9,9 +9,8 @@ import { ResearchTeam } from './forms/research-team';
 import { InternalDetails } from './forms/internal-details';
 import { ParticipantView } from './forms/participant-view';
 import { AdditionalSessions } from './forms/additional-sessions';
-import { Study } from '@api';
+import { NewStudy, Study } from '@api';
 import { ActionFooter } from './action-footer';
-import tr from '@faker-js/faker/locales/tr';
 
 export type StepKey =
     'research-team' |
@@ -55,19 +54,15 @@ const getValidationSchema = (studies: Study[]) => {
             }),
         // researcherPi: Yup.string().email(),
         // researcherLead: Yup.string().email(),
-        stages: Yup.array().required().of(
+        stages: Yup.array().of(
             Yup.object({
-                points: Yup.number(),
-                duration: Yup.number(),
-                // feedbackTypes: Yup.array().min(1, 'At least one'),
+                points: Yup.number().required(),
+                duration: Yup.number().required(),
                 feedbackTypes: Yup.array().test(
                     'At least one',
                     'Select at least one item',
-                    (value) => {
-                        return value && value.length
-                    }
+                    (feedbackTypes) => (feedbackTypes?.length || 0) > 0
                 ),
-                // feedbackTypes: Yup.boolean().oneOf([true], 'Must select one'),
             })
         ),
         titleForParticipants: Yup.string().max(45).required('Required')
@@ -117,9 +112,7 @@ export default function EditStudy() {
                     titleForParticipants: '',
                     titleForResearchers: '',
                     shortDescription: '',
-                    longDescription: '',
                     tags: [],
-                    stages: [],
                 })
                 return
             }
@@ -147,10 +140,12 @@ export default function EditStudy() {
 }
 
 const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, studies, children }) => {
+    const initialStep = +useQueryParam('step') || 0
+
     return (
         <Form
             validationSchema={getValidationSchema(studies)}
-            defaultValues={{ ...study, step: 0 }}
+            defaultValues={{ ...study, step: initialStep }}
             onSubmit={() => {}}
             onCancel={() => {}}
             className='h-100'
@@ -161,10 +156,8 @@ const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, stu
 }
 
 const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
-    // const [stepIndex, setStepIndex] = useState<number>(+useQueryParam('step') || 0)
     const { watch, setValue } = useFormContext()
     const currentStep = watch('step')
-    console.log(currentStep)
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
     const nav = useNavigate()
@@ -174,10 +167,12 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
         if (isNew) {
             const savedStudy = await api.addStudy({
                 addStudy: {
-                    study: study as any,
+                    study: study as NewStudy,
                 },
             })
-            nav(`/study/edit/${savedStudy.id}?step=${currentStep}`)
+            if (savedStudy) {
+                nav(`/study/edit/${savedStudy.id}?step=${currentStep}`)
+            }
         } else {
             await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
         }

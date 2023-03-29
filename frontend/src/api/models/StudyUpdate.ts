@@ -39,18 +39,6 @@ export interface StudyUpdate {
      */
     readonly id?: number;
     /**
-     * Desired sample size set by researcher
-     * @type {number}
-     * @memberof StudyUpdate
-     */
-    targetSampleSize?: number;
-    /**
-     * How many times the study has been launched
-     * @type {number}
-     * @memberof StudyUpdate
-     */
-    readonly launchedCount?: number;
-    /**
      * The study name that participants see.
      * @type {string}
      * @memberof StudyUpdate
@@ -164,6 +152,24 @@ export interface StudyUpdate {
      * @memberof StudyUpdate
      */
     stages?: Array<Stage>;
+    /**
+     * Desired sample size set by researcher
+     * @type {number}
+     * @memberof StudyUpdate
+     */
+    targetSampleSize?: number;
+    /**
+     * How many times the study has been launched
+     * @type {number}
+     * @memberof StudyUpdate
+     */
+    readonly launchedCount?: number;
+    /**
+     * The URL to which stages should return after completing
+     * @type {string}
+     * @memberof StudyUpdate
+     */
+    readonly returnUrl?: string;
 }
 
 
@@ -200,8 +206,6 @@ export function StudyUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
-        'launchedCount': !exists(json, 'launched_count') ? undefined : json['launched_count'],
         'titleForParticipants': !exists(json, 'title_for_participants') ? undefined : json['title_for_participants'],
         'titleForResearchers': !exists(json, 'title_for_researchers') ? undefined : json['title_for_researchers'],
         'shortDescription': !exists(json, 'short_description') ? undefined : json['short_description'],
@@ -221,6 +225,9 @@ export function StudyUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
         'studyType': !exists(json, 'study_type') ? undefined : json['study_type'],
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
+        'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
+        'launchedCount': !exists(json, 'launched_count') ? undefined : json['launched_count'],
+        'returnUrl': !exists(json, 'return_url') ? undefined : json['return_url'],
     };
 }
 
@@ -233,7 +240,6 @@ export function StudyUpdateToJSON(value?: StudyUpdate | null): any {
     }
     return {
         
-        'target_sample_size': value.targetSampleSize,
         'title_for_participants': value.titleForParticipants,
         'title_for_researchers': value.titleForResearchers,
         'short_description': value.shortDescription,
@@ -252,6 +258,7 @@ export function StudyUpdateToJSON(value?: StudyUpdate | null): any {
         'view_count': value.viewCount,
         'study_type': value.studyType,
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),
+        'target_sample_size': value.targetSampleSize,
     };
 }
 
