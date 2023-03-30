@@ -1,16 +1,50 @@
-import { Box, React, useState } from '@common';
+import { Box, React, useEffect, useMemo, useState } from '@common';
 import { Icon } from '@components';
 import { colors } from '@theme';
-import { Button, Col, InputField, useFormContext } from '@nathanstitt/sundry';
+import { Col, InputField, Select, SelectField, SelectOption, useFormContext } from '@nathanstitt/sundry';
 import { IRB } from '../../../account/researcher-account-page';
 import { EditingStudy } from '@models';
-import { useCurrentResearcher, useCurrentUser, useUserInfo } from '@lib';
+import { useApi, useUserInfo } from '@lib';
+import { Researcher } from '@api';
+import { components, OptionProps } from 'react-select';
+
+interface ResearcherOptionI {
+    readonly researcher: Researcher;
+}
+
+const ResearcherOption: FC<OptionProps<ResearcherOptionI>> = (props: OptionProps<ResearcherOptionI>) => {
+    return (
+        <components.Option {...props}>
+            <small>
+                {props.data.researcher.firstName} {props.data.researcher.lastName}
+            </small>
+        </components.Option>
+    );
+};
 
 export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
+    const api = useApi()
+    const [researchers, setResearchers] = useState<Researcher[]>([])
     const [piMyself, setPiMyself] = useState<boolean>(false)
     const [leadMyself, setLeadMyself] = useState<boolean>(false)
     const { watch, setValue } = useFormContext()
     const userEmail = useUserInfo()?.contact_infos.find(info => info.type === 'EmailAddress')?.value
+
+    useEffect(() => {
+        api.getResearchers().then(researchers => {
+            setResearchers(researchers.data || [])
+        })
+    }, [researchers.length])
+
+    const researcherOptions: SelectOption[] = useMemo(() => {
+        // TODO Add email to label once we have it available
+        return researchers.map(r => ({
+            label: `${r.firstName} ${r.lastName}`,
+            value: r.id,
+        }))
+    }, [researchers])
+
+    console.log(watch())
 
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
@@ -37,16 +71,13 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                         <span>This will be myself</span>
                     </Box>
 
-                    <InputField
+                    <SelectField
                         name='researcherPi'
-                        readOnly={piMyself}
-                        type='text'
-                        placeholder='Institutional Email Address'
+                        options={researcherOptions}
+                        isDisabled={piMyself}
+                        isClearable
+                        placeholder='Search by name or email address'
                     />
-                </Col>
-
-                <Col sm={4} direction='column' align='start' justify='center' gap='large'>
-                    <InviteCollaborator disabled={piMyself || !watch('researcherPi')}/>
                 </Col>
             </Box>
 
@@ -64,16 +95,13 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                         }}/>
                         <span>This will be myself</span>
                     </Box>
-                    <InputField
+                    <SelectField
                         name='researcherLead'
-                        readOnly={leadMyself}
-                        type='text'
-                        placeholder='Institutional Email Address'
+                        options={researcherOptions}
+                        isDisabled={leadMyself}
+                        isClearable
+                        placeholder='Search by name or email address'
                     />
-                </Col>
-
-                <Col sm={4} direction='column' align='start' justify='center' gap='large'>
-                    <InviteCollaborator disabled={leadMyself || !watch('researcherLead')}/>
                 </Col>
             </Box>
 
@@ -87,19 +115,5 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                 </Col>
             </Box>
         </Box>
-    )
-}
-
-const InviteCollaborator: FC<{disabled: boolean}> = ({ disabled }) => {
-    const invite = () => {
-
-    }
-    return (
-        <div>
-            <Button className='btn-researcher-secondary' disabled={disabled} onClick={() => invite()}>
-                Invite Collaborator
-            </Button>
-
-        </div>
     )
 }

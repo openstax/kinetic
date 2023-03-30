@@ -33,6 +33,9 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
     render(json: error, status: error.status_code) and return if error
 
+    if params[:study][:stages]
+      pp params[:study][:stages]
+    end
     inbound_binding.update_model!(@study)
 
     response_binding = Api::V1::Bindings::Study.create_from_model(@study)

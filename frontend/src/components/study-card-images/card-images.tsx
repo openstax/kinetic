@@ -47,7 +47,11 @@ const legacyImageMap: Record<string, string> = {
     'UncoverAchievementLearning': 'Schoolfuturecareer_22',
 }
 
-export const getImageUrl = (imageId: string) => {
+export const getImageUrl = (imageId: string | undefined) => {
+    if (!imageId) {
+        return `${BaseUrl}/${cardImages[0].imageId}.svg`
+    }
+
     if (legacyImageMap[imageId]) {
         return `${BaseUrl}/${legacyImageMap[imageId]}.svg`;
     }

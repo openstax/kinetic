@@ -8,6 +8,7 @@ import styled from '@emotion/styled'
 import { CardImages } from '../../components/study-card-images'
 import { colors, media } from '@theme'
 import { Image } from '@faker-js/faker/image';
+import { getImageUrl } from '../../components/study-card-images/card-images';
 
 interface StudyCardProps {
     study: ParticipantStudy
@@ -205,13 +206,12 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
 }
 
 const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
-    const Image = CardImages[study.imageId || 'StemInterest'] || CardImages.StemInterest
     const isMobile = useIsMobileDevice();
 
     return (
         <>
-            <Image.image
-                name={Image.title}
+            <img src={getImageUrl(study.imageId)}
+                alt={study.imageId}
                 className='study-card-image'
                 css={{
                     border: `1px solid ${colors.lightGray}`,

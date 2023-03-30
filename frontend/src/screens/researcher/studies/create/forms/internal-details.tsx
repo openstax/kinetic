@@ -1,20 +1,56 @@
 import { EditingStudy } from '@models';
-import { React, Box, useState } from '@common';
+import { Box, React, useState } from '@common';
 import { FieldErrorMessage, Icon } from '@components';
 import { colors } from '@theme';
-import { Col, InputField, SelectField, useFormContext, useFormState } from '@nathanstitt/sundry';
+import { Col, InputField, SelectField } from '@nathanstitt/sundry';
+import { components, OptionProps } from 'react-select';
 
 const studyTypes = [
-    { value: 'Cognitive Tasks & Assessments', label: 'Cognitive Tasks & Assessments' },
-    { value: 'Survey', label: 'Survey' },
-    { value: 'Research', label: 'Research' },
-    { value: 'Learner-characteristics', label: 'Learner-characteristics' },
-    { value: 'Transfer of Learning', label: 'Transfer of Learning' },
+    {
+        value: 'Cognitive Tasks & Assessments',
+        label: 'Cognitive Tasks & Assessments',
+        desc: 'Measures of human cognition, such as working memory, reasoning, and problem-solving, as well as prior knowledge and skills',
+    },
+    {
+        value: 'Learner Characteristics',
+        label: 'Learner Characteristics',
+        desc: 'Individual differences measures related to learning and education that provide insight into who is the learner',
+    },
+    {
+        value: 'Research',
+        label: 'Research',
+        desc: 'Learning and educational studies, such as A/B/N tests, quasi experiments, and single-domain interventional research',
+    },
+    {
+        value: 'Survey',
+        label: 'Survey',
+        desc: 'Self-report measures related to understanding learner needs, such as product development, UX design, and marketing research',
+    },
+    {
+        value: 'Transfer of Learning',
+        label: 'Transfer of Learning',
+        desc: 'Interventions that assess learning or other outcomes across domains',
+    },
 ];
 
-export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
-    const [studyType, setStudyType] = useState('')
+interface StudyOption {
+    readonly value: string;
+    readonly label: string;
+    readonly desc: string;
+}
 
+const Option: FC<OptionProps<StudyOption>> = (props: OptionProps<StudyOption>) => {
+    return (
+        <components.Option {...props}>
+            <Box direction='column' gap='small'>
+                <h6 className='fw-bold'>{props.data.label}</h6>
+                <small>{props.data.desc}</small>
+            </Box>
+        </components.Option>
+    );
+};
+
+export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
             <Box gap='xlarge'>
@@ -50,10 +86,9 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
                     <SelectField
                         name="studyType"
                         isClearable={true}
-                        onChange={(value: string) => setStudyType(value)}
-                        // value={study.studyType}
-                        defaultValue={studyType}
+                        defaultValue={study.studyType}
                         options={studyTypes}
+                        components={{ Option } as any}
                     />
                 </Col>
             </Box>

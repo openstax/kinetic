@@ -188,7 +188,6 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                 action: () => {
                     // save study?
                     setValue('step', 1)
-                    // setStepIndex(1)
                 },
             },
             secondaryAction: {

@@ -10,7 +10,6 @@ import { StudyValidationSchema, TagLabels, isNewStudy, EditingStudy, isStudy } f
 import { Study, Stage } from '@api'
 import { useApi, errorToString, useForceUpdate, pick, remove } from '@lib'
 import { StudyModal } from './studies/modal'
-import { CardImagesSelector } from '../components/study-card-images'
 
 const TAG_OPTIONS = Object.keys(TagLabels).map((t) => ({
     label: t, value: t,
@@ -333,11 +332,6 @@ function EditStudy() {
                 <Alert warning={true} onDismiss={() => setError('')} message={error} />
 
                 <StudyStages study={study} onUpdate={reRender} />
-
-                <CardImagesSelector
-                    label="Card image"
-                    name="imageId"
-                />
 
                 <InputField name="titleForParticipants" id="participants-title" label="Title for participants" />
                 <InputField name="titleForResearchers" id="researchers-title" label="Title for researchers" />
