@@ -4,7 +4,7 @@ class Api::V1::Participant::StudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
   COMMON_REQUIRED_STUDY_FIELDS = [
-    :title, :short_description, :tags, :total_points, :total_duration
+    :title, :short_description, :total_points, :total_duration
   ].freeze
 
   add_components do

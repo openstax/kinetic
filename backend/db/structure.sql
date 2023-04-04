@@ -528,7 +528,9 @@ CREATE TABLE public.stages (
     available_after_days double precision DEFAULT 0.0 NOT NULL,
     duration_minutes integer DEFAULT 0 NOT NULL,
     points integer DEFAULT 0 NOT NULL,
-    feedback_types character varying[] DEFAULT '{}'::character varying[] NOT NULL
+    feedback_types character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    opens_at timestamp with time zone,
+    closes_at timestamp with time zone
 );
 
 
@@ -576,7 +578,8 @@ CREATE TABLE public.studies (
     view_count integer DEFAULT 0,
     study_type character varying,
     study_topic character varying,
-    study_subject character varying
+    study_subject character varying,
+    internal_description character varying
 );
 
 

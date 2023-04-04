@@ -7,22 +7,17 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
     add_column :studies, :study_type, :string
     add_column :studies, :study_topic, :string
     add_column :studies, :study_subject, :string
+    add_column :studies, :internal_description, :string
 
     add_column :stages, :feedback_types, :string, array: true, null: false, default: []
     add_index :stages, :feedback_types, using: 'gin'
+    add_column :stages, :opens_at, :datetime
+    add_column :stages, :closes_at, :datetime
 
     # TODO Update all instances of feedback_description to use study.stages
     remove_column :studies, :feedback_description, :string
 
     add_column :study_researchers, :role, :integer, default: 0
-
-    # create_table :study_invites do |t|
-    #   t.references :study, null: false, foreign_key: true
-    #   t.string :email, null: false
-    #   t.string :role, null: false
-    #   t.timestamps
-    # end
-    # add_index :study_invites, [:researcher_id, :study_id], unique: true
 
     reversible do |dir|
       dir.up do

@@ -6,7 +6,6 @@ class Api::V1::Researcher::StudiesOpenApi
   COMMON_REQUIRED_STUDY_FIELDS = [
     :title_for_participants,
     :short_description,
-    :tags
   ].freeze
 
   openapi_component do

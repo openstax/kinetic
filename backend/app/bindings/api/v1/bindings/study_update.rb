@@ -30,6 +30,9 @@ module Api::V1::Bindings
     # A long study description.
     attr_accessor :long_description
 
+    # An internal study description for researchers.
+    attr_accessor :internal_description
+
     # The tags of the study object, used for grouping and filtering.
     attr_accessor :tags
 
@@ -71,6 +74,12 @@ module Api::V1::Bindings
 
     # The type of study
     attr_accessor :study_type
+
+    # The study topic
+    attr_accessor :study_topic
+
+    # The study's subject
+    attr_accessor :study_subject
 
     # The study's stages.
     attr_accessor :stages
@@ -114,6 +123,7 @@ module Api::V1::Bindings
         :'title_for_researchers' => :'title_for_researchers',
         :'short_description' => :'short_description',
         :'long_description' => :'long_description',
+        :'internal_description' => :'internal_description',
         :'tags' => :'tags',
         :'feedback_description' => :'feedback_description',
         :'image_id' => :'image_id',
@@ -128,6 +138,8 @@ module Api::V1::Bindings
         :'view_count' => :'view_count',
         :'completed_count' => :'completed_count',
         :'study_type' => :'study_type',
+        :'study_topic' => :'study_topic',
+        :'study_subject' => :'study_subject',
         :'stages' => :'stages',
         :'target_sample_size' => :'target_sample_size',
         :'launched_count' => :'launched_count',
@@ -148,6 +160,7 @@ module Api::V1::Bindings
         :'title_for_researchers' => :'String',
         :'short_description' => :'String',
         :'long_description' => :'String',
+        :'internal_description' => :'String',
         :'tags' => :'Array<String>',
         :'feedback_description' => :'String',
         :'image_id' => :'String',
@@ -162,6 +175,8 @@ module Api::V1::Bindings
         :'view_count' => :'Float',
         :'completed_count' => :'Float',
         :'study_type' => :'String',
+        :'study_topic' => :'String',
+        :'study_subject' => :'String',
         :'stages' => :'Array<Stage>',
         :'target_sample_size' => :'Float',
         :'launched_count' => :'Float',
@@ -217,6 +232,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'long_description')
         self.long_description = attributes[:'long_description']
+      end
+
+      if attributes.key?(:'internal_description')
+        self.internal_description = attributes[:'internal_description']
       end
 
       if attributes.key?(:'tags')
@@ -277,6 +296,14 @@ module Api::V1::Bindings
 
       if attributes.key?(:'study_type')
         self.study_type = attributes[:'study_type']
+      end
+
+      if attributes.key?(:'study_topic')
+        self.study_topic = attributes[:'study_topic']
+      end
+
+      if attributes.key?(:'study_subject')
+        self.study_subject = attributes[:'study_subject']
       end
 
       if attributes.key?(:'stages')
@@ -343,12 +370,6 @@ module Api::V1::Bindings
       @title_for_researchers = title_for_researchers
     end
 
-    # Custom attribute writer method with validation
-    # @param [Object] tags Value to be assigned
-    def tags=(tags)
-      @tags = tags
-    end
-
     # Custom attribute writer method checking allowed values (enum).
     # @param [Object] status Object to be assigned
     def status=(status)
@@ -369,6 +390,7 @@ module Api::V1::Bindings
           title_for_researchers == o.title_for_researchers &&
           short_description == o.short_description &&
           long_description == o.long_description &&
+          internal_description == o.internal_description &&
           tags == o.tags &&
           feedback_description == o.feedback_description &&
           image_id == o.image_id &&
@@ -383,6 +405,8 @@ module Api::V1::Bindings
           view_count == o.view_count &&
           completed_count == o.completed_count &&
           study_type == o.study_type &&
+          study_topic == o.study_topic &&
+          study_subject == o.study_subject &&
           stages == o.stages &&
           target_sample_size == o.target_sample_size &&
           launched_count == o.launched_count &&
@@ -398,7 +422,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, tags, feedback_description, image_id, benefits, is_hidden, opens_at, closes_at, first_launched_at, researchers, is_mandatory, status, view_count, completed_count, study_type, stages, target_sample_size, launched_count, return_url].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, internal_description, tags, feedback_description, image_id, benefits, is_hidden, opens_at, closes_at, first_launched_at, researchers, is_mandatory, status, view_count, completed_count, study_type, study_topic, study_subject, stages, target_sample_size, launched_count, return_url].hash
     end
 
     # Builds the object from hash

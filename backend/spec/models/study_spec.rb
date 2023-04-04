@@ -29,7 +29,7 @@ RSpec.describe Study do
     let(:study) { create(:study, num_stages: 2) }
     let(:user) { User.new('00000000-0000-0000-0000-000000000001') }
 
-    it 'picks an launched but not landed stage' do
+    it 'picks a launched but not landed stage' do
       stage = study.stages.first
       stage.launch_by_user!(user)
       expect(study.next_stage_for_user(user)).to eq study.stages.first

@@ -10,6 +10,24 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
     const [showImagePicker, setShowImagePicker] = useState<boolean>(false)
     const { setValue, watch, register } = useFormContext()
     const studyPreview = watch() as EditingStudy
+
+    const setDurationAndPoints = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value === '5') {
+            setValue('stages.0.points', 10)
+            setValue('stages.0.durationMinutes', 5)
+        }
+
+        if (e.target.value === '15') {
+            setValue('stages.0.points', 20)
+            setValue('stages.0.durationMinutes', 15)
+        }
+
+        if (e.target.value === '25') {
+            setValue('stages.0.points', 30)
+            setValue('stages.0.durationMinutes', 25)
+        }
+    }
+
     return (
         <Box className='mt-6' gap='xlarge'>
             <Col sm={8}>
@@ -45,7 +63,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
 
                         <Col sm={6} direction='column' gap>
                             <div>
-                                <InputField name='shortDescription' />
+                                <InputField type='textarea' name='shortDescription' />
                                 <CharacterCount max={120} name='shortDescription' />
                             </div>
                         </Col>
@@ -59,7 +77,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
 
                         <Col sm={6} direction='column' gap>
                             <div>
-                                <InputField name='longDescription' />
+                                <InputField type='textarea' name='longDescription' />
                                 <CharacterCount max={250} name='longDescription' />
                             </div>
                         </Col>
@@ -100,16 +118,16 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                         <Col sm={6} direction='column'>
                             <Box direction='column'>
                                 <Box gap>
-                                    <input type='radio' id='5' name='durationAndPoints'/>
-                                    <label htmlFor="5">5 minutes: 10 pts</label>
+                                    <input type='radio' {...register('stages.0.durationAndPoints')} value={5} onChange={setDurationAndPoints}/>
+                                    <label>~5 minutes: 10 pts</label>
                                 </Box>
                                 <Box gap>
-                                    <input type='radio' id='15' name='durationAndPoints' />
-                                    <label htmlFor="15">15 minutes: 20 pts</label>
+                                    <input type='radio' {...register('stages.0.durationAndPoints')} value={15} onChange={setDurationAndPoints}/>
+                                    <label>~15 minutes: 20 pts</label>
                                 </Box>
                                 <Box gap>
-                                    <input type='radio' id='25' name='durationAndPoints' />
-                                    <label htmlFor="25">25 minutes: 30pts</label>
+                                    <input type='radio' {...register('stages.0.durationAndPoints')} value={25} onChange={setDurationAndPoints}/>
+                                    <label>~25 minutes: 30 pts</label>
                                 </Box>
                             </Box>
                         </Col>
@@ -152,7 +170,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
 
                         <Col sm={6} direction='column' gap>
                             <div>
-                                <InputField name='benefits' />
+                                <InputField type='textarea' name='benefits' />
                                 <CharacterCount max={170} name='benefits' />
                             </div>
                         </Col>

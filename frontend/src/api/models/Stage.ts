@@ -79,6 +79,24 @@ export interface Stage {
      * @memberof Stage
      */
     durationMinutes?: number;
+    /**
+     * When the stage opens for participation; null means not open.
+     * @type {Date}
+     * @memberof Stage
+     */
+    opensAt?: Date | null;
+    /**
+     * When the stage closes for participation; null means does not close.
+     * @type {Date}
+     * @memberof Stage
+     */
+    closesAt?: Date | null;
+    /**
+     * Feedback types for this stage
+     * @type {Array<string>}
+     * @memberof Stage
+     */
+    feedbackTypes?: Array<string>;
 }
 
 /**
@@ -113,6 +131,9 @@ export function StageFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
         'config': json['config'],
         'points': !exists(json, 'points') ? undefined : json['points'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
+        'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
+        'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
+        'feedbackTypes': !exists(json, 'feedback_types') ? undefined : json['feedback_types'],
     };
 }
 
@@ -131,6 +152,9 @@ export function StageToJSON(value?: Stage | null): any {
         'config': value.config,
         'points': value.points,
         'duration_minutes': value.durationMinutes,
+        'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
+        'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
+        'feedback_types': value.feedbackTypes,
     };
 }
 

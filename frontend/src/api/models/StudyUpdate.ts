@@ -63,6 +63,12 @@ export interface StudyUpdate {
      */
     longDescription?: string;
     /**
+     * An internal study description for researchers.
+     * @type {string}
+     * @memberof StudyUpdate
+     */
+    internalDescription?: string;
+    /**
      * The tags of the study object, used for grouping and filtering.
      * @type {Array<string>}
      * @memberof StudyUpdate
@@ -147,6 +153,18 @@ export interface StudyUpdate {
      */
     studyType?: string;
     /**
+     * The study topic
+     * @type {string}
+     * @memberof StudyUpdate
+     */
+    studyTopic?: string;
+    /**
+     * The study's subject
+     * @type {string}
+     * @memberof StudyUpdate
+     */
+    studySubject?: string;
+    /**
      * The study's stages.
      * @type {Array<Stage>}
      * @memberof StudyUpdate
@@ -210,6 +228,7 @@ export function StudyUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'titleForResearchers': !exists(json, 'title_for_researchers') ? undefined : json['title_for_researchers'],
         'shortDescription': !exists(json, 'short_description') ? undefined : json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
+        'internalDescription': !exists(json, 'internal_description') ? undefined : json['internal_description'],
         'tags': !exists(json, 'tags') ? undefined : json['tags'],
         'feedbackDescription': !exists(json, 'feedback_description') ? undefined : json['feedback_description'],
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
@@ -224,6 +243,8 @@ export function StudyUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
         'studyType': !exists(json, 'study_type') ? undefined : json['study_type'],
+        'studyTopic': !exists(json, 'study_topic') ? undefined : json['study_topic'],
+        'studySubject': !exists(json, 'study_subject') ? undefined : json['study_subject'],
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
         'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
         'launchedCount': !exists(json, 'launched_count') ? undefined : json['launched_count'],
@@ -244,6 +265,7 @@ export function StudyUpdateToJSON(value?: StudyUpdate | null): any {
         'title_for_researchers': value.titleForResearchers,
         'short_description': value.shortDescription,
         'long_description': value.longDescription,
+        'internal_description': value.internalDescription,
         'tags': value.tags,
         'feedback_description': value.feedbackDescription,
         'image_id': value.imageId,
@@ -257,6 +279,8 @@ export function StudyUpdateToJSON(value?: StudyUpdate | null): any {
         'status': value.status,
         'view_count': value.viewCount,
         'study_type': value.studyType,
+        'study_topic': value.studyTopic,
+        'study_subject': value.studySubject,
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),
         'target_sample_size': value.targetSampleSize,
     };

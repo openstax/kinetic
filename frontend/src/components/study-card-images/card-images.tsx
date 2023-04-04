@@ -22,6 +22,7 @@ interface CardImage {
     category: Category[],
 }
 
+// TODO These can be removed once we update everything on prod
 const legacyImageMap: Record<string, string> = {
     'AbilityBeliefs': 'Schoolfuturecareer_19',
     'AnxiousPersonNew': 'Personality_1',

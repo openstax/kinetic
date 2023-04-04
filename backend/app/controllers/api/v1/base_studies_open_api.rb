@@ -23,9 +23,12 @@ class Api::V1::BaseStudiesOpenApi
         key :type, :string
         key :description, 'A long study description.'
       end
+      property :internal_description do
+        key :type, :string
+        key :description, 'An internal study description for researchers.'
+      end
       property :tags do
         key :type, :array
-        key :minLength, 0
         key :items, { 'type' => 'string' }
         key :description, 'The tags of the study object, used for grouping and filtering.'
       end
@@ -90,6 +93,14 @@ class Api::V1::BaseStudiesOpenApi
       property :study_type do
         key :type, :string
         key :description, 'The type of study'
+      end
+      property :study_topic do
+        key :type, :string
+        key :description, 'The study topic'
+      end
+      property :study_subject do
+        key :type, :string
+        key :description, 'The study\'s subject'
       end
       property :stages do
         key :type, :array

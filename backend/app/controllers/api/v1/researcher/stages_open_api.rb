@@ -36,7 +36,7 @@ class Api::V1::Researcher::StagesOpenApi
     end
   end
 
-  add_properties(:Stage) do
+  add_properties(:Stage, :StageUpdate) do
     property :id do
       key :type, :integer
       key :description, 'The study ID.'
@@ -84,6 +84,24 @@ class Api::V1::Researcher::StagesOpenApi
     property :duration_minutes do
       key :type, :number
       key :description, 'How long the stage is (in minutes)'
+    end
+    property :opens_at do
+      key :type, :string
+      key :nullable, true
+      key :format, 'date-time'
+      key :description, 'When the stage opens for participation; null means not open.'
+    end
+    property :closes_at do
+      key :type, :string
+      key :nullable, true
+      key :format, 'date-time'
+      key :description, 'When the stage closes for participation; null means does not close.'
+    end
+    property :feedback_types do
+      key :type, :array
+      key :minLength, 0
+      key :items, { 'type' => 'string' }
+      key :description, 'Feedback types for this stage'
     end
   end
 

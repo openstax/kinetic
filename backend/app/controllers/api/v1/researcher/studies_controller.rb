@@ -9,6 +9,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     render(json: error, status: error.status_code) and return if error
 
     created_study = inbound_binding.create_model!(researcher: current_researcher)
+    inbound_binding.stages.each{|s| created_study.stages << Stage.new(s.to_hash)}
 
     response_binding = Api::V1::Bindings::Study.create_from_model(created_study)
     render json: response_binding, status: :created

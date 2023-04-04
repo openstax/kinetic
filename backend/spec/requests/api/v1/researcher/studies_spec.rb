@@ -7,16 +7,15 @@ RSpec.describe 'Studies', api: :v1 do
   let(:researcher1) { create(:researcher) }
   let(:researcher2) { create(:researcher) }
 
-  describe 'Update nested fields' do
-    let!(:study) { create(:study, researchers: researcher1) }
-    let(:stage) { create(:stage) }
-
-    it 'updates stages?' do
-      binding = Api::V1::Bindings::StudyUpdate.new({ title_for_researchers: 'Test', stages: [ stage ] })
-      binding.update_model!(study)
-      pp study.stages
-    end
-  end
+  # describe 'Update nested fields' do
+  #   let!(:study) { create(:study, researchers: researcher1) }
+  #   let(:stage) { create(:stage) }
+  #
+  #   it 'updates stages?' do
+  #     binding = Api::V1::Bindings::StudyUpdate.new({ title_for_researchers: 'Test', stages: [ stage ] })
+  #     binding.update_model!(study)
+  #   end
+  # end
 
   describe 'POST researcher/studies' do
     let(:valid_new_study_attributes) do
@@ -25,8 +24,20 @@ RSpec.describe 'Studies', api: :v1 do
         title_for_researchers: 'Researcher study title',
         short_description: 'A short description',
         long_description: 'A longer description',
-        is_mandatory: false,
-        tags: ['type:research_study']
+        study_type: 'Research',
+        study_topic: 'Learning',
+        study_subject: 'Biology',
+        image_id: 'Schoolfuturecareer_1',
+        benefits: 'Some benefit to society',
+        stages: [
+          {
+            points: 10,
+            duration_minutes: 5,
+            feedback_types: ['debrief, personalized'],
+            config: {}
+          }
+        ]
+        # tags: ['type:research_study']
       }
     end
 

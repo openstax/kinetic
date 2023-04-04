@@ -185,14 +185,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             key: 'research-team',
             primaryAction: {
                 text: 'Continue',
-                action: () => {
-                    // save study?
-                    setValue('step', 1)
-                },
-            },
-            secondaryAction: {
-                text: 'Save as draft',
-                action: () => saveStudy(watch() as EditingStudy),
+                action: () => setValue('step', 1),
             },
         },
         {

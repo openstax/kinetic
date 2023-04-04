@@ -7,8 +7,11 @@ FactoryBot.define do
     end
 
     available_after_days { 0 }
-    duration_minutes { rand(1..50) }
-    points { rand(1..50) }
+    points { 10 }
+    duration_minutes { 5 }
+    opens_at { 30.days.ago }
+    closes_at { 30.days.from_now }
+    feedback_types { ['debrief, personalized'] }
 
     config do
       {

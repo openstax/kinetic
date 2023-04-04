@@ -42,6 +42,15 @@ module Api::V1::Bindings
     # How long the stage is (in minutes)
     attr_accessor :duration_minutes
 
+    # When the stage opens for participation; null means not open.
+    attr_accessor :opens_at
+
+    # When the stage closes for participation; null means does not close.
+    attr_accessor :closes_at
+
+    # Feedback types for this stage
+    attr_accessor :feedback_types
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -53,7 +62,10 @@ module Api::V1::Bindings
         :'is_launchable' => :'is_launchable',
         :'config' => :'config',
         :'points' => :'points',
-        :'duration_minutes' => :'duration_minutes'
+        :'duration_minutes' => :'duration_minutes',
+        :'opens_at' => :'opens_at',
+        :'closes_at' => :'closes_at',
+        :'feedback_types' => :'feedback_types'
       }
     end
 
@@ -73,13 +85,18 @@ module Api::V1::Bindings
         :'is_launchable' => :'Boolean',
         :'config' => :'Object',
         :'points' => :'Float',
-        :'duration_minutes' => :'Float'
+        :'duration_minutes' => :'Float',
+        :'opens_at' => :'Time',
+        :'closes_at' => :'Time',
+        :'feedback_types' => :'Array<String>'
       }
     end
 
     # List of attributes with nullable: true
     def self.openapi_nullable
       Set.new([
+        :'opens_at',
+        :'closes_at',
       ])
     end
 
@@ -133,6 +150,20 @@ module Api::V1::Bindings
       if attributes.key?(:'duration_minutes')
         self.duration_minutes = attributes[:'duration_minutes']
       end
+
+      if attributes.key?(:'opens_at')
+        self.opens_at = attributes[:'opens_at']
+      end
+
+      if attributes.key?(:'closes_at')
+        self.closes_at = attributes[:'closes_at']
+      end
+
+      if attributes.key?(:'feedback_types')
+        if (value = attributes[:'feedback_types']).is_a?(Array)
+          self.feedback_types = value
+        end
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -153,6 +184,12 @@ module Api::V1::Bindings
       true
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] feedback_types Value to be assigned
+    def feedback_types=(feedback_types)
+      @feedback_types = feedback_types
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
@@ -166,7 +203,10 @@ module Api::V1::Bindings
           is_launchable == o.is_launchable &&
           config == o.config &&
           points == o.points &&
-          duration_minutes == o.duration_minutes
+          duration_minutes == o.duration_minutes &&
+          opens_at == o.opens_at &&
+          closes_at == o.closes_at &&
+          feedback_types == o.feedback_types
     end
 
     # @see the `==` method
@@ -178,7 +218,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [order, title, description, available_after_days, is_completed, is_launchable, config, points, duration_minutes].hash
+      [order, title, description, available_after_days, is_completed, is_launchable, config, points, duration_minutes, opens_at, closes_at, feedback_types].hash
     end
 
     # Builds the object from hash

@@ -1,6 +1,6 @@
 import { EditingStudy } from '@models';
-import { Box, React, useState } from '@common';
-import { FieldErrorMessage, Icon } from '@components';
+import { Box, React } from '@common';
+import { CharacterCount, FieldErrorMessage, Icon } from '@components';
 import { colors } from '@theme';
 import { Col, InputField, SelectField } from '@nathanstitt/sundry';
 import { components, OptionProps } from 'react-select';
@@ -73,6 +73,23 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
                         type='textarea'
                     />
                     <FieldErrorMessage name='titleForResearchers' />
+                    <CharacterCount max={100} name={'titleForResearchers'} />
+                </Col>
+            </Box>
+
+            <Box gap='xlarge'>
+                <Col sm={3} direction='column' gap>
+                    <h6>Internal Description*</h6>
+                    <small>This is an internal description only visible to researchers. It can adopt a more technical language</small>
+                </Col>
+
+                <Col sm={4} direction='column' gap>
+                    <InputField
+                        name='internalDescription'
+                        type='textarea'
+                    />
+                    <FieldErrorMessage name='internalDescription' />
+                    <CharacterCount max={250} name={'internalDescription'} />
                 </Col>
             </Box>
 
