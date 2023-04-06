@@ -72,7 +72,7 @@ export const useLearnerStudies = () => {
         // if we haven't found 3 marked as featured, pad out the list to get enough
         const highlightedStudies = featuredStudies.concat(
             featuredStudies.length == FEATURED_COUNT ? [] :
-                eligibleStudies.slice(-1 * (FEATURED_COUNT - featuredStudies.length))
+                eligibleStudies.filter(s => !s.isFeatured).slice(-1 * (FEATURED_COUNT - featuredStudies.length))
         )
 
         const studiesByTopic = groupBy(allStudies, (s) => tagOfType(s, 'topic') || 'topic:other') as any as StudyByTopics
