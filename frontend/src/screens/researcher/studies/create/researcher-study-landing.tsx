@@ -3,6 +3,7 @@ import { Footer, TopNavBar } from '@components';
 import { colors } from '../../../../theme';
 import { Button } from '@nathanstitt/sundry';
 import { Link } from 'react-router-dom';
+import { Step } from './edit-study';
 
 export default function ResearcherStudyLanding() {
     const [showSteps, setShowSteps] = useState<boolean>(false)
@@ -18,7 +19,7 @@ export default function ResearcherStudyLanding() {
     )
 }
 
-export const ExitButton = () => {
+export const ExitButton:FC<{step?: Step}> = ({ step }) => {
     const nav = useNavigate()
     return (
         <h6
@@ -69,7 +70,7 @@ const StepsOverview: FC = () => {
 
     return (
         <Box direction='column' align='center'>
-            <ExitButton/>
+            <ExitButton />
             <Box width='750px' gap='large' direction='column'>
                 <h2 className='fw-bold'>Here are the steps you need to go through</h2>
                 <Box gap='large'>

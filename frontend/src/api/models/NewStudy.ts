@@ -37,19 +37,19 @@ export interface NewStudy {
      * @type {string}
      * @memberof NewStudy
      */
-    titleForParticipants: string;
+    titleForParticipants?: string;
     /**
      * The study name that only researchers see.
      * @type {string}
      * @memberof NewStudy
      */
-    titleForResearchers?: string;
+    titleForResearchers: string;
     /**
      * A short study description.
      * @type {string}
      * @memberof NewStudy
      */
-    shortDescription: string;
+    shortDescription?: string;
     /**
      * A long study description.
      * @type {string}
@@ -61,7 +61,7 @@ export interface NewStudy {
      * @type {string}
      * @memberof NewStudy
      */
-    internalDescription?: string;
+    internalDescription: string;
     /**
      * The tags of the study object, used for grouping and filtering.
      * @type {Array<string>}
@@ -203,8 +203,8 @@ export type NewStudyStatusEnum = typeof NewStudyStatusEnum[keyof typeof NewStudy
  */
 export function instanceOfNewStudy(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "titleForParticipants" in value;
-    isInstance = isInstance && "shortDescription" in value;
+    isInstance = isInstance && "titleForResearchers" in value;
+    isInstance = isInstance && "internalDescription" in value;
 
     return isInstance;
 }
@@ -219,11 +219,11 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'titleForParticipants': json['title_for_participants'],
-        'titleForResearchers': !exists(json, 'title_for_researchers') ? undefined : json['title_for_researchers'],
-        'shortDescription': json['short_description'],
+        'titleForParticipants': !exists(json, 'title_for_participants') ? undefined : json['title_for_participants'],
+        'titleForResearchers': json['title_for_researchers'],
+        'shortDescription': !exists(json, 'short_description') ? undefined : json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
-        'internalDescription': !exists(json, 'internal_description') ? undefined : json['internal_description'],
+        'internalDescription': json['internal_description'],
         'tags': !exists(json, 'tags') ? undefined : json['tags'],
         'feedbackDescription': !exists(json, 'feedback_description') ? undefined : json['feedback_description'],
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],

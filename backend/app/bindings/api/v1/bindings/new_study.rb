@@ -320,20 +320,20 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @title_for_participants.nil?
-        invalid_properties.push('invalid value for "title_for_participants", title_for_participants cannot be nil.')
-      end
-
-      if @title_for_participants.to_s.length < 1
+      if !@title_for_participants.nil? && @title_for_participants.to_s.length < 1
         invalid_properties.push('invalid value for "title_for_participants", the character length must be great than or equal to 1.')
       end
 
-      if !@title_for_researchers.nil? && @title_for_researchers.to_s.length < 1
+      if @title_for_researchers.nil?
+        invalid_properties.push('invalid value for "title_for_researchers", title_for_researchers cannot be nil.')
+      end
+
+      if @title_for_researchers.to_s.length < 1
         invalid_properties.push('invalid value for "title_for_researchers", the character length must be great than or equal to 1.')
       end
 
-      if @short_description.nil?
-        invalid_properties.push('invalid value for "short_description", short_description cannot be nil.')
+      if @internal_description.nil?
+        invalid_properties.push('invalid value for "internal_description", internal_description cannot be nil.')
       end
 
       invalid_properties
@@ -342,10 +342,10 @@ module Api::V1::Bindings
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @title_for_participants.nil?
-      return false if @title_for_participants.to_s.length < 1
-      return false if !@title_for_researchers.nil? && @title_for_researchers.to_s.length < 1
-      return false if @short_description.nil?
+      return false if !@title_for_participants.nil? && @title_for_participants.to_s.length < 1
+      return false if @title_for_researchers.nil?
+      return false if @title_for_researchers.to_s.length < 1
+      return false if @internal_description.nil?
       status_validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "completed"])
       return false unless status_validator.valid?(@status)
       true
@@ -354,11 +354,7 @@ module Api::V1::Bindings
     # Custom attribute writer method with validation
     # @param [Object] title_for_participants Value to be assigned
     def title_for_participants=(title_for_participants)
-      if title_for_participants.nil?
-        fail ArgumentError, 'title_for_participants cannot be nil'
-      end
-
-      if title_for_participants.to_s.length < 1
+      if !title_for_participants.nil? && title_for_participants.to_s.length < 1
         fail ArgumentError, 'invalid value for "title_for_participants", the character length must be great than or equal to 1.'
       end
 
@@ -368,7 +364,11 @@ module Api::V1::Bindings
     # Custom attribute writer method with validation
     # @param [Object] title_for_researchers Value to be assigned
     def title_for_researchers=(title_for_researchers)
-      if !title_for_researchers.nil? && title_for_researchers.to_s.length < 1
+      if title_for_researchers.nil?
+        fail ArgumentError, 'title_for_researchers cannot be nil'
+      end
+
+      if title_for_researchers.to_s.length < 1
         fail ArgumentError, 'invalid value for "title_for_researchers", the character length must be great than or equal to 1.'
       end
 

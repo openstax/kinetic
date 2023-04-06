@@ -1,16 +1,17 @@
-import { Box, React, useEffect, useNavigate, useParams, useState } from '@common'
+import { Box, React, useEffect, useMemo, useNavigate, useParams, useState } from '@common'
 import { useApi, useQueryParam } from '@lib';
 import { EditingStudy } from '@models';
 import { LoadingAnimation, TopNavBar } from '@components';
 import { ProgressBar } from './progress-bar';
 import { ExitButton } from './researcher-study-landing';
-import { Col, Form, useFormContext, Yup } from '@nathanstitt/sundry';
+import { Col, Form, useFormContext, useFormState, Yup } from '@nathanstitt/sundry';
 import { ResearchTeam } from './forms/research-team';
 import { InternalDetails } from './forms/internal-details';
 import { ParticipantView } from './forms/participant-view';
 import { AdditionalSessions } from './forms/additional-sessions';
 import { NewStudy, Study } from '@api';
 import { ActionFooter } from './action-footer';
+import { ReactNode } from 'react';
 
 export type StepKey =
     'research-team' |
@@ -23,10 +24,12 @@ export type StepKey =
 interface Action {
     text: string
     action?: Function
+    disabled?: boolean
 }
 
 export interface Step {
     index: number
+    component?: ReactNode
     text: string
     key: StepKey
     optional?: boolean
@@ -36,24 +39,27 @@ export interface Step {
     backAction?: () => void
 }
 
-const getValidationSchema = (studies: Study[]) => {
+const getValidationSchema = (studies: Study[], study: EditingStudy) => {
+    const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])
     return Yup.object().shape({
-        titleForResearchers: Yup.string().max(45)
-            .test(
-                'Unique',
-                'This study title is already in use. Please change your study title to make it unique.',
-                (value) => {
-                    if (!studies.length) {
-                        return true
-                    }
-                    return studies?.every(study => study.titleForResearchers?.toLowerCase() !== value?.toLowerCase())
-                }
-            ).when('step', {
-                is: 2,
-                then: (s) => s.required('Required'),
-            }),
-        // researcherPi: Yup.string().email(),
-        // researcherLead: Yup.string().email(),
+        titleForResearchers: Yup.string().when('step', {
+            is: 0,
+            then: (s) => s.required('Required').max(100)
+                    .test(
+                        'Unique',
+                        'This study title is already in use. Please change your study title to make it unique.',
+                        (value) => {
+                            if (!studies.length) {
+                                return true
+                            }
+                            return allOtherStudies.every(study => study.titleForResearchers?.toLowerCase() !== value?.toLowerCase())
+                        }
+                    ),
+        }),
+        internalDescription: Yup.string().max(250).when('step', {
+            is: 0,
+            then: (s) => s.required('Required'),
+        }),
         stages: Yup.array().of(
             Yup.object({
                 points: Yup.number().required(),
@@ -65,35 +71,22 @@ const getValidationSchema = (studies: Study[]) => {
                 ),
             })
         ),
-        titleForParticipants: Yup.string().max(45).required('Required')
-            .test(
-                'Unique',
-                'This study title is already in use. Please change your study title to make it unique.',
-                (value) => {
-                    if (!studies.length) {
-                        return true
-                    }
-                    return studies.every(study => study.titleForParticipants?.toLowerCase() !== value?.toLowerCase())
-                }
-            ),
+        titleForParticipants: Yup.string()
+            .when('step', {
+                is: 2,
+                then: (s) =>
+                    s.required('Required').max(45).test(
+                        'Unique',
+                        'This study title is already in use. Please change your study title to make it unique.',
+                        (value) => {
+                            if (!studies.length) {
+                                return true
+                            }
+                            return allOtherStudies.every(study => study.titleForParticipants?.toLowerCase() !== value?.toLowerCase())
+                        }
+                    ),
+            }),
     })
-}
-
-const renderCurrentStep = (index: number, study: EditingStudy) => {
-    switch(index) {
-        case 0:
-            return <ResearchTeam study={study} />
-        case 1:
-            return <InternalDetails study={study} />
-        case 2:
-            return <ParticipantView study={study} />
-        case 3:
-            return <AdditionalSessions study={study} />
-        case 4:
-            return
-        case 5:
-            return
-    }
 }
 
 export default function EditStudy() {
@@ -103,16 +96,17 @@ export default function EditStudy() {
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
 
-
     useEffect(() => {
         api.getStudies().then(studies => {
             setAllStudies(studies.data || [])
             if (isNew) {
                 setStudy({
-                    titleForParticipants: '',
                     titleForResearchers: '',
+                    internalDescription: '',
+                    titleForParticipants: ' ',
                     shortDescription: '',
-                    tags: [],
+                    longDescription: '',
+                    stages: [],
                 })
                 return
             }
@@ -140,12 +134,12 @@ export default function EditStudy() {
 }
 
 const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, studies, children }) => {
-    const initialStep = +useQueryParam('step') || 0
+    // const initialStep = +useQueryParam('step') || 0
 
     return (
         <Form
-            validationSchema={getValidationSchema(studies)}
-            defaultValues={{ ...study, step: initialStep }}
+            validationSchema={getValidationSchema(studies, study)}
+            defaultValues={{ ...study, step: 0 }}
             onSubmit={() => {}}
             onCancel={() => {}}
             className='h-100'
@@ -156,12 +150,15 @@ const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, stu
 }
 
 const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
-    const { watch, setValue } = useFormContext()
+    const { watch, setValue, trigger } = useFormContext()
+    const formState = useFormState()
     const currentStep = watch('step')
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
     const nav = useNavigate()
     const api = useApi()
+
+    const { isValid } = formState
 
     const saveStudy = async (study: EditingStudy) => {
         if (isNew) {
@@ -181,22 +178,37 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     const steps: Step[] = [
         {
             index: 0,
-            text: 'Research Team',
-            key: 'research-team',
+            component: <InternalDetails study={study} />,
+            text: 'Internal Details',
+            key: 'internal-details',
             primaryAction: {
                 text: 'Continue',
-                action: () => setValue('step', 1),
+                disabled: !isValid,
+                action: async () => {
+                    const valid = await trigger()
+                    if (valid) {
+                        await saveStudy(watch() as EditingStudy)
+                        setValue('step', 1)
+                    }
+                },
+            },
+            secondaryAction: {
+                text: 'Save as draft',
+                disabled: !isValid,
+                action: () => saveStudy(watch() as EditingStudy),
             },
         },
         {
             index: 1,
-            text: 'Internal Details',
-            key: 'internal-details',
+            component: <ResearchTeam study={study} />,
+            text: 'Research Team',
+            key: 'research-team',
             backAction: () => setValue('step', 0),
             primaryAction: {
                 text: 'Continue',
-                action: () => {
+                action: async () => {
                     // save study?
+                    const valid = await trigger()
                     setValue('step', 2)
                 },
             },
@@ -207,6 +219,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
         },
         {
             index: 2,
+            component: <ParticipantView study={study} />,
             text: 'Participant View',
             key: 'participant-view',
             backAction: () => setValue('step', 1),
@@ -225,6 +238,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
         },
         {
             index: 3,
+            component: <AdditionalSessions study={study} />,
             text: 'Additional Sessions (optional)',
             key: 'additional-sessions',
             backAction: () => setValue('step', 2),
@@ -266,11 +280,10 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                         <ProgressBar steps={steps} currentStep={steps[currentStep]} setStepIndex={(i) => setValue('step', i)}/>
                     </Col>
                     <Col sm={1}>
-                        <ExitButton/>
+                        <ExitButton step={steps[currentStep]} />
                     </Col>
                 </Box>
-
-                {renderCurrentStep(currentStep, study)}
+                {steps[currentStep].component}
             </div>
             <ActionFooter step={steps[currentStep]} />
         </Box>

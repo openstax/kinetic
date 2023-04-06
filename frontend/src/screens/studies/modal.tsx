@@ -47,15 +47,13 @@ export const StudyModal:React.FC<StudyModalProps> = ({ onHide, study }) => {
     }, [study?.id])
     if (!study) { return null }
 
-    const title = isParticipantStudy(study) ? study.title : study.titleForParticipants
-
     return (
         <Modal
             xlarge
             show={true}
             onHide={isPreview ? () => onHide?.() : undefined}
             closeBtn={isPreview}
-            title={title}
+            title={study.titleForParticipants}
             data-is-study-preview-modal={isPreview}
         >
             <Modal.Body css={{ padding: 0 }}>

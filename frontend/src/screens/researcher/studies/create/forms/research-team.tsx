@@ -1,7 +1,7 @@
 import { Box, React, useEffect, useMemo, useState } from '@common';
 import { Icon } from '@components';
 import { colors } from '@theme';
-import { Col, SelectField, SelectOption } from '@nathanstitt/sundry';
+import { Col, SelectField, SelectOption, useFormContext } from '@nathanstitt/sundry';
 import { IRB } from '../../../account/researcher-account-page';
 import { EditingStudy } from '@models';
 import { useApi } from '@lib';
@@ -19,6 +19,7 @@ const DropdownIndicator = (props: DropdownIndicatorProps) => {
 export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
     const api = useApi()
     const [researchers, setResearchers] = useState<Researcher[]>([])
+    const { setValue } = useFormContext()
 
     useEffect(() => {
         api.getResearchers().then(researchers => {
@@ -32,6 +33,12 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
             value: r.id,
         }))
     }, [researchers])
+
+    const setResearcherByRole = (id: number, role: string) => {
+        // TODO Set study.researchers[]
+        console.log(id, role)
+        // setValue('researchers')
+    }
 
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
@@ -56,6 +63,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                         isClearable
                         placeholder='Search for a researcher by name'
                         components={{ DropdownIndicator }}
+                        onChange={(value) => !!value && setResearcherByRole(value as number, 'pi')}
                     />
                 </Col>
             </Box>
@@ -73,6 +81,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                         isClearable
                         placeholder='Search for a researcher by name'
                         components={{ DropdownIndicator }}
+                        onChange={(value) => !!value && setResearcherByRole(value as number, 'lead')}
                     />
                 </Col>
             </Box>

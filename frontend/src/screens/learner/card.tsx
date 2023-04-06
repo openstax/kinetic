@@ -1,13 +1,10 @@
 import { cx, React, useCallback } from '@common'
 import { Box, Icon, MultiSessionBar } from '@components'
-import { get } from 'lodash'
 import { useIsMobileDevice } from '@lib'
-import { EditingStudy, studyIsMultipart, TagLabels, tagOfType, tagsOfType } from '@models'
+import { EditingStudy, studyIsMultipart } from '@models'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
-import { CardImages } from '../../components/study-card-images'
 import { colors, media } from '@theme'
-import { Image } from '@faker-js/faker/image';
 import { getImageUrl } from '../../components/study-card-images/card-images';
 
 interface StudyCardProps {
@@ -50,9 +47,14 @@ const Card = styled(Box)({
     },
 })
 
-const Tag: React.FC<{ tag?: string }> = ({ tag }) => (
-    tag ? <span className="badge text-dark" css={{ borderRadius: 8, background: colors.gray }}>{get(TagLabels, tag, tag)}</span> : null
-)
+const Tag: React.FC<{ tag?: string }> = ({ tag }) => {
+    if (!tag) return null
+    return (
+        <span className="badge text-dark" css={{ borderRadius: 8, background: colors.gray }}>
+            {tag}
+        </span>
+    )
+}
 
 const Researcher: React.FC<StudyCardProps> = ({ study }) => {
     const pi = study.researchers?.find(r => r.role === 'pi')
@@ -169,8 +171,8 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
     return (
         <Box className={cx({ 'small': !isMobile, 'xx-small': isMobile }, 'mt-auto', 'pt-1')} justify='between' align='center' wrap>
             <Box gap='small'>
-                <Tag tag={tagOfType(study, 'topic')} />
-                {tagsOfType(study, 'subject').slice(0, 1).map(tag => <Tag key={tag} tag={tag} />)}
+                <Tag tag={study.studyTopic} />
+                <Tag tag={study.studySubject} />
             </Box>
             <Box>
                 {!!study.totalDuration && <div>

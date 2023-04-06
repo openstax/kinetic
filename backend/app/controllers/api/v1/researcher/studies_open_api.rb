@@ -4,8 +4,8 @@ class Api::V1::Researcher::StudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
   COMMON_REQUIRED_STUDY_FIELDS = [
-    :title_for_participants,
-    :short_description,
+    :title_for_researchers,
+    :internal_description
   ].freeze
 
   openapi_component do

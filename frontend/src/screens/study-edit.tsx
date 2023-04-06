@@ -6,12 +6,12 @@ import {
     InputField, SelectField, DateTimeField, Row, Col, Icon,
     LinkButton, Button, Box, FormSubmitHandler, useField,
 } from '@components'
-import { StudyValidationSchema, TagLabels, isNewStudy, EditingStudy, isStudy } from '@models'
+import { StudyValidationSchema, isNewStudy, EditingStudy, isStudy } from '@models'
 import { Study, Stage } from '@api'
 import { useApi, errorToString, useForceUpdate, pick, remove } from '@lib'
 import { StudyModal } from './studies/modal'
-
-const TAG_OPTIONS = Object.keys(TagLabels).map((t) => ({
+// TODO Delete this file
+const TAG_OPTIONS = Object.keys([]).map((t) => ({
     label: t, value: t,
 }))
 const QualtricsFields = () => (
@@ -254,13 +254,13 @@ function EditStudy() {
     const isNew = 'new' === id
     useEffect(() => {
         if (isNew) {
-            setStudy({
-                titleForParticipants: '',
-                isMandatory: false,
-                shortDescription: '',
-                longDescription: '',
-                tags: [],
-            })
+            // setStudy({
+            //     titleForParticipants: '',
+            //     isMandatory: false,
+            //     shortDescription: '',
+            //     longDescription: '',
+            //     tags: [],
+            // })
             setTimeout(() => { document.querySelector<HTMLInputElement>('#participants-title')?.focus() }, 100)
             return
         }

@@ -7,6 +7,15 @@ class Stage < ApplicationRecord
 
   self.implicit_order_column = 'order'
 
+  arel = Stage.arel_table
+
+  scope :available, -> {
+    where
+      .not(opens_at: nil)
+      .where(arel[:opens_at].lteq(Time.now))
+      .where(arel[:closes_at].eq(nil).or(arel[:closes_at].gteq(Time.now)))
+  }
+
   has_many :launched_stages do
     def for_user(user)
       where(user_id: user.id).first
@@ -63,6 +72,10 @@ class Stage < ApplicationRecord
 
   def delayed?
     available_after_days.positive?
+  end
+
+  def available?
+    opens_at && Time.now > opens_at && (closes_at.nil? || Time.now <= closes_at)
   end
 
   def launcher(user_id)

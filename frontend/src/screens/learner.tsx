@@ -5,7 +5,7 @@ import { colors, media } from '../theme'
 import { Global } from '@emotion/react'
 import { Box, Footer, RewardsProgressBar, TopNavBar } from '@components'
 import { useIsMobileDevice } from '@lib'
-import { StudyTopicID, studyTopicTagIDs, StudyTopicTags } from '@models'
+import { StudyTopic, studyTopics } from '@models'
 import { StudyByTopics, useLearnerStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
 import { SplashImage } from './learner/splash-image'
@@ -107,15 +107,25 @@ const MobileStudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, st
 
 interface FiltersProps {
     studies: StudyByTopics
-    filter: StudyTopicID
-    setFilter(filter: StudyTopicID): void
+    filter: StudyTopic
+    setFilter(filter: StudyTopic): void
 }
 
-const filterProps = (type: StudyTopicID, filter: StudyTopicID, setType: (t: StudyTopicID) => void) => ({
-    className: type == filter ? 'active' : '',
-    'data-test-id': type,
-    onClick() { setType(type) },
-})
+const TopicFilter: FC<{topic: StudyTopic, filter: StudyTopic, setFilter: (t: StudyTopic) => void}> = ({
+    topic, filter, setFilter,
+}) => {
+    return (
+        <span
+            className={topic == filter ? 'active' : ''}
+            data-testid={topic}
+            onClick={() => setFilter(topic)}
+            role="tab"
+        >
+            {topic}
+        </span>
+
+    )
+}
 
 const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
     if (useIsMobileDevice()) {
@@ -137,11 +147,10 @@ const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
                 },
             }}
         >
-            {studyTopicTagIDs.map((tag) => (
-                studies[tag]?.length ?
-                    <span role="tab" key={tag} {...filterProps(tag, filter, setFilter)}>{StudyTopicTags[tag]}</span> : null
+            {studyTopics.map((topic) => (
+                studies[topic]?.length && <TopicFilter topic={topic} filter={filter} setFilter={setFilter} />
             ))}
-        </Box >
+        </Box>
     )
 }
 
@@ -158,10 +167,10 @@ const AllSubjects: FC<AllSubjectsProps> = ({
     if (useIsMobileDevice()) {
         return (
             <>
-                {studyTopicTagIDs
-                    .filter((tag) => !!studies[tag]?.length)
-                    .map((tag) => (
-                        <MobileStudyList key={tag} onSelect={onSelect} title={StudyTopicTags[tag]} className={tag} studies={studies[tag] || []} />
+                {studyTopics
+                    .filter((topic) => !!studies[topic]?.length)
+                    .map((topic) => (
+                        <MobileStudyList key={topic} onSelect={onSelect} title={topic} className={topic} studies={studies[topic] || []} />
                     ))
                 }
             </>

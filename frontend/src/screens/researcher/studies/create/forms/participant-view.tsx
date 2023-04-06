@@ -1,4 +1,4 @@
-import { EditingStudy } from '@models';
+import { EditingStudy, studySubjects, studyTopics } from '@models';
 import { Box, React, useState } from '@common';
 import { CharacterCount, FieldErrorMessage, Icon, SelectField } from '@components';
 import { colors } from '@theme';
@@ -86,23 +86,22 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
                             <h6>Add tags*</h6>
-                            <small>Select the study type and subject area of the study (if applicable) that best describes your study to participants</small>
+                            <small>Select the study type and content area (if applicable) that best describes your study to participants</small>
                         </Col>
 
-                        {/* TODO handle tags and subjects */}
                         <Col sm={6} direction='column' gap>
                             <div>
                                 <SelectField
-                                    name="tags" id="tags" placeholder="Tags"
-                                    allowCreate isMulti
-                                    options={[]}
+                                    name="studyTopic"
+                                    placeholder="Topic"
+                                    options={studyTopics.map(s => ({ value: s, label: s }))}
                                 />
                             </div>
                             <div>
                                 <SelectField
-                                    name="subjects" id="subjects" placeholder="Subjects"
-                                    allowCreate isMulti
-                                    options={[]}
+                                    name="studySubject"
+                                    placeholder="Subject"
+                                    options={studySubjects.map(s => ({ value: s, label: s }))}
                                 />
                             </div>
                         </Col>

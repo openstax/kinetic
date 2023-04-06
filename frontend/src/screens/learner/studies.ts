@@ -1,15 +1,12 @@
-import { useEffect, useState, useMemo, useCallback } from '@common'
+import { useCallback, useEffect, useMemo, useState } from '@common'
 import { useLocalstorageState } from 'rooks'
-import { tagOfType } from '@models'
+import { isStudyLaunchable, StudyTopic } from '@models'
 import { ParticipantStudy } from '@api'
-import { sortBy, groupBy } from 'lodash'
+import { groupBy, sortBy } from 'lodash'
 import { useApi } from '@lib'
-import {
-    isStudyLaunchable, StudyTopicID,
-} from '@models'
 
 
-export type StudyByTopics = Record<StudyTopicID, ParticipantStudy[]>
+export type StudyByTopics = Record<StudyTopic, ParticipantStudy[]>
 const MS_IN_MONTH = 1000 * 60 * 60 * 24 * 30
 const FEATURED_COUNT = 3
 
@@ -42,7 +39,7 @@ export const useLearnerStudies = () => {
         sort: {},
     })
     studySort.sort = (studySort.sort || {}) // value from localStorage might not have "sort" key
-    const [filter, setFilter] = useState<StudyTopicID>('topic:personality')
+    const [filter, setFilter] = useState<StudyTopic>('Personality')
     const [studies, setStudyState] = useState<StudyState>({
         allStudies: [],
         highlightedStudies: [],
@@ -63,7 +60,7 @@ export const useLearnerStudies = () => {
             return rnd * (s.completedAt ? 1 : -1)
         })
         setStudySort({ ...studySort })
-        // find all studies that are elible to be featured
+        // find all studies that are eligible to be featured
         const eligibleStudies = allStudies.filter(s => !s.isMandatory && !s.completedAt)
         // select 3 that are marked as featured
         const featuredStudies = eligibleStudies
@@ -75,9 +72,9 @@ export const useLearnerStudies = () => {
                 eligibleStudies.slice(-1 * (FEATURED_COUNT - featuredStudies.length))
         )
 
-        const studiesByTopic = groupBy(allStudies, (s) => tagOfType(s, 'topic') || 'topic:other') as any as StudyByTopics
+        const studiesByTopic = groupBy(allStudies, (s) => s.studyTopic) as any as StudyByTopics
         if (!studiesByTopic[filter]) {
-            setFilter((Object.keys(studiesByTopic) as Array<StudyTopicID>)[0])
+            setFilter((Object.keys(studiesByTopic) as Array<StudyTopic>)[0])
         }
         setStudyState({
             mandatoryStudy, allStudies, highlightedStudies, studiesByTopic,

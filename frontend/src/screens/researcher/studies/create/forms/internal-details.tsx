@@ -57,7 +57,7 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
                 <h3 className='fw-bold'>Internal Details</h3>
                 <Box gap align='center'>
                     <Icon height={20} color={colors.kineticResearcher} icon='clockFill'/>
-                    <span>ETA: 2 min</span>
+                    <span>ETA: 5 min</span>
                 </Box>
             </Box>
 

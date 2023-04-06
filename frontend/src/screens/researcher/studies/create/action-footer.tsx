@@ -20,6 +20,7 @@ export const ActionFooter: FC<{
                 <Box align='center' gap='large'>
                     {step.secondaryAction ? <Button
                         className='btn-researcher-secondary'
+                        disabled={step.secondaryAction.disabled}
                         css={{ width: 170, justifyContent: 'center' }}
                         onClick={() => step.secondaryAction?.action?.()}
                     >
@@ -28,6 +29,7 @@ export const ActionFooter: FC<{
 
                     {step.primaryAction ? <Button
                         className='btn-researcher-primary'
+                        disabled={step.primaryAction.disabled}
                         css={{ width: 170, justifyContent: 'center' }}
                         onClick={() => step.primaryAction?.action?.()}
                     >

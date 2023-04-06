@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Study < ApplicationRecord
-  # list of fields to set to nil when they're ommited in an api udpate
-  NULLABLE_FIELDS = %w[opens_at closes_at].freeze
   has_many :study_researchers, inverse_of: :study, dependent: :destroy
   has_many :researchers, through: :study_researchers, dependent: :destroy
   # need the double quotes, order is a postgresql semi-reserved word
@@ -24,15 +22,9 @@ class Study < ApplicationRecord
 
   enum status: [:draft, :active, :paused, :scheduled, :completed], _default: 'draft'
 
-  arel = Study.arel_table
-
+  # https://gorails.com/blog/activerecord-merge
   scope :available, -> {
-    where
-      .not(opens_at: nil)
-      .where(is_hidden: false)
-      .where(arel[:opens_at].lteq(Time.now))
-      .where(arel[:closes_at].eq(nil).or(
-               arel[:closes_at].gteq(Time.now)))
+    joins(:stages).where(is_hidden: false).merge(Stage.available)
   }
 
   def study_status
@@ -71,7 +63,7 @@ class Study < ApplicationRecord
   end
 
   def available?
-    !is_hidden? && opens_at && Time.now > opens_at && (closes_at.nil? || Time.now <= closes_at)
+    stages.any? { |stage| stage.available? }
   end
 
   def can_delete?

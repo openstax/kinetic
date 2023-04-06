@@ -9,7 +9,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     render(json: error, status: error.status_code) and return if error
 
     created_study = inbound_binding.create_model!(researcher: current_researcher)
-    inbound_binding.stages.each{|s| created_study.stages << Stage.new(s.to_hash)}
+    inbound_binding.stages.each{|s| created_study.stages << Stage.new(s.to_hash)} unless inbound_binding.stages.nil?
 
     response_binding = Api::V1::Bindings::Study.create_from_model(created_study)
     render json: response_binding, status: :created
@@ -34,10 +34,10 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
     render(json: error, status: error.status_code) and return if error
 
-    if params[:study][:stages]
-      pp params[:study][:stages]
-    end
-    inbound_binding.update_model!(@study)
+    @study.update(inbound_binding.to_hash.except(:researchers))
+    # inbound_binding.researchers.each do | researcher |
+    #   @study.study_researchers
+    # end
 
     response_binding = Api::V1::Bindings::Study.create_from_model(@study)
     render json: response_binding, status: :ok

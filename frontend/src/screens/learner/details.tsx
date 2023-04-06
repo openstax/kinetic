@@ -1,11 +1,9 @@
-import { React, useState, useCallback, useNavigate, useParams, useEffect } from '@common'
+import { React, useCallback, useEffect, useNavigate, useParams, useState } from '@common'
 import { ParticipantStudy, PublicResearcher } from '@api'
-import { LaunchStudy, isStudyLaunchable, StudyTopicID, StudyTopicTags, tagOfType, studyIsMultipart } from '@models'
-import { useApi, dayjs } from '@lib'
-import {
-    OffCanvas, Icon, IconKey, Box, Button, MultiSessionBar,
-} from '@components'
-import { colors } from '../../theme'
+import { isStudyLaunchable, LaunchStudy, studyIsMultipart } from '@models'
+import { dayjs, useApi } from '@lib'
+import { Box, Button, Icon, IconKey, MultiSessionBar, OffCanvas } from '@components'
+import { colors } from '@theme'
 
 interface StudyDetailsProps {
     study: ParticipantStudy
@@ -163,15 +161,12 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
 
     if (!study) return null
 
-    const topic = tagOfType<StudyTopicID>(study, 'topic')
-    const tag = topic ? StudyTopicTags[topic] : ''
-
     return (
         <OffCanvas show={!!study} title="Study Detail" onHide={onHide}>
             <Box direction="column" flex>
                 <div css={{ overflowY: 'auto', flex: 1 }}>
-                    <h3>{study.title}</h3>
-                    {tag && <Box gap align="center" margin={{ vertical: 'large' }}>
+                    <h3>{study.titleForParticipants}</h3>
+                    {study.studyTopic && <Box gap align="center" margin={{ vertical: 'large' }}>
                         <div css={{ position: 'relative' }}>
                             <Icon icon="chatLeft" color={colors.purple} />
                             <span css={{
@@ -182,7 +177,7 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
                                 fontSize: 7,
                             }}>#</span>
                         </div>
-                        {tag}</Box>
+                        {study.studyTopic}</Box>
                     }
                     <StudyTime study={study} />
                     <StudyPart property="feedbackDescription" title="Feedback Available" icon="feedback" study={study} />

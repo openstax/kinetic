@@ -43,19 +43,19 @@ export interface Study {
      * @type {string}
      * @memberof Study
      */
-    titleForParticipants: string;
+    titleForParticipants?: string;
     /**
      * The study name that only researchers see.
      * @type {string}
      * @memberof Study
      */
-    titleForResearchers?: string;
+    titleForResearchers: string;
     /**
      * A short study description.
      * @type {string}
      * @memberof Study
      */
-    shortDescription: string;
+    shortDescription?: string;
     /**
      * A long study description.
      * @type {string}
@@ -67,7 +67,7 @@ export interface Study {
      * @type {string}
      * @memberof Study
      */
-    internalDescription?: string;
+    internalDescription: string;
     /**
      * The tags of the study object, used for grouping and filtering.
      * @type {Array<string>}
@@ -210,8 +210,8 @@ export type StudyStatusEnum = typeof StudyStatusEnum[keyof typeof StudyStatusEnu
 export function instanceOfStudy(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "titleForParticipants" in value;
-    isInstance = isInstance && "shortDescription" in value;
+    isInstance = isInstance && "titleForResearchers" in value;
+    isInstance = isInstance && "internalDescription" in value;
 
     return isInstance;
 }
@@ -227,11 +227,11 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
     return {
         
         'id': json['id'],
-        'titleForParticipants': json['title_for_participants'],
-        'titleForResearchers': !exists(json, 'title_for_researchers') ? undefined : json['title_for_researchers'],
-        'shortDescription': json['short_description'],
+        'titleForParticipants': !exists(json, 'title_for_participants') ? undefined : json['title_for_participants'],
+        'titleForResearchers': json['title_for_researchers'],
+        'shortDescription': !exists(json, 'short_description') ? undefined : json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
-        'internalDescription': !exists(json, 'internal_description') ? undefined : json['internal_description'],
+        'internalDescription': json['internal_description'],
         'tags': !exists(json, 'tags') ? undefined : json['tags'],
         'feedbackDescription': !exists(json, 'feedback_description') ? undefined : json['feedback_description'],
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],

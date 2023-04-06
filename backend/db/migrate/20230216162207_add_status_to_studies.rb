@@ -14,9 +14,6 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
     add_column :stages, :opens_at, :datetime
     add_column :stages, :closes_at, :datetime
 
-    # TODO Update all instances of feedback_description to use study.stages
-    remove_column :studies, :feedback_description, :string
-
     add_column :study_researchers, :role, :integer, default: 0
 
     reversible do |dir|
@@ -34,7 +31,11 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
                    else
                      :active
                    end
-          study.update!(status: status)
+          # Fill in blanks as researcher title is now required - some existing studies were missing it
+          title_for_researchers = study.title_for_researchers || study.title_for_participants
+          study.update!(status: status, title_for_researchers: title_for_researchers)
+
+
         end
       end
 
@@ -42,5 +43,12 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
 
       end
     end
+
+    # TODO Remove opens_at, closes_at on studies
+    # remove_column :studies, :closes_at, :datetime
+    # remove_column :studies, :opens_at, :datetime
+    # remove_column :studies, :tags, :string
+    # TODO Update all instances of feedback_description to use study.stages
+    remove_column :studies, :feedback_description, :string
   end
 end
