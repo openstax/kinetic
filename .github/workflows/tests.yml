@@ -30,7 +30,7 @@ jobs:
           docker logs kinetic_api_1
       - name: Wait for api to boot
         working-directory: frontend
-        run: $(yarn bin)/wait-on http://localhost:4006/api/v1/openapi.json
+        run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
       - name: Generate bindings
         run: docker compose exec api bundle exec rake openstax_openapi:generate_model_bindings[1]
       - name: Check for changes in bindings

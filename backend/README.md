@@ -31,7 +31,8 @@ $ /code> lefthook run pre-push
 
 * ...
 
-
+** Connecting to remote databases
+```heroku pg:psql --remote={remote-name}```
 
 ** Getting into the backend terminal
 ```docker compose exec api /bin/bash```
