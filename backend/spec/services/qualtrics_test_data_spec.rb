@@ -26,7 +26,7 @@ RSpec.describe QualtricsTestData do
         .and_return(data)
     )
     expect {
-      analysis.fetch_responses(is_testing: true)
+      analysis.responses_before(cutoff: Date.today, is_testing: true)
     }.to change { analysis.analysis_response_exports.count }.by(1)
     exp = analysis.analysis_response_exports.last
     expect(exp.metadata).to eq('random_seed' => 42)
