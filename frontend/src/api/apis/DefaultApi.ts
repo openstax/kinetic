@@ -24,7 +24,6 @@ import type {
   AnalysisListing,
   BannerNotice,
   BannersListing,
-  DateTime,
   Environment,
   Launch,
   ParticipantStudies,
@@ -67,8 +66,6 @@ import {
     BannerNoticeToJSON,
     BannersListingFromJSON,
     BannersListingToJSON,
-    DateTimeFromJSON,
-    DateTimeToJSON,
     EnvironmentFromJSON,
     EnvironmentToJSON,
     LaunchFromJSON,
@@ -807,7 +804,7 @@ export class DefaultApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         if (requestParameters.cutoff !== undefined) {
-            queryParameters['cutoff'] = requestParameters.cutoff;
+            queryParameters['cutoff'] = (requestParameters.cutoff as any).toISOString().substr(0,10);
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
