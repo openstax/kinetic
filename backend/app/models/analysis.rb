@@ -18,7 +18,9 @@ class Analysis < ApplicationRecord
                   .where(AnalysisResponseExport.arel_table[:cutoff_at].lteq(cutoff))
                   .order(created_at: :desc)
 
-    if responses.none?
+    # if we didn't find any responses
+    # or the earliest one isn't today, check for new
+    if responses.none? || responses.first.cutoff_at.to_date != cutoff.to_date
       responses = [analysis_response_exports.create!(is_testing: is_testing, cutoff_at: cutoff)]
     end
 
