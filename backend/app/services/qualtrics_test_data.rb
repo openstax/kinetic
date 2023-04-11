@@ -13,7 +13,7 @@ class QualtricsTestData
     @stage = stage
   end
 
-  def to_csv(response_count: 50)
+  def to_csv_file(response_count: 50)
     questions = QualtricsApi.get_survey_definition_questions(@stage)
 
     file = Tempfile.new(
@@ -38,7 +38,7 @@ class QualtricsTestData
       csv << row
     end
     file.flush
-    file.path
+    file
   end
 
   def question_is_recorded?(question)

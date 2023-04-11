@@ -15,7 +15,7 @@ class Analysis < ApplicationRecord
   def responses_before(cutoff:, is_testing:)
     responses = analysis_response_exports
                   .where(is_testing: is_testing)
-                  .where(AnalysisResponseExport.arel_table[:cutoff_at].lt(cutoff))
+                  .where(AnalysisResponseExport.arel_table[:cutoff_at].lteq(cutoff))
                   .order(created_at: :desc)
 
     if responses.none?
