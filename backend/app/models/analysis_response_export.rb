@@ -4,6 +4,7 @@ require 'digest/md5'
 
 class AnalysisResponseExport < ApplicationRecord
   belongs_to :analysis
+  after_create :ensure_fetched
 
   def self.new_random_seed
     Random.new_seed
@@ -13,11 +14,7 @@ class AnalysisResponseExport < ApplicationRecord
 
   has_many_attached :files
 
-  def fresh?
-    is_complete && updated_at.after?(6.hours.ago)
-  end
-
-  def fetch
+  def ensure_fetched
     return if is_complete?
     # TODO: kickoff and monitor Qualtrics download
     raise 'not yet implemented' unless is_testing
@@ -27,13 +24,10 @@ class AnalysisResponseExport < ApplicationRecord
 
   protected
 
-  def attach_file(file)
-    f = File.open(file)
-    md5sum = Digest::MD5.hexdigest(f.read)
-    f.rewind
-    files.attach(io: f, filename: "#{md5sum}#{File.extname(file)}")
-  ensure
-    f.close
+  def attach_file(file_name)
+    md5sum = Digest::MD5.file(file_name).hexdigest
+    files.attach(io: File.open(file_name),
+                 filename: "#{File.basename(file_name)}-#{md5sum}#{File.extname(file_name)}")
   end
 
   def generate_test_data

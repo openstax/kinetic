@@ -168,10 +168,7 @@ export interface GetResearcherRequest {
 
 export interface GetResponseDownloadRequest {
     apiKey: string;
-}
-
-export interface GetResponseStatusRequest {
-    apiKey: string;
+    cutoff?: Date;
 }
 
 export interface GetStageRequest {
@@ -797,7 +794,7 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Prepare response download
+     * Prepare and fetch response download
      */
     async getResponseDownloadRaw(requestParameters: GetResponseDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Responses>> {
         if (requestParameters.apiKey === null || requestParameters.apiKey === undefined) {
@@ -806,40 +803,14 @@ export class DefaultApi extends runtime.BaseAPI {
 
         const queryParameters: any = {};
 
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/researcher/responses/{api_key}/fetch`.replace(`{${"api_key"}}`, encodeURIComponent(String(requestParameters.apiKey))),
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResponsesFromJSON(jsonValue));
-    }
-
-    /**
-     * Prepare response download
-     */
-    async getResponseDownload(requestParameters: GetResponseDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Responses> {
-        const response = await this.getResponseDownloadRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Retrives the status of response download
-     */
-    async getResponseStatusRaw(requestParameters: GetResponseStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Responses>> {
-        if (requestParameters.apiKey === null || requestParameters.apiKey === undefined) {
-            throw new runtime.RequiredError('apiKey','Required parameter requestParameters.apiKey was null or undefined when calling getResponseStatus.');
+        if (requestParameters.cutoff !== undefined) {
+            queryParameters['cutoff'] = (requestParameters.cutoff as any).toISOString().substr(0,10);
         }
 
-        const queryParameters: any = {};
-
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/researcher/responses/{api_key}/status`.replace(`{${"api_key"}}`, encodeURIComponent(String(requestParameters.apiKey))),
+            path: `/researcher/responses/{api_key}`.replace(`{${"api_key"}}`, encodeURIComponent(String(requestParameters.apiKey))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -849,10 +820,10 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Retrives the status of response download
+     * Prepare and fetch response download
      */
-    async getResponseStatus(requestParameters: GetResponseStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Responses> {
-        const response = await this.getResponseStatusRaw(requestParameters, initOverrides);
+    async getResponseDownload(requestParameters: GetResponseDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Responses> {
+        const response = await this.getResponseDownloadRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
