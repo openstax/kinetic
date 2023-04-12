@@ -14,7 +14,7 @@ class QualtricsTestData
   end
 
   def to_csv(response_count: 50)
-    questions = QualtricsApi.get_survey_definition_questions(@stage)
+    questions = QualtricsApi.new.get_survey_definition_questions(@stage)
 
     file = Tempfile.new(
       ["#{@stage.study.title_for_researchers.parameterize}-stage-#{@stage.order + 1}", '.csv']
