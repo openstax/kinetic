@@ -19,8 +19,8 @@ class Analysis < ApplicationRecord
                   .order(created_at: :desc)
 
     # if we didn't find any responses
-    # or the earliest one isn't today, check for new
-    if responses.none? || responses.first.cutoff_at.to_date != cutoff.to_date
+    # or check for new if the earliest one is less than cutoff
+    if responses.none? || responses.first.cutoff_at.to_date < cutoff.to_date
       responses = [analysis_response_exports.create!(is_testing: is_testing, cutoff_at: cutoff)]
     end
 
