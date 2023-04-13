@@ -528,6 +528,8 @@ CREATE TABLE public.stages (
     available_after_days double precision DEFAULT 0.0 NOT NULL,
     duration_minutes integer DEFAULT 0 NOT NULL,
     points integer DEFAULT 0 NOT NULL,
+    status integer DEFAULT 0,
+    target_sample_size integer DEFAULT 0,
     feedback_types character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     opens_at timestamp with time zone,
     closes_at timestamp with time zone
@@ -560,21 +562,16 @@ ALTER SEQUENCE public.stages_id_seq OWNED BY public.stages.id;
 CREATE TABLE public.studies (
     id bigint NOT NULL,
     title_for_researchers character varying,
-    title_for_participants character varying NOT NULL,
-    short_description text NOT NULL,
-    long_description text NOT NULL,
-    opens_at timestamp with time zone,
-    closes_at timestamp with time zone,
+    title_for_participants character varying DEFAULT ''::character varying,
+    short_description character varying DEFAULT ''::character varying,
+    long_description character varying DEFAULT ''::character varying,
     is_mandatory boolean DEFAULT false NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL,
-    tags character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     benefits character varying,
     image_id character varying,
     completed_count integer DEFAULT 0 NOT NULL,
     is_hidden boolean DEFAULT false NOT NULL,
-    status integer DEFAULT 0,
-    target_sample_size integer DEFAULT 0,
     view_count integer DEFAULT 0,
     study_type character varying,
     study_topic character varying,
@@ -1161,13 +1158,6 @@ CREATE UNIQUE INDEX index_stages_on_order_and_study_id ON public.stages USING bt
 --
 
 CREATE INDEX index_stages_on_study_id ON public.stages USING btree (study_id);
-
-
---
--- Name: index_studies_on_tags; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_studies_on_tags ON public.studies USING gin (tags);
 
 
 --

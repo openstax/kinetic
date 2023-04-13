@@ -15,9 +15,6 @@ require 'time'
 
 module Api::V1::Bindings
   class StageUpdate
-    # The study ID.
-    attr_accessor :id
-
     # An integer that describes the sort order for this stage
     attr_accessor :order
 
@@ -30,7 +27,7 @@ module Api::V1::Bindings
     # How many days after previous stage will this become available
     attr_accessor :available_after_days
 
-    # Has the stage been launched
+    # Has the stage been completed
     attr_accessor :is_completed
 
     # Can the stage be launched
@@ -39,11 +36,11 @@ module Api::V1::Bindings
     # The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
     attr_accessor :config
 
-    # How many points the stage is worth
-    attr_accessor :points
-
     # How long the stage is (in minutes)
     attr_accessor :duration_minutes
+
+    # How many points the stage is worth
+    attr_accessor :points
 
     # When the stage opens for participation; null means not open.
     attr_accessor :opens_at
@@ -54,10 +51,37 @@ module Api::V1::Bindings
     # Feedback types for this stage
     attr_accessor :feedback_types
 
+    # Desired sample size set by researcher
+    attr_accessor :target_sample_size
+
+    # Status of the stage
+    attr_accessor :status
+
+    class EnumAttributeValidator
+      attr_reader :datatype
+      attr_reader :allowable_values
+
+      def initialize(datatype, allowable_values)
+        @allowable_values = allowable_values.map do |value|
+          case datatype.to_s
+          when /Integer/i
+            value.to_i
+          when /Float/i
+            value.to_f
+          else
+            value
+          end
+        end
+      end
+
+      def valid?(value)
+        !value || allowable_values.include?(value)
+      end
+    end
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'id' => :'id',
         :'order' => :'order',
         :'title' => :'title',
         :'description' => :'description',
@@ -65,11 +89,13 @@ module Api::V1::Bindings
         :'is_completed' => :'is_completed',
         :'is_launchable' => :'is_launchable',
         :'config' => :'config',
-        :'points' => :'points',
         :'duration_minutes' => :'duration_minutes',
+        :'points' => :'points',
         :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
-        :'feedback_types' => :'feedback_types'
+        :'feedback_types' => :'feedback_types',
+        :'target_sample_size' => :'target_sample_size',
+        :'status' => :'status'
       }
     end
 
@@ -81,7 +107,6 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'id' => :'Integer',
         :'order' => :'Integer',
         :'title' => :'String',
         :'description' => :'String',
@@ -89,11 +114,13 @@ module Api::V1::Bindings
         :'is_completed' => :'Boolean',
         :'is_launchable' => :'Boolean',
         :'config' => :'Object',
-        :'points' => :'Float',
         :'duration_minutes' => :'Float',
+        :'points' => :'Float',
         :'opens_at' => :'Time',
         :'closes_at' => :'Time',
-        :'feedback_types' => :'Array<String>'
+        :'feedback_types' => :'Array<String>',
+        :'target_sample_size' => :'Float',
+        :'status' => :'String'
       }
     end
 
@@ -119,10 +146,6 @@ module Api::V1::Bindings
         end
         h[k.to_sym] = v
       }
-
-      if attributes.key?(:'id')
-        self.id = attributes[:'id']
-      end
 
       if attributes.key?(:'order')
         self.order = attributes[:'order']
@@ -152,12 +175,12 @@ module Api::V1::Bindings
         self.config = attributes[:'config']
       end
 
-      if attributes.key?(:'points')
-        self.points = attributes[:'points']
-      end
-
       if attributes.key?(:'duration_minutes')
         self.duration_minutes = attributes[:'duration_minutes']
+      end
+
+      if attributes.key?(:'points')
+        self.points = attributes[:'points']
       end
 
       if attributes.key?(:'opens_at')
@@ -173,16 +196,20 @@ module Api::V1::Bindings
           self.feedback_types = value
         end
       end
+
+      if attributes.key?(:'target_sample_size')
+        self.target_sample_size = attributes[:'target_sample_size']
+      end
+
+      if attributes.key?(:'status')
+        self.status = attributes[:'status']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @id.nil?
-        invalid_properties.push('invalid value for "id", id cannot be nil.')
-      end
-
       if @config.nil?
         invalid_properties.push('invalid value for "config", config cannot be nil.')
       end
@@ -193,8 +220,9 @@ module Api::V1::Bindings
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @id.nil?
       return false if @config.nil?
+      status_validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "waiting_period", "ready_for_launch", "completed"])
+      return false unless status_validator.valid?(@status)
       true
     end
 
@@ -204,12 +232,21 @@ module Api::V1::Bindings
       @feedback_types = feedback_types
     end
 
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] status Object to be assigned
+    def status=(status)
+      validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "waiting_period", "ready_for_launch", "completed"])
+      unless validator.valid?(status)
+        fail ArgumentError, "invalid value for \"status\", must be one of #{validator.allowable_values}."
+      end
+      @status = status
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          id == o.id &&
           order == o.order &&
           title == o.title &&
           description == o.description &&
@@ -217,11 +254,13 @@ module Api::V1::Bindings
           is_completed == o.is_completed &&
           is_launchable == o.is_launchable &&
           config == o.config &&
-          points == o.points &&
           duration_minutes == o.duration_minutes &&
+          points == o.points &&
           opens_at == o.opens_at &&
           closes_at == o.closes_at &&
-          feedback_types == o.feedback_types
+          feedback_types == o.feedback_types &&
+          target_sample_size == o.target_sample_size &&
+          status == o.status
     end
 
     # @see the `==` method
@@ -233,7 +272,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, order, title, description, available_after_days, is_completed, is_launchable, config, points, duration_minutes, opens_at, closes_at, feedback_types].hash
+      [order, title, description, available_after_days, is_completed, is_launchable, config, duration_minutes, points, opens_at, closes_at, feedback_types, target_sample_size, status].hash
     end
 
     # Builds the object from hash

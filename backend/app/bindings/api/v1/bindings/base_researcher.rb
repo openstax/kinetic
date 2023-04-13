@@ -14,51 +14,33 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class Stage
-    # The study ID.
-    attr_accessor :id
+  class BaseResearcher
+    # The researcher's first name.
+    attr_accessor :first_name
 
-    # An integer that describes the sort order for this stage
-    attr_accessor :order
+    # The researcher's last name.
+    attr_accessor :last_name
 
-    # The name of the stage
-    attr_accessor :title
+    # The researcher's institution.
+    attr_accessor :institution
 
-    # The longer description shown to participants
-    attr_accessor :description
+    # The researcher's bio.
+    attr_accessor :bio
 
-    # How many days after previous stage will this become available
-    attr_accessor :available_after_days
+    # The researcher's lab page.
+    attr_accessor :lab_page
 
-    # Has the stage been completed
-    attr_accessor :is_completed
+    # The researcher's interest (1).
+    attr_accessor :research_interest1
 
-    # Can the stage be launched
-    attr_accessor :is_launchable
+    # The researcher's interest (2).
+    attr_accessor :research_interest2
 
-    # The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
-    attr_accessor :config
+    # The researcher's interest (3).
+    attr_accessor :research_interest3
 
-    # How long the stage is (in minutes)
-    attr_accessor :duration_minutes
-
-    # How many points the stage is worth
-    attr_accessor :points
-
-    # When the stage opens for participation; null means not open.
-    attr_accessor :opens_at
-
-    # When the stage closes for participation; null means does not close.
-    attr_accessor :closes_at
-
-    # Feedback types for this stage
-    attr_accessor :feedback_types
-
-    # Desired sample size set by researcher
-    attr_accessor :target_sample_size
-
-    # Status of the stage
-    attr_accessor :status
+    # Researchers role
+    attr_accessor :role
 
     class EnumAttributeValidator
       attr_reader :datatype
@@ -85,21 +67,15 @@ module Api::V1::Bindings
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'id' => :'id',
-        :'order' => :'order',
-        :'title' => :'title',
-        :'description' => :'description',
-        :'available_after_days' => :'available_after_days',
-        :'is_completed' => :'is_completed',
-        :'is_launchable' => :'is_launchable',
-        :'config' => :'config',
-        :'duration_minutes' => :'duration_minutes',
-        :'points' => :'points',
-        :'opens_at' => :'opens_at',
-        :'closes_at' => :'closes_at',
-        :'feedback_types' => :'feedback_types',
-        :'target_sample_size' => :'target_sample_size',
-        :'status' => :'status'
+        :'first_name' => :'first_name',
+        :'last_name' => :'last_name',
+        :'institution' => :'institution',
+        :'bio' => :'bio',
+        :'lab_page' => :'lab_page',
+        :'research_interest1' => :'research_interest1',
+        :'research_interest2' => :'research_interest2',
+        :'research_interest3' => :'research_interest3',
+        :'role' => :'role'
       }
     end
 
@@ -111,29 +87,21 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'id' => :'Integer',
-        :'order' => :'Integer',
-        :'title' => :'String',
-        :'description' => :'String',
-        :'available_after_days' => :'Float',
-        :'is_completed' => :'Boolean',
-        :'is_launchable' => :'Boolean',
-        :'config' => :'Object',
-        :'duration_minutes' => :'Float',
-        :'points' => :'Float',
-        :'opens_at' => :'Time',
-        :'closes_at' => :'Time',
-        :'feedback_types' => :'Array<String>',
-        :'target_sample_size' => :'Float',
-        :'status' => :'String'
+        :'first_name' => :'String',
+        :'last_name' => :'String',
+        :'institution' => :'String',
+        :'bio' => :'String',
+        :'lab_page' => :'String',
+        :'research_interest1' => :'String',
+        :'research_interest2' => :'String',
+        :'research_interest3' => :'String',
+        :'role' => :'String'
       }
     end
 
     # List of attributes with nullable: true
     def self.openapi_nullable
       Set.new([
-        :'opens_at',
-        :'closes_at',
       ])
     end
 
@@ -141,77 +109,51 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::Stage` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::BaseResearcher` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::Stage`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::BaseResearcher`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'id')
-        self.id = attributes[:'id']
+      if attributes.key?(:'first_name')
+        self.first_name = attributes[:'first_name']
       end
 
-      if attributes.key?(:'order')
-        self.order = attributes[:'order']
+      if attributes.key?(:'last_name')
+        self.last_name = attributes[:'last_name']
       end
 
-      if attributes.key?(:'title')
-        self.title = attributes[:'title']
+      if attributes.key?(:'institution')
+        self.institution = attributes[:'institution']
       end
 
-      if attributes.key?(:'description')
-        self.description = attributes[:'description']
+      if attributes.key?(:'bio')
+        self.bio = attributes[:'bio']
       end
 
-      if attributes.key?(:'available_after_days')
-        self.available_after_days = attributes[:'available_after_days']
+      if attributes.key?(:'lab_page')
+        self.lab_page = attributes[:'lab_page']
       end
 
-      if attributes.key?(:'is_completed')
-        self.is_completed = attributes[:'is_completed']
+      if attributes.key?(:'research_interest1')
+        self.research_interest1 = attributes[:'research_interest1']
       end
 
-      if attributes.key?(:'is_launchable')
-        self.is_launchable = attributes[:'is_launchable']
+      if attributes.key?(:'research_interest2')
+        self.research_interest2 = attributes[:'research_interest2']
       end
 
-      if attributes.key?(:'config')
-        self.config = attributes[:'config']
+      if attributes.key?(:'research_interest3')
+        self.research_interest3 = attributes[:'research_interest3']
       end
 
-      if attributes.key?(:'duration_minutes')
-        self.duration_minutes = attributes[:'duration_minutes']
-      end
-
-      if attributes.key?(:'points')
-        self.points = attributes[:'points']
-      end
-
-      if attributes.key?(:'opens_at')
-        self.opens_at = attributes[:'opens_at']
-      end
-
-      if attributes.key?(:'closes_at')
-        self.closes_at = attributes[:'closes_at']
-      end
-
-      if attributes.key?(:'feedback_types')
-        if (value = attributes[:'feedback_types']).is_a?(Array)
-          self.feedback_types = value
-        end
-      end
-
-      if attributes.key?(:'target_sample_size')
-        self.target_sample_size = attributes[:'target_sample_size']
-      end
-
-      if attributes.key?(:'status')
-        self.status = attributes[:'status']
+      if attributes.key?(:'role')
+        self.role = attributes[:'role']
       end
     end
 
@@ -219,46 +161,25 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @id.nil?
-        invalid_properties.push('invalid value for "id", id cannot be nil.')
-      end
-
-      if @order.nil?
-        invalid_properties.push('invalid value for "order", order cannot be nil.')
-      end
-
-      if @config.nil?
-        invalid_properties.push('invalid value for "config", config cannot be nil.')
-      end
-
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @id.nil?
-      return false if @order.nil?
-      return false if @config.nil?
-      status_validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "waiting_period", "ready_for_launch", "completed"])
-      return false unless status_validator.valid?(@status)
+      role_validator = EnumAttributeValidator.new('String', ["member", "pi", "lead"])
+      return false unless role_validator.valid?(@role)
       true
     end
 
-    # Custom attribute writer method with validation
-    # @param [Object] feedback_types Value to be assigned
-    def feedback_types=(feedback_types)
-      @feedback_types = feedback_types
-    end
-
     # Custom attribute writer method checking allowed values (enum).
-    # @param [Object] status Object to be assigned
-    def status=(status)
-      validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "waiting_period", "ready_for_launch", "completed"])
-      unless validator.valid?(status)
-        fail ArgumentError, "invalid value for \"status\", must be one of #{validator.allowable_values}."
+    # @param [Object] role Object to be assigned
+    def role=(role)
+      validator = EnumAttributeValidator.new('String', ["member", "pi", "lead"])
+      unless validator.valid?(role)
+        fail ArgumentError, "invalid value for \"role\", must be one of #{validator.allowable_values}."
       end
-      @status = status
+      @role = role
     end
 
     # Checks equality by comparing each attribute.
@@ -266,21 +187,15 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          id == o.id &&
-          order == o.order &&
-          title == o.title &&
-          description == o.description &&
-          available_after_days == o.available_after_days &&
-          is_completed == o.is_completed &&
-          is_launchable == o.is_launchable &&
-          config == o.config &&
-          duration_minutes == o.duration_minutes &&
-          points == o.points &&
-          opens_at == o.opens_at &&
-          closes_at == o.closes_at &&
-          feedback_types == o.feedback_types &&
-          target_sample_size == o.target_sample_size &&
-          status == o.status
+          first_name == o.first_name &&
+          last_name == o.last_name &&
+          institution == o.institution &&
+          bio == o.bio &&
+          lab_page == o.lab_page &&
+          research_interest1 == o.research_interest1 &&
+          research_interest2 == o.research_interest2 &&
+          research_interest3 == o.research_interest3 &&
+          role == o.role
     end
 
     # @see the `==` method
@@ -292,7 +207,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, order, title, description, available_after_days, is_completed, is_launchable, config, duration_minutes, points, opens_at, closes_at, feedback_types, target_sample_size, status].hash
+      [first_name, last_name, institution, bio, lab_page, research_interest1, research_interest2, research_interest3, role].hash
     end
 
     # Builds the object from hash

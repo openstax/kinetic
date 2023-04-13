@@ -1,7 +1,7 @@
 import { Box, React, styled, useNavigate, useState } from '@common'
-import { Footer, TopNavBar } from '@components';
-import { colors } from '../../../../theme';
-import { Button } from '@nathanstitt/sundry';
+import { Footer, Icon, TopNavBar } from '@components';
+import { colors } from '@theme';
+import { Button, Modal, useFormState } from '@nathanstitt/sundry';
 import { Link } from 'react-router-dom';
 import { Step } from './edit-study';
 
@@ -19,21 +19,65 @@ export default function ResearcherStudyLanding() {
     )
 }
 
-export const ExitButton:FC<{step?: Step}> = ({ step }) => {
+export const ExitButton: FC<{
+    step?: Step,
+    isNew?: boolean
+}> = ({ step, isNew }) => {
+    const [showWarning, setShowWarning] = useState<boolean>(false)
+    const { isDirty } = useFormState()
+
     const nav = useNavigate()
     return (
-        <h6
-            css={{
-                textDecoration: 'underline',
-                textUnderlineOffset: '.5rem',
-                color: colors.grayText,
-                cursor: 'pointer',
-                alignSelf: 'end',
-            }}
-            onClick={() => nav('/studies')}
-        >
-            Exit
-        </h6>
+        <div>
+            <h6
+                css={{
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '.5rem',
+                    color: colors.grayText,
+                    cursor: 'pointer',
+                    alignSelf: 'end',
+                }}
+                onClick={() => {
+                    if (isDirty && !isNew) {
+                        setShowWarning(true)
+                    } else {
+                        nav('/studies')
+                    }
+                }}
+            >
+                Exit
+            </h6>
+            <Modal
+                center
+                show={showWarning}
+                large
+            >
+                <Modal.Body>
+                    <Box padding='4rem' align='center' justify='center' direction='column' gap='large'>
+                        <Box gap='large' align='center'>
+                            <Icon height={20} icon="warning" color={colors.red} />
+                            <span className='fs-4 fw-bold'>Exit Page</span>
+                        </Box>
+                        <Box align='center' direction='column'>
+                            <span>You're about to leave this study creation process.</span>
+                            <span>Would you like to save the changes you made thus far?</span>
+                        </Box>
+                        <Box gap='large'>
+                            <Button className='btn-researcher-secondary' onClick={() => {
+                                nav('/studies')
+                            }}>
+                                No, discard changes
+                            </Button>
+                            <Button className='btn-researcher-primary' onClick={() => {
+                                // save, then navigate away
+                            }}>
+                                Yes, save changes
+                            </Button>
+                        </Box>
+                    </Box>
+                </Modal.Body>
+            </Modal>
+        </div>
     )
 }
 

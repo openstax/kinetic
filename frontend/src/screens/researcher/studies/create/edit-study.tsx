@@ -1,5 +1,5 @@
 import { Box, React, useEffect, useMemo, useNavigate, useParams, useState } from '@common'
-import { useApi, useQueryParam } from '@lib';
+import { useApi } from '@lib';
 import { EditingStudy } from '@models';
 import { LoadingAnimation, TopNavBar } from '@components';
 import { ProgressBar } from './progress-bar';
@@ -60,17 +60,20 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
             is: 0,
             then: (s) => s.required('Required'),
         }),
-        stages: Yup.array().of(
-            Yup.object({
-                points: Yup.number().required(),
-                duration: Yup.number().required(),
-                feedbackTypes: Yup.array().test(
-                    'At least one',
-                    'Select at least one item',
-                    (feedbackTypes) => (feedbackTypes?.length || 0) > 0
-                ),
-            })
-        ),
+        stages: Yup.array().when('step', {
+            is: (step: number) => step === 2 || step === 3,
+            then: Yup.array().of(
+                Yup.object({
+                    points: Yup.number().required(),
+                    duration: Yup.number().required(),
+                    feedbackTypes: Yup.array().test(
+                        'At least one',
+                        'Select at least one item',
+                        (feedbackTypes) => (feedbackTypes?.length || 0) > 0
+                    ),
+                })
+            ),
+        }),
         titleForParticipants: Yup.string()
             .when('step', {
                 is: 2,
@@ -103,10 +106,6 @@ export default function EditStudy() {
                 setStudy({
                     titleForResearchers: '',
                     internalDescription: '',
-                    titleForParticipants: ' ',
-                    shortDescription: '',
-                    longDescription: '',
-                    stages: [],
                 })
                 return
             }
@@ -115,6 +114,7 @@ export default function EditStudy() {
                 setStudy(study)
             } else {
                 // setError('study was not found')
+                // Navigate back to /studies if no study found?
             }
         })
     }, [id])
@@ -151,6 +151,7 @@ const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, stu
 
 const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     const { watch, setValue, trigger } = useFormContext()
+
     const formState = useFormState()
     const currentStep = watch('step')
     const id = useParams<{ id: string }>().id
@@ -158,7 +159,8 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     const nav = useNavigate()
     const api = useApi()
 
-    const { isValid } = formState
+    const { isValid, errors } = formState
+    console.log(isValid, errors)
 
     const saveStudy = async (study: EditingStudy) => {
         if (isNew) {
@@ -280,7 +282,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                         <ProgressBar steps={steps} currentStep={steps[currentStep]} setStepIndex={(i) => setValue('step', i)}/>
                     </Col>
                     <Col sm={1}>
-                        <ExitButton step={steps[currentStep]} />
+                        <ExitButton step={steps[currentStep]} isNew={isNew} />
                     </Col>
                 </Box>
                 {steps[currentStep].component}

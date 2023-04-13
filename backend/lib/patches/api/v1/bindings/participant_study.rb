@@ -39,7 +39,6 @@ Rails.application.config.to_prepare do
 
     def self.attributes_from_study_model(model, user)
       model.attributes_for_binding(self).tap do |attributes|
-        attributes[:title] = model.title_for_participants
         attributes[:is_featured] = model.is_featured?
         attributes[:total_points] = model.total_points
         attributes[:total_duration] = model.total_duration

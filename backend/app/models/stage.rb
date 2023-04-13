@@ -30,6 +30,39 @@ class Stage < ApplicationRecord
 
   before_create :set_order
 
+  enum status: [:draft, :active, :paused, :scheduled, :waiting_period, :ready_for_launch, :completed], _default: 'draft'
+
+  def status
+    s = read_attribute(:status)
+
+    if is_draft
+      'draft'
+    elsif s == 'paused'
+      'paused'
+    elsif is_completed
+      'completed'
+    elsif is_scheduled
+      'scheduled'
+    else
+      s
+    end
+  end
+
+  def is_draft
+    s = read_attribute(:status)
+    opens_at.nil? && s == 'draft'
+  end
+
+  def is_completed
+    s = read_attribute(:status)
+    # Add sample size check to completed once the user can populate that data
+    !closes_at.nil? && (s == 'active' && closes_at < DateTime.now)
+  end
+
+  def is_scheduled
+    !opens_at.nil? && opens_at > DateTime.now
+  end
+
   def previous_stage
     siblings.where(Stage.arel_table[:order].lt(order)).order(:order).last
   end

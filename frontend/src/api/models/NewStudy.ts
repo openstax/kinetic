@@ -63,18 +63,6 @@ export interface NewStudy {
      */
     internalDescription: string;
     /**
-     * The tags of the study object, used for grouping and filtering.
-     * @type {Array<string>}
-     * @memberof NewStudy
-     */
-    tags?: Array<string>;
-    /**
-     * Description of feedback displayed to the user upon study completion
-     * @type {string}
-     * @memberof NewStudy
-     */
-    feedbackDescription?: string;
-    /**
      * Freeform id of image that should be displayed on study card
      * @type {string}
      * @memberof NewStudy
@@ -93,18 +81,6 @@ export interface NewStudy {
      */
     isHidden?: boolean;
     /**
-     * When the study opens for participation; null means not open.
-     * @type {Date}
-     * @memberof NewStudy
-     */
-    opensAt?: Date | null;
-    /**
-     * When the study closes for participation; null means does not close.
-     * @type {Date}
-     * @memberof NewStudy
-     */
-    closesAt?: Date | null;
-    /**
      * When the study was launched; null means not launched
      * @type {Date}
      * @memberof NewStudy
@@ -122,12 +98,6 @@ export interface NewStudy {
      * @memberof NewStudy
      */
     isMandatory?: boolean;
-    /**
-     * Status of the study
-     * @type {string}
-     * @memberof NewStudy
-     */
-    status?: NewStudyStatusEnum;
     /**
      * How many times the study has been viewed
      * @type {number}
@@ -159,17 +129,17 @@ export interface NewStudy {
      */
     studySubject?: string;
     /**
+     * The study's status
+     * @type {string}
+     * @memberof NewStudy
+     */
+    readonly status?: string;
+    /**
      * The study's stages.
      * @type {Array<Stage>}
      * @memberof NewStudy
      */
     stages?: Array<Stage>;
-    /**
-     * Desired sample size set by researcher
-     * @type {number}
-     * @memberof NewStudy
-     */
-    targetSampleSize?: number;
     /**
      * How many times the study has been launched
      * @type {number}
@@ -183,20 +153,6 @@ export interface NewStudy {
      */
     readonly returnUrl?: string;
 }
-
-
-/**
- * @export
- */
-export const NewStudyStatusEnum = {
-    Active: 'active',
-    Paused: 'paused',
-    Scheduled: 'scheduled',
-    Draft: 'draft',
-    Completed: 'completed'
-} as const;
-export type NewStudyStatusEnum = typeof NewStudyStatusEnum[keyof typeof NewStudyStatusEnum];
-
 
 /**
  * Check if a given object implements the NewStudy interface.
@@ -224,24 +180,19 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'shortDescription': !exists(json, 'short_description') ? undefined : json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
         'internalDescription': json['internal_description'],
-        'tags': !exists(json, 'tags') ? undefined : json['tags'],
-        'feedbackDescription': !exists(json, 'feedback_description') ? undefined : json['feedback_description'],
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
         'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
-        'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
-        'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
-        'status': !exists(json, 'status') ? undefined : json['status'],
         'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
         'studyType': !exists(json, 'study_type') ? undefined : json['study_type'],
         'studyTopic': !exists(json, 'study_topic') ? undefined : json['study_topic'],
         'studySubject': !exists(json, 'study_subject') ? undefined : json['study_subject'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
-        'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
         'launchedCount': !exists(json, 'launched_count') ? undefined : json['launched_count'],
         'returnUrl': !exists(json, 'return_url') ? undefined : json['return_url'],
     };
@@ -261,23 +212,17 @@ export function NewStudyToJSON(value?: NewStudy | null): any {
         'short_description': value.shortDescription,
         'long_description': value.longDescription,
         'internal_description': value.internalDescription,
-        'tags': value.tags,
-        'feedback_description': value.feedbackDescription,
         'image_id': value.imageId,
         'benefits': value.benefits,
         'is_hidden': value.isHidden,
-        'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
-        'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'first_launched_at': value.firstLaunchedAt === undefined ? undefined : (value.firstLaunchedAt.toISOString()),
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(ResearcherToJSON)),
         'is_mandatory': value.isMandatory,
-        'status': value.status,
         'view_count': value.viewCount,
         'study_type': value.studyType,
         'study_topic': value.studyTopic,
         'study_subject': value.studySubject,
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),
-        'target_sample_size': value.targetSampleSize,
     };
 }
 

@@ -160,6 +160,42 @@ RSpec.describe 'Stages', api: :v1 do
     context 'when signed in as a researcher on the study' do
       before { stub_current_user(original_researcher) }
 
+      # TODO Update and test stage statuses once implemented
+      # it 'updates the study\'s status to completed' do
+      #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'completed' } }
+      #
+      #   expect(response).to have_http_status(:success)
+      #   expect(response_hash).to match(a_hash_including(status: 'completed'))
+      # end
+      #
+      # it 'updates the study\'s status to scheduled' do
+      #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'scheduled' } }
+      #
+      #   expect(response).to have_http_status(:success)
+      #   expect(response_hash).to match(a_hash_including(status: 'scheduled'))
+      # end
+      #
+      # it 'updates the study\'s status to active' do
+      #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'active' } }
+      #
+      #   expect(response).to have_http_status(:success)
+      #   expect(response_hash).to match(a_hash_including(status: 'active'))
+      # end
+      #
+      # it 'updates the study\'s status to draft' do
+      #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'draft' } }
+      #
+      #   expect(response).to have_http_status(:success)
+      #   expect(response_hash).to match(a_hash_including(status: 'draft'))
+      # end
+      #
+      # it 'updates the study\'s status to paused' do
+      #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'paused' } }
+      #
+      #   expect(response).to have_http_status(:success)
+      #   expect(response_hash).to match(a_hash_including(status: 'paused'))
+      # end
+
       it 'works with good data' do
         api_put path, params: { stage: valid_changes }
         expect(response).to have_http_status(:ok)

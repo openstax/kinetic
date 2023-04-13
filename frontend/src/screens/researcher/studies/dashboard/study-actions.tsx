@@ -1,11 +1,12 @@
 import { React, styled, useNavigate } from '@common';
 import { Box, Icon } from '@components';
-import { Study, StudyStatusEnum } from '@api';
-import { colors } from '../../../../theme';
+import { StageStatusEnum, Study } from '@api';
+import { colors } from '@theme';
 import { Button, dayjs, Modal } from '@nathanstitt/sundry';
 import { useApi } from '@lib';
 import { CellContext } from '@tanstack/react-table';
 import { NotificationType } from './study-action-notification';
+import { getClosesAt } from '@models';
 
 const ModalType = {
     Pause: 'pauseStudy',
@@ -27,10 +28,12 @@ const ActionModalContent: FC<{
     const api = useApi()
     const nav = useNavigate()
 
-    const updateStudy = (study: Study, status: StudyStatusEnum, message: string) => {
-        const oldStatus = study.status
+    // TODO Update stage status instead of study
+    const updateStudy = (study: Study, status: StageStatusEnum, message: string) => {
+    // const updateStudy = (study: Study, status: string, message: string) => {
+    //     const oldStatus = study.status
         try {
-            study.status = status
+            // study.status = status
             api.updateStudy({ id: study.id, updateStudy: { study: study as any } })
                 .then((study) => {
                     cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
@@ -38,7 +41,7 @@ const ActionModalContent: FC<{
                 })
         }
         catch (err) {
-            study.status = oldStatus
+            // study.status = oldStatus
             addNotification(String(err), 'error')
             console.error(err) // eslint-disable-line no-console
         }
@@ -70,13 +73,13 @@ const ActionModalContent: FC<{
                 actionText='Pause Study'
                 onSubmit={() => updateStudy(
                     study,
-                    StudyStatusEnum.Paused,
+                    StageStatusEnum.Paused,
                     `Study ${study.titleForResearchers} has been paused.`
                 )}
                 onCancel={onHide}
             />
         case ModalType.Resume:
-            if (dayjs().isBefore(dayjs(study.closesAt))) {
+            if (dayjs().isBefore(dayjs(getClosesAt(study)))) {
                 return <StudyActionContainer
                     header="Resume Study"
                     warning={false}
@@ -85,7 +88,7 @@ const ActionModalContent: FC<{
                     actionText='Resume Study'
                     onSubmit={() => updateStudy(
                         study,
-                        StudyStatusEnum.Active,
+                        StageStatusEnum.Active,
                         `Study ${study.titleForResearchers} has been resumed.`
                     )}
                     onCancel={onHide}
@@ -101,7 +104,7 @@ const ActionModalContent: FC<{
                     onCancel={() => {
                         updateStudy(
                             study,
-                            StudyStatusEnum.Completed,
+                            StageStatusEnum.Completed,
                             `Study ${study.titleForResearchers} has been manually closed. It can now be found under 'Completed' studies`
                         )
                         onHide()
@@ -117,7 +120,7 @@ const ActionModalContent: FC<{
                 actionText='End Study'
                 onSubmit={() => updateStudy(
                     study,
-                    StudyStatusEnum.Completed,
+                    StageStatusEnum.Completed,
                     `Study ${study.titleForResearchers} has been manually closed. It can now be found under 'Completed' studies`
                 )}
                 onCancel={onHide}
@@ -126,7 +129,7 @@ const ActionModalContent: FC<{
             return <StudyActionContainer
                 header="Delete Study"
                 warning={true}
-                body={study.status === StudyStatusEnum.Scheduled ?
+                body={study.status === StageStatusEnum.Scheduled ?
                     'This action will delete the study and all data collected thus far. This is permanent and cannot be undone. Are you sure?' :
                     'This action will delete the study draft. This is permanent and cannot be undone. Are you sure?'
                 }
@@ -134,7 +137,7 @@ const ActionModalContent: FC<{
                 actionText='Yes, delete the study'
                 onSubmit={() => deleteStudy(
                     study,
-                    study.status === StudyStatusEnum.Scheduled ?
+                    study.status === StageStatusEnum.Scheduled ?
                         `Scheduled study ${study.titleForResearchers} has been deleted.` :
                         `Study draft ${study.titleForResearchers} has been deleted.`
                 )}
@@ -209,21 +212,21 @@ export const ActionColumn: React.FC<{
         setShowModal(false)
     }
 
-    const editDisabled = study.status === StudyStatusEnum.Completed
-    const pauseDisabled = study.status !== StudyStatusEnum.Active
-    const resumeDisabled = study.status !== StudyStatusEnum.Paused
+    const editDisabled = study.status === StageStatusEnum.Completed
+    const pauseDisabled = study.status !== StageStatusEnum.Active
+    const resumeDisabled = study.status !== StageStatusEnum.Paused
 
     const showEndStudy =
-        study.status === StudyStatusEnum.Paused ||
-        (study.status !== StudyStatusEnum.Completed && study.status === StudyStatusEnum.Active)
+        study.status === StageStatusEnum.Paused ||
+        (study.status !== StageStatusEnum.Completed && study.status === StageStatusEnum.Active)
 
-    const showReopen = study.status === StudyStatusEnum.Completed
+    const showReopen = study.status === StageStatusEnum.Completed
 
     const showDelete =
-        study.status === StudyStatusEnum.Draft ||
-        study.status === StudyStatusEnum.Scheduled
+        study.status === StageStatusEnum.Draft ||
+        study.status === StageStatusEnum.Scheduled
 
-    const showResumeButton = study.status === StudyStatusEnum.Paused
+    const showResumeButton = study.status === StageStatusEnum.Paused
 
     return (
         <Box gap='xlarge' justify='center' align='center'>

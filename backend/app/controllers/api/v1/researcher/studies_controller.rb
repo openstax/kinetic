@@ -34,10 +34,17 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
     render(json: error, status: error.status_code) and return if error
 
-    @study.update(inbound_binding.to_hash.except(:researchers))
+    @study.update(inbound_binding.to_hash.except(:researchers, :stages))
     # inbound_binding.researchers.each do | researcher |
     #   @study.study_researchers
     # end
+
+    @study.stages.clear
+    inbound_binding.stages.each do | stage |
+      # TODO Use proper config when cloning template?
+      s = Stage.where(id: stage.id).first_or_create(stage.to_hash.merge({config: {}}))
+      @study.stages << s
+    end
 
     response_binding = Api::V1::Bindings::Study.create_from_model(@study)
     render json: response_binding, status: :ok

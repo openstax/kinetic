@@ -16,91 +16,91 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface PublicResearcher
+ * @interface BaseResearcher
  */
-export interface PublicResearcher {
+export interface BaseResearcher {
     /**
      * The researcher's first name.
      * @type {string}
-     * @memberof PublicResearcher
+     * @memberof BaseResearcher
      */
     firstName?: string;
     /**
      * The researcher's last name.
      * @type {string}
-     * @memberof PublicResearcher
+     * @memberof BaseResearcher
      */
     lastName?: string;
     /**
      * The researcher's institution.
      * @type {string}
-     * @memberof PublicResearcher
+     * @memberof BaseResearcher
      */
     institution?: string;
     /**
      * The researcher's bio.
      * @type {string}
-     * @memberof PublicResearcher
+     * @memberof BaseResearcher
      */
     bio?: string;
     /**
      * The researcher's lab page.
      * @type {string}
-     * @memberof PublicResearcher
+     * @memberof BaseResearcher
      */
     labPage?: string;
     /**
      * The researcher's interest (1).
      * @type {string}
-     * @memberof PublicResearcher
+     * @memberof BaseResearcher
      */
     researchInterest1?: string;
     /**
      * The researcher's interest (2).
      * @type {string}
-     * @memberof PublicResearcher
+     * @memberof BaseResearcher
      */
     researchInterest2?: string;
     /**
      * The researcher's interest (3).
      * @type {string}
-     * @memberof PublicResearcher
+     * @memberof BaseResearcher
      */
     researchInterest3?: string;
     /**
      * Researchers role
      * @type {string}
-     * @memberof PublicResearcher
+     * @memberof BaseResearcher
      */
-    role?: PublicResearcherRoleEnum;
+    role?: BaseResearcherRoleEnum;
 }
 
 
 /**
  * @export
  */
-export const PublicResearcherRoleEnum = {
+export const BaseResearcherRoleEnum = {
     Member: 'member',
     Pi: 'pi',
     Lead: 'lead'
 } as const;
-export type PublicResearcherRoleEnum = typeof PublicResearcherRoleEnum[keyof typeof PublicResearcherRoleEnum];
+export type BaseResearcherRoleEnum = typeof BaseResearcherRoleEnum[keyof typeof BaseResearcherRoleEnum];
 
 
 /**
- * Check if a given object implements the PublicResearcher interface.
+ * Check if a given object implements the BaseResearcher interface.
  */
-export function instanceOfPublicResearcher(value: object): boolean {
+export function instanceOfBaseResearcher(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function PublicResearcherFromJSON(json: any): PublicResearcher {
-    return PublicResearcherFromJSONTyped(json, false);
+export function BaseResearcherFromJSON(json: any): BaseResearcher {
+    return BaseResearcherFromJSONTyped(json, false);
 }
 
-export function PublicResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean): PublicResearcher {
+export function BaseResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean): BaseResearcher {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -118,7 +118,7 @@ export function PublicResearcherFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-export function PublicResearcherToJSON(value?: PublicResearcher | null): any {
+export function BaseResearcherToJSON(value?: BaseResearcher | null): any {
     if (value === undefined) {
         return undefined;
     }

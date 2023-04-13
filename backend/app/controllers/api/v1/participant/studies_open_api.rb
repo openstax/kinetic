@@ -40,25 +40,7 @@ class Api::V1::Participant::StudiesOpenApi
       end
     end
 
-    schema :PublicResearcher do
-      property :first_name do
-        key :type, :string
-        key :description, 'The researcher\'s first name.'
-      end
-      property :last_name do
-        key :type, :string
-        key :description, 'The researcher\'s last name.'
-      end
-      property :institution do
-        key :type, :string
-        key :description, 'The researcher\'s institution.'
-      end
-      property :bio do
-        key :type, :string
-        key :description, 'The researcher\'s bio.'
-      end
-    end
-
+    # TODO Add stage info to this
     schema :ParticipantStudyStage do
       property :order do
         key :type, :integer
@@ -82,7 +64,7 @@ class Api::V1::Participant::StudiesOpenApi
       end
       property :is_completed do
         key :type, :boolean
-        key :description, 'Has the stage been launched'
+        key :description, 'Has the stage been completed'
         key :readOnly, true
       end
       property :is_launchable do
@@ -99,6 +81,33 @@ class Api::V1::Participant::StudiesOpenApi
         key :type, :integer
         key :description, 'How many points the stage is worth'
         key :readOnly, true
+      end
+      property :opens_at do
+        key :type, :string
+        key :nullable, true
+        key :format, 'date-time'
+        key :description, 'When the stage opens for participation; null means not open.'
+      end
+      property :closes_at do
+        key :type, :string
+        key :nullable, true
+        key :format, 'date-time'
+        key :description, 'When the stage closes for participation; null means does not close.'
+      end
+      property :feedback_types do
+        key :type, :array
+        key :minLength, 0
+        key :items, { 'type' => 'string' }
+        key :description, 'Feedback types for this stage'
+      end
+      property :target_sample_size do
+        key :type, :number
+        key :description, 'Desired sample size set by researcher'
+      end
+      property :status do
+        key :type, :string
+        key :description, 'Status of the study'
+        key :enum, %w[active paused scheduled draft waiting_period ready_for_launch completed]
       end
     end
     schema :ParticipantStudies do

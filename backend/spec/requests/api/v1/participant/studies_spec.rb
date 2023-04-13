@@ -4,20 +4,21 @@ require 'rails_helper'
 
 RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
 
-  let!(:closed_study) { create(:study, num_stages: 2, closes_at: 1.day.ago) }
+  let!(:closed_study) { create(:study, title: 'closed study', stages: [create(:stage, opens_at: 10.days.ago, closes_at: 3.days.ago)]) }
 
-  let!(:study1) { create(:study, num_stages: 2) }
+  let!(:study1) { create(:study, title: 'study 1', num_stages: 2) }
   let(:stage1a) { study1.stages.order(:order)[0] }
   let(:stage1b) { study1.stages.order(:order)[1] }
 
-  let!(:study2) { create(:study, num_stages: 2) }
+  let!(:study2) { create(:study, title: 'study 2', num_stages: 2) }
   let(:stage2a) { study2.stages.order(:order)[0] }
   let(:stage2b) { study2.stages.order(:order)[1] }
 
-  let!(:study3) { create(:study, num_stages: 1) }
+  let!(:study3) { create(:study, title: 'study 3', num_stages: 1) }
   let(:stage3a) { study3.stages.order(:order)[0] }
 
   let(:user1_id) { SecureRandom.uuid }
+  let(:user1) {User.new(user1_id)}
 
   let(:user1_study1_launch_pad) { LaunchPad.new(study_id: study1.id, user_id: user1_id) }
   let(:user1_study2_launch_pad) { LaunchPad.new(study_id: study2.id, user_id: user1_id) }
@@ -48,9 +49,8 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
         expect(response).to have_http_status(:success)
         expect(response_hash).to match a_hash_including(
           id: study2.id,
-          title: study2.title_for_participants,
+          title_for_participants: study2.title_for_participants,
           short_description: study2.short_description,
-          tags: study2.tags,
           researchers: a_collection_containing_exactly(
             a_hash_including({
               first_name: study2.researchers.first.first_name,
@@ -101,9 +101,8 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
         expect(response_hash[:data]).to match a_collection_containing_exactly(
           a_hash_including(
             id: study1.id,
-            title: study1.title_for_participants,
+            title_for_participants: study1.title_for_participants,
             short_description: study1.short_description,
-            tags: study1.tags,
             popularity_rating: a_value_within(0.1).of(0.0),
             researchers: a_collection_containing_exactly(
               a_hash_including({
@@ -115,18 +114,17 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
           ),
           a_hash_including(
             id: study2.id,
-            title: study2.title_for_participants,
+            title_for_participants: study2.title_for_participants,
             short_description: study2.short_description,
             popularity_rating: a_value_within(0.1).of(0.33),
-            tags: study2.tags,
+            first_launched_at: kind_of(String),
             researchers: a_collection_containing_exactly(
               a_hash_including({
-                first_name: study2.researchers.first.first_name,
+                first_name: kind_of(String),
                 institution: kind_of(String),
                 bio: kind_of(String)
               })
             ),
-            first_launched_at: kind_of(String)
           ),
           a_hash_including(
             id: study3.id,
@@ -166,7 +164,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
       end
 
       it 'launches next stage for a multi-part' do
-        stage1a.launch_by_user!(User.new(user1_id)).completed!
+        stage1a.launch_by_user!(user1).completed!
 
         api_put "participant/studies/#{study1.id}/launch"
         expect(response).to have_http_status(:success)
@@ -194,12 +192,12 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
       before { stub_current_user(user1_id) }
 
       it 'returns completion status for a multistage study' do
-        stage1a.launch_by_user!(User.new(user1_id))
+        stage1a.launch_by_user!(user1)
         # expect_any_instance_of(LaunchPad).to receive(:land)
         api_put "participant/studies/#{study1.id}/land"
         expect(response_hash[:completed_at]).to be_nil
 
-        stage1b.launch_by_user!(User.new(user1_id))
+        stage1b.launch_by_user!(user1)
         Timecop.freeze do
           api_put "participant/studies/#{study1.id}/land"
           expect(response_hash[:completed_at]).not_to be_nil

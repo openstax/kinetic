@@ -36,7 +36,7 @@ class Api::V1::Researcher::StagesOpenApi
     end
   end
 
-  add_properties(:Stage, :StageUpdate) do
+  add_properties(:Stage) do
     property :id do
       key :type, :integer
       key :description, 'The study ID.'
@@ -64,7 +64,7 @@ class Api::V1::Researcher::StagesOpenApi
     end
     property :is_completed do
       key :type, :boolean
-      key :description, 'Has the stage been launched'
+      key :description, 'Has the stage been completed'
       key :readOnly, true
     end
     property :is_launchable do
@@ -77,13 +77,13 @@ class Api::V1::Researcher::StagesOpenApi
       key :description,  'The configuration for a particular kind of stage, e.g. Qualtrics.  ' \
                          'See `QualtricsStage`'
     end
-    property :points do
-      key :type, :number
-      key :description, 'How many points the stage is worth'
-    end
     property :duration_minutes do
       key :type, :number
       key :description, 'How long the stage is (in minutes)'
+    end
+    property :points do
+      key :type, :number
+      key :description, 'How many points the stage is worth'
     end
     property :opens_at do
       key :type, :string
@@ -102,6 +102,15 @@ class Api::V1::Researcher::StagesOpenApi
       key :minLength, 0
       key :items, { 'type' => 'string' }
       key :description, 'Feedback types for this stage'
+    end
+    property :target_sample_size do
+      key :type, :number
+      key :description, 'Desired sample size set by researcher'
+    end
+    property :status do
+      key :type, :string
+      key :description, 'Status of the stage'
+      key :enum, %w[active paused scheduled draft waiting_period ready_for_launch completed]
     end
   end
 

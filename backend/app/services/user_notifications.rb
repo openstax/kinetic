@@ -67,8 +67,10 @@ class UserNotifications
     # GIVEN the user has opted-in to receive new available studies email
     # WHEN a new study/studies becomes available on the learner dashboard
     def deliver_new_studies
-      studies = Study.where(opens_at: yesterday).or(Study.where(opens_at: nil,
-                                                                created_at: yesterday))
+      studies = Study.joins(:stages)
+                     .where(stages: {opens_at: yesterday})
+                     .or(Study.where(created_at: yesterday))
+
       return unless studies.any?
 
       users = users_with_emails_for('new_studies')

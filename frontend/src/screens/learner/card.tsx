@@ -1,11 +1,13 @@
-import { cx, React, useCallback } from '@common'
+import { cx, React, useCallback, useState } from '@common'
 import { Box, Icon, MultiSessionBar } from '@components'
 import { useIsMobileDevice } from '@lib'
-import { EditingStudy, studyIsMultipart } from '@models'
+import { EditingStudy, getStudyDuration, getStudyPoints, studyHasFeedback, studyIsMultipart } from '@models'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
 import { getImageUrl } from '../../components/study-card-images/card-images';
+import { Button } from '@nathanstitt/sundry';
+import { StudyDetailsPreview } from './details';
 
 interface StudyCardProps {
     study: ParticipantStudy
@@ -68,7 +70,7 @@ const Researcher: React.FC<StudyCardProps> = ({ study }) => {
 }
 
 const Feedback: React.FC<StudyCardProps> = ({ study }) => {
-    if (!study.feedbackDescription) return <span />
+    if (!studyHasFeedback(study)) return <span />
 
     return (
         <Box align='center' gap>
@@ -144,12 +146,13 @@ const MultiSessionFlag: FC<StudyCardProps> = ({ study }) => {
 }
 
 const FeedbackMultiSessionContainer: FC<StudyCardProps> = ({ study }) => {
-    if (!study.feedbackDescription && !studyIsMultipart(study)) {
+    const isMobile = useIsMobileDevice();
+
+    if (!studyHasFeedback(study) && !studyIsMultipart(study)) {
         return (
             <Box margin={{ top: 'default', bottom: 'default' }}></Box>
         )
     }
-    const isMobile = useIsMobileDevice();
 
     return (
         <Box
@@ -175,12 +178,9 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
                 <Tag tag={study.studySubject} />
             </Box>
             <Box>
-                {!!study.totalDuration && <div>
-                    {studyIsMultipart(study) && <span>*Total: </span>}
-                    {study.totalDuration}min
-                </div>}
-
-                {!!study.totalPoints && <span>&nbsp;&middot; {study.totalPoints}pts</span>}
+                <span>{getStudyDuration(study)} min</span>
+                &nbsp;&middot;
+                <span>{getStudyPoints(study)} pts</span>
             </Box>
         </Box>
     )
@@ -237,9 +237,22 @@ const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
 }
 
 export const StudyCardPreview: FC<{study: EditingStudy}> = ({ study }) => {
+    const [showDetails, setShowDetails] = useState<boolean>(false)
     return (
         <Card className="col study" direction='column'>
             <CardContent study={study as ParticipantStudy} />
+            <Button
+                className='btn-researcher-secondary justify-content-center mt-3'
+                onClick={() => {setShowDetails(true)}}
+            >
+                Preview Study Detail
+            </Button>
+            <StudyDetailsPreview
+                study={study as ParticipantStudy}
+                show={showDetails}
+                onHide={() => setShowDetails(false)}
+                preview={true}
+            />
         </Card>
     )
 }

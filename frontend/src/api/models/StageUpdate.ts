@@ -20,12 +20,6 @@ import { exists, mapValues } from '../runtime';
  */
 export interface StageUpdate {
     /**
-     * The study ID.
-     * @type {number}
-     * @memberof StageUpdate
-     */
-    readonly id: number;
-    /**
      * An integer that describes the sort order for this stage
      * @type {number}
      * @memberof StageUpdate
@@ -50,7 +44,7 @@ export interface StageUpdate {
      */
     availableAfterDays?: number;
     /**
-     * Has the stage been launched
+     * Has the stage been completed
      * @type {boolean}
      * @memberof StageUpdate
      */
@@ -68,17 +62,17 @@ export interface StageUpdate {
      */
     config: object;
     /**
-     * How many points the stage is worth
-     * @type {number}
-     * @memberof StageUpdate
-     */
-    points?: number;
-    /**
      * How long the stage is (in minutes)
      * @type {number}
      * @memberof StageUpdate
      */
     durationMinutes?: number;
+    /**
+     * How many points the stage is worth
+     * @type {number}
+     * @memberof StageUpdate
+     */
+    points?: number;
     /**
      * When the stage opens for participation; null means not open.
      * @type {Date}
@@ -97,14 +91,41 @@ export interface StageUpdate {
      * @memberof StageUpdate
      */
     feedbackTypes?: Array<string>;
+    /**
+     * Desired sample size set by researcher
+     * @type {number}
+     * @memberof StageUpdate
+     */
+    targetSampleSize?: number;
+    /**
+     * Status of the stage
+     * @type {string}
+     * @memberof StageUpdate
+     */
+    status?: StageUpdateStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const StageUpdateStatusEnum = {
+    Active: 'active',
+    Paused: 'paused',
+    Scheduled: 'scheduled',
+    Draft: 'draft',
+    WaitingPeriod: 'waiting_period',
+    ReadyForLaunch: 'ready_for_launch',
+    Completed: 'completed'
+} as const;
+export type StageUpdateStatusEnum = typeof StageUpdateStatusEnum[keyof typeof StageUpdateStatusEnum];
+
 
 /**
  * Check if a given object implements the StageUpdate interface.
  */
 export function instanceOfStageUpdate(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "id" in value;
     isInstance = isInstance && "config" in value;
 
     return isInstance;
@@ -120,7 +141,6 @@ export function StageUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'id': json['id'],
         'order': !exists(json, 'order') ? undefined : json['order'],
         'title': !exists(json, 'title') ? undefined : json['title'],
         'description': !exists(json, 'description') ? undefined : json['description'],
@@ -128,11 +148,13 @@ export function StageUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'isCompleted': !exists(json, 'is_completed') ? undefined : json['is_completed'],
         'isLaunchable': !exists(json, 'is_launchable') ? undefined : json['is_launchable'],
         'config': json['config'],
-        'points': !exists(json, 'points') ? undefined : json['points'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
+        'points': !exists(json, 'points') ? undefined : json['points'],
         'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'feedbackTypes': !exists(json, 'feedback_types') ? undefined : json['feedback_types'],
+        'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
     };
 }
 
@@ -149,11 +171,13 @@ export function StageUpdateToJSON(value?: StageUpdate | null): any {
         'description': value.description,
         'available_after_days': value.availableAfterDays,
         'config': value.config,
-        'points': value.points,
         'duration_minutes': value.durationMinutes,
+        'points': value.points,
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'feedback_types': value.feedbackTypes,
+        'target_sample_size': value.targetSampleSize,
+        'status': value.status,
     };
 }
 

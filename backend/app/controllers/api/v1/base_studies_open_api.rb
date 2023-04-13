@@ -8,7 +8,6 @@ class Api::V1::BaseStudiesOpenApi
       property :title_for_participants do
         key :type, :string
         key :description, 'The study name that participants see.'
-        key :minLength, 1
       end
       property :title_for_researchers do
         key :type, :string
@@ -26,15 +25,7 @@ class Api::V1::BaseStudiesOpenApi
       property :internal_description do
         key :type, :string
         key :description, 'An internal study description for researchers.'
-      end
-      property :tags do
-        key :type, :array
-        key :items, { 'type' => 'string' }
-        key :description, 'The tags of the study object, used for grouping and filtering.'
-      end
-      property :feedback_description do
-        key :type, :string
-        key :description, 'Description of feedback displayed to the user upon study completion'
+        key :minLength, 1
       end
       property :image_id do
         key :type, :string
@@ -47,18 +38,6 @@ class Api::V1::BaseStudiesOpenApi
       property :is_hidden do
         key :type, :boolean
         key :description, 'Is the study hidden from participants'
-      end
-      property :opens_at do
-        key :type, :string
-        key :nullable, true
-        key :format, 'date-time'
-        key :description, 'When the study opens for participation; null means not open.'
-      end
-      property :closes_at do
-        key :type, :string
-        key :nullable, true
-        key :format, 'date-time'
-        key :description, 'When the study closes for participation; null means does not close.'
       end
       property :first_launched_at do
         key :type, :string
@@ -75,11 +54,6 @@ class Api::V1::BaseStudiesOpenApi
       property :is_mandatory do
         key :type, :boolean
         key :description, 'Mandatory studies must be completed by all users'
-      end
-      property :status do
-        key :type, :string
-        key :description, 'Status of the study'
-        key :enum, %w[active paused scheduled draft completed]
       end
       property :view_count do
         key :type, :number
@@ -108,10 +82,6 @@ class Api::V1::BaseStudiesOpenApi
         items do
           key :$ref, :Stage
         end
-      end
-      property :target_sample_size do
-        key :type, :number
-        key :description, 'Desired sample size set by researcher'
       end
       property :launched_count do
         key :type, :number

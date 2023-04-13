@@ -4,10 +4,71 @@ class Api::V1::ResearchersOpenApi
   include OpenStax::OpenApi::Blocks
 
   openapi_component do
-    schema :ResearcherUpdate
+    schema :BaseResearcher do
+      property :first_name do
+        key :type, :string
+        key :description, 'The researcher\'s first name.'
+      end
+      property :last_name do
+        key :type, :string
+        key :description, 'The researcher\'s last name.'
+      end
+      property :institution do
+        key :type, :string
+        key :description, 'The researcher\'s institution.'
+      end
+      property :bio do
+        key :type, :string
+        key :description, 'The researcher\'s bio.'
+      end
+      property :lab_page do
+        key :type, :string
+        key :description, 'The researcher\'s lab page.'
+      end
+      property :research_interest1 do
+        key :type, :string
+        key :description, 'The researcher\'s interest (1).'
+      end
+      property :research_interest2 do
+        key :type, :string
+        key :description, 'The researcher\'s interest (2).'
+      end
+      property :research_interest3 do
+        key :type, :string
+        key :description, 'The researcher\'s interest (3).'
+      end
+      property :role do
+        key :type, :string
+        key :description, 'Researchers role'
+        key :enum, %w[member pi lead]
+      end
+    end
+
+    schema :ResearcherUpdate do
+      allOf do
+        schema do
+          key :$ref, :BaseResearcher
+        end
+      end
+    end
+
     schema :Researcher do
       key :required, [:id]
+      allOf do
+        schema do
+          key :$ref, :BaseResearcher
+        end
+      end
     end
+
+    schema :PublicResearcher do
+      allOf do
+        schema do
+          key :$ref, :BaseResearcher
+        end
+      end
+    end
+
     schema :AvatarUpload do
       property :avatar do
         key :type, :string
@@ -15,6 +76,7 @@ class Api::V1::ResearchersOpenApi
         key :description, 'The researcher\'s avatar.'
       end
     end
+
     schema :ResearchersList do
       property :data do
         key :type, :array
@@ -24,6 +86,7 @@ class Api::V1::ResearchersOpenApi
         end
       end
     end
+
   end
 
   add_properties(:Researcher, :ResearcherUpdate) do
@@ -36,51 +99,10 @@ class Api::V1::ResearchersOpenApi
       key :format, 'uuid'
       key :description, 'The researcher\'s user ID.'
     end
-    property :first_name do
-      key :type, :string
-      key :description, 'The researcher\'s first name.'
-    end
-    property :last_name do
-      key :type, :string
-      key :description, 'The researcher\'s last name.'
-    end
     property :avatar_url do
       key :type, :string
       key :description, 'The researcher\'s avatar URL.'
       key :readOnly, true
-    end
-    property :institution do
-      key :type, :string
-      key :description, 'The researcher\'s institution.'
-    end
-    property :bio do
-      key :type, :string
-      key :description, 'The researcher\'s bio.'
-    end
-    property :lab_page do
-      key :type, :string
-      key :description, 'The researcher\'s lab page.'
-    end
-    property :research_interest1 do
-      key :type, :string
-      key :description, 'The researcher\'s interest (1).'
-    end
-    property :research_interest2 do
-      key :type, :string
-      key :description, 'The researcher\'s interest (2).'
-    end
-    property :research_interest3 do
-      key :type, :string
-      key :description, 'The researcher\'s interest (3).'
-    end
-    property :invite_code do
-      key :type, :string
-      key :description, 'The researcher\'s invite code.'
-    end
-    property :role do
-      key :type, :string
-      key :description, 'Researchers role'
-      key :enum, %w[member pi lead]
     end
   end
 

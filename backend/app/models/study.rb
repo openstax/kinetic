@@ -11,47 +11,24 @@ class Study < ApplicationRecord
   has_many :study_analysis
   has_many :analysis, through: :study_analysis
 
-  has_one  :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
+  has_one :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
 
   scope :multi_stage, -> { joins(:stages).group('studies.id').having('count(study_id) > 1') }
 
   # Delete researchers to avoid them complaining about not leaving a researcher undeleted
   before_destroy(prepend: true) { study_researchers.delete_all }
 
-  accepts_nested_attributes_for :stages
-
-  enum status: [:draft, :active, :paused, :scheduled, :completed], _default: 'draft'
-
   # https://gorails.com/blog/activerecord-merge
   scope :available, -> {
-    joins(:stages).where(is_hidden: false).merge(Stage.available)
+    joins(:stages).group('studies.id').where(is_hidden: false).merge(Stage.available)
   }
 
+  def opens_at
+    stages.first.opens_at
+  end
+
   def study_status
-    if is_draft
-      'draft'
-    elsif status == 'paused'
-      'paused'
-    elsif is_completed
-      'completed'
-    elsif is_scheduled
-      'scheduled'
-    else
-      status
-    end
-  end
-
-  def is_draft
-    opens_at.nil? && status == 'draft'
-  end
-
-  def is_completed
-    # Add sample size check to completed once the user can populate that data
-    !closes_at.nil? && (status == 'active' && closes_at < DateTime.now)
-  end
-
-  def is_scheduled
-    !opens_at.nil? && opens_at > DateTime.now
+    stages.first.status
   end
 
   def total_points

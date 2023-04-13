@@ -44,7 +44,7 @@ export interface NewStage {
      */
     availableAfterDays?: number;
     /**
-     * Has the stage been launched
+     * Has the stage been completed
      * @type {boolean}
      * @memberof NewStage
      */
@@ -62,17 +62,17 @@ export interface NewStage {
      */
     config: object;
     /**
-     * How many points the stage is worth
-     * @type {number}
-     * @memberof NewStage
-     */
-    points?: number;
-    /**
      * How long the stage is (in minutes)
      * @type {number}
      * @memberof NewStage
      */
     durationMinutes?: number;
+    /**
+     * How many points the stage is worth
+     * @type {number}
+     * @memberof NewStage
+     */
+    points?: number;
     /**
      * When the stage opens for participation; null means not open.
      * @type {Date}
@@ -91,7 +91,35 @@ export interface NewStage {
      * @memberof NewStage
      */
     feedbackTypes?: Array<string>;
+    /**
+     * Desired sample size set by researcher
+     * @type {number}
+     * @memberof NewStage
+     */
+    targetSampleSize?: number;
+    /**
+     * Status of the stage
+     * @type {string}
+     * @memberof NewStage
+     */
+    status?: NewStageStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const NewStageStatusEnum = {
+    Active: 'active',
+    Paused: 'paused',
+    Scheduled: 'scheduled',
+    Draft: 'draft',
+    WaitingPeriod: 'waiting_period',
+    ReadyForLaunch: 'ready_for_launch',
+    Completed: 'completed'
+} as const;
+export type NewStageStatusEnum = typeof NewStageStatusEnum[keyof typeof NewStageStatusEnum];
+
 
 /**
  * Check if a given object implements the NewStage interface.
@@ -120,11 +148,13 @@ export function NewStageFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'isCompleted': !exists(json, 'is_completed') ? undefined : json['is_completed'],
         'isLaunchable': !exists(json, 'is_launchable') ? undefined : json['is_launchable'],
         'config': json['config'],
-        'points': !exists(json, 'points') ? undefined : json['points'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
+        'points': !exists(json, 'points') ? undefined : json['points'],
         'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'feedbackTypes': !exists(json, 'feedback_types') ? undefined : json['feedback_types'],
+        'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
     };
 }
 
@@ -141,11 +171,13 @@ export function NewStageToJSON(value?: NewStage | null): any {
         'description': value.description,
         'available_after_days': value.availableAfterDays,
         'config': value.config,
-        'points': value.points,
         'duration_minutes': value.durationMinutes,
+        'points': value.points,
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'feedback_types': value.feedbackTypes,
+        'target_sample_size': value.targetSampleSize,
+        'status': value.status,
     };
 }
 

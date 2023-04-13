@@ -2,6 +2,7 @@ import * as Yup from 'yup'
 import { DefaultApi, NewStudy, ParticipantStudy, Study } from '@api'
 import { dayjs, isNil, useApi } from '@lib'
 import { useEffect, useState } from '@common';
+import { first, sumBy } from 'lodash-es';
 
 export type EditingStudy = NewStudy | Study
 export type SavedStudy = Study | ParticipantStudy
@@ -44,7 +45,7 @@ const areStudyStagesLaunchable = (study: ParticipantStudy) => {
 export const isStudyLaunchable = (study: ParticipantStudy) => {
     return Boolean(
         !study.completedAt
-        && (!study.closesAt || dayjs(study.closesAt).isAfter(dayjs()))
+        // && (!study.closesAt || dayjs(study.closesAt).isAfter(dayjs()))
         && areStudyStagesLaunchable(study)
     )
 }
@@ -63,6 +64,37 @@ export function isParticipantStudy(study?: any): study is ParticipantStudy {
 
 export function studyIsMultipart(study: ParticipantStudy): boolean {
     return Boolean(study.stages && study.stages.length > 1)
+}
+
+export function studyHasFeedback(study: ParticipantStudy): boolean {
+    if (!study.stages) {
+        return false
+    }
+    return study.stages.some(stage => stage.feedbackTypes && stage.feedbackTypes.length > 0)
+}
+
+export function getStudyPoints(study: ParticipantStudy): number {
+    if (!study.stages) return 0
+
+    return sumBy(study.stages, 'points')
+}
+
+export function getStudyDuration(study: ParticipantStudy): number {
+    if (!study.stages) return 0
+
+    return sumBy(study.stages, 'durationMinutes')
+}
+
+export function getOpensAt(study: Study): Date | null {
+    const firstStage = first(study.stages)
+    if (!firstStage || !firstStage.opensAt) return null
+    return firstStage.opensAt
+}
+
+export function getClosesAt(study: Study): Date | null {
+    const firstStage = first(study.stages)
+    if (!firstStage || !firstStage.closesAt) return null
+    return firstStage.closesAt
 }
 
 export const useFetchStudies = () => {

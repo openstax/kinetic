@@ -32,6 +32,12 @@ export interface Researcher {
      */
     userId?: string;
     /**
+     * The researcher's avatar URL.
+     * @type {string}
+     * @memberof Researcher
+     */
+    readonly avatarUrl?: string;
+    /**
      * The researcher's first name.
      * @type {string}
      * @memberof Researcher
@@ -43,12 +49,6 @@ export interface Researcher {
      * @memberof Researcher
      */
     lastName?: string;
-    /**
-     * The researcher's avatar URL.
-     * @type {string}
-     * @memberof Researcher
-     */
-    readonly avatarUrl?: string;
     /**
      * The researcher's institution.
      * @type {string}
@@ -85,12 +85,6 @@ export interface Researcher {
      * @memberof Researcher
      */
     researchInterest3?: string;
-    /**
-     * The researcher's invite code.
-     * @type {string}
-     * @memberof Researcher
-     */
-    inviteCode?: string;
     /**
      * Researchers role
      * @type {string}
@@ -133,16 +127,15 @@ export function ResearcherFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         
         'id': json['id'],
         'userId': !exists(json, 'user_id') ? undefined : json['user_id'],
+        'avatarUrl': !exists(json, 'avatar_url') ? undefined : json['avatar_url'],
         'firstName': !exists(json, 'first_name') ? undefined : json['first_name'],
         'lastName': !exists(json, 'last_name') ? undefined : json['last_name'],
-        'avatarUrl': !exists(json, 'avatar_url') ? undefined : json['avatar_url'],
         'institution': !exists(json, 'institution') ? undefined : json['institution'],
         'bio': !exists(json, 'bio') ? undefined : json['bio'],
         'labPage': !exists(json, 'lab_page') ? undefined : json['lab_page'],
         'researchInterest1': !exists(json, 'research_interest1') ? undefined : json['research_interest1'],
         'researchInterest2': !exists(json, 'research_interest2') ? undefined : json['research_interest2'],
         'researchInterest3': !exists(json, 'research_interest3') ? undefined : json['research_interest3'],
-        'inviteCode': !exists(json, 'invite_code') ? undefined : json['invite_code'],
         'role': !exists(json, 'role') ? undefined : json['role'],
     };
 }
@@ -166,7 +159,6 @@ export function ResearcherToJSON(value?: Researcher | null): any {
         'research_interest1': value.researchInterest1,
         'research_interest2': value.researchInterest2,
         'research_interest3': value.researchInterest3,
-        'invite_code': value.inviteCode,
         'role': value.role,
     };
 }

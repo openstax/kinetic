@@ -259,7 +259,6 @@ function EditStudy() {
             //     isMandatory: false,
             //     shortDescription: '',
             //     longDescription: '',
-            //     tags: [],
             // })
             setTimeout(() => { document.querySelector<HTMLInputElement>('#participants-title')?.focus() }, 100)
             return

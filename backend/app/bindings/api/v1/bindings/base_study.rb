@@ -30,12 +30,6 @@ module Api::V1::Bindings
     # An internal study description for researchers.
     attr_accessor :internal_description
 
-    # The tags of the study object, used for grouping and filtering.
-    attr_accessor :tags
-
-    # Description of feedback displayed to the user upon study completion
-    attr_accessor :feedback_description
-
     # Freeform id of image that should be displayed on study card
     attr_accessor :image_id
 
@@ -45,12 +39,6 @@ module Api::V1::Bindings
     # Is the study hidden from participants
     attr_accessor :is_hidden
 
-    # When the study opens for participation; null means not open.
-    attr_accessor :opens_at
-
-    # When the study closes for participation; null means does not close.
-    attr_accessor :closes_at
-
     # When the study was launched; null means not launched
     attr_accessor :first_launched_at
 
@@ -59,9 +47,6 @@ module Api::V1::Bindings
 
     # Mandatory studies must be completed by all users
     attr_accessor :is_mandatory
-
-    # Status of the study
-    attr_accessor :status
 
     # How many times the study has been viewed
     attr_accessor :view_count
@@ -78,39 +63,17 @@ module Api::V1::Bindings
     # The study's subject
     attr_accessor :study_subject
 
+    # The study's status
+    attr_accessor :status
+
     # The study's stages.
     attr_accessor :stages
-
-    # Desired sample size set by researcher
-    attr_accessor :target_sample_size
 
     # How many times the study has been launched
     attr_accessor :launched_count
 
     # The URL to which stages should return after completing
     attr_accessor :return_url
-
-    class EnumAttributeValidator
-      attr_reader :datatype
-      attr_reader :allowable_values
-
-      def initialize(datatype, allowable_values)
-        @allowable_values = allowable_values.map do |value|
-          case datatype.to_s
-          when /Integer/i
-            value.to_i
-          when /Float/i
-            value.to_f
-          else
-            value
-          end
-        end
-      end
-
-      def valid?(value)
-        !value || allowable_values.include?(value)
-      end
-    end
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -120,24 +83,19 @@ module Api::V1::Bindings
         :'short_description' => :'short_description',
         :'long_description' => :'long_description',
         :'internal_description' => :'internal_description',
-        :'tags' => :'tags',
-        :'feedback_description' => :'feedback_description',
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
         :'is_hidden' => :'is_hidden',
-        :'opens_at' => :'opens_at',
-        :'closes_at' => :'closes_at',
         :'first_launched_at' => :'first_launched_at',
         :'researchers' => :'researchers',
         :'is_mandatory' => :'is_mandatory',
-        :'status' => :'status',
         :'view_count' => :'view_count',
         :'completed_count' => :'completed_count',
         :'study_type' => :'study_type',
         :'study_topic' => :'study_topic',
         :'study_subject' => :'study_subject',
+        :'status' => :'status',
         :'stages' => :'stages',
-        :'target_sample_size' => :'target_sample_size',
         :'launched_count' => :'launched_count',
         :'return_url' => :'return_url'
       }
@@ -156,24 +114,19 @@ module Api::V1::Bindings
         :'short_description' => :'String',
         :'long_description' => :'String',
         :'internal_description' => :'String',
-        :'tags' => :'Array<String>',
-        :'feedback_description' => :'String',
         :'image_id' => :'String',
         :'benefits' => :'String',
         :'is_hidden' => :'Boolean',
-        :'opens_at' => :'Time',
-        :'closes_at' => :'Time',
         :'first_launched_at' => :'Time',
         :'researchers' => :'Array<Researcher>',
         :'is_mandatory' => :'Boolean',
-        :'status' => :'String',
         :'view_count' => :'Float',
         :'completed_count' => :'Float',
         :'study_type' => :'String',
         :'study_topic' => :'String',
         :'study_subject' => :'String',
+        :'status' => :'String',
         :'stages' => :'Array<Stage>',
-        :'target_sample_size' => :'Float',
         :'launched_count' => :'Float',
         :'return_url' => :'String'
       }
@@ -182,8 +135,6 @@ module Api::V1::Bindings
     # List of attributes with nullable: true
     def self.openapi_nullable
       Set.new([
-        :'opens_at',
-        :'closes_at',
       ])
     end
 
@@ -222,16 +173,6 @@ module Api::V1::Bindings
         self.internal_description = attributes[:'internal_description']
       end
 
-      if attributes.key?(:'tags')
-        if (value = attributes[:'tags']).is_a?(Array)
-          self.tags = value
-        end
-      end
-
-      if attributes.key?(:'feedback_description')
-        self.feedback_description = attributes[:'feedback_description']
-      end
-
       if attributes.key?(:'image_id')
         self.image_id = attributes[:'image_id']
       end
@@ -242,14 +183,6 @@ module Api::V1::Bindings
 
       if attributes.key?(:'is_hidden')
         self.is_hidden = attributes[:'is_hidden']
-      end
-
-      if attributes.key?(:'opens_at')
-        self.opens_at = attributes[:'opens_at']
-      end
-
-      if attributes.key?(:'closes_at')
-        self.closes_at = attributes[:'closes_at']
       end
 
       if attributes.key?(:'first_launched_at')
@@ -264,10 +197,6 @@ module Api::V1::Bindings
 
       if attributes.key?(:'is_mandatory')
         self.is_mandatory = attributes[:'is_mandatory']
-      end
-
-      if attributes.key?(:'status')
-        self.status = attributes[:'status']
       end
 
       if attributes.key?(:'view_count')
@@ -290,14 +219,14 @@ module Api::V1::Bindings
         self.study_subject = attributes[:'study_subject']
       end
 
+      if attributes.key?(:'status')
+        self.status = attributes[:'status']
+      end
+
       if attributes.key?(:'stages')
         if (value = attributes[:'stages']).is_a?(Array)
           self.stages = value
         end
-      end
-
-      if attributes.key?(:'target_sample_size')
-        self.target_sample_size = attributes[:'target_sample_size']
       end
 
       if attributes.key?(:'launched_count')
@@ -313,12 +242,12 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if !@title_for_participants.nil? && @title_for_participants.to_s.length < 1
-        invalid_properties.push('invalid value for "title_for_participants", the character length must be great than or equal to 1.')
-      end
-
       if !@title_for_researchers.nil? && @title_for_researchers.to_s.length < 1
         invalid_properties.push('invalid value for "title_for_researchers", the character length must be great than or equal to 1.')
+      end
+
+      if !@internal_description.nil? && @internal_description.to_s.length < 1
+        invalid_properties.push('invalid value for "internal_description", the character length must be great than or equal to 1.')
       end
 
       invalid_properties
@@ -327,21 +256,9 @@ module Api::V1::Bindings
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if !@title_for_participants.nil? && @title_for_participants.to_s.length < 1
       return false if !@title_for_researchers.nil? && @title_for_researchers.to_s.length < 1
-      status_validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "completed"])
-      return false unless status_validator.valid?(@status)
+      return false if !@internal_description.nil? && @internal_description.to_s.length < 1
       true
-    end
-
-    # Custom attribute writer method with validation
-    # @param [Object] title_for_participants Value to be assigned
-    def title_for_participants=(title_for_participants)
-      if !title_for_participants.nil? && title_for_participants.to_s.length < 1
-        fail ArgumentError, 'invalid value for "title_for_participants", the character length must be great than or equal to 1.'
-      end
-
-      @title_for_participants = title_for_participants
     end
 
     # Custom attribute writer method with validation
@@ -354,14 +271,14 @@ module Api::V1::Bindings
       @title_for_researchers = title_for_researchers
     end
 
-    # Custom attribute writer method checking allowed values (enum).
-    # @param [Object] status Object to be assigned
-    def status=(status)
-      validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "completed"])
-      unless validator.valid?(status)
-        fail ArgumentError, "invalid value for \"status\", must be one of #{validator.allowable_values}."
+    # Custom attribute writer method with validation
+    # @param [Object] internal_description Value to be assigned
+    def internal_description=(internal_description)
+      if !internal_description.nil? && internal_description.to_s.length < 1
+        fail ArgumentError, 'invalid value for "internal_description", the character length must be great than or equal to 1.'
       end
-      @status = status
+
+      @internal_description = internal_description
     end
 
     # Checks equality by comparing each attribute.
@@ -374,24 +291,19 @@ module Api::V1::Bindings
           short_description == o.short_description &&
           long_description == o.long_description &&
           internal_description == o.internal_description &&
-          tags == o.tags &&
-          feedback_description == o.feedback_description &&
           image_id == o.image_id &&
           benefits == o.benefits &&
           is_hidden == o.is_hidden &&
-          opens_at == o.opens_at &&
-          closes_at == o.closes_at &&
           first_launched_at == o.first_launched_at &&
           researchers == o.researchers &&
           is_mandatory == o.is_mandatory &&
-          status == o.status &&
           view_count == o.view_count &&
           completed_count == o.completed_count &&
           study_type == o.study_type &&
           study_topic == o.study_topic &&
           study_subject == o.study_subject &&
+          status == o.status &&
           stages == o.stages &&
-          target_sample_size == o.target_sample_size &&
           launched_count == o.launched_count &&
           return_url == o.return_url
     end
@@ -405,7 +317,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [title_for_participants, title_for_researchers, short_description, long_description, internal_description, tags, feedback_description, image_id, benefits, is_hidden, opens_at, closes_at, first_launched_at, researchers, is_mandatory, status, view_count, completed_count, study_type, study_topic, study_subject, stages, target_sample_size, launched_count, return_url].hash
+      [title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, researchers, is_mandatory, view_count, completed_count, study_type, study_topic, study_subject, status, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

@@ -50,7 +50,7 @@ export interface Stage {
      */
     availableAfterDays?: number;
     /**
-     * Has the stage been launched
+     * Has the stage been completed
      * @type {boolean}
      * @memberof Stage
      */
@@ -68,17 +68,17 @@ export interface Stage {
      */
     config: object;
     /**
-     * How many points the stage is worth
-     * @type {number}
-     * @memberof Stage
-     */
-    points?: number;
-    /**
      * How long the stage is (in minutes)
      * @type {number}
      * @memberof Stage
      */
     durationMinutes?: number;
+    /**
+     * How many points the stage is worth
+     * @type {number}
+     * @memberof Stage
+     */
+    points?: number;
     /**
      * When the stage opens for participation; null means not open.
      * @type {Date}
@@ -97,7 +97,35 @@ export interface Stage {
      * @memberof Stage
      */
     feedbackTypes?: Array<string>;
+    /**
+     * Desired sample size set by researcher
+     * @type {number}
+     * @memberof Stage
+     */
+    targetSampleSize?: number;
+    /**
+     * Status of the stage
+     * @type {string}
+     * @memberof Stage
+     */
+    status?: StageStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const StageStatusEnum = {
+    Active: 'active',
+    Paused: 'paused',
+    Scheduled: 'scheduled',
+    Draft: 'draft',
+    WaitingPeriod: 'waiting_period',
+    ReadyForLaunch: 'ready_for_launch',
+    Completed: 'completed'
+} as const;
+export type StageStatusEnum = typeof StageStatusEnum[keyof typeof StageStatusEnum];
+
 
 /**
  * Check if a given object implements the Stage interface.
@@ -129,11 +157,13 @@ export function StageFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
         'isCompleted': !exists(json, 'is_completed') ? undefined : json['is_completed'],
         'isLaunchable': !exists(json, 'is_launchable') ? undefined : json['is_launchable'],
         'config': json['config'],
-        'points': !exists(json, 'points') ? undefined : json['points'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
+        'points': !exists(json, 'points') ? undefined : json['points'],
         'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'feedbackTypes': !exists(json, 'feedback_types') ? undefined : json['feedback_types'],
+        'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
     };
 }
 
@@ -150,11 +180,13 @@ export function StageToJSON(value?: Stage | null): any {
         'description': value.description,
         'available_after_days': value.availableAfterDays,
         'config': value.config,
-        'points': value.points,
         'duration_minutes': value.durationMinutes,
+        'points': value.points,
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'feedback_types': value.feedbackTypes,
+        'target_sample_size': value.targetSampleSize,
+        'status': value.status,
     };
 }
 

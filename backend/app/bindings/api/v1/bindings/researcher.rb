@@ -21,14 +21,14 @@ module Api::V1::Bindings
     # The researcher's user ID.
     attr_accessor :user_id
 
+    # The researcher's avatar URL.
+    attr_accessor :avatar_url
+
     # The researcher's first name.
     attr_accessor :first_name
 
     # The researcher's last name.
     attr_accessor :last_name
-
-    # The researcher's avatar URL.
-    attr_accessor :avatar_url
 
     # The researcher's institution.
     attr_accessor :institution
@@ -47,9 +47,6 @@ module Api::V1::Bindings
 
     # The researcher's interest (3).
     attr_accessor :research_interest3
-
-    # The researcher's invite code.
-    attr_accessor :invite_code
 
     # Researchers role
     attr_accessor :role
@@ -81,16 +78,15 @@ module Api::V1::Bindings
       {
         :'id' => :'id',
         :'user_id' => :'user_id',
+        :'avatar_url' => :'avatar_url',
         :'first_name' => :'first_name',
         :'last_name' => :'last_name',
-        :'avatar_url' => :'avatar_url',
         :'institution' => :'institution',
         :'bio' => :'bio',
         :'lab_page' => :'lab_page',
         :'research_interest1' => :'research_interest1',
         :'research_interest2' => :'research_interest2',
         :'research_interest3' => :'research_interest3',
-        :'invite_code' => :'invite_code',
         :'role' => :'role'
       }
     end
@@ -105,16 +101,15 @@ module Api::V1::Bindings
       {
         :'id' => :'Integer',
         :'user_id' => :'String',
+        :'avatar_url' => :'String',
         :'first_name' => :'String',
         :'last_name' => :'String',
-        :'avatar_url' => :'String',
         :'institution' => :'String',
         :'bio' => :'String',
         :'lab_page' => :'String',
         :'research_interest1' => :'String',
         :'research_interest2' => :'String',
         :'research_interest3' => :'String',
-        :'invite_code' => :'String',
         :'role' => :'String'
       }
     end
@@ -123,6 +118,13 @@ module Api::V1::Bindings
     def self.openapi_nullable
       Set.new([
       ])
+    end
+
+    # List of class defined in allOf (OpenAPI v3)
+    def self.openapi_all_of
+      [
+      :'BaseResearcher'
+      ]
     end
 
     # Initializes the object
@@ -148,16 +150,16 @@ module Api::V1::Bindings
         self.user_id = attributes[:'user_id']
       end
 
+      if attributes.key?(:'avatar_url')
+        self.avatar_url = attributes[:'avatar_url']
+      end
+
       if attributes.key?(:'first_name')
         self.first_name = attributes[:'first_name']
       end
 
       if attributes.key?(:'last_name')
         self.last_name = attributes[:'last_name']
-      end
-
-      if attributes.key?(:'avatar_url')
-        self.avatar_url = attributes[:'avatar_url']
       end
 
       if attributes.key?(:'institution')
@@ -182,10 +184,6 @@ module Api::V1::Bindings
 
       if attributes.key?(:'research_interest3')
         self.research_interest3 = attributes[:'research_interest3']
-      end
-
-      if attributes.key?(:'invite_code')
-        self.invite_code = attributes[:'invite_code']
       end
 
       if attributes.key?(:'role')
@@ -230,16 +228,15 @@ module Api::V1::Bindings
       self.class == o.class &&
           id == o.id &&
           user_id == o.user_id &&
+          avatar_url == o.avatar_url &&
           first_name == o.first_name &&
           last_name == o.last_name &&
-          avatar_url == o.avatar_url &&
           institution == o.institution &&
           bio == o.bio &&
           lab_page == o.lab_page &&
           research_interest1 == o.research_interest1 &&
           research_interest2 == o.research_interest2 &&
           research_interest3 == o.research_interest3 &&
-          invite_code == o.invite_code &&
           role == o.role
     end
 
@@ -252,7 +249,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, user_id, first_name, last_name, avatar_url, institution, bio, lab_page, research_interest1, research_interest2, research_interest3, invite_code, role].hash
+      [id, user_id, avatar_url, first_name, last_name, institution, bio, lab_page, research_interest1, research_interest2, research_interest3, role].hash
     end
 
     # Builds the object from hash

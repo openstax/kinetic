@@ -22,22 +22,26 @@ RSpec.describe 'Studies', api: :v1 do
       {
         title_for_participants: 'Participant study title',
         title_for_researchers: 'Researcher study title',
+        internal_description: 'For researchers only',
         short_description: 'A short description',
         long_description: 'A longer description',
         study_type: 'Research',
         study_topic: 'Learning',
         study_subject: 'Biology',
-        image_id: 'Schoolfuturecareer_1',
         benefits: 'Some benefit to society',
+        image_id: 'Schoolfuturecareer_1',
         stages: [
           {
             points: 10,
             duration_minutes: 5,
             feedback_types: ['debrief, personalized'],
-            config: {}
+            config: {
+              type: 'qualtrics',
+              survey_id: 'SV_12QHR3BE',
+              secret_key: '1234567890123456'
+            }
           }
         ]
-        # tags: ['type:research_study']
       }
     end
 
@@ -152,54 +156,12 @@ RSpec.describe 'Studies', api: :v1 do
         )
       end
 
-      it 'updates the study\'s status to completed' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { status: 'completed' } }
-
-        expect(response).to have_http_status(:success)
-        expect(response_hash).to match(a_hash_including(status: 'completed'))
-      end
-
-      it 'updates the study\'s status to scheduled' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { status: 'scheduled' } }
-
-        expect(response).to have_http_status(:success)
-        expect(response_hash).to match(a_hash_including(status: 'scheduled'))
-      end
-
-      it 'updates the study\'s status to active' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { status: 'active' } }
-
-        expect(response).to have_http_status(:success)
-        expect(response_hash).to match(a_hash_including(status: 'active'))
-      end
-
-      it 'updates the study\'s status to draft' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { status: 'draft' } }
-
-        expect(response).to have_http_status(:success)
-        expect(response_hash).to match(a_hash_including(status: 'draft'))
-      end
-
-      it 'updates the study\'s status to paused' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { status: 'paused' } }
-
-        expect(response).to have_http_status(:success)
-        expect(response_hash).to match(a_hash_including(status: 'paused'))
-      end
-
       it 'cannot blank required fields' do
         expect {
           api_put "researcher/studies/#{study1.id}",
-                  params: { study: { title_for_participants: '' } }
-        }.not_to change { study1.title_for_participants }
+                  params: { study: { internal_description: '' } }
+        }.not_to change { study1.internal_description }
         expect(response).to have_http_status(:unprocessable_entity)
-      end
-
-      it 'can set funky tags to whatever they want' do
-        expect {
-          api_put "researcher/studies/#{study1.id}",
-                  params: { study: { tags: ['howdy'] } }
-        }.to change { study1.reload; study1.tags }
       end
     end
   end

@@ -1,5 +1,5 @@
 import { cx, React, styled } from '@common';
-import { Study, StudyStatusEnum } from '@api';
+import { StageStatusEnum, Study } from '@api';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -15,7 +15,7 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import { Link } from 'react-router-dom';
-import { colors } from '../../../../theme';
+import { colors } from '@theme';
 import { toDayJS } from '@lib';
 import { Box, Icon } from '@components';
 import AtoZ from '../../../../images/icons/atoz.png';
@@ -252,6 +252,12 @@ export const StudiesTable: React.FC<{
             filterFn: (row, columnId, filterValue) => {
                 return filterValue.includes(row.getValue(columnId))
             },
+            accessorFn: (row) => {
+                if (!row.stages?.length) {
+                    return 'draft'
+                }
+                return row.stages[0].status
+            },
             cell: (info) => <StatusLabel status={info.getValue() as string} />,
         },
         {
@@ -263,7 +269,8 @@ export const StudiesTable: React.FC<{
             accessorKey: 'closesAt',
             header: () => <span>{currentStatus === StudyStatus.Completed ? 'Closed on' : 'Closes on'}</span>,
             cell: (info) => {
-                if (info.row.original.status === StudyStatusEnum.Paused || !info.getValue()) {
+                // TODO Stage status and nested table rows
+                if (info.row.original.status === StageStatusEnum.Paused || !info.getValue()) {
                     return '-'
                 }
                 return toDayJS(info.getValue() as Date).format('MM/DD/YYYY')
@@ -286,15 +293,17 @@ export const StudiesTable: React.FC<{
             },
             cell: (info) => {
                 const study = info.row.original;
-                if (study.completedCount == 0 || study.targetSampleSize == 0) {
-                    return null
-                }
+                // TODO Stage.targetSampleSize
+                // if (study.completedCount == 0 || study.targetSampleSize == 0) {
+                //     return null
+                // }
                 if (currentStatus === StudyStatus.Completed) {
                     return <span>{study.completedCount}</span>
                 }
+                // TODO Stage.targetSampleSize
                 return (
                     <span>
-                        {study.completedCount}/{study.targetSampleSize}
+                        {/*{study.completedCount}/{study.targetSampleSize}*/}
                     </span>
                 )
             },

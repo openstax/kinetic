@@ -162,7 +162,18 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
     if (!study) return null
 
     return (
-        <OffCanvas show={!!study} title="Study Detail" onHide={onHide}>
+        <StudyDetailsPreview study={study} show={!!study} onHide={onHide} />
+    )
+}
+
+export const StudyDetailsPreview: FC<{
+    study: ParticipantStudy,
+    show: boolean,
+    onHide: () => void,
+    preview?: boolean
+}> = ({ study, show, onHide, preview = false }) => {
+    return (
+        <OffCanvas show={show} title="Study Detail" onHide={onHide}>
             <Box direction="column" flex>
                 <div css={{ overflowY: 'auto', flex: 1 }}>
                     <h3>{study.titleForParticipants}</h3>
@@ -190,7 +201,7 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
                         education research. All your data will be kept confidential and anonymous.
                     </Part>
                 </div>
-                <LaunchStudyButton study={study} />
+                {!preview && <LaunchStudyButton study={study} />}
             </Box>
         </OffCanvas>
     )
