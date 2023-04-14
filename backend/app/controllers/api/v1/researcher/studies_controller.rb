@@ -30,18 +30,24 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     render json: response_binding, status: :ok
   end
 
+  # TODO Submit study endpoint? or just special params on update?
   def update
     inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
     render(json: error, status: error.status_code) and return if error
 
     @study.update(inbound_binding.to_hash.except(:researchers, :stages))
-    # inbound_binding.researchers.each do | researcher |
-    #   @study.study_researchers
+
+    # @study.researchers = inbound_binding.researchers.map do | researcher |
+    #
     # end
+    # @study.researchers.clear
+    inbound_binding.researchers.each do | researcher |
+      @study.study_researchers << StudyResearcher.create({researcher_id: researcher.id, role: researcher.role})
+    end
 
     @study.stages.clear
     inbound_binding.stages.each do | stage |
-      # TODO Use proper config when cloning template?
+      # TODO Configs will get added on final step
       s = Stage.where(id: stage.id).first_or_create(stage.to_hash.merge({config: {}}))
       @study.stages << s
     end

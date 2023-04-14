@@ -444,8 +444,7 @@ CREATE TABLE public.researchers (
     last_name character varying,
     research_interest1 character varying,
     research_interest2 character varying,
-    research_interest3 character varying,
-    invite_code character varying
+    research_interest3 character varying
 );
 
 
@@ -1185,7 +1184,7 @@ CREATE INDEX index_study_researchers_on_researcher_id ON public.study_researcher
 -- Name: index_study_researchers_on_researcher_id_and_study_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_study_researchers_on_researcher_id_and_study_id ON public.study_researchers USING btree (researcher_id, study_id);
+CREATE INDEX index_study_researchers_on_researcher_id_and_study_id ON public.study_researchers USING btree (researcher_id, study_id);
 
 
 --

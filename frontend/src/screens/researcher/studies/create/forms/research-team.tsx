@@ -5,7 +5,7 @@ import { Col, SelectField, SelectOption, useFormContext } from '@nathanstitt/sun
 import { IRB } from '../../../account/researcher-account-page';
 import { EditingStudy } from '@models';
 import { useApi } from '@lib';
-import { Researcher } from '@api';
+import { Researcher, ResearcherRoleEnum } from '@api';
 import { components, DropdownIndicatorProps } from 'react-select';
 
 const DropdownIndicator = (props: DropdownIndicatorProps) => {
@@ -34,10 +34,36 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
         }))
     }, [researchers])
 
-    const setResearcherByRole = (id: number, role: string) => {
-        // TODO Set study.researchers[]
-        console.log(id, role)
-        // setValue('researchers')
+    const setResearcherByRole = (id: number, role: ResearcherRoleEnum) => {
+        if (!study.researchers) {
+            study.researchers = []
+        }
+        const researcher = researchers.find(r => r.id === id);
+        if (!researcher) return
+        const researcherWithRole = { ...researcher, role }
+        if (role === ResearcherRoleEnum.Pi) {
+            const piIndex = study.researchers.findIndex(r => r.role === ResearcherRoleEnum.Pi)
+            if (piIndex !== -1) {
+                study.researchers[piIndex] = researcherWithRole
+            } else {
+                study.researchers.push(researcherWithRole)
+            }
+        }
+
+        if (role === ResearcherRoleEnum.Lead) {
+            const leadIndex = study.researchers.findIndex(r => r.role === ResearcherRoleEnum.Lead)
+            if (leadIndex !== -1) {
+                study.researchers[leadIndex] = researcherWithRole
+            } else {
+                study.researchers.push(researcherWithRole)
+            }
+        }
+
+        if (role === ResearcherRoleEnum.Member) {
+            study.researchers.push(researcherWithRole)
+        }
+
+        setValue('researchers', study.researchers)
     }
 
     return (

@@ -56,6 +56,10 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
     remove_column :studies, :feedback_description, :string
 
     # Unused from last migration
-    # remove_column :researchers, :invite_code, :string
+    remove_column :researchers, :invite_code, :string
+
+    # Remove unique indexes for study researchers
+    remove_index :study_researchers, [:researcher_id, :study_id]
+    add_index :study_researchers, [:researcher_id, :study_id]
   end
 end

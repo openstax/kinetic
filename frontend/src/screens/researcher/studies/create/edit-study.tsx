@@ -1,10 +1,9 @@
 import { Box, React, useEffect, useMemo, useNavigate, useParams, useState } from '@common'
-import { useApi } from '@lib';
+import { useApi, useQueryParam } from '@lib';
 import { EditingStudy } from '@models';
-import { LoadingAnimation, TopNavBar } from '@components';
+import { Icon, LoadingAnimation, TopNavBar } from '@components';
 import { ProgressBar } from './progress-bar';
-import { ExitButton } from './researcher-study-landing';
-import { Col, Form, useFormContext, useFormState, Yup } from '@nathanstitt/sundry';
+import { Button, Col, Form, Modal, useFormContext, useFormState, Yup } from '@nathanstitt/sundry';
 import { ResearchTeam } from './forms/research-team';
 import { InternalDetails } from './forms/internal-details';
 import { ParticipantView } from './forms/participant-view';
@@ -12,6 +11,7 @@ import { AdditionalSessions } from './forms/additional-sessions';
 import { NewStudy, Study } from '@api';
 import { ActionFooter } from './action-footer';
 import { ReactNode } from 'react';
+import { colors } from '@theme';
 
 export type StepKey =
     'research-team' |
@@ -61,11 +61,11 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
             then: (s) => s.required('Required'),
         }),
         stages: Yup.array().when('step', {
-            is: (step: number) => step === 2 || step === 3,
+            is: 2,
             then: Yup.array().of(
                 Yup.object({
-                    points: Yup.number().required(),
-                    duration: Yup.number().required(),
+                    points: Yup.number(),
+                    duration: Yup.number(),
                     feedbackTypes: Yup.array().test(
                         'At least one',
                         'Select at least one item',
@@ -134,12 +134,12 @@ export default function EditStudy() {
 }
 
 const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, studies, children }) => {
-    // const initialStep = +useQueryParam('step') || 0
+    const initialStep = +useQueryParam('step') || 0
 
     return (
         <Form
             validationSchema={getValidationSchema(studies, study)}
-            defaultValues={{ ...study, step: 0 }}
+            defaultValues={{ ...study, step: initialStep }}
             onSubmit={() => {}}
             onCancel={() => {}}
             className='h-100'
@@ -152,15 +152,17 @@ const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, stu
 const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     const { watch, setValue, trigger } = useFormContext()
 
-    const formState = useFormState()
     const currentStep = watch('step')
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
     const nav = useNavigate()
     const api = useApi()
 
-    const { isValid, errors } = formState
-    console.log(isValid, errors)
+    const { isValid, isDirty } = useFormState()
+
+    const setStep = (index: number) => {
+        setValue('step', index, { shouldValidate: true })
+    }
 
     const saveStudy = async (study: EditingStudy) => {
         if (isNew) {
@@ -170,10 +172,10 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                 },
             })
             if (savedStudy) {
-                nav(`/study/edit/${savedStudy.id}?step=${currentStep}`)
+                nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
             }
         } else {
-            await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
+            isDirty && await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
         }
     }
 
@@ -190,7 +192,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                     const valid = await trigger()
                     if (valid) {
                         await saveStudy(watch() as EditingStudy)
-                        setValue('step', 1)
+                        setStep(1)
                     }
                 },
             },
@@ -205,13 +207,13 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             component: <ResearchTeam study={study} />,
             text: 'Research Team',
             key: 'research-team',
-            backAction: () => setValue('step', 0),
+            backAction: () => setStep(0),
             primaryAction: {
                 text: 'Continue',
                 action: async () => {
                     // save study?
                     const valid = await trigger()
-                    setValue('step', 2)
+                    setStep(2)
                 },
             },
             secondaryAction: {
@@ -224,12 +226,12 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             component: <ParticipantView study={study} />,
             text: 'Participant View',
             key: 'participant-view',
-            backAction: () => setValue('step', 1),
+            backAction: () => setStep(1),
             primaryAction: {
                 text: 'Continue',
                 action: () => {
                     // save study?
-                    setValue('step', 3)
+                    setStep(3)
                 },
             },
             secondaryAction: {
@@ -243,13 +245,13 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             component: <AdditionalSessions study={study} />,
             text: 'Additional Sessions (optional)',
             key: 'additional-sessions',
-            backAction: () => setValue('step', 2),
+            backAction: () => setStep(2),
             optional: true,
             primaryAction: {
                 text: 'Continue',
                 action: () => {
                     // save study?
-                    setValue('step', 4)
+                    setStep(4)
                 },
             },
             secondaryAction: {
@@ -279,15 +281,76 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                         <span></span>
                     </Col>
                     <Col sm={10}>
-                        <ProgressBar steps={steps} currentStep={steps[currentStep]} setStepIndex={(i) => setValue('step', i)}/>
+                        <ProgressBar steps={steps} currentStep={steps[currentStep]} setStepIndex={(i) => setStep(i)}/>
                     </Col>
                     <Col sm={1}>
-                        <ExitButton step={steps[currentStep]} isNew={isNew} />
+                        <ExitButton isNew={isNew} />
                     </Col>
                 </Box>
                 {steps[currentStep].component}
             </div>
             <ActionFooter step={steps[currentStep]} />
         </Box>
+    )
+}
+
+const ExitButton: FC<{
+    isNew?: boolean
+}> = ({ isNew }) => {
+    const [showWarning, setShowWarning] = useState<boolean>(false)
+    const { isDirty } = useFormState()
+
+    const nav = useNavigate()
+    return (
+        <div>
+            <h6
+                css={{
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '.5rem',
+                    color: colors.grayText,
+                    cursor: 'pointer',
+                    alignSelf: 'end',
+                }}
+                onClick={() => {
+                    if (isDirty && !isNew) {
+                        setShowWarning(true)
+                    } else {
+                        nav('/studies')
+                    }
+                }}
+            >
+                Exit
+            </h6>
+            <Modal
+                center
+                show={showWarning}
+                large
+            >
+                <Modal.Body>
+                    <Box padding='4rem' align='center' justify='center' direction='column' gap='large'>
+                        <Box gap='large' align='center'>
+                            <Icon height={20} icon="warning" color={colors.red} />
+                            <span className='fs-4 fw-bold'>Exit Page</span>
+                        </Box>
+                        <Box align='center' direction='column'>
+                            <span>You're about to leave this study creation process.</span>
+                            <span>Would you like to save the changes you made thus far?</span>
+                        </Box>
+                        <Box gap='large'>
+                            <Button className='btn-researcher-secondary' onClick={() => {
+                                nav('/studies')
+                            }}>
+                                No, discard changes
+                            </Button>
+                            <Button className='btn-researcher-primary' onClick={() => {
+                                // save, then navigate away
+                            }}>
+                                Yes, save changes
+                            </Button>
+                        </Box>
+                    </Box>
+                </Modal.Body>
+            </Modal>
+        </div>
     )
 }

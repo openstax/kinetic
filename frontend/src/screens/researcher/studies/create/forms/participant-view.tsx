@@ -156,7 +156,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                                     <input {...register('stages.0.feedbackTypes')} type='checkbox' id='general' value='general' />
                                     <label htmlFor="general">General</label>
                                 </Box>
-                                <FieldErrorMessage name='stages[0].feedbackTypes'/>
+                                <FieldErrorMessage name='stages.0.feedbackTypes'/>
                             </Box>
                         </Col>
                     </Box>
