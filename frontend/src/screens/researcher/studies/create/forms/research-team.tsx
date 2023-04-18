@@ -5,7 +5,7 @@ import { Col, SelectField, SelectOption, useFormContext } from '@nathanstitt/sun
 import { IRB } from '../../../account/researcher-account-page';
 import { EditingStudy } from '@models';
 import { useApi } from '@lib';
-import { Researcher, ResearcherRoleEnum } from '@api';
+import { Researcher } from '@api';
 import { components, DropdownIndicatorProps } from 'react-select';
 
 const DropdownIndicator = (props: DropdownIndicatorProps) => {
@@ -19,13 +19,13 @@ const DropdownIndicator = (props: DropdownIndicatorProps) => {
 export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
     const api = useApi()
     const [researchers, setResearchers] = useState<Researcher[]>([])
-    const { setValue } = useFormContext()
+    const { setValue, getValues } = useFormContext()
 
     useEffect(() => {
         api.getResearchers().then(researchers => {
             setResearchers(researchers.data || [])
         })
-    }, [researchers.length])
+    }, [])
 
     const researcherOptions: SelectOption[] = useMemo(() => {
         return researchers.map(r => ({
@@ -34,36 +34,22 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
         }))
     }, [researchers])
 
-    const setResearcherByRole = (id: number, role: ResearcherRoleEnum) => {
+    const updateResearchers = () => {
         if (!study.researchers) {
             study.researchers = []
         }
-        const researcher = researchers.find(r => r.id === id);
-        if (!researcher) return
-        const researcherWithRole = { ...researcher, role }
-        if (role === ResearcherRoleEnum.Pi) {
-            const piIndex = study.researchers.findIndex(r => r.role === ResearcherRoleEnum.Pi)
-            if (piIndex !== -1) {
-                study.researchers[piIndex] = researcherWithRole
-            } else {
-                study.researchers.push(researcherWithRole)
-            }
-        }
 
-        if (role === ResearcherRoleEnum.Lead) {
-            const leadIndex = study.researchers.findIndex(r => r.role === ResearcherRoleEnum.Lead)
-            if (leadIndex !== -1) {
-                study.researchers[leadIndex] = researcherWithRole
-            } else {
-                study.researchers.push(researcherWithRole)
-            }
-        }
+        const members = study.researchers.filter(r => r.role === 'member');
+        // TODO build members with form fields in the future, when we support that feature
+        const updatedResearchers = [...members]
 
-        if (role === ResearcherRoleEnum.Member) {
-            study.researchers.push(researcherWithRole)
-        }
+        const pi = researchers.find(r => r.id === getValues('researcherPi'))
+        pi && updatedResearchers.push({ ...pi, role: 'pi' })
 
-        setValue('researchers', study.researchers)
+        const lead = researchers.find(r => r.id === getValues('researcherLead'))
+        lead && updatedResearchers.push({ ...lead, role: 'lead' })
+
+        setValue('researchers', updatedResearchers)
     }
 
     return (
@@ -72,7 +58,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                 <h3 className='fw-bold'>Research Team</h3>
                 <Box gap align='center'>
                     <Icon height={20} color={colors.kineticResearcher} icon='clockFill'/>
-                    <span>ETA: 2 min</span>
+                    <span>ETA: 5 min</span>
                 </Box>
             </Box>
 
@@ -89,7 +75,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                         isClearable
                         placeholder='Search for a researcher by name'
                         components={{ DropdownIndicator }}
-                        onChange={(value) => !!value && setResearcherByRole(value as number, 'pi')}
+                        onChange={updateResearchers}
                     />
                 </Col>
             </Box>
@@ -107,7 +93,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                         isClearable
                         placeholder='Search for a researcher by name'
                         components={{ DropdownIndicator }}
-                        onChange={(value) => !!value && setResearcherByRole(value as number, 'lead')}
+                        onChange={updateResearchers}
                     />
                 </Col>
             </Box>

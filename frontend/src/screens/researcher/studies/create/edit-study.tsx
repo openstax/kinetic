@@ -8,7 +8,7 @@ import { ResearchTeam } from './forms/research-team';
 import { InternalDetails } from './forms/internal-details';
 import { ParticipantView } from './forms/participant-view';
 import { AdditionalSessions } from './forms/additional-sessions';
-import { NewStudy, Study } from '@api';
+import { NewStudy, ResearcherRoleEnum, Study } from '@api';
 import { ActionFooter } from './action-footer';
 import { ReactNode } from 'react';
 import { colors } from '@theme';
@@ -59,6 +59,14 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
         internalDescription: Yup.string().max(250).when('step', {
             is: 0,
             then: (s) => s.required('Required'),
+        }),
+        researcherPi: Yup.number().when('step', {
+            is: 1,
+            then: Yup.number().required(),
+        }),
+        researcherLead: Yup.number().when('step', {
+            is: 1,
+            then: Yup.number().required(),
         }),
         stages: Yup.array().when('step', {
             is: 2,
@@ -135,11 +143,21 @@ export default function EditStudy() {
 
 const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, studies, children }) => {
     const initialStep = +useQueryParam('step') || 0
+    const { pi, lead } = useMemo(() => {
+        const pi = study.researchers?.find(r => r.role === ResearcherRoleEnum.Pi)?.id
+        const lead = study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)?.id
+        return { pi, lead }
+    }, [study.researchers])
 
     return (
         <Form
             validationSchema={getValidationSchema(studies, study)}
-            defaultValues={{ ...study, step: initialStep }}
+            defaultValues={{
+                ...study,
+                step: initialStep,
+                researcherPi: pi,
+                researcherLead: lead,
+            }}
             onSubmit={() => {}}
             onCancel={() => {}}
             className='h-100'
@@ -165,6 +183,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     }
 
     const saveStudy = async (study: EditingStudy) => {
+        console.log(isNew);
         if (isNew) {
             const savedStudy = await api.addStudy({
                 addStudy: {
@@ -215,10 +234,13 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                     const valid = await trigger()
                     setStep(2)
                 },
+                // TODO disable if dirty, make sure
+                disabled: !isDirty,
             },
             secondaryAction: {
                 text: 'Save as draft',
                 action: () => saveStudy(watch() as EditingStudy),
+                disabled: !isDirty,
             },
         },
         {

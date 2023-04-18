@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 import { DefaultApi, NewStudy, ParticipantStudy, Study } from '@api'
-import { dayjs, isNil, useApi } from '@lib'
+import { isNil, useApi } from '@lib'
 import { useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
 

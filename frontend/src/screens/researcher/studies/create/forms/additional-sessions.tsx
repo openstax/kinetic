@@ -2,10 +2,12 @@ import { EditingStudy } from '@models';
 import { Box, React, useState } from '@common';
 import { Icon } from '@components';
 import { colors } from '@theme';
-import { Col, InputField } from '@nathanstitt/sundry';
+import { Button, Col, useFormContext } from '@nathanstitt/sundry';
+import { AddStage, NewStage, Stage } from '@api';
+import { uniqueId } from 'lodash-es';
 
 export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {
-    const [additionalSession, setAdditionalSession] = useState<boolean>(false)
+    const [additionalSession, setAdditionalSession] = useState<boolean>(!!study.stages && study.stages.length > 1)
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
             <Box gap direction='column'>
@@ -30,11 +32,21 @@ export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {
                     <Box gap='medium'>
                         <Box direction='column'>
                             <Box gap>
-                                <input type='radio' id='yes' checked={additionalSession} onChange={() => setAdditionalSession(!additionalSession)} />
+                                <input
+                                    type='radio'
+                                    id='yes'
+                                    checked={additionalSession}
+                                    onChange={() => setAdditionalSession(!additionalSession)}
+                                />
                                 <label htmlFor="yes">Yes</label>
                             </Box>
                             <Box gap>
-                                <input type='radio' id='no' checked={!additionalSession} onChange={() => setAdditionalSession(!additionalSession)} />
+                                <input
+                                    type='radio'
+                                    id='no'
+                                    checked={!additionalSession}
+                                    onChange={() => setAdditionalSession(!additionalSession)}
+                                />
                                 <label htmlFor="no">Not right now</label>
                             </Box>
                         </Box>
@@ -42,21 +54,72 @@ export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {
                 </Col>
             </Box>
 
-            {additionalSession && <MoreSessions />}
+            {additionalSession && <MoreSessions study={study}/>}
         </Box>
     )
 }
 
-const MoreSessions: FC<{}> = () => {
+const MoreSessions: FC<{study: EditingStudy}> = ({ study }) => {
+    const initialSessions: (Stage | NewStage)[] = (study.stages || []).slice(1)
+    // populate with empty stage to render
+    initialSessions.push({
+        order: initialSessions.length,
+        config: {},
+    })
+    // Don't include the first session here
+    const [sessions, setSessions] = useState<(Stage | NewStage)[]>(initialSessions)
+    // const [numSessions, setNumSessions] = useState<number>(additionalSessions.length)
+    const { watch } = useFormContext()
+    // const sessions = watch('stages')
+    // console.log(sessions);
+
+
+    const addSession = () => {
+        setSessions(prev => ([
+            ...prev,
+            {
+                order: prev.length,
+                config: {},
+            } as NewStage,
+        ]))
+    }
+
+    const removeSession = (index: number) => {
+        setSessions(prev => prev.filter((_, i) => i !== index))
+    }
+
+    console.log(sessions);
     return (
-        <Col
-            direction='column'
-            sm={8}
-            css={{ border: `1px solid ${colors.lightGray}`, borderRadius: 10 }}
-        >
-            <div css={{ backgroundColor: colors.gray, padding: `1rem`, borderRadius: `10px 10px 0 0` }}>
-                <h4>Session 2</h4>
-            </div>
+        <Col direction='column' sm={8} gap='large'>
+            {sessions.map((stage, index) => (
+                <AdditionalSession key={uniqueId('stage_')} index={index} onDelete={removeSession} />
+            ))}
+
+            <Button
+                icon='plus'
+                align='center'
+                css={{
+                    border: `1px solid ${colors.lightGray}`,
+                    padding: 12,
+                }}
+                onClick={() => addSession()}
+            >
+                Add another session
+            </Button>
+        </Col>
+    )
+}
+
+
+const AdditionalSession: FC<{ index: number, onDelete: (index: number) => void }> = ({ index, onDelete }) => {
+    const { register } = useFormContext()
+
+    return (
+        <Col direction='column' css={{ border: `1px solid ${colors.lightGray}`, borderRadius: 10 }}>
+            <Box css={{ backgroundColor: colors.gray, padding: `1rem`, borderRadius: `10px 10px 0 0` }} justify='between'>
+                <h4>Session {index}</h4>
+                <Icon color={colors.red} icon='trash' onClick={() => onDelete(index) } />
+            </Box>
 
             <Box direction='column' css={{ padding: '1rem' }} gap='xlarge'>
                 <Box gap='xlarge'>
@@ -81,7 +144,11 @@ const MoreSessions: FC<{}> = () => {
                     <Col sm={6} direction='column' gap='medium'>
                         <Box direction='column'>
                             <Box gap>
-                                <input type='checkbox' id='score' name='feedbackScore' />
+                                <input
+                                    type='checkbox'
+                                    id='score'
+                                    {...register(`stages.${index + 1}.feedbackTypes`, { shouldUnregister: true })}
+                                />
                                 <label htmlFor="score">Score</label>
                             </Box>
                             <Box gap>
@@ -100,8 +167,6 @@ const MoreSessions: FC<{}> = () => {
                     </Col>
                 </Box>
             </Box>
-
-
         </Col>
     )
 }

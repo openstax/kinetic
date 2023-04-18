@@ -2,7 +2,7 @@
 
 class Researcher < ApplicationRecord
   has_many :study_researchers
-  has_many :studies, through: :study_researchers, inverse_of: :researchers
+  has_many :studies, -> { distinct }, through: :study_researchers, inverse_of: :researchers
 
   has_many :analysis_researchers
   has_many :analysis, through: :analysis_researchers, inverse_of: :researchers

@@ -9,7 +9,11 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     render(json: error, status: error.status_code) and return if error
 
     created_study = inbound_binding.create_model!(researcher: current_researcher)
-    inbound_binding.stages.each{|s| created_study.stages << Stage.new(s.to_hash)} unless inbound_binding.stages.nil?
+    unless inbound_binding.stages.nil?
+      inbound_binding.stages.each do |s|
+        created_study.stages << Stage.new(s.to_hash.merge({config: {}}))
+      end
+    end
 
     response_binding = Api::V1::Bindings::Study.create_from_model(created_study)
     render json: response_binding, status: :created
@@ -30,27 +34,29 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     render json: response_binding, status: :ok
   end
 
-  # TODO Submit study endpoint? or just special params on update?
+  # TODO Submit study for final review endpoint? or just special params on update?
   def update
     inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
     render(json: error, status: error.status_code) and return if error
 
     @study.update(inbound_binding.to_hash.except(:researchers, :stages))
 
-    # @study.researchers = inbound_binding.researchers.map do | researcher |
-    #
-    # end
-    # @study.researchers.clear
-    inbound_binding.researchers.each do | researcher |
-      @study.study_researchers << StudyResearcher.create({researcher_id: researcher.id, role: researcher.role})
+    # TODO Ruby get only new items of diff (incoming vs existing) for emails
+    new_researchers = Array(inbound_binding.researchers).map do |researcher|
+      # try StudyResearcher.first_or_create({researcher_id: researcher.id, role: researcher.role})
+      StudyResearcher.create({ researcher_id: researcher.id, role: researcher.role })
+    end
+    StudyResearcher.skip_callback(:destroy, :before, :check_destroy_leaves_another_researcher_in_study, raise: false)
+    @study.study_researchers.replace(new_researchers.uniq)
+
+    unless inbound_binding.stages.nil?
+      @study.stages.clear
+      inbound_binding.stages.each do |stage|
+        s = Stage.where(id: stage.id).first_or_create(stage.to_hash.merge({ config: {} }))
+        @study.stages << s
+      end
     end
 
-    @study.stages.clear
-    inbound_binding.stages.each do | stage |
-      # TODO Configs will get added on final step
-      s = Stage.where(id: stage.id).first_or_create(stage.to_hash.merge({config: {}}))
-      @study.stages << s
-    end
 
     response_binding = Api::V1::Bindings::Study.create_from_model(@study)
     render json: response_binding, status: :ok

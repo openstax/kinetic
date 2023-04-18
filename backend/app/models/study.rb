@@ -24,11 +24,11 @@ class Study < ApplicationRecord
   }
 
   def opens_at
-    stages.first.opens_at
+    stages.first&.opens_at || nil
   end
 
   def study_status
-    stages.first.status
+    stages.first&.status || 'draft'
   end
 
   def total_points

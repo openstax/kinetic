@@ -5,11 +5,13 @@ import { colors } from '@theme';
 import { Button, Col, InputField, useFormContext } from '@nathanstitt/sundry';
 import { ImageLibrary } from '../image-library';
 import { StudyCardPreview } from '../../../../learner/card';
+import { first } from 'lodash-es';
 
 export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
     const [showImagePicker, setShowImagePicker] = useState<boolean>(false)
     const { setValue, watch, register } = useFormContext()
     const studyPreview = watch() as EditingStudy
+    const firstSession = first(study.stages)
 
     const setDurationAndPoints = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value === '5') {
@@ -113,19 +115,36 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                             <small>Select the option that best describes your estimated study duration. Study points are based on study duration</small>
                         </Col>
 
-                        {/* TODO Setup handler */}
                         <Col sm={6} direction='column'>
                             <Box direction='column'>
                                 <Box gap>
-                                    <input type='radio' {...register('stages.0.durationAndPoints')} value={5} onChange={setDurationAndPoints}/>
+                                    <input
+                                        type='radio'
+                                        {...register('stages.0.points')}
+                                        value={10}
+                                        defaultChecked={firstSession?.points === 10}
+                                        onChange={setDurationAndPoints}
+                                    />
                                     <label>~5 minutes: 10 pts</label>
                                 </Box>
                                 <Box gap>
-                                    <input type='radio' {...register('stages.0.durationAndPoints')} value={15} onChange={setDurationAndPoints}/>
+                                    <input
+                                        type='radio'
+                                        {...register('stages.0.points')}
+                                        value={20}
+                                        defaultChecked={firstSession?.points === 20}
+                                        onChange={setDurationAndPoints}
+                                    />
                                     <label>~15 minutes: 20 pts</label>
                                 </Box>
                                 <Box gap>
-                                    <input type='radio' {...register('stages.0.durationAndPoints')} value={25} onChange={setDurationAndPoints}/>
+                                    <input
+                                        type='radio'
+                                        {...register('stages.0.points')}
+                                        value={30}
+                                        defaultChecked={firstSession?.points === 30}
+                                        onChange={setDurationAndPoints}
+                                    />
                                     <label>~25 minutes: 30 pts</label>
                                 </Box>
                             </Box>

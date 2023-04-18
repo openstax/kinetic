@@ -156,6 +156,25 @@ RSpec.describe 'Studies', api: :v1 do
         )
       end
 
+      it 'updates the study researchers' do
+        api_put "researcher/studies/#{study1.id}", params: { study: { researchers: [researcher1, researcher2]} }
+
+        expect(response).to have_http_status(:success)
+        debugger
+        expect(response_hash).to match a_hash_including(
+          researchers: a_collection_containing_exactly(
+            a_hash_including({
+              id: researcher1.id,
+              bio: researcher1.bio,
+            }),
+            a_hash_including({
+              id: researcher2.id,
+              bio: researcher2.bio,
+            }),
+          )
+        )
+      end
+
       it 'cannot blank required fields' do
         expect {
           api_put "researcher/studies/#{study1.id}",
