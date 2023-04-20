@@ -13,7 +13,7 @@ class Api::V1::Researcher::StagesOpenApi
     end
 
     schema :Stage do
-      key :required, %w[id order config return_url]
+      key :required, %w[id config return_url]
     end
 
     schema :QualtricsStage do

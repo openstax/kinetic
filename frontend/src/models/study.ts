@@ -1,5 +1,4 @@
-import * as Yup from 'yup'
-import { DefaultApi, NewStudy, ParticipantStudy, Study } from '@api'
+import { DefaultApi, NewStudy, ParticipantStudy, ResearcherRoleEnum, Study } from '@api'
 import { isNil, useApi } from '@lib'
 import { useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
@@ -12,22 +11,6 @@ export enum StudyStatus {
     Draft = 'Draft', // eslint-disable-line no-unused-vars
     Completed = 'Completed', // eslint-disable-line no-unused-vars
 }
-
-export const StudyValidationSchema = Yup.object().shape({
-    titleForParticipants: Yup.string().required('Required'),
-    shortDescription: Yup.string().required('Required'),
-    longDescription: Yup.string().required('Required'),
-    tags: Yup.array().of(Yup.string()).test(
-        'has-type',
-        'studies must have a type set',
-        (tags) => Boolean(tags?.find(t => t?.match(/^type:/)))
-    ).test(
-        'has-topic',
-        'studies must have a topic set',
-        (tags) => Boolean(tags?.find(t => t?.match(/^topic:/)))
-    ),
-});
-
 
 export const LaunchStudy = async (api: DefaultApi, study: { id: number }, options: { preview?: boolean } = {}) => {
     const launch = await api.launchStudy({ id: study.id, preview: options.preview || false })
@@ -56,6 +39,14 @@ export function isStudy(study: EditingStudy): study is Study {
 
 export function isNewStudy(study: EditingStudy): study is NewStudy {
     return isNil((study as Study).id)
+}
+
+export function getStudyPi(study: EditingStudy) {
+    return study.researchers?.find(r => r.role === ResearcherRoleEnum.Pi)
+}
+
+export function getStudyLead(study: EditingStudy) {
+    return study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)
 }
 
 export function isParticipantStudy(study?: any): study is ParticipantStudy {

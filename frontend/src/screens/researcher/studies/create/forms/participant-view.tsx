@@ -12,8 +12,10 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
     const { setValue, watch, register } = useFormContext()
     const studyPreview = watch() as EditingStudy
     const firstSession = first(study.stages)
+    console.log(studyPreview);
 
     const setDurationAndPoints = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // TODO Use useFormArray().update()
         if (e.target.value === '5') {
             setValue('stages.0.points', 10)
             setValue('stages.0.durationMinutes', 5)

@@ -49,7 +49,7 @@ const Card = styled(Box)({
     },
 })
 
-const Tag: React.FC<{ tag?: string }> = ({ tag }) => {
+export const Tag: React.FC<{ tag?: string }> = ({ tag }) => {
     if (!tag) return null
     return (
         <span className="badge text-dark" css={{ borderRadius: 8, background: colors.gray }}>

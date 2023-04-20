@@ -1,13 +1,14 @@
 import { EditingStudy } from '@models';
-import { Box, React, useState } from '@common';
-import { Icon } from '@components';
+import { Box, React, useEffect, useState } from '@common';
+import { FieldErrorMessage, Icon } from '@components';
 import { colors } from '@theme';
 import { Button, Col, useFormContext } from '@nathanstitt/sundry';
-import { AddStage, NewStage, Stage } from '@api';
+import { NewStage, Stage, Study } from '@api';
 import { uniqueId } from 'lodash-es';
+import { useFieldArray } from 'react-hook-form';
 
 export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {
-    const [additionalSession, setAdditionalSession] = useState<boolean>(!!study.stages && study.stages.length > 1)
+    // const [additionalSession, setAdditionalSession] = useState<boolean>(!!study.stages && study.stages.length > 1)
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
             <Box gap direction='column'>
@@ -22,77 +23,83 @@ export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {
                 <p>You can skip this part if you don’t have any other session to add. Feel free to come back at any time to add session(s).</p>
             </Box>
 
-            <Box gap='xlarge'>
-                <Col sm={3} direction='column' gap>
-                    <h6>Do you want another session? </h6>
-                    <small>This is intended for a delayed measure for longitudinal study, choose yes if you want.</small>
-                </Col>
+            <Sessions study={study}/>
 
-                <Col sm={4} direction='column' gap>
-                    <Box gap='medium'>
-                        <Box direction='column'>
-                            <Box gap>
-                                <input
-                                    type='radio'
-                                    id='yes'
-                                    checked={additionalSession}
-                                    onChange={() => setAdditionalSession(!additionalSession)}
-                                />
-                                <label htmlFor="yes">Yes</label>
-                            </Box>
-                            <Box gap>
-                                <input
-                                    type='radio'
-                                    id='no'
-                                    checked={!additionalSession}
-                                    onChange={() => setAdditionalSession(!additionalSession)}
-                                />
-                                <label htmlFor="no">Not right now</label>
-                            </Box>
-                        </Box>
-                    </Box>
-                </Col>
-            </Box>
+            {/*<Box gap='xlarge'>*/}
+            {/*    <Col sm={3} direction='column' gap>*/}
+            {/*        <h6>Do you want another session? </h6>*/}
+            {/*        <small>This is intended for a delayed measure for longitudinal study, choose yes if you want.</small>*/}
+            {/*    </Col>*/}
 
-            {additionalSession && <MoreSessions study={study}/>}
+            {/*    <Col sm={4} direction='column' gap>*/}
+            {/*        <Box gap='medium'>*/}
+            {/*            <Box direction='column'>*/}
+            {/*                <Box gap>*/}
+            {/*                    <input*/}
+            {/*                        type='radio'*/}
+            {/*                        id='yes'*/}
+            {/*                        checked={additionalSession}*/}
+            {/*                        onChange={() => setAdditionalSession(!additionalSession)}*/}
+            {/*                    />*/}
+            {/*                    <label htmlFor="yes">Yes</label>*/}
+            {/*                </Box>*/}
+            {/*                <Box gap>*/}
+            {/*                    <input*/}
+            {/*                        type='radio'*/}
+            {/*                        id='no'*/}
+            {/*                        checked={!additionalSession}*/}
+            {/*                        onChange={() => {*/}
+
+            {/*                            setAdditionalSession(!additionalSession)*/}
+            {/*                        }}*/}
+            {/*                    />*/}
+            {/*                    <label htmlFor="no">Not right now</label>*/}
+            {/*                </Box>*/}
+            {/*            </Box>*/}
+            {/*        </Box>*/}
+            {/*    </Col>*/}
+            {/*</Box>*/}
+
+            {/*{additionalSession && <MoreSessions study={study}/>}*/}
         </Box>
     )
 }
 
-const MoreSessions: FC<{study: EditingStudy}> = ({ study }) => {
-    const initialSessions: (Stage | NewStage)[] = (study.stages || []).slice(1)
-    // populate with empty stage to render
-    initialSessions.push({
-        order: initialSessions.length,
-        config: {},
+const Sessions: FC<{study: EditingStudy}> = ({ study }) => {
+    const { control, watch } = useFormContext<EditingStudy>()
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'stages',
     })
-    // Don't include the first session here
-    const [sessions, setSessions] = useState<(Stage | NewStage)[]>(initialSessions)
-    // const [numSessions, setNumSessions] = useState<number>(additionalSessions.length)
-    const { watch } = useFormContext()
-    // const sessions = watch('stages')
-    // console.log(sessions);
 
+    console.log(fields, watch('stages'));
 
     const addSession = () => {
-        setSessions(prev => ([
-            ...prev,
-            {
-                order: prev.length,
-                config: {},
-            } as NewStage,
-        ]))
+        append({ order: fields.length, config: {}, id: -1 })
+        // setSessions(prev => ([
+        //     ...prev,
+        //     {
+        //         order: prev.length,
+        //         config: {},
+        //     } as NewStage,
+        // ]))
     }
 
     const removeSession = (index: number) => {
-        setSessions(prev => prev.filter((_, i) => i !== index))
+        remove(index)
+        // unregister(`stages.${index}`, { keepValue: false })
+        // setSessions(prev => prev.filter((_, i) => i !== index))
     }
 
-    console.log(sessions);
     return (
         <Col direction='column' sm={8} gap='large'>
-            {sessions.map((stage, index) => (
-                <AdditionalSession key={uniqueId('stage_')} index={index} onDelete={removeSession} />
+            {fields.map((stage, index) => (
+                <AdditionalSession
+                    key={stage.id}
+                    index={index}
+                    session={stage}
+                    onDelete={removeSession}
+                />
             ))}
 
             <Button
@@ -102,7 +109,7 @@ const MoreSessions: FC<{study: EditingStudy}> = ({ study }) => {
                     border: `1px solid ${colors.lightGray}`,
                     padding: 12,
                 }}
-                onClick={() => addSession()}
+                onClick={addSession}
             >
                 Add another session
             </Button>
@@ -111,26 +118,78 @@ const MoreSessions: FC<{study: EditingStudy}> = ({ study }) => {
 }
 
 
-const AdditionalSession: FC<{ index: number, onDelete: (index: number) => void }> = ({ index, onDelete }) => {
-    const { register } = useFormContext()
+const AdditionalSession: FC<{
+    index: number,
+    onDelete: (index: number) => void,
+    session: Stage | NewStage
+}> = ({ index, onDelete, session }) => {
+    // don't show the first session
+    if (index === 0) return null
+    const { register, getValues } = useFormContext()
+    const prevStagePoints = getValues(`stages.${index - 1}.points`)
 
     return (
         <Col direction='column' css={{ border: `1px solid ${colors.lightGray}`, borderRadius: 10 }}>
             <Box css={{ backgroundColor: colors.gray, padding: `1rem`, borderRadius: `10px 10px 0 0` }} justify='between'>
-                <h4>Session {index}</h4>
+                <h4>Session {index + 1}</h4>
                 <Icon color={colors.red} icon='trash' onClick={() => onDelete(index) } />
             </Box>
 
             <Box direction='column' css={{ padding: '1rem' }} gap='xlarge'>
                 <Box gap='xlarge'>
                     <Col sm={4} direction='column' gap>
-                        <h6>Duration & points*</h6>
+                        <h6>Session Duration*</h6>
+                    </Col>
+
+                    <Col sm={6} gap>
+                        <Box direction='column'>
+                            <Box gap>
+                                <input
+                                    type='radio'
+                                    value={5}
+                                    {...register(`stages.${index}.durationMinutes`)}
+                                    defaultChecked={session?.durationMinutes === 5}
+                                />
+                                <label>~5 minutes</label>
+                            </Box>
+                            <Box gap>
+                                <input
+                                    type='radio'
+                                    value={15}
+                                    {...register(`stages.${index}.durationMinutes`)}
+                                    defaultChecked={session?.durationMinutes === 15}
+                                />
+                                <label>~15 minutes</label>
+                            </Box>
+                            <Box gap>
+                                <input
+                                    type='radio'
+                                    value={25}
+                                    {...register(`stages.${index}.durationMinutes`)}
+                                    defaultChecked={session?.durationMinutes === 25}
+                                />
+                                <label>~25 minutes</label>
+                            </Box>
+                        </Box>
+                    </Col>
+                </Box>
+
+                <Box gap='xlarge'>
+                    <Col sm={4} direction='column' gap>
+                        <h6>Session Points*</h6>
                     </Col>
 
                     <Col sm={6} gap>
                         <Box gap>
-                            <input type='radio' id='pts' readOnly={true} name='pointsAndDuration'  />
-                            <label htmlFor="pts">35 points</label>
+                            <input
+                                type='radio'
+                                id='pts'
+                                readOnly={true}
+                                checked={true}
+                                {...register(`stages.${index}.points]`)}
+                                value={+prevStagePoints + 5}
+                            />
+                            <label htmlFor="pts">{+prevStagePoints + 5} points</label>
                         </Box>
                     </Col>
                 </Box>
@@ -147,22 +206,39 @@ const AdditionalSession: FC<{ index: number, onDelete: (index: number) => void }
                                 <input
                                     type='checkbox'
                                     id='score'
-                                    {...register(`stages.${index + 1}.feedbackTypes`, { shouldUnregister: true })}
+                                    value='score'
+                                    {...register(`stages.${index}.feedbackTypes]`)}
                                 />
                                 <label htmlFor="score">Score</label>
                             </Box>
                             <Box gap>
-                                <input type='checkbox' id='debrief' name='feedbackDebrief' />
+                                <input
+                                    type='checkbox'
+                                    id='debrief'
+                                    value='debrief'
+                                    {...register(`stages.${index}.feedbackTypes]`)}
+                                />
                                 <label htmlFor="debrief">Debrief</label>
                             </Box>
                             <Box gap>
-                                <input type='checkbox' id='personalized' name='feedbackPersonalized' />
+                                <input
+                                    type='checkbox'
+                                    id='personalized'
+                                    value='personalized'
+                                    {...register(`stages.${index}.feedbackTypes]`)}
+                                />
                                 <label htmlFor="personalized">Personalized</label>
                             </Box>
                             <Box gap>
-                                <input type='checkbox' id='general' name='feedbackGeneral' />
+                                <input
+                                    type='checkbox'
+                                    id='general'
+                                    value='general'
+                                    {...register(`stages.${index}.feedbackTypes]`)}
+                                />
                                 <label htmlFor="general">General</label>
                             </Box>
+                            <FieldErrorMessage name={`stages.${index}.feedbackTypes]`} />
                         </Box>
                     </Col>
                 </Box>

@@ -12,6 +12,7 @@ import { NewStudy, ResearcherRoleEnum, Study } from '@api';
 import { ActionFooter } from './action-footer';
 import { ReactNode } from 'react';
 import { colors } from '@theme';
+import { ReviewStudy } from './forms/review-study';
 
 export type StepKey =
     'research-team' |
@@ -69,7 +70,7 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
             then: Yup.number().required(),
         }),
         stages: Yup.array().when('step', {
-            is: 2,
+            is: (step: number) => step === 2 || step === 3,
             then: Yup.array().of(
                 Yup.object({
                     points: Yup.number(),
@@ -157,6 +158,7 @@ const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, stu
                 step: initialStep,
                 researcherPi: pi,
                 researcherLead: lead,
+                stages: study.stages,
             }}
             onSubmit={() => {}}
             onCancel={() => {}}
@@ -165,6 +167,15 @@ const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, stu
             {children}
         </Form>
     )
+}
+
+export enum StudyStep {
+    InternalDetails = 0,
+    ResearchTeam = 1,
+    ParticipantView = 2,
+    AdditionalSessions = 3,
+    ReviewStudy = 4,
+    FinalizeStudy = 5
 }
 
 const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
@@ -178,12 +189,11 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
 
     const { isValid, isDirty } = useFormState()
 
-    const setStep = (index: number) => {
-        setValue('step', index, { shouldValidate: true })
+    const setStep = (step: StudyStep) => {
+        setValue('step', step, { shouldValidate: true })
     }
 
     const saveStudy = async (study: EditingStudy) => {
-        console.log(isNew);
         if (isNew) {
             const savedStudy = await api.addStudy({
                 addStudy: {
@@ -194,13 +204,14 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                 nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
             }
         } else {
+            console.log(isDirty);
             isDirty && await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
         }
     }
 
     const steps: Step[] = [
         {
-            index: 0,
+            index: StudyStep.InternalDetails,
             component: <InternalDetails study={study} />,
             text: 'Internal Details',
             key: 'internal-details',
@@ -252,7 +263,6 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             primaryAction: {
                 text: 'Continue',
                 action: () => {
-                    // save study?
                     setStep(3)
                 },
             },
@@ -283,6 +293,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
         },
         {
             index: 4,
+            component: <ReviewStudy study={study} />,
             text: 'Waiting Period',
             key: 'waiting-period',
             disabled: true,

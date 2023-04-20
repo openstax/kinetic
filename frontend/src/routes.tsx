@@ -8,7 +8,6 @@ import { analytics } from './lib/analytics'
 const Home = loadAsync('Homepage', () => import('./screens/homepage'))
 const Dev = loadAsync('Dev', () => import('./screens/dev'))
 const StudyLanding = loadAsync('Study Landing Page', () => import('./screens/study-landing'))
-// const EditStudy = loadAsync('Edit Study Details', () => import('./screens/study-edit'))
 const ResearcherStudies = loadAsync('Studies', () => import('./screens/researcher/studies/dashboard/researcher-studies'))
 const LearnerDashboard = loadAsync('Studies', () => import('./screens/learner'))
 const AdminHomepage = loadAsync('Admin', () => import('./screens/admin-home'))
