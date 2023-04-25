@@ -1,7 +1,6 @@
 import { Box, React, useEffect, useMemo, useState } from '@common';
-import { Icon } from '@components';
 import { colors } from '@theme';
-import { Col, SelectField, SelectOption, useFormContext } from '@nathanstitt/sundry';
+import { Icon, Col, SelectField, SelectOption, useFormContext } from '@components';
 import { IRB } from '../../../account/researcher-account-page';
 import { EditingStudy } from '@models';
 import { useApi } from '@lib';

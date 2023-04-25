@@ -69,6 +69,7 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ listing, onEditSuccess }) 
     return (
         <div className="container analysis mt-8">
             <Form
+                name="analysis"
                 onSubmit={saveAnalysis}
                 showControls
                 onCancel={onCancel}

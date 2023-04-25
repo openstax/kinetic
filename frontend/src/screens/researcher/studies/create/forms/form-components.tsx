@@ -1,6 +1,5 @@
 import { Box, React } from '@common';
-import { Col, InputField } from '@nathanstitt/sundry';
-import { CharacterCount } from '@components';
+import { Col, InputField, CharacterCount } from '@components';
 
 
 export const FormSection: FCWC<{}> = ({ }) => {

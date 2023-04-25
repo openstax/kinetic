@@ -5,7 +5,7 @@ import {
     IconifyIcon,
     IconifyIconDefinition,
     setSundryIcons,
-} from '@nathanstitt/sundry'
+} from '@nathanstitt/sundry/ui'
 
 import thumbsUp from '@iconify-icons/bi/hand-thumbs-up-fill'
 import exclamationTriangle from '@iconify-icons/bi/exclamation-triangle-fill'

@@ -1,10 +1,8 @@
 import { EditingStudy } from '@models';
 import { Box, React, useEffect, useState } from '@common';
-import { FieldErrorMessage, Icon } from '@components';
+import { FieldErrorMessage, Icon, Button, Col, useFormContext } from '@components';
 import { colors } from '@theme';
-import { Button, Col, useFormContext } from '@nathanstitt/sundry';
 import { NewStage, Stage, Study } from '@api';
-import { uniqueId } from 'lodash-es';
 import { useFieldArray } from 'react-hook-form';
 
 export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {

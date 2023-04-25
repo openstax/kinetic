@@ -1,4 +1,4 @@
-import { Button, Col, Modal } from '@nathanstitt/sundry';
+import { Button, Col, Modal } from '@components'
 import { Box, React, styled, useState } from '@common';
 import { colors } from '@theme';
 import { cardImages, Category, getImageUrl, imageCategories } from '../../../../components/study-card-images/card-images';
