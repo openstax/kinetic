@@ -1,15 +1,13 @@
-import { React, cx } from '@common'
-import { Box, Tooltip, Icon, SegmentedBar, Segment, segmentCircleStyle } from '@components'
-import {
-    useRewardsSchedule,
-    RewardsSegment,
-} from '@models'
+import { Box, cx, React } from '@common'
+import { Icon, Segment, segmentCircleStyle, SegmentedBar } from '@components'
+import { RewardsSegment, useRewardsSchedule } from '@models'
 import { formatDate, toDayJS, useIsMobileDevice } from '@lib'
 import { ParticipantStudy } from '@api'
 import { colors } from '../theme'
 import trophyFilledIcon from '@iconify-icons/bi/trophy-fill'
 import trophyOutlineIcon from '@iconify-icons/bi/trophy'
 import { CSSObject } from '@emotion/react'
+import { Tooltip } from '@nathanstitt/sundry';
 
 interface RewardsProgressBarProps {
     studies: ParticipantStudy[]

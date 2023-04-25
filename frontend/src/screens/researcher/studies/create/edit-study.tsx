@@ -51,7 +51,7 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
                     .test(
                         'Unique',
                         'This study title is already in use. Please change your study title to make it unique.',
-                        (value) => {
+                        (value: string) => {
                             if (!studies.length) {
                                 return true
                             }
@@ -61,7 +61,7 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
         }),
         internalDescription: Yup.string().max(250).when('step', {
             is: 0,
-            then: (s) => s.required('Required'),
+            then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
         researcherPi: Yup.number().when('step', {
             is: 1,
@@ -80,7 +80,7 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
                     feedbackTypes: Yup.array().test(
                         'At least one',
                         'Select at least one item',
-                        (feedbackTypes) => (feedbackTypes?.length || 0) > 0
+                        (feedbackTypes: string[]) => (feedbackTypes?.length || 0) > 0
                     ),
                 })
             ),
@@ -88,11 +88,11 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
         titleForParticipants: Yup.string()
             .when('step', {
                 is: 2,
-                then: (s) =>
+                then: (s: Yup.BaseSchema) =>
                     s.required('Required').max(45).test(
                         'Unique',
                         'This study title is already in use. Please change your study title to make it unique.',
-                        (value) => {
+                        (value: string) => {
                             if (!studies.length) {
                                 return true
                             }
