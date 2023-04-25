@@ -1,0 +1,15 @@
+#
+
+studies:
+  - id: 1
+    status: 'active'
+    study_type: 'Cognitive Task & Assessment'
+    title_for_researchers: 'Working Memory Operation Span Task'
+    title_for_participants: 'How many letters can you remember?'
+    feedbackTypes: ['debrief', 'score']
+    benefits: 'some benefits'
+    durationMinutes: 25
+    points: 30
+    # Define everything in stages? or set numStages and copy one value over to each stage
+#    stages:
+#      - id:

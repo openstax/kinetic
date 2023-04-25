@@ -26,9 +26,10 @@ const getLineColor = (step: Step, currentStepIndex: number, finalStep: boolean =
     return colors.lightGray
 }
 
+// TODO An array that holds the state of each checkbox... in steps
 // TODO Just make the progress bar styles static dont get too fancy
 // TODO remove onclick / setStepIndex after dev (just a dev superpower)
-export const ProgressBar: FC<{
+export const StudyCreationProgressBar: FC<{
     steps: Step[],
     currentStep: Step,
     setStepIndex: (index: number) => void

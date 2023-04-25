@@ -61,5 +61,6 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
     # Remove unique indexes for study researchers
     remove_index :study_researchers, [:researcher_id, :study_id]
     add_index :study_researchers, [:researcher_id, :study_id]
+
   end
 end

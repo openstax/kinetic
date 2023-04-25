@@ -24,43 +24,6 @@ export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {
             </Box>
 
             <Sessions study={study}/>
-
-            {/*<Box gap='xlarge'>*/}
-            {/*    <Col sm={3} direction='column' gap>*/}
-            {/*        <h6>Do you want another session? </h6>*/}
-            {/*        <small>This is intended for a delayed measure for longitudinal study, choose yes if you want.</small>*/}
-            {/*    </Col>*/}
-
-            {/*    <Col sm={4} direction='column' gap>*/}
-            {/*        <Box gap='medium'>*/}
-            {/*            <Box direction='column'>*/}
-            {/*                <Box gap>*/}
-            {/*                    <input*/}
-            {/*                        type='radio'*/}
-            {/*                        id='yes'*/}
-            {/*                        checked={additionalSession}*/}
-            {/*                        onChange={() => setAdditionalSession(!additionalSession)}*/}
-            {/*                    />*/}
-            {/*                    <label htmlFor="yes">Yes</label>*/}
-            {/*                </Box>*/}
-            {/*                <Box gap>*/}
-            {/*                    <input*/}
-            {/*                        type='radio'*/}
-            {/*                        id='no'*/}
-            {/*                        checked={!additionalSession}*/}
-            {/*                        onChange={() => {*/}
-
-            {/*                            setAdditionalSession(!additionalSession)*/}
-            {/*                        }}*/}
-            {/*                    />*/}
-            {/*                    <label htmlFor="no">Not right now</label>*/}
-            {/*                </Box>*/}
-            {/*            </Box>*/}
-            {/*        </Box>*/}
-            {/*    </Col>*/}
-            {/*</Box>*/}
-
-            {/*{additionalSession && <MoreSessions study={study}/>}*/}
         </Box>
     )
 }

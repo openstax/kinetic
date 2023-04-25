@@ -2,7 +2,7 @@ import { Box, React, useEffect, useMemo, useNavigate, useParams, useState } from
 import { useApi, useQueryParam } from '@lib';
 import { EditingStudy } from '@models';
 import { Icon, LoadingAnimation, TopNavBar } from '@components';
-import { ProgressBar } from './progress-bar';
+import { StudyCreationProgressBar } from './study-creation-progress-bar';
 import { Button, Col, Form, Modal, useFormContext, useFormState, Yup } from '@nathanstitt/sundry';
 import { ResearchTeam } from './forms/research-team';
 import { InternalDetails } from './forms/internal-details';
@@ -13,6 +13,7 @@ import { ActionFooter } from './action-footer';
 import { ReactNode } from 'react';
 import { colors } from '@theme';
 import { ReviewStudy } from './forms/review-study';
+import { FinalizeStudy } from './forms/finalize-study';
 
 export type StepKey =
     'research-team' |
@@ -38,6 +39,7 @@ export interface Step {
     primaryAction?: Action
     secondaryAction?: Action
     backAction?: () => void
+    progressBar?: string[],
 }
 
 const getValidationSchema = (studies: Study[], study: EditingStudy) => {
@@ -45,7 +47,7 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
     return Yup.object().shape({
         titleForResearchers: Yup.string().when('step', {
             is: 0,
-            then: (s) => s.required('Required').max(100)
+            then: (s: Yup.BaseSchema) => s.required('Required').max(100)
                     .test(
                         'Unique',
                         'This study title is already in use. Please change your study title to make it unique.',
@@ -133,7 +135,7 @@ export default function EditStudy() {
     }
 
     return (
-        <Box direction='column' className='edit-study vh-100'>
+        <Box direction='column' className='edit-study vh-100 bg-white'>
             <TopNavBar hideBanner/>
             <StudyForm study={study} studies={allStudies}>
                 <FormContent study={study} />
@@ -162,7 +164,6 @@ const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, stu
             }}
             onSubmit={() => {}}
             onCancel={() => {}}
-            className='h-100'
         >
             {children}
         </Form>
@@ -269,7 +270,6 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             secondaryAction: {
                 text: 'Save as draft',
                 action: () => saveStudy(watch() as EditingStudy),
-
             },
         },
         {
@@ -300,21 +300,28 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
         },
         {
             index: 5,
+            component: <FinalizeStudy study={study} />,
             text: 'Finalize Study',
             key: 'finalize-study',
             disabled: true,
+            primaryAction: {
+                text: 'Launch Study',
+                action: () => {
+                    console.log('Launch!')
+                },
+            },
         },
     ]
 
     return (
-        <Box direction='column' justify='between' className='h-100'>
+        <Box direction='column' justify='between' className='bg-white h-100'>
             <div className="container-lg py-4 mb-10">
                 <Box justify='between'>
                     <Col sm={1}>
                         <span></span>
                     </Col>
                     <Col sm={10}>
-                        <ProgressBar steps={steps} currentStep={steps[currentStep]} setStepIndex={(i) => setStep(i)}/>
+                        <StudyCreationProgressBar steps={steps} currentStep={steps[currentStep]} setStepIndex={(i) => setStep(i)}/>
                     </Col>
                     <Col sm={1}>
                         <ExitButton isNew={isNew} />

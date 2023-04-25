@@ -15,8 +15,8 @@ interface StudyCardProps {
 }
 
 const Card = styled(Box)({
-    minWidth: 300,
-    maxWidth: 450,
+    minWidth: 350,
+    maxWidth: 350,
     backgroundColor: 'white',
     padding: '1rem',
     boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.1)',

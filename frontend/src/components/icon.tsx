@@ -50,6 +50,8 @@ import pause from '@iconify-icons/bi/pause'
 import pauseFill from '@iconify-icons/bi/pause-fill'
 import playFill from '@iconify-icons/bi/play-fill'
 import chevronLeft from '@iconify-icons/bi/chevron-left'
+import chevronDown from '@iconify-icons/bi/chevron-down'
+import chevronUp from '@iconify-icons/bi/chevron-up'
 
 const SUNDRY_PACKAGED_ICONS = {
     thumbsUp,
@@ -102,6 +104,8 @@ export const ICONS = {
     pauseFill,
     playFill,
     chevronLeft,
+    chevronDown,
+    chevronUp,
 }
 
 export type IconKey = keyof typeof ICONS
