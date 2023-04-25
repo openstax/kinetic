@@ -1,10 +1,10 @@
-import * as Yup from 'yup';
-import { React, styled, useState } from '@common';
+import { React, Yup, cx, styled, useState } from '@common';
 import { useApi, useCurrentResearcher, useUserInfo } from '@lib';
 import { colors } from '@theme';
 import { Researcher } from '@api';
-import { Button, Form, FormCancelButton, FormSaveButton, Tooltip } from '@nathanstitt/sundry';
-import { Box, CharacterCount, cx, Icon, InputField, SelectField } from '@components';
+import {
+    Button, Form, FormCancelButton, FormSaveButton, Tooltip, Box, CharacterCount, Icon, InputField, SelectField
+} from '@components';
 
 const urlRegex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
 export const ResearcherValidationSchema = Yup.object().shape({
@@ -106,7 +106,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
                     name="institution"
                     isClearable={true}
                     placeholder={editing ? 'Select Option' : ''}
-                    onChange={(value: string) => setInstitution(value)}
+                    onChange={(value) => (typeof value == 'string' && setInstitution(value))}
                     value={institution}
                     defaultValue={institution}
                     options={institutionList}

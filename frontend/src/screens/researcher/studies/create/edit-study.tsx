@@ -1,9 +1,8 @@
-import { Box, React, useEffect, useMemo, useNavigate, useParams, useState } from '@common'
+import { Box, React, Yup, useEffect, useMemo, useNavigate, useParams, useState } from '@common'
 import { useApi, useQueryParam } from '@lib';
 import { EditingStudy } from '@models';
-import { Icon, LoadingAnimation, TopNavBar } from '@components';
+import { Icon, LoadingAnimation, TopNavBar, Button, Col, Form, Modal, useFormContext, useFormState, } from '@components';
 import { StudyCreationProgressBar } from './study-creation-progress-bar';
-import { Button, Col, Form, Modal, useFormContext, useFormState, Yup } from '@nathanstitt/sundry';
 import { ResearchTeam } from './forms/research-team';
 import { InternalDetails } from './forms/internal-details';
 import { ParticipantView } from './forms/participant-view';
@@ -51,7 +50,7 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
                     .test(
                         'Unique',
                         'This study title is already in use. Please change your study title to make it unique.',
-                        (value) => {
+                        (value?: string) => {
                             if (!studies.length) {
                                 return true
                             }

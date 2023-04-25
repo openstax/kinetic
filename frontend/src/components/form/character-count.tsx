@@ -1,7 +1,6 @@
-import { useFormContext } from '@nathanstitt/sundry';
 import { Box, React } from '@common';
 import { colors } from '@theme';
-import { Icon } from '@components';
+import { Icon, useFormContext } from '@components';
 
 export const CharacterCount: FC<{ max: number, name: string }> = ({ max, name }) => {
     const value = useFormContext().watch(name, '')

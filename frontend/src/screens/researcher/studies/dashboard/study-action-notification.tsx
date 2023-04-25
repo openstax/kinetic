@@ -1,7 +1,6 @@
 import { Box, React, styled, useState } from '@common';
-import { Icon } from '@components';
-import { colors } from '../../../../theme';
-import { Col } from '@nathanstitt/sundry';
+import { Icon, Col } from '@components';
+import { colors } from '@theme'
 
 export type NotificationType = 'error' | 'success' | 'info'
 interface Notification {

@@ -1,9 +1,8 @@
 import { Box, React, styled, useNavigate, useState } from '@common'
-import { Footer, Icon, TopNavBar } from '@components';
+import {  Button, Footer, TopNavBar } from '@components';
 import { colors } from '@theme';
-import { Button, Modal, useFormState } from '@nathanstitt/sundry';
 import { Link } from 'react-router-dom';
-import { Step } from './edit-study';
+
 
 export default function ResearcherStudyLanding() {
     const [showSteps, setShowSteps] = useState<boolean>(false)

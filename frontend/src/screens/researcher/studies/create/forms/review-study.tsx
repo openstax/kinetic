@@ -1,10 +1,9 @@
 import { EditingStudy, getStudyLead, getStudyPi } from '@models';
 import { Box, React } from '@common';
 import { colors } from '@theme';
-import { Button, Col, useFormContext } from '@nathanstitt/sundry';
 import { StudyCardPreview, Tag } from '../../../../learner/card';
 import { StudyStep } from '../edit-study';
-import { Icon } from '@components';
+import { Icon, Button, Col, useFormContext } from '@components';
 import { useToggle } from 'rooks';
 
 export const ReviewStudy: FC<{study: EditingStudy}> = ({ study }) => {
