@@ -36,6 +36,7 @@ const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, on
             </Box>
             <Box className="card-body" direction="column">
                 <Form
+                    name="reward"
                     onSubmit={saveReward}
                     showControls={!reward.id}
                     validationSchema={Yup.object().shape({

@@ -1,8 +1,7 @@
 import { EditingStudy } from '@models';
 import { Box, React } from '@common';
-import { Col, DateTime, DateTimeField, InputField, SelectField } from '@nathanstitt/sundry';
+import { Icon, Col, DateTime, DateTimeField, InputField, SelectField } from '@components';
 import { StudyOverview } from './review-study';
-import { Icon } from '@components';
 import { colors } from '@theme';
 import { useToggle } from 'rooks';
 

@@ -1,12 +1,11 @@
 import { cx, React, useCallback, useState } from '@common'
-import { Box, Icon, MultiSessionBar } from '@components'
+import { Box, Icon, MultiSessionBar, Button } from '@components'
 import { useIsMobileDevice } from '@lib'
 import { EditingStudy, getStudyDuration, getStudyPoints, studyHasFeedback, studyIsMultipart } from '@models'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
 import { getImageUrl } from '../../components/study-card-images/card-images';
-import { Button } from '@nathanstitt/sundry';
 import { StudyDetailsPreview } from './details';
 
 interface StudyCardProps {

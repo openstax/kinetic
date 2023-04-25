@@ -1,8 +1,7 @@
 import { EditingStudy } from '@models';
 import { Box, React } from '@common';
-import { CharacterCount, FieldErrorMessage, Icon } from '@components';
+import { CharacterCount, FieldErrorMessage, Icon,  Col, InputField, SelectField } from '@components';
 import { colors } from '@theme';
-import { Col, InputField, SelectField, useFormContext } from '@nathanstitt/sundry';
 import { components, OptionProps } from 'react-select';
 
 const studyTypes = [

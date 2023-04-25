@@ -38,6 +38,7 @@ const Banner: React.FC<{ banner: BannerNotice, onUpdate(): void }> = ({ banner, 
             </Box>
             <Box className="card-body" direction="column">
                 <Form
+                    name="banner"
                     onSubmit={saveBanner}
                     showControls={!banner.id}
                     validationSchema={Yup.object().shape({

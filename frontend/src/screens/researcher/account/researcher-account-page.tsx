@@ -1,9 +1,8 @@
-import { Box, Footer, HelpLink, Icon, ResourceLinks, TopNavBar } from '@components';
+import { Box, Footer, HelpLink, Icon, ResourceLinks, TopNavBar, Col, Form, Modal, Tooltip } from '@components';
 import { React, styled, useState } from '@common';
 import { useApi, useCurrentResearcher, useEnvironment } from '@lib';
 import { colors } from '../../../theme';
 import { Researcher } from '@api';
-import { Col, Form, Modal, Tooltip } from '@nathanstitt/sundry';
 import CustomerSupportImage from '../../../components/customer-support-image';
 import RiceLogoURL from '../../../images/rice-logo-darktext.png';
 import DefaultAvatar from '../../../images/default-avatar.png';
