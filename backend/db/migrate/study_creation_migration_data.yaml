@@ -13,3 +13,4 @@ studies:
     # Define everything in stages? or set numStages and copy one value over to each stage
 #    stages:
 #      - id:
+  - id: 2

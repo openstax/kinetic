@@ -1,13 +1,13 @@
-import { Box, React, Yup, useEffect, useMemo, useNavigate, useParams, useState } from '@common'
+import { Box, React, useEffect, useMemo, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
-import { EditingStudy } from '@models';
-import { Icon, LoadingAnimation, TopNavBar, Button, Col, Form, Modal, useFormContext, useFormState } from '@components';
+import { EditingStudy, getStudyStatus } from '@models';
+import { Button, Col, Form, Icon, LoadingAnimation, Modal, TopNavBar, useFormContext, useFormState } from '@components';
 import { StudyCreationProgressBar } from './study-creation-progress-bar';
 import { ResearchTeam } from './forms/research-team';
 import { InternalDetails } from './forms/internal-details';
 import { ParticipantView } from './forms/participant-view';
 import { AdditionalSessions } from './forms/additional-sessions';
-import { NewStudy, ResearcherRoleEnum, Study } from '@api';
+import { NewStudy, ResearcherRoleEnum, StageStatusEnum, Study } from '@api';
 import { ActionFooter } from './action-footer';
 import { ReactNode } from 'react';
 import { colors } from '@theme';
@@ -38,7 +38,6 @@ export interface Step {
     primaryAction?: Action
     secondaryAction?: Action
     backAction?: () => void
-    progressBar?: string[],
 }
 
 const getValidationSchema = (studies: Study[], study: EditingStudy) => {
@@ -62,6 +61,10 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
             is: 0,
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
+        studyType: Yup.string().when('step', {
+            is: 0,
+            then: (s: Yup.BaseSchema) => s.required('Required'),
+        }),
         researcherPi: Yup.number().when('step', {
             is: 1,
             then: Yup.number().required(),
@@ -79,7 +82,7 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
                     feedbackTypes: Yup.array().test(
                         'At least one',
                         'Select at least one item',
-                        (feedbackTypes: string[]) => (feedbackTypes?.length || 0) > 0
+                        (feedbackTypes?: string[]) => (feedbackTypes?.length || 0) > 0
                     ),
                 })
             ),
@@ -204,7 +207,6 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                 nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
             }
         } else {
-            console.log(isDirty);
             isDirty && await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
         }
     }
@@ -216,34 +218,29 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             text: 'Internal Details',
             key: 'internal-details',
             primaryAction: {
-                text: 'Continue',
+                text: 'Save & Continue',
                 disabled: !isValid,
                 action: async () => {
                     const valid = await trigger()
                     if (valid) {
                         await saveStudy(watch() as EditingStudy)
-                        setStep(1)
+                        setStep(StudyStep.ResearchTeam)
                     }
                 },
             },
-            secondaryAction: {
-                text: 'Save as draft',
-                disabled: !isValid,
-                action: () => saveStudy(watch() as EditingStudy),
-            },
         },
         {
-            index: 1,
+            index: StudyStep.ResearchTeam,
             component: <ResearchTeam study={study} />,
             text: 'Research Team',
             key: 'research-team',
-            backAction: () => setStep(0),
+            backAction: () => setStep(StudyStep.InternalDetails),
             primaryAction: {
                 text: 'Continue',
                 action: async () => {
                     // save study?
-                    const valid = await trigger()
-                    setStep(2)
+                    // const valid = await trigger()
+                    setStep(StudyStep.ParticipantView)
                 },
                 // TODO disable if dirty, make sure
                 disabled: !isDirty,
@@ -255,15 +252,15 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             },
         },
         {
-            index: 2,
+            index: StudyStep.ParticipantView,
             component: <ParticipantView study={study} />,
             text: 'Participant View',
             key: 'participant-view',
-            backAction: () => setStep(1),
+            backAction: () => setStep(StudyStep.ResearchTeam),
             primaryAction: {
                 text: 'Continue',
                 action: () => {
-                    setStep(3)
+                    setStep(StudyStep.AdditionalSessions)
                 },
             },
             secondaryAction: {
@@ -272,17 +269,17 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             },
         },
         {
-            index: 3,
+            index: StudyStep.AdditionalSessions,
             component: <AdditionalSessions study={study} />,
             text: 'Additional Sessions (optional)',
             key: 'additional-sessions',
-            backAction: () => setStep(2),
+            backAction: () => setStep(StudyStep.ParticipantView),
             optional: true,
             primaryAction: {
                 text: 'Continue',
                 action: () => {
                     // save study?
-                    setStep(4)
+                    setStep(StudyStep.ReviewStudy)
                 },
             },
             secondaryAction: {
@@ -291,14 +288,28 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             },
         },
         {
-            index: 4,
+            index: StudyStep.ReviewStudy,
             component: <ReviewStudy study={study} />,
             text: 'Waiting Period',
             key: 'waiting-period',
             disabled: true,
+            primaryAction: {
+                text: 'Continue',
+                action: () => {
+                    if (getStudyStatus(study) === StageStatusEnum.WaitingPeriod) {
+
+                    }
+                    // save study?
+                    setStep(StudyStep.ReviewStudy)
+                },
+            },
+            secondaryAction: {
+                text: 'Save as draft',
+                action: () => saveStudy(watch() as EditingStudy),
+            },
         },
         {
-            index: 5,
+            index: StudyStep.FinalizeStudy,
             component: <FinalizeStudy study={study} />,
             text: 'Finalize Study',
             key: 'finalize-study',
@@ -306,7 +317,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             primaryAction: {
                 text: 'Launch Study',
                 action: () => {
-                    console.log('Launch!')
+                    // console.log('Launch!')
                 },
             },
         },
@@ -315,15 +326,15 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     return (
         <Box direction='column' justify='between' className='bg-white h-100'>
             <div className="container-lg py-4 mb-10">
-                <Box justify='between'>
+                <Box justify='between' gap='xxlarge'>
                     <Col sm={1}>
                         <span></span>
                     </Col>
-                    <Col sm={10}>
+                    <Col sm={9}>
                         <StudyCreationProgressBar steps={steps} currentStep={steps[currentStep]} setStepIndex={(i) => setStep(i)}/>
                     </Col>
                     <Col sm={1}>
-                        <ExitButton isNew={isNew} />
+                        {currentStep !== StudyStep.InternalDetails && <ExitButton saveStudy={saveStudy} />}
                     </Col>
                 </Box>
                 {steps[currentStep].component}
@@ -333,10 +344,9 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     )
 }
 
-const ExitButton: FC<{
-    isNew?: boolean
-}> = ({ isNew }) => {
+const ExitButton: FC<{saveStudy: (study: EditingStudy) => void}> = ({ saveStudy }) => {
     const [showWarning, setShowWarning] = useState<boolean>(false)
+    const { getValues } = useFormContext()
     const { isDirty } = useFormState()
 
     const nav = useNavigate()
@@ -351,7 +361,7 @@ const ExitButton: FC<{
                     alignSelf: 'end',
                 }}
                 onClick={() => {
-                    if (isDirty && !isNew) {
+                    if (isDirty) {
                         setShowWarning(true)
                     } else {
                         nav('/studies')
@@ -364,6 +374,7 @@ const ExitButton: FC<{
                 center
                 show={showWarning}
                 large
+                onHide={() => setShowWarning(false)}
             >
                 <Modal.Body>
                     <Box padding='4rem' align='center' justify='center' direction='column' gap='large'>
@@ -382,9 +393,10 @@ const ExitButton: FC<{
                                 No, discard changes
                             </Button>
                             <Button className='btn-researcher-primary' onClick={() => {
-                                // save, then navigate away
+                                saveStudy(getValues() as EditingStudy)
+                                nav('/studies')
                             }}>
-                                Yes, save changes
+                               Yes, save changes
                             </Button>
                         </Box>
                     </Box>

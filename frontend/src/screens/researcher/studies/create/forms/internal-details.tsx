@@ -6,8 +6,8 @@ import { components, OptionProps } from 'react-select';
 
 const studyTypes = [
     {
-        value: 'Cognitive Tasks & Assessments',
-        label: 'Cognitive Tasks & Assessments',
+        value: 'Cognitive Task & Assessment',
+        label: 'Cognitive Task & Assessment',
         desc: 'Measures of human cognition, such as working memory, reasoning, and problem-solving, as well as prior knowledge and skills',
     },
     {
@@ -23,7 +23,7 @@ const studyTypes = [
     {
         value: 'Survey',
         label: 'Survey',
-        desc: 'Self-report measures related to understanding learner needs, such as product development, UX design, and marketing research',
+        desc: 'Surveys, assessments, and/or interventions related to understanding learner needs, such as product development and UX design',
     },
     {
         value: 'Transfer of Learning',
@@ -56,14 +56,16 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
                 <h3 className='fw-bold'>Internal Details</h3>
                 <Box gap align='center'>
                     <Icon height={20} color={colors.kineticResearcher} icon='clockFill'/>
-                    <span>ETA: 5 min</span>
+                    <span>ETA: 2min</span>
                 </Box>
             </Box>
 
             <Box gap='xlarge'>
                 <Col sm={3} direction='column' gap>
-                    <h6>Internal Study Title*</h6>
-                    <small>This is an internal title only visible to researchers. It can adopt a more technical language</small>
+                    <h6>Internal Study Title</h6>
+                    <small>
+                        This is an internal title only visible to researchers. Feel free to use technical language that is meaningful.
+                    </small>
                 </Col>
 
                 <Col sm={4} direction='column' gap>
@@ -78,8 +80,8 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
 
             <Box gap='xlarge'>
                 <Col sm={3} direction='column' gap>
-                    <h6>Internal Description*</h6>
-                    <small>This is an internal description only visible to researchers. It can adopt a more technical language</small>
+                    <h6>Internal Description</h6>
+                    <small>Brief short description of what this study investigates</small>
                 </Col>
 
                 <Col sm={4} direction='column' gap>
@@ -94,14 +96,14 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
 
             <Box gap='xlarge'>
                 <Col sm={3} direction='column' gap>
-                    <h6>Study Type (optional)</h6>
+                    <h6>Study Type</h6>
                     <small>Internal tags only visible to researchers</small>
                 </Col>
 
                 <Col sm={4} direction='column' gap>
                     <SelectField
                         name="studyType"
-                        isClearable={true}
+                        placeholder='Select Type'
                         defaultValue={study.studyType}
                         options={studyTypes}
                         components={{ Option } as any}
