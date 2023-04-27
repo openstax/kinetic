@@ -38,7 +38,7 @@ class QualtricsTestData
       csv << row
     end
     file.flush
-    file.path
+    file
   end
 
   def question_is_recorded?(question)

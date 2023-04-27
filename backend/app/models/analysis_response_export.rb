@@ -24,14 +24,17 @@ class AnalysisResponseExport < ApplicationRecord
 
   protected
 
-  def attach_file(file_name)
+  def file_attachment(file_name)
     md5sum = Digest::MD5.file(file_name).hexdigest
-    files.attach(io: File.open(file_name),
-                 filename: "#{File.basename(file_name)}-#{md5sum}#{File.extname(file_name)}")
+    ext = File.extname(file_name)
+    {
+      io: File.open(file_name),
+      filename: "#{File.basename(file_name, ext)}-#{md5sum}#{ext}"
+    }
   end
 
   def generate_test_data
-    files = []
+    csvs = []
     seed = metadata[:random_seed] || self.class.new_random_seed
     analysis.studies.each do |study|
       study.stages.each do |stage|
@@ -44,10 +47,10 @@ class AnalysisResponseExport < ApplicationRecord
 
         generator = generator_klass.new(stage: stage, random_seed: seed)
 
-        files <<  generator.to_csv
+        csvs << generator.to_csv
       end
     end
-    files.each { |f| attach_file(f) }
+    files.attach(csvs.map { |f| file_attachment(f.path) })
     update!(is_complete: true, metadata: metadata.merge(random_seed: seed))
   end
 end

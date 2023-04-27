@@ -15,10 +15,12 @@ class Analysis < ApplicationRecord
   def responses_before(cutoff:, is_testing:)
     responses = analysis_response_exports
                   .where(is_testing: is_testing)
-                  .where(AnalysisResponseExport.arel_table[:cutoff_at].lt(cutoff))
+                  .where(AnalysisResponseExport.arel_table[:cutoff_at].lteq(cutoff))
                   .order(created_at: :desc)
 
-    if responses.none?
+    # if we didn't find any responses
+    # or check for new if the earliest one is less than cutoff
+    if responses.none? || responses.first.cutoff_at.to_date < cutoff.to_date
       responses = [analysis_response_exports.create!(is_testing: is_testing, cutoff_at: cutoff)]
     end
 
