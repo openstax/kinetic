@@ -163,7 +163,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
 
             {!editing &&
                 <Box gap>
-                    <Button primary data-test-id="form-edit-btn" onClick={() => setEditing(true)}>
+                    <Button primary data-testid="form-edit-btn" onClick={() => setEditing(true)}>
                         Edit Profile
                     </Button>
                 </Box>

@@ -34,7 +34,7 @@ const Banner: React.FC<{ banner: BannerNotice, onUpdate(): void }> = ({ banner, 
             className="mb-2 border bg-white"
         >
             <Box className="card-header" justify="end">
-                <Icon icon="trash" data-test-id="delete-banner" onClick={onDelete} />
+                <Icon icon="trash" data-testid="delete-banner" onClick={onDelete} />
             </Box>
             <Box className="card-body" direction="column">
                 <Form
@@ -70,7 +70,7 @@ export function AdminBanners() {
         <div className="banners">
             <Box justify="between" align="center" margin="bottom">
                 <h4>Scheduled Banners</h4>
-                <Icon height={15} icon="plusCircle" data-test-id="add-banner" onClick={state.addNewRecord} />
+                <Icon height={15} icon="plusCircle" data-testid="add-banner" onClick={state.addNewRecord} />
             </Box>
             {state.records.map((banner, i) => <Banner key={banner.id || i} banner={banner} onUpdate={state.fetchRecords} />)}
         </div>

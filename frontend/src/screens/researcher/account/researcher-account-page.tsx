@@ -170,7 +170,7 @@ const Avatar: React.FC = () => {
                 center
                 show={isShowingModal}
                 large
-                data-test-id="update-avatar-modal"
+                data-testid="update-avatar-modal"
                 title='Update Avatar'
             >
                 <Modal.Body>

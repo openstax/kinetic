@@ -66,7 +66,7 @@ const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies,
             <h3 css={{ margin: '2rem 0' }}>{title}</h3>
             {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
-            <Grid css={{ overflow: 'auto', paddingBottom: '10px' }} data-test-id="studies-listing">
+            <Grid css={{ overflow: 'auto', paddingBottom: '10px' }} data-testid="studies-listing">
                 {studies.map((s) => <StudyCard onSelect={onSelect} study={s} key={s.id} />)}
             </Grid>
         </div>
@@ -133,7 +133,7 @@ const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
     }
 
     return (
-        <Box gap="large" data-test-id="topic-tabs" wrap margin={{ bottom: 'large' }}
+        <Box gap="large" data-testid="topic-tabs" wrap margin={{ bottom: 'large' }}
             css={{
                 span: {
                     cursor: 'pointer',
