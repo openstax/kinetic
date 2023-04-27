@@ -47,7 +47,7 @@ class AnalysisResponseExport < ApplicationRecord
 
         generator = generator_klass.new(stage: stage, random_seed: seed)
 
-        csvs << generator.to_csv_file
+        csvs << generator.to_csv
       end
     end
     files.attach(csvs.map { |f| file_attachment(f.path) })
