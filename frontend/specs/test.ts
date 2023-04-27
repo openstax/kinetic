@@ -15,7 +15,7 @@ expect.extend(matchers)
 export const createTestIdEngine = () => {
     const toTestSelector = (sel: string) => {
         const quoted = sel.match(/^".*"$/) ? sel : `"${sel}"`
-        return `[data-test-id=${quoted}]`
+        return `[data-testid=${quoted}]`
     }
     return {
         query: (root: HTMLElement, selector: string) => root.querySelector(toTestSelector(selector)),

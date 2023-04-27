@@ -58,12 +58,12 @@ export default function ResearcherStudies() {
                 <ActionNotification notifications={notifications} onDismiss={dismissNotification}/>
 
                 <Box align="center" justify="between">
-                    <h3 className='fw-bold' data-test-id='studies-table-header'>
+                    <h3 className='fw-bold' data-testid='studies-table-header'>
                         Studies
                     </h3>
                     <Button
                         primary
-                        data-test-id="add-study"
+                        data-testid="add-study"
                         onClick={() => nav('/study/create')}
                         className='fw-bold'
                     >

@@ -91,7 +91,7 @@ export const ImageLibrary: FC<{
             center
             show={show}
             xlarge
-            data-test-id="image-library-modal"
+            data-testid="image-library-modal"
             title='Image Library'
         >
             <Modal.Body css={{ padding: 0, height: 500 }}>

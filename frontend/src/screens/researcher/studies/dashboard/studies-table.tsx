@@ -372,7 +372,7 @@ export const StudiesTable: React.FC<{
     return (
         <Box direction='column' className='mt-2'>
             {isLaunched && <StatusFilters table={table} className='my-2'/>}
-            <table data-test-id="studies-table" className='w-100'>
+            <table data-testid="studies-table" className='w-100'>
                 <thead css={{ height: 40 }}>
                     <tr>
                         {table.getFlatHeaders().map((header) =>
