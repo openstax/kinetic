@@ -13,7 +13,6 @@ class QualtricsTestData
     @stage = stage
   end
 
-
   def to_csv(response_count: 50)
     questions = QualtricsApi.new.get_survey_definition_questions(@stage)
 
