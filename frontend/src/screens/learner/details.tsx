@@ -65,7 +65,7 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
             busyMessage="Launching Study…"
             primary
             disabled={!isStudyLaunchable(study)}
-            data-test-id="launch-study"
+            data-testid="launch-study"
             onClick={onLaunch}
         >
             {action} study

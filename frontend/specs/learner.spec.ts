@@ -62,7 +62,7 @@ test('launching study and testing completion', async ({ page }) => {
     const studyId = await createStudy({ page, name: faker.commerce.productName() })
     await goToPage({ page, path: '/studies', loginAs: 'user' })
 
-    const firstStudyCard = page.locator('css=.studies.filtered >> [data-test-id="studies-listing"]').nth(0)
+    const firstStudyCard = page.locator('css=.studies.filtered >> [data-testid="studies-listing"]').nth(0)
 
     const firstStudyId = await studyIdForCard(firstStudyCard)
 
