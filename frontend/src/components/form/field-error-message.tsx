@@ -11,7 +11,7 @@ export const FieldErrorMessage: FC<{name: string}> = ({ name }) => {
     return (
         <small css={{ color: colors.red }}>
             <Box gap>
-                <Icon icon="warning" color='red' height={18}></Icon>
+                <Icon icon="warning" height={18}></Icon>
                 <span>{String(error.message)}</span>
             </Box>
         </small>

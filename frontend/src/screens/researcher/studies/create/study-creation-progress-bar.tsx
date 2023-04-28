@@ -21,6 +21,9 @@ const getLineColor = (step: Step, currentStep: Step, finalStep: boolean = false)
     }
 
     if (step.index < currentStep.index) {
+        if (currentStep.index === StudyStep.ReviewStudy || currentStep.index === StudyStep.FinalizeStudy) {
+            return colors.lightGray
+        }
         return colors.kineticResearcher
     } else {
         return colors.lightGray
@@ -68,7 +71,7 @@ const StepIcon: FC<{step: Step, currentStep: Step}> = ({ step, currentStep }) =>
         return <img height={25} src={CompletedStep} alt='complete' />
     }
 
-    if (step.optional) {
+    if (step.index === StudyStep.AdditionalSessions) {
         return <img height={25} src={OptionalStep} alt='optional' />
     }
 

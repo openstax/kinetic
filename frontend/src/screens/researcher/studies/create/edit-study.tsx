@@ -5,7 +5,7 @@ import { Button, Col, Form, Icon, LoadingAnimation, Modal, TopNavBar, useFormCon
 import { StudyCreationProgressBar } from './study-creation-progress-bar';
 import { ResearchTeam } from './forms/research-team';
 import { InternalDetails } from './forms/internal-details';
-import { ParticipantView } from './forms/participant-view';
+import { ParticipantView, participantViewValidation } from './forms/participant-view';
 import { AdditionalSessions } from './forms/additional-sessions';
 import { NewStudy, ResearcherRoleEnum, StageStatusEnum, Study } from '@api';
 import { ActionFooter } from './action-footer';
@@ -65,13 +65,13 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
             is: 0,
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
-        researcherPi: Yup.number().when('step', {
+        researcherPi: Yup.mixed().when('step', {
             is: 1,
-            then: Yup.number().required(),
+            then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
-        researcherLead: Yup.number().when('step', {
+        researcherLead: Yup.mixed().when('step', {
             is: 1,
-            then: Yup.number().required(),
+            then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
         stages: Yup.array().when('step', {
             is: (step: number) => step === 2 || step === 3,
@@ -87,22 +87,21 @@ const getValidationSchema = (studies: Study[], study: EditingStudy) => {
                 })
             ),
         }),
-        titleForParticipants: Yup.string()
-            .when('step', {
-                is: 2,
-                then: (s: Yup.BaseSchema) =>
-                    s.required('Required').max(45).test(
-                        'Unique',
-                        'This study title is already in use. Please change your study title to make it unique.',
-                        (value: string) => {
-                            if (!studies.length) {
-                                return true
-                            }
-                            return allOtherStudies.every(study => study.titleForParticipants?.toLowerCase() !== value?.toLowerCase())
-                        }
-                    ),
-            }),
+        ...participantViewValidation(studies, study),
     })
+}
+
+const getFormDefaults = (study: EditingStudy, step: StudyStep) => {
+    const pi = study.researchers?.find(r => r.role === ResearcherRoleEnum.Pi)?.id
+    const lead = study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)?.id
+
+    return {
+        ...study,
+        step: step,
+        researcherPi: pi,
+        researcherLead: lead,
+        stages: study.stages,
+    }
 }
 
 export default function EditStudy() {
@@ -148,22 +147,11 @@ export default function EditStudy() {
 
 const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, studies, children }) => {
     const initialStep = +useQueryParam('step') || 0
-    const { pi, lead } = useMemo(() => {
-        const pi = study.researchers?.find(r => r.role === ResearcherRoleEnum.Pi)?.id
-        const lead = study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)?.id
-        return { pi, lead }
-    }, [study.researchers])
 
     return (
         <Form
             validationSchema={getValidationSchema(studies, study)}
-            defaultValues={{
-                ...study,
-                step: initialStep,
-                researcherPi: pi,
-                researcherLead: lead,
-                stages: study.stages,
-            }}
+            defaultValues={getFormDefaults(study, initialStep)}
             onSubmit={() => {}}
             onCancel={() => {}}
         >
@@ -182,7 +170,7 @@ export enum StudyStep {
 }
 
 const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
-    const { watch, setValue, trigger } = useFormContext()
+    const { watch, setValue, trigger, getValues, reset } = useFormContext()
 
     const currentStep = watch('step')
     const id = useParams<{ id: string }>().id
@@ -196,7 +184,8 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
         setValue('step', step, { shouldValidate: true })
     }
 
-    const saveStudy = async (study: EditingStudy) => {
+    const saveStudy = async () => {
+        const study = getValues() as EditingStudy
         if (isNew) {
             const savedStudy = await api.addStudy({
                 addStudy: {
@@ -207,7 +196,12 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                 nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
             }
         } else {
-            isDirty && await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
+            if (!isDirty) {
+                return;
+            }
+
+            const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
+            reset(getFormDefaults(savedStudy, currentStep))
         }
     }
 
@@ -223,7 +217,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                 action: async () => {
                     const valid = await trigger()
                     if (valid) {
-                        await saveStudy(watch() as EditingStudy)
+                        await saveStudy()
                         setStep(StudyStep.ResearchTeam)
                     }
                 },
@@ -237,17 +231,19 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             backAction: () => setStep(StudyStep.InternalDetails),
             primaryAction: {
                 text: 'Continue',
-                action: async () => {
-                    // save study?
-                    // const valid = await trigger()
-                    setStep(StudyStep.ParticipantView)
-                },
+                disabled: !isValid,
                 // TODO disable if dirty, make sure
-                disabled: !isDirty,
+                action: async () => {
+                    const valid = await trigger()
+                    if (valid) {
+                        await saveStudy()
+                        setStep(StudyStep.ParticipantView)
+                    }
+                },
             },
             secondaryAction: {
                 text: 'Save as draft',
-                action: () => saveStudy(watch() as EditingStudy),
+                action: saveStudy,
                 disabled: !isDirty,
             },
         },
@@ -265,7 +261,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             },
             secondaryAction: {
                 text: 'Save as draft',
-                action: () => saveStudy(watch() as EditingStudy),
+                action: saveStudy,
             },
         },
         {
@@ -284,7 +280,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             },
             secondaryAction: {
                 text: 'Save as draft',
-                action: () => saveStudy(watch() as EditingStudy),
+                action: saveStudy,
             },
         },
         {
@@ -297,15 +293,14 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                 text: 'Continue',
                 action: () => {
                     if (getStudyStatus(study) === StageStatusEnum.WaitingPeriod) {
-
+                        // do something?
                     }
-                    // save study?
                     setStep(StudyStep.ReviewStudy)
                 },
             },
             secondaryAction: {
                 text: 'Save as draft',
-                action: () => saveStudy(watch() as EditingStudy),
+                action: saveStudy,
             },
         },
         {

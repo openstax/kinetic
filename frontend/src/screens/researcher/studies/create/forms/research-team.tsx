@@ -1,6 +1,6 @@
 import { Box, React, useEffect, useMemo, useState } from '@common';
 import { colors } from '@theme';
-import { Icon, Col, SelectField, SelectOption, useFormContext } from '@components';
+import { Icon, Col, SelectField, SelectOption, useFormContext, FieldErrorMessage } from '@components';
 import { IRB } from '../../../account/researcher-account-page';
 import { EditingStudy } from '@models';
 import { useApi } from '@lib';
@@ -18,7 +18,7 @@ const DropdownIndicator = (props: DropdownIndicatorProps) => {
 export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
     const api = useApi()
     const [researchers, setResearchers] = useState<Researcher[]>([])
-    const { setValue, getValues } = useFormContext()
+    const { setValue, getValues, watch } = useFormContext()
 
     useEffect(() => {
         api.getResearchers().then(researchers => {
@@ -57,7 +57,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                 <h3 className='fw-bold'>Research Team</h3>
                 <Box gap align='center'>
                     <Icon height={20} color={colors.kineticResearcher} icon='clockFill'/>
-                    <span>ETA: 5 min</span>
+                    <span>ETA: 2min</span>
                 </Box>
             </Box>
 
@@ -67,7 +67,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                     <small>Invite the study PI as a collaborator, and enable them to view and manage the study from their own account</small>
                 </Col>
 
-                <Col sm={4} justify='center'>
+                <Col sm={4} justify='center' gap>
                     <SelectField
                         name='researcherPi'
                         options={researcherOptions}
@@ -76,6 +76,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                         components={{ DropdownIndicator }}
                         onChange={updateResearchers}
                     />
+                    <FieldErrorMessage name='researcherPi' />
                 </Col>
             </Box>
 
@@ -85,7 +86,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                     <small>Invite the study lead as a collaborator, and enable them to view and manage the study from their own account</small>
                 </Col>
 
-                <Col sm={4} justify='center'>
+                <Col sm={4} justify='center' gap>
                     <SelectField
                         name='researcherLead'
                         options={researcherOptions}
@@ -94,6 +95,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                         components={{ DropdownIndicator }}
                         onChange={updateResearchers}
                     />
+                    <FieldErrorMessage name='researcherLead' />
                 </Col>
             </Box>
 

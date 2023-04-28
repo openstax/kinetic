@@ -1,17 +1,46 @@
 import { EditingStudy, studySubjects, studyTopics } from '@models';
-import { Box, React, useState } from '@common';
+import { Box, React, useMemo, useState, Yup } from '@common';
 import { CharacterCount, FieldErrorMessage, Icon, SelectField, Button, Col, InputField, useFormContext } from '@components';
 import { colors } from '@theme';
 import { ImageLibrary } from '../image-library';
 import { StudyCardPreview } from '../../../../learner/card';
 import { first } from 'lodash-es';
+import { Study } from '@api';
+
+export const participantViewValidation = (studies: Study[], study: EditingStudy) => {
+    const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])
+
+    return {
+        titleForParticipants: Yup.string().when('step', {
+            is: 2,
+            then: (s: Yup.BaseSchema) =>
+                s.required('Required').max(45).test(
+                    'Unique',
+                    'This study title is already in use. Please change your study title to make it unique.',
+                    (value: string) => {
+                        if (!studies.length) {
+                            return true
+                        }
+                        return allOtherStudies.every(study => study.titleForParticipants?.toLowerCase() !== value?.toLowerCase())
+                    }
+                ),
+        }),
+        shortDescription: Yup.string().max(120).when('step', {
+            is: 2,
+            then: (s: Yup.BaseSchema) => s.required('Required'),
+        }),
+        longDescription: Yup.string().max(250).when('step', {
+            is: 2,
+            then: (s: Yup.BaseSchema) => s.required('Required'),
+        }),
+    }
+}
 
 export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
     const [showImagePicker, setShowImagePicker] = useState<boolean>(false)
     const { setValue, watch, register } = useFormContext()
     const studyPreview = watch() as EditingStudy
     const firstSession = first(study.stages)
-    console.log(studyPreview);
 
     const setDurationAndPoints = (e: React.ChangeEvent<HTMLInputElement>) => {
         // TODO Use useFormArray().update()
@@ -39,7 +68,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                         <h3 className='fw-bold'>Participant View</h3>
                         <Box gap align='center'>
                             <Icon height={20} color={colors.kineticResearcher} icon='clockFill'/>
-                            <span>ETA: 10 min</span>
+                            <span>ETA: 10min</span>
                         </Box>
                     </Box>
 
@@ -61,28 +90,26 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
                             <h6>Short Study Description*</h6>
-                            <small>Craft a description visible to participants that can be a hook for your study - relevant, brief, simple, and engaging</small>
+                            <small>Craft a description that best engages participants with your study - relevant, brief, and simple</small>
                         </Col>
 
-                        <Col sm={6} direction='column' gap>
-                            <div>
-                                <InputField type='textarea' name='shortDescription' />
-                                <CharacterCount max={120} name='shortDescription' />
-                            </div>
+                        <Col sm={6} direction='column' gap='small'>
+                            <InputField type='textarea' name='shortDescription' />
+                            <CharacterCount max={120} name='shortDescription' />
+                            <FieldErrorMessage name='shortDescription' />
                         </Col>
                     </Box>
 
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
                             <h6>Long Study Description*</h6>
-                            <small>Share more about what participants could expect when taking your study</small>
+                            <small>Share more about what participants should expect when participating in your study</small>
                         </Col>
 
-                        <Col sm={6} direction='column' gap>
-                            <div>
-                                <InputField type='textarea' name='longDescription' />
-                                <CharacterCount max={250} name='longDescription' />
-                            </div>
+                        <Col sm={6} direction='column' gap='small'>
+                            <InputField type='textarea' name='longDescription' />
+                            <CharacterCount max={250} name='longDescription' />
+                            <FieldErrorMessage name='longDescription' />
                         </Col>
                     </Box>
 
