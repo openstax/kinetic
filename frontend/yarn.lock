@@ -735,10 +735,10 @@
     hoist-non-react-statics "^3.3.1"
     react-is "^16.12.0"
 
-"@nathanstitt/sundry@1.4.5":
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/@nathanstitt/sundry/-/sundry-1.4.5.tgz#5e6172412f47ea8a1d385936cd0bfe4d9ffef470"
-  integrity sha512-sPZYxJ0WFRaORhWQfMFn7Ev/CDC31i97rzRNySqcisVEGWqbGGyVFCSvenYWqsJaEa13cMFfm/nJC0642UkQVA==
+"@nathanstitt/sundry@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@nathanstitt/sundry/-/sundry-1.5.0.tgz#918b0fcde19995bf619de256db434a57c9886d19"
+  integrity sha512-wCXjr7PZ7SDpvKBE7Ec4LGYwHR9ePDPYNFAt2Zj+C8fd7wYAtUeElMF/JoMytsFW62WnjV+8iX6YBshpQFL89w==
   dependencies:
     "@hookform/resolvers" "^2.9"
     "@iconify-icons/bi" "^1.2.15"
@@ -4351,7 +4351,7 @@ use-local-storage-state@^17.0.0:
   resolved "https://registry.yarnpkg.com/use-local-storage-state/-/use-local-storage-state-17.2.0.tgz#4928f792b0030b9fca3e9b7cb15e39526dfbb41f"
   integrity sha512-CcnSJ3oaCbb4aXPRpctXNoAOfJ1V4+OWLHrvA2s2hOYCE7HG0QEyKd324XAs7FsyXv/uzYcu7sPxn+KwvJIwlw==
 
-use-sync-external-store@^1.2.0:
+use-sync-external-store@1.2.0, use-sync-external-store@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
   integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
@@ -4605,3 +4605,10 @@ yup@^0.32:
     nanoclone "^0.2.1"
     property-expr "^2.0.4"
     toposort "^2.0.2"
+
+zustand@^4.3.7:
+  version "4.3.7"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.3.7.tgz#501b1f0393a7f1d103332e45ab574be5747fedce"
+  integrity sha512-dY8ERwB9Nd21ellgkBZFhudER8KVlelZm8388B5nDAXhO/+FZDhYMuRnqDgu5SYyRgz/iaf8RKnbUs/cHfOGlQ==
+  dependencies:
+    use-sync-external-store "1.2.0"

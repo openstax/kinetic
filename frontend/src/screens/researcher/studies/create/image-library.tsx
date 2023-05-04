@@ -81,10 +81,10 @@ export const ImageLibrary: FC<{
     show: boolean,
     onHide: () => void,
     onSelect: (imageId: string) => void,
-    currentImage: string
+    currentImage?: string
 }> = ({ show, onHide, onSelect, currentImage }) => {
     const [category, setCategory] = useState<Category>('Personality')
-    const [selectedImage, setSelectedImage] = useState<string>(currentImage)
+    const [selectedImage, setSelectedImage] = useState<string>(currentImage || 'Schoolfuturecareer_1')
     return (
         <Modal
             onHide={onHide}

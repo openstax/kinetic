@@ -1,12 +1,31 @@
 import { EditingStudy } from '@models';
-import { Box, React, useEffect, useState } from '@common';
+import { Box, React, useEffect, useState, Yup } from '@common';
 import { FieldErrorMessage, Icon, Button, Col, useFormContext } from '@components';
 import { colors } from '@theme';
 import { NewStage, Stage, Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
+import { StudyFeedback } from './participant-view';
+
+export const additionalSessionsValidation = () => {
+    return {
+        stages: Yup.array().when('step', {
+            is: (step: number) => step === 3,
+            then: Yup.array().of(
+                Yup.object({
+                    points: Yup.string().required(),
+                    durationMinutes: Yup.string().required(),
+                    feedbackTypes: Yup.array().test(
+                        'At least one',
+                        'Select at least one item',
+                        (feedbackTypes?: string[]) => (feedbackTypes?.length || 0) > 0
+                    ),
+                })
+            ),
+        }),
+    }
+}
 
 export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {
-    // const [additionalSession, setAdditionalSession] = useState<boolean>(!!study.stages && study.stages.length > 1)
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
             <Box gap direction='column'>
@@ -14,7 +33,7 @@ export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {
                     <h3 className='fw-bold'>Additional sessions (optional)</h3>
                     <Box gap align='center'>
                         <Icon height={20} color={colors.kineticResearcher} icon='clockFill'/>
-                        <span>ETA: 10 min</span>
+                        <span>ETA: 2min</span>
                     </Box>
                 </Box>
 
@@ -27,29 +46,18 @@ export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {
 }
 
 const Sessions: FC<{study: EditingStudy}> = ({ study }) => {
-    const { control, watch } = useFormContext<EditingStudy>()
+    const { control } = useFormContext<EditingStudy>()
     const { fields, append, remove } = useFieldArray({
         control,
         name: 'stages',
     })
 
-    console.log(fields, watch('stages'));
-
     const addSession = () => {
         append({ order: fields.length, config: {}, id: -1 })
-        // setSessions(prev => ([
-        //     ...prev,
-        //     {
-        //         order: prev.length,
-        //         config: {},
-        //     } as NewStage,
-        // ]))
     }
 
     const removeSession = (index: number) => {
         remove(index)
-        // unregister(`stages.${index}`, { keepValue: false })
-        // setSessions(prev => prev.filter((_, i) => i !== index))
     }
 
     return (
@@ -100,6 +108,7 @@ const AdditionalSession: FC<{
                 <Box gap='xlarge'>
                     <Col sm={4} direction='column' gap>
                         <h6>Session Duration*</h6>
+                        <small>Select the option that best describes your estimated session duration.</small>
                     </Col>
 
                     <Col sm={6} gap>
@@ -155,54 +164,7 @@ const AdditionalSession: FC<{
                     </Col>
                 </Box>
 
-                <Box gap='xlarge'>
-                    <Col sm={4} direction='column' gap>
-                        <h6>Participant Feedback*</h6>
-                        <small>Share with participants what type of feedback to expect at the end of the study. Preferred feedback indicated.</small>
-                    </Col>
-
-                    <Col sm={6} direction='column' gap='medium'>
-                        <Box direction='column'>
-                            <Box gap>
-                                <input
-                                    type='checkbox'
-                                    id='score'
-                                    value='score'
-                                    {...register(`stages.${index}.feedbackTypes]`)}
-                                />
-                                <label htmlFor="score">Score</label>
-                            </Box>
-                            <Box gap>
-                                <input
-                                    type='checkbox'
-                                    id='debrief'
-                                    value='debrief'
-                                    {...register(`stages.${index}.feedbackTypes]`)}
-                                />
-                                <label htmlFor="debrief">Debrief</label>
-                            </Box>
-                            <Box gap>
-                                <input
-                                    type='checkbox'
-                                    id='personalized'
-                                    value='personalized'
-                                    {...register(`stages.${index}.feedbackTypes]`)}
-                                />
-                                <label htmlFor="personalized">Personalized</label>
-                            </Box>
-                            <Box gap>
-                                <input
-                                    type='checkbox'
-                                    id='general'
-                                    value='general'
-                                    {...register(`stages.${index}.feedbackTypes]`)}
-                                />
-                                <label htmlFor="general">General</label>
-                            </Box>
-                            <FieldErrorMessage name={`stages.${index}.feedbackTypes]`} />
-                        </Box>
-                    </Col>
-                </Box>
+                <StudyFeedback sessionIndex={index} />
             </Box>
         </Col>
     )

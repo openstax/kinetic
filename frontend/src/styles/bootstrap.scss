@@ -75,6 +75,9 @@ $spacers: map-merge(
 
 $body-bg: #f6f8fa;
 
+$toast-background-color: rgba(#f6f8fa, 1);
+$toast-header-background-color: rgba(#f6f8fa, 1);
+
 // scss-docs-start import-stack
 // Configuration
 @import "node_modules/bootstrap/scss/functions";
@@ -106,8 +109,8 @@ $body-bg: #f6f8fa;
 @import "node_modules/bootstrap/scss/alert";
 // @import "node_modules/bootstrap/scss/progress";
 @import "node_modules/bootstrap/scss/list-group";
-// @import "node_modules/bootstrap/scss/close";
-// @import "node_modules/bootstrap/scss/toasts";
+@import "node_modules/bootstrap/scss/close";
+@import "node_modules/bootstrap/scss/toasts";
 @import "node_modules/bootstrap/scss/modal";
 @import "node_modules/bootstrap/scss/tooltip";
 @import "node_modules/bootstrap/scss/popover";

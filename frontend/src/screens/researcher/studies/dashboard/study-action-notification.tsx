@@ -2,6 +2,7 @@ import { Box, React, styled, useState } from '@common';
 import { Icon, Col } from '@components';
 import { colors } from '@theme'
 
+// TODO Replace with useNotificationStore()
 export type NotificationType = 'error' | 'success' | 'info'
 interface Notification {
     type: NotificationType,

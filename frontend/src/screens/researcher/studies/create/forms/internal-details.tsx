@@ -1,8 +1,37 @@
 import { EditingStudy } from '@models';
-import { Box, React } from '@common';
+import { Box, React, useMemo, Yup } from '@common';
 import { CharacterCount, FieldErrorMessage, Icon,  Col, InputField, SelectField } from '@components';
 import { colors } from '@theme';
 import { components, OptionProps } from 'react-select';
+import { Study } from '@api';
+
+export const internalDetailsValidation = (studies: Study[], study: EditingStudy) => {
+    const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])
+    return {
+        titleForResearchers: Yup.string().when('step', {
+            is: 0,
+            then: (s: Yup.BaseSchema) => s.required('Required').max(100)
+                .test(
+                    'Unique',
+                    'This study title is already in use. Please change your study title to make it unique.',
+                    (value?: string) => {
+                        if (!studies.length) {
+                            return true
+                        }
+                        return allOtherStudies.every(study => study.titleForResearchers?.toLowerCase() !== value?.toLowerCase())
+                    }
+                ),
+        }),
+        internalDescription: Yup.string().max(250).when('step', {
+            is: 0,
+            then: (s: Yup.BaseSchema) => s.required('Required'),
+        }),
+        studyType: Yup.string().when('step', {
+            is: 0,
+            then: (s: Yup.BaseSchema) => s.required('Required'),
+        }),
+    }
+}
 
 const studyTypes = [
     {

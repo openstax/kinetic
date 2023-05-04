@@ -1,26 +1,20 @@
-import { Box, React, useEffect, useMemo, useNavigate, useParams, useState, Yup } from '@common'
+import { Box, React, useEffect, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
 import { EditingStudy, getStudyStatus } from '@models';
 import { Button, Col, Form, Icon, LoadingAnimation, Modal, TopNavBar, useFormContext, useFormState } from '@components';
 import { StudyCreationProgressBar } from './study-creation-progress-bar';
-import { ResearchTeam } from './forms/research-team';
-import { InternalDetails } from './forms/internal-details';
+import { researcherValidation, ResearchTeam } from './forms/research-team';
+import { InternalDetails, internalDetailsValidation } from './forms/internal-details';
 import { ParticipantView, participantViewValidation } from './forms/participant-view';
-import { AdditionalSessions } from './forms/additional-sessions';
+import { AdditionalSessions, additionalSessionsValidation } from './forms/additional-sessions';
 import { NewStudy, ResearcherRoleEnum, StageStatusEnum, Study } from '@api';
 import { ActionFooter } from './action-footer';
 import { ReactNode } from 'react';
 import { colors } from '@theme';
 import { ReviewStudy } from './forms/review-study';
 import { FinalizeStudy } from './forms/finalize-study';
-
-export type StepKey =
-    'research-team' |
-    'internal-details' |
-    'participant-view' |
-    'additional-sessions' |
-    'waiting-period' |
-    'finalize-study'
+import { useNotificationStore } from '@store';
+import { Toast } from '@nathanstitt/sundry/ui';
 
 interface Action {
     text: string
@@ -32,69 +26,24 @@ export interface Step {
     index: number
     component?: ReactNode
     text: string
-    key: StepKey
     optional?: boolean
-    disabled?: boolean
     primaryAction?: Action
     secondaryAction?: Action
     backAction?: () => void
 }
 
-const getValidationSchema = (studies: Study[], study: EditingStudy) => {
-    const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])
+const buildValidationSchema = (studies: Study[], study: EditingStudy) => {
     return Yup.object().shape({
-        titleForResearchers: Yup.string().when('step', {
-            is: 0,
-            then: (s: Yup.BaseSchema) => s.required('Required').max(100)
-                    .test(
-                        'Unique',
-                        'This study title is already in use. Please change your study title to make it unique.',
-                        (value?: string) => {
-                            if (!studies.length) {
-                                return true
-                            }
-                            return allOtherStudies.every(study => study.titleForResearchers?.toLowerCase() !== value?.toLowerCase())
-                        }
-                    ),
-        }),
-        internalDescription: Yup.string().max(250).when('step', {
-            is: 0,
-            then: (s: Yup.BaseSchema) => s.required('Required'),
-        }),
-        studyType: Yup.string().when('step', {
-            is: 0,
-            then: (s: Yup.BaseSchema) => s.required('Required'),
-        }),
-        researcherPi: Yup.mixed().when('step', {
-            is: 1,
-            then: (s: Yup.BaseSchema) => s.required('Required'),
-        }),
-        researcherLead: Yup.mixed().when('step', {
-            is: 1,
-            then: (s: Yup.BaseSchema) => s.required('Required'),
-        }),
-        stages: Yup.array().when('step', {
-            is: (step: number) => step === 2 || step === 3,
-            then: Yup.array().of(
-                Yup.object({
-                    points: Yup.number(),
-                    duration: Yup.number(),
-                    feedbackTypes: Yup.array().test(
-                        'At least one',
-                        'Select at least one item',
-                        (feedbackTypes?: string[]) => (feedbackTypes?.length || 0) > 0
-                    ),
-                })
-            ),
-        }),
+        ...internalDetailsValidation(studies, study),
+        ...researcherValidation(),
         ...participantViewValidation(studies, study),
+        ...additionalSessionsValidation(),
     })
 }
 
 const getFormDefaults = (study: EditingStudy, step: StudyStep) => {
     const pi = study.researchers?.find(r => r.role === ResearcherRoleEnum.Pi)?.id
     const lead = study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)?.id
-
     return {
         ...study,
         step: step,
@@ -146,11 +95,19 @@ export default function EditStudy() {
 }
 
 const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, studies, children }) => {
-    const initialStep = +useQueryParam('step') || 0
+    let initialStep = +useQueryParam('step') || StudyStep.InternalDetails
+
+    if (getStudyStatus(study) === StageStatusEnum.WaitingPeriod) {
+        initialStep = StudyStep.ReviewStudy
+    }
+
+    if (getStudyStatus(study) === StageStatusEnum.ReadyForLaunch) {
+        initialStep = StudyStep.FinalizeStudy
+    }
 
     return (
         <Form
-            validationSchema={getValidationSchema(studies, study)}
+            validationSchema={buildValidationSchema(studies, study)}
             defaultValues={getFormDefaults(study, initialStep)}
             onSubmit={() => {}}
             onCancel={() => {}}
@@ -171,7 +128,6 @@ export enum StudyStep {
 
 const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     const { watch, setValue, trigger, getValues, reset } = useFormContext()
-
     const currentStep = watch('step')
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
@@ -181,6 +137,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     const { isValid, isDirty } = useFormState()
 
     const setStep = (step: StudyStep) => {
+        nav(`/study/edit/${id}?step=${step}`)
         setValue('step', step, { shouldValidate: true })
     }
 
@@ -194,6 +151,10 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             })
             if (savedStudy) {
                 nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
+                setStep(currentStep + 1)
+                Toast.show({
+                    message: `New copy of ${study.titleForResearchers} has been created and saved as a draft. It can now be found under ‘Draft’.`,
+                })
             }
         } else {
             if (!isDirty) {
@@ -201,7 +162,10 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             }
 
             const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
-            reset(getFormDefaults(savedStudy, currentStep))
+            reset(getFormDefaults(savedStudy, currentStep), { keepIsValid: true })
+            Toast.show({
+                message: `New edits to the study ${study.titleForResearchers}” have successfully been saved`,
+            })
         }
     }
 
@@ -210,7 +174,6 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             index: StudyStep.InternalDetails,
             component: <InternalDetails study={study} />,
             text: 'Internal Details',
-            key: 'internal-details',
             primaryAction: {
                 text: 'Save & Continue',
                 disabled: !isValid,
@@ -219,6 +182,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                     if (valid) {
                         await saveStudy()
                         setStep(StudyStep.ResearchTeam)
+
                     }
                 },
             },
@@ -227,12 +191,10 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             index: StudyStep.ResearchTeam,
             component: <ResearchTeam study={study} />,
             text: 'Research Team',
-            key: 'research-team',
             backAction: () => setStep(StudyStep.InternalDetails),
             primaryAction: {
                 text: 'Continue',
                 disabled: !isValid,
-                // TODO disable if dirty, make sure
                 action: async () => {
                     const valid = await trigger()
                     if (valid) {
@@ -251,44 +213,51 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             index: StudyStep.ParticipantView,
             component: <ParticipantView study={study} />,
             text: 'Participant View',
-            key: 'participant-view',
             backAction: () => setStep(StudyStep.ResearchTeam),
             primaryAction: {
                 text: 'Continue',
-                action: () => {
-                    setStep(StudyStep.AdditionalSessions)
+                disabled: !isValid,
+                action: async () => {
+                    const valid = await trigger()
+                    if (valid) {
+                        await saveStudy()
+                        setStep(StudyStep.AdditionalSessions)
+                    }
                 },
             },
             secondaryAction: {
                 text: 'Save as draft',
                 action: saveStudy,
+                disabled: !isDirty,
             },
         },
         {
             index: StudyStep.AdditionalSessions,
             component: <AdditionalSessions study={study} />,
             text: 'Additional Sessions (optional)',
-            key: 'additional-sessions',
             backAction: () => setStep(StudyStep.ParticipantView),
             optional: true,
             primaryAction: {
                 text: 'Continue',
-                action: () => {
-                    // save study?
-                    setStep(StudyStep.ReviewStudy)
+                disabled: !isValid,
+                action: async () => {
+                    const valid = await trigger()
+                    if (valid) {
+                        await saveStudy()
+                        setStep(StudyStep.ReviewStudy)
+                    }
                 },
             },
             secondaryAction: {
                 text: 'Save as draft',
                 action: saveStudy,
+                disabled: !isDirty,
             },
         },
         {
             index: StudyStep.ReviewStudy,
             component: <ReviewStudy study={study} />,
             text: 'Waiting Period',
-            key: 'waiting-period',
-            disabled: true,
             primaryAction: {
                 text: 'Continue',
                 action: () => {
@@ -298,17 +267,11 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                     setStep(StudyStep.ReviewStudy)
                 },
             },
-            secondaryAction: {
-                text: 'Save as draft',
-                action: saveStudy,
-            },
         },
         {
             index: StudyStep.FinalizeStudy,
             component: <FinalizeStudy study={study} />,
             text: 'Finalize Study',
-            key: 'finalize-study',
-            disabled: true,
             primaryAction: {
                 text: 'Launch Study',
                 action: () => {
@@ -329,7 +292,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                         <StudyCreationProgressBar steps={steps} currentStep={steps[currentStep]} setStepIndex={(i) => setStep(i)}/>
                     </Col>
                     <Col sm={1}>
-                        {currentStep !== StudyStep.InternalDetails && <ExitButton saveStudy={saveStudy} />}
+                        {currentStep !== StudyStep.InternalDetails && <ExitButton study={getValues() as EditingStudy} saveStudy={saveStudy} />}
                     </Col>
                 </Box>
                 {steps[currentStep].component}
@@ -339,10 +302,11 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     )
 }
 
-const ExitButton: FC<{saveStudy: (study: EditingStudy) => void}> = ({ saveStudy }) => {
+const ExitButton: FC<{study: EditingStudy, saveStudy: (study: EditingStudy) => void}> = ({ study, saveStudy }) => {
     const [showWarning, setShowWarning] = useState<boolean>(false)
     const { getValues } = useFormContext()
     const { isDirty } = useFormState()
+    const { addNotification } = useNotificationStore()
 
     const nav = useNavigate()
     return (
@@ -384,12 +348,18 @@ const ExitButton: FC<{saveStudy: (study: EditingStudy) => void}> = ({ saveStudy 
                         <Box gap='large'>
                             <Button className='btn-researcher-secondary' onClick={() => {
                                 nav('/studies')
+                                Toast.show({
+                                    message: `New edits to the study ${study.titleForResearchers} have been discarded`,
+                                })
                             }}>
                                 No, discard changes
                             </Button>
                             <Button className='btn-researcher-primary' onClick={() => {
                                 saveStudy(getValues() as EditingStudy)
                                 nav('/studies')
+                                Toast.show({
+                                    message: `New edits to the study ${study.titleForResearchers} have successfully been saved`,
+                                })
                             }}>
                                Yes, save changes
                             </Button>

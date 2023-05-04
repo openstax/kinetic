@@ -1,15 +1,17 @@
-import { EditingStudy, getStudyLead, getStudyPi } from '@models';
-import { Box, React } from '@common';
+import { EditingStudy, getStudyLead, getStudyPi, getStudyStatus } from '@models';
+import { Box, React, useNavigate } from '@common';
 import { colors } from '@theme';
 import { StudyCardPreview, Tag } from '../../../../learner/card';
 import { StudyStep } from '../edit-study';
-import { Icon, Button, Col, useFormContext } from '@components';
+import { Button, Col, Icon, useFormContext } from '@components';
 import { useToggle } from 'rooks';
+import Waiting from '@images/study-creation/waiting.svg'
+import { StageStatusEnum } from '@api';
 
 export const ReviewStudy: FC<{study: EditingStudy}> = ({ study }) => {
 
-    if (study.status === 'waiting-period') {
-        // render correct page
+    // if (getStudyStatus(study) === StageStatusEnum.WaitingPeriod) {
+    if (true) {
         // disable buttons
         return <WaitingForTemplate study={study} />
     }
@@ -37,8 +39,9 @@ const StudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = ({ study
     }
     const pi = getStudyPi(study);
     const lead = getStudyLead(study);
+
     return (
-        <Box gap='xxlarge'>
+        <Box gap='xxlarge' justify='between'>
             <Col sm={4} direction='column' gap='large'>
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
@@ -123,8 +126,15 @@ const StudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = ({ study
 
 const WaitingForTemplate: FC<{study: EditingStudy}> = ({ study }) => {
     return (
-        <Box>
-
+        <Box direction='column' gap='xxlarge' className='mt-6'>
+            <Box direction='column' align='center' className='text-center' width='500px' gap='large' alignSelf='center'>
+                <img src={Waiting} alt='waiting' height={200}/>
+                <h5 className='fw-bold'>Waiting for Qualtrics template</h5>
+                <h6 className='lh-lg' css={{ color: colors.grayerText }}>
+                    Our team is working hard to create a Qualtrics template for you. Come back and continue when you finish your Qualtrics survey.
+                </h6>
+            </Box>
+            <StudyOverview study={study} />
         </Box>
     )
 }

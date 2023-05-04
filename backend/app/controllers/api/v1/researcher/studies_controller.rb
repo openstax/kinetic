@@ -41,11 +41,17 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
     @study.update(inbound_binding.to_hash.except(:researchers, :stages))
 
-    # TODO Ruby get only new items of diff (incoming vs existing) for emails
     new_researchers = Array(inbound_binding.researchers).map do |researcher|
       # try StudyResearcher.first_or_create({researcher_id: researcher.id, role: researcher.role})
       StudyResearcher.create({ researcher_id: researcher.id, role: researcher.role })
     end
+
+    # Newly added researchers
+    newly_added = new_researchers - @study.study_researchers
+
+    # Removed researchers
+    removed_researchers = @study.study_researchers - new_researchers
+
     StudyResearcher.skip_callback(:destroy, :before, :check_destroy_leaves_another_researcher_in_study, raise: false)
     @study.study_researchers.replace(new_researchers.uniq)
 

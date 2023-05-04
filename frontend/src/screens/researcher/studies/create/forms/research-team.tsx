@@ -1,4 +1,4 @@
-import { Box, React, useEffect, useMemo, useState } from '@common';
+import { Box, React, useEffect, useMemo, useState, Yup } from '@common';
 import { colors } from '@theme';
 import { Icon, Col, SelectField, SelectOption, useFormContext, FieldErrorMessage } from '@components';
 import { IRB } from '../../../account/researcher-account-page';
@@ -6,6 +6,20 @@ import { EditingStudy } from '@models';
 import { useApi } from '@lib';
 import { Researcher } from '@api';
 import { components, DropdownIndicatorProps } from 'react-select';
+import { useCallback } from 'react';
+
+export const researcherValidation = () => {
+    return {
+        researcherPi: Yup.mixed().when('step', {
+            is: 1,
+            then: (s: Yup.BaseSchema) => s.required('Required'),
+        }),
+        researcherLead: Yup.mixed().when('step', {
+            is: 1,
+            then: (s: Yup.BaseSchema) => s.required('Required'),
+        }),
+    }
+}
 
 const DropdownIndicator = (props: DropdownIndicatorProps) => {
     return (
@@ -18,7 +32,7 @@ const DropdownIndicator = (props: DropdownIndicatorProps) => {
 export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
     const api = useApi()
     const [researchers, setResearchers] = useState<Researcher[]>([])
-    const { setValue, getValues, watch } = useFormContext()
+    const { setValue, getValues } = useFormContext()
 
     useEffect(() => {
         api.getResearchers().then(researchers => {
@@ -76,6 +90,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                         components={{ DropdownIndicator }}
                         onChange={updateResearchers}
                     />
+                    <small>An email invitation will be sent once you click “Continue’</small>
                     <FieldErrorMessage name='researcherPi' />
                 </Col>
             </Box>
@@ -95,6 +110,7 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
                         components={{ DropdownIndicator }}
                         onChange={updateResearchers}
                     />
+                    <small>An email invitation will be sent once you click “Continue’</small>
                     <FieldErrorMessage name='researcherLead' />
                 </Col>
             </Box>

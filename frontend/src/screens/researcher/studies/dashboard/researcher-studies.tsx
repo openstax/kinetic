@@ -6,6 +6,7 @@ import 'bootstrap/js/dist/dropdown'
 import { StudiesTable } from './studies-table';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { ActionNotification, useActionNotifications } from './study-action-notification';
+import { Notifications } from '../../../../components/notifications';
 
 const NavTabs = styled.ul({
     padding: '1rem 0',
@@ -55,8 +56,6 @@ export default function ResearcherStudies() {
         <div className="studies">
             <TopNavBar hideBanner/>
             <div className="container-lg h-100 py-4">
-                <ActionNotification notifications={notifications} onDismiss={dismissNotification}/>
-
                 <Box align="center" justify="between">
                     <h3 className='fw-bold' data-testid='studies-table-header'>
                         Studies
