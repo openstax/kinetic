@@ -76,26 +76,33 @@ class UserMailer < ApplicationMailer
       template: 'invite_researcher'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
-        'researcher_full_name' => params[:researcher].full_name,
-        'study_one_title' => params[:studies].first.title_for_participants,
-        'study_two_title' => params[:studies].last.title_for_participants
+        'full_name' => params[:user].full_name,
       }
     end
   end
 
-  def study_submitted_for_qualtrics_permissions
+  def remove_researcher_from_study
     mail(
-      to: 'kinetic@kinetic.com',
-      subject: "You've been invited to a study",
-      template: 'invite_researcher'
+      to: params[:user].email_address,
+      subject: "You've been removed from a study",
+      template: 'remove_researcher'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
         'full_name' => params[:user].full_name,
-        'study_one_title' => params[:studies].first.title_for_participants,
-        'study_two_title' => params[:studies].last.title_for_participants
       }
     end
   end
 
+  def study_ready_for_review
+    mail(
+      to: 'kinetic@kinetic.com',
+      subject: "A study has been submitted for review",
+      template: 'study_ready_for_review'
+    ) { |format| format.text { render plain: '' } }.tap do |message|
+      message.mailgun_variables = {
+        'study_title' => params[:study].title_for_researchers
+      }
+    end
+  end
 
 end

@@ -47,10 +47,10 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     end
 
     # Newly added researchers
-    newly_added = new_researchers - @study.study_researchers
+    newly_added = (new_researchers - @study.study_researchers) - [@current_researcher]
 
     # Removed researchers
-    removed_researchers = @study.study_researchers - new_researchers
+    removed_researchers = (@study.study_researchers - new_researchers) - [@current_researcher]
 
     StudyResearcher.skip_callback(:destroy, :before, :check_destroy_leaves_another_researcher_in_study, raise: false)
     @study.study_researchers.replace(new_researchers.uniq)
