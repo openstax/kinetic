@@ -45,6 +45,9 @@ module Api::V1::Bindings
     # When the study was launched; null means not launched
     attr_accessor :first_launched_at
 
+    # Status of the stage
+    attr_accessor :status
+
     # The study's researchers.
     attr_accessor :researchers
 
@@ -66,9 +69,6 @@ module Api::V1::Bindings
     # The study's subject
     attr_accessor :study_subject
 
-    # The study's status
-    attr_accessor :status
-
     # The study's stages.
     attr_accessor :stages
 
@@ -77,6 +77,28 @@ module Api::V1::Bindings
 
     # The URL to which stages should return after completing
     attr_accessor :return_url
+
+    class EnumAttributeValidator
+      attr_reader :datatype
+      attr_reader :allowable_values
+
+      def initialize(datatype, allowable_values)
+        @allowable_values = allowable_values.map do |value|
+          case datatype.to_s
+          when /Integer/i
+            value.to_i
+          when /Float/i
+            value.to_f
+          else
+            value
+          end
+        end
+      end
+
+      def valid?(value)
+        !value || allowable_values.include?(value)
+      end
+    end
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -91,6 +113,7 @@ module Api::V1::Bindings
         :'benefits' => :'benefits',
         :'is_hidden' => :'is_hidden',
         :'first_launched_at' => :'first_launched_at',
+        :'status' => :'status',
         :'researchers' => :'researchers',
         :'is_mandatory' => :'is_mandatory',
         :'view_count' => :'view_count',
@@ -98,7 +121,6 @@ module Api::V1::Bindings
         :'study_type' => :'study_type',
         :'study_topic' => :'study_topic',
         :'study_subject' => :'study_subject',
-        :'status' => :'status',
         :'stages' => :'stages',
         :'launched_count' => :'launched_count',
         :'return_url' => :'return_url'
@@ -123,6 +145,7 @@ module Api::V1::Bindings
         :'benefits' => :'String',
         :'is_hidden' => :'Boolean',
         :'first_launched_at' => :'Time',
+        :'status' => :'String',
         :'researchers' => :'Array<Researcher>',
         :'is_mandatory' => :'Boolean',
         :'view_count' => :'Float',
@@ -130,7 +153,6 @@ module Api::V1::Bindings
         :'study_type' => :'String',
         :'study_topic' => :'String',
         :'study_subject' => :'String',
-        :'status' => :'String',
         :'stages' => :'Array<Stage>',
         :'launched_count' => :'Float',
         :'return_url' => :'String'
@@ -205,6 +227,10 @@ module Api::V1::Bindings
         self.first_launched_at = attributes[:'first_launched_at']
       end
 
+      if attributes.key?(:'status')
+        self.status = attributes[:'status']
+      end
+
       if attributes.key?(:'researchers')
         if (value = attributes[:'researchers']).is_a?(Array)
           self.researchers = value
@@ -233,10 +259,6 @@ module Api::V1::Bindings
 
       if attributes.key?(:'study_subject')
         self.study_subject = attributes[:'study_subject']
-      end
-
-      if attributes.key?(:'status')
-        self.status = attributes[:'status']
       end
 
       if attributes.key?(:'stages')
@@ -289,6 +311,8 @@ module Api::V1::Bindings
       return false if @title_for_researchers.to_s.length < 1
       return false if @internal_description.nil?
       return false if @internal_description.to_s.length < 1
+      status_validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "waiting_period", "ready_for_launch", "completed"])
+      return false unless status_validator.valid?(@status)
       true
     end
 
@@ -320,6 +344,16 @@ module Api::V1::Bindings
       @internal_description = internal_description
     end
 
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] status Object to be assigned
+    def status=(status)
+      validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "waiting_period", "ready_for_launch", "completed"])
+      unless validator.valid?(status)
+        fail ArgumentError, "invalid value for \"status\", must be one of #{validator.allowable_values}."
+      end
+      @status = status
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
@@ -335,6 +369,7 @@ module Api::V1::Bindings
           benefits == o.benefits &&
           is_hidden == o.is_hidden &&
           first_launched_at == o.first_launched_at &&
+          status == o.status &&
           researchers == o.researchers &&
           is_mandatory == o.is_mandatory &&
           view_count == o.view_count &&
@@ -342,7 +377,6 @@ module Api::V1::Bindings
           study_type == o.study_type &&
           study_topic == o.study_topic &&
           study_subject == o.study_subject &&
-          status == o.status &&
           stages == o.stages &&
           launched_count == o.launched_count &&
           return_url == o.return_url
@@ -357,7 +391,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, researchers, is_mandatory, view_count, completed_count, study_type, study_topic, study_subject, status, stages, launched_count, return_url].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, status, researchers, is_mandatory, view_count, completed_count, study_type, study_topic, study_subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

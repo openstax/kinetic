@@ -1,18 +1,18 @@
 export const BaseUrl = 'https://kinetic-app-assets.s3.amazonaws.com/assets/card-images'
 
 export type Category =
-    'School & Future Career' |
-    'Personality' |
-    'Memory' |
     'Learning' |
+    'Memory' |
+    'Personality' |
+    'School & Future Career' |
     'Nonhuman' |
     'Other'
 
 export const imageCategories: Category[] = [
-    'School & Future Career',
-    'Personality',
-    'Memory',
     'Learning',
+    'Memory',
+    'Personality',
+    'School & Future Career',
     'Nonhuman',
     'Other',
 ]

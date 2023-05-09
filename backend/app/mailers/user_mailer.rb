@@ -72,11 +72,13 @@ class UserMailer < ApplicationMailer
   def invite_researcher_to_study
     mail(
       to: params[:user].email_address,
-      subject: "You've been invited to a study",
-      template: 'invite_researcher'
+      subject: "OpenStax Kinetic: You’ve been invited to collaborate on a study",
+      template: 'researcher_collaboration_invite'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
-        'full_name' => params[:user].full_name,
+        'researcher_firstName' => params[:user].first_name,
+        'researcher_lastName' => params[:user].last_name,
+        'internal_study_title' => '',
       }
     end
   end
@@ -93,11 +95,11 @@ class UserMailer < ApplicationMailer
     end
   end
 
-  def study_ready_for_review
+  def submit_study_for_review
     mail(
-      to: 'kinetic@kinetic.com',
-      subject: "A study has been submitted for review",
-      template: 'study_ready_for_review'
+      to: 'kinetic@openstax.org',
+      subject: "Important: Access Request to Qualtrics",
+      template: 'access_request_qualtrics'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
         'study_title' => params[:study].title_for_researchers

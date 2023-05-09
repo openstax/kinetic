@@ -11,9 +11,8 @@ import { NewStudy, ResearcherRoleEnum, StageStatusEnum, Study } from '@api';
 import { ActionFooter } from './action-footer';
 import { ReactNode } from 'react';
 import { colors } from '@theme';
-import { ReviewStudy } from './forms/review-study';
+import { ReviewStudy, SubmitStudyModal } from './forms/review-study';
 import { FinalizeStudy } from './forms/finalize-study';
-import { useNotificationStore } from '@store';
 import { Toast } from '@nathanstitt/sundry/ui';
 
 interface Action {
@@ -26,7 +25,6 @@ export interface Step {
     index: number
     component?: ReactNode
     text: string
-    optional?: boolean
     primaryAction?: Action
     secondaryAction?: Action
     backAction?: () => void
@@ -128,6 +126,7 @@ export enum StudyStep {
 
 const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     const { watch, setValue, trigger, getValues, reset } = useFormContext()
+    const [showSubmitStudy, setShowSubmitStudy] = useState(false)
     const currentStep = watch('step')
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
@@ -163,9 +162,9 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
 
             const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
             reset(getFormDefaults(savedStudy, currentStep), { keepIsValid: true })
-            Toast.show({
-                message: `New edits to the study ${study.titleForResearchers}” have successfully been saved`,
-            })
+            // Toast.show({
+            //     message: `New edits to the study ${study.titleForResearchers}” have successfully been saved`,
+            // })
         }
     }
 
@@ -182,7 +181,6 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                     if (valid) {
                         await saveStudy()
                         setStep(StudyStep.ResearchTeam)
-
                     }
                 },
             },
@@ -200,6 +198,9 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                     if (valid) {
                         await saveStudy()
                         setStep(StudyStep.ParticipantView)
+                        Toast.show({
+                            message: `TODO message from iris`,
+                        })
                     }
                 },
             },
@@ -236,7 +237,6 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             component: <AdditionalSessions study={study} />,
             text: 'Additional Sessions (optional)',
             backAction: () => setStep(StudyStep.ParticipantView),
-            optional: true,
             primaryAction: {
                 text: 'Continue',
                 disabled: !isValid,
@@ -259,12 +259,13 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             component: <ReviewStudy study={study} />,
             text: 'Waiting Period',
             primaryAction: {
-                text: 'Continue',
+                text: 'Submit Study',
                 action: () => {
+                    setShowSubmitStudy(true)
                     if (getStudyStatus(study) === StageStatusEnum.WaitingPeriod) {
                         // do something?
                     }
-                    setStep(StudyStep.ReviewStudy)
+                    // setStep(StudyStep.ReviewStudy)
                 },
             },
         },
@@ -298,6 +299,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                 {steps[currentStep].component}
             </div>
             <ActionFooter step={steps[currentStep]} />
+            <SubmitStudyModal study={study} show={showSubmitStudy} setShow={setShowSubmitStudy} />
         </Box>
     )
 }
@@ -306,7 +308,6 @@ const ExitButton: FC<{study: EditingStudy, saveStudy: (study: EditingStudy) => v
     const [showWarning, setShowWarning] = useState<boolean>(false)
     const { getValues } = useFormContext()
     const { isDirty } = useFormState()
-    const { addNotification } = useNotificationStore()
 
     const nav = useNavigate()
     return (

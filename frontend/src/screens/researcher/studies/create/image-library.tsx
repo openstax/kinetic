@@ -1,5 +1,5 @@
 import { Button, Col, Modal } from '@components'
-import { Box, React, styled, useState } from '@common';
+import { Box, React, styled, useEffect, useState } from '@common';
 import { colors } from '@theme';
 import { cardImages, Category, getImageUrl, imageCategories } from '../../../../components/study-card-images/card-images';
 
@@ -83,8 +83,16 @@ export const ImageLibrary: FC<{
     onSelect: (imageId: string) => void,
     currentImage?: string
 }> = ({ show, onHide, onSelect, currentImage }) => {
-    const [category, setCategory] = useState<Category>('Personality')
+    const currentCategory = cardImages.find(image => image.imageId == currentImage)?.category[0] || 'Learning'
+
+    const [category, setCategory] = useState<Category>(currentCategory)
     const [selectedImage, setSelectedImage] = useState<string>(currentImage || 'Schoolfuturecareer_1')
+
+    useEffect(() => () => {
+        setCategory(currentCategory)
+        setSelectedImage(currentImage || 'Schoolfuturecareer_1')
+    }, [show])
+
     return (
         <Modal
             onHide={onHide}

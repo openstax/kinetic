@@ -2,7 +2,7 @@
 
 class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseController
 
-  before_action :set_study, only: [:update, :destroy, :show]
+  before_action :set_study, only: [:update, :destroy, :show, :submit]
 
   def create
     inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::NewStudy)
@@ -34,7 +34,6 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     render json: response_binding, status: :ok
   end
 
-  # TODO Submit study for final review endpoint? or just special params on update?
   def update
     inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
     render(json: error, status: error.status_code) and return if error
@@ -50,7 +49,9 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     newly_added = (new_researchers - @study.study_researchers) - [@current_researcher]
 
     # Removed researchers
-    removed_researchers = (@study.study_researchers - new_researchers) - [@current_researcher]
+    # removed_researchers = (@study.study_researchers - new_researchers) - [@current_researcher]
+
+    ResearcherNotifications.notify_study_researchers(newly_added, [])
 
     StudyResearcher.skip_callback(:destroy, :before, :check_destroy_leaves_another_researcher_in_study, raise: false)
     @study.study_researchers.replace(new_researchers.uniq)
@@ -66,6 +67,13 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
     response_binding = Api::V1::Bindings::Study.create_from_model(@study)
     render json: response_binding, status: :ok
+  end
+
+  def submit
+    @study.stages.each do |stage|
+      stage.update({:status => :waiting_period})
+    end
+    render json: Api::V1::Bindings::Study.create_from_model(@study), status: :ok
   end
 
   def destroy

@@ -7,6 +7,10 @@ class StudyResearcher < ApplicationRecord
 
   before_destroy :check_destroy_leaves_another_researcher_in_study
 
+  def user_id
+    researcher.user_id
+  end
+
   protected
 
   def check_destroy_leaves_another_researcher_in_study

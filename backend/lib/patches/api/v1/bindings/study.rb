@@ -22,6 +22,8 @@ Rails.application.config.to_prepare do
         Api::V1::Bindings::Stage.create_from_model(stage_model)
       end
 
+      # Dynamically get this on frontend? or rely on this?
+      # if removing this, remove property :status from base_studies_open_api
       attributes[:status] = model.study_status
       attributes[:launched_count] = model.launched_count
 

@@ -108,6 +108,46 @@ class Api::V1::Researcher::StudiesOpenApi
     end
   end
 
+  openapi_path '/researcher/studies/{id}/submit' do
+    operation :post do
+      key :summary, 'Submit a study for review'
+      key :description, 'Submit a study for review'
+      key :operationId, 'submitStudy'
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'ID of the study to submit.'
+        key :required, true
+        key :schema, { type: :integer }
+      end
+
+      # request_body do
+      #   key :description, 'The study is submitted and the status is updated properly.'
+      #   content 'application/json' do
+      #     schema do
+      #       key :type, :object
+      #       key :title, :updateStudy
+      #       property :study do
+      #         key :$ref, :StudyUpdate
+      #       end
+      #     end
+      #   end
+      # end
+      response 200 do
+        key :description, 'Success.  Returns the updated study.'
+        content 'application/json' do
+          schema do
+            key :$ref, :Study
+          end
+        end
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+  end
+
   openapi_path '/researcher/studies/{id}' do
     operation :get do
       key :summary, 'Get a single study'

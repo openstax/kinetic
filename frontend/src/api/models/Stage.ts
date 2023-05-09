@@ -30,7 +30,7 @@ export interface Stage {
      * @type {number}
      * @memberof Stage
      */
-    readonly order: number;
+    readonly order?: number;
     /**
      * The name of the stage
      * @type {string}
@@ -133,7 +133,6 @@ export type StageStatusEnum = typeof StageStatusEnum[keyof typeof StageStatusEnu
 export function instanceOfStage(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "order" in value;
     isInstance = isInstance && "config" in value;
 
     return isInstance;
@@ -150,7 +149,7 @@ export function StageFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
     return {
         
         'id': json['id'],
-        'order': json['order'],
+        'order': !exists(json, 'order') ? undefined : json['order'],
         'title': !exists(json, 'title') ? undefined : json['title'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],

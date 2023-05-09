@@ -129,6 +129,12 @@ export interface ParticipantStudy {
      */
     firstLaunchedAt?: Date;
     /**
+     * Status of the stage
+     * @type {string}
+     * @memberof ParticipantStudy
+     */
+    readonly status?: ParticipantStudyStatusEnum;
+    /**
      * The study's researchers.
      * @type {Array<Researcher>}
      * @memberof ParticipantStudy
@@ -171,12 +177,6 @@ export interface ParticipantStudy {
      */
     studySubject?: string;
     /**
-     * The study's status
-     * @type {string}
-     * @memberof ParticipantStudy
-     */
-    readonly status?: string;
-    /**
      * The study's stages.
      * @type {Array<Stage>}
      * @memberof ParticipantStudy
@@ -195,6 +195,22 @@ export interface ParticipantStudy {
      */
     readonly returnUrl?: string;
 }
+
+
+/**
+ * @export
+ */
+export const ParticipantStudyStatusEnum = {
+    Active: 'active',
+    Paused: 'paused',
+    Scheduled: 'scheduled',
+    Draft: 'draft',
+    WaitingPeriod: 'waiting_period',
+    ReadyForLaunch: 'ready_for_launch',
+    Completed: 'completed'
+} as const;
+export type ParticipantStudyStatusEnum = typeof ParticipantStudyStatusEnum[keyof typeof ParticipantStudyStatusEnum];
+
 
 /**
  * Check if a given object implements the ParticipantStudy interface.
@@ -235,6 +251,7 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
         'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
+        'status': !exists(json, 'status') ? undefined : json['status'],
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
@@ -242,7 +259,6 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'studyType': !exists(json, 'study_type') ? undefined : json['study_type'],
         'studyTopic': !exists(json, 'study_topic') ? undefined : json['study_topic'],
         'studySubject': !exists(json, 'study_subject') ? undefined : json['study_subject'],
-        'status': !exists(json, 'status') ? undefined : json['status'],
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
         'launchedCount': !exists(json, 'launched_count') ? undefined : json['launched_count'],
         'returnUrl': !exists(json, 'return_url') ? undefined : json['return_url'],

@@ -223,10 +223,6 @@ module Api::V1::Bindings
         invalid_properties.push('invalid value for "id", id cannot be nil.')
       end
 
-      if @order.nil?
-        invalid_properties.push('invalid value for "order", order cannot be nil.')
-      end
-
       if @config.nil?
         invalid_properties.push('invalid value for "config", config cannot be nil.')
       end
@@ -238,7 +234,6 @@ module Api::V1::Bindings
     # @return true if the model is valid
     def valid?
       return false if @id.nil?
-      return false if @order.nil?
       return false if @config.nil?
       status_validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "waiting_period", "ready_for_launch", "completed"])
       return false unless status_validator.valid?(@status)

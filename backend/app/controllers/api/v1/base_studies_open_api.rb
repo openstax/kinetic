@@ -44,6 +44,12 @@ class Api::V1::BaseStudiesOpenApi
         key :format, 'date-time'
         key :description, 'When the study was launched; null means not launched'
       end
+      property :status do
+        key :type, :string
+        key :description, 'Status of the stage'
+        key :enum, %w[active paused scheduled draft waiting_period ready_for_launch completed]
+        key :readOnly, true
+      end
       property :researchers do
         key :type, :array
         key :description, 'The study\'s researchers.'

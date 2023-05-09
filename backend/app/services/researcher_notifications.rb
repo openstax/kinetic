@@ -9,14 +9,15 @@ class ResearcherNotifications
           user_info[researcher.user_id]&.uuid == researcher.user_id
         end
         UserMailer.with(user: user[researcher.user_id]).invite_researcher_to_study.deliver
-      end
+      end unless users_info.empty?
 
-      removed_researchers.each do | researcher |
-        user = users_info.find do | user_info |
-          user_info[researcher.user_id]&.uuid == researcher.user_id
-        end
-        UserMailer.with(user: user[researcher.user_id]).remove_researcher_from_study.deliver
-      end
+      # We aren't supporting this feature for this iteration, but will in the future so leaving this for the future
+      # removed_researchers.each do | researcher |
+      #   user = users_info.find do | user_info |
+      #     user_info[researcher.user_id]&.uuid == researcher.user_id
+      #   end
+      #   UserMailer.with(user: user[researcher.user_id]).remove_researcher_from_study.deliver
+      # end
     end
 
     def notify_kinetic_study_review(study)

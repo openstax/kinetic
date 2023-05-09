@@ -7,16 +7,6 @@ RSpec.describe 'Studies', api: :v1 do
   let(:researcher1) { create(:researcher) }
   let(:researcher2) { create(:researcher) }
 
-  # describe 'Update nested fields' do
-  #   let!(:study) { create(:study, researchers: researcher1) }
-  #   let(:stage) { create(:stage) }
-  #
-  #   it 'updates stages?' do
-  #     binding = Api::V1::Bindings::StudyUpdate.new({ title_for_researchers: 'Test', stages: [ stage ] })
-  #     binding.update_model!(study)
-  #   end
-  # end
-
   describe 'POST researcher/studies' do
     let(:valid_new_study_attributes) do
       {
@@ -63,6 +53,7 @@ RSpec.describe 'Studies', api: :v1 do
 
     context 'when signed in as a researcher' do
       before { stub_current_user(researcher1) }
+      let!(:study_with_stages) { create(:study, researchers: researcher1, stages: [create(:stage)]) }
 
       it 'successfully creates a new study' do
         api_post 'researcher/studies', params: { study: valid_new_study_attributes }
@@ -78,6 +69,19 @@ RSpec.describe 'Studies', api: :v1 do
             )
           )
         )
+      end
+
+      it 'submits the study for review' do
+        api_post "researcher/studies/#{study_with_stages.id}/submit"
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match(a_hash_including(
+          stages: a_collection_containing_exactly(
+            a_hash_including({
+              status: 'waiting_period',
+            })
+          ),
+        ))
       end
     end
   end

@@ -4,7 +4,6 @@ import { PageNotFound } from '@components'
 import { loadAsync } from './components/async'
 import { useCurrentUser } from '@lib'
 import { analytics } from './lib/analytics'
-import { Notifications } from './components/notifications';
 
 const Home = loadAsync('Homepage', () => import('./screens/homepage'))
 const Dev = loadAsync('Dev', () => import('./screens/dev'))

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
           delete 'researcher/:user_id', to: 'study_researchers#destroy'
           resources :stages, shallow: true, only: [:create, :show, :update, :destroy]
         end
+        post 'studies/:id/submit', to: 'studies#submit'
 
         resources :analysis, except: [:destroy]
 

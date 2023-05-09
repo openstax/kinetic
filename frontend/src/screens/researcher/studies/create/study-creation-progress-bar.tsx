@@ -62,9 +62,6 @@ export const StudyCreationProgressBar: FC<{
 
 const StepIcon: FC<{step: Step, currentStep: Step}> = ({ step, currentStep }) => {
     if (step.index < currentStep.index) {
-        // if (currentStep.index === StudyStep.ReviewStudy || currentStep.index === StudyStep.FinalizeStudy) {
-        //     return <img height={25} src={InactiveStep} alt='complete' />
-        // }
         return <img height={25} src={CompletedStep} alt='complete' />
     }
 

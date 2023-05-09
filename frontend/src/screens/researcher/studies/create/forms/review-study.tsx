@@ -1,17 +1,19 @@
 import { EditingStudy, getStudyLead, getStudyPi, getStudyStatus } from '@models';
-import { Box, React, useNavigate } from '@common';
+import { Box, React, useNavigate, useState } from '@common';
 import { colors } from '@theme';
 import { StudyCardPreview, Tag } from '../../../../learner/card';
 import { StudyStep } from '../edit-study';
-import { Button, Col, Icon, useFormContext } from '@components';
+import { Button, Col, Icon, Modal, useFormContext } from '@components';
 import { useToggle } from 'rooks';
 import Waiting from '@images/study-creation/waiting.svg'
-import { StageStatusEnum } from '@api';
+import { StageStatusEnum, Study } from '@api';
+import { Toast } from '@nathanstitt/sundry/ui';
+import { useApi } from '@lib';
 
 export const ReviewStudy: FC<{study: EditingStudy}> = ({ study }) => {
 
-    // if (getStudyStatus(study) === StageStatusEnum.WaitingPeriod) {
-    if (true) {
+    if (getStudyStatus(study) === StageStatusEnum.WaitingPeriod) {
+    // if (true) {
         // disable buttons
         return <WaitingForTemplate study={study} />
     }
@@ -21,12 +23,10 @@ export const ReviewStudy: FC<{study: EditingStudy}> = ({ study }) => {
         <Box className='mt-6' direction='column' gap='xlarge'>
             <Box gap='large' direction='column'>
                 <h3 className='fw-bold'>Review your study</h3>
-                <p>You can skip this part if you don’t have any other session to add. Feel free to come back at any time to add session(s).</p>
+                <p>You're almost done! Make sure to review your study, and check on any last details before submitting it to the Kinetic team</p>
             </Box>
 
             <StudyInformation study={study} />
-
-            <StudyOverview study={study} />
 
         </Box>
     )
@@ -41,11 +41,25 @@ const StudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = ({ study
     const lead = getStudyLead(study);
 
     return (
-        <Box gap='xxlarge' justify='between'>
-            <Col sm={4} direction='column' gap='large'>
+        <Box gap='xxlarge'>
+            <Col sm={5} direction='column' gap='large'>
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
-                        <h6 className='fw-bold'>About researcher</h6>
+                        <h6 className='fw-bold'>Internal Details</h6>
+                        {!viewOnly && <Button className='btn-researcher-secondary' onClick={() => setStep(StudyStep.InternalDetails)}>
+                            Edit
+                        </Button>}
+                    </Col>
+                    <Col sm={8} direction='column'>
+                        <small>Title: {study.titleForResearchers}</small>
+                        <small>Description: {study.internalDescription}</small>
+                        <div><Tag tag={study.studyType} /></div>
+                    </Col>
+                </Box>
+
+                <Box justify='between' direction='column'>
+                    <Col justify='between' direction='row'>
+                        <h6 className='fw-bold'>Research Team</h6>
                         {!viewOnly && <Button className='btn-researcher-secondary' onClick={() => setStep(StudyStep.ResearchTeam)}>
                             Edit
                         </Button>}
@@ -53,32 +67,14 @@ const StudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = ({ study
                     <Col sm={8} direction='column'>
                         <small>IRB-FY2022-19</small>
                         <small>Rice University</small>
-                        {pi && <small>PI: {pi.firstName} {pi.lastName}</small>}
+                        {pi && <small>Study PI: {pi.firstName} {pi.lastName}</small>}
                         {lead && <small>Study Lead: {lead.firstName} {lead.lastName}</small>}
                     </Col>
                 </Box>
 
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
-                        <h6 className='fw-bold'>Information Available to Researchers</h6>
-                        {!viewOnly && <Button className='btn-researcher-secondary' onClick={() => setStep(StudyStep.InternalDetails)}>
-                            Edit
-                        </Button>}
-                    </Col>
-                    <Col sm={8} direction='column' gap>
-                        <small>Title: {study.titleForParticipants}</small>
-                        <Box gap>
-                            <small>Tags: </small>
-                            <Tag tag={study.studyType} />
-                            <Tag tag={study.studySubject} />
-                        </Box>
-                    </Col>
-
-                </Box>
-
-                <Box justify='between' direction='column'>
-                    <Col justify='between' direction='row'>
-                        <h6 className='fw-bold'>Information Available to Participants</h6>
+                        <h6 className='fw-bold'>Participant View</h6>
                         {!viewOnly && <Button className='btn-researcher-secondary' onClick={() => setStep(StudyStep.ParticipantView)}>
                             Edit
                         </Button>}
@@ -173,5 +169,90 @@ export const StudyOverview: FC<{study: EditingStudy}> = ({ study }) => {
             }
 
         </Box>
+    )
+}
+
+export const SubmitStudyModal: FC<{
+    study: EditingStudy,
+    show: boolean,
+    setShow: (show: boolean) => void
+}> = ({ study, show, setShow }) => {
+    const api = useApi()
+    const { getValues } = useFormContext()
+    const [submitted, setSubmitted] = useState(false)
+    if (submitted) {
+        return <SubmitSuccess show={submitted} setShow={setSubmitted} />
+    }
+
+    const submitStudy = () => {
+        const study: Study = getValues() as Study
+        study.stages = study.stages?.map(stage => {
+            return {
+                ...stage,
+                status: StageStatusEnum.WaitingPeriod,
+            }
+        })
+        console.log(study);
+        // api.submitStudy()
+    }
+
+    return (
+        <Modal
+            center
+            show={show}
+            large
+            onHide={() => setShow(false)}
+        >
+            <Modal.Body>
+                <Box padding='4rem' align='center' justify='center' direction='column' gap='xlarge'>
+                    <Box align='center' className='text-center' direction='column'>
+                        <span>You’re about to submit your study to the Kinetic team so that the appropriate permissions are set. Please review and confirm any final changes. You won’t be able to change your Kinetic study information past this point. Are you ready to proceed?</span>
+                    </Box>
+                    <Box gap='large'>
+                        <Button className='btn-researcher-secondary' onClick={() => setShow(false)}>
+                            Not yet, edit study
+                        </Button>
+                        <Button className='btn-researcher-primary' onClick={() => {
+                            submitStudy()
+                            setSubmitted(true)
+                            setShow(false)
+                        }}>
+                            Yes, submit study
+                        </Button>
+                    </Box>
+                </Box>
+            </Modal.Body>
+        </Modal>
+    )
+}
+
+const SubmitSuccess: FC<{
+    show: boolean,
+    setShow: (show: boolean) => void
+}> = ({ show, setShow }) => {
+    const nav = useNavigate()
+    return (
+        <Modal
+            center
+            show={show}
+            large
+            onHide={() => setShow(false)}
+        >
+            <Modal.Body>
+                <Box padding='4rem' align='center' justify='center' direction='column' gap='xlarge'>
+                    <Box align='center' className='text-center' direction='column'>
+                        <span>Our team is creating a Qualtrics template and setting up the correct permissions for your study. You will receive an email from owlsurveys@rice.edu containing an access code to your Qualtrics template and further instructions via your registered email within the next business day.</span>
+                        <br/>
+                        <span>Follow the instructions to build your task and come back here to proceed with finalizing your study and launching it on Kinetic.</span>
+                    </Box>
+
+                    <Button className='btn-researcher-primary' onClick={() => {
+                        nav('/studies')
+                    }}>
+                        Return to Studies Dashboard
+                    </Button>
+                </Box>
+            </Modal.Body>
+        </Modal>
     )
 }

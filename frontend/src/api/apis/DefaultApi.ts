@@ -204,6 +204,10 @@ export interface StudyStatsRequest {
     view?: boolean;
 }
 
+export interface SubmitStudyRequest {
+    id: number;
+}
+
 export interface UpdateAnalysisRequest {
     id: number;
     updateAnalysis?: UpdateAnalysis;
@@ -1159,6 +1163,38 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async studyStats(requestParameters: StudyStatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ParticipantStudy> {
         const response = await this.studyStatsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Submit a study for review
+     * Submit a study for review
+     */
+    async submitStudyRaw(requestParameters: SubmitStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Study>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling submitStudy.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researcher/studies/{id}/submit`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudyFromJSON(jsonValue));
+    }
+
+    /**
+     * Submit a study for review
+     * Submit a study for review
+     */
+    async submitStudy(requestParameters: SubmitStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Study> {
+        const response = await this.submitStudyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

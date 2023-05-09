@@ -6,7 +6,6 @@ import 'bootstrap/js/dist/dropdown'
 import { StudiesTable } from './studies-table';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { ActionNotification, useActionNotifications } from './study-action-notification';
-import { Notifications } from '../../../../components/notifications';
 
 const NavTabs = styled.ul({
     padding: '1rem 0',
