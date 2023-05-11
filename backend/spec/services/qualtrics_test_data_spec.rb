@@ -21,12 +21,12 @@ RSpec.describe QualtricsTestData do
   it 'generates a CSV' do
     allow(AnalysisResponseExport).to receive(:new_random_seed).and_return(42)
     allow_any_instance_of(QualtricsApi).to(
-      receive(:get)
-        .with("survey-definitions/#{survey_id}")
-        .and_return(data)
+      receive(:get_survey_definition)
+        .with(survey_id)
+        .and_return(data['result'])
     )
     expect {
-      analysis.fetch_responses(is_testing: true)
+      analysis.responses_before(cutoff: Date.today, is_testing: true)
     }.to change { analysis.analysis_response_exports.count }.by(1)
     exp = analysis.analysis_response_exports.last
     expect(exp.metadata).to eq('random_seed' => 42)

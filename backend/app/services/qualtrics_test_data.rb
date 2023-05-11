@@ -14,9 +14,11 @@ class QualtricsTestData
   end
 
   def to_csv(response_count: 50)
-    questions = QualtricsApi.get_survey_definition_questions(@stage)
+    questions = QualtricsApi.new.get_survey_definition_questions(@stage)
 
-    file = Tempfile.new(["test-data-stage-#{@stage.id}", '.csv'])
+    file = Tempfile.new(
+      ["#{@stage.study.title_for_researchers.parameterize}-stage-#{@stage.order + 1}", '.csv']
+    )
 
     csv = CSV.new(file)
     headings = []
@@ -25,7 +27,7 @@ class QualtricsTestData
     end
 
     csv << headings
-    response_count.times do |_i|
+    response_count.times do
       row = []
       questions.each do |q|
         next unless question_is_recorded?(q)
@@ -36,7 +38,7 @@ class QualtricsTestData
       csv << row
     end
     file.flush
-    file.path
+    file
   end
 
   def question_is_recorded?(question)

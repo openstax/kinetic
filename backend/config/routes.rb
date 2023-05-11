@@ -20,8 +20,8 @@ Rails.application.routes.draw do
 
         resources :analysis, except: [:destroy]
 
-        post 'responses/:api_key/fetch', to: 'responses#fetch'
-        get 'responses/:api_key/status', to: 'responses#show'
+        get 'responses/:api_key', to: 'responses#fetch'
+
       end
 
       namespace :participant do
