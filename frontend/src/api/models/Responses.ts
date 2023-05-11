@@ -20,6 +20,12 @@ import { exists, mapValues } from '../runtime';
  */
 export interface Responses {
     /**
+     * The Responses download ID.
+     * @type {number}
+     * @memberof Responses
+     */
+    readonly id: number;
+    /**
      * Status of the request
      * @type {string}
      * @memberof Responses
@@ -56,6 +62,7 @@ export type ResponsesStatusEnum = typeof ResponsesStatusEnum[keyof typeof Respon
  */
 export function instanceOfResponses(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
     isInstance = isInstance && "status" in value;
 
     return isInstance;
@@ -71,6 +78,7 @@ export function ResponsesFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
+        'id': json['id'],
         'status': json['status'],
         'responseUrls': !exists(json, 'response_urls') ? undefined : json['response_urls'],
         'error': !exists(json, 'error') ? undefined : json['error'],

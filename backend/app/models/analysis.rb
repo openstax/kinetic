@@ -12,12 +12,19 @@ class Analysis < ApplicationRecord
 
   validates :title, :repository_url, presence: true
 
-  def fetch_responses(is_testing:)
-    resp = analysis_response_exports
-             .find_by(is_testing: is_testing, is_complete: false)
+  def responses_before(cutoff:, is_testing:)
+    responses = analysis_response_exports
+                  .where(is_testing: is_testing)
+                  .where(AnalysisResponseExport.arel_table[:cutoff_at].lteq(cutoff))
+                  .order(created_at: :desc)
 
-    resp = analysis_response_exports.create(is_testing: is_testing) if resp.nil? || !resp.fresh?
-    resp.fetch
+    # if we didn't find any responses
+    # or check for new if the earliest one is less than cutoff
+    if responses.none? || responses.first.cutoff_at.to_date < cutoff.to_date
+      responses = [analysis_response_exports.create!(is_testing: is_testing, cutoff_at: cutoff)]
+    end
+
+    responses
   end
 
   def can_read_study_id?(id)

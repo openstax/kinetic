@@ -38,7 +38,7 @@ jobs:
         id: verify-changed-files
         with:
           files: |
-             backend/app/bindings
+             frontend/src/api
       - name: Fail if bindings changed
         if: steps.verify-changed-files.outputs.files_changed == 'true'
         run: |

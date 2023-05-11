@@ -19,8 +19,9 @@ OpenStax::OpenApi.configure do |config| # rubocop:disable Metrics/BlockLength
     end,
     r: lambda do |version|
       {
-        exceptionPackage: 'rlang',
         packageName: 'kinetic',
+        exceptionPackage: 'rlang',
+        operationIdNaming: 'snake_case',
         packageVersion: version,
         returnExceptionOnFailure: true
       }
@@ -35,6 +36,12 @@ OpenStax::OpenApi.configure do |config| # rubocop:disable Metrics/BlockLength
   config.client_language_post_processing = {
     'typescript-fetch' => lambda do |opts|
       FileUtils.cp_r Dir.glob("#{opts[:output_dir]}/*"), Rails.root.join('../frontend/src/api/')
+    end,
+    'r' => lambda do |opts|
+      FileUtils.cp_r Rails.root.glob('api/patches/r/*'), "#{opts[:output_dir]}/R/"
+      File.open("#{opts[:output_dir]}/NAMESPACE", 'a') do |f|
+        f.puts('export(fetch_kinetic_responses)')
+      end
     end
   }.symbolize_keys
 
