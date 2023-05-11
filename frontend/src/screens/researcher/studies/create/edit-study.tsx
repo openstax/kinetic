@@ -1,34 +1,17 @@
 import { Box, React, useEffect, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
-import { EditingStudy, getStudyStatus } from '@models';
+import { EditingStudy, getStudyStatus, isDraft, isReadyForLaunch, isWaiting } from '@models';
 import { Button, Col, Form, Icon, LoadingAnimation, Modal, TopNavBar, useFormContext, useFormState } from '@components';
-import { StudyCreationProgressBar } from './study-creation-progress-bar';
+import { ResearcherProgressBar, Step } from '../../../../components/researcher/researcher-progress-bar';
 import { researcherValidation, ResearchTeam } from './forms/research-team';
 import { InternalDetails, internalDetailsValidation } from './forms/internal-details';
 import { ParticipantView, participantViewValidation } from './forms/participant-view';
 import { AdditionalSessions, additionalSessionsValidation } from './forms/additional-sessions';
 import { NewStudy, ResearcherRoleEnum, StageStatusEnum, Study } from '@api';
 import { ActionFooter } from './action-footer';
-import { ReactNode } from 'react';
 import { colors } from '@theme';
 import { ReviewStudy, SubmitStudyModal } from './forms/review-study';
-import { FinalizeStudy } from './forms/finalize-study';
 import { Toast } from '@nathanstitt/sundry/ui';
-
-interface Action {
-    text: string
-    action?: Function
-    disabled?: boolean
-}
-
-export interface Step {
-    index: number
-    component?: ReactNode
-    text: string
-    primaryAction?: Action
-    secondaryAction?: Action
-    backAction?: () => void
-}
 
 const buildValidationSchema = (studies: Study[], study: EditingStudy) => {
     return Yup.object().shape({
@@ -99,9 +82,6 @@ const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, stu
         initialStep = StudyStep.ReviewStudy
     }
 
-    if (getStudyStatus(study) === StageStatusEnum.ReadyForLaunch) {
-        initialStep = StudyStep.FinalizeStudy
-    }
 
     return (
         <Form
@@ -121,7 +101,6 @@ export enum StudyStep {
     ParticipantView = 2,
     AdditionalSessions = 3,
     ReviewStudy = 4,
-    FinalizeStudy = 5
 }
 
 const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
@@ -132,6 +111,11 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     const isNew = 'new' === id
     const nav = useNavigate()
     const api = useApi()
+
+    // TODO reroute to study dashboard if they try to navigate here and status is not draft
+    // if (!isDraft(study)) {
+    //     nav('/studies')
+    // }
 
     const { isValid, isDirty } = useFormState()
 
@@ -199,7 +183,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                         await saveStudy()
                         setStep(StudyStep.ParticipantView)
                         Toast.show({
-                            message: `TODO message from iris`,
+                            message: `Invitations to collaborate on study ${study.titleForResearchers} have successfully been sent.`,
                         })
                     }
                 },
@@ -237,6 +221,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
             component: <AdditionalSessions study={study} />,
             text: 'Additional Sessions (optional)',
             backAction: () => setStep(StudyStep.ParticipantView),
+            optional: true,
             primaryAction: {
                 text: 'Continue',
                 disabled: !isValid,
@@ -257,26 +242,16 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
         {
             index: StudyStep.ReviewStudy,
             component: <ReviewStudy study={study} />,
-            text: 'Waiting Period',
+            text: 'Review Study',
             primaryAction: {
                 text: 'Submit Study',
+                // disabled: isWaiting(study),
                 action: () => {
-                    setShowSubmitStudy(true)
-                    if (getStudyStatus(study) === StageStatusEnum.WaitingPeriod) {
-                        // do something?
+                    if (isWaiting(study)) {
+                        return
                     }
-                    // setStep(StudyStep.ReviewStudy)
-                },
-            },
-        },
-        {
-            index: StudyStep.FinalizeStudy,
-            component: <FinalizeStudy study={study} />,
-            text: 'Finalize Study',
-            primaryAction: {
-                text: 'Launch Study',
-                action: () => {
-                    // console.log('Launch!')
+
+                    setShowSubmitStudy(true)
                 },
             },
         },
@@ -290,7 +265,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                         <span></span>
                     </Col>
                     <Col sm={9}>
-                        <StudyCreationProgressBar steps={steps} currentStep={steps[currentStep]} setStepIndex={(i) => setStep(i)}/>
+                        <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} setStepIndex={(i) => setStep(i)}/>
                     </Col>
                     <Col sm={1}>
                         {currentStep !== StudyStep.InternalDetails && <ExitButton study={getValues() as EditingStudy} saveStudy={saveStudy} />}
@@ -299,7 +274,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                 {steps[currentStep].component}
             </div>
             <ActionFooter step={steps[currentStep]} />
-            <SubmitStudyModal study={study} show={showSubmitStudy} setShow={setShowSubmitStudy} />
+            <SubmitStudyModal study={study as Study} show={showSubmitStudy} setShow={setShowSubmitStudy} />
         </Box>
     )
 }

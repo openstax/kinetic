@@ -70,6 +70,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   end
 
   def submit
+    # Qualtrics Survey Clone and update stage configs
     @study.stages.each do |stage|
       stage.update({:status => :waiting_period})
     end

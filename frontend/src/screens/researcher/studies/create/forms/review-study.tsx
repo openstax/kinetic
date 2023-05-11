@@ -1,23 +1,23 @@
-import { EditingStudy, getStudyLead, getStudyPi, getStudyStatus } from '@models';
+import { EditingStudy, getStudyLead, getStudyPi, isReadyForLaunch, isWaiting } from '@models';
 import { Box, React, useNavigate, useState } from '@common';
 import { colors } from '@theme';
 import { StudyCardPreview, Tag } from '../../../../learner/card';
 import { StudyStep } from '../edit-study';
 import { Button, Col, Icon, Modal, useFormContext } from '@components';
-import { useToggle } from 'rooks';
 import Waiting from '@images/study-creation/waiting.svg'
-import { StageStatusEnum, Study } from '@api';
-import { Toast } from '@nathanstitt/sundry/ui';
+import QualtricsReady from '@images/study-creation/qualtricsready.svg'
+import { Study } from '@api';
 import { useApi } from '@lib';
+import { Collapsible } from '../../../../../components/collapsible';
 
 export const ReviewStudy: FC<{study: EditingStudy}> = ({ study }) => {
-
-    if (getStudyStatus(study) === StageStatusEnum.WaitingPeriod) {
-    // if (true) {
-        // disable buttons
-        return <WaitingForTemplate study={study} />
-    }
-
+    // if (isWaiting(study)) {
+    //     return <WaitingForTemplate study={study} />
+    // }
+    //
+    // if (isReadyForLaunch(study)) {
+    //     return <ReadyForLaunch study={study} />
+    // }
 
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
@@ -27,7 +27,6 @@ export const ReviewStudy: FC<{study: EditingStudy}> = ({ study }) => {
             </Box>
 
             <StudyInformation study={study} />
-
         </Box>
     )
 }
@@ -51,9 +50,9 @@ const StudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = ({ study
                         </Button>}
                     </Col>
                     <Col sm={8} direction='column'>
-                        <small>Title: {study.titleForResearchers}</small>
+                        <small>Study Title: {study.titleForResearchers}</small>
                         <small>Description: {study.internalDescription}</small>
-                        <div><Tag tag={study.studyType} /></div>
+                        <div>Tag: <Tag tag={study.studyType} /></div>
                     </Col>
                 </Box>
 
@@ -84,35 +83,7 @@ const StudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = ({ study
                     </Col>
                 </Box>
 
-                <svg css={{ strokeWidth: 2, height: 40 }}>
-                    <line x1="0" y1="30" x2="500" y2="30" strokeDasharray={10} stroke={colors.grayText} />
-                </svg>
-
-                <Box justify='between' direction='column'>
-                    <Col justify='between' direction='row'>
-                        <h6 className='fw-bold'>Additional Session (optional)</h6>
-
-                        {!viewOnly && <Button
-                            className={!study.stages?.length ? 'btn-researcher-primary' : 'btn-researcher-secondary'}
-                            onClick={() => setStep(StudyStep.AdditionalSessions)}
-                        >
-                            {!study.stages?.length ? 'Start' : 'Edit'}
-                        </Button>}
-                    </Col>
-                    <Col sm={8} direction='column'>
-                        {!study.stages?.length &&
-                            <small>Turn your single session study into a longitudinal study by adding retention measures</small>
-                        }
-                        {study.stages?.map((stage, index) => {
-                            if (index === 0) return null
-                            return (
-                                <small key={stage.order}>
-                                    Session {index + 1}: {stage.durationMinutes} minutes, {stage.points} points
-                                </small>
-                            )
-                        })}
-                    </Col>
-                </Box>
+                <AdditionalSessionsOverview viewOnly={viewOnly} study={study} />
             </Col>
 
             <StudyCardPreview study={study} />
@@ -120,14 +91,64 @@ const StudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = ({ study
     )
 }
 
+const AdditionalSessionsOverview: FC<{viewOnly: boolean, study: EditingStudy}> = ({ viewOnly, study }) => {
+    const { setValue } = useFormContext()
+    const setStep = (step: StudyStep) => {
+        setValue('step', step, { shouldValidate: true })
+    }
+
+    if (viewOnly && !study.stages?.length) {
+        return null
+    }
+
+    return (
+        <Box direction='column' gap='large'>
+            <svg css={{ strokeWidth: 2, height: 40 }}>
+                <line x1="0" y1="30" x2="500" y2="30" strokeDasharray={10} stroke={colors.grayText} />
+            </svg>
+
+            <Box justify='between' direction='column'>
+                <Col justify='between' direction='row'>
+                    <h6 className='fw-bold'>Additional Sessions (optional)</h6>
+
+                    {!viewOnly && <Button
+                        className={!study.stages?.length ? 'btn-researcher-primary' : 'btn-researcher-secondary'}
+                        onClick={() => setStep(StudyStep.AdditionalSessions)}
+                    >
+                        {!study.stages?.length ? 'Start' : 'Edit'}
+                    </Button>}
+                </Col>
+
+                <Col sm={8} direction='column'>
+                    {!viewOnly && !study.stages?.length &&
+                        <small>Turn your single session study into a longitudinal study by adding retention measures</small>
+                    }
+                    {study.stages?.map((stage, index) => {
+                        if (index === 0) return null
+                        return (
+                            <small key={stage.order}>
+                                Session {index + 1}: {stage.durationMinutes} minutes, {stage.points} points
+                            </small>
+                        )
+                    })}
+                </Col>
+            </Box>
+        </Box>
+    )
+
+}
+
 const WaitingForTemplate: FC<{study: EditingStudy}> = ({ study }) => {
     return (
         <Box direction='column' gap='xxlarge' className='mt-6'>
-            <Box direction='column' align='center' className='text-center' width='500px' gap='large' alignSelf='center'>
+            <Box direction='column' align='center' className='text-center' width='600px' gap='large' alignSelf='center'>
                 <img src={Waiting} alt='waiting' height={200}/>
-                <h5 className='fw-bold'>Waiting for Qualtrics template</h5>
+                <h5 className='fw-bold'>Almost there! We’re setting up the right permissions</h5>
                 <h6 className='lh-lg' css={{ color: colors.grayerText }}>
-                    Our team is working hard to create a Qualtrics template for you. Come back and continue when you finish your Qualtrics survey.
+                    Our team is creating a Qualtrics template and setting up the correct permissions for your study. You will receive an email from owlsurveys@rice.edu containing an access code to your Qualtrics template and further instructions via your registered email within the next business day.
+                </h6>
+                <h6 className='lh-lg' css={{ color: colors.grayerText }}>
+                    Follow the instructions to build your task and come back here to proceed with finalizing your study and launching it on Kinetic.
                 </h6>
             </Box>
             <StudyOverview study={study} />
@@ -135,65 +156,77 @@ const WaitingForTemplate: FC<{study: EditingStudy}> = ({ study }) => {
     )
 }
 
-const TemplateReady: FC<{study: EditingStudy}> = ({ study }) => {
+const ReadyForLaunch: FC<{study: EditingStudy}> = ({ study }) => {
     return (
-        <Box>
-
+        <Box direction='column' gap='xxlarge' className='mt-6'>
+            <Box direction='column' align='center' className='text-center' width='600px' gap='large' alignSelf='center'>
+                <img src={QualtricsReady} alt='qualtrics-ready' height={200}/>
+                <h5 className='fw-bold'>All set up and ready to go!</h5>
+                <h6 className='lh-lg' css={{ color: colors.grayerText }}>
+                    The correct permissions are now all set! An access code has now been sent to your email from owlsurveys@rice.edu providing you with further instructions on how to access your Qualtrics template.
+                </h6>
+                <Box gap>
+                    <h6 className='lh-lg' css={{ color: colors.grayerText }}>
+                        Once you’ve set up your study in Qualtrics and it’s ready for data collection, return here to finalize it and launch it on Kinetic.
+                    </h6>
+                    <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={16} tooltip={<span>Didn’t receive an email with your Qualtrics collaboration code? Please email us at <a href="mailto:kinetic@openstax.org">kinetic@openstax.org</a> and we’ll get it all up and running for you</span>}/>
+                </Box>
+                <SetupQualtricsConfirmation study={study} />
+            </Box>
+            <StudyOverview study={study} />
         </Box>
+    )
+}
+
+const SetupQualtricsConfirmation: FC<{study: EditingStudy}> = ({ study }) => {
+    const { register } = useFormContext()
+
+    if (study.stages?.length === 1) {
+        return (
+            <Box gap align='center'>
+                <input type='checkbox' {...register('userHasCheckedQualtrics')} />
+                <small>Yes, I have completed Qualtrics</small>
+
+                <div css={{ display: 'flex' }}>
+
+                </div>
+            </Box>
+        )
+    }
+
+    return (
+        <div>
+            {study.stages?.map((stage, index) => (
+                <Box gap align='center' key={stage.order}>
+                    <input type='checkbox' {...register('userHasCheckedQualtrics')} />
+                    <small>Yes, I have set up Session {index + 1} in Qualtrics</small>
+                </Box>
+            ))}
+        </div>
     )
 }
 
 export const StudyOverview: FC<{study: EditingStudy}> = ({ study }) => {
-    const [expanded, toggleExpanded] = useToggle()
-
     return (
-        <Box css={{ backgroundColor: colors.pageBackground }} className='p-2' direction='column'>
-            <Box justify='between'>
-                <Box direction='column' gap>
-                    <h5>Study overview</h5>
-                    <small css={{ color: colors.grayText }}>
-                        Expand this section to see a high-level overview of your study
-                    </small>
-                </Box>
-
-                <Button link onClick={toggleExpanded}>
-                    {expanded ? 'Collapse' : 'Expand'}
-                    <Icon icon={expanded ? 'chevronUp' : 'chevronDown'}/>
-                </Button>
-            </Box>
-
-            {expanded &&
-                <div className='py-2'>
-                    <StudyInformation study={study} viewOnly/>
-                </div>
-            }
-
-        </Box>
+        <Collapsible title='Study Overview' description='Expand this section to see a high-level overview of your study'>
+            <StudyInformation study={study} viewOnly/>
+        </Collapsible>
     )
 }
 
 export const SubmitStudyModal: FC<{
-    study: EditingStudy,
+    study: Study,
     show: boolean,
     setShow: (show: boolean) => void
 }> = ({ study, show, setShow }) => {
     const api = useApi()
-    const { getValues } = useFormContext()
     const [submitted, setSubmitted] = useState(false)
     if (submitted) {
         return <SubmitSuccess show={submitted} setShow={setSubmitted} />
     }
 
     const submitStudy = () => {
-        const study: Study = getValues() as Study
-        study.stages = study.stages?.map(stage => {
-            return {
-                ...stage,
-                status: StageStatusEnum.WaitingPeriod,
-            }
-        })
-        console.log(study);
-        // api.submitStudy()
+        api.submitStudy({ id: study.id  })
     }
 
     return (
@@ -231,6 +264,7 @@ const SubmitSuccess: FC<{
     setShow: (show: boolean) => void
 }> = ({ show, setShow }) => {
     const nav = useNavigate()
+    // TODO Don't allow user to close this modal on backdrop click
     return (
         <Modal
             center

@@ -1,11 +1,26 @@
-import { Box, React, styled } from '@common';
+import { Box, React } from '@common';
 import { colors } from '@theme';
 import ActiveStep from '@images/icons/active-step.svg'
-import InactiveStep from '@images/icons/inactive-step.svg'
 import CompletedStep from '@images/icons/completed-step.svg'
 import OptionalStep from '@images/icons/optional-step.svg'
 import DisabledStep from '@images/icons/disabled-step.svg'
-import { Step, StudyStep } from './edit-study';
+import { ReactNode } from 'react';
+
+export interface StepAction {
+    text: string
+    action?: Function
+    disabled?: boolean
+}
+
+export interface Step {
+    index: number
+    component?: ReactNode
+    text: string
+    primaryAction?: StepAction
+    secondaryAction?: StepAction
+    backAction?: () => void
+    optional?: boolean
+}
 
 const getLineColor = (step: Step, currentStep: Step) => {
     if (step.index === currentStep.index) {
@@ -19,17 +34,12 @@ const getLineColor = (step: Step, currentStep: Step) => {
     }
 }
 
-export const StudyCreationProgressBar: FC<{
+export const ResearcherProgressBar: FC<{
     steps: Step[],
     currentStep: Step,
     setStepIndex: (index: number) => void
 }> = ({ steps, currentStep, setStepIndex }) => {
     const onClickStep = (step: Step) => {
-        // TODO uncomment after dev, users cant navigate if on the following steps
-        // if (currentStep.index === StudyStep.ReviewStudy || currentStep.index === StudyStep.FinalizeStudy) {
-        //     return
-        // }
-
         setStepIndex(step.index)
     }
 
@@ -65,7 +75,7 @@ const StepIcon: FC<{step: Step, currentStep: Step}> = ({ step, currentStep }) =>
         return <img height={25} src={CompletedStep} alt='complete' />
     }
 
-    if (step.index === StudyStep.AdditionalSessions) {
+    if (step.optional) {
         return <img height={25} src={OptionalStep} alt='optional' />
     }
 

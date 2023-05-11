@@ -244,7 +244,7 @@ export const StudyCardPreview: FC<{study: EditingStudy}> = ({ study }) => {
                 className='btn-researcher-secondary justify-content-center mt-3'
                 onClick={() => {setShowDetails(true)}}
             >
-                Preview Study Detail
+                Preview Study Details
             </Button>
             <StudyDetailsPreview
                 study={study as ParticipantStudy}

@@ -21,7 +21,7 @@ class ResearcherNotifications
     end
 
     def notify_kinetic_study_review(study)
-      UserMailer.with(study: study).study_ready_for_review.deliver
+      UserMailer.with(study: study).submit_study_for_review.deliver
     end
   end
 end

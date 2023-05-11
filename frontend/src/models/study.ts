@@ -1,4 +1,4 @@
-import { DefaultApi, NewStudy, ParticipantStudy, ResearcherRoleEnum, StageStatusEnum, Study } from '@api'
+import { DefaultApi, NewStudy, ParticipantStudy, ResearcherRoleEnum, StageStatusEnum, Study, StudyStatusEnum } from '@api'
 import { isNil, useApi } from '@lib'
 import { useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
@@ -47,6 +47,18 @@ export function getStudyStatus(study: EditingStudy) {
     }
 
     return first(study.stages)?.status
+}
+
+export function isWaiting(study: EditingStudy) {
+    return study.status === StudyStatusEnum.WaitingPeriod
+}
+
+export function isReadyForLaunch(study: EditingStudy) {
+    return study.status === StudyStatusEnum.ReadyForLaunch
+}
+
+export function isDraft(study: EditingStudy) {
+    return study.status === StudyStatusEnum.Draft
 }
 
 export function getStudyPi(study: EditingStudy) {

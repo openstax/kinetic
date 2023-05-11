@@ -23,6 +23,18 @@ class Study < ApplicationRecord
     joins(:stages).group('studies.id').where(is_hidden: false).merge(Stage.available)
   }
 
+  def pi
+    study_researchers.find_by(role: 'pi')
+  end
+
+  def lead
+    study_researchers.find_by(role: 'lead')
+  end
+
+  def members
+    study_researchers.find_by(role: 'member')
+  end
+
   def opens_at
     stages.first&.opens_at || nil
   end
