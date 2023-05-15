@@ -109,18 +109,6 @@ export function getStudyDuration(study: ParticipantStudy): number {
     return sumBy(study.stages, 'durationMinutes')
 }
 
-export function getOpensAt(study: Study): Date | null {
-    const firstStage = first(study.stages)
-    if (!firstStage || !firstStage.opensAt) return null
-    return firstStage.opensAt
-}
-
-export function getClosesAt(study: Study): Date | null {
-    const firstStage = first(study.stages)
-    if (!firstStage || !firstStage.closesAt) return null
-    return firstStage.closesAt
-}
-
 export const useFetchStudies = () => {
     const api = useApi()
     const [studies, setStudies] = useState<Study[]>([])

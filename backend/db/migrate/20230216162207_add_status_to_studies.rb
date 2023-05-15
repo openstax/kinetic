@@ -6,13 +6,11 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
     add_column :studies, :study_subject, :string
     add_column :studies, :internal_description, :string
     add_column :studies, :shareable_after_months, :integer
+    add_column :studies, :target_sample_size, :integer
 
     add_column :stages, :status, :integer, default: 0
-    add_column :stages, :target_sample_size, :integer, default: 0
     add_column :stages, :feedback_types, :string, array: true, null: false, default: []
     add_index :stages, :feedback_types, using: 'gin'
-    add_column :stages, :opens_at, :datetime
-    add_column :stages, :closes_at, :datetime
 
     add_column :study_researchers, :role, :integer, default: 0
 
@@ -35,8 +33,6 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
       end
     end
 
-    remove_column :studies, :closes_at, :datetime
-    remove_column :studies, :opens_at, :datetime
     remove_column :studies, :tags, :string
     remove_column :studies, :feedback_description, :string
 

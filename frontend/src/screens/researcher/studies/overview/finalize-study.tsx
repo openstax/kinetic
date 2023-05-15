@@ -1,9 +1,10 @@
-import { Box, React, styled, useState, Yup } from '@common';
+import { Box, React, styled, Yup } from '@common';
 import {
     Button,
     Col,
     DateTime,
     DateTimeField,
+    DateTimeFormats,
     Form,
     FormSaveButton,
     Icon,
@@ -11,35 +12,23 @@ import {
     SelectField,
     useFormContext,
     useFormState,
-    DateTimeFormats,
 } from '@components';
 import { colors } from '@theme';
 import { useToggle } from 'rooks';
-import { Stage, Study, StudyStatusEnum } from '@api';
-import { formatDate, useApi } from '@lib';
+import { Study, StudyStatusEnum } from '@api';
+import { useApi } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import { getFirstStage } from '@models';
-import { useFieldArray } from 'react-hook-form';
 
 const ResearcherCheckbox = styled(InputField)({
-    border: 0,
     '.form-check-input, &.form-check-input': {
         height: 16,
         width: 16,
         '&:checked': {
-            backgroundColor: 'gray',
-            borderColor: 'red',
+            backgroundColor: colors.kineticResearcher,
+            borderColor: colors.kineticResearcher,
         },
     },
-    // border: 0,
-    // '.form-check-input, &.form-check-input': {
-    //     height: 16,
-    //     width: 16,
-    //     '&:checked': {
-    //         backgroundColor: colors.kineticResearcher,
-    //         borderColor: colors.kineticResearcher,
-    //     },
-    // },
 })
 
 const finalizeValidation = Yup.object().shape({
@@ -60,6 +49,8 @@ export const FinalizeStudyForm: FC<{study: Study, disabled?: boolean}> = ({ stud
             validationSchema={finalizeValidation}
             defaultValues={{
                 ...study,
+                hasSampleSize: !!study.targetSampleSize,
+                hasClosingDate: !!study.closesAt,
             }}
             onSubmit={(values, context) => saveStudy(values, context)}
             onCancel={() => {}}
@@ -133,7 +124,7 @@ const SubmitStudyButton: FC<{study: Study}> = ({ study }) => {
 export const FinalizeStudy: FC<{study: Study}> = ({ study }) => {
     return (
         <Box className='mt-2' direction='column' gap='xlarge'>
-            <OpensAt study={study} />
+            <OpensAt />
 
             <ClosingCriteria study={study} />
 
@@ -142,7 +133,7 @@ export const FinalizeStudy: FC<{study: Study}> = ({ study }) => {
     )
 }
 
-const OpensAt: FC<{study: Study}> = ({ study }) => {
+const OpensAt: FC = () => {
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
@@ -153,7 +144,7 @@ const OpensAt: FC<{study: Study}> = ({ study }) => {
             <Col sm={6} direction='column' gap>
                 <div>
                     <DateTimeField
-                        name='stages.0.opensAt'
+                        name='opensAt'
                         label='Opens On'
                         withTime
                         format={DateTimeFormats.shortDateTime}
@@ -217,11 +208,7 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
     if (!firstStage) {
         return null
     }
-    const [hasSampleSize, setHasSampleSize] = useState(!!firstStage.targetSampleSize)
-    const [hasClosingDate, setHasClosingDate] = useState(!!firstStage.closesAt)
-
-    const { register, setValue, watch } = useFormContext()
-    const { update } = useFieldArray<{ stages: Stage[] }>({ name: 'stages' });
+    const { watch } = useFormContext()
 
     return (
         <Box gap='xlarge'>
@@ -236,47 +223,37 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
 
             <Col sm={6} direction='column' gap>
                 <Box gap>
-                    <Col gap sm={3} >
+                    <Col gap sm={3} direction='row' align='center'>
                         <ResearcherCheckbox
+                            name='hasSampleSize'
                             type='checkbox'
-                            // label='By sample size'
-                            name='stages.0.hasSampleSize'
-                            checked={hasSampleSize}
-                            // onChange={() => {
-                            //     setHasSampleSize(!hasSampleSize)
-                            //     setValue('stages.0.targetSampleSize', 0)
-                            // }}
                             id='sample-size'
                         />
                         <label htmlFor='sample-size'>By sample size</label>
                     </Col>
                     <Col sm={5}>
                         <InputField
-                            name={`stages.0.targetSampleSize`}
-                            disabled={!watch('stages.0.hasSampleSize')}
+                            name='targetSampleSize'
+                            disabled={!watch('hasSampleSize')}
                             placeholder='1-1000'
                             type='number'
                         />
                     </Col>
                 </Box>
 
-                <Box gap >
+                <Box gap>
                     <Col gap sm={3} direction='row' align='center'>
                         <ResearcherCheckbox
-                            label='By due date'
                             name='hasClosingDate'
                             type='checkbox'
-                            checked={hasClosingDate}
-                            onChange={() => {
-                                setHasClosingDate(!hasClosingDate)
-                                setValue('stages.0.closesAt', null)
-                            }}
+                            id='closing-date'
                         />
+                        <label htmlFor='closing-date'>By closing date</label>
                     </Col>
                     <Col sm={5}>
                         <DateTime
-                            name={`stages.0.closesAt`}
-                            readOnly={!hasClosingDate}
+                            name='closesAt'
+                            readOnly={!watch('hasClosingDate')}
                             placeholder='Select a date'
                             format={DateTimeFormats.shortDateTime}
                             options={{

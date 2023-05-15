@@ -44,9 +44,25 @@ class Api::V1::BaseStudiesOpenApi
         key :format, 'date-time'
         key :description, 'When the study was launched; null means not launched'
       end
+      property :opens_at do
+        key :type, :string
+        key :nullable, true
+        key :format, 'date-time'
+        key :description, 'When the study opens for participation; null means not open.'
+      end
+      property :closes_at do
+        key :type, :string
+        key :nullable, true
+        key :format, 'date-time'
+        key :description, 'When the study closes for participation; null means does not close.'
+      end
+      property :target_sample_size do
+        key :type, :number
+        key :description, 'Desired sample size set by researcher'
+      end
       property :status do
         key :type, :string
-        key :description, 'Status of the stage'
+        key :description, 'Status of the study'
         key :enum, %w[active paused scheduled draft waiting_period ready_for_launch completed]
         key :readOnly, true
       end

@@ -45,7 +45,16 @@ module Api::V1::Bindings
     # When the study was launched; null means not launched
     attr_accessor :first_launched_at
 
-    # Status of the stage
+    # When the study opens for participation; null means not open.
+    attr_accessor :opens_at
+
+    # When the study closes for participation; null means does not close.
+    attr_accessor :closes_at
+
+    # Desired sample size set by researcher
+    attr_accessor :target_sample_size
+
+    # Status of the study
     attr_accessor :status
 
     # The study's researchers.
@@ -116,6 +125,9 @@ module Api::V1::Bindings
         :'benefits' => :'benefits',
         :'is_hidden' => :'is_hidden',
         :'first_launched_at' => :'first_launched_at',
+        :'opens_at' => :'opens_at',
+        :'closes_at' => :'closes_at',
+        :'target_sample_size' => :'target_sample_size',
         :'status' => :'status',
         :'researchers' => :'researchers',
         :'is_mandatory' => :'is_mandatory',
@@ -149,6 +161,9 @@ module Api::V1::Bindings
         :'benefits' => :'String',
         :'is_hidden' => :'Boolean',
         :'first_launched_at' => :'Time',
+        :'opens_at' => :'Time',
+        :'closes_at' => :'Time',
+        :'target_sample_size' => :'Float',
         :'status' => :'String',
         :'researchers' => :'Array<Researcher>',
         :'is_mandatory' => :'Boolean',
@@ -167,6 +182,8 @@ module Api::V1::Bindings
     # List of attributes with nullable: true
     def self.openapi_nullable
       Set.new([
+        :'opens_at',
+        :'closes_at',
         :'shareable_after_months',
       ])
     end
@@ -231,6 +248,18 @@ module Api::V1::Bindings
 
       if attributes.key?(:'first_launched_at')
         self.first_launched_at = attributes[:'first_launched_at']
+      end
+
+      if attributes.key?(:'opens_at')
+        self.opens_at = attributes[:'opens_at']
+      end
+
+      if attributes.key?(:'closes_at')
+        self.closes_at = attributes[:'closes_at']
+      end
+
+      if attributes.key?(:'target_sample_size')
+        self.target_sample_size = attributes[:'target_sample_size']
       end
 
       if attributes.key?(:'status')
@@ -379,6 +408,9 @@ module Api::V1::Bindings
           benefits == o.benefits &&
           is_hidden == o.is_hidden &&
           first_launched_at == o.first_launched_at &&
+          opens_at == o.opens_at &&
+          closes_at == o.closes_at &&
+          target_sample_size == o.target_sample_size &&
           status == o.status &&
           researchers == o.researchers &&
           is_mandatory == o.is_mandatory &&
@@ -402,7 +434,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, status, researchers, is_mandatory, view_count, shareable_after_months, completed_count, study_type, study_topic, study_subject, stages, launched_count, return_url].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, is_mandatory, view_count, shareable_after_months, completed_count, study_type, study_topic, study_subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

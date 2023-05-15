@@ -93,7 +93,25 @@ export interface Study {
      */
     firstLaunchedAt?: Date;
     /**
-     * Status of the stage
+     * When the study opens for participation; null means not open.
+     * @type {Date}
+     * @memberof Study
+     */
+    opensAt?: Date | null;
+    /**
+     * When the study closes for participation; null means does not close.
+     * @type {Date}
+     * @memberof Study
+     */
+    closesAt?: Date | null;
+    /**
+     * Desired sample size set by researcher
+     * @type {number}
+     * @memberof Study
+     */
+    targetSampleSize?: number;
+    /**
+     * Status of the study
      * @type {string}
      * @memberof Study
      */
@@ -214,6 +232,9 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
         'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
+        'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
+        'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
+        'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
         'status': !exists(json, 'status') ? undefined : json['status'],
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
@@ -247,6 +268,9 @@ export function StudyToJSON(value?: Study | null): any {
         'benefits': value.benefits,
         'is_hidden': value.isHidden,
         'first_launched_at': value.firstLaunchedAt === undefined ? undefined : (value.firstLaunchedAt.toISOString()),
+        'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
+        'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
+        'target_sample_size': value.targetSampleSize,
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(ResearcherToJSON)),
         'is_mandatory': value.isMandatory,
         'view_count': value.viewCount,

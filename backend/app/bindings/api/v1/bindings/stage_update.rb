@@ -42,17 +42,8 @@ module Api::V1::Bindings
     # How many points the stage is worth
     attr_accessor :points
 
-    # When the stage opens for participation; null means not open.
-    attr_accessor :opens_at
-
-    # When the stage closes for participation; null means does not close.
-    attr_accessor :closes_at
-
     # Feedback types for this stage
     attr_accessor :feedback_types
-
-    # Desired sample size set by researcher
-    attr_accessor :target_sample_size
 
     # Status of the stage
     attr_accessor :status
@@ -91,10 +82,7 @@ module Api::V1::Bindings
         :'config' => :'config',
         :'duration_minutes' => :'duration_minutes',
         :'points' => :'points',
-        :'opens_at' => :'opens_at',
-        :'closes_at' => :'closes_at',
         :'feedback_types' => :'feedback_types',
-        :'target_sample_size' => :'target_sample_size',
         :'status' => :'status'
       }
     end
@@ -116,10 +104,7 @@ module Api::V1::Bindings
         :'config' => :'Object',
         :'duration_minutes' => :'Float',
         :'points' => :'Float',
-        :'opens_at' => :'Time',
-        :'closes_at' => :'Time',
         :'feedback_types' => :'Array<String>',
-        :'target_sample_size' => :'Float',
         :'status' => :'String'
       }
     end
@@ -127,8 +112,6 @@ module Api::V1::Bindings
     # List of attributes with nullable: true
     def self.openapi_nullable
       Set.new([
-        :'opens_at',
-        :'closes_at',
       ])
     end
 
@@ -183,22 +166,10 @@ module Api::V1::Bindings
         self.points = attributes[:'points']
       end
 
-      if attributes.key?(:'opens_at')
-        self.opens_at = attributes[:'opens_at']
-      end
-
-      if attributes.key?(:'closes_at')
-        self.closes_at = attributes[:'closes_at']
-      end
-
       if attributes.key?(:'feedback_types')
         if (value = attributes[:'feedback_types']).is_a?(Array)
           self.feedback_types = value
         end
-      end
-
-      if attributes.key?(:'target_sample_size')
-        self.target_sample_size = attributes[:'target_sample_size']
       end
 
       if attributes.key?(:'status')
@@ -256,10 +227,7 @@ module Api::V1::Bindings
           config == o.config &&
           duration_minutes == o.duration_minutes &&
           points == o.points &&
-          opens_at == o.opens_at &&
-          closes_at == o.closes_at &&
           feedback_types == o.feedback_types &&
-          target_sample_size == o.target_sample_size &&
           status == o.status
     end
 
@@ -272,7 +240,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [order, title, description, available_after_days, is_completed, is_launchable, config, duration_minutes, points, opens_at, closes_at, feedback_types, target_sample_size, status].hash
+      [order, title, description, available_after_days, is_completed, is_launchable, config, duration_minutes, points, feedback_types, status].hash
     end
 
     # Builds the object from hash

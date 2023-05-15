@@ -18,6 +18,9 @@ FactoryBot.define do
     study_subject { 'Biology' }
     benefits { Faker::Lorem.paragraph_by_chars(number: rand(50..170)) }
     image_id { 'Schoolfuturecareer_1' }
+    target_sample_size { 100 }
+    opens_at { 30.days.ago }
+    closes_at { 30.days.from_now }
 
     after(:create) do |study, evaluator|
       researchers = [evaluator.researchers].flatten.compact

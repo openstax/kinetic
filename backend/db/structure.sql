@@ -529,10 +529,7 @@ CREATE TABLE public.stages (
     duration_minutes integer DEFAULT 0 NOT NULL,
     points integer DEFAULT 0 NOT NULL,
     status integer DEFAULT 0,
-    target_sample_size integer DEFAULT 0,
-    feedback_types character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    opens_at timestamp with time zone,
-    closes_at timestamp with time zone
+    feedback_types character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -572,12 +569,15 @@ CREATE TABLE public.studies (
     image_id character varying,
     completed_count integer DEFAULT 0 NOT NULL,
     is_hidden boolean DEFAULT false NOT NULL,
+    opens_at timestamp with time zone,
+    closes_at timestamp with time zone,
     view_count integer DEFAULT 0,
     study_type character varying,
     study_topic character varying,
     study_subject character varying,
     internal_description character varying,
-    shareable_after_months integer
+    shareable_after_months integer,
+    target_sample_size integer
 );
 
 

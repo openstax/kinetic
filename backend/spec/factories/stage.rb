@@ -9,10 +9,7 @@ FactoryBot.define do
     available_after_days { 0 }
     points { 10 }
     duration_minutes { 5 }
-    opens_at { 30.days.ago }
-    closes_at { 30.days.from_now }
     feedback_types { ['debrief, personalized'] }
-    target_sample_size { 100 }
 
     config do
       {

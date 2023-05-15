@@ -7,15 +7,6 @@ class Stage < ApplicationRecord
 
   self.implicit_order_column = 'order'
 
-  arel = Stage.arel_table
-
-  scope :available, -> {
-    where
-      .not(opens_at: nil)
-      .where(arel[:opens_at].lteq(Time.now))
-      .where(arel[:closes_at].eq(nil).or(arel[:closes_at].gteq(Time.now)))
-  }
-
   has_many :launched_stages do
     def for_user(user)
       where(user_id: user.id).first
@@ -50,17 +41,17 @@ class Stage < ApplicationRecord
 
   def is_draft
     s = read_attribute(:status)
-    opens_at.nil? && s == 'draft'
+    study.opens_at.nil? && s == 'draft'
   end
 
   def is_completed
     s = read_attribute(:status)
     # Add sample size check to completed once the user can populate that data
-    !closes_at.nil? && (s == 'active' && closes_at < DateTime.now)
+    !study.closes_at.nil? && (s == 'active' && study.closes_at < DateTime.now)
   end
 
   def is_scheduled
-    !opens_at.nil? && opens_at > DateTime.now
+    !study.opens_at.nil? && study.opens_at > DateTime.now
   end
 
   def previous_stage
@@ -105,10 +96,6 @@ class Stage < ApplicationRecord
 
   def delayed?
     available_after_days.positive?
-  end
-
-  def available?
-    opens_at && Time.now > opens_at && (closes_at.nil? || Time.now <= closes_at)
   end
 
   def launcher(user_id)

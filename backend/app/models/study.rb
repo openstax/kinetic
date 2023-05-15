@@ -18,9 +18,13 @@ class Study < ApplicationRecord
   # Delete researchers to avoid them complaining about not leaving a researcher undeleted
   before_destroy(prepend: true) { study_researchers.delete_all }
 
-  # https://gorails.com/blog/activerecord-merge
   scope :available, -> {
-    joins(:stages).group('studies.id').where(is_hidden: false).merge(Stage.available)
+    where
+      .not(opens_at: nil)
+      .where(is_hidden: false)
+      .where(arel[:opens_at].lteq(Time.now))
+      .where(arel[:closes_at].eq(nil).or(
+        arel[:closes_at].gteq(Time.now)))
   }
 
   def pi
@@ -35,10 +39,6 @@ class Study < ApplicationRecord
     study_researchers.find_by(role: 'member')
   end
 
-  def opens_at
-    stages.first&.opens_at || nil
-  end
-
   def study_status
     stages.first&.status || 'draft'
   end
@@ -51,8 +51,11 @@ class Study < ApplicationRecord
     stages.sum(:duration_minutes)
   end
 
+  # TODO handle this case from debshila:
+  # just keep one case in mind: learner x completes stage 1 and we reach end date,
+  # meeting end date closes stage 1 but leaves subsequent stages open until the interval is reached
   def available?
-    stages.any? { |stage| stage.available? }
+    !is_hidden? && opens_at && Time.now > opens_at && (closes_at.nil? || Time.now <= closes_at)
   end
 
   def can_delete?

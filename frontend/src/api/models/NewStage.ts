@@ -74,29 +74,11 @@ export interface NewStage {
      */
     points?: number;
     /**
-     * When the stage opens for participation; null means not open.
-     * @type {Date}
-     * @memberof NewStage
-     */
-    opensAt?: Date | null;
-    /**
-     * When the stage closes for participation; null means does not close.
-     * @type {Date}
-     * @memberof NewStage
-     */
-    closesAt?: Date | null;
-    /**
      * Feedback types for this stage
      * @type {Array<string>}
      * @memberof NewStage
      */
     feedbackTypes?: Array<string>;
-    /**
-     * Desired sample size set by researcher
-     * @type {number}
-     * @memberof NewStage
-     */
-    targetSampleSize?: number;
     /**
      * Status of the stage
      * @type {string}
@@ -150,10 +132,7 @@ export function NewStageFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'config': json['config'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
         'points': !exists(json, 'points') ? undefined : json['points'],
-        'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
-        'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'feedbackTypes': !exists(json, 'feedback_types') ? undefined : json['feedback_types'],
-        'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
         'status': !exists(json, 'status') ? undefined : json['status'],
     };
 }
@@ -173,10 +152,7 @@ export function NewStageToJSON(value?: NewStage | null): any {
         'config': value.config,
         'duration_minutes': value.durationMinutes,
         'points': value.points,
-        'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
-        'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'feedback_types': value.feedbackTypes,
-        'target_sample_size': value.targetSampleSize,
         'status': value.status,
     };
 }

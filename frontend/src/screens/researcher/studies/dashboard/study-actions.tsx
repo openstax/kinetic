@@ -5,7 +5,6 @@ import { colors } from '@theme';
 import { useApi } from '@lib';
 import { CellContext } from '@tanstack/react-table';
 import { NotificationType } from './study-action-notification';
-import { getClosesAt } from '@models';
 
 const ModalType = {
     Pause: 'pauseStudy',
@@ -78,7 +77,7 @@ const ActionModalContent: FC<{
                 onCancel={onHide}
             />
         case ModalType.Resume:
-            if (dayjs().isBefore(dayjs(getClosesAt(study)))) {
+            if (dayjs().isBefore(dayjs(study.closesAt))) {
                 return <StudyActionContainer
                     header="Resume Study"
                     warning={false}
