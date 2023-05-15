@@ -14,7 +14,7 @@
     "test:watch": "chokidar 'specs/*.ts' --initial bin/env -c 'yarn run playwright test {path}'",
     "test:debug": "PWDEBUG=1 yarn run test --workers=1",
     "lint": "eslint src",
-    "pf": "run-p typecheck lint",
+    "pf": "run-p -c typecheck lint",
     "typecheck": "tsc --skipLibCheck --noEmit"
   },
   "dependencies": {
@@ -27,7 +27,7 @@
     "@emotion/styled": "^11.10.0",
     "@iconify-icons/bi": "^1.2.2",
     "@iconify/react": "^3.2.1",
-    "@nathanstitt/sundry": "1.5.0",
+    "@nathanstitt/sundry": "^1.5.5",
     "@sentry/react": "^7.11.1",
     "@sentry/tracing": "^7.11.1",
     "@tanstack/react-table": "^8.7.9",
