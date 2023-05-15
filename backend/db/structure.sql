@@ -145,8 +145,8 @@ CREATE TABLE public.activesupport_cache_entries (
 CREATE TABLE public.admins (
     id bigint NOT NULL,
     user_id uuid NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -276,8 +276,8 @@ ALTER SEQUENCE public.analysis_response_exports_id_seq OWNED BY public.analysis_
 CREATE TABLE public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -322,10 +322,10 @@ CREATE TABLE public.launched_stages (
     id bigint NOT NULL,
     stage_id bigint NOT NULL,
     user_id uuid,
-    first_launched_at timestamp without time zone,
-    completed_at timestamp without time zone,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    first_launched_at timestamp with time zone,
+    completed_at timestamp with time zone,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -356,12 +356,12 @@ CREATE TABLE public.launched_studies (
     id bigint NOT NULL,
     study_id bigint NOT NULL,
     user_id uuid NOT NULL,
-    first_launched_at timestamp without time zone,
-    completed_at timestamp without time zone,
-    opted_out_at timestamp without time zone,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    aborted_at timestamp without time zone,
+    first_launched_at timestamp with time zone,
+    completed_at timestamp with time zone,
+    opted_out_at timestamp with time zone,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
+    aborted_at timestamp with time zone,
     consent_granted boolean
 );
 
@@ -394,7 +394,7 @@ CREATE TABLE public.participant_metadata (
     user_id uuid NOT NULL,
     study_id bigint NOT NULL,
     metadata jsonb,
-    created_at timestamp without time zone
+    created_at timestamp with time zone
 );
 
 
@@ -424,8 +424,8 @@ ALTER SEQUENCE public.participant_metadata_id_seq OWNED BY public.participant_me
 CREATE TABLE public.research_ids (
     id text NOT NULL,
     user_id uuid NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -438,8 +438,8 @@ CREATE TABLE public.researchers (
     user_id uuid NOT NULL,
     institution character varying,
     bio text,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     lab_page character varying,
     first_name character varying,
     last_name character varying,
@@ -521,8 +521,8 @@ CREATE TABLE public.stages (
     study_id bigint NOT NULL,
     "order" integer NOT NULL,
     config jsonb NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     title character varying,
     description character varying,
     available_after_days double precision DEFAULT 0.0 NOT NULL,
@@ -562,24 +562,12 @@ ALTER SEQUENCE public.stages_id_seq OWNED BY public.stages.id;
 CREATE TABLE public.studies (
     id bigint NOT NULL,
     title_for_researchers character varying,
-<<<<<<< HEAD
     title_for_participants character varying DEFAULT ''::character varying,
     short_description character varying DEFAULT ''::character varying,
     long_description character varying DEFAULT ''::character varying,
     is_mandatory boolean DEFAULT false NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL,
-=======
-    title_for_participants character varying NOT NULL,
-    short_description text NOT NULL,
-    long_description text NOT NULL,
-    opens_at timestamp without time zone,
-    closes_at timestamp without time zone,
-    is_mandatory boolean DEFAULT false NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    tags character varying[] DEFAULT '{}'::character varying[] NOT NULL,
->>>>>>> researcher-dashboard-milestone
     benefits character varying,
     image_id character varying,
     completed_count integer DEFAULT 0 NOT NULL,
@@ -588,7 +576,8 @@ CREATE TABLE public.studies (
     study_type character varying,
     study_topic character varying,
     study_subject character varying,
-    internal_description character varying
+    internal_description character varying,
+    shareable_after_months integer
 );
 
 
@@ -649,14 +638,9 @@ CREATE TABLE public.study_researchers (
     id bigint NOT NULL,
     study_id bigint NOT NULL,
     researcher_id bigint NOT NULL,
-<<<<<<< HEAD
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL,
     role integer DEFAULT 0
-=======
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
->>>>>>> researcher-dashboard-milestone
 );
 
 
@@ -1108,10 +1092,24 @@ CREATE INDEX index_launched_stages_on_stage_id ON public.launched_stages USING b
 
 
 --
+-- Name: index_launched_stages_on_user_id_and_stage_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_launched_stages_on_user_id_and_stage_id ON public.launched_stages USING btree (user_id, stage_id);
+
+
+--
 -- Name: index_launched_studies_on_study_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_launched_studies_on_study_id ON public.launched_studies USING btree (study_id);
+
+
+--
+-- Name: index_launched_studies_on_user_id_and_study_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_launched_studies_on_user_id_and_study_id ON public.launched_studies USING btree (user_id, study_id);
 
 
 --
@@ -1328,12 +1326,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211129180319'),
 ('20220110162620'),
 ('20220303160442'),
-('20220324192614'),
-('20220406201351'),
 ('20220407193306'),
-('20220407205649'),
 ('20220408162010'),
-('20220429195630'),
 ('20220810173840'),
 ('20220817161302'),
 ('20220824152243'),
@@ -1347,7 +1341,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230109200606'),
 ('20230130155253'),
 ('20230216162207'),
-('20230421153444'),
-('20230404161002');
+('20230404161002'),
+('20230421153444');
 
 

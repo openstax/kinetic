@@ -28,6 +28,13 @@ export * from './form-select'
 export * from './form/character-count'
 export * from './form/field-error-message'
 
+export * from './layout/page-container'
+
+export * from './researcher/researcher-progress-bar'
+
+export * from './collapsible-section'
+export * from './exit-button'
+
 import { Footer } from './footer'
 import { Icon, IconProps, IconKey } from './icon'
 

@@ -54,6 +54,9 @@ module Api::V1::Bindings
     # How many times the study has been viewed
     attr_accessor :view_count
 
+    # How many months until the study is public
+    attr_accessor :shareable_after_months
+
     # Number of times this study has been completed
     attr_accessor :completed_count
 
@@ -113,6 +116,7 @@ module Api::V1::Bindings
         :'researchers' => :'researchers',
         :'is_mandatory' => :'is_mandatory',
         :'view_count' => :'view_count',
+        :'shareable_after_months' => :'shareable_after_months',
         :'completed_count' => :'completed_count',
         :'study_type' => :'study_type',
         :'study_topic' => :'study_topic',
@@ -144,6 +148,7 @@ module Api::V1::Bindings
         :'researchers' => :'Array<Researcher>',
         :'is_mandatory' => :'Boolean',
         :'view_count' => :'Float',
+        :'shareable_after_months' => :'Float',
         :'completed_count' => :'Float',
         :'study_type' => :'String',
         :'study_topic' => :'String',
@@ -157,6 +162,7 @@ module Api::V1::Bindings
     # List of attributes with nullable: true
     def self.openapi_nullable
       Set.new([
+        :'shareable_after_months',
       ])
     end
 
@@ -227,6 +233,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'view_count')
         self.view_count = attributes[:'view_count']
+      end
+
+      if attributes.key?(:'shareable_after_months')
+        self.shareable_after_months = attributes[:'shareable_after_months']
       end
 
       if attributes.key?(:'completed_count')
@@ -333,6 +343,7 @@ module Api::V1::Bindings
           researchers == o.researchers &&
           is_mandatory == o.is_mandatory &&
           view_count == o.view_count &&
+          shareable_after_months == o.shareable_after_months &&
           completed_count == o.completed_count &&
           study_type == o.study_type &&
           study_topic == o.study_topic &&
@@ -351,7 +362,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, status, researchers, is_mandatory, view_count, completed_count, study_type, study_topic, study_subject, stages, launched_count, return_url].hash
+      [title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, status, researchers, is_mandatory, view_count, shareable_after_months, completed_count, study_type, study_topic, study_subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

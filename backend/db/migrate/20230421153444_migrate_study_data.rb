@@ -4,8 +4,8 @@ class MigrateStudyData < ActiveRecord::Migration[6.1]
     studies = YAML.load_file(Rails.root.join('db/migrate/study_creation_migration_data.yaml'))
 
     studies.each do | s |
-      puts(study)
-      study = Study.find(s.id)
+      # puts(s)
+      # study = Study.find_by(s.id)
 
     end
   end

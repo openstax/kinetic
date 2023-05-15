@@ -1,24 +1,14 @@
-import { EditingStudy, getStudyLead, getStudyPi, isReadyForLaunch, isWaiting } from '@models';
+import { EditingStudy, getStudyLead, getStudyPi } from '@models';
 import { Box, React, useNavigate, useState } from '@common';
 import { colors } from '@theme';
 import { StudyCardPreview, Tag } from '../../../../learner/card';
 import { StudyStep } from '../edit-study';
-import { Button, Col, Icon, Modal, useFormContext } from '@components';
-import Waiting from '@images/study-creation/waiting.svg'
+import { Button, Col, CollapsibleSection, Icon, Modal, useFormContext } from '@components';
 import QualtricsReady from '@images/study-creation/qualtricsready.svg'
 import { Study } from '@api';
 import { useApi } from '@lib';
-import { Collapsible } from '../../../../../components/collapsible';
 
 export const ReviewStudy: FC<{study: EditingStudy}> = ({ study }) => {
-    // if (isWaiting(study)) {
-    //     return <WaitingForTemplate study={study} />
-    // }
-    //
-    // if (isReadyForLaunch(study)) {
-    //     return <ReadyForLaunch study={study} />
-    // }
-
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
             <Box gap='large' direction='column'>
@@ -138,23 +128,6 @@ const AdditionalSessionsOverview: FC<{viewOnly: boolean, study: EditingStudy}> =
 
 }
 
-const WaitingForTemplate: FC<{study: EditingStudy}> = ({ study }) => {
-    return (
-        <Box direction='column' gap='xxlarge' className='mt-6'>
-            <Box direction='column' align='center' className='text-center' width='600px' gap='large' alignSelf='center'>
-                <img src={Waiting} alt='waiting' height={200}/>
-                <h5 className='fw-bold'>Almost there! We’re setting up the right permissions</h5>
-                <h6 className='lh-lg' css={{ color: colors.grayerText }}>
-                    Our team is creating a Qualtrics template and setting up the correct permissions for your study. You will receive an email from owlsurveys@rice.edu containing an access code to your Qualtrics template and further instructions via your registered email within the next business day.
-                </h6>
-                <h6 className='lh-lg' css={{ color: colors.grayerText }}>
-                    Follow the instructions to build your task and come back here to proceed with finalizing your study and launching it on Kinetic.
-                </h6>
-            </Box>
-            <StudyOverview study={study} />
-        </Box>
-    )
-}
 
 const ReadyForLaunch: FC<{study: EditingStudy}> = ({ study }) => {
     return (
@@ -173,7 +146,7 @@ const ReadyForLaunch: FC<{study: EditingStudy}> = ({ study }) => {
                 </Box>
                 <SetupQualtricsConfirmation study={study} />
             </Box>
-            <StudyOverview study={study} />
+            <CollapsibleStudyOverview study={study} />
         </Box>
     )
 }
@@ -206,11 +179,11 @@ const SetupQualtricsConfirmation: FC<{study: EditingStudy}> = ({ study }) => {
     )
 }
 
-export const StudyOverview: FC<{study: EditingStudy}> = ({ study }) => {
+export const CollapsibleStudyOverview: FC<{study: EditingStudy}> = ({ study }) => {
     return (
-        <Collapsible title='Study Overview' description='Expand this section to see a high-level overview of your study'>
+        <CollapsibleSection title='Study Overview' description='Expand this section to see a high-level overview of your study'>
             <StudyInformation study={study} viewOnly/>
-        </Collapsible>
+        </CollapsibleSection>
     )
 }
 

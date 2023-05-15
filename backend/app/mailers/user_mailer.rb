@@ -101,18 +101,16 @@ class UserMailer < ApplicationMailer
       subject: "Important: Access Request to Qualtrics",
       template: 'access_request_qualtrics'
     ) { |format| format.text { render plain: '' } }.tap do |message|
-      debugger
       member = params[:study].members.first
       lead = params[:study].lead
       pi = params[:study].pi
-      # creating_researcher = params[:study].researchers.find { |r| r.role == 'member'}
       message.mailgun_variables = {
         'internal_study_details' => params[:study].title_for_researchers,
         'total_study_sessions' => params[:study].stages.size,
-        'date' => Time.now.strftime("%B %d %Y at %I:%M %p"),
-        'member' => member.first_name + ' ' + member.last_name,
-        'lead' => lead.first_name + ' ' + lead.last_name,
-        'pi' => pi.first_name + ' ' + pi.last_name
+        'date_submitted' => Time.now.strftime("%B %d %Y at %I:%M %p"),
+        'member_researcher_full_name' => member.first_name + ' ' + member.last_name,
+        'lead_researcher_full_name' => lead.first_name + ' ' + lead.last_name,
+        'pi_researcher_full_name' => pi.first_name + ' ' + pi.last_name
       }
     end
   end

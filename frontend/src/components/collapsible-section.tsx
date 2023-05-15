@@ -3,8 +3,17 @@ import { Box, React } from '@common';
 import { colors } from '@theme';
 import { Button, Icon } from './index';
 
-export const Collapsible: FCWC<{title: string, description: string}> = ({ title, description, children }) => {
-    const [expanded, toggleExpanded] = useToggle()
+export const CollapsibleSection: FCWC<{
+    title: string,
+    description: string,
+    open?: boolean
+}> = ({
+    title,
+    description,
+    open = false,
+    children,
+}) => {
+    const [expanded, toggleExpanded] = useToggle(open)
 
     return (
         <Box css={{ backgroundColor: colors.pageBackground }} className='p-2' direction='column'>

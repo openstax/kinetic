@@ -111,6 +111,12 @@ export interface NewStudy {
      */
     viewCount?: number;
     /**
+     * How many months until the study is public
+     * @type {number}
+     * @memberof NewStudy
+     */
+    shareableAfterMonths?: number | null;
+    /**
      * Number of times this study has been completed
      * @type {number}
      * @memberof NewStudy
@@ -204,6 +210,7 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
+        'shareableAfterMonths': !exists(json, 'shareable_after_months') ? undefined : json['shareable_after_months'],
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
         'studyType': !exists(json, 'study_type') ? undefined : json['study_type'],
         'studyTopic': !exists(json, 'study_topic') ? undefined : json['study_topic'],
@@ -235,6 +242,7 @@ export function NewStudyToJSON(value?: NewStudy | null): any {
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(ResearcherToJSON)),
         'is_mandatory': value.isMandatory,
         'view_count': value.viewCount,
+        'shareable_after_months': value.shareableAfterMonths,
         'study_type': value.studyType,
         'study_topic': value.studyTopic,
         'study_subject': value.studySubject,

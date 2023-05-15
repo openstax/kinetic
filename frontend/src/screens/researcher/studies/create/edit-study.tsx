@@ -1,6 +1,6 @@
 import { Box, React, useEffect, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
-import { EditingStudy, getStudyStatus, isDraft, isReadyForLaunch, isWaiting } from '@models';
+import { EditingStudy, getStudyStatus, isWaiting } from '@models';
 import { Button, Col, Form, Icon, LoadingAnimation, Modal, TopNavBar, useFormContext, useFormState } from '@components';
 import { ResearcherProgressBar, Step } from '../../../../components/researcher/researcher-progress-bar';
 import { researcherValidation, ResearchTeam } from './forms/research-team';
@@ -82,7 +82,6 @@ const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, stu
         initialStep = StudyStep.ReviewStudy
     }
 
-
     return (
         <Form
             validationSchema={buildValidationSchema(studies, study)}
@@ -146,9 +145,6 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
 
             const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
             reset(getFormDefaults(savedStudy, currentStep), { keepIsValid: true })
-            // Toast.show({
-            //     message: `New edits to the study ${study.titleForResearchers}” have successfully been saved`,
-            // })
         }
     }
 

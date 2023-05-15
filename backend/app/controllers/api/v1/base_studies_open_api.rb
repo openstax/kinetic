@@ -65,6 +65,11 @@ class Api::V1::BaseStudiesOpenApi
         key :type, :number
         key :description, 'How many times the study has been viewed'
       end
+      property :shareable_after_months do
+        key :type, :number
+        key :description, 'How many months until the study is public'
+        key :nullable, true
+      end
       property :completed_count do
         key :type, :number
         key :description, 'Number of times this study has been completed'

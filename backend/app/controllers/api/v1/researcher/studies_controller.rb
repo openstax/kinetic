@@ -74,6 +74,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     @study.stages.each do |stage|
       stage.update({:status => :waiting_period})
     end
+    ResearcherNotifications.notify_kinetic_study_review(@study)
     render json: Api::V1::Bindings::Study.create_from_model(@study), status: :ok
   end
 

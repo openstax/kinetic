@@ -1,7 +1,6 @@
 import { Box, React } from '@common';
 import { Link } from 'react-router-dom';
-import { Button, Icon } from '@components';
-import { Step } from './edit-study';
+import { Button, Icon, Step } from '@components';
 
 export const ActionFooter: FC<{
     step: Step,
