@@ -41,17 +41,15 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     @study.update(inbound_binding.to_hash.except(:researchers, :stages))
 
     new_researchers = Array(inbound_binding.researchers).map do |researcher|
+      # @nathan any benefit of one over the other below?
       # try StudyResearcher.first_or_create({researcher_id: researcher.id, role: researcher.role})
       StudyResearcher.create({ researcher_id: researcher.id, role: researcher.role })
     end
 
-    # Newly added researchers
-    newly_added = (new_researchers - @study.study_researchers) - [@current_researcher]
-
-    # Removed researchers
+    added_researchers = (new_researchers - @study.study_researchers) - [@current_researcher]
     # removed_researchers = (@study.study_researchers - new_researchers) - [@current_researcher]
 
-    ResearcherNotifications.notify_study_researchers(newly_added, [])
+    ResearcherNotifications.notify_study_researchers(added_researchers, [])
 
     StudyResearcher.skip_callback(:destroy, :before, :check_destroy_leaves_another_researcher_in_study, raise: false)
     @study.study_researchers.replace(new_researchers.uniq)
@@ -76,6 +74,12 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     end
     ResearcherNotifications.notify_kinetic_study_review(@study)
     render json: Api::V1::Bindings::Study.create_from_model(@study), status: :ok
+  end
+
+  def launch
+    @study.stages.each do | stage |
+      stage.update({:status => :active})
+    end
   end
 
   def destroy

@@ -1,5 +1,5 @@
 import { Box, React, styled, useNavigate, useState } from '@common'
-import { Button, Footer, TopNavBar } from '@components';
+import { Button, Footer, Page, TopNavBar } from '@components';
 import { colors } from '@theme';
 import { Link } from 'react-router-dom';
 import StartProcess from '@images/study-creation/start-process.svg'
@@ -8,13 +8,9 @@ export default function ResearcherStudyLanding() {
     const [showSteps, setShowSteps] = useState<boolean>(false)
 
     return (
-        <div className='create-study-overview'>
-            <TopNavBar hideBanner/>
-            <div className="container-lg h-100 py-4">
-                {showSteps ? <StepsOverview /> : <Introduction onClickStart={() => setShowSteps(true)} />}
-            </div>
-            <Footer className='fixed-bottom' />
-        </div>
+        <Page className='create-study-overview' hideFooter hideBanner backgroundColor={colors.white}>
+            {showSteps ? <StepsOverview /> : <Introduction onClickStart={() => setShowSteps(true)} />}
+        </Page>
     )
 }
 

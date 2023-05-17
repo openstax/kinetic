@@ -1,8 +1,19 @@
 import { Box, React, useEffect, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
 import { EditingStudy, getStudyStatus, isWaiting } from '@models';
-import { Button, Col, Form, Icon, LoadingAnimation, Modal, TopNavBar, useFormContext, useFormState } from '@components';
-import { ResearcherProgressBar, Step } from '../../../../components/researcher/researcher-progress-bar';
+import {
+    Button,
+    Col,
+    Form,
+    Icon,
+    LoadingAnimation,
+    Modal,
+    Page,
+    TopNavBar,
+    useFormContext,
+    useFormState,
+} from '@components';
+import { ResearcherProgressBar, Step } from '@components';
 import { researcherValidation, ResearchTeam } from './forms/research-team';
 import { InternalDetails, internalDetailsValidation } from './forms/internal-details';
 import { ParticipantView, participantViewValidation } from './forms/participant-view';
@@ -66,12 +77,11 @@ export default function EditStudy() {
     }
 
     return (
-        <Box direction='column' className='edit-study vh-100 bg-white'>
-            <TopNavBar hideBanner/>
+        <Page className='edit-study' backgroundColor={colors.white} hideFooter hideBanner>
             <StudyForm study={study} studies={allStudies}>
                 <FormContent study={study} />
             </StudyForm>
-        </Box>
+        </Page>
     )
 }
 
@@ -254,8 +264,8 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     ]
 
     return (
-        <Box direction='column' justify='between' className='bg-white h-100'>
-            <div className="container-lg py-4 mb-10">
+        <Box direction='column' justify='between'>
+            <div className="py-2 mb-10">
                 <Box justify='between' gap='xxlarge'>
                     <Col sm={1}>
                         <span></span>

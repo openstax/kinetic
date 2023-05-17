@@ -1,5 +1,5 @@
 import { cx, React, styled, useNavigate, useState } from '@common'
-import { Box, Button, Footer, Icon, TopNavBar } from '@components'
+import { Box, Button, Footer, Icon, Page, TopNavBar } from '@components'
 import { StudyStatus } from '@models'
 import { colors } from '../../../../theme';
 import 'bootstrap/js/dist/dropdown'
@@ -33,6 +33,7 @@ export default function ResearcherStudies() {
         { id: 'status', value: ['active', 'paused', 'scheduled'] },
     ])
 
+    // TODO Replace with toasts
     const { notifications, addNotification, dismissNotification } = useActionNotifications()
 
     const setStatus = (ev: React.MouseEvent<HTMLAnchorElement>) => {
@@ -52,8 +53,7 @@ export default function ResearcherStudies() {
     }
 
     return (
-        <div className="studies">
-            <TopNavBar hideBanner/>
+        <Page hideBanner className='studies-dashboard'>
             <div className="container-lg h-100 py-4">
                 <Box align="center" justify="between">
                     <h3 className='fw-bold' data-testid='studies-table-header'>
@@ -94,7 +94,6 @@ export default function ResearcherStudies() {
                     addNotification={addNotification}
                 />
             </div>
-            <Footer className='fixed-bottom' />
-        </div>
+        </Page>
     )
 }

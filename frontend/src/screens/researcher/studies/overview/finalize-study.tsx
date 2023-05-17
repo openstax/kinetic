@@ -1,269 +1,96 @@
-import { Box, React, styled, Yup } from '@common';
-import {
-    Button,
-    Col,
-    DateTime,
-    DateTimeField,
-    DateTimeFormats,
-    Form,
-    FormSaveButton,
-    Icon,
-    InputField,
-    SelectField,
-    useFormContext,
-    useFormState,
-} from '@components';
+import { Box, React, styled, useEffect, useState, Yup } from '@common';
+import { CollapsibleSection, Form, ResearcherCheckbox, useFormState } from '@components';
+import { Study } from '@api';
+import QualtricsReady from '@images/study-creation/qualtricsready.svg'
 import { colors } from '@theme';
-import { useToggle } from 'rooks';
-import { Study, StudyStatusEnum } from '@api';
-import { useApi } from '@lib';
-import { FormContext } from '@nathanstitt/sundry/form-hooks';
-import { getFirstStage } from '@models';
+import { EditSubmittedStudy } from './edit-submitted-study';
+import { StudyInformation } from './study-overview';
 
-const ResearcherCheckbox = styled(InputField)({
-    '.form-check-input, &.form-check-input': {
-        height: 16,
-        width: 16,
-        '&:checked': {
-            backgroundColor: colors.kineticResearcher,
-            borderColor: colors.kineticResearcher,
-        },
-    },
+export const FinalizeStudy: FC<{study: Study, }> = ({ study }) => {
+    const [userCheckedQualtrics, setUserCheckedQualtrics] = useState<boolean>(false)
+
+    return (
+        <Box direction='column' gap='large' className='mb-10'>
+            <ReadyForLaunch study={study} setUserCheckedQualtrics={setUserCheckedQualtrics} />
+
+            <CollapsibleSection title='Finalize your study' collapsible={false}>
+                <EditSubmittedStudy study={study} formDisabled={!userCheckedQualtrics}/>
+            </CollapsibleSection>
+
+            <StudyInformation study={study} />
+        </Box>
+    )
+}
+
+const ReadyForLaunch: FC<{
+    study: Study,
+    setUserCheckedQualtrics: (checked: boolean) => void
+}> = ({ study, setUserCheckedQualtrics }) => {
+    return (
+        <Box direction='column' gap='xxlarge' className='mt-6'>
+            <Box direction='column' align='center' className='text-center' gap='large' alignSelf='center' padding={{ left: '3em', right: '3em' }}>
+                <img src={QualtricsReady} alt='qualtrics-ready' height={200}/>
+                <h5 className='fw-bold'>All set up and ready to go!</h5>
+                <h6 className='lh-lg' css={{ color: colors.grayerText }}>
+                    <div>The correct permissions are now all set! An access code has now been sent to your email from owlsurveys@rice.edu providing you with further instructions on how to access your Qualtrics template.</div>
+                    <div>Once you’ve set up your study in Qualtrics and it’s ready for data collection, return here to finalize it and launch it on Kinetic.</div>
+                </h6>
+                <span css={{ color: colors.grayText }}>Didn’t receive an email with your Qualtrics collaboration code? Please email us at <a href="mailto:kinetic@openstax.org">kinetic@openstax.org</a> and we’ll get it all up and running for you</span>
+
+                <Form
+                    defaultValues={{
+                        userHasCheckedQualtrics: null,
+                    }}
+                    validationSchema={Yup.object().shape({
+                        userHasCheckedQualtrics: Yup.array().test(
+                            'All checked',
+                            'Check all boxes to continue',
+                            (checks?: boolean[]) => {
+                                return !!checks?.length && checks.every(c => c)
+                            }
+                        ),
+                    })}
+                    onSubmit={() => {}}
+                >
+                    <QualtricsConfirmationContainer study={study} setUserCheckedQualtrics={setUserCheckedQualtrics} />
+                </Form>
+            </Box>
+        </Box>
+    )
+}
+
+const QualtricsConfirmation = styled(Box)({
+    border: `1px solid ${colors.kineticResearcher}`,
+    padding: `1rem 2rem`,
+    borderRadius: 5,
 })
 
-const finalizeValidation = Yup.object().shape({
-
-});
-
-export const FinalizeStudyForm: FC<{study: Study, disabled?: boolean}> = ({ study, disabled = false }) => {
-    const api = useApi()
-    const saveStudy = async (study: Study, context: FormContext<any>) => {
-        const { reset } = context
-        const savedStudy = await api.updateStudy({ id: Number(study.id), updateStudy: { study: study } })
-        reset(savedStudy, { keepIsValid: true })
-    }
-
-    return (
-        <Form
-            readOnly={disabled}
-            validationSchema={finalizeValidation}
-            defaultValues={{
-                ...study,
-                hasSampleSize: !!study.targetSampleSize,
-                hasClosingDate: !!study.closesAt,
-            }}
-            onSubmit={(values, context) => saveStudy(values, context)}
-            onCancel={() => {}}
-        >
-            <FormContent study={study} />
-        </Form>
-    )
-}
-
-const FormContent: FC<{study: Study}> = ({ study }) => {
+const QualtricsConfirmationContainer: FC<{
+    study: Study,
+    setUserCheckedQualtrics: (checked: boolean) => void
+}> = ({ study, setUserCheckedQualtrics }) => {
     const { isValid } = useFormState()
-    return (
-        <div>
-            <FinalizeStudy study={study} />
-            <FormSaveButton className='btn-researcher-primary mt-2' disabled={!isValid}>
-                Publish Changes
-            </FormSaveButton>
-        </div>
-    )
-}
+    useEffect(() => {
+        setUserCheckedQualtrics(isValid)
+    })
 
-const SubmitStudyButton: FC<{study: Study}> = ({ study }) => {
-    const { isValid } = useFormState()
-
-    if (study.status === StudyStatusEnum.ReadyForLaunch) {
+    if (study.stages?.length === 1) {
         return (
-            <Box className='fixed-bottom bg-white mt-auto' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
-                <Box className='container-lg' align='center' justify='between'>
-                    <span></span>
-                    <Button
-                        className='btn-researcher-primary'
-                        disabled={true}
-                        css={{ width: 170, justifyContent: 'center' }}
-                        onClick={() => {
-                        }}
-                    >
-                        Finalize Study
-                    </Button>
-
-                    {/*<Box align='center' gap='large'>*/}
-                    {/*    {step.secondaryAction ? <Button*/}
-                    {/*        className='btn-researcher-secondary'*/}
-                    {/*        disabled={step.secondaryAction.disabled}*/}
-                    {/*        css={{ width: 170, justifyContent: 'center' }}*/}
-                    {/*        onClick={() => step.secondaryAction?.action?.()}*/}
-                    {/*    >*/}
-                    {/*        {step.secondaryAction?.text}*/}
-                    {/*    </Button> : <></>}*/}
-
-                    {/*{step.primaryAction ? <Button*/}
-                    {/*    className='btn-researcher-primary'*/}
-                    {/*    disabled={step.primaryAction.disabled}*/}
-                    {/*    css={{ width: 170, justifyContent: 'center' }}*/}
-                    {/*    onClick={() => step.primaryAction?.action?.()}*/}
-                    {/*>*/}
-                    {/*    {step.primaryAction?.text}*/}
-                    {/*</Button> : <></>}*/}
-                    {/*</Box>*/}
-                </Box>
-            </Box>
+            <QualtricsConfirmation gap align='center'>
+                <ResearcherCheckbox type='checkbox' name='userHasCheckedQualtrics.0' id='confirm-qualtrics'/>
+                <label htmlFor='confirm-qualtrics'>Yes, I have set up my study in Qualtrics</label>
+            </QualtricsConfirmation>
         )
     }
 
     return (
-        <FormSaveButton className='btn-researcher-primary mt-2' disabled={!isValid}>
-            Publish Changes
-        </FormSaveButton>
-    )
-}
-
-export const FinalizeStudy: FC<{study: Study}> = ({ study }) => {
-    return (
-        <Box className='mt-2' direction='column' gap='xlarge'>
-            <OpensAt />
-
-            <ClosingCriteria study={study} />
-
-            <ShareStudy study={study} />
-        </Box>
-    )
-}
-
-const OpensAt: FC = () => {
-    return (
-        <Box gap='xlarge'>
-            <Col sm={3} direction='column' gap>
-                <h6>Opens on*</h6>
-                <small>Date & Time when study becomes public</small>
-            </Col>
-
-            <Col sm={6} direction='column' gap>
-                <div>
-                    <DateTimeField
-                        name='opensAt'
-                        label='Opens On'
-                        withTime
-                        format={DateTimeFormats.shortDateTime}
-                        options={{
-                            defaultHour: 9,
-                        }}
-                        hint='Central Time - US'
-                    />
-                </div>
-            </Col>
-        </Box>
-    )
-}
-
-const ShareStudy: FC<{study: Study}> = ({ study }) => {
-    const shareable = study.shareableAfterMonths !== null
-    const [shareStudy, toggleShareStudy] = useToggle(shareable)
-    const { setValue } = useFormContext()
-    return (
-        <Box gap='xlarge'>
-            <Col sm={3} direction='column' gap>
-                <h6>Sharing this study for public analysis (optional)</h6>
-                <small>Date & Time when study becomes public</small>
-            </Col>
-
-            <Col sm={6} direction='column' gap>
-                <Box gap>
-                    <input type='checkbox' defaultChecked={shareable} id='share-study' onChange={() => {
-                        toggleShareStudy()
-                        if (shareStudy) {
-                            setValue('shareableAfterMonths', null)
-                        }
-                    }}/>
-                    <label className='small' htmlFor="share-study">
-                        I would like to make my study available to other researchers for replication, extension, etc
-                    </label>
-                </Box>
-                {shareStudy &&
-                    <Box gap align='center'>
-                        <small>After an embargo period of</small>
-                        <SelectField
-                            name="shareableAfterMonths"
-                            value={0}
-                            options={[
-                                { value: 0, label: 'No embargo' },
-                                { value: 6, label: '6 months' },
-                                { value: 12, label: '12 months' },
-                                { value: 18, label: '18 months' },
-                            ]}
-                        />
-                    </Box>
-                }
-            </Col>
-        </Box>
-    )
-}
-
-
-const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
-    const firstStage = getFirstStage(study)
-    if (!firstStage) {
-        return null
-    }
-    const { watch } = useFormContext()
-
-    return (
-        <Box gap='xlarge'>
-            <Col sm={3} direction='column' gap>
-                <h6>Close criteria*</h6>
-                <small>Select your preferred closing criteria indicating completion of data collection process. It can be left blank if unknown.</small>
-                <Box gap css={{ color: colors.kineticResearcher }} align='center'>
-                    <small>What is the Sample Size</small>
-                    <Icon icon='questionCircleFill' tooltip='Consider Inflating sample size by 5% of your desired N to enable exclusion as we work to amplify our recruitment efforts'/>
-                </Box>
-            </Col>
-
-            <Col sm={6} direction='column' gap>
-                <Box gap>
-                    <Col gap sm={3} direction='row' align='center'>
-                        <ResearcherCheckbox
-                            name='hasSampleSize'
-                            type='checkbox'
-                            id='sample-size'
-                        />
-                        <label htmlFor='sample-size'>By sample size</label>
-                    </Col>
-                    <Col sm={5}>
-                        <InputField
-                            name='targetSampleSize'
-                            disabled={!watch('hasSampleSize')}
-                            placeholder='1-1000'
-                            type='number'
-                        />
-                    </Col>
-                </Box>
-
-                <Box gap>
-                    <Col gap sm={3} direction='row' align='center'>
-                        <ResearcherCheckbox
-                            name='hasClosingDate'
-                            type='checkbox'
-                            id='closing-date'
-                        />
-                        <label htmlFor='closing-date'>By closing date</label>
-                    </Col>
-                    <Col sm={5}>
-                        <DateTime
-                            name='closesAt'
-                            readOnly={!watch('hasClosingDate')}
-                            placeholder='Select a date'
-                            format={DateTimeFormats.shortDateTime}
-                            options={{
-                                defaultHour: 9,
-                            }}
-                            withTime
-                        />
-                    </Col>
-                </Box>
-            </Col>
-        </Box>
+        <div>
+            {study.stages?.map((stage, index) => (
+                <QualtricsConfirmation gap align='center' key={stage.order} className='mt-1'>
+                    <ResearcherCheckbox type='checkbox' name={`userHasCheckedQualtrics.${index}`} id={`confirm-qualtrics-${index}`} />
+                    <label htmlFor={`confirm-qualtrics-${index}`}>Yes, I have set up Session {index + 1} in Qualtrics</label>
+                </QualtricsConfirmation>
+            ))}
+        </div>
     )
 }

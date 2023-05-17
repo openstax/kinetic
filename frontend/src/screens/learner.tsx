@@ -211,7 +211,6 @@ const LearnerDashboard = () => {
                 <Route path={'details/:studyId'} element={<StudyDetails studies={allStudies} />} />
             </Routes>
             <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
-            <Global styles={{ background: colors.pageBackground }} />
             <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 

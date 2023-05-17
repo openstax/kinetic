@@ -1,4 +1,4 @@
-$body-bg: #E5E5E5;
+$body-bg: #F7F8FA;
 $primary: #6922EA;
 $primary-bg: #fff;
 $link-color: #0d6efd;
@@ -6,10 +6,6 @@ $link-color: #0d6efd;
 @import "./bootstrap";
 @import "flatpickr/dist/flatpickr.css";
 @import 'swiper/swiper-bundle.css';
-
-html, body {
-    height: 100%
-}
 
 .cursor-pointer {
     cursor: pointer;
@@ -22,15 +18,7 @@ html, body {
     }
 }
 
-.truncate-2 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
-
+// todo components?
 .btn-researcher-primary {
     --bs-btn-font-weight: 600;
     --bs-btn-color: var(--bs-white);

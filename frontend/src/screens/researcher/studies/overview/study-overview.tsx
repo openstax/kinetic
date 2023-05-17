@@ -1,12 +1,13 @@
 import { Box, React, useEffect, useNavigate, useParams, useState } from '@common';
 import { useApi } from '@lib';
-import { Study, StudyStatusEnum } from '@api';
-import { Col, CollapsibleSection, ExitButton, Footer, LoadingAnimation, PageContainer, TopNavBar } from '@components';
-import { getStudyLead, getStudyPi } from '@models';
+import { Study } from '@api';
+import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page, PageContent, TopNavBar } from '@components';
+import { getStudyLead, getStudyPi, isReadyForLaunch, isWaiting } from '@models';
 import { StudyCardPreview, Tag } from '../../../learner/card';
 import { colors } from '@theme';
-import { FinalizeStudyForm } from './finalize-study';
+import { FinalizeStudy } from './finalize-study';
 import Waiting from '@images/study-creation/waiting.svg'
+import { EditSubmittedStudy } from './edit-submitted-study';
 
 export default function StudyOverview() {
     const api = useApi()
@@ -28,22 +29,19 @@ export default function StudyOverview() {
     }
 
     return (
-        <Box direction='column' className='bg-white vh-100'>
-            <TopNavBar hideBanner />
-            <PageContainer>
-                <StudyOverviewContent study={study} />
-            </PageContainer>
-            <Footer />
-        </Box>
+        <Page hideFooter backgroundColor={colors.white}>
+            <StudyOverviewContent study={study} />
+        </Page>
     )
 }
 
 const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
-    if (study.status === StudyStatusEnum.WaitingPeriod) {
+    if (isWaiting(study)) {
         return <WaitingForTemplate study={study} />
     }
 
-    if (study.status === StudyStatusEnum.ReadyForLaunch) {
+    // if (isReadyForLaunch(study)) {
+    if (true) {
         return (
             <FinalizeStudy study={study} />
         )
@@ -59,19 +57,18 @@ const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
             <StudyInformation study={study} />
 
             <CollapsibleSection title='Edit Study' description='Make changes to open and close criteria' open={true}>
-                <FinalizeStudyForm study={study} />
+                <EditSubmittedStudy study={study} />
             </CollapsibleSection>
         </Box>
     )
 }
 
-const StudyInformation: FC<{ study: Study }> = ({ study }) => {
+export const StudyInformation: FC<{ study: Study }> = ({ study }) => {
     const pi = getStudyPi(study);
     const lead = getStudyLead(study);
 
     return (
         <CollapsibleSection title='Study Overview' description='Expand this section to see a high-level overview of your study'>
-
             <Box gap='xxlarge'>
                 <Col sm={5} direction='column' gap='large'>
                     <Box justify='between' direction='column'>

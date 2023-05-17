@@ -50,6 +50,7 @@ export function isNewStudy(study: EditingStudy): study is NewStudy {
     return isNil((study as Study).id)
 }
 
+// TODO can we rely on the backend being up to date? or just use stages?
 export function getStudyStatus(study: EditingStudy) {
     if (!study.stages || !study.stages.length) {
         return StageStatusEnum.Draft

@@ -4,7 +4,6 @@ import { colors } from '@theme';
 import { StudyCardPreview, Tag } from '../../../../learner/card';
 import { StudyStep } from '../edit-study';
 import { Button, Col, CollapsibleSection, Icon, Modal, useFormContext } from '@components';
-import QualtricsReady from '@images/study-creation/qualtricsready.svg'
 import { Study } from '@api';
 import { useApi } from '@lib';
 
@@ -16,12 +15,12 @@ export const ReviewStudy: FC<{study: EditingStudy}> = ({ study }) => {
                 <p>You're almost done! Make sure to review your study, and check on any last details before submitting it to the Kinetic team</p>
             </Box>
 
-            <StudyInformation study={study} />
+            <EditingStudyInformation study={study} />
         </Box>
     )
 }
 
-const StudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = ({ study, viewOnly = false }) => {
+const EditingStudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = ({ study, viewOnly = false }) => {
     const { setValue } = useFormContext()
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true })
@@ -129,60 +128,10 @@ const AdditionalSessionsOverview: FC<{viewOnly: boolean, study: EditingStudy}> =
 }
 
 
-const ReadyForLaunch: FC<{study: EditingStudy}> = ({ study }) => {
-    return (
-        <Box direction='column' gap='xxlarge' className='mt-6'>
-            <Box direction='column' align='center' className='text-center' width='600px' gap='large' alignSelf='center'>
-                <img src={QualtricsReady} alt='qualtrics-ready' height={200}/>
-                <h5 className='fw-bold'>All set up and ready to go!</h5>
-                <h6 className='lh-lg' css={{ color: colors.grayerText }}>
-                    The correct permissions are now all set! An access code has now been sent to your email from owlsurveys@rice.edu providing you with further instructions on how to access your Qualtrics template.
-                </h6>
-                <Box gap>
-                    <h6 className='lh-lg' css={{ color: colors.grayerText }}>
-                        Once you’ve set up your study in Qualtrics and it’s ready for data collection, return here to finalize it and launch it on Kinetic.
-                    </h6>
-                    <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={16} tooltip={<span>Didn’t receive an email with your Qualtrics collaboration code? Please email us at <a href="mailto:kinetic@openstax.org">kinetic@openstax.org</a> and we’ll get it all up and running for you</span>}/>
-                </Box>
-                <SetupQualtricsConfirmation study={study} />
-            </Box>
-            <CollapsibleStudyOverview study={study} />
-        </Box>
-    )
-}
-
-const SetupQualtricsConfirmation: FC<{study: EditingStudy}> = ({ study }) => {
-    const { register } = useFormContext()
-
-    if (study.stages?.length === 1) {
-        return (
-            <Box gap align='center'>
-                <input type='checkbox' {...register('userHasCheckedQualtrics')} />
-                <small>Yes, I have completed Qualtrics</small>
-
-                <div css={{ display: 'flex' }}>
-
-                </div>
-            </Box>
-        )
-    }
-
-    return (
-        <div>
-            {study.stages?.map((stage, index) => (
-                <Box gap align='center' key={stage.order}>
-                    <input type='checkbox' {...register('userHasCheckedQualtrics')} />
-                    <small>Yes, I have set up Session {index + 1} in Qualtrics</small>
-                </Box>
-            ))}
-        </div>
-    )
-}
-
 export const CollapsibleStudyOverview: FC<{study: EditingStudy}> = ({ study }) => {
     return (
         <CollapsibleSection title='Study Overview' description='Expand this section to see a high-level overview of your study'>
-            <StudyInformation study={study} viewOnly/>
+            <EditingStudyInformation study={study} viewOnly/>
         </CollapsibleSection>
     )
 }

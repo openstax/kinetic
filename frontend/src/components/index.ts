@@ -28,11 +28,12 @@ export * from './form-select'
 export * from './form/character-count'
 export * from './form/field-error-message'
 
-export * from './layout/page-container'
+export * from './layout/page-content'
 
 export * from './researcher/researcher-progress-bar'
+export * from './researcher/researcher-checkbox'
 
-export * from './collapsible-section'
+export * from './researcher/collapsible-section'
 export * from './exit-button'
 
 import { Footer } from './footer'
