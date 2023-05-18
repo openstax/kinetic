@@ -21,7 +21,9 @@ class Stage < ApplicationRecord
 
   before_create :set_order
 
-  enum status: [:draft, :active, :paused, :scheduled, :waiting_period, :ready_for_launch, :completed], _default: 'draft'
+  enum status: [:draft, :active, :paused, :scheduled,
+                :waiting_period, :ready_for_launch, :completed],
+       _default: 'draft'
 
   def status
     s = read_attribute(:status)

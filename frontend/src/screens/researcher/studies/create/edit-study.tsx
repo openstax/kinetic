@@ -253,9 +253,9 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                 text: 'Submit Study',
                 // disabled: isWaiting(study),
                 action: () => {
-                    if (isWaiting(study)) {
-                        return
-                    }
+                    // if (isWaiting(study)) {
+                    //     return
+                    // }
 
                     setShowSubmitStudy(true)
                 },

@@ -15,6 +15,20 @@ class Study < ApplicationRecord
 
   scope :multi_stage, -> { joins(:stages).group('studies.id').having('count(study_id) > 1') }
 
+  has_one :pi,
+      -> { joins(:study_researchers).where(researchers: { study_researchers: { role: 'pi' } }) },
+          foreign_key: 'study_researchers.study_id',
+          class_name: 'Researcher'
+  has_one :lead,
+          -> { joins(:study_researchers).where(researchers: { study_researchers: { role: 'lead' } }) },
+          foreign_key: 'study_researchers.study_id',
+          class_name: 'Researcher'
+
+  has_many :members,
+          -> { joins(:study_researchers).where(researchers: { study_researchers: { role: 'member' } }) },
+          foreign_key: 'study_researchers.study_id',
+          class_name: 'Researcher'
+
   # Delete researchers to avoid them complaining about not leaving a researcher undeleted
   before_destroy(prepend: true) { study_researchers.delete_all }
 
@@ -24,22 +38,10 @@ class Study < ApplicationRecord
       .where(is_hidden: false)
       .where(arel[:opens_at].lteq(Time.now))
       .where(arel[:closes_at].eq(nil).or(
-        arel[:closes_at].gteq(Time.now)))
+               arel[:closes_at].gteq(Time.now)))
   }
 
-  def pi
-    study_researchers.find_by(role: 'pi')
-  end
-
-  def lead
-    study_researchers.find_by(role: 'lead')
-  end
-
-  def members
-    study_researchers.find_by(role: 'member')
-  end
-
-  def study_status
+  def status
     stages.first&.status || 'draft'
   end
 
@@ -51,7 +53,7 @@ class Study < ApplicationRecord
     stages.sum(:duration_minutes)
   end
 
-  # TODO handle this case from debshila:
+  # TODO: handle this case from debshila:
   # just keep one case in mind: learner x completes stage 1 and we reach end date,
   # meeting end date closes stage 1 but leaves subsequent stages open until the interval is reached
   def available?

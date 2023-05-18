@@ -130,6 +130,10 @@ export interface AddStudyRequest {
     addStudy?: AddStudy;
 }
 
+export interface ApproveStudyRequest {
+    id: number;
+}
+
 export interface CreateBannerRequest {
     addBanner: AddBanner;
 }
@@ -388,6 +392,36 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Approve a study
+     */
+    async approveStudyRaw(requestParameters: ApproveStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Studies>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling approveStudy.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/studies/{id}/approve`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudiesFromJSON(jsonValue));
+    }
+
+    /**
+     * Approve a study
+     */
+    async approveStudy(requestParameters: ApproveStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Studies> {
+        const response = await this.approveStudyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Add a banner
      */
     async createBannerRaw(requestParameters: CreateBannerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BannerNotice>> {
@@ -604,7 +638,7 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      * Returns listing of all banners, expired or not 
-     * Retrive list of all banners
+     * Retrieve list of all banners
      */
     async getBannersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BannersListing>> {
         const queryParameters: any = {};
@@ -623,7 +657,7 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      * Returns listing of all banners, expired or not 
-     * Retrive list of all banners
+     * Retrieve list of all banners
      */
     async getBanners(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BannersListing> {
         const response = await this.getBannersRaw(initOverrides);
@@ -925,6 +959,34 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getStudies(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Studies> {
         const response = await this.getStudiesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns listing of all studies waiting for approval 
+     * Retrieve all studies waiting for approval
+     */
+    async getStudiesAwaitingApprovalRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Studies>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/studies`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudiesFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns listing of all studies waiting for approval 
+     * Retrieve all studies waiting for approval
+     */
+    async getStudiesAwaitingApproval(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Studies> {
+        const response = await this.getStudiesAwaitingApprovalRaw(initOverrides);
         return await response.value();
     }
 

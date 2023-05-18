@@ -72,13 +72,13 @@ class UserMailer < ApplicationMailer
   def invite_researcher_to_study
     mail(
       to: params[:user].email_address,
-      subject: "OpenStax Kinetic: You’ve been invited to collaborate on a study",
+      subject: 'OpenStax Kinetic: You’ve been invited to collaborate on a study',
       template: 'researcher_collaboration_invite'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
         'researcher_firstName' => params[:user].first_name,
         'researcher_lastName' => params[:user].last_name,
-        'internal_study_title' => '',
+        'internal_study_title' => ''
       }
     end
   end
@@ -90,7 +90,7 @@ class UserMailer < ApplicationMailer
       template: 'remove_researcher'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
-        'full_name' => params[:user].full_name,
+        'full_name' => params[:user].full_name
       }
     end
   end
@@ -98,7 +98,7 @@ class UserMailer < ApplicationMailer
   def submit_study_for_review
     mail(
       to: 'kinetic@openstax.org',
-      subject: "Important: Access Request to Qualtrics",
+      subject: 'Important: Access Request to Qualtrics',
       template: 'access_request_qualtrics'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       member = params[:study].members.first
@@ -107,11 +107,13 @@ class UserMailer < ApplicationMailer
       message.mailgun_variables = {
         'internal_study_details' => params[:study].title_for_researchers,
         'total_study_sessions' => params[:study].stages.size,
-        'date_submitted' => Time.now.strftime("%B %d %Y at %I:%M %p"),
-        'member_researcher_full_name' => member.first_name + ' ' + member.last_name,
-        'lead_researcher_full_name' => lead.first_name + ' ' + lead.last_name,
-        'pi_researcher_full_name' => pi.first_name + ' ' + pi.last_name
+        'date_submitted' => Time.now.strftime('%B %d %Y at %I:%M %p'),
+        'member_researcher_full_name' => "#{member.first_name} #{member.last_name}",
+        # 'lead_researcher_full_name' => "#{lead.first_name} #{lead.last_name}",
+        # 'pi_researcher_full_name' => "#{pi.first_name} #{pi.last_name}"
       }
+      message.mailgun_variables[:lead_researcher_full_name] = "#{lead.first_name} #{lead.last_name}" unless lead.nil?
+      message.mailgun_variables[:pi_researcher_full_name] = "#{pi.first_name} #{pi.last_name}" unless pi.nil?
     end
   end
 

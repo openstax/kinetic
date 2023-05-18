@@ -15,7 +15,7 @@ import {
     useFormState,
     ResearcherCheckbox, Button,
 } from '@components';
-import { Box, cx, React, Yup } from '@common';
+import { Box, cx, React, useNavigate, Yup } from '@common';
 import { getFirstStage, isReadyForLaunch } from '@models';
 import { colors } from '@theme';
 
@@ -57,20 +57,18 @@ const FormContent: FC<{study: Study}> = ({ study }) => {
     return (
         <Box className='mt-2' direction='column' gap='xlarge'>
             <OpensAt />
-
             <ClosingCriteria study={study} />
-
             <ShareStudy study={study} />
         </Box>
     )
 }
 
 const FormActions: FC<{study: Study}> = ({ study }) => {
+    const nav = useNavigate()
     const { isValid } = useFormState()
     const { handleSubmit, watch } = useFormContext()
 
-    if (true) {
-    // if (isReadyForLaunch(study)) {
+    if (isReadyForLaunch(study)) {
         return (
             <Box className='fixed-bottom bg-white' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
                 <Box className='container-lg' align='center' justify='end'>
@@ -78,10 +76,14 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
                         className='btn-researcher-primary'
                         disabled={!isValid}
                         onSubmit={() => {
-                            handleSubmit((study) => console.log(study))
+                            // call launch instead?
+                            handleSubmit((study) => {
+                                // navigate to dashboard?
+                                // toast confirm?
+
+                            })
                         }}
                         css={{ width: 170, justifyContent: 'center' }}
-                        // onClick={handleSubmit((study) => console.log(study))}
                     >
                         Launch Study
                     </FormSaveButton>

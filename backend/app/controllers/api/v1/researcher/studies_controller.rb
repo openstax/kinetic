@@ -9,10 +9,8 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     render(json: error, status: error.status_code) and return if error
 
     created_study = inbound_binding.create_model!(researcher: current_researcher)
-    unless inbound_binding.stages.nil?
-      inbound_binding.stages.each do |s|
-        created_study.stages << Stage.new(s.to_hash.merge({config: {}}))
-      end
+    inbound_binding.stages&.each do |s|
+      created_study.stages << Stage.new(s.to_hash.merge({ config: {} }))
     end
 
     response_binding = Api::V1::Bindings::Study.create_from_model(created_study)
@@ -51,7 +49,8 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
     ResearcherNotifications.notify_study_researchers(added_researchers, [])
 
-    StudyResearcher.skip_callback(:destroy, :before, :check_destroy_leaves_another_researcher_in_study, raise: false)
+    StudyResearcher.skip_callback(:destroy, :before,
+                                  :check_destroy_leaves_another_researcher_in_study, raise: false)
     @study.study_researchers.replace(new_researchers.uniq)
 
     unless inbound_binding.stages.nil?
@@ -62,7 +61,6 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       end
     end
 
-
     response_binding = Api::V1::Bindings::Study.create_from_model(@study)
     render json: response_binding, status: :ok
   end
@@ -70,15 +68,15 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   def submit
     # Qualtrics Survey Clone and update stage configs
     @study.stages.each do |stage|
-      stage.update({:status => :waiting_period})
+      stage.update({ status: :waiting_period })
     end
     ResearcherNotifications.notify_kinetic_study_review(@study)
     render json: Api::V1::Bindings::Study.create_from_model(@study), status: :ok
   end
 
   def launch
-    @study.stages.each do | stage |
-      stage.update({:status => :active})
+    @study.stages.each do |stage|
+      stage.update({ status: :active })
     end
   end
 

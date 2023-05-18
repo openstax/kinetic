@@ -6,6 +6,7 @@ import {
 } from '@components'
 import { AdminBanners } from './admin/banners'
 import { AdminRewards } from './admin/rewards'
+import { ApproveStudies } from './admin/approve-studies';
 
 export default function AdminHome() {
     const user = useCurrentUser()
@@ -25,12 +26,18 @@ export default function AdminHome() {
                             Rewards
                         </NavLink>
                     </li>
+                    <li className="nav-item">
+                        <NavLink className="nav-link" aria-current="page" to="/admin/approve-studies">
+                            Approve Studies
+                        </NavLink>
+                    </li>
                 </ul>
             </TopNavBar>
             <div className="container studies my-8">
                 <Routes>
                     <Route path="/" element={<Navigate to="/admin/banners/" />} />
                     <Route path="/banners/" element={<AdminBanners />} />
+                    <Route path="/approve-studies/" element={<ApproveStudies />} />
                     <Route path="/rewards/" element={<AdminRewards />} />
                 </Routes>
             </div>

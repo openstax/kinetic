@@ -163,7 +163,7 @@ class Api::V1::Researcher::StudiesOpenApi
       response 200 do
         key :description, 'Success, Returns the study'
         content 'application/json' do
-          schema {key :$ref, :Study}
+          schema { key :$ref, :Study }
         end
       end
       extend Api::V1::OpenApiResponses::AuthenticationError

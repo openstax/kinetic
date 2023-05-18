@@ -40,7 +40,7 @@ class Api::V1::Participant::StudiesOpenApi
       end
     end
 
-    # TODO Add stage info to this
+    # TODO: Add stage info to this
     schema :ParticipantStudyStage do
       property :order do
         key :type, :integer

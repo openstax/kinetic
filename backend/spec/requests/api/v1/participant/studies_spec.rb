@@ -18,7 +18,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
   let(:stage3a) { study3.stages.order(:order)[0] }
 
   let(:user1_id) { SecureRandom.uuid }
-  let(:user1) {User.new(user1_id)}
+  let(:user1) { User.new(user1_id) }
 
   let(:user1_study1_launch_pad) { LaunchPad.new(study_id: study1.id, user_id: user1_id) }
   let(:user1_study2_launch_pad) { LaunchPad.new(study_id: study2.id, user_id: user1_id) }
@@ -124,7 +124,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
                 institution: kind_of(String),
                 bio: kind_of(String)
               })
-            ),
+            )
           ),
           a_hash_including(
             id: study3.id,

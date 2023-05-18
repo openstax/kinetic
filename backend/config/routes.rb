@@ -16,7 +16,9 @@ Rails.application.routes.draw do
           delete 'researcher/:user_id', to: 'study_researchers#destroy'
           resources :stages, shallow: true, only: [:create, :show, :update, :destroy]
         end
+        # TODO generic endpoint to update status
         post 'studies/:id/submit', to: 'studies#submit'
+        post 'studies/:id/launch', to: 'studies#launch'
 
         resources :analysis, except: [:destroy]
 
@@ -36,6 +38,8 @@ Rails.application.routes.draw do
       namespace :admin do
         resources :rewards
         resources :banners
+        resources :studies
+        post 'studies/:id/approve', to: 'studies#approve'
       end
 
       get :openapi, to: 'open_api#json', constraints: { format: :json }

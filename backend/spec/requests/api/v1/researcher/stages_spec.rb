@@ -160,7 +160,7 @@ RSpec.describe 'Stages', api: :v1 do
     context 'when signed in as a researcher on the study' do
       before { stub_current_user(original_researcher) }
 
-      # TODO Update and test stage statuses once implemented
+      # TODO: Update and test stage statuses once implemented
       # it 'updates the study\'s status to completed' do
       #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'completed' } }
       #

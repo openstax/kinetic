@@ -14,6 +14,7 @@ class Researcher < ApplicationRecord
 
   def avatar_url
     return unless avatar.attached?
+
     Rails.application.routes.url_helpers.url_for(avatar)
   end
 end

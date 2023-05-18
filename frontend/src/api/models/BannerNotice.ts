@@ -26,7 +26,7 @@ export interface BannerNotice {
      */
     id?: number;
     /**
-     * The messsage to display.  Limited HTML is supported
+     * The message to display.  Limited HTML is supported
      * @type {string}
      * @memberof BannerNotice
      */

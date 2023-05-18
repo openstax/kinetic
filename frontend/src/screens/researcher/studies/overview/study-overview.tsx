@@ -40,8 +40,7 @@ const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
         return <WaitingForTemplate study={study} />
     }
 
-    // if (isReadyForLaunch(study)) {
-    if (true) {
+    if (isReadyForLaunch(study)) {
         return (
             <FinalizeStudy study={study} />
         )

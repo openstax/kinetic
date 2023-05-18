@@ -53,6 +53,7 @@ RSpec.describe 'Studies', api: :v1 do
 
     context 'when signed in as a researcher' do
       before { stub_current_user(researcher1) }
+
       let!(:study_with_stages) { create(:study, researchers: researcher1, stages: [create(:stage)]) }
 
       it 'successfully creates a new study' do
@@ -78,9 +79,9 @@ RSpec.describe 'Studies', api: :v1 do
         expect(response_hash).to match(a_hash_including(
           stages: a_collection_containing_exactly(
             a_hash_including({
-              status: 'waiting_period',
+              status: 'waiting_period'
             })
-          ),
+          )
         ))
       end
     end
@@ -161,19 +162,19 @@ RSpec.describe 'Studies', api: :v1 do
       end
 
       it 'updates the study researchers' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { researchers: [researcher1, researcher2]} }
+        api_put "researcher/studies/#{study1.id}", params: { study: { researchers: [researcher1, researcher2] } }
 
         expect(response).to have_http_status(:success)
         expect(response_hash).to match a_hash_including(
           researchers: a_collection_containing_exactly(
             a_hash_including({
               id: researcher1.id,
-              bio: researcher1.bio,
+              bio: researcher1.bio
             }),
             a_hash_including({
               id: researcher2.id,
-              bio: researcher2.bio,
-            }),
+              bio: researcher2.bio
+            })
           )
         )
       end

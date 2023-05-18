@@ -735,10 +735,10 @@
     hoist-non-react-statics "^3.3.1"
     react-is "^16.12.0"
 
-"@nathanstitt/sundry@^1.5.5":
-  version "1.5.5"
-  resolved "https://registry.yarnpkg.com/@nathanstitt/sundry/-/sundry-1.5.5.tgz#876cf92a0fbe6d8c50916921f727a2857a977c4b"
-  integrity sha512-zGZsa0d7/PjU3487wh44+AMejNMixA83ANvzObSj7sFc6O45wlHXHThoJmx0hjXXkP7MeH1iRD7gxefoFcLfBA==
+"@nathanstitt/sundry@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@nathanstitt/sundry/-/sundry-1.6.0.tgz#752b18d7a19f3d31b87fd023e1c1593a64b24cf0"
+  integrity sha512-oX4KQUdaqKZ0arIFCTKm/IgA0QfV2ct9aAXfgQAuyg2Aq94O2iQYALzuLPV+Z94g8E3qGau2YI6K7wFURBO/Xg==
   dependencies:
     "@hookform/resolvers" "^2.9"
     "@iconify-icons/bi" "^1.2.15"

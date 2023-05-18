@@ -24,7 +24,7 @@ Rails.application.config.to_prepare do
 
       # Dynamically get this on frontend? or rely on this?
       # if removing this, remove property :status from base_studies_open_api
-      attributes[:status] = model.study_status
+      attributes[:status] = model.status
       attributes[:launched_count] = model.launched_count
 
       new(attributes)
