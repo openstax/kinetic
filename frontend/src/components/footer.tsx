@@ -137,7 +137,7 @@ export const DesktopFooter: React.FC<{ className?: string, includeFunders?: bool
 
 export const Footer: React.FC<{ className?: string, includeFunders?: boolean }> = ({ className, includeFunders }) => {
     return (
-        <div className={cx('footer', 'mt-auto', className)}>
+        <div className={cx('footer', className)}>
             {includeFunders && < Funders />}
             {useIsMobileDevice() ? <MobileFooter/> : <DesktopFooter/>}
         </div>

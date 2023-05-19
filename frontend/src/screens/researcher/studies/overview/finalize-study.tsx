@@ -1,5 +1,5 @@
 import { Box, React, styled, useEffect, useState, Yup } from '@common';
-import { CollapsibleSection, Form, ResearcherCheckbox, useFormState } from '@components';
+import { CollapsibleSection, ExitButton, Form, ResearcherCheckbox, useFormState } from '@components';
 import { Study } from '@api';
 import QualtricsReady from '@images/study-creation/qualtricsready.svg'
 import { colors } from '@theme';
@@ -10,7 +10,7 @@ export const FinalizeStudy: FC<{study: Study, }> = ({ study }) => {
     const [userCheckedQualtrics, setUserCheckedQualtrics] = useState<boolean>(false)
 
     return (
-        <Box direction='column' gap='large' className='mb-10'>
+        <Box direction='column' gap='large'>
             <ReadyForLaunch study={study} setUserCheckedQualtrics={setUserCheckedQualtrics} />
 
             <CollapsibleSection title='Finalize your study' collapsible={false}>
@@ -27,7 +27,11 @@ const ReadyForLaunch: FC<{
     setUserCheckedQualtrics: (checked: boolean) => void
 }> = ({ study, setUserCheckedQualtrics }) => {
     return (
-        <Box direction='column' gap='xxlarge' className='mt-6'>
+        <Box direction='column' gap='xxlarge'>
+            <Box align='center' justify='between'>
+                <h3>{study?.titleForResearchers}</h3>
+                <ExitButton />
+            </Box>
             <Box direction='column' align='center' className='text-center' gap='large' alignSelf='center' padding={{ left: '3em', right: '3em' }}>
                 <img src={QualtricsReady} alt='qualtrics-ready' height={200}/>
                 <h5 className='fw-bold'>All set up and ready to go!</h5>

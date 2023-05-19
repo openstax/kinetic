@@ -15,6 +15,7 @@ import {
     useFormState,
     ResearcherCheckbox, Button,
 } from '@components';
+import { dayjs } from '@lib';
 import { Box, cx, React, useNavigate, Yup } from '@common';
 import { getFirstStage, isReadyForLaunch } from '@models';
 import { colors } from '@theme';
@@ -104,18 +105,19 @@ const OpensAt: FC = () => {
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
                 <h6>Opens on*</h6>
-                <small>Date & Time when study becomes public</small>
+                <small>Date and Time when study is made visible to participants. Set date/time to your local timezone.</small>
             </Col>
 
             <Col sm={6} direction='column' gap>
                 <div>
                     <DateTimeField
                         name='opensAt'
-                        label='Opens On'
+                        label='Pick a Date'
                         withTime
                         format={DateTimeFormats.shortDateTime}
                         options={{
                             defaultHour: 9,
+                            minDate: 'today',
                         }}
                         hint='Your Local Timezone'
                     />

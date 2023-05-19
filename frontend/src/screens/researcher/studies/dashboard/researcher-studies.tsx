@@ -1,11 +1,11 @@
 import { cx, React, styled, useNavigate, useState } from '@common'
-import { Box, Button, Footer, Icon, Page, TopNavBar } from '@components'
+import { Box, Button, Icon, Page } from '@components'
 import { StudyStatus } from '@models'
 import { colors } from '../../../../theme';
 import 'bootstrap/js/dist/dropdown'
 import { StudiesTable } from './studies-table';
 import { ColumnFiltersState } from '@tanstack/react-table';
-import { ActionNotification, useActionNotifications } from './study-action-notification';
+import { useActionNotifications } from './study-action-notification';
 
 const NavTabs = styled.ul({
     padding: '1rem 0',
@@ -54,7 +54,7 @@ export default function ResearcherStudies() {
 
     return (
         <Page hideBanner className='studies-dashboard'>
-            <div className="container-lg h-100 py-4">
+            <div className="container-lg py-4">
                 <Box align="center" justify="between">
                     <h3 className='fw-bold' data-testid='studies-table-header'>
                         Studies
@@ -93,6 +93,7 @@ export default function ResearcherStudies() {
                     isLaunched={currentStatus === StudyStatus.Launched}
                     addNotification={addNotification}
                 />
+
             </div>
         </Page>
     )

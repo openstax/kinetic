@@ -265,7 +265,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
 
     return (
         <Box direction='column' justify='between'>
-            <div className="py-2 mb-10">
+            <div className="py-2">
                 <Box justify='between' gap='xxlarge'>
                     <Col sm={1}>
                         <span></span>
