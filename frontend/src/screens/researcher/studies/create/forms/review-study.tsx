@@ -127,7 +127,7 @@ const AdditionalSessionsOverview: FC<{viewOnly: boolean, study: EditingStudy}> =
 
 }
 
-
+// TODO Unused??
 export const CollapsibleStudyOverview: FC<{study: EditingStudy}> = ({ study }) => {
     return (
         <CollapsibleSection title='Study Overview' description='Expand this section to see a high-level overview of your study'>
@@ -148,7 +148,13 @@ export const SubmitStudyModal: FC<{
     }
 
     const submitStudy = () => {
-        api.submitStudy({ id: study.id  })
+        api.updateStudy({
+            id: study.id,
+            updateStudy: { study: study as any },
+            action: 'submit',
+        })
+        // api.updateStudyStatus({ id: study.id, action: 'submit' })
+        // api.submitStudy({ id: study.id  })
     }
 
     return (

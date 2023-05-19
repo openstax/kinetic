@@ -16,9 +16,7 @@ Rails.application.routes.draw do
           delete 'researcher/:user_id', to: 'study_researchers#destroy'
           resources :stages, shallow: true, only: [:create, :show, :update, :destroy]
         end
-        # TODO generic endpoint to update status
-        post 'studies/:id/submit', to: 'studies#submit'
-        post 'studies/:id/launch', to: 'studies#launch'
+        post 'studies/:id/update_status', to: 'studies#update_status'
 
         resources :analysis, except: [:destroy]
 

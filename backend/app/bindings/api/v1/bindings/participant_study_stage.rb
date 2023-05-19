@@ -39,10 +39,10 @@ module Api::V1::Bindings
     # How many points the stage is worth
     attr_accessor :points
 
-    # When the stage opens for participation; null means not open.
+    # When the study opens for participation; null means not open.
     attr_accessor :opens_at
 
-    # When the stage closes for participation; null means does not close.
+    # When the study closes for participation; null means does not close.
     attr_accessor :closes_at
 
     # Feedback types for this stage

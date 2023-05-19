@@ -86,13 +86,13 @@ class Api::V1::Participant::StudiesOpenApi
         key :type, :string
         key :nullable, true
         key :format, 'date-time'
-        key :description, 'When the stage opens for participation; null means not open.'
+        key :description, 'When the study opens for participation; null means not open.'
       end
       property :closes_at do
         key :type, :string
         key :nullable, true
         key :format, 'date-time'
-        key :description, 'When the stage closes for participation; null means does not close.'
+        key :description, 'When the study closes for participation; null means does not close.'
       end
       property :feedback_types do
         key :type, :array

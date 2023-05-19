@@ -28,6 +28,11 @@ class Api::V1::Researcher::StudiesOpenApi
     end
 
     schema :StudyUpdate do
+      # property :update_status_action do
+      #   key :type, :string
+      #   key :description, 'Status update action'
+      #   key :enum, %w[submit_for_review launch]
+      # end
       allOf do
         schema do
           key :$ref, :BaseStudy
@@ -108,33 +113,43 @@ class Api::V1::Researcher::StudiesOpenApi
     end
   end
 
-  openapi_path '/researcher/studies/{id}/submit' do
+  openapi_path '/researcher/studies/{id}/update_status' do
     operation :post do
-      key :summary, 'Submit a study for review'
-      key :description, 'Submit a study for review'
-      key :operationId, 'submitStudy'
+      key :summary, 'Updates the status of a study'
+      key :description, 'Updates the status of a study'
+      key :operationId, 'updateStudyStatus'
       parameter do
         key :name, :id
         key :in, :path
-        key :description, 'ID of the study to submit.'
+        key :description, 'ID of the study to update.'
         key :required, true
         key :schema, { type: :integer }
       end
-
-      # request_body do
-      #   key :description, 'The study is submitted and the status is updated properly.'
-      #   content 'application/json' do
-      #     schema do
-      #       key :type, :object
-      #       key :title, :updateStudy
-      #       property :study do
-      #         key :$ref, :StudyUpdate
-      #       end
-      #     end
-      #   end
-      # end
+      parameter do
+        key :name, :status_action
+        key :in, :query
+        key :description, 'Action you want to take on the study'
+        key :required, true
+        key :schema, { type: :string, enum: %w[submit launch] }
+      end
+      request_body do
+        key :description, 'The study updates.'
+        key :required, false
+        content 'application/json' do
+          schema { key :$ref, :Study }
+        end
+        # content 'application/json' do
+        #   schema do
+        #     key :type, :object
+        #     key :title, :updateStudy
+        #     property :study do
+        #       key :$ref, :StudyUpdate
+        #     end
+        #   end
+        # end
+      end
       response 200 do
-        key :description, 'Success.  Returns the updated study.'
+        key :description, 'Success. Returns the updated study.'
         content 'application/json' do
           schema do
             key :$ref, :Study
@@ -183,7 +198,13 @@ class Api::V1::Researcher::StudiesOpenApi
         key :required, true
         key :schema, { type: :integer }
       end
-
+      # parameter do
+      #   key :name, :action
+      #   key :in, :query
+      #   key :description, 'Action you want to take on the study'
+      #   key :required, false
+      #   key :schema, { type: :string, enum: %w[submit launch] }
+      # end
       request_body do
         key :description, 'The study updates.'
         content 'application/json' do

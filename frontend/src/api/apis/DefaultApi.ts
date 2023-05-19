@@ -205,10 +205,6 @@ export interface StudyStatsRequest {
     view?: boolean;
 }
 
-export interface SubmitStudyRequest {
-    id: number;
-}
-
 export interface UpdateAnalysisRequest {
     id: number;
     updateAnalysis?: UpdateAnalysis;
@@ -246,6 +242,12 @@ export interface UpdateStageRequest {
 export interface UpdateStudyRequest {
     id: number;
     updateStudy?: UpdateStudy;
+}
+
+export interface UpdateStudyStatusRequest {
+    id: number;
+    statusAction: UpdateStudyStatusStatusActionEnum;
+    study?: Study;
 }
 
 /**
@@ -1200,38 +1202,6 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Submit a study for review
-     * Submit a study for review
-     */
-    async submitStudyRaw(requestParameters: SubmitStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Study>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling submitStudy.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/researcher/studies/{id}/submit`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => StudyFromJSON(jsonValue));
-    }
-
-    /**
-     * Submit a study for review
-     * Submit a study for review
-     */
-    async submitStudy(requestParameters: SubmitStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Study> {
-        const response = await this.submitStudyRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Update a analysis
      * Update a analysis
      */
@@ -1535,6 +1505,49 @@ export class DefaultApi extends runtime.BaseAPI {
         return await response.value();
     }
 
+    /**
+     * Updates the status of a study
+     * Updates the status of a study
+     */
+    async updateStudyStatusRaw(requestParameters: UpdateStudyStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Study>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateStudyStatus.');
+        }
+
+        if (requestParameters.statusAction === null || requestParameters.statusAction === undefined) {
+            throw new runtime.RequiredError('statusAction','Required parameter requestParameters.statusAction was null or undefined when calling updateStudyStatus.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.statusAction !== undefined) {
+            queryParameters['status_action'] = requestParameters.statusAction;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/researcher/studies/{id}/update_status`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StudyToJSON(requestParameters.study),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudyFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates the status of a study
+     * Updates the status of a study
+     */
+    async updateStudyStatus(requestParameters: UpdateStudyStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Study> {
+        const response = await this.updateStudyStatusRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
 }
 
 /**
@@ -1544,3 +1557,11 @@ export const LandStudyAbortedEnum = {
     Refusedconsent: 'refusedconsent'
 } as const;
 export type LandStudyAbortedEnum = typeof LandStudyAbortedEnum[keyof typeof LandStudyAbortedEnum];
+/**
+ * @export
+ */
+export const UpdateStudyStatusStatusActionEnum = {
+    Submit: 'submit',
+    Launch: 'launch'
+} as const;
+export type UpdateStudyStatusStatusActionEnum = typeof UpdateStudyStatusStatusActionEnum[keyof typeof UpdateStudyStatusStatusActionEnum];

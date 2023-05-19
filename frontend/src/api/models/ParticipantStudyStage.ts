@@ -68,13 +68,13 @@ export interface ParticipantStudyStage {
      */
     readonly points?: number;
     /**
-     * When the stage opens for participation; null means not open.
+     * When the study opens for participation; null means not open.
      * @type {Date}
      * @memberof ParticipantStudyStage
      */
     opensAt?: Date | null;
     /**
-     * When the stage closes for participation; null means does not close.
+     * When the study closes for participation; null means does not close.
      * @type {Date}
      * @memberof ParticipantStudyStage
      */
