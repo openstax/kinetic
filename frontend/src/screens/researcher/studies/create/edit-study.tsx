@@ -1,6 +1,6 @@
-import { Box, React, useEffect, useNavigate, useParams, useState, Yup } from '@common'
+import { Box, React, useEffect, useLocation, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
-import { EditingStudy, getStudyStatus, isWaiting } from '@models';
+import { EditingStudy, getStudyStatus } from '@models';
 import {
     Button,
     Col,
@@ -9,11 +9,11 @@ import {
     LoadingAnimation,
     Modal,
     Page,
-    TopNavBar,
+    ResearcherProgressBar,
+    Step,
     useFormContext,
     useFormState,
 } from '@components';
-import { ResearcherProgressBar, Step } from '@components';
 import { researcherValidation, ResearchTeam } from './forms/research-team';
 import { InternalDetails, internalDetailsValidation } from './forms/internal-details';
 import { ParticipantView, participantViewValidation } from './forms/participant-view';
@@ -79,7 +79,7 @@ export default function EditStudy() {
     return (
         <Page className='edit-study' backgroundColor={colors.white} hideFooter hideBanner>
             <StudyForm study={study} studies={allStudies}>
-                <FormContent study={study} />
+                <FormContent study={study} setStudy={setStudy} />
             </StudyForm>
         </Page>
     )
@@ -112,13 +112,17 @@ export enum StudyStep {
     ReviewStudy = 4,
 }
 
-const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
+const FormContent: FC<{
+    study: EditingStudy,
+    setStudy: (study: EditingStudy) => void
+}> = ({ study, setStudy }) => {
     const { watch, setValue, trigger, getValues, reset } = useFormContext()
     const [showSubmitStudy, setShowSubmitStudy] = useState(false)
     const currentStep = watch('step')
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
     const nav = useNavigate()
+    const location = useLocation()
     const api = useApi()
 
     // TODO reroute to study dashboard if they try to navigate here and status is not draft
@@ -129,7 +133,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
     const { isValid, isDirty } = useFormState()
 
     const setStep = (step: StudyStep) => {
-        nav(`/study/edit/${id}?step=${step}`)
+        nav(`${location.pathname}?step=${step}`)
         setValue('step', step, { shouldValidate: true })
     }
 
@@ -137,16 +141,14 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
         const study = getValues() as EditingStudy
         if (isNew) {
             const savedStudy = await api.addStudy({
-                addStudy: {
-                    study: study as NewStudy,
-                },
+                addStudy: { study: study as NewStudy },
             })
             if (savedStudy) {
                 nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
-                setStep(currentStep + 1)
                 Toast.show({
                     message: `New copy of ${study.titleForResearchers} has been created and saved as a draft. It can now be found under ‘Draft’.`,
                 })
+                setStudy(savedStudy)
             }
         } else {
             if (!isDirty) {
@@ -155,6 +157,7 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
 
             const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
             reset(getFormDefaults(savedStudy, currentStep), { keepIsValid: true })
+            setStudy(savedStudy)
         }
     }
 
@@ -170,7 +173,6 @@ const FormContent: FC<{study: EditingStudy}> = ({ study }) => {
                     const valid = await trigger()
                     if (valid) {
                         await saveStudy()
-                        setStep(StudyStep.ResearchTeam)
                     }
                 },
             },
