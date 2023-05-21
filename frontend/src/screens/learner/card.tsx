@@ -25,6 +25,7 @@ const Card = styled(Box)({
     cursor: 'pointer',
     minHeight: 450,
     maxHeight: 450,
+    borderRadius: 8,
     '&:hover': {
         boxShadow: '0px 8px 10px rgba(0, 0, 0, 0.4)',
     },

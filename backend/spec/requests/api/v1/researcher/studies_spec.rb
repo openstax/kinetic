@@ -6,6 +6,7 @@ RSpec.describe 'Studies', api: :v1 do
 
   let(:researcher1) { create(:researcher) }
   let(:researcher2) { create(:researcher) }
+  let(:researcher3) { create(:researcher) }
 
   describe 'POST researcher/studies' do
     let(:valid_new_study_attributes) do
@@ -193,18 +194,32 @@ RSpec.describe 'Studies', api: :v1 do
       end
 
       it 'updates the study researchers' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { researchers: [researcher1, researcher2] } }
+        researcher1.update_attribute(:role, 'member')
+        researcher2.update_attribute(:role, 'pi')
+        researcher3.update_attribute(:role, 'lead')
+        api_put "researcher/studies/#{study1.id}", params: { study: { researchers: [
+          researcher1,
+          researcher2,
+          researcher3
+        ] } }
 
         expect(response).to have_http_status(:success)
         expect(response_hash).to match a_hash_including(
           researchers: a_collection_containing_exactly(
             a_hash_including({
               id: researcher1.id,
-              bio: researcher1.bio
+              bio: researcher1.bio,
+              role: researcher1.role
             }),
             a_hash_including({
               id: researcher2.id,
-              bio: researcher2.bio
+              bio: researcher2.bio,
+              role: researcher2.role
+            }),
+            a_hash_including({
+              id: researcher3.id,
+              bio: researcher3.bio,
+              role: researcher3.role
             })
           )
         )

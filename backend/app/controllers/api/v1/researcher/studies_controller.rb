@@ -38,7 +38,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
     @study.update(inbound_binding.to_hash.except(:researchers, :stages))
 
-    notify_researchers(Array(inbound_binding.researchers))
+    notify_researchers(Array(inbound_binding.researchers)) unless inbound_binding.researchers.nil?
 
     unless inbound_binding.stages.nil?
       @study.stages.clear
@@ -86,7 +86,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   def notify_researchers(researchers)
     new_researchers = researchers.map do |researcher|
       # @nathan any benefit of one over the other below?
-      # try StudyResearcher.first_or_create({researcher_id: researcher.id, role: researcher.role})
+      # StudyResearcher.first_or_create({researcher_id: researcher.id, role: researcher.role})
       StudyResearcher.create({ researcher_id: researcher.id, role: researcher.role })
     end
 

@@ -214,6 +214,7 @@ module Api::V1::Bindings
       Set.new([
         :'opens_at',
         :'closes_at',
+        :'target_sample_size',
         :'shareable_after_months',
       ])
     end

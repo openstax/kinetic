@@ -103,7 +103,7 @@ export interface BaseStudy {
      * @type {number}
      * @memberof BaseStudy
      */
-    targetSampleSize?: number;
+    targetSampleSize?: number | null;
     /**
      * Status of the study
      * @type {string}

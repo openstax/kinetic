@@ -103,7 +103,7 @@ export interface NewStudy {
      * @type {number}
      * @memberof NewStudy
      */
-    targetSampleSize?: number;
+    targetSampleSize?: number | null;
     /**
      * Status of the study
      * @type {string}

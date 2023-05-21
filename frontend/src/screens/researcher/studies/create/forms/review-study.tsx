@@ -148,13 +148,10 @@ export const SubmitStudyModal: FC<{
     }
 
     const submitStudy = () => {
-        api.updateStudy({
+        api.updateStudyStatus({
             id: study.id,
-            updateStudy: { study: study as any },
-            action: 'submit',
+            statusAction: 'submit',
         })
-        // api.updateStudyStatus({ id: study.id, action: 'submit' })
-        // api.submitStudy({ id: study.id  })
     }
 
     return (

@@ -145,7 +145,7 @@ export interface ParticipantStudy {
      * @type {number}
      * @memberof ParticipantStudy
      */
-    targetSampleSize?: number;
+    targetSampleSize?: number | null;
     /**
      * Status of the study
      * @type {string}

@@ -138,15 +138,6 @@ class Api::V1::Researcher::StudiesOpenApi
         content 'application/json' do
           schema { key :$ref, :Study }
         end
-        # content 'application/json' do
-        #   schema do
-        #     key :type, :object
-        #     key :title, :updateStudy
-        #     property :study do
-        #       key :$ref, :StudyUpdate
-        #     end
-        #   end
-        # end
       end
       response 200 do
         key :description, 'Success. Returns the updated study.'

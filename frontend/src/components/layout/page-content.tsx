@@ -35,7 +35,7 @@ export const Page: FCWC<{
             }} />
             <TopNavBar hideBanner={hideBanner}/>
             <PageContent className='pb-12' css={{
-                minHeight: 'calc(100vh - 201px)',
+                minHeight: `calc(100vh - 81px - ${hideFooter ? 0 : '120px'})`,
             }}>
                 {children}
             </PageContent>

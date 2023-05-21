@@ -58,6 +58,7 @@ class Api::V1::BaseStudiesOpenApi
       end
       property :target_sample_size do
         key :type, :number
+        key :nullable, true
         key :description, 'Desired sample size set by researcher'
       end
       property :status do

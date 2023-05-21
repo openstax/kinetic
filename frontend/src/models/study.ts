@@ -87,7 +87,7 @@ export function isParticipantStudy(study?: any): study is ParticipantStudy {
     return study && !isNil((study).id) && !isNil((study).title)
 }
 
-export function studyIsMultipart(study: ParticipantStudy): boolean {
+export function studyIsMultipart(study: ParticipantStudy | Study): boolean {
     return Boolean(study.stages && study.stages.length > 1)
 }
 
