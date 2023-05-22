@@ -60,7 +60,6 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     end
 
     if params[:status_action] === 'submit'
-      # Qualtrics Survey Clone and update stage configs
       @study.stages.each do |stage|
         stage.update({ status: :waiting_period })
       end
@@ -68,9 +67,10 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     end
 
     if params[:status_action] === 'launch'
-      @study.stages.each do |stage|
-        stage.update({ status: :active })
-      end
+      @study.stages.update_all(status: 'active')
+      # @study.stages.each do |stage|
+      #   stage.update({ status: :active })
+      # end
     end
 
     render json: Api::V1::Bindings::Study.create_from_model(@study), status: :ok
@@ -95,9 +95,9 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
     ResearcherNotifications.notify_study_researchers(added_researchers, [])
 
-    StudyResearcher.skip_callback(:destroy, :before,
-                                  :check_destroy_leaves_another_researcher_in_study, raise: false)
+    StudyResearcher.skip_callback(:destroy, :before, :check_destroy_leaves_another_researcher_in_study, raise: false)
     @study.study_researchers.replace(new_researchers.uniq)
+    StudyResearcher.set_callback(:destroy, :before, :check_destroy_leaves_another_researcher_in_study, raise: false)
   end
 
 

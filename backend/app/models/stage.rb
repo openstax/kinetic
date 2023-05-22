@@ -90,14 +90,8 @@ class Stage < ApplicationRecord
     # can complete a previous launch, but cannot launch once it's completed
     return launch.incomplete? if launch.present?
 
-    return true if available_after_days.zero? # can be launched immediatly
-
     # can launch once the days interval is past
     prev_launch.completed_at.before?(available_after_days.days.ago)
-  end
-
-  def delayed?
-    available_after_days.positive?
   end
 
   def launcher(user_id)

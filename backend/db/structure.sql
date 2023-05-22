@@ -525,7 +525,7 @@ CREATE TABLE public.stages (
     updated_at timestamp(6) with time zone NOT NULL,
     title character varying,
     description character varying,
-    available_after_days double precision DEFAULT 0.0 NOT NULL,
+    available_after_days double precision DEFAULT 1.0 NOT NULL,
     duration_minutes integer DEFAULT 0 NOT NULL,
     points integer DEFAULT 0 NOT NULL,
     status integer DEFAULT 0,

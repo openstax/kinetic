@@ -200,7 +200,7 @@ class Api::V1::Participant::StudiesOpenApi
         key :schema, { type: :boolean }
       end
       response 200 do
-        key :description, 'Success.  Returns info on how to launch the user.'
+        key :description, 'Success. Returns info on how to launch the user.'
         content 'application/json' do
           schema { key :$ref, :Launch }
         end

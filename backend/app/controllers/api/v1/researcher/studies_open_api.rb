@@ -28,11 +28,6 @@ class Api::V1::Researcher::StudiesOpenApi
     end
 
     schema :StudyUpdate do
-      # property :update_status_action do
-      #   key :type, :string
-      #   key :description, 'Status update action'
-      #   key :enum, %w[submit_for_review launch]
-      # end
       allOf do
         schema do
           key :$ref, :BaseStudy

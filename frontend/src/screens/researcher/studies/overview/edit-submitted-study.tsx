@@ -1,11 +1,13 @@
-import { Stage, Study } from '@api';
+import { Study } from '@api';
 import { useApi } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import {
+    Button,
     Col,
     DateTime,
     DateTimeField,
-    DateTimeFormats, FieldErrorMessage,
+    DateTimeFormats,
+    FieldErrorMessage,
     Form,
     FormSaveButton,
     Icon,
@@ -35,7 +37,7 @@ const studyValidation = Yup.object().shape({
     }),
     stages: Yup.array().of(
         Yup.object().shape({
-            availableAfterDays: Yup.number().typeError('Required').min(0).required('Required'),
+            availableAfterDays: Yup.number().typeError('Required').min(1, 'Only whole numbers above 0 are valid').required('Required'),
         })
     ),
 });
@@ -109,7 +111,7 @@ const Sessions: FC<{study: Study}> = ({ study }) => {
                                 <Box gap align='center'>
                                     <InputField
                                         name={`stages.${i}.availableAfterDays`}
-                                        placeholder='0-100'
+                                        placeholder='1-100'
                                         type='number'
                                     />
                                     <span>Days</span>
@@ -126,34 +128,30 @@ const Sessions: FC<{study: Study}> = ({ study }) => {
 
 const FormActions: FC<{study: Study}> = ({ study }) => {
     const nav = useNavigate()
-    const { isValid, isDirty } = useFormState()
-    const { handleSubmit, watch } = useFormContext()
+    const { isValid } = useFormState()
     const api = useApi()
 
     if (isReadyForLaunch(study)) {
         return (
             <Box className='fixed-bottom bg-white' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
                 <Box className='container-lg' align='center' justify='end'>
-                    <FormSaveButton
+                    <Button
                         className='btn-researcher-primary'
                         disabled={!isValid}
-                        onSubmit={() => {
-                            // call launch instead?
-                            handleSubmit((study) => {
-                                api.updateStudyStatus({
-                                    id: study.id,
-                                    study: study as Study,
-                                    statusAction: 'launch',
-                                }).then(() => {
-                                    // Open Modal with return to dashboard button
-                                    nav('/studies')
-                                })
+                        onClick={() => {
+                            api.updateStudyStatus({
+                                id: study.id,
+                                study: study as Study,
+                                statusAction: 'launch',
+                            }).then((study) => {
+                                // Open Modal with return to dashboard button
+                                nav('/studies')
                             })
                         }}
                         css={{ width: 170, justifyContent: 'center' }}
                     >
                         Launch Study
-                    </FormSaveButton>
+                    </Button>
                 </Box>
             </Box>
         )

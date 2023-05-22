@@ -21,12 +21,14 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
           study.update!(title_for_researchers: title_for_researchers, internal_description: ' ')
         end
 
+        change_column_default :stages, :available_after_days, 1
         change_column :studies, :title_for_participants, :string, :default => '', :null => true
         change_column :studies, :short_description, :string, :default => '', :null => true
         change_column :studies, :long_description, :string, :default => '', :null => true
       end
 
       dir.down do
+        change_column_default :stages, :available_after_days, 0
         change_column :studies, :title_for_participants, :string, :null => false
         change_column :studies, :short_description, :string, :null => false
         change_column :studies, :long_description, :string, :null => false

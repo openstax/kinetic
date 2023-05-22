@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe UserNotifications, type: :mailer do
 
   let(:study1) { create(:study, num_stages: 1) }
-  let!(:past_study) { create(:study, stages: [create(:stage, opens_at: Date.yesterday)]) }
+  let!(:past_study) { create(:study, opens_at: Date.yesterday, closes_at: 10.days.ago, stages: [create(:stage)]) }
   let(:multi_stage) { create(:study, num_stages: 2) }
 
   let(:user1_id) { SecureRandom.uuid }

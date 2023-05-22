@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe Study do
-  let!(:opens_and_closes_study) { create(:study, stages: [create(:stage)]) }
-  let!(:opens_and_closes_before_study) { create(:study, stages: [create(:stage, opens_at: 10.days.ago, closes_at: 3.days.ago)]) }
-  let!(:opens_only_study) { create(:study, stages: [create(:stage, closes_at: nil)]) }
-  let!(:opens_later_only_study) { create(:study, stages: [create(:stage, opens_at: 3.days.from_now, closes_at: nil)]) }
-  let!(:no_times_study) { create(:study, stages: [create(:stage, opens_at: nil, closes_at: nil)]) }
+  let!(:opens_and_closes_study) { create(:study, title: 'a') }
+  let!(:opens_and_closes_before_study) { create(:study, opens_at: 10.days.ago, closes_at: 3.days.ago, title: 'b') }
+  let!(:opens_only_study) { create(:study, closes_at: nil, title: 'c') }
+  let!(:opens_later_only_study) { create(:study, opens_at: 3.days.from_now, closes_at: nil, title: 'd') }
+  let!(:no_times_study) { create(:study, opens_at: nil, closes_at: nil, title: 'e') }
 
   describe '#open?' do
     it 'returns open studies' do
@@ -37,27 +37,28 @@ RSpec.describe Study do
 
     describe 'when prior stage is complete' do
       before do
-        study.stages.first.launch_by_user!(user).completed!
+        study.stages.first.launch_by_user!(user).update!(completed_at: 3.days.ago)
       end
 
       it 'selects first uncompleted stage' do
         expect(study.next_stage_for_user(user)).to eq study.stages.second
       end
 
-      describe 'when next stage has a availability filter' do
+      describe 'when next stage has an availability filter' do
         before do
-          study.stages.second.update_attribute(:available_after_days, 0.001) # approx 1.5 mins
+          study.stages.second.update_attribute(:available_after_days, 5)
         end
 
         it 'does not launch when not reached' do
           expect(study.next_stage_for_user(user)).to be_nil
-          Timecop.freeze(1.minute.from_now) do
+
+          Timecop.freeze(1.days.from_now) do
             expect(study.next_stage_for_user(user)).to be_nil
           end
         end
 
         it 'launches when time is elapsed' do
-          Timecop.freeze(2.minute.from_now) do
+          Timecop.freeze(7.days.from_now) do
             expect(study.next_stage_for_user(user)).to eq study.stages.second
           end
         end

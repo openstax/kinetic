@@ -85,20 +85,20 @@ RSpec.describe LaunchPad, multi_stage: true do
     end
 
     it 'launches the second stage' do
-      url = nil
-      expect {
-        url = user1_study1_launch_pad.launch_url
-      }.to not_change { LaunchedStudy.count }
-       .and change { LaunchedStage.count }.by(1)
+      Timecop.freeze(1.day.from_now) do
+        url = nil
+        expect {
+          url = user1_study1_launch_pad.launch_url
+        }.to not_change { LaunchedStudy.count }
+         .and change { LaunchedStage.count }.by(1)
 
-      expect(url).to match(/ssotoken=/)
+        expect(url).to match(/ssotoken=/)
+      end
     end
   end
 
   context 'when a user has completed a study' do
     before do
-      user1_study1_launch_pad.launch_url
-      user1_study1_launch_pad.land
       user1_study1_launch_pad.launch_url
       user1_study1_launch_pad.land
     end

@@ -1,12 +1,11 @@
 import { Box, React, useEffect, useMemo, useState, Yup } from '@common';
 import { colors } from '@theme';
-import { Icon, Col, SelectField, SelectOption, useFormContext, FieldErrorMessage } from '@components';
+import { Col, FieldErrorMessage, Icon, SelectField, SelectOption, useFormContext } from '@components';
 import { IRB } from '../../../account/researcher-account-page';
 import { EditingStudy } from '@models';
 import { useApi } from '@lib';
 import { Researcher } from '@api';
 import { components, DropdownIndicatorProps } from 'react-select';
-import { useCallback } from 'react';
 
 export const researcherValidation = () => {
     return {

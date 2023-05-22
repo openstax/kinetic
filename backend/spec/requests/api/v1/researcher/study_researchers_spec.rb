@@ -7,12 +7,11 @@ RSpec.describe 'Study Researchers', api: :v1 do
   before { responses_not_exceptions! }
 
   let(:other_researcher) { create(:researcher) }
+  let(:new_researcher) { create(:researcher) }
   let(:original_researcher) { create(:researcher) }
-  let(:original_researchers) { [original_researcher] }
-  let(:study) { create(:study, researchers: original_researchers) }
+  let(:study) { create(:study, researchers: [original_researcher]) }
 
   describe 'add a researcher to a study' do
-    let(:new_researcher) { create(:researcher) }
     let(:path) { "researcher/studies/#{study.id}/researcher/#{new_researcher.user_id}" }
 
     context 'when logged out' do
@@ -53,7 +52,6 @@ RSpec.describe 'Study Researchers', api: :v1 do
 
   describe 'remove a researcher from a study' do
     let(:yet_another_researcher) { create(:researcher) }
-    let(:original_researchers) { [original_researcher, other_researcher] }
     let(:path) { "researcher/studies/#{study.id}/researcher/#{original_researcher.user_id}" }
 
     context 'when logged out' do
@@ -85,15 +83,13 @@ RSpec.describe 'Study Researchers', api: :v1 do
       before { stub_current_user(original_researcher) }
 
       it 'removes researcher' do
-        api_delete path
+        api_delete "researcher/studies/#{study.id}/researcher/#{new_researcher.user_id}"
         expect(response).to have_http_status(:ok)
-        expect(study.researchers.reload).not_to include(original_researcher)
+        expect(study.researchers.reload).not_to include(new_researcher)
       end
     end
 
     context 'when there is only one researcher left' do
-      let(:original_researchers) { [original_researcher] }
-
       before { stub_current_user(original_researcher) }
 
       it 'does not allow deletion' do

@@ -32,6 +32,7 @@ class Study < ApplicationRecord
   # Delete researchers to avoid them complaining about not leaving a researcher undeleted
   before_destroy(prepend: true) { study_researchers.delete_all }
 
+  arel = Study.arel_table
   scope :available, -> {
     where
       .not(opens_at: nil)

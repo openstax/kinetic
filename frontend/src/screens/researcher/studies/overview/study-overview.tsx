@@ -142,7 +142,11 @@ const AdditionalSessionsInformation: FC<{ study: Study}> = ({ study }) => {
 
 const WaitingForTemplate: FC<{study: Study}> = ({ study }) => {
     return (
-        <Box direction='column' gap='xxlarge' >
+        <Box direction='column' gap='xxlarge'>
+            <Box align='center' justify='between'>
+                <h3>{study?.titleForResearchers}</h3>
+                <ExitButton />
+            </Box>
             <Box direction='column' align='center' className='text-center' gap='large' alignSelf='center'>
                 <img src={Waiting} alt='waiting' height={200}/>
                 <h5 className='fw-bold'>Almost there! We’re setting up the right permissions</h5>

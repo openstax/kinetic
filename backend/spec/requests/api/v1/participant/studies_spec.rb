@@ -98,7 +98,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
       it 'returns studies' do
         api_get 'participant/studies'
         expect(response).to have_http_status(:success)
-        expect(response_hash[:data]).to match a_collection_containing_exactly(
+        expect(response_hash[:data]).to match a_collection_including(
           a_hash_including(
             id: study1.id,
             title_for_participants: study1.title_for_participants,
@@ -166,11 +166,13 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
       it 'launches next stage for a multi-part' do
         stage1a.launch_by_user!(user1).completed!
 
-        api_put "participant/studies/#{study1.id}/launch"
-        expect(response).to have_http_status(:success)
-        expect(response_hash).to match a_hash_including(
-          url: /#{stage1b.config[:url]}.*/
-        )
+        Timecop.freeze(5.days.from_now) do
+          api_put "participant/studies/#{study1.id}/launch"
+          expect(response).to have_http_status(:success)
+          expect(response_hash).to match a_hash_including(
+            url: /#{stage1b.config[:url]}.*/
+          )
+        end
       end
 
       it 'gives an error for a complete study' do

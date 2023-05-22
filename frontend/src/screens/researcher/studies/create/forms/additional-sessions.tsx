@@ -11,6 +11,7 @@ export const additionalSessionsValidation = () => {
         stages: Yup.array().when('step', {
             is: (step: number) => step === 3,
             then: Yup.array().of(
+                // TODO Validation error (maybe points?)
                 Yup.object({
                     points: Yup.string().required(),
                     durationMinutes: Yup.string().required(),
