@@ -43,7 +43,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     unless inbound_binding.stages.nil?
       @study.stages.clear
       inbound_binding.stages.each do |stage|
-        s = Stage.where(id: stage.id).first_or_create(stage.to_hash.merge({ config: {} }))
+        s = Stage.where(id: stage.id).find_or_create_by(stage.to_hash.merge({ config: {} }))
         @study.stages << s
       end
     end
@@ -85,9 +85,9 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
   def notify_researchers(researchers)
     new_researchers = researchers.map do |researcher|
-      # @nathan any benefit of one over the other below?
-      # StudyResearcher.first_or_create({researcher_id: researcher.id, role: researcher.role})
-      StudyResearcher.create({ researcher_id: researcher.id, role: researcher.role })
+      # StudyResearcher.first_or_create({study_id: @study.id, researcher_id: researcher.id, role: researcher.role})
+      StudyResearcher.find_or_create_by({study_id: @study.id, researcher_id: researcher.id, role: researcher.role})
+      # StudyResearcher.create({ researcher_id: researcher.id, role: researcher.role })
     end
 
     added_researchers = (new_researchers - @study.study_researchers) - [@current_researcher]

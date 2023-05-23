@@ -523,8 +523,6 @@ CREATE TABLE public.stages (
     config jsonb NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL,
-    title character varying,
-    description character varying,
     available_after_days double precision DEFAULT 1.0 NOT NULL,
     duration_minutes integer DEFAULT 0 NOT NULL,
     points integer DEFAULT 0 NOT NULL,

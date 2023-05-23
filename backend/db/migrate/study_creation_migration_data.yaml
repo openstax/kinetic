@@ -1,16 +1,43 @@
-#
+- id: 32
+  status: 'active'
+  title_for_researchers: 'Working Memory Operation Span Task'
+  description_for_researchers: 'Task assessing working memory capacity that aligns with individuals ability to recall letters while solving math problems. We intend to look at individual differences in operation span.'
+  study_type: 'Cognitive Task & Assessment'
+  study_pi: 'Baraniuk'
+  study_lead: 'Marks'
+  title_for_participants: 'How many letters can you remember?'
+  short_description_for_participants: 'People differ in how many letters and numbers they can “hold” at once. This study assesses your letter memory skills.'
+  long_description_for_participants: 'This brief study explores how many letters you can memorize at once. You will see some letters flashing on your screen one by one, and then you will be asked to recall them after completing some easy math problems.'
+  study_topic: 'Memory'
+  study_subject: null
+  benefits: 'Your contribution will be invaluable to cognitive science research. Once completed, we will provide a brief summary of the purpose of this memory study.'
+  opens_at: 2022-01-18 09:00:00
+  closes_at: null
+  stages:
+    - points: 123
+      duration_minutes: 123
+      feedback_types: [ 'debrief' ]
 
-studies:
-  - id: 1
-    status: 'active'
-    study_type: 'Cognitive Task & Assessment'
-    title_for_researchers: 'Working Memory Operation Span Task'
-    title_for_participants: 'How many letters can you remember?'
-    feedbackTypes: ['debrief', 'score']
-    benefits: 'some benefits'
-    durationMinutes: 25
-    points: 30
-    # Define everything in stages? or set numStages and copy one value over to each stage
-#    stages:
-#      - id:
-  - id: 2
+- id: 30
+  status: 'active'
+  title_for_researchers: 'Active Highlighting (biology)'
+  description_for_researchers: 'Examining the impact of guided highlighting to encourage deeper processing of the biology learning materials on immediate and delayed recall.'
+  study_type: 'Learning Research'
+  study_pi: 'Baraniuk'
+  study_lead: 'Little'
+  title_for_participants: 'Biology, cells, & highlighting (2 parts)'
+  short_description_for_participants: 'Read about cancer and biology, practice highlighting, play a game, and take a quiz. See you in a week for quiz #2!'
+  long_description_for_participants: Try our online highlighting study on a biology chapter! You'll read about cancer research, practice highlighting the content, play a quick game, and then take a brief quiz afterward. Come back in a week to take the second quiz. See you soon!
+  study_topic: 'Learning'
+  study_subject: 'Biology'
+  benefits: 'You will gain practice highlighting online content while learning about a biology topic. Your responses will also further research on new online learning tools.'
+  opens_at: 2022-03-05 09:00:00
+  closes_at: null
+  stages:
+    - points: 123
+      duration_minutes: 123
+      feedback_types: [ 'Score' ]
+    - points: 456
+      duration_minutes: 456
+      feedback_types: [ 'score' ]
+      available_after_days: '7'

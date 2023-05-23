@@ -38,6 +38,9 @@ class AddStatusToStudies < ActiveRecord::Migration[6.1]
     remove_column :studies, :tags, :string
     remove_column :studies, :feedback_description, :string
 
+    remove_column :stages, :title, :string
+    remove_column :stages, :description, :string
+
     # Unused from last migration
     remove_column :researchers, :invite_code, :string
 
