@@ -46,7 +46,7 @@ export default function AdminHome() {
                 <Route path="/banners/" element={<AdminBanners />} />
                 <Route path="/approve-studies/" element={<ApproveStudies />} />
                 <Route path="/rewards/" element={<AdminRewards />} />
-                <Route path="/workspaces/:studyId" element={<AdminWorkspaces />} />
+                <Route path="/workspaces/:studyId?" element={<AdminWorkspaces />} />
             </Routes>
 
         </Grid>

@@ -31,7 +31,7 @@ export function AdminWorkspaces() {
         })
     }, [])
 
-    const studyId = useParamId('studyId')
+    const studyId = useParamId('studyId', false)
 
     const study = studies.find(s => s.id == studyId)
 
