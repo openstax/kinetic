@@ -1,13 +1,27 @@
 # frozen_string_literal: true
 
 class Api::V1::Researcher::ResponsesController < ApplicationController
-  before_action :set_analysis
+
+  include ActionController::HttpAuthentication::Token::ControllerMethods
 
   def fetch
-    cutoff = params[:cutoff] ? params[:cutoff].to_date : Date.today
+    cutoff = params[:cutoff] ? params[:cutoff].to_date : Date.tomorrow
     analysis = Analysis.find_by!(api_key: params[:api_key])
+
     # TODO: set is_testing only when coming from outside network
-    responses = analysis.responses_before(cutoff: cutoff, is_testing: true)
+    is_testing = !authenticate_with_http_token do |token, _o|
+      Rails.application.secrets.enclave_api_key == token
+    end
+
+    responses = analysis.response_exports.for_cutoff(cutoff).where(is_testing: is_testing)
+
+    if responses.none? && is_testing
+      analysis.stages.each do |stage|
+        responses << stage.response_exports.create!(
+          is_testing: is_testing, cutoff_at: cutoff
+        )
+      end
+    end
 
     pending = responses.any? { |r| !r.is_complete }
 
@@ -19,7 +33,4 @@ class Api::V1::Researcher::ResponsesController < ApplicationController
     render json: api_binding, status: :ok
   end
 
-  protected
-
-  def set_analysis; end
 end
