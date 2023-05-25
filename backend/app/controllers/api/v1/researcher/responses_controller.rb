@@ -16,6 +16,7 @@ class Api::V1::Researcher::ResponsesController < ApplicationController
     responses = analysis.response_exports.for_cutoff(cutoff).where(is_testing: is_testing)
 
     if responses.none? && is_testing
+      responses = []
       analysis.stages.each do |stage|
         responses << stage.response_exports.create!(
           is_testing: is_testing, cutoff_at: cutoff
