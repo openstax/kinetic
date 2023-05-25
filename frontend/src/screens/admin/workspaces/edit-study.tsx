@@ -134,9 +134,8 @@ export function EditStudy({ study }: EditProps) {
 
     return (
         <div className="container">
-            <h3>Editing {study.titleForResearchers}</h3>
+            <h3>Data for {study.titleForResearchers}</h3>
             <Section heading="Responses" id="">
-
             <Responses responses={responses} setResponses={setResponses} />
             {study.stages?.map((stage,i ) => <Stage index={i} key={stage.id} setResponses={setResponses}  stage={stage}  />)}
             </Section>

@@ -38,6 +38,8 @@ export function AdminWorkspaces() {
     return (
         <>
             <Sidebar as="ul" className="list-group nav flex-column pt-5">
+                <h3 className="ms-2">Studies</h3>
+                <hr />
                 {studies.map(s=>(
                     <li key={s.id} className="nav-item">
                         <Nav

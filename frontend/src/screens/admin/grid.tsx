@@ -5,7 +5,7 @@ export const Grid = styled.div({
     display: 'grid',
     height: '100vh',
     width: '100vw',
-    gridTemplateColumns: 'auto 3fr',
+    gridTemplateColumns: 'minmax(auto, 200px) 1fr',
     gridTemplateRows: 'auto 1fr auto',
     overflow: 'hidden',
     gridTemplateAreas: `
