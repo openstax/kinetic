@@ -16,10 +16,11 @@ export const Grid = styled.div({
 });
 
 export const Sidebar = styled(Box)({
+    borderRight: '1px solid #ccc',
     flexDirection: 'column',
     gridArea: 'sidebar',
     overflow: 'auto',
-    borderRight: '1px solid #ccc',
+    flexWrap: 'nowrap',
 })
 
 export const Main = styled(Box)({

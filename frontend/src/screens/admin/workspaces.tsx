@@ -37,19 +37,21 @@ export function AdminWorkspaces() {
 
     return (
         <>
-            <Sidebar as="ul" className="list-group nav flex-column pt-5">
-                <h3 className="ms-2">Studies</h3>
+            <Sidebar className="list-group nav flex-column">
+                <h3 className="ms-2 py-2">Studies</h3>
                 <hr />
-                {studies.map(s=>(
-                    <li key={s.id} className="nav-item">
-                        <Nav
-                            to={`/admin/workspaces/${s.id}`}
-                            className="nav-link"
-                        >
-                            {s.titleForResearchers}
-                        </Nav>
-                    </li>
-                ))}
+                <ul className="list-group nav flex-column flex-nowrap">
+                    {studies.map(s => (
+                        <li key={s.id} className="nav-item">
+                            <Nav
+                                to={`/admin/workspaces/${s.id}`}
+                                className="nav-link"
+                            >
+                                {s.titleForResearchers}
+                            </Nav>
+                        </li>
+                    ))}
+                </ul>
             </Sidebar>
             <Main centered>
                 {study ? <EditStudy study={study} /> : <WelcomeMsg />}
