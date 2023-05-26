@@ -12,7 +12,7 @@ class Api::V1::Researcher::ResponsesController < ApplicationController
     is_testing = !authenticate_with_http_token do |token, _o|
       Rails.application.secrets.enclave_api_key == token
     end
-    # we add a day so that it gets absolutely everything that's contained in the day requested
+    # we add a day so that it gets everything that's contained in the day requested
     responses = analysis.response_exports.for_cutoff(cutoff + 1.day).where(is_testing: is_testing)
 
     if responses.none? && is_testing
