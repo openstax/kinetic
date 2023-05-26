@@ -13,7 +13,7 @@ library(httr)
 #' @param base_path (optional) path to server api.  Only should be set if instructed by support in order to test using development code
 #' @return list containing the names of  downloaded files.  Array will be empty if no responses were recorded
 #' @export
-fetch_kinetic_responses <- function(api_key, cutoff_date = format(Sys.Date(), "%Y-%m-%d"), base_path = "https://kinetic.openstax.org/api/v1") {
+fetch_kinetic_responses <- function(api_key, cutoff_date, base_path = "https://kinetic.openstax.org/api/v1") {
   bearer_token <- Sys.getenv("ENCLAVE_API_KEY")
   headers <- c('User-Agent' = 'Kinetic API')
   if (nchar(bearer_token) > 0) {
