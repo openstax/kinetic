@@ -80,13 +80,16 @@ RSpec.describe 'Studies', api: :v1 do
         api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=submit"
 
         expect(response).to have_http_status(:success)
-        expect(response_hash).to match(a_hash_including(
-                                         stages: a_collection_containing_exactly(
-                                           a_hash_including({
-                                             status: 'waiting_period'
-                                           })
-                                         )
-        ))
+
+        expect(response_hash).to match(
+          a_hash_including(
+            stages: a_collection_containing_exactly(
+              a_hash_including({
+                  status: 'waiting_period'
+                })
+              )
+            )
+          )
       end
 
       it 'launches the study and the study status should be active' do
@@ -94,13 +97,15 @@ RSpec.describe 'Studies', api: :v1 do
                  params: { study: { opens_at: 1.day.ago } }
 
         expect(response).to have_http_status(:success)
-        expect(response_hash).to match(a_hash_including(
-                                         stages: a_collection_containing_exactly(
-                                           a_hash_including({
-                                             status: 'active'
-                                           })
-                                         )
-        ))
+        expect(response_hash).to match(
+          a_hash_including(
+            stages: a_collection_containing_exactly(
+              a_hash_including({
+                  status: 'active'
+                })
+              )
+            )
+          )
       end
 
       it 'launches the study and the study status should be scheduled' do
@@ -108,13 +113,15 @@ RSpec.describe 'Studies', api: :v1 do
                  params: { study: { opens_at: 1.day.from_now } }
 
         expect(response).to have_http_status(:success)
-        expect(response_hash).to match(a_hash_including(
-                                         stages: a_collection_containing_exactly(
-                                           a_hash_including({
-                                             status: 'scheduled'
-                                           })
-                                         )
-        ))
+        expect(response_hash).to match(
+          a_hash_including(
+            stages: a_collection_containing_exactly(
+              a_hash_including({
+                  status: 'scheduled'
+                })
+              )
+            )
+          )
       end
     end
   end
