@@ -7,13 +7,13 @@ library(httr)
 #' Prepare and fetch response download
 #'
 #' @param api_key Api key of the analysis.
-#' @param cutoff (optional) A character string specifying the cutoff date in the format "YYYY-MM-DD".
-#'     Defaults to today's date.
+#' @param cutoff_date A character string specifying the cutoff date in the format "YYYY-MM-DD".
 #'     Only responses occring before this date will be included
 #' @param base_path (optional) path to server api.  Only should be set if instructed by support in order to test using development code
 #' @return list containing the names of  downloaded files.  Array will be empty if no responses were recorded
 #' @export
-fetch_kinetic_responses <- function(api_key, cutoff_date, base_path = "https://kinetic.openstax.org/api/v1") {
+fetch_kinetic_responses <- function(cutoff_date, base_path = "https://kinetic.openstax.org/api/v1") {
+  api_key <- Sys.getenv("ANALYSIS_API_KEY")
   bearer_token <- Sys.getenv("ENCLAVE_API_KEY")
   headers <- c('User-Agent' = 'Kinetic API')
   if (nchar(bearer_token) > 0) {

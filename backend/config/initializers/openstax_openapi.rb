@@ -41,7 +41,7 @@ OpenStax::OpenApi.configure do |config| # rubocop:disable Metrics/BlockLength
       FileUtils.cp_r Rails.root.glob('api/patches/r/*'), "#{opts[:output_dir]}/R/"
       File.open("#{opts[:output_dir]}/NAMESPACE", 'a') do |f|
         f.puts('export(fetch_kinetic_responses)')
-        f.puts('export(snapshot_for_enclave)')
+        f.puts('export(snapshot_for_kinetic_enclave)')
       end
     end
   }.symbolize_keys
