@@ -19,7 +19,7 @@ class Api::V1::Researcher::ResponsesController < ApplicationController
   private
 
   def find_or_create_responses(cutoff, is_testing)
-    analysis = Analysis.find_by(api_key: params[:analysis_id])
+    analysis = Analysis.find_by!(api_key: params[:api_key])
     # add a day so that it gets everything that's contained in the day requested
     responses = analysis.response_exports.for_cutoff(cutoff + 1.day).where(is_testing: is_testing)
     if responses.none? && is_testing
