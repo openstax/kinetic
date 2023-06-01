@@ -2,7 +2,6 @@ import { cx, React, useCallback } from '@common'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '../theme'
-import { Global } from '@emotion/react'
 import { Box, Footer, RewardsProgressBar, TopNavBar } from '@components'
 import { useIsMobileDevice } from '@lib'
 import { StudyTopic, studyTopics } from '@models'
@@ -53,8 +52,8 @@ interface StudyListProps {
 const Grid = styled.div({
     display: 'grid',
     gridTemplateColumns: 'repeat(3, [col-start] minmax(100px, 1fr) [col-end])',
-    gridColumnGap: 20,
-    gridRowGap: 20,
+    columnGap: 20,
+    rowGap: 20,
     [media.tablet]: {
         gridTemplateColumns: 'repeat(2, [col-start] minmax(100px, 1fr) [col-end])',
     },
@@ -148,7 +147,7 @@ const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
             }}
         >
             {studyTopics.map((topic) => (
-                studies[topic]?.length && <TopicFilter topic={topic} filter={filter} setFilter={setFilter} />
+                studies[topic]?.length && <TopicFilter topic={topic} key={topic} filter={filter} setFilter={setFilter} />
             ))}
         </Box>
     )

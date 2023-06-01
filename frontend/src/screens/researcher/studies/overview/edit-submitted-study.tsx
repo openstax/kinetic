@@ -11,13 +11,13 @@ import {
     Form,
     FormSaveButton,
     Icon,
-    InputField,
+    InputField, Modal, ResearcherButton,
     ResearcherCheckbox,
     SelectField,
     useFormContext,
     useFormState,
 } from '@components';
-import { Box, React, useNavigate, Yup } from '@common';
+import { Box, React, useNavigate, useState, Yup } from '@common';
 import { getFirstStage, isReadyForLaunch } from '@models';
 import { colors } from '@theme';
 
@@ -66,8 +66,11 @@ export const EditSubmittedStudy: FC<{
             onSubmit={(values, context) => saveStudy(values, context)}
             onCancel={() => {}}
         >
-            <Sessions study={study} />
-            <FormActions study={study} />
+            <Box direction='column' gap='xlarge'>
+                <Sessions study={study} />
+                <ShareStudy study={study} />
+                <FormActions study={study} />
+            </Box>
         </Form>
     )
 }
@@ -130,28 +133,27 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
     const nav = useNavigate()
     const { isValid } = useFormState()
     const api = useApi()
+    const [show, setShow] = useState(false)
 
     if (isReadyForLaunch(study)) {
         return (
             <Box className='fixed-bottom bg-white' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
                 <Box className='container-lg' align='center' justify='end'>
-                    <Button
-                        className='btn-researcher-primary'
+                    <ResearcherButton
                         disabled={!isValid}
                         onClick={() => {
                             api.updateStudyStatus({
                                 id: study.id,
                                 study: study as Study,
                                 statusAction: 'launch',
-                            }).then((study) => {
-                                // Open Modal with return to dashboard button
-                                nav('/studies')
+                            }).then(() => {
+                                setShow(true)
                             })
                         }}
-                        css={{ width: 170, justifyContent: 'center' }}
                     >
                         Launch Study
-                    </Button>
+                    </ResearcherButton>
+                    <LaunchStudyModal show={show} setShow={setShow} />
                 </Box>
             </Box>
         )
@@ -163,6 +165,32 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
                 Publish Changes
             </FormSaveButton>
         </Box>
+    )
+}
+
+const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = ({ show, setShow }) => {
+    const nav = useNavigate()
+    return (
+        <Modal
+            center
+            show={show}
+            large
+            onHide={() => setShow(false)}
+        >
+            <Modal.Body>
+                <Box padding='4rem' align='center' justify='center' direction='column' gap='xlarge'>
+                    <Box align='center' className='text-center' direction='column'>
+                        <span>Congratulations! Your study has been successfully launched. Feel free to use our dashboard to check any progress of this study. </span>
+                    </Box>
+                    <ResearcherButton onClick={() => {
+                        setShow(false)
+                        nav('/studies')
+                    }}>
+                        Return to Dashboard
+                    </ResearcherButton>
+                </Box>
+            </Modal.Body>
+        </Modal>
     )
 }
 
@@ -199,15 +227,15 @@ const ShareStudy: FC<{study: Study}> = ({ study }) => {
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
-                <h6>Sharing this study for public analysis (optional)</h6>
-                <small>Date & Time when study becomes public</small>
+                <h6>Share Study on Kinetic (Optional)</h6>
+                <small>Opt in to share your study with other researchers on Kinetic for replication, extension, etc.</small>
             </Col>
 
             <Col direction='column' gap>
                 <Box gap align='center'>
                     <ResearcherCheckbox name='shareStudy' type='checkbox' id='share-study' />
                     <label htmlFor="share-study">
-                        I would like to make my study available to other researchers for replication, extension, etc
+                        I would like to share my study with other researchers on Kinetic after an embargo period of
                     </label>
                 </Box>
                 {watch('shareStudy') &&
@@ -215,6 +243,7 @@ const ShareStudy: FC<{study: Study}> = ({ study }) => {
                         <small>After an embargo period of</small>
                         <SelectField
                             name="shareableAfterMonths"
+                            placeholder='Select'
                             value={0}
                             options={[
                                 { value: 0, label: 'No embargo' },

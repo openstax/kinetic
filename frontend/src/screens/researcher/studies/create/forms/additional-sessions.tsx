@@ -13,8 +13,8 @@ export const additionalSessionsValidation = () => {
             then: Yup.array().of(
                 // TODO Validation error (maybe points?)
                 Yup.object({
-                    points: Yup.string().required(),
-                    durationMinutes: Yup.string().required(),
+                    points: Yup.number().required(),
+                    durationMinutes: Yup.number().required(),
                     feedbackTypes: Yup.array().test(
                         'At least one',
                         'Select at least one item',
@@ -75,6 +75,7 @@ const Sessions: FC<{study: EditingStudy}> = ({ study }) => {
             <Button
                 icon='plus'
                 align='center'
+                data-testid='add-session'
                 css={{
                     border: `1px solid ${colors.lightGray}`,
                     padding: 12,

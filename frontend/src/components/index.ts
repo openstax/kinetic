@@ -32,7 +32,7 @@ export * from './layout/page-content'
 
 export * from './researcher/researcher-progress-bar'
 export * from './researcher/researcher-checkbox'
-
+export * from './researcher/researcher-button'
 export * from './researcher/collapsible-section'
 export * from './exit-button'
 

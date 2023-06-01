@@ -1,5 +1,5 @@
 import { Box, React, styled, useNavigate, useState } from '@common'
-import { Button, Footer, Page, TopNavBar } from '@components';
+import { Button, Footer, Page, ResearcherButton, TopNavBar } from '@components';
 import { colors } from '@theme';
 import { Link } from 'react-router-dom';
 import StartProcess from '@images/study-creation/start-process.svg'
@@ -8,7 +8,7 @@ export default function ResearcherStudyLanding() {
     const [showSteps, setShowSteps] = useState<boolean>(false)
 
     return (
-        <Page className='create-study-overview' hideFooter hideBanner backgroundColor={colors.white}>
+        <Page className='create-study-overview' hideFooter backgroundColor={colors.white}>
             {showSteps ? <StepsOverview /> : <Introduction onClickStart={() => setShowSteps(true)} />}
         </Page>
     )
@@ -82,13 +82,12 @@ const StepsOverview: FC = () => {
                         </SectionText>
                     </StepSection>
 
-                    <Button
-                        className='btn-researcher-primary'
+                    <ResearcherButton
                         onClick={() => nav('/study/edit/new')}
                         css={{ alignSelf: 'center', padding: `10px 40px` }}
                     >
                         Start
-                    </Button>
+                    </ResearcherButton>
                 </Box>
 
                 <StepSection header='Finalize Study' borderColor={colors.lightGray}>
@@ -118,9 +117,9 @@ const Introduction: FC<{onClickStart: () => void}> = ({ onClickStart }) => {
                     <span>If you’re rather looking to access existing Kinetic data, please visit the </span>
                     <Link to='/analysis'>analysis center.</Link>
                 </h6>
-                <Button className='btn-researcher-primary mt-4' onClick={() => onClickStart()}>
+                <ResearcherButton className='mt-4' onClick={() => onClickStart()}>
                     Start process
-                </Button>
+                </ResearcherButton>
             </Box>
         </Box>
     )

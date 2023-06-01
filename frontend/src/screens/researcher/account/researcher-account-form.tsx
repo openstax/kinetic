@@ -3,7 +3,7 @@ import { useApi, useCurrentResearcher, useUserInfo } from '@lib';
 import { colors } from '@theme';
 import { Researcher } from '@api';
 import {
-    Button, Form, FormCancelButton, FormSaveButton, Tooltip, Box, CharacterCount, Icon, InputField, SelectField
+    Button, Form, FormCancelButton, FormSaveButton, Tooltip, Box, CharacterCount, Icon, InputField, SelectField,
 } from '@components';
 
 const urlRegex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
@@ -120,8 +120,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
                 </Tooltip>
             </Box>
             <div className='col-4'>
-                <InputField
-                    name="researchInterest1" />
+                <InputField name="researchInterest1" />
                 <CharacterCount max={25} name='researchInterest1' />
             </div>
 

@@ -91,7 +91,7 @@ export interface StudyUpdate {
      * @type {Date}
      * @memberof StudyUpdate
      */
-    firstLaunchedAt?: Date;
+    readonly firstLaunchedAt?: Date;
     /**
      * When the study opens for participation; null means not open.
      * @type {Date}
@@ -264,7 +264,6 @@ export function StudyUpdateToJSON(value?: StudyUpdate | null): any {
         'image_id': value.imageId,
         'benefits': value.benefits,
         'is_hidden': value.isHidden,
-        'first_launched_at': value.firstLaunchedAt === undefined ? undefined : (value.firstLaunchedAt.toISOString()),
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'target_sample_size': value.targetSampleSize,

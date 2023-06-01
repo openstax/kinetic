@@ -53,7 +53,7 @@ export default function ResearcherStudies() {
     }
 
     return (
-        <Page hideBanner className='studies-dashboard'>
+        <Page className='studies-dashboard'>
             <Box align="center" justify="between">
                 <h3 className='fw-bold' data-testid='studies-table-header'>
                         Studies

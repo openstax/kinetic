@@ -1,7 +1,7 @@
 import { Box, React, useEffect, useNavigate, useParams, useState } from '@common';
 import { useApi } from '@lib';
 import { Study } from '@api';
-import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page, PageContent, TopNavBar } from '@components';
+import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page } from '@components';
 import { getStudyLead, getStudyPi, isReadyForLaunch, isWaiting } from '@models';
 import { StudyCardPreview, Tag } from '../../../learner/card';
 import { colors } from '@theme';
@@ -75,9 +75,23 @@ export const StudyInformation: FC<{ study: Study }> = ({ study }) => {
                             <h6 className='fw-bold'>Internal Details</h6>
                         </Col>
                         <Col sm={8} direction='column'>
-                            <small>Study Title: {study.titleForResearchers}</small>
-                            <small>Description: {study.internalDescription}</small>
-                            <div>Tag: <Tag tag={study.studyType} /></div>
+                            <ul>
+                                <li>
+                                    <small css={{ color: colors.grayerText }}>
+                                        Study Title: <span css={{ color: colors.grayText }}>{study.titleForResearchers}</span>
+                                    </small>
+                                </li>
+                                <li>
+                                    <small css={{ color: colors.grayerText }}>
+                                        Description: <span css={{ color: colors.grayText }}>{study.internalDescription}</span>
+                                    </small>
+                                </li>
+                                <li>
+                                    <small css={{ color: colors.grayerText }}>
+                                        Tag: <span css={{ color: colors.grayText }}><Tag tag={study.studyType} /></span>
+                                    </small>
+                                </li>
+                            </ul>
                         </Col>
                     </Box>
 
@@ -86,10 +100,28 @@ export const StudyInformation: FC<{ study: Study }> = ({ study }) => {
                             <h6 className='fw-bold'>Research Team</h6>
                         </Col>
                         <Col sm={8} direction='column'>
-                            <small>IRB-FY2022-19</small>
-                            <small>Rice University</small>
-                            {pi && <small>Study PI: {pi.firstName} {pi.lastName}</small>}
-                            {lead && <small>Study Lead: {lead.firstName} {lead.lastName}</small>}
+                            <ul>
+                                <li>
+                                    <small css={{ color: colors.grayerText }}>
+                                        IRB: <span css={{ color: colors.grayText }}>IRB-FY2022-19</span>
+                                    </small>
+                                </li>
+                                <li>
+                                    <small css={{ color: colors.grayerText }}>
+                                        University: <span css={{ color: colors.grayText }}>Rice University</span>
+                                    </small>
+                                </li>
+                                {pi && <li>
+                                    <small css={{ color: colors.grayerText }}>
+                                        Study PI: <span css={{ color: colors.grayText }}>{pi.firstName} {pi.lastName}</span>
+                                    </small>
+                                </li>}
+                                {lead && <li>
+                                    <small css={{ color: colors.grayerText }}>
+                                        Study Lead: <span css={{ color: colors.grayText }}>{lead.firstName} {lead.lastName}</span>
+                                    </small>
+                                </li>}
+                            </ul>
                         </Col>
                     </Box>
 

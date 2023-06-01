@@ -22,7 +22,7 @@ export const internalDetailsValidation = (studies: Study[], study: EditingStudy)
                     }
                 ),
         }),
-        internalDescription: Yup.string().max(250).when('step', {
+        internalDescription: Yup.string().max(250, 'Max 250 Characters').when('step', {
             is: 0,
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
@@ -91,7 +91,7 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
 
             <Box gap='xlarge'>
                 <Col sm={3} direction='column' gap>
-                    <h6>Internal Study Title</h6>
+                    <h6>Internal Study Title*</h6>
                     <small>
                         This is an internal title only visible to researchers. Feel free to use technical language that is meaningful.
                     </small>
@@ -102,14 +102,13 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
                         name='titleForResearchers'
                         type='textarea'
                     />
-                    <FieldErrorMessage name='titleForResearchers' />
-                    <CharacterCount max={100} name={'titleForResearchers'} />
+                    <FieldErrorMessage name='titleForResearchers' liveCountMax={100}/>
                 </Col>
             </Box>
 
             <Box gap='xlarge'>
                 <Col sm={3} direction='column' gap>
-                    <h6>Internal Description</h6>
+                    <h6>Internal Description*</h6>
                     <small>Brief short description of what this study investigates</small>
                 </Col>
 
@@ -118,8 +117,7 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
                         name='internalDescription'
                         type='textarea'
                     />
-                    <FieldErrorMessage name='internalDescription' />
-                    <CharacterCount max={250} name={'internalDescription'} />
+                    <FieldErrorMessage name='internalDescription' liveCountMax={250}/>
                 </Col>
             </Box>
 
@@ -132,6 +130,7 @@ export const InternalDetails: FC<{study: EditingStudy}> = ({ study }) => {
                 <Col sm={4} direction='column' gap>
                     <SelectField
                         name="studyType"
+                        data-testid='study-type'
                         placeholder='Select Type'
                         defaultValue={study.studyType}
                         options={studyTypes}

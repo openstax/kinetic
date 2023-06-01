@@ -28,7 +28,7 @@ export default function AdminHome() {
                     </li>
                     <li className="nav-item">
                         <NavLink className="nav-link" aria-current="page" to="/admin/approve-studies">
-                            Approve Studies
+                            Studies
                         </NavLink>
                     </li>
                 </ul>

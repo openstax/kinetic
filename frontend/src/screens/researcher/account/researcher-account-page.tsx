@@ -20,7 +20,7 @@ export default function ResearcherAccountPage() {
 
     return (
         <PageWrapper>
-            <TopNavBar hideBanner/>
+            <TopNavBar />
             <Box className='container-lg py-5' justify='between'>
                 <Col sm={9} css={{ paddingRight: '2rem' }} direction='column'>
                     <Box justify='between' height='40px'>

@@ -19,11 +19,9 @@ const PageWrapper = styled.div<{backgroundColor: string}>`
 export const Page: FCWC<{
     className?: string,
     backgroundColor?: string,
-    hideBanner?: boolean,
     hideFooter?: boolean
 }> = ({
     backgroundColor = colors.pageBackground,
-    hideBanner = false,
     hideFooter = false,
     className,
     children,
@@ -33,7 +31,7 @@ export const Page: FCWC<{
             <Global styles={{
                 body: { background: `${backgroundColor} !important` },
             }} />
-            <TopNavBar hideBanner={hideBanner}/>
+            <TopNavBar />
             <PageContent className='pb-12' css={{
                 minHeight: `calc(100vh - 81px - ${hideFooter ? 0 : '120px'})`,
             }}>

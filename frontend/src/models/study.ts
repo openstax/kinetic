@@ -84,7 +84,7 @@ export function getStudyLead(study: EditingStudy) {
 }
 
 export function isParticipantStudy(study?: any): study is ParticipantStudy {
-    return study && !isNil((study).id) && !isNil((study).title)
+    return study && !isNil((study).id) && !isNil((study).titleForParticipants)
 }
 
 export function studyIsMultipart(study: ParticipantStudy | Study): boolean {

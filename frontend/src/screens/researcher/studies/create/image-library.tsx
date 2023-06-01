@@ -1,4 +1,4 @@
-import { Button, Col, Modal } from '@components'
+import { Button, Col, Modal, ResearcherButton } from '@components'
 import { Box, React, styled, useEffect, useState } from '@common';
 import { colors } from '@theme';
 import { cardImages, Category, getImageUrl, imageCategories } from '../../../../components/study-card-images/card-images';
@@ -61,7 +61,7 @@ const ImageCard: FC<{
                 }
             }}
         >
-            <img src={getImageUrl(imageId)} alt={imageId} width={250} height={140} css={{
+            <img src={getImageUrl(imageId)} data-testid='card-image' alt={imageId} width={250} height={140} css={{
                 border: `1px solid ${colors.lightGray}`,
                 padding: `0 25px`,
             }}/>
@@ -134,24 +134,20 @@ export const ImageLibrary: FC<{
                             </ImageCardContainer>
                         </Box>
                         <Box gap='xlarge' css={{ padding: `10px 20px` }} alignSelf='end'>
-                            <Button
-                                className='btn-researcher-secondary'
-                                css={{ width: 170, justifyContent: 'center' }}
-                                onClick={() => onHide()}
-                            >
+                            <ResearcherButton fixedWidth type='secondary' onClick={() => onHide()}>
                                 Cancel
-                            </Button>
-                            <Button
-                                className='btn-researcher-primary'
+                            </ResearcherButton>
+                            <ResearcherButton
                                 disabled={!selectedImage}
-                                css={{ width: 170, justifyContent: 'center' }}
+                                fixedWidth
+                                data-testid='select-card-image'
                                 onClick={() => {
                                     onSelect(selectedImage)
                                     onHide()
                                 }}
                             >
                                 Select
-                            </Button>
+                            </ResearcherButton>
                         </Box>
                     </Col>
                 </Box>

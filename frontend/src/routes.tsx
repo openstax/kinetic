@@ -36,7 +36,7 @@ export const AppRoutes = () => {
                 <Route path="/dev/*" element={<Dev />} />
                 <Route path="/study/land/:studyId" element={<StudyLanding />} />
                 <Route path="/study/create" element={<ResearcherStudyLanding />} />
-                <Route path="/researcher/study/overview/:id" element={<StudyOverview />} />
+                <Route path="/study/overview/:id" element={<StudyOverview />} />
                 <Route path="/study/edit/:id" element={<EditStudy />} />
                 <Route path="/study/edit/:id/about-researcher" element={<EditStudy />} />
                 <Route path="/study/edit/:id/researcher-info" element={<EditStudy />} />

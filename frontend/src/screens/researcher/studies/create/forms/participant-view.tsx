@@ -1,6 +1,16 @@
 import { EditingStudy, studySubjects, studyTopics } from '@models';
 import { Box, React, useMemo, useState, Yup } from '@common';
-import { CharacterCount, FieldErrorMessage, Icon, SelectField, Button, Col, InputField, useFormContext } from '@components';
+import {
+    CharacterCount,
+    FieldErrorMessage,
+    Icon,
+    SelectField,
+    Button,
+    Col,
+    InputField,
+    useFormContext,
+    ResearcherButton,
+} from '@components';
 import { colors } from '@theme';
 import { ImageLibrary } from '../image-library';
 import { StudyCardPreview } from '../../../../learner/card';
@@ -39,10 +49,10 @@ export const participantViewValidation = (studies: Study[], study: EditingStudy)
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
         stages: Yup.array().when('step', {
-            is: (step: number) => step === 2,
+            is: 2,
             then: Yup.array().of(
                 Yup.object({
-                    points: Yup.mixed().required(),
+                    points: Yup.number().required(),
                     feedbackTypes: Yup.array().test(
                         'At least one',
                         'Select at least one item',
@@ -118,8 +128,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                         <Col sm={6} direction='column' gap>
                             <div>
                                 <InputField name='titleForParticipants' />
-                                <FieldErrorMessage name='titleForParticipants' />
-                                <CharacterCount max={45} name='titleForParticipants' />
+                                <FieldErrorMessage name='titleForParticipants' liveCountMax={45} />
                             </div>
                         </Col>
                     </Box>
@@ -132,8 +141,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
 
                         <Col sm={6} direction='column' gap='small'>
                             <InputField type='textarea' name='shortDescription' />
-                            <CharacterCount max={120} name='shortDescription' />
-                            <FieldErrorMessage name='shortDescription' />
+                            <FieldErrorMessage name='shortDescription' liveCountMax={120} />
                         </Col>
                     </Box>
 
@@ -145,8 +153,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
 
                         <Col sm={6} direction='column' gap>
                             <InputField type='textarea' name='longDescription' />
-                            <CharacterCount max={250} name='longDescription' />
-                            <FieldErrorMessage name='longDescription' />
+                            <FieldErrorMessage name='longDescription' liveCountMax={250} />
                         </Col>
                     </Box>
 
@@ -162,7 +169,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                                 placeholder="Study Topic*"
                                 options={studyTopics.map(s => ({ value: s, label: s }))}
                             />
-                            <FieldErrorMessage name='studyTopic' />
+                            <FieldErrorMessage name=' studyTopic' />
                             <SelectField
                                 name="studySubject"
                                 placeholder="Study Content Area (optional)"
@@ -228,8 +235,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                         <Col sm={6} direction='column' gap>
                             <div>
                                 <InputField type='textarea' name='benefits' />
-                                <CharacterCount max={170} name='benefits' />
-                                <FieldErrorMessage name='benefits' />
+                                <FieldErrorMessage name='benefits' liveCountMax={170}/>
                             </div>
                         </Col>
                     </Box>
@@ -241,13 +247,13 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                         </Col>
 
                         <Col sm={6} direction='column' gap align='start'>
-                            <Button className='btn-researcher-secondary' onClick={() => setShowImagePicker(true)}>
+                            <ResearcherButton type='secondary' data-testid='image-picker' onClick={() => setShowImagePicker(true)}>
                                 {study.imageId ? 'Change Selected Image' : 'Select Study Card Image'}
-                            </Button>
+                            </ResearcherButton>
                             <ImageLibrary
                                 show={showImagePicker}
                                 onHide={() => setShowImagePicker(false)}
-                                onSelect={(imageId) => setValue('imageId', imageId)}
+                                onSelect={(imageId) => setValue('imageId', imageId, { shouldValidate: true })}
                                 currentImage={getValues('imageId')}
                             />
                             <FieldErrorMessage name='imageId' />
@@ -255,7 +261,6 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                                 type='text'
                                 className='d-none'
                                 name='imageId'
-                                defaultValue={getValues('imageId')}
                             />
                         </Col>
                     </Box>

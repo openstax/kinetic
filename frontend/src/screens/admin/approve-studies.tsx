@@ -2,7 +2,7 @@ import { Study } from '@api'
 import { Box, React, useEffect, useState } from '@common'
 import { useApi } from '@lib'
 import { useToggle } from 'rooks';
-import { Button } from '@components';
+import { Button, ResearcherButton, Toast } from '@components';
 
 export function ApproveStudies() {
     const api = useApi()
@@ -64,17 +64,19 @@ const StudyRow: FC<{study: Study, setStudies: (studies: Study[] | undefined) => 
                 {study.titleForResearchers}
             </td>
             <td>
-                <Button
-                    className='btn-researcher-primary'
+                <ResearcherButton
                     disabled={!selected}
                     onClick={() => {
                         api.approveStudy({ id: study.id }).then(response => {
                             setStudies(response.data)
+                            Toast.show({
+                                message: `${study.titleForResearchers} was updated successfully`,
+                            })
                         })
                     }}
                 >
                     Qualtrics Ready
-                </Button>
+                </ResearcherButton>
             </td>
         </tr>
     )

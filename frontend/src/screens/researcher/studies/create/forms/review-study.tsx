@@ -3,7 +3,7 @@ import { Box, React, useNavigate, useState } from '@common';
 import { colors } from '@theme';
 import { StudyCardPreview, Tag } from '../../../../learner/card';
 import { StudyStep } from '../edit-study';
-import { Button, Col, CollapsibleSection, Icon, Modal, useFormContext } from '@components';
+import { Button, Col, CollapsibleSection, Modal, ResearcherButton, useFormContext } from '@components';
 import { Study } from '@api';
 import { useApi } from '@lib';
 
@@ -34,38 +34,70 @@ const EditingStudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = (
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Internal Details</h6>
-                        {!viewOnly && <Button className='btn-researcher-secondary' onClick={() => setStep(StudyStep.InternalDetails)}>
+                        {!viewOnly && <ResearcherButton type='secondary' onClick={() => setStep(StudyStep.InternalDetails)}>
                             Edit
-                        </Button>}
+                        </ResearcherButton>}
                     </Col>
                     <Col sm={8} direction='column'>
-                        <small>Study Title: {study.titleForResearchers}</small>
-                        <small>Description: {study.internalDescription}</small>
-                        <div>Tag: <Tag tag={study.studyType} /></div>
+                        <ul>
+                            <li>
+                                <small css={{ color: colors.grayerText }}>
+                                    Study Title: <span css={{ color: colors.grayText }}>{study.titleForResearchers}</span>
+                                </small>
+                            </li>
+                            <li>
+                                <small css={{ color: colors.grayerText }}>
+                                    Description: <span css={{ color: colors.grayText }}>{study.internalDescription}</span>
+                                </small>
+                            </li>
+                            <li>
+                                <small css={{ color: colors.grayerText }}>
+                                    Tag: <span css={{ color: colors.grayText }}><Tag tag={study.studyType} /></span>
+                                </small>
+                            </li>
+                        </ul>
                     </Col>
                 </Box>
 
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Research Team</h6>
-                        {!viewOnly && <Button className='btn-researcher-secondary' onClick={() => setStep(StudyStep.ResearchTeam)}>
+                        {!viewOnly && <ResearcherButton type='secondary' onClick={() => setStep(StudyStep.ResearchTeam)}>
                             Edit
-                        </Button>}
+                        </ResearcherButton>}
                     </Col>
                     <Col sm={8} direction='column'>
-                        <small>IRB-FY2022-19</small>
-                        <small>Rice University</small>
-                        {pi && <small>Study PI: {pi.firstName} {pi.lastName}</small>}
-                        {lead && <small>Study Lead: {lead.firstName} {lead.lastName}</small>}
+                        <ul>
+                            <li>
+                                <small css={{ color: colors.grayerText }}>
+                                    IRB: <span css={{ color: colors.grayText }}>IRB-FY2022-19</span>
+                                </small>
+                            </li>
+                            <li>
+                                <small css={{ color: colors.grayerText }}>
+                                    University: <span css={{ color: colors.grayText }}>Rice University</span>
+                                </small>
+                            </li>
+                            {pi && <li>
+                                <small css={{ color: colors.grayerText }}>
+                                    Study PI: <span css={{ color: colors.grayText }}>{pi.firstName} {pi.lastName}</span>
+                                </small>
+                            </li>}
+                            {lead && <li>
+                                <small css={{ color: colors.grayerText }}>
+                                    Study Lead: <span css={{ color: colors.grayText }}>{lead.firstName} {lead.lastName}</span>
+                                </small>
+                            </li>}
+                        </ul>
                     </Col>
                 </Box>
 
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Participant View</h6>
-                        {!viewOnly && <Button className='btn-researcher-secondary' onClick={() => setStep(StudyStep.ParticipantView)}>
+                        {!viewOnly && <ResearcherButton type='secondary' onClick={() => setStep(StudyStep.ParticipantView)}>
                             Edit
-                        </Button>}
+                        </ResearcherButton>}
                     </Col>
                     <Col sm={8} direction='column'>
                         <small>Interact with the study card on the right-hand side to review how participants view your study</small>
@@ -100,12 +132,12 @@ const AdditionalSessionsOverview: FC<{viewOnly: boolean, study: EditingStudy}> =
                 <Col justify='between' direction='row'>
                     <h6 className='fw-bold'>Additional Sessions (optional)</h6>
 
-                    {!viewOnly && <Button
-                        className={!study.stages?.length ? 'btn-researcher-primary' : 'btn-researcher-secondary'}
+                    {!viewOnly && <ResearcherButton
+                        type={!study.stages?.length ? 'primary' : 'secondary'}
                         onClick={() => setStep(StudyStep.AdditionalSessions)}
                     >
                         {!study.stages?.length ? 'Start' : 'Edit'}
-                    </Button>}
+                    </ResearcherButton>}
                 </Col>
 
                 <Col sm={8} direction='column'>
@@ -167,16 +199,16 @@ export const SubmitStudyModal: FC<{
                         <span>You’re about to submit your study to the Kinetic team so that the appropriate permissions are set. Please review and confirm any final changes. You won’t be able to change your Kinetic study information past this point. Are you ready to proceed?</span>
                     </Box>
                     <Box gap='large'>
-                        <Button className='btn-researcher-secondary' onClick={() => setShow(false)}>
+                        <ResearcherButton type='secondary' onClick={() => setShow(false)}>
                             Not yet, edit study
-                        </Button>
-                        <Button className='btn-researcher-primary' onClick={() => {
+                        </ResearcherButton>
+                        <ResearcherButton onClick={() => {
                             submitStudy()
                             setSubmitted(true)
                             setShow(false)
                         }}>
                             Yes, submit study
-                        </Button>
+                        </ResearcherButton>
                     </Box>
                 </Box>
             </Modal.Body>
@@ -205,11 +237,11 @@ const SubmitSuccess: FC<{
                         <span>Follow the instructions to build your task and come back here to proceed with finalizing your study and launching it on Kinetic.</span>
                     </Box>
 
-                    <Button className='btn-researcher-primary' onClick={() => {
+                    <ResearcherButton onClick={() => {
                         nav('/studies')
                     }}>
                         Return to Studies Dashboard
-                    </Button>
+                    </ResearcherButton>
                 </Box>
             </Modal.Body>
         </Modal>

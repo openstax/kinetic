@@ -370,7 +370,7 @@ export const StudiesTable: React.FC<{
     })
 
     return (
-        <Box direction='column' className='mt-2'>
+        <Box direction='column' className='studies mt-2'>
             {isLaunched && <StatusFilters table={table} className='my-2'/>}
             <table data-testid="studies-table" className='w-100'>
                 <thead css={{ height: 40 }}>

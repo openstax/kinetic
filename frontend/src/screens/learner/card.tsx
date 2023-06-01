@@ -1,5 +1,5 @@
 import { cx, React, useCallback, useState } from '@common'
-import { Box, Icon, MultiSessionBar, Button } from '@components'
+import { Box, Icon, MultiSessionBar, Button, ResearcherButton } from '@components'
 import { useIsMobileDevice } from '@lib'
 import { EditingStudy, getStudyDuration, getStudyPoints, studyHasFeedback, studyIsMultipart } from '@models'
 import { ParticipantStudy } from '@api'
@@ -23,8 +23,8 @@ const Card = styled(Box)({
     color: 'inherit',
     textDecoration: 'none',
     cursor: 'pointer',
-    minHeight: 450,
-    maxHeight: 450,
+    minHeight: 475,
+    maxHeight: 475,
     borderRadius: 8,
     '&:hover': {
         boxShadow: '0px 8px 10px rgba(0, 0, 0, 0.4)',
@@ -241,12 +241,13 @@ export const StudyCardPreview: FC<{study: EditingStudy}> = ({ study }) => {
     return (
         <Card className="col study" direction='column'>
             <CardContent study={study as ParticipantStudy} />
-            <Button
-                className='btn-researcher-secondary justify-content-center mt-3'
+            <ResearcherButton
+                type='secondary'
+                className='justify-content-center mt-3'
                 onClick={() => {setShowDetails(true)}}
             >
                 Preview Study Details
-            </Button>
+            </ResearcherButton>
             <StudyDetailsPreview
                 study={study as ParticipantStudy}
                 show={showDetails}

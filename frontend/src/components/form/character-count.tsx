@@ -1,16 +1,9 @@
 import { Box, React } from '@common';
 import { colors } from '@theme';
-import { Icon, useFormContext, useFormState } from '@components';
-import { get } from 'lodash';
+import { Icon, useFormContext } from '@components';
 
 export const CharacterCount: FC<{ max: number, name: string }> = ({ max, name }) => {
     const value = useFormContext().watch(name, '')
-    const { errors }  = useFormState()
-    const error = get(errors, name)
-
-    if (error) {
-        return null
-    }
 
     if (value.length > max) {
         return (
