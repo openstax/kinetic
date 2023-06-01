@@ -38,10 +38,8 @@ OpenStax::OpenApi.configure do |config| # rubocop:disable Metrics/BlockLength
       FileUtils.cp_r Dir.glob("#{opts[:output_dir]}/*"), Rails.root.join('../frontend/src/api/')
     end,
     'r' => lambda do |opts|
-      FileUtils.cp_r Rails.root.glob('api/patches/r/*'), "#{opts[:output_dir]}/R/"
-      File.open("#{opts[:output_dir]}/NAMESPACE", 'a') do |f|
-        f.puts('export(fetch_kinetic_responses)')
-        f.puts('export(snapshot_for_kinetic_enclave)')
+      Dir.chdir opts[:output_dir] do
+        puts `patch -p2 < #{Rails.root.join('clients/r.patch')}`
       end
     end
   }.symbolize_keys
