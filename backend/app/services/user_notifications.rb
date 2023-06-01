@@ -68,7 +68,7 @@ class UserNotifications
     # WHEN a new study/studies becomes available on the learner dashboard
     def deliver_new_studies
       studies = Study.where(opens_at: yesterday)
-                     .or(Study.where(opens_at: nil, created_at: yesterday))
+                  .or(Study.where(opens_at: nil, created_at: yesterday))
 
       return unless studies.any?
 

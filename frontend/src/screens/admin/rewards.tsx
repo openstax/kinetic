@@ -5,6 +5,7 @@ import {
     Box, Icon, Col, EditingForm as Form, Alert, DateTimeField, InputField,
 } from '@components'
 import { useApi, useFetchState } from '@lib'
+import { Main } from './grid'
 
 const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, onUpdate }) => {
     const [error, setError] = useState('')
@@ -75,7 +76,7 @@ export function AdminRewards() {
     if (state.busy) return state.busy
 
     return (
-        <div className="rewards">
+        <Main className="container pt-2">
             <Box justify="between" align="center" margin="bottom">
                 <h4>Scheduled Rewards</h4>
                 <Icon height={15} icon="plusCircle" data-testid="add-reward" onClick={state.addNewRecord} />
@@ -83,7 +84,6 @@ export function AdminRewards() {
             {state.records.map((reward, i) => (
                 <RewardCard key={reward.id || i} reward={reward} onUpdate={state.fetchRecords} />
             ))}
-
-        </div>
+        </Main>
     )
 }

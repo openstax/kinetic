@@ -1,5 +1,5 @@
 import { React, useEffect, useCallback, useMemo, useState } from '@common'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { LoadingAnimation } from '../components/loading-animation'
 import qs from 'qs'
 
@@ -79,4 +79,11 @@ export function useFetchState<T>({ fetch, addRecord }: FetcherArgs<T>) {
         records,
         addNewRecord,
     }
+}
+
+export const useParamId = (name: string, throwIfMissing = true) => {
+    const id = useParams()[name]
+    if (!id && throwIfMissing) throw new Error(`${name} is not found in URL parameters`);
+
+    return Number(id);
 }

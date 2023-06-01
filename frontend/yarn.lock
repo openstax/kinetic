@@ -735,10 +735,10 @@
     hoist-non-react-statics "^3.3.1"
     react-is "^16.12.0"
 
-"@nathanstitt/sundry@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@nathanstitt/sundry/-/sundry-1.6.0.tgz#752b18d7a19f3d31b87fd023e1c1593a64b24cf0"
-  integrity sha512-oX4KQUdaqKZ0arIFCTKm/IgA0QfV2ct9aAXfgQAuyg2Aq94O2iQYALzuLPV+Z94g8E3qGau2YI6K7wFURBO/Xg==
+"@nathanstitt/sundry@^1.6.4":
+  version "1.6.4"
+  resolved "https://registry.yarnpkg.com/@nathanstitt/sundry/-/sundry-1.6.4.tgz#93bed0733f052f58ef0b113efcc72f32085b0bf6"
+  integrity sha512-poBkaba8XEOdXySy8FBCm+Ep7ta4EO3en75f/xjnoqBpOZbGamscEJGnZGvJWSjJY9zH2KWw4aWkUiz4nHGMgg==
   dependencies:
     "@hookform/resolvers" "^2.9"
     "@iconify-icons/bi" "^1.2.15"
@@ -748,7 +748,6 @@
     "@popperjs/core" "^2.11"
     "@react-aria/ssr" "^3.5.0"
     "@restart/ui" "^1.6"
-    boxible "^1.7"
     flatpickr "^4.6"
     graphql "^16.6"
     react-hook-form "^7.43"
@@ -1541,10 +1540,10 @@ bootstrap@^5.1.3:
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.2.3.tgz#54739f4414de121b9785c5da3c87b37ff008322b"
   integrity sha512-cEKPM+fwb3cT8NzQZYEu4HilJ3anCrWqh3CHAok1p9jXqMPsPTBhU25fBckEJHJ/p+tTxTFTsFQGM+gaHpi3QQ==
 
-boxible@^1.7:
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/boxible/-/boxible-1.7.4.tgz#7e52d18f22d98116cb5bc78e653a3967bed91b72"
-  integrity sha512-0tOTRxZ2U1vlG9RbdYhzMSYjV65T6vKu+meannIEN2CGx5sG4bRWeUpFcY/zRs9fzSICwb7jvEMtjscdnSi10A==
+boxible@^1.7.7:
+  version "1.7.7"
+  resolved "https://registry.yarnpkg.com/boxible/-/boxible-1.7.7.tgz#0abb0fb2d27092c76dabf72f7d7c167982874296"
+  integrity sha512-UmzgjJi5c0u4Oo0NvgGC7dW13lw2QjHQGpKxMWsC8BVPnaR0h2ExUIaSjcHE0bcHk5zDjCLCbZimh/8JGAIYyQ==
   dependencies:
     jest-environment-jsdom "^29.4.3"
 

@@ -27,6 +27,7 @@ import tripleDotVertical from '@iconify-icons/bi/three-dots-vertical'
 import cancel from '@iconify-icons/bi/x-circle'
 import trash from '@iconify-icons/bi/trash'
 import checkCircle from '@iconify-icons/bi/check-circle-fill'
+import emptyCircle from '@iconify-icons/bi/circle'
 import feedback from '@iconify-icons/bi/chat-left-dots-fill'
 import search from '@iconify-icons/bi/search'
 import heart from '@iconify-icons/bi/heart-fill'
@@ -36,6 +37,7 @@ import list from '@iconify-icons/bi/list'
 import multiStage from '@iconify-icons/bi/stack'
 import chatLeft from '@iconify-icons/bi/chat-left-fill'
 import cloudUpload from '@iconify-icons/bi/cloud-upload'
+import cloudDownload from '@iconify-icons/bi/cloud-download'
 import questionCircleFill from '@iconify-icons/bi/question-circle-fill'
 import arrowLeftRight from '@iconify-icons/bi/arrow-left-right'
 import arrowUpDown from '@iconify-icons/bi/arrow-up-down'
@@ -53,6 +55,7 @@ import chevronUp from '@iconify-icons/bi/chevron-up'
 
 const SUNDRY_PACKAGED_ICONS = {
     thumbsUp,
+    xSimple: x,
     exclamationCircle,
     exclamationTriangle,
     cancel: xCircle,
@@ -84,12 +87,14 @@ export const ICONS = {
     feedback,
     heart,
     warning,
+    emptyCircle,
     rolodex,
     list,
     right,
     multiStage,
     chatLeft,
     cloudUpload,
+    cloudDownload,
     questionCircleFill,
     arrowUpDown,
     arrowLeftRight,

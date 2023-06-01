@@ -1,15 +1,16 @@
 import { Study } from '@api'
-import { Box, React, useEffect, useState } from '@common'
+import { React, useEffect, useState } from '@common'
 import { useApi } from '@lib'
 import { useToggle } from 'rooks';
-import { Button, ResearcherButton, Toast } from '@components';
+import { ResearcherButton, Toast } from '@components';
+import { Main } from './grid'
 
 export function ApproveStudies() {
     const api = useApi()
     const [studies, setStudies] = useState<Study[]>()
 
     useEffect(() => {
-        api.getStudiesAwaitingApproval().then(studies => {
+        api.adminQueryStudies({ status: 'waiting_period' }).then(studies => {
             setStudies(studies.data)
         })
     }, [])
@@ -21,7 +22,7 @@ export function ApproveStudies() {
     }
 
     return (
-        <Box className='waiting-studies' direction='column' gap='large'>
+        <Main className='waiting-studies pt-2' gap='large'>
             <h3>Studies awaiting approval</h3>
 
             <table className="table table-hover table-bordered">
@@ -38,16 +39,16 @@ export function ApproveStudies() {
                     )}
                 </tbody>
             </table>
-        </Box>
+        </Main>
     )
 }
 
 const NoStudiesToApprove: FC = () => {
     return (
-        <Box direction='column' align='center' justify='center'>
+        <Main direction='column' centered>
             <h4>There are currently no studies awaiting approval.</h4>
             <h4>Go relax and enjoy your day!</h4>
-        </Box>
+        </Main>
     )
 }
 

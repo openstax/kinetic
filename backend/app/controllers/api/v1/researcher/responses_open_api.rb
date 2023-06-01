@@ -43,6 +43,7 @@ class Api::V1::Researcher::ResponsesOpenApi
         key :required, true
         key :schema, { type: :string }
       end
+
       parameter do
         key :name, :cutoff
         key :in, :query
