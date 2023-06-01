@@ -1097,10 +1097,24 @@ CREATE INDEX index_launched_stages_on_stage_id ON public.launched_stages USING b
 
 
 --
+-- Name: index_launched_stages_on_user_id_and_stage_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_launched_stages_on_user_id_and_stage_id ON public.launched_stages USING btree (user_id, stage_id);
+
+
+--
 -- Name: index_launched_studies_on_study_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_launched_studies_on_study_id ON public.launched_studies USING btree (study_id);
+
+
+--
+-- Name: index_launched_studies_on_user_id_and_study_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_launched_studies_on_user_id_and_study_id ON public.launched_studies USING btree (user_id, study_id);
 
 
 --
@@ -1324,12 +1338,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211129180319'),
 ('20220110162620'),
 ('20220303160442'),
-('20220324192614'),
-('20220406201351'),
 ('20220407193306'),
-('20220407205649'),
 ('20220408162010'),
-('20220429195630'),
 ('20220810173840'),
 ('20220817161302'),
 ('20220824152243'),
