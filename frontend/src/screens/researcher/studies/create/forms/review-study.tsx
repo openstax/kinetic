@@ -7,20 +7,21 @@ import { Button, Col, CollapsibleSection, Modal, ResearcherButton, useFormContex
 import { Study } from '@api';
 import { useApi } from '@lib';
 
-export const ReviewStudy: FC<{study: EditingStudy}> = ({ study }) => {
+export const ReviewStudy: FC<{ study: EditingStudy }> = ({ study }) => {
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
             <Box gap='large' direction='column'>
                 <h3 className='fw-bold'>Review your study</h3>
-                <p>You're almost done! Make sure to review your study, and check on any last details before submitting it to the Kinetic team</p>
+                <p>You're almost done! Make sure to review your study, and check on any last details before submitting
+                    it to the Kinetic team</p>
             </Box>
 
-            <EditingStudyInformation study={study} />
+            <EditingStudyInformation study={study}/>
         </Box>
     )
 }
 
-const EditingStudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = ({ study, viewOnly = false }) => {
+const EditingStudyInformation: FC<{ study: EditingStudy, viewOnly?: boolean }> = ({ study, viewOnly = false }) => {
     const { setValue } = useFormContext()
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true })
@@ -34,9 +35,10 @@ const EditingStudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = (
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Internal Details</h6>
-                        {!viewOnly && <ResearcherButton type='secondary' onClick={() => setStep(StudyStep.InternalDetails)}>
-                            Edit
-                        </ResearcherButton>}
+                        {!viewOnly &&
+                            <ResearcherButton type='secondary' onClick={() => setStep(StudyStep.InternalDetails)}>
+                                Edit
+                            </ResearcherButton>}
                     </Col>
                     <Col sm={8} direction='column'>
                         <ul>
@@ -52,7 +54,7 @@ const EditingStudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = (
                             </li>
                             <li>
                                 <small css={{ color: colors.grayerText }}>
-                                    Tag: <span css={{ color: colors.grayText }}><Tag tag={study.studyType} /></span>
+                                    Tag: <span css={{ color: colors.grayText }}><Tag tag={study.studyType}/></span>
                                 </small>
                             </li>
                         </ul>
@@ -62,9 +64,10 @@ const EditingStudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = (
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Research Team</h6>
-                        {!viewOnly && <ResearcherButton type='secondary' onClick={() => setStep(StudyStep.ResearchTeam)}>
-                            Edit
-                        </ResearcherButton>}
+                        {!viewOnly &&
+                            <ResearcherButton type='secondary' onClick={() => setStep(StudyStep.ResearchTeam)}>
+                                Edit
+                            </ResearcherButton>}
                     </Col>
                     <Col sm={8} direction='column'>
                         <ul>
@@ -85,7 +88,8 @@ const EditingStudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = (
                             </li>}
                             {lead && <li>
                                 <small css={{ color: colors.grayerText }}>
-                                    Study Lead: <span css={{ color: colors.grayText }}>{lead.firstName} {lead.lastName}</span>
+                                    Study Lead: <span
+                                        css={{ color: colors.grayText }}>{lead.firstName} {lead.lastName}</span>
                                 </small>
                             </li>}
                         </ul>
@@ -95,24 +99,26 @@ const EditingStudyInformation: FC<{study: EditingStudy, viewOnly?: boolean}> = (
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Participant View</h6>
-                        {!viewOnly && <ResearcherButton type='secondary' onClick={() => setStep(StudyStep.ParticipantView)}>
-                            Edit
-                        </ResearcherButton>}
+                        {!viewOnly &&
+                            <ResearcherButton type='secondary' onClick={() => setStep(StudyStep.ParticipantView)}>
+                                Edit
+                            </ResearcherButton>}
                     </Col>
                     <Col sm={8} direction='column'>
-                        <small>Interact with the study card on the right-hand side to review how participants view your study</small>
+                        <small>Interact with the study card on the right-hand side to review how participants view your
+                            study</small>
                     </Col>
                 </Box>
 
-                <AdditionalSessionsOverview viewOnly={viewOnly} study={study} />
+                <AdditionalSessionsOverview viewOnly={viewOnly} study={study}/>
             </Col>
 
-            <StudyCardPreview study={study} />
+            <StudyCardPreview study={study}/>
         </Box>
     )
 }
 
-const AdditionalSessionsOverview: FC<{viewOnly: boolean, study: EditingStudy}> = ({ viewOnly, study }) => {
+const AdditionalSessionsOverview: FC<{ viewOnly: boolean, study: EditingStudy }> = ({ viewOnly, study }) => {
     const { setValue } = useFormContext()
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true })
@@ -125,7 +131,7 @@ const AdditionalSessionsOverview: FC<{viewOnly: boolean, study: EditingStudy}> =
     return (
         <Box direction='column' gap='large'>
             <svg css={{ strokeWidth: 2, height: 40 }}>
-                <line x1="0" y1="30" x2="500" y2="30" strokeDasharray={10} stroke={colors.grayText} />
+                <line x1="0" y1="30" x2="500" y2="30" strokeDasharray={10} stroke={colors.grayText}/>
             </svg>
 
             <Box justify='between' direction='column'>
@@ -142,7 +148,8 @@ const AdditionalSessionsOverview: FC<{viewOnly: boolean, study: EditingStudy}> =
 
                 <Col sm={8} direction='column'>
                     {!viewOnly && !study.stages?.length &&
-                        <small>Turn your single session study into a longitudinal study by adding retention measures</small>
+                        <small>Turn your single session study into a longitudinal study by adding retention
+                            measures</small>
                     }
                     {study.stages?.map((stage, index) => {
                         if (index === 0) return null
@@ -160,9 +167,10 @@ const AdditionalSessionsOverview: FC<{viewOnly: boolean, study: EditingStudy}> =
 }
 
 // TODO Unused??
-export const CollapsibleStudyOverview: FC<{study: EditingStudy}> = ({ study }) => {
+export const CollapsibleStudyOverview: FC<{ study: EditingStudy }> = ({ study }) => {
     return (
-        <CollapsibleSection title='Study Overview' description='Expand this section to see a high-level overview of your study'>
+        <CollapsibleSection title='Study Overview'
+            description='Expand this section to see a high-level overview of your study'>
             <EditingStudyInformation study={study} viewOnly/>
         </CollapsibleSection>
     )
@@ -176,7 +184,7 @@ export const SubmitStudyModal: FC<{
     const api = useApi()
     const [submitted, setSubmitted] = useState(false)
     if (submitted) {
-        return <SubmitSuccess show={submitted} setShow={setSubmitted} />
+        return <SubmitSuccess show={submitted} />
     }
 
     const submitStudy = () => {
@@ -191,7 +199,6 @@ export const SubmitStudyModal: FC<{
             center
             show={show}
             large
-            onHide={() => setShow(false)}
         >
             <Modal.Body>
                 <Box padding='4rem' align='center' justify='center' direction='column' gap='xlarge'>
@@ -216,19 +223,10 @@ export const SubmitStudyModal: FC<{
     )
 }
 
-const SubmitSuccess: FC<{
-    show: boolean,
-    setShow: (show: boolean) => void
-}> = ({ show, setShow }) => {
+const SubmitSuccess: FC<{ show: boolean }> = ({ show }) => {
     const nav = useNavigate()
-    // TODO Don't allow user to close this modal on backdrop click
     return (
-        <Modal
-            center
-            show={show}
-            large
-            onHide={() => setShow(false)}
-        >
+        <Modal center show={show} large>
             <Modal.Body>
                 <Box padding='4rem' align='center' justify='center' direction='column' gap='xlarge'>
                     <Box align='center' className='text-center' direction='column'>

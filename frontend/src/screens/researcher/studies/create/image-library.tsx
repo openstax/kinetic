@@ -140,7 +140,7 @@ export const ImageLibrary: FC<{
                             <ResearcherButton
                                 disabled={!selectedImage}
                                 fixedWidth
-                                data-testid='select-card-image'
+                                testId='select-card-image'
                                 onClick={() => {
                                     onSelect(selectedImage)
                                     onHide()

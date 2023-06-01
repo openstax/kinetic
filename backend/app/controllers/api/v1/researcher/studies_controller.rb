@@ -21,8 +21,8 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     studies = current_researcher.studies.includes(:researchers, :stages, :first_launched_study)
     response_binding = Api::V1::Bindings::Studies.new(
       data: studies.map do |study|
-              Api::V1::Bindings::Study.create_from_model(study)
-            end
+        Api::V1::Bindings::Study.create_from_model(study)
+      end
     )
     render json: response_binding, status: :ok
   end

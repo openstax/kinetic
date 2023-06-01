@@ -19,7 +19,8 @@ class Api::V1::Admin::StudiesController < Api::V1::Admin::BaseController
     stage = Stage.find(params[:stage_id])
     if params[:file]
       exp = stage.response_exports.build({
-                                           is_complete: true, is_testing: params[:is_testing],
+                                           is_complete: true,
+                                           is_testing: params[:is_testing],
                                            cutoff_at: Time.now
                                          })
       exp.files.attach(params[:file])

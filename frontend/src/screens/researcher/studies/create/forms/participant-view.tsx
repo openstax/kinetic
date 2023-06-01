@@ -247,7 +247,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                         </Col>
 
                         <Col sm={6} direction='column' gap align='start'>
-                            <ResearcherButton type='secondary' data-testid='image-picker' onClick={() => setShowImagePicker(true)}>
+                            <ResearcherButton type='secondary' testId='image-picker' onClick={() => setShowImagePicker(true)}>
                                 {study.imageId ? 'Change Selected Image' : 'Select Study Card Image'}
                             </ResearcherButton>
                             <ImageLibrary

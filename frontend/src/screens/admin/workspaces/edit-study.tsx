@@ -1,12 +1,7 @@
-import { React, useEffect, useState, useId, styled, useCallback, formatDate } from '@common'
-import {
-    EditingForm, FormSubmitHandler, Icon,
-    FloatingField, Col, Section,
- InputField, useFormContext, ColProps  } from '@components'
-import { ResponseExport, Study, Stage } from '@api'
-import { useApi, useParamId } from '@lib'
-import { NavLink, useParams } from 'react-router-dom'
-import { Panel } from '@components/panel'
+import { formatDate, React, useCallback, useEffect, useId, useState } from '@common'
+import { Col, ColProps, EditingForm, FormSubmitHandler, Icon, InputField, Section, useFormContext } from '@components'
+import { ResponseExport, Stage, Study } from '@api'
+import { useApi } from '@lib'
 
 
 type EditProps = {
@@ -47,7 +42,7 @@ type ResponsesProps = {
     setResponses: SetResponses
 }
 
-const Responses:FC<ResponsesProps> = ({responses, setResponses}) => {
+const Responses:FC<ResponsesProps> = ({ responses, setResponses }) => {
     const api = useApi()
     const onDelete = (id: number) => {
         api.adminDestroyResponse({ id }).then(resp => setResponses(resp.data || []))
@@ -65,15 +60,15 @@ const Responses:FC<ResponsesProps> = ({responses, setResponses}) => {
             </thead>
             <tbody>
                 {responses.map(r => (
-                <tr key={r.id}>
-                    <th scope="row">{formatDate(r.cutoffAt)}</th>
-                    <td><Boolean val={r.isComplete} /></td>
-                    <td><Boolean val={r.isTesting} /></td>
-                    <td>
-                        {r.urls.map(u => <a key={u} href={u} target="_blank"><Icon icon="cloudDownload" /></a>)}
-                    </td>
+                    <tr key={r.id}>
+                        <th scope="row">{formatDate(r.cutoffAt)}</th>
+                        <td><Boolean val={r.isComplete} /></td>
+                        <td><Boolean val={r.isTesting} /></td>
+                        <td>
+                            {r.urls.map(u => <a key={u} href={u} target="_blank"><Icon icon="cloudDownload" /></a>)}
+                        </td>
                         <td><Icon icon="trash" onClick={() => onDelete(r.id)} /></td>
-                </tr>))}
+                    </tr>))}
             </tbody>
         </table>
     )
@@ -90,11 +85,10 @@ type StageFormValues = Stage & {
 }
 
 
-const Stage:FC<StageProps> = ({ stage, setResponses }) => {
+const EditStage: FC<StageProps> = ({ stage, setResponses }) => {
     const api = useApi()
 
     const onSubmit: FormSubmitHandler<StageFormValues> = useCallback((v, fc) => {
-        console.log(v.newResponse)
         const file = v.newResponse?.item(0) || undefined
         api.adminAddResponses({
             stageId: v.id,
@@ -136,8 +130,8 @@ export function EditStudy({ study }: EditProps) {
         <div className="container">
             <h3>Data for {study.titleForResearchers}</h3>
             <Section heading="Responses" id="">
-            <Responses responses={responses} setResponses={setResponses} />
-            {study.stages?.map((stage,i ) => <Stage index={i} key={stage.id} setResponses={setResponses}  stage={stage}  />)}
+                <Responses responses={responses} setResponses={setResponses} />
+                {study.stages?.map((stage,i ) => <EditStage index={i} key={stage.id} setResponses={setResponses}  stage={stage}  />)}
             </Section>
         </div>
     )

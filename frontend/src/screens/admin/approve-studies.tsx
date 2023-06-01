@@ -68,7 +68,7 @@ const StudyRow: FC<{study: Study, setStudies: (studies: Study[] | undefined) => 
                 <ResearcherButton
                     disabled={!selected}
                     onClick={() => {
-                        api.approveStudy({ id: study.id }).then(response => {
+                        api.adminApproveStudy({ id: study.id }).then(response => {
                             setStudies(response.data)
                             Toast.show({
                                 message: `${study.titleForResearchers} was updated successfully`,

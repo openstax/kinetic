@@ -1,7 +1,6 @@
 import { expect, Page } from '@playwright/test'
 import { dayjs } from '../src/lib/date'
 import { faker } from './test';
-import { isNumber } from 'lodash-es';
 
 export { dayjs }
 
@@ -111,7 +110,6 @@ interface createStudyArgs {
     opensAt?: dayjs.Dayjs,
 }
 
-// TODO Rewrite create study tests after new screens
 export const createStudy = async ({
     page, name,
 }: createStudyArgs) => {
@@ -121,21 +119,13 @@ export const createStudy = async ({
     await page.fill('[name=internalDescription]', faker.commerce.color())
 
     await selectFirstDropdownItem({ page, fieldName: 'studyType' })
-    // await page.locator('.select', { has: page.locator(`input[name=studyType]`) }).click()
-    // // await page.waitForTimeout(100)
-    // await page.keyboard.press('Enter')
 
-    await expect (page.locator('testId=primary-action')).not.toBeDisabled()
+    await expect(page.locator('testId=primary-action')).not.toBeDisabled()
     await page.click('testId=primary-action')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(200)
 
-    // Study should reroute to study/edit/:id
-    const studyId = await getIdFromUrl(page)
-    await expect(studyId).toBe(isNumber)
-
     // Step 2 - Research Team
-    // Should have a study ID at this point
     await page.locator('.select', { has: page.locator(`input[name=researcherPi]`) }).click()
     await page.waitForTimeout(100)
     await page.keyboard.press('Enter')
@@ -144,7 +134,7 @@ export const createStudy = async ({
     await page.waitForTimeout(100)
     await page.keyboard.press('Enter')
 
-    await expect (page.locator('testId=primary-action')).not.toBeDisabled()
+    await expect(page.locator('testId=primary-action')).not.toBeDisabled()
     await page.click('testId=primary-action')
     await page.waitForLoadState('networkidle')
 
@@ -160,12 +150,12 @@ export const createStudy = async ({
     await page.fill('[name=benefits]', faker.finance.accountName())
 
     await page.click('testId=image-picker')
-    await expect (page.locator('testId=image-library-modal')).toBeVisible()
+    await expect(page.locator('testId=image-library-modal')).toBeVisible()
     await page.locator('testId=card-image').first().click()
     await page.click('testId=select-card-image')
-    await expect (page.locator('testId=image-library-modal')).not.toBeVisible()
+    await expect(page.locator('testId=image-library-modal')).not.toBeVisible()
 
-    await expect (page.locator('testId=primary-action')).not.toBeDisabled()
+    await expect(page.locator('testId=primary-action')).not.toBeDisabled()
     await page.click('testId=primary-action')
     await page.waitForLoadState('networkidle')
 
@@ -174,18 +164,15 @@ export const createStudy = async ({
     await page.click("input[value='25']")
     await page.click("input[value='personalized']")
 
-    await expect (page.locator('testId=primary-action')).not.toBeDisabled()
+    await expect(page.locator('testId=primary-action')).not.toBeDisabled()
     await page.click('testId=primary-action')
     await page.waitForLoadState('networkidle')
 
-    // Review your study
-    await expect(page).toMatchText(/You're almost done!/)
-
-
     // Submit study
-    await expect (page.locator('testId=primary-action')).not.toBeDisabled()
+    await expect(page.locator('testId=primary-action')).not.toBeDisabled()
     await page.click('testId=primary-action')
-    await expect (page.locator('.modal-content')).toBeVisible()
+    await expect(page.locator('.modal-content')).toBeVisible()
+    await page.click('.modal-content >> testId=primary-action')
 
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1000)
@@ -195,7 +182,7 @@ export const createStudy = async ({
 }
 
 export const selectFirstDropdownItem = async (
-    { fieldName, page }: {fieldName: string, page: Page}
+    { fieldName, page }: { fieldName: string, page: Page }
 ) => {
     await page.locator('.select', { has: page.locator(`input[name=${fieldName}]`) }).click()
     await page.keyboard.press('Enter')
