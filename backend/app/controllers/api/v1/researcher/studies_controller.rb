@@ -60,9 +60,10 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     end
 
     if params[:status_action] === 'submit'
-      @study.stages.each do |stage|
-        stage.update({ status: :waiting_period })
-      end
+      @study.stages.update_all(status: 'waiting_period')
+      # @study.stages.each do |stage|
+      #   stage.update({ status: :waiting_period })
+      # end
       ResearcherNotifications.notify_kinetic_study_review(@study)
     end
 

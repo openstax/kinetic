@@ -1,8 +1,8 @@
 class MigrateStudyData < ActiveRecord::Migration[6.1]
   def up
-    # studies = YAML.load_file(Rails.root.join('db/migrate/study_creation_migration_data.yaml'))
-    # Make the deploy happy for now
-    studies = []
+    studies = YAML.load_file(Rails.root.join('db/migrate/study_creation_migration_data.yaml'))
+    # Make the deploy happy
+    # studies = []
     studies.each do | data |
       study = Study.includes(:stages, :study_researchers).find(data['id'])
 
@@ -10,16 +10,14 @@ class MigrateStudyData < ActiveRecord::Migration[6.1]
         raise("Cant find study with id: #{data['id']}")
       end
 
-      puts(data, study)
-
       lead = Researcher.find_by(first_name: data['study_lead_first'], last_name: data['study_lead_last'])
-      if lead.nil?
-        raise("Researcher #{data['study_lead']} not found")
-      end
+      # if lead.nil?
+      #   raise("Researcher #{data['study_lead']} not found")
+      # end
       pi = Researcher.find_by(first_name: data['study_pi_first'], last_name: data['study_pi_last'])
-      if pi.nil?
-        raise("Researcher #{data['study_pi']} not found")
-      end
+      # if pi.nil?
+      #   raise("Researcher #{data['study_pi']} not found")
+      # end
       # Find out default member? kinetic admin?
       # member = Researcher.find_by(last_name: data['study_pi'])
       unless lead.nil?

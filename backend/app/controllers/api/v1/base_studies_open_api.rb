@@ -43,6 +43,7 @@ class Api::V1::BaseStudiesOpenApi
         key :type, :string
         key :format, 'date-time'
         key :description, 'When the study was launched; null means not launched'
+        key :readOnly, true
       end
       property :opens_at do
         key :type, :string
