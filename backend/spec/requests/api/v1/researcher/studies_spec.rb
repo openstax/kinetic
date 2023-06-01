@@ -73,48 +73,55 @@ RSpec.describe 'Studies', api: :v1 do
         )
       end
 
-      # TODO Tests for not being allowed to change statuses?
+      # TODO: Tests for not being allowed to change statuses?
       # will we have rules around not updating from status A => status C
 
       it 'submits the study for review' do
         api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=submit"
 
         expect(response).to have_http_status(:success)
-        expect(response_hash).to match(a_hash_including(
-          stages: a_collection_containing_exactly(
-            a_hash_including({
-              status: 'waiting_period'
-            })
+
+        expect(response_hash).to match(
+          a_hash_including(
+            stages: a_collection_containing_exactly(
+              a_hash_including({
+                  status: 'waiting_period'
+                })
+              )
+            )
           )
-        ))
       end
 
       it 'launches the study and the study status should be active' do
         api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=launch",
-                 params: {study: { opens_at: 1.day.ago }}
+                 params: { study: { opens_at: 1.day.ago } }
 
         expect(response).to have_http_status(:success)
-        expect(response_hash).to match(a_hash_including(
-          stages: a_collection_containing_exactly(
-            a_hash_including({
-              status: 'active'
-            })
+        expect(response_hash).to match(
+          a_hash_including(
+            stages: a_collection_containing_exactly(
+              a_hash_including({
+                  status: 'active'
+                })
+              )
+            )
           )
-        ))
       end
 
       it 'launches the study and the study status should be scheduled' do
         api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=launch",
-                 params: {study: { opens_at: 1.day.from_now }}
+                 params: { study: { opens_at: 1.day.from_now } }
 
         expect(response).to have_http_status(:success)
-        expect(response_hash).to match(a_hash_including(
-          stages: a_collection_containing_exactly(
-            a_hash_including({
-              status: 'scheduled'
-            })
+        expect(response_hash).to match(
+          a_hash_including(
+            stages: a_collection_containing_exactly(
+              a_hash_including({
+                  status: 'scheduled'
+                })
+              )
+            )
           )
-        ))
       end
     end
   end

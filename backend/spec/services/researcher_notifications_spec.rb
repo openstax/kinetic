@@ -13,9 +13,9 @@ RSpec.describe ResearcherNotifications, type: :mailer do
 
   before do
     allow(UserInfo).to receive(:for_uuids).and_return([
-      added_researcher_info_response,
-      removed_researcher_info_response
-    ])
+                                                        added_researcher_info_response,
+                                                        removed_researcher_info_response
+                                                      ])
   end
 
   it 'notifies researchers that were added and removed from study' do
@@ -26,7 +26,7 @@ RSpec.describe ResearcherNotifications, type: :mailer do
     # Invited email
     email1 = ActionMailer::Base.deliveries.first
     expect(email1.to).to eq [added_researcher_info.email_address]
-    expect(email1.subject).to match "OpenStax Kinetic: You’ve been invited to collaborate on a study"
+    expect(email1.subject).to match 'OpenStax Kinetic: You’ve been invited to collaborate on a study'
 
     # Will use this when we start notifying removed users as well
     # Removed email

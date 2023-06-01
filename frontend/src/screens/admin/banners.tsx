@@ -5,7 +5,7 @@ import {
     Box, Icon, Col, EditingForm as Form, Alert, DateTimeField, InputField,
 } from '@components'
 import { useApi, useFetchState } from '@lib'
-
+import { Main } from './grid'
 
 const Banner: React.FC<{ banner: BannerNotice, onUpdate(): void }> = ({ banner, onUpdate }) => {
     const [error, setError] = useState('')
@@ -67,12 +67,12 @@ export function AdminBanners() {
     if (state.busy) return state.busy
 
     return (
-        <div className="banners">
+        <Main className="container pt-2">
             <Box justify="between" align="center" margin="bottom">
                 <h4>Scheduled Banners</h4>
                 <Icon height={15} icon="plusCircle" data-testid="add-banner" onClick={state.addNewRecord} />
             </Box>
             {state.records.map((banner, i) => <Banner key={banner.id || i} banner={banner} onUpdate={state.fetchRecords} />)}
-        </div>
+        </Main>
     )
 }

@@ -108,7 +108,7 @@ class UserMailer < ApplicationMailer
         'internal_study_details' => params[:study].title_for_researchers,
         'total_study_sessions' => params[:study].stages.size,
         'date_submitted' => Time.now.strftime('%B %d %Y at %I:%M %p'),
-        'member_researcher_full_name' => "#{member.first_name} #{member.last_name}",
+        'member_researcher_full_name' => "#{member.first_name} #{member.last_name}"
         # 'lead_researcher_full_name' => "#{lead.first_name} #{lead.last_name}",
         # 'pi_researcher_full_name' => "#{pi.first_name} #{pi.last_name}"
       }

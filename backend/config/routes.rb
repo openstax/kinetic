@@ -36,8 +36,11 @@ Rails.application.routes.draw do
       namespace :admin do
         resources :rewards
         resources :banners
-        resources :studies
+        get 'studies/:status', to: 'studies#index'
         post 'studies/:id/approve', to: 'studies#approve'
+        get 'study/:id/responses', to: 'studies#responses'
+        post 'stage/:stage_id/responses', to: 'studies#add_response'
+        delete 'responses/:id', to: 'studies#destroy_response'
       end
 
       get :openapi, to: 'open_api#json', constraints: { format: :json }

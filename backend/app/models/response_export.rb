@@ -2,9 +2,11 @@
 
 require 'digest/md5'
 
-class AnalysisResponseExport < ApplicationRecord
-  belongs_to :analysis
+class ResponseExport < ApplicationRecord
+  belongs_to :stage
   after_create :ensure_fetched
+
+  scope :for_cutoff, ->(cutoff) { where(arel_table[:cutoff_at].lteq(cutoff)) }
 
   def self.new_random_seed
     Random.new_seed
@@ -36,21 +38,18 @@ class AnalysisResponseExport < ApplicationRecord
   def generate_test_data
     csvs = []
     seed = metadata[:random_seed] || self.class.new_random_seed
-    analysis.studies.each do |study|
-      study.stages.each do |stage|
-        generator_klass = case stage.config[:type]
-                          when 'qualtrics'
-                            QualtricsTestData
-                          else
-                            raise "Unsupported stage type: '#{stage.config[:type]}'"
-                          end
+    generator_klass = case stage.config[:type]
+                      when 'qualtrics'
+                        QualtricsTestData
+                      else
+                        raise "Unsupported stage type: '#{stage.config[:type]}'"
+                      end
 
-        generator = generator_klass.new(stage: stage, random_seed: seed)
+    generator = generator_klass.new(stage: stage, random_seed: seed)
+    csvs << generator.to_csv
 
-        csvs << generator.to_csv
-      end
-    end
     files.attach(csvs.map { |f| file_attachment(f.path) })
     update!(is_complete: true, metadata: metadata.merge(random_seed: seed))
   end
+
 end
