@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -e
+
+LANG=$1
+
+VERSION=0.1.0
+
+# error if LANG arg missing
+if [ -z "$LANG" ]; then
+    echo "Usage: $0 <lang>"
+    exit 1
+fi
+
+PATCHDIR=tmp/$LANG.patch
+SOURCE=clients/$VERSION/$LANG
+
+if [ -d $PATCHDIR ]; then
+  echo "Error: $PATCHDIR already exists, will not overwrite"
+  echo "If files are not needed, remove $PATCHDIR and try again"
+  exit 1
+fi
+
+bundle exec rake openstax_openapi:generate_client[1,$LANG]
+
+cp -r $SOURCE $PATCHDIR
+
+echo Files are ready for modification.  steps:
+echo "   * Edit files in directory: tmp/$LANG.new"
+echo "   * diff -Naru $SOURCE $PATCHDIR > clients/$LANG.patch"
