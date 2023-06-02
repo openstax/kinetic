@@ -5,7 +5,6 @@ export type Category =
     'Memory' |
     'Personality' |
     'School & Future Career' |
-    'Nonhuman' |
     'Other'
 
 export const imageCategories: Category[] = [
@@ -13,7 +12,6 @@ export const imageCategories: Category[] = [
     'Memory',
     'Personality',
     'School & Future Career',
-    'Nonhuman',
     'Other',
 ]
 
@@ -112,13 +110,13 @@ export const cardImages: CardImage[] = [
     { imageId: 'Other_8', category: ['Other'] },
     { imageId: 'Other_9', category: ['Other'] },
     { imageId: 'Demographic', category: ['Other'] },
-    { imageId: 'Nonhuman_1', category: ['Nonhuman'] },
-    { imageId: 'Nonhuman_2', category: ['Nonhuman'] },
-    { imageId: 'Nonhuman_3', category: ['Nonhuman'] },
-    { imageId: 'Nonhuman_4', category: ['Nonhuman'] },
-    { imageId: 'Nonhuman_5', category: ['Nonhuman'] },
-    { imageId: 'Nonhuman_6', category: ['Nonhuman'] },
-    { imageId: 'Nonhuman_7', category: ['Nonhuman'] },
+    { imageId: 'Nonhuman_1', category: ['Other'] },
+    { imageId: 'Nonhuman_2', category: ['Other'] },
+    { imageId: 'Nonhuman_3', category: ['Other'] },
+    { imageId: 'Nonhuman_4', category: ['Other'] },
+    { imageId: 'Nonhuman_5', category: ['Other'] },
+    { imageId: 'Nonhuman_6', category: ['Other'] },
+    { imageId: 'Nonhuman_7', category: ['Other'] },
     { imageId: 'MemoryLearning_1', category: ['Memory', 'Learning'] },
     { imageId: 'MemoryLearning_2', category: ['Memory', 'Learning'] },
     { imageId: 'Memory_1', category: ['Memory'] },

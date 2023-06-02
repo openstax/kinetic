@@ -101,13 +101,13 @@ export function studyHasFeedback(study: ParticipantStudy): boolean {
 export function getStudyPoints(study: ParticipantStudy): number {
     if (!study.stages) return 0
 
-    return sumBy(study.stages, 'points')
+    return sumBy(study.stages, (s) => +(s.points || 0))
 }
 
 export function getStudyDuration(study: ParticipantStudy): number {
     if (!study.stages) return 0
 
-    return sumBy(study.stages, 'durationMinutes')
+    return sumBy(study.stages, (s) => +(s.durationMinutes || 0))
 }
 
 export const useFetchStudies = () => {

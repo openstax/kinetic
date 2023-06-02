@@ -5,7 +5,7 @@ import { EditingStudy, getStudyDuration, getStudyPoints, studyHasFeedback, study
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
-import { getImageUrl } from '../../components/study-card-images/card-images';
+import { getImageUrl } from '@components';
 import { StudyDetailsPreview } from './details';
 
 interface StudyCardProps {
@@ -242,7 +242,7 @@ export const StudyCardPreview: FC<{study: EditingStudy}> = ({ study }) => {
         <Card className="col study" direction='column'>
             <CardContent study={study as ParticipantStudy} />
             <ResearcherButton
-                type='secondary'
+                buttonType='secondary'
                 className='justify-content-center mt-3'
                 onClick={() => {setShowDetails(true)}}
             >

@@ -36,7 +36,7 @@ const EditingStudyInformation: FC<{ study: EditingStudy, viewOnly?: boolean }> =
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Internal Details</h6>
                         {!viewOnly &&
-                            <ResearcherButton type='secondary' onClick={() => setStep(StudyStep.InternalDetails)}>
+                            <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.InternalDetails)}>
                                 Edit
                             </ResearcherButton>}
                     </Col>
@@ -65,7 +65,7 @@ const EditingStudyInformation: FC<{ study: EditingStudy, viewOnly?: boolean }> =
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Research Team</h6>
                         {!viewOnly &&
-                            <ResearcherButton type='secondary' onClick={() => setStep(StudyStep.ResearchTeam)}>
+                            <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.ResearchTeam)}>
                                 Edit
                             </ResearcherButton>}
                     </Col>
@@ -100,7 +100,7 @@ const EditingStudyInformation: FC<{ study: EditingStudy, viewOnly?: boolean }> =
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Participant View</h6>
                         {!viewOnly &&
-                            <ResearcherButton type='secondary' onClick={() => setStep(StudyStep.ParticipantView)}>
+                            <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.ParticipantView)}>
                                 Edit
                             </ResearcherButton>}
                     </Col>
@@ -139,7 +139,7 @@ const AdditionalSessionsOverview: FC<{ viewOnly: boolean, study: EditingStudy }>
                     <h6 className='fw-bold'>Additional Sessions (optional)</h6>
 
                     {!viewOnly && <ResearcherButton
-                        type={!study.stages?.length ? 'primary' : 'secondary'}
+                        buttonType={!study.stages?.length ? 'primary' : 'secondary'}
                         onClick={() => setStep(StudyStep.AdditionalSessions)}
                     >
                         {!study.stages?.length ? 'Start' : 'Edit'}
@@ -206,7 +206,7 @@ export const SubmitStudyModal: FC<{
                         <span>You’re about to submit your study to the Kinetic team so that the appropriate permissions are set. Please review and confirm any final changes. You won’t be able to change your Kinetic study information past this point. Are you ready to proceed?</span>
                     </Box>
                     <Box gap='large'>
-                        <ResearcherButton type='secondary' onClick={() => setShow(false)}>
+                        <ResearcherButton buttonType='secondary' onClick={() => setShow(false)}>
                             Not yet, edit study
                         </ResearcherButton>
                         <ResearcherButton onClick={() => {
