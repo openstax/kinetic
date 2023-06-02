@@ -7,6 +7,7 @@ FactoryBot.define do
     is_complete { true }
     is_empty { false }
     is_testing { true }
+    cutoff_at { Date.yesterday }
 
     stage
 

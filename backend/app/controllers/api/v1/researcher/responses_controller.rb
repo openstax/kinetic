@@ -5,13 +5,13 @@ class Api::V1::Researcher::ResponsesController < ApplicationController
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
   def fetch
-    responses = find_or_create_responses(
+    (status, responses) = find_or_create_responses(
       params[:cutoff] ? params[:cutoff].to_date : Date.today,
       !has_enclaves_token?
     )
 
-    render status: :ok, json: Api::V1::Bindings::Responses.new(
-      status: responses.all(&:is_complete) ? 'complete' : 'pending',
+    render status: status, json: Api::V1::Bindings::Responses.new(
+      status: responses.all?(&:is_complete) ? 'complete' : 'pending',
       response_urls: responses.filter(&:is_complete).flat_map { |r| r.files.map { |f| url_for(f) } }
     )
   end
@@ -19,17 +19,21 @@ class Api::V1::Researcher::ResponsesController < ApplicationController
   private
 
   def find_or_create_responses(cutoff, is_testing)
-    analysis = Analysis.find_by!(api_key: params[:api_key])
+    analysis = Analysis.find_by(api_key: params[:api_key])
+    return [:not_found, []] if analysis.nil?
+
     # add a day so that it gets everything that's contained in the day requested
-    responses = analysis.response_exports.for_cutoff(cutoff + 1.day).where(is_testing: is_testing)
+    responses = analysis.response_exports
+                  .for_cutoff(cutoff + 1.day)
+                  .where(is_testing: is_testing).to_a
     if responses.none? && is_testing
-      return analysis.stages.map do |stage|
+      responses = analysis.stages.map do |stage|
         stage.response_exports.create!(
           is_testing: is_testing, cutoff_at: cutoff
           )
       end
     end
-    responses
+    [:ok, responses]
   end
 
   def has_enclaves_token?
