@@ -12,7 +12,7 @@ if [ -z "$LANG" ]; then
     exit 1
 fi
 
-PATCHDIR=tmp/$LANG.patch
+PATCHDIR=tmp/$LANG.new
 SOURCE=clients/$VERSION/$LANG
 
 if [ -d $PATCHDIR ]; then
@@ -27,4 +27,5 @@ cp -r $SOURCE $PATCHDIR
 
 echo Files are ready for modification.  steps:
 echo "   * Edit files in directory: tmp/$LANG.new"
-echo "   * diff -Naru $SOURCE $PATCHDIR > clients/$LANG.patch"
+echo "   * to install and test locally: R -e \"devtools::install('tmp/r.new')\""
+echo "   * to update patch file for future runs: diff -Naru $SOURCE $PATCHDIR > clients/$LANG.patch"
