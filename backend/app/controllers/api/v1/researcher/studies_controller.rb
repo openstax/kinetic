@@ -60,7 +60,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       @study.update(study_update.to_hash.except(:researchers, :stages))
     end
 
-    if params[:status_action] === 'submit'
+    if params[:status_action] == 'submit'
       @study.stages.update_all(status: 'waiting_period')
       # @study.stages.each do |stage|
       #   stage.update({ status: :waiting_period })
