@@ -3,7 +3,8 @@ import { Box, React, useMemo, useState, Yup } from '@common';
 import {
     Col,
     FieldErrorMessage,
-    FieldTitle, getImageUrl,
+    FieldTitle,
+    getImageUrl,
     InputField,
     ResearcherButton,
     ResearcherDetailedCheckbox,

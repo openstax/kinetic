@@ -1,9 +1,9 @@
 class MigrateStudyData < ActiveRecord::Migration[6.1]
   def up
-    studies = YAML.load_file(Rails.root.join('db/migrate/study_creation_migration_data.yaml'))
+    studies = YAML.load_file(Rails.root.join('db/migrate/migration_script.yaml'))
     # Make the deploy happy
     # studies = []
-    studies.each do | data |
+    studies.each do |data|
       study = Study.includes(:stages, :study_researchers).find(data['id'])
 
       if study.nil?

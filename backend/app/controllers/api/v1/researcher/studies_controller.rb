@@ -95,8 +95,12 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
   def notify_researchers(researchers)
     new_researchers = researchers.map do |researcher|
-      StudyResearcher.find_or_create_by({ study_id: @study.id, researcher_id: researcher.id,
-                                          role: researcher.role })
+      StudyResearcher.find_or_create_by
+      ({
+        study_id: @study.id,
+        researcher_id: researcher.id,
+        role: researcher.role
+      })
     end
 
     added_researchers = (new_researchers - @study.study_researchers) - [@current_researcher]

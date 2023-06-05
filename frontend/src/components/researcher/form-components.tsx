@@ -4,6 +4,14 @@ import { colors } from '@theme';
 import { uniqueId } from 'lodash-es';
 import { InputField } from '../index';
 
+export const FieldTitle: FCWC<{required?: boolean}> = ({ required, children }) => {
+    return (
+        <h6 className='fw-bold'>
+            {children}{required && <span css={{ color: colors.red }}>*</span>}
+        </h6>
+    )
+}
+
 export const StepHeader: FCWOC<{
     title: string,
     eta: number,
