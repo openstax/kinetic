@@ -30,7 +30,7 @@ export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
             <StepHeader title='Additional sessions (optional)' eta={2}>
-                <p>You can skip this part if you don’t have any other session to add. Feel free to come back at any time to add session(s).</p>
+                <p>If you wish to gather delayed measures for a longitudinal study, you can opt to add additional sessions below. Alternatively, simply click ‘Continue’ to keep it as a single session study.</p>
             </StepHeader>
 
             <Sessions />
@@ -74,7 +74,7 @@ const Sessions: FC = () => {
                 }}
                 onClick={addSession}
             >
-                Add another session
+                Add Additional Sessions
             </Button>
         </Col>
     )

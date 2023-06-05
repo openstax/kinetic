@@ -61,10 +61,10 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     end
 
     if params[:status_action] === 'submit'
-      @study.stages.update_all(status: 'waiting_period')
-      # @study.stages.each do |stage|
-      #   stage.update({ status: :waiting_period })
-      # end
+      # TODO Qualtrics cloning here?
+      @study.stages.each do |stage|
+        stage.update({ status: :waiting_period })
+      end
       ResearcherNotifications.notify_kinetic_study_review(@study)
     end
 
@@ -87,10 +87,8 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
   def notify_researchers(researchers)
     new_researchers = researchers.map do |researcher|
-      # StudyResearcher.first_or_create({study_id: @study.id, researcher_id: researcher.id, role: researcher.role})
       StudyResearcher.find_or_create_by({ study_id: @study.id, researcher_id: researcher.id,
                                           role: researcher.role })
-      # StudyResearcher.create({ researcher_id: researcher.id, role: researcher.role })
     end
 
     added_researchers = (new_researchers - @study.study_researchers) - [@current_researcher]

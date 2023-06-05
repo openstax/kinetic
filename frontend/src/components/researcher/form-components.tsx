@@ -1,5 +1,5 @@
 import { Box, React, styled } from '@common';
-import { Icon, useFormContext } from '@components';
+import { Icon, useFormContext, Col } from '@components';
 import { colors } from '@theme';
 import { uniqueId } from 'lodash-es';
 import { InputField } from '../index';
@@ -9,7 +9,7 @@ export const StepHeader: FCWOC<{
     eta: number,
 }> = ({ title, eta, children }) => {
     return (
-        <Box gap direction='column'>
+        <Col gap sm={8}>
             <Box gap='xlarge'>
                 <h3 className='fw-bold'>{title}</h3>
                 <Box gap align='center'>
@@ -18,7 +18,7 @@ export const StepHeader: FCWOC<{
                 </Box>
             </Box>
             {children}
-        </Box>
+        </Col>
     )
 }
 

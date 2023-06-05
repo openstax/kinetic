@@ -59,9 +59,10 @@ export function getStudyStatus(study: EditingStudy) {
     return first(study.stages)?.status
 }
 
-export function getFirstStage(study: Study): Stage | undefined {
+export function getFirstStage(study: Study | ParticipantStudy): Stage | undefined {
     return first(study.stages)
 }
+
 
 export function isWaiting(study: EditingStudy) {
     return study.status === StudyStatusEnum.WaitingPeriod

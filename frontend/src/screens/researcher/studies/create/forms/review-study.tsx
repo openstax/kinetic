@@ -21,7 +21,7 @@ export const ReviewStudy: FC<{ study: EditingStudy }> = ({ study }) => {
     )
 }
 
-const EditingStudyInformation: FC<{ study: EditingStudy, viewOnly?: boolean }> = ({ study, viewOnly = false }) => {
+const EditingStudyInformation: FC<{ study: EditingStudy }> = ({ study }) => {
     const { setValue } = useFormContext()
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true })
@@ -35,10 +35,9 @@ const EditingStudyInformation: FC<{ study: EditingStudy, viewOnly?: boolean }> =
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Internal Details</h6>
-                        {!viewOnly &&
-                            <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.InternalDetails)}>
-                                Edit
-                            </ResearcherButton>}
+                        <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.InternalDetails)}>
+                            Edit
+                        </ResearcherButton>
                     </Col>
                     <Col sm={8} direction='column'>
                         <ul>
@@ -64,10 +63,9 @@ const EditingStudyInformation: FC<{ study: EditingStudy, viewOnly?: boolean }> =
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Research Team</h6>
-                        {!viewOnly &&
-                            <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.ResearchTeam)}>
-                                Edit
-                            </ResearcherButton>}
+                        <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.ResearchTeam)}>
+                            Edit
+                        </ResearcherButton>
                     </Col>
                     <Col sm={8} direction='column'>
                         <ul>
@@ -99,10 +97,9 @@ const EditingStudyInformation: FC<{ study: EditingStudy, viewOnly?: boolean }> =
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Participant View</h6>
-                        {!viewOnly &&
-                            <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.ParticipantView)}>
-                                Edit
-                            </ResearcherButton>}
+                        <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.ParticipantView)}>
+                            Edit
+                        </ResearcherButton>
                     </Col>
                     <Col sm={8} direction='column'>
                         <small>Interact with the study card on the right-hand side to review how participants view your
@@ -110,7 +107,7 @@ const EditingStudyInformation: FC<{ study: EditingStudy, viewOnly?: boolean }> =
                     </Col>
                 </Box>
 
-                <AdditionalSessionsOverview viewOnly={viewOnly} study={study}/>
+                <AdditionalSessionsOverview study={study}/>
             </Col>
 
             <StudyCardPreview study={study}/>
@@ -118,13 +115,15 @@ const EditingStudyInformation: FC<{ study: EditingStudy, viewOnly?: boolean }> =
     )
 }
 
-const AdditionalSessionsOverview: FC<{ viewOnly: boolean, study: EditingStudy }> = ({ viewOnly, study }) => {
+const AdditionalSessionsOverview: FC<{ study: EditingStudy }> = ({ study }) => {
     const { setValue } = useFormContext()
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true })
     }
 
-    if (viewOnly && !study.stages?.length) {
+    const stageCount = study.stages?.length || 0
+
+    if (!stageCount) {
         return null
     }
 
@@ -138,18 +137,17 @@ const AdditionalSessionsOverview: FC<{ viewOnly: boolean, study: EditingStudy }>
                 <Col justify='between' direction='row'>
                     <h6 className='fw-bold'>Additional Sessions (optional)</h6>
 
-                    {!viewOnly && <ResearcherButton
-                        buttonType={!study.stages?.length ? 'primary' : 'secondary'}
+                    <ResearcherButton
+                        buttonType={stageCount == 1 ? 'primary' : 'secondary'}
                         onClick={() => setStep(StudyStep.AdditionalSessions)}
                     >
-                        {!study.stages?.length ? 'Start' : 'Edit'}
-                    </ResearcherButton>}
+                        {stageCount == 1 ? 'Start' : 'Edit'}
+                    </ResearcherButton>
                 </Col>
 
                 <Col sm={8} direction='column'>
-                    {!viewOnly && !study.stages?.length &&
-                        <small>Turn your single session study into a longitudinal study by adding retention
-                            measures</small>
+                    {stageCount == 1 &&
+                        <small>Turn your single session study into a longitudinal study by adding retention measures</small>
                     }
                     {study.stages?.map((stage, index) => {
                         if (index === 0) return null
@@ -164,16 +162,6 @@ const AdditionalSessionsOverview: FC<{ viewOnly: boolean, study: EditingStudy }>
         </Box>
     )
 
-}
-
-// TODO Unused??
-export const CollapsibleStudyOverview: FC<{ study: EditingStudy }> = ({ study }) => {
-    return (
-        <CollapsibleSection title='Study Overview'
-            description='Expand this section to see a high-level overview of your study'>
-            <EditingStudyInformation study={study} viewOnly/>
-        </CollapsibleSection>
-    )
 }
 
 export const SubmitStudyModal: FC<{
