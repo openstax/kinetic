@@ -60,7 +60,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       @study.update(study_update.to_hash.except(:researchers, :stages))
     end
 
-    if params[:status_action] === 'submit'
+    if params[:status_action] == 'submit'
       (survey_id, secret_key) = CloneSurvey.new.clone(@study.title_for_researchers)
       @study.stages.each do |stage|
         stage.update
