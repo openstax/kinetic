@@ -61,9 +61,17 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     end
 
     if params[:status_action] === 'submit'
-      # TODO Qualtrics cloning here?
+      (survey_id, secret_key) = CloneSurvey.new.clone(@study.title_for_researchers)
       @study.stages.each do |stage|
-        stage.update({ status: :waiting_period })
+        stage.update
+        ({
+          status: :waiting_period,
+          config: {
+            type: 'qualtrics',
+            survey_id: survey_id,
+            secret_key: secret_key
+          }
+        })
       end
       ResearcherNotifications.notify_kinetic_study_review(@study)
     end
