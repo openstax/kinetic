@@ -1,6 +1,6 @@
 import { Box, React, useEffect, useMemo, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
-import { EditingStudy } from '@models';
+import { EditingStudy, isDraft } from '@models';
 import {
     Col,
     Form,
@@ -24,6 +24,7 @@ import { colors } from '@theme';
 import { ReviewStudy, SubmitStudyModal } from './forms/review-study';
 import { Toast } from '@nathanstitt/sundry/ui';
 import { noop } from 'lodash-es';
+import { useLocalstorageState } from 'rooks';
 
 const buildValidationSchema = (studies: Study[], study: EditingStudy) => {
     return Yup.object().shape({
@@ -92,7 +93,9 @@ export default function EditStudy() {
 }
 
 const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, studies, children }) => {
-    let initialStep = +useQueryParam('step') || StudyStep.InternalDetails
+    const id = useParams<{ id: string }>().id
+    const [studyProgressStep] = useLocalstorageState(`study-progress-${id}`, 0)
+    let initialStep = +useQueryParam('step') ||studyProgressStep
 
     const defaults = useMemo(() => {
         return getFormDefaults(study, initialStep)
@@ -134,16 +137,17 @@ const FormContent: FC<{
     const isNew = 'new' === id
     const nav = useNavigate()
     const api = useApi()
+    const [, setStudyProgressStep] = useLocalstorageState<StudyStep>(`study-progress-${id}`)
 
-    // TODO reroute to study dashboard if they try to navigate here and status is not draft
-    // if (!isDraft(study)) {
-    //     nav('/studies')
-    // }
+    if (!isDraft(study)) {
+        nav('/studies')
+    }
 
     const { isValid, isDirty } = useFormState()
 
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true })
+        setStudyProgressStep(step)
     }
 
     const saveStudy = async () => {
@@ -173,7 +177,7 @@ const FormContent: FC<{
     const steps: Step[] = [
         {
             index: StudyStep.InternalDetails,
-            component: <InternalDetails study={study} />,
+            component: <InternalDetails />,
             text: 'Internal Details',
             primaryAction: {
                 text: 'Save & Continue',
@@ -341,7 +345,7 @@ const ExitButton: FC<{study: EditingStudy, saveStudy: (study: EditingStudy) => v
                                         message: `New edits to the study ${study.titleForResearchers} have been discarded`,
                                     })
                                 }}
-                                type='secondary'
+                                buttonType='secondary'
                             >
                                 No, discard changes
                             </ResearcherButton>

@@ -59,9 +59,10 @@ export function getStudyStatus(study: EditingStudy) {
     return first(study.stages)?.status
 }
 
-export function getFirstStage(study: Study): Stage | undefined {
+export function getFirstStage(study: Study | ParticipantStudy): Stage | undefined {
     return first(study.stages)
 }
+
 
 export function isWaiting(study: EditingStudy) {
     return study.status === StudyStatusEnum.WaitingPeriod
@@ -101,13 +102,13 @@ export function studyHasFeedback(study: ParticipantStudy): boolean {
 export function getStudyPoints(study: ParticipantStudy): number {
     if (!study.stages) return 0
 
-    return sumBy(study.stages, 'points')
+    return sumBy(study.stages, (s) => +(s.points || 0))
 }
 
 export function getStudyDuration(study: ParticipantStudy): number {
     if (!study.stages) return 0
 
-    return sumBy(study.stages, 'durationMinutes')
+    return sumBy(study.stages, (s) => +(s.durationMinutes || 0))
 }
 
 export const useFetchStudies = () => {

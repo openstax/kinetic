@@ -134,7 +134,7 @@ export const ImageLibrary: FC<{
                             </ImageCardContainer>
                         </Box>
                         <Box gap='xlarge' css={{ padding: `10px 20px` }} alignSelf='end'>
-                            <ResearcherButton fixedWidth type='secondary' onClick={() => onHide()}>
+                            <ResearcherButton fixedWidth buttonType='secondary' onClick={() => onHide()}>
                                 Cancel
                             </ResearcherButton>
                             <ResearcherButton

@@ -39,8 +39,9 @@ export const ResearcherProgressBar: FC<{
     currentStep: Step,
     setStepIndex: (index: number) => void
 }> = ({ steps, currentStep, setStepIndex }) => {
+    // TODO Remove before merging - dev superpower only
     const onClickStep = (step: Step) => {
-        setStepIndex(step.index)
+        // setStepIndex(step.index)
     }
 
     return (

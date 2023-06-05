@@ -1,6 +1,6 @@
 import { EditingStudy } from '@models';
 import { Box, React, useEffect, useState, Yup } from '@common';
-import { FieldErrorMessage, Icon, Button, Col, useFormContext } from '@components';
+import { FieldErrorMessage, Icon, Button, Col, useFormContext, StepHeader, FieldTitle } from '@components';
 import { colors } from '@theme';
 import { NewStage, Stage, Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
@@ -29,24 +29,16 @@ export const additionalSessionsValidation = () => {
 export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
-            <Box gap direction='column'>
-                <Box gap='xlarge'>
-                    <h3 className='fw-bold'>Additional sessions (optional)</h3>
-                    <Box gap align='center'>
-                        <Icon height={20} color={colors.kineticResearcher} icon='clockFill'/>
-                        <span>ETA: 2min</span>
-                    </Box>
-                </Box>
+            <StepHeader title='Additional sessions (optional)' eta={2}>
+                <p>If you wish to gather delayed measures for a longitudinal study, you can opt to add additional sessions below. Alternatively, simply click ‘Continue’ to keep it as a single session study.</p>
+            </StepHeader>
 
-                <p>You can skip this part if you don’t have any other session to add. Feel free to come back at any time to add session(s).</p>
-            </Box>
-
-            <Sessions study={study}/>
+            <Sessions />
         </Box>
     )
 }
 
-const Sessions: FC<{study: EditingStudy}> = ({ study }) => {
+const Sessions: FC = () => {
     const { control } = useFormContext<EditingStudy>()
     const { fields, append, remove } = useFieldArray({
         control,
@@ -82,7 +74,7 @@ const Sessions: FC<{study: EditingStudy}> = ({ study }) => {
                 }}
                 onClick={addSession}
             >
-                Add another session
+                Add Additional Sessions
             </Button>
         </Col>
     )
@@ -109,7 +101,7 @@ const AdditionalSession: FC<{
             <Box direction='column' css={{ padding: '1rem' }} gap='xlarge'>
                 <Box gap='xlarge'>
                     <Col sm={4} direction='column' gap>
-                        <h6>Session Duration*</h6>
+                        <FieldTitle required>Session Duration</FieldTitle>
                         <small>Select the option that best describes your estimated session duration.</small>
                     </Col>
 
@@ -118,29 +110,32 @@ const AdditionalSession: FC<{
                             <Box gap>
                                 <input
                                     type='radio'
+                                    id='min-5'
                                     value={5}
                                     {...register(`stages.${index}.durationMinutes`)}
                                     defaultChecked={session?.durationMinutes === 5}
                                 />
-                                <label>~5 minutes</label>
+                                <label htmlFor='min-5'>~5 minutes</label>
                             </Box>
                             <Box gap>
                                 <input
                                     type='radio'
+                                    id='min-15'
                                     value={15}
                                     {...register(`stages.${index}.durationMinutes`)}
                                     defaultChecked={session?.durationMinutes === 15}
                                 />
-                                <label>~15 minutes</label>
+                                <label htmlFor='min-15'>~15 minutes</label>
                             </Box>
                             <Box gap>
                                 <input
                                     type='radio'
+                                    id='min-25'
                                     value={25}
                                     {...register(`stages.${index}.durationMinutes`)}
                                     defaultChecked={session?.durationMinutes === 25}
                                 />
-                                <label>~25 minutes</label>
+                                <label htmlFor='min-25'>~25 minutes</label>
                             </Box>
                         </Box>
                     </Col>
@@ -148,7 +143,7 @@ const AdditionalSession: FC<{
 
                 <Box gap='xlarge'>
                     <Col sm={4} direction='column' gap>
-                        <h6>Session Points*</h6>
+                        <FieldTitle required>Session Points</FieldTitle>
                     </Col>
 
                     <Col sm={6} gap>

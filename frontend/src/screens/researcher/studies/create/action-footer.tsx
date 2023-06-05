@@ -1,8 +1,17 @@
-import { Box, React } from '@common';
+import { Box, React, useCallback, useState } from '@common';
 import { Link } from 'react-router-dom';
 import { Icon, ResearcherButton, Step } from '@components';
 
 export const ActionFooter: FC<{ step: Step, }> = ({ step }) => {
+    const [busy, setBusy] = useState(false)
+    const triggerAnimation = useCallback(() => {
+        setBusy(true)
+        const timer = setTimeout(() => {
+            setBusy(false)
+        }, 750);
+        return () => clearTimeout(timer);
+    }, [setBusy]);
+
     return (
         <Box className='fixed-bottom bg-white mt-auto' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
             <Box className='container-lg' align='center' justify='between'>
@@ -16,10 +25,15 @@ export const ActionFooter: FC<{ step: Step, }> = ({ step }) => {
                 <Box align='center' gap='large'>
                     {step.secondaryAction ?
                         <ResearcherButton
-                            type='secondary'
+                            buttonType='secondary'
                             fixedWidth
+                            busy={busy}
+                            busyMessage='Saving'
                             disabled={step.secondaryAction.disabled}
-                            onClick={() => step.secondaryAction?.action?.()}
+                            onClick={() => {
+                                step.secondaryAction?.action?.()
+                                triggerAnimation()
+                            }}
                         >
                             {step.secondaryAction?.text}
                         </ResearcherButton>

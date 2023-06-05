@@ -1,6 +1,6 @@
 import { React, useCallback, useEffect, useNavigate, useParams, useState } from '@common'
 import { ParticipantStudy, PublicResearcher } from '@api'
-import { isStudyLaunchable, LaunchStudy, studyIsMultipart } from '@models'
+import { getFirstStage, isStudyLaunchable, LaunchStudy, studyIsMultipart } from '@models'
 import { dayjs, useApi } from '@lib'
 import { Box, Button, Icon, IconKey, MultiSessionBar, OffCanvas } from '@components'
 import { colors } from '@theme'
@@ -94,6 +94,9 @@ const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
 }
 
 const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
+    const firstStage = getFirstStage(study)
+    if (!firstStage?.durationMinutes || !firstStage.points) return null
+
     if (studyIsMultipart(study)) {
         return (
             <Box className='mb-1' direction='column'>
@@ -118,8 +121,8 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
     return (
         <Box gap align="center" className='mb-1'>
             <Icon icon="clock" color={colors.purple} />
-            <div>{study.totalDuration}min</div>
-            {!!study.totalPoints && <span>{study.totalPoints}pts</span>}
+            <div>{firstStage.durationMinutes}min</div>
+            <span>{firstStage.points}pts</span>
         </Box>
     )
 }

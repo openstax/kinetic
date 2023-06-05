@@ -125,6 +125,10 @@ export const createStudy = async ({
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(200)
 
+    // Study should reroute to study/edit/:id
+    const studyId = await getIdFromUrl(page)
+    console.log(studyId)
+
     // Step 2 - Research Team
     await page.locator('.select', { has: page.locator(`input[name=researcherPi]`) }).click()
     await page.waitForTimeout(100)

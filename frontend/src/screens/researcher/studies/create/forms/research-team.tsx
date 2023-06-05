@@ -1,6 +1,15 @@
 import { Box, React, useEffect, useMemo, useState, Yup } from '@common';
 import { colors } from '@theme';
-import { Col, FieldErrorMessage, Icon, SelectField, SelectOption, useFormContext } from '@components';
+import {
+    Col,
+    FieldErrorMessage,
+    FieldTitle,
+    Icon,
+    SelectField,
+    SelectOption,
+    StepHeader,
+    useFormContext,
+} from '@components';
 import { IRB } from '../../../account/researcher-account-page';
 import { EditingStudy } from '@models';
 import { useApi } from '@lib';
@@ -66,18 +75,12 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
 
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
-            <Box gap='xlarge'>
-                <h3 className='fw-bold'>Research Team</h3>
-                <Box gap align='center'>
-                    <Icon height={20} color={colors.kineticResearcher} icon='clockFill'/>
-                    <span>ETA: 2min</span>
-                </Box>
-            </Box>
+            <StepHeader title='Research Team' eta={2} />
 
             <Box gap='xlarge'>
                 <Col sm={3} direction='column' gap>
-                    <h6>Study PI*</h6>
-                    <small>Invite the study PI as a collaborator, and enable them to view and manage the study from their own account</small>
+                    <FieldTitle required>Study PI</FieldTitle>
+                    <small>Select your study PI from the pool of Kinetic  researchers, and enable them to view and manage the study from their own account</small>
                 </Col>
 
                 <Col sm={4} justify='center' gap>
@@ -96,8 +99,8 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
 
             <Box gap='xlarge'>
                 <Col sm={3} direction='column' gap>
-                    <h6>Postdoc/Student Lead*</h6>
-                    <small>Invite the study lead as a collaborator, and enable them to view and manage the study from their own account</small>
+                    <FieldTitle required>Study Lead</FieldTitle>
+                    <small>Select your study lead from the pool of Kinetic  researchers, and enable them to view and manage the study from their own account</small>
                 </Col>
 
                 <Col sm={4} justify='center' gap>
@@ -116,7 +119,8 @@ export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
 
             <Box gap='xlarge'>
                 <Col sm={3} direction='column' gap>
-                    <h6>IRB Detail</h6>
+                    <FieldTitle>IRB Detail</FieldTitle>
+                    <small>Rice University remains the IRB of record until further notice</small>
                 </Col>
 
                 <Col sm={4} direction='column' align='start' gap>

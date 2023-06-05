@@ -1,22 +1,22 @@
 import { EditingStudy, studySubjects, studyTopics } from '@models';
 import { Box, React, useMemo, useState, Yup } from '@common';
 import {
-    CharacterCount,
-    FieldErrorMessage,
-    Icon,
-    SelectField,
-    Button,
     Col,
+    FieldErrorMessage,
+    FieldTitle, getImageUrl,
     InputField,
-    useFormContext,
     ResearcherButton,
+    ResearcherDetailedCheckbox,
+    SelectField,
+    StepHeader,
+    useFormContext,
 } from '@components';
-import { colors } from '@theme';
 import { ImageLibrary } from '../image-library';
 import { StudyCardPreview } from '../../../../learner/card';
 import { first } from 'lodash-es';
 import { Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
+import { colors } from '@theme';
 
 export const participantViewValidation = (studies: Study[], study: EditingStudy) => {
     const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])
@@ -27,7 +27,7 @@ export const participantViewValidation = (studies: Study[], study: EditingStudy)
             then: (s: Yup.BaseSchema) =>
                 s.required('Required').max(45).test(
                     'Unique',
-                    'This study title is already in use. Please change your study title to make it unique.',
+                    'This study title is already in use. Please change your study title to make it unique on Kinetic..',
                     (value: string) => {
                         if (!studies.length) {
                             return true
@@ -111,17 +111,11 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
         <Box className='mt-6' gap='xlarge'>
             <Col sm={8}>
                 <Box direction='column' gap='xlarge'>
-                    <Box gap='xlarge'>
-                        <h3 className='fw-bold'>Participant View</h3>
-                        <Box gap align='center'>
-                            <Icon height={20} color={colors.kineticResearcher} icon='clockFill'/>
-                            <span>ETA: 10min</span>
-                        </Box>
-                    </Box>
+                    <StepHeader title='Participant View' eta={10} />
 
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
-                            <h6>Study Title for Participants*</h6>
+                            <FieldTitle required>Study Title for Participants</FieldTitle>
                             <small>Consider a title that helps make the study relevant, friendly, and appealing to participants</small>
                         </Col>
 
@@ -135,7 +129,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
 
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
-                            <h6>Short Study Description*</h6>
+                            <FieldTitle required>Short Study Description</FieldTitle>
                             <small>Craft a description that best engages participants with your study - relevant, brief, and simple</small>
                         </Col>
 
@@ -147,7 +141,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
 
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
-                            <h6>Long Study Description*</h6>
+                            <FieldTitle required>Long Study Description</FieldTitle>
                             <small>Share more about what participants should expect when participating in your study</small>
                         </Col>
 
@@ -159,7 +153,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
 
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
-                            <h6>Add tags*</h6>
+                            <FieldTitle required>Add tags</FieldTitle>
                             <small>Select the study type and content area (if applicable) that best describes your study to participants</small>
                         </Col>
 
@@ -180,7 +174,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
 
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
-                            <h6>Duration & points*</h6>
+                            <FieldTitle required>Duration & points</FieldTitle>
                             <small>Select the option that best describes your estimated study duration. Study points are based on duration.</small>
                         </Col>
 
@@ -228,7 +222,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
 
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
-                            <h6>Benefits to Participants*</h6>
+                            <FieldTitle required>Benefits to Participants</FieldTitle>
                             <small>Share how the feedback and findings from the study may benefit the participant</small>
                         </Col>
 
@@ -242,12 +236,13 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
 
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
-                            <h6>Study Card Illustration*</h6>
+                            <FieldTitle required>Study Card Illustration</FieldTitle>
                             <small>Select an illustration that more closely represents your study to participants</small>
                         </Col>
 
-                        <Col sm={6} direction='column' gap align='start'>
-                            <ResearcherButton type='secondary' testId='image-picker' onClick={() => setShowImagePicker(true)}>
+                        <Col sm={6} direction='column' gap align='start' justify='center'>
+                            <ImagePreview imageId={getValues('imageId') || '' } />
+                            <ResearcherButton buttonType='secondary' testId='image-picker' onClick={() => setShowImagePicker(true)}>
                                 {study.imageId ? 'Change Selected Image' : 'Select Study Card Image'}
                             </ResearcherButton>
                             <ImageLibrary
@@ -267,89 +262,66 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
                 </Box>
             </Col>
 
-            <Col sm={4} direction='column' align='center'>
-                <p>Preview of what learner will see</p>
+            <Col sm={4} direction='column' align='start'>
+                <p>Preview of what the participant will see</p>
                 <StudyCardPreview study={watch() as EditingStudy} />
             </Col>
         </Box>
     )
 }
 
-export const StudyFeedback: FC<{sessionIndex: number}> = ({ sessionIndex }) => {
-    const { register } = useFormContext<EditingStudy>()
+const ImagePreview: FC<{imageId: string}> = ({ imageId }) => {
+    return (
+        <Col gap sm={12}>
+            <img src={getImageUrl(imageId)}
+                alt={imageId}
+                className='study-card-image'
+                css={{
+                    border: `1px solid ${colors.lightGray}`,
+                    borderRadius: 8,
+                }}
+            />
+            <small css={{ colors: colors.grayText }}>Selected image: {imageId}</small>
+        </Col>
+    )
+}
 
+export const StudyFeedback: FC<{sessionIndex: number}> = ({ sessionIndex }) => {
     return (
         <Box gap='xlarge'>
             <Col sm={4} direction='column' gap>
-                <h6>Feedback*</h6>
+                <FieldTitle required>
+                    Feedback
+                </FieldTitle>
                 <small>Share with participants what type of feedback to expect at the end of the study. Preferred feedback indicated.</small>
             </Col>
 
             <Col sm={6} direction='column' gap='large'>
                 <Box direction='column' gap>
-                    <Box gap align='start'>
-                        <input
-                            {...register(`stages.${sessionIndex}.feedbackTypes`)}
-                            css={{ marginTop: 5 }}
-                            type='checkbox'
-                            id='score'
-                            value='score'
-                        />
-                        <label htmlFor="score">
-                            <Box direction='column' gap='small'>
-                                <span>Score</span>
-                                <small css={{ color: colors.grayText }}>An estimate of the participant’s performance or attributes</small>
-                            </Box>
-                        </label>
-                    </Box>
-
-                    <Box gap align='start'>
-                        <input
-                            {...register(`stages.${sessionIndex}.feedbackTypes`)}
-                            css={{ marginTop: 5 }}
-                            type='checkbox'
-                            id='debrief'
-                            value='debrief'
-                        />
-                        <label htmlFor="debrief">
-                            <Box direction='column' gap='small'>
-                                <span>Debrief</span>
-                                <small css={{ color: colors.grayText }}>A summary (e.g., study procedures, results, etc.). Designed to provide a sense of closure</small>
-                            </Box>
-                        </label>
-                    </Box>
-
-                    <Box gap align='start'>
-                        <input
-                            {...register(`stages.${sessionIndex}.feedbackTypes`)}
-                            css={{ marginTop: 5 }}
-                            type='checkbox'
-                            id='general'
-                            value='general'
-                        />
-                        <label htmlFor="general">
-                            <Box direction='column' gap='small'>
-                                <span>General feedback (learner favorite)</span>
-                                <small css={{ color: colors.grayText }}>Information about the constructs addressed and how they broadly relate to the participant</small>
-                            </Box>
-                        </label>
-                    </Box>
-
-                    <Box gap align='start'>
-                        <input
-                            {...register(`stages.${sessionIndex}.feedbackTypes`)}
-                            css={{ marginTop: 5 }}
-                            type='checkbox'
-                            id='personalized'
-                            value='personalized'
-                        />
-                        <label htmlFor="personalized">
-                            <Box direction='column' gap='small'>
-                                <span>Personalized feedback (learner favorite)</span>
-                                <small css={{ color: colors.grayText }}>Tailored information to participant's specific characteristics, behaviors, needs, performance, or some combination</small>
-                            </Box>
-                        </label>
-                    </Box>
+                    <ResearcherDetailedCheckbox
+                        name={`stages.${sessionIndex}.feedbackTypes`}
+                        value='score'
+                        label='Score'
+                        desc='An estimate of the participant’s performance or attributes'
+                    />
+                    <ResearcherDetailedCheckbox
+                        name={`stages.${sessionIndex}.feedbackTypes`}
+                        value='debrief'
+                        label='Debrief'
+                        desc='A summary (e.g., study procedures, results, etc.). Designed to provide a sense of closure'
+                    />
+                    <ResearcherDetailedCheckbox
+                        name={`stages.${sessionIndex}.feedbackTypes`}
+                        value='general'
+                        label='General feedback (learner favorite)'
+                        desc='Information about the constructs addressed and how they broadly relate to the participant'
+                    />
+                    <ResearcherDetailedCheckbox
+                        name={`stages.${sessionIndex}.feedbackTypes`}
+                        value='personalized'
+                        label='Personalized feedback (learner favorite)'
+                        desc="Tailored information to participant's specific characteristics, behaviors, needs, performance, or some combination"
+                    />
 
                     <FieldErrorMessage name='stages.0.feedbackTypes'/>
                 </Box>
