@@ -73,7 +73,7 @@
 - id: 4
   status: 'active'
   title_for_researchers: 'RIASEC Vocational Interest'
-  description_for_researchers: 'Captures participants' scores on each of the 6 RIASEC vocational interests.'
+  description_for_researchers: "Captures participants' scores on each of the 6 RIASEC vocational interests."
   study_type: 'Learner Characteristics'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -121,15 +121,15 @@
 - id: 6
   status: 'active'
   title_for_researchers: 'Science Knowledge Quiz'
-  description_for_researchers: 'Captures participants' scores on three subgroups of fundamental science topics.'
+  description_for_researchers: "Captures participants' scores on three subgroups of fundamental science topics."
   study_type: 'Cognitive Task & Assessment'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
   study_lead_first: 'Brittany'
   study_lead_last: 'Bradford'
   title_for_participants: 'How much do you remember from science class?'
-  short_description_for_participants: 'How much do you remember from middle school science? Find out what you've retained… and where you're a little rusty.'
-  long_description_for_participants: 'This is an 18-question general science knowledge quiz assessing your knowledge of basic middle and high school science topics (earth science, lab science, and scientific measurement). Afterward, you'll be shown your score breakdown in each category.'
+  short_description_for_participants: "How much do you remember from middle school science? Find out what you've retained… and where you're a little rusty."
+  long_description_for_participants: "This is an 18-question general science knowledge quiz assessing your knowledge of basic middle and high school science topics (earth science, lab science, and scientific measurement). Afterward, you'll be shown your score breakdown in each category."
   study_topic: 'Learning'
   study_subject: null
   benefits: 'You will find out what you remember from science topics you might not have studied in years, and what your strongest and weakest topics are.'
@@ -145,7 +145,7 @@
 - id: 7
   status: 'active'
   title_for_researchers: 'General anxiety'
-  description_for_researchers: 'Captures participants' general anxiety scores.'
+  description_for_researchers: "Captures participants' general anxiety scores."
   study_type: 'Learner Characteristics'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -156,7 +156,7 @@
   long_description_for_participants: 'This 10-question survey will ask questions about how you tend to think about and respond to the stressors in your life. After taking this survey, we will share with you your anxiety score and give you some tips to help manage it.'
   study_topic: 'Personality'
   study_subject: null
-  benefits: 'You'll learn a bit more about the general level of anxiety score you've obtained and what it means, and receive suggestions on steps you can take to help manage anxiety.'
+  benefits: "You'll learn a bit more about the general level of anxiety score you've obtained and what it means, and receive suggestions on steps you can take to help manage anxiety."
   opens_at: 2022-03-05 09:00:00
   closes_at: null
   stages:
@@ -169,7 +169,7 @@
 - id: 8
   status: 'active'
   title_for_researchers: 'Goal Orientation'
-  description_for_researchers: 'Captures participants' scores on the three categories of goal orientation (performance, learning, and avoidance).'
+  description_for_researchers: "Captures participants' scores on the three categories of goal orientation (performance, learning, and avoidance)."
   study_type: 'Learner Characteristics'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -193,7 +193,7 @@
 - id: 9
   status: 'active'
   title_for_researchers: 'Self-Efficacy'
-  description_for_researchers: 'Captures participants' general self-efficacy.'
+  description_for_researchers: "Captures participants' general self-efficacy."
   study_type: 'Learner Characteristics'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -225,7 +225,7 @@
   study_lead_last: 'Basu Mallick'
   title_for_participants: 'Biology, cells, & highlighting (2 parts)'
   short_description_for_participants: 'Read about cancer and biology, practice highlighting, play a game, and take a quiz. See you in a week for quiz #2!'
-  long_description_for_participants: 'Try our online highlighting study on a biology chapter! You'll read about cancer research, practice highlighting the content, play a quick game, and then take a brief quiz afterward. Come back in a week to take the second quiz. See you soon!'
+  long_description_for_participants: "Try our online highlighting study on a biology chapter! You'll read about cancer research, practice highlighting the content, play a quick game, and then take a brief quiz afterward. Come back in a week to take the second quiz. See you soon!"
   study_topic: 'Learning'
   study_subject: 'Biology'
   benefits: 'You will gain practice highlighting online content while learning about a biology topic. Your responses will also further research on new online learning tools.'
@@ -245,7 +245,7 @@
 - id: 11
   status: 'active'
   title_for_researchers: 'Working Memory Reading Span Task'
-  description_for_researchers: 'Task assessing working memory capacity that aligns with individuals' ability to recall letters while assessing whether a sentence is meaningful vs. nonsense. We intend to look at individual differences in reading span.'
+  description_for_researchers: "Task assessing working memory capacity that aligns with individuals' ability to recall letters while assessing whether a sentence is meaningful vs. nonsense. We intend to look at individual differences in reading span."
   study_type: 'Cognitive Task & Assessment'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -269,7 +269,7 @@
 - id: 12
   status: 'active'
   title_for_researchers: 'Matrices (Cognitive Ability) Test'
-  description_for_researchers: 'Captures participants' scores on a visuo-spatial matrices pattern completion task.'
+  description_for_researchers: "Captures participants' scores on a visuo-spatial matrices pattern completion task."
   study_type: 'Cognitive Task & Assessment'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -325,7 +325,7 @@
   study_lead_last: 'Basu Mallick'
   title_for_participants: 'Psychology, stress, & highlighting (2 parts)'
   short_description_for_participants: 'Read about the psychology of stress, practice highlighting, play a game, and take a quiz. See you in a week for quiz #2!'
-  long_description_for_participants: 'Try our online highlighting study on a psychology chapter! You'll read about stress, practice highlighting the content, play a quick game, and then take a brief quiz afterward. Come back in a week to take the second quiz. See you soon!'
+  long_description_for_participants: "Try our online highlighting study on a psychology chapter! You'll read about stress, practice highlighting the content, play a quick game, and then take a brief quiz afterward. Come back in a week to take the second quiz. See you soon!"
   study_topic: 'Learning'
   study_subject: 'Psychology'
   benefits: 'You will gain practice highlighting online content while learning about a psychology topic. Your responses will also further research on new online learning tools.'
@@ -377,7 +377,7 @@
   study_lead_last: 'Bradford'
   title_for_participants: 'Do you stick with your goals?'
   short_description_for_participants: 'Persisting when you face challenges is difficult but worthwhile. Do you tend to overcome obstacles to meet your goals?'
-  long_description_for_participants: 'This is a 10-question quiz exploring your persistence and dedication to meeting long-term goals. After you take the quiz, you'll receive your score, as well as suggestions on steps you can take to help improve your ability to stick with your goals.'
+  long_description_for_participants: "This is a 10-question quiz exploring your persistence and dedication to meeting long-term goals. After you take the quiz, you'll receive your score, as well as suggestions on steps you can take to help improve your ability to stick with your goals."
   study_topic: 'Personality'
   study_subject: null
   benefits: 'You will learn more about how dedicated you are to achieving long-term goals, and tips to help increase your commitment and future success.'
@@ -393,7 +393,7 @@
 - id: 17
   status: 'active'
   title_for_researchers: 'Belongingness'
-  description_for_researchers: 'Captures participants' scores on a general sense of belongingness scale.'
+  description_for_researchers: Captures participants' scores on a general sense of belongingness scale.
   study_type: 'Learner Characteristics'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -401,7 +401,7 @@
   study_lead_last: 'Bradford'
   title_for_participants: 'Do you fit in?'
   short_description_for_participants: 'Your sense of how much you “belong” can have an impact on your overall happiness and success. How included do you feel?'
-  long_description_for_participants: 'This is a 12-question quiz about how included or excluded you may feel from social groups. After you take this quiz, you'll receive feedback on your general sense of social belongingness, as well as tips on steps you can take to help strengthen it.'
+  long_description_for_participants: "This is a 12-question quiz about how included or excluded you may feel from social groups. After you take this quiz, you'll receive feedback on your general sense of social belongingness, as well as tips on steps you can take to help strengthen it."
   study_topic: 'Personality'
   study_subject: null
   benefits: 'You will learn about your current sense of belongingness, and tips on how to help expand your social groups and increase your overall sense of satisfaction and happiness.'
@@ -417,7 +417,7 @@
 - id: 18
   status: 'active'
   title_for_researchers: 'MARSI (Meta-cognitive Reading Strategies)'
-  description_for_researchers: 'Captures participants' scores on three subgroups of metacognitive reading strategies.'
+  description_for_researchers: Captures participants' scores on three subgroups of metacognitive reading strategies.
   study_type: 'Cognitive Task & Assessment'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -425,10 +425,10 @@
   study_lead_last: 'Bradford'
   title_for_participants: 'Are you a super reader?'
   short_description_for_participants: 'Everyone reads using different techniques. This quiz assesses how much you use certain strategies and where to improve.'
-  long_description_for_participants: 'This 15-question quiz uncovers how often you use different reading techniques. Once completed, you'll receive feedback on how you scored in three categories, as well as suggestions to help improve your reading skills and strengthen your learning.'
+  long_description_for_participants: This 15-question quiz uncovers how often you use different reading techniques. Once completed, you'll receive feedback on how you scored in three categories, as well as suggestions to help improve your reading skills and strengthen your learning.
   study_topic: 'Learning'
   study_subject: null
-  benefits: 'You'll get a chance to see how you read academic content and what your overall score was. You'll be given tips to help improve your critical reading skills even further.'
+  benefits: You'll get a chance to see how you read academic content and what your overall score was. You'll be given tips to help improve your critical reading skills even further.
   opens_at: 2022-06-15 09:00:00
   closes_at: null
   stages:
@@ -488,7 +488,7 @@
 - id: 21
   status: 'active'
   title_for_researchers: 'Mindset'
-  description_for_researchers: 'Captures participants' scores on a fixed versus growth mindset measure.'
+  description_for_researchers: Captures participants' scores on a fixed versus growth mindset measure.
   study_type: 'Learner Characteristics'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -496,7 +496,7 @@
   study_lead_last: 'Bradford'
   title_for_participants: 'What are your ability beliefs?'
   short_description_for_participants: 'Some people believe their capabilities are set at birth. Others say growth is always possible. What do you believe?'
-  long_description_for_participants: 'This 6-question quiz will ask you to consider how you think about intelligence. After the quiz, you'll see your score, along with tips on how to better wield these beliefs to help your performance at work and in school.'
+  long_description_for_participants: This 6-question quiz will ask you to consider how you think about intelligence. After the quiz, you'll see your score, along with tips on how to better wield these beliefs to help your performance at work and in school.
   study_topic: 'Personality'
   study_subject: null
   benefits: 'You will learn more on whether you have beliefs about your abilities that might be limiting your personal growth, and how your outlook shapes your worldview.'
@@ -512,7 +512,7 @@
 - id: 22
   status: 'active'
   title_for_researchers: 'Barratt Impulsiveness Scale'
-  description_for_researchers: 'Assesses learners' tendencies towards displaying impulsiveness and the type of impulsiveness they demonstrate.'
+  description_for_researchers: Assesses learners' tendencies towards displaying impulsiveness and the type of impulsiveness they demonstrate.
   study_type: 'Learner Characteristics'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -536,7 +536,7 @@
 - id: 24
   status: 'active'
   title_for_researchers: 'Resilience'
-  description_for_researchers: 'Captures participants' scores on a general resilience measure.'
+  description_for_researchers: Captures participants' scores on a general resilience measure.
   study_type: 'Learner Characteristics'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -544,7 +544,7 @@
   study_lead_last: 'Bradford'
   title_for_participants: 'Do you survive or thrive?'
   short_description_for_participants: 'Some people recover from setbacks more quickly than others. How well do you tend to “bounce back” from challenges?'
-  long_description_for_participants: 'This 6-question quiz will ask you how you tend to handle stressful events. Once completed, you'll find out your score and receive guidance on how to help improve your ability to overcome life's challenges.'
+  long_description_for_participants: This 6-question quiz will ask you how you tend to handle stressful events. Once completed, you'll find out your score and receive guidance on how to help improve your ability to overcome life's challenges.
   study_topic: 'Personality'
   study_subject: null
   benefits: 'You will learn more about your own resilience and receive targeted suggestions to help strengthen it, and help improve your physical and mental health.'
@@ -560,7 +560,7 @@
 - id: 25
   status: 'active'
   title_for_researchers: 'STEM Biodata'
-  description_for_researchers: 'Captures participants' scores on a 7-factor STEM biodata measure that is being validated.'
+  description_for_researchers: Captures participants' scores on a 7-factor STEM biodata measure that is being validated.
   study_type: 'Cognitive Task & Assessment'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -568,10 +568,10 @@
   study_lead_last: 'Bradford'
   title_for_participants: 'Reflecting on your childhood experiences'
   short_description_for_participants: 'How did your parents/teachers impact what you enjoyed and experienced in elementary school - especially math and science?'
-  long_description_for_participants: 'This study will ask about activities, preferences, and behaviors you might have experienced when you were 11 and younger, with specific focus on your science, math, and engineering experiences. Afterward, you'll receive your scores in each category.'
+  long_description_for_participants: This study will ask about activities, preferences, and behaviors you might have experienced when you were 11 and younger, with specific focus on your science, math, and engineering experiences. Afterward, you'll receive your scores in each category.
   study_topic: 'School & Career'
   study_subject: null
-  benefits: 'You'll receive your scores on seven different “themes” of your early educational life experiences, which may lead you to do some interesting reflection on your childhood.'
+  benefits: You'll receive your scores on seven different “themes” of your early educational life experiences, which may lead you to do some interesting reflection on your childhood.
   opens_at: 2022-08-15 09:00:00
   closes_at: null
   stages:
@@ -616,7 +616,7 @@
   study_lead_last: 'Bradford'
   title_for_participants: 'Biology + Cells Lesson'
   short_description_for_participants: 'Try this fun lesson on cells, genes, and RNA! Then take a brief quiz on your new microbiology knowledge and see your score.'
-  long_description_for_participants: 'You'll see, hear, or read a fun, four-minute lesson on cellular functions. Then you'll take a 9-question quiz on what you learned and see your score. Your results will help researchers discover how students learn best from multimedia lessons.'
+  long_description_for_participants: You'll see, hear, or read a fun, four-minute lesson on cellular functions. Then you'll take a 9-question quiz on what you learned and see your score. Your results will help researchers discover how students learn best from multimedia lessons.
   study_topic: 'Learning'
   study_subject: 'Biology'
   benefits: 'You will learn more about a microbiology topic and then find out your quiz score. Your responses will also help researchers design future lessons for online learners.'
@@ -632,7 +632,7 @@
 - id: 29
   status: 'active'
   title_for_researchers: 'Time Management'
-  description_for_researchers: 'Captures participants' scores on a new time management measure as part of the measure validation process.'
+  description_for_researchers: Captures participants' scores on a new time management measure as part of the measure validation process.
   study_type: 'Cognitive Task & Assessment'
   study_pi_first: 'Fred'
   study_pi_last: 'Oswald'
@@ -663,7 +663,7 @@
   study_lead_last: 'Basu Mallick'
   title_for_participants: 'US History, Jackson, & highlighting (2 parts)'
   short_description_for_participants: 'Read about the US presidency in 1828, practice highlighting, play a game, and take a quiz. See you in a week for quiz #2!'
-  long_description_for_participants: 'Try our online highlighting study on a US history chapter! You'll read about the 1828 election, practice highlighting the content, play a quick game, and then take a brief quiz afterward. Come back in a week to take the second quiz. See you soon!'
+  long_description_for_participants: Try our online highlighting study on a US history chapter! You'll read about the 1828 election, practice highlighting the content, play a quick game, and then take a brief quiz afterward. Come back in a week to take the second quiz. See you soon!
   study_topic: 'Learning'
   study_subject: null
   benefits: 'You will gain practice highlighting online content while learning about a US history topic. Your responses will also further research on new online learning tools.'
@@ -686,11 +686,11 @@
   study_lead_first: 'Sabitha'
   study_lead_last: 'Sudarshan'
   title_for_participants: 'Are you scared of failing?'
-  short_description_for_participants: 'We've all experienced failure at some point in our lives - but have you let the fear of failure define you?'
-  long_description_for_participants: 'You'll answer 25 questions set to help you understand how fearful you are of not succeeding, and of its possible consequences - such as experiencing shame, or having an uncertain future. Once completed, you'll receive tips to help overcome it.'
+  short_description_for_participants: We've all experienced failure at some point in our lives - but have you let the fear of failure define you?
+  long_description_for_participants: You'll answer 25 questions set to help you understand how fearful you are of not succeeding, and of its possible consequences - such as experiencing shame, or having an uncertain future. Once completed, you'll receive tips to help overcome it.
   study_topic: 'Personality'
   study_subject: null
-  benefits: 'By answering these questions, you will get to know if you're letting fear dictate your life. Once completed, you'll receive tips to help overcome it.'
+  benefits: By answering these questions, you will get to know if you're letting fear dictate your life. Once completed, you'll receive tips to help overcome it.
   opens_at: 2022-09-26 09:00:00
   closes_at: null
   stages:
@@ -704,15 +704,15 @@
 - id: 33
   status: 'active'
   title_for_researchers: 'Optimism'
-  description_for_researchers: 'Captures participants' scores on a general pessimism versus optimism measure.'
+  description_for_researchers: Captures participants' scores on a general pessimism versus optimism measure.
   study_type: 'Learner Characteristics'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
   study_lead_first: 'Brittany'
   study_lead_last: 'Bradford'
-  title_for_participants: 'What's ahead - smooth sailing or stormy seas?'
+  title_for_participants: What's ahead - smooth sailing or stormy seas?
   short_description_for_participants: 'Your perspective about the future can change your future. Learn your tendencies toward expecting the best or the worst.'
-  long_description_for_participants: 'This is an 8-question quiz asking you to reflect on how you think about and tend to plan for the future, and whether you tend to expect the best (or the worst!). Once completed, you'll receive tips on how to strengthen your optimistic thinking.'
+  long_description_for_participants: This is an 8-question quiz asking you to reflect on how you think about and tend to plan for the future, and whether you tend to expect the best (or the worst!). Once completed, you'll receive tips on how to strengthen your optimistic thinking.
   study_topic: 'Personality'
   study_subject: null
   benefits: 'You will learn your optimism score and what your score means, as well as tips on how you can increase your optimistic thinking if you tend to think more negatively.'
@@ -728,18 +728,18 @@
 - id: 34
   status: 'active'
   title_for_researchers: 'Subjective Well-Being (SWB)'
-  description_for_researchers: 'Captures participants' scores on a general subjective well-being measure.'
+  description_for_researchers: Captures participants' scores on a general subjective well-being measure.
   study_type: 'Learner Characteristics'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
   study_lead_first: 'Brittany'
   study_lead_last: 'Bradford'
   title_for_participants: 'What are you feeling? And how often?'
-  short_description_for_participants: 'Emotions can change all the time. Explore how you've been feeling over the past month, both the good and the bad.'
-  long_description_for_participants: 'This is a 12-question quiz about the positive and negative feelings you've experienced over the past four weeks. You'll be asked to think about how often and how strongly you've felt certain emotions. At the end, you'll be given personalized tips.'
+  short_description_for_participants: Emotions can change all the time. Explore how you've been feeling over the past month, both the good and the bad.
+  long_description_for_participants: This is a 12-question quiz about the positive and negative feelings you've experienced over the past four weeks. You'll be asked to think about how often and how strongly you've felt certain emotions. At the end, you'll be given personalized tips.
   study_topic: 'Personality'
   study_subject: null
-  benefits: 'You'll learn more about the frequency of your positive and negative emotions, what these may say about you, and tips to help strengthen your positive life experiences.'
+  benefits: You'll learn more about the frequency of your positive and negative emotions, what these may say about you, and tips to help strengthen your positive life experiences.
   opens_at: 2022-10-27 09:00:00
   closes_at: null
   stages:
@@ -752,7 +752,7 @@
 - id: 35
   status: 'active'
   title_for_researchers: 'Motivational Prompts'
-  description_for_researchers: 'Captures participants' scores on what type of prompts are the most or least motivating for students and why.'
+  description_for_researchers: Captures participants' scores on what type of prompts are the most or least motivating for students and why.
   study_type: 'Learning Research'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -760,7 +760,7 @@
   study_lead_last: 'Bainbridge'
   title_for_participants: 'What motivates you? And why?'
   short_description_for_participants: 'Read motivating messages and tell us whether these are effective and why!'
-  long_description_for_participants: 'You will review a few motivational prompts and provide your feedback by highlighting what you like and don't like about them, and why. At the end you'll take a brief quiz to help us assess your reading comprehension.'
+  long_description_for_participants: You will review a few motivational prompts and provide your feedback by highlighting what you like and don't like about them, and why. At the end you'll take a brief quiz to help us assess your reading comprehension.
   study_topic: 'Learning'
   study_subject: null
   benefits: 'This task may lead you to reflect on what motivates you and why. Your contribution will support research that seeks to help future students succeed in math.'
@@ -776,7 +776,7 @@
 - id: 36
   status: 'active'
   title_for_researchers: 'Persistence in Learning'
-  description_for_researchers: 'Captures participants' scores on persistence and its association with academic success.'
+  description_for_researchers: Captures participants' scores on persistence and its association with academic success.
   study_type: 'Learning Research'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -784,10 +784,10 @@
   study_lead_last: 'Bainbridge'
   title_for_participants: 'Do you have the persistence you need to learn?'
   short_description_for_participants: 'Persistence can be a better predictor of academic success than IQ. Do you have the persistence needed to excel in school?'
-  long_description_for_participants: 'In this study you'll be asked to keep trying at a difficult task, read about evolutionary biology, demonstrate your learning with a quiz, and answer some questions about your motivation while learning.'
+  long_description_for_participants: In this study you'll be asked to keep trying at a difficult task, read about evolutionary biology, demonstrate your learning with a quiz, and answer some questions about your motivation while learning.
   study_topic: 'Learning'
   study_subject: 'Biology'
-  benefits: 'You'll get insight into how persistence influences your learning. Your contribution will be invaluable to help improve digital learning environments for other learners.'
+  benefits: You'll get insight into how persistence influences your learning. Your contribution will be invaluable to help improve digital learning environments for other learners.
   opens_at: 2023-03-20 09:00:00
   closes_at: null
   stages:
@@ -811,7 +811,7 @@
   long_description_for_participants: 'You will answer a total of 25 questions regarding how much you delay tasks and work related to assignment, homework and exams. Once completed, you will receive some tips to help you better cope with procrastination.'
   study_topic: 'Personality'
   study_subject: 'Psychology'
-  benefits: 'You'll learn more about how much you do or do not delay tasks, and steps you can take to help you get a better hold of things.'
+  benefits: You'll learn more about how much you do or do not delay tasks, and steps you can take to help you get a better hold of things.
   opens_at: 2022-11-15 09:00:00
   closes_at: null
   stages:
@@ -848,7 +848,7 @@
 - id: 39
   status: 'active'
   title_for_researchers: 'Gates Reading Comprehension Task'
-  description_for_researchers: 'Captures participants' scores on a reading comprehension assessment.'
+  description_for_researchers: Captures participants' scores on a reading comprehension assessment.
   study_type: 'Cognitive Task & Assessment'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -872,7 +872,7 @@
 - id: 40
   status: 'active'
   title_for_researchers: 'Higher Ed/MarCom Survey on OER'
-  description_for_researchers: 'Assessment for the internal higher ed marketing team to assess participants' opinions on OpenStax and other OER providers.'
+  description_for_researchers: Assessment for the internal higher ed marketing team to assess participants' opinions on OpenStax and other OER providers.
   study_type: 'Product & Organizational Research'
   study_pi_first: 'Rich'
   study_pi_last: 'Baraniuk'
@@ -903,7 +903,7 @@
   study_lead_first: 'Sabitha'
   study_lead_last: 'Sudarshan'
   title_for_participants: 'OpenStax or traditional textbooks?'
-  short_description_for_participants: 'You've experienced OpenStax online textbooks - how do they compare to traditional textbooks?'
+  short_description_for_participants: You've experienced OpenStax online textbooks - how do they compare to traditional textbooks?
   long_description_for_participants: 'This is a short survey on how OpenStax online textbooks might have served you so far compared to traditional textbooks, and how we can strive to be better.'
   study_topic: 'Other'
   study_subject: null

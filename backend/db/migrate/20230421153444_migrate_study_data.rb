@@ -1,6 +1,6 @@
 class MigrateStudyData < ActiveRecord::Migration[6.1]
   def up
-    studies = YAML.load_file(Rails.root.join('db/migrate/migration_script.yaml'))
+    studies = YAML.load_file(Rails.root.join('db/migrate/study_migration_data.yaml'))
     # Make the deploy happy
     # studies = []
     studies.each do |data|

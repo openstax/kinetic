@@ -1,5 +1,4 @@
 import { Box, React, useEffect, useMemo, useState, Yup } from '@common';
-import { colors } from '@theme';
 import {
     Col,
     FieldErrorMessage,
