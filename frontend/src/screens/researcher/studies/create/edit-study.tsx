@@ -139,8 +139,8 @@ const FormContent: FC<{
     const api = useApi()
     const [, setStudyProgressStep] = useLocalstorageState<StudyStep>(`study-progress-${id}`)
 
-    if (!isDraft(study)) {
-        nav('/studies')
+    if (!isDraft(study) && !isNew) {
+        nav(`/study/overview/${id}`)
     }
 
     const { isValid, isDirty } = useFormState()

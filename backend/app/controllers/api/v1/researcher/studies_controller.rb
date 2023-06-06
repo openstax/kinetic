@@ -61,10 +61,10 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     end
 
     if params[:status_action] == 'submit'
+      debugger
       (survey_id, secret_key) = CloneSurvey.new.clone(@study.title_for_researchers)
       @study.stages.each do |stage|
-        stage.update
-        ({
+        stage.update({
           status: :waiting_period,
           config: {
             type: 'qualtrics',
@@ -78,9 +78,6 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
     if params[:status_action] == 'launch'
       @study.stages.update_all(status: 'active')
-      # @study.stages.each do |stage|
-      #   stage.update({ status: :active })
-      # end
     end
 
     render json: Api::V1::Bindings::Study.create_from_model(@study), status: :ok
@@ -95,12 +92,11 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
   def notify_researchers(researchers)
     new_researchers = researchers.map do |researcher|
-      StudyResearcher.find_or_create_by
-      ({
+      StudyResearcher.find_or_create_by(
         study_id: @study.id,
         researcher_id: researcher.id,
         role: researcher.role
-      })
+      )
     end
 
     added_researchers = (new_researchers - @study.study_researchers) - [@current_researcher]

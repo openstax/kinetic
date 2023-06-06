@@ -1,8 +1,20 @@
 class MigrateStudyData < ActiveRecord::Migration[6.1]
   def up
+    researchers = YAML.load_file(Rails.root.join('db/migrate/researchers.yaml'))
+    Researcher.create({
+      first_name: 'Jeffrey',
+      last_name: 'Zhong',
+      user_id: '00000000-0000-0000-0000-000000000099'
+    })
+    researchers.each do |researcher|
+      Researcher.find_or_create_by(
+        first_name: researcher['first_name'],
+        last_name: researcher['last_name'],
+        user_id: researcher['uuid']
+      )
+    end
+
     studies = YAML.load_file(Rails.root.join('db/migrate/study_migration_data.yaml'))
-    # Make the deploy happy
-    # studies = []
     studies.each do |data|
       study = Study.includes(:stages, :study_researchers).find(data['id'])
 
@@ -10,23 +22,16 @@ class MigrateStudyData < ActiveRecord::Migration[6.1]
         raise("Cant find study with id: #{data['id']}")
       end
 
-      lead = Researcher.find_by(first_name: data['study_lead_first'], last_name: data['study_lead_last'])
-      # if lead.nil?
-      #   raise("Researcher #{data['study_lead']} not found")
-      # end
-      pi = Researcher.find_by(first_name: data['study_pi_first'], last_name: data['study_pi_last'])
-      # if pi.nil?
-      #   raise("Researcher #{data['study_pi']} not found")
-      # end
-      # Find out default member? kinetic admin?
-      # member = Researcher.find_by(last_name: data['study_pi'])
+      lead = Researcher.find_by(user_id: data['study_lead_uuid'])
+      pi = Researcher.find_by(user_id: data['study_pi_uuid'])
+
       unless lead.nil?
-        lead_sr = StudyResearcher.find_or_create_by({ study_id: study.id, researcher_id: lead.id, role: 'lead'})
+        lead_sr = StudyResearcher.find_or_create_by(study_id: study.id, researcher_id: lead.id, role: 'lead')
         study.study_researchers << lead_sr unless lead_sr.nil?
       end
 
       unless pi.nil?
-        pi_sr = StudyResearcher.find_or_create_by({ study_id: study.id, researcher_id: pi.id, role: 'pi'})
+        pi_sr = StudyResearcher.find_or_create_by(study_id: study.id, researcher_id: pi.id, role: 'pi')
         study.study_researchers << pi_sr unless pi_sr.nil?
       end
 
