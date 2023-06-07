@@ -11,9 +11,11 @@ class CloneSurvey
   end
 
   def clone(new_name)
-    result = @api.create_survey(@source.merge({
-                                                SurveyEntry: @source['SurveyEntry'].merge({ SurveyName: new_name })
-                                              }.deep_stringify_keys))
+    result = @api.create_survey(@source.merge(
+      { SurveyEntry: @source['SurveyEntry'].merge(
+        { SurveyName: new_name })
+      }.deep_stringify_keys)
+    )
     @api.share_survey(
       result['SurveyID'],
       Rails.application.secrets.qualtrics_group_library,

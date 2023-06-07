@@ -7,9 +7,7 @@ RSpec.describe 'Studies', api: :v1 do
   let(:researcher1) { create(:researcher) }
   let(:researcher2) { create(:researcher) }
   let(:researcher3) { create(:researcher) }
-  let(:survey_id) { 'SV_6xGQzj4OBJnxGuy' } # demographic survey
-  let(:data) { JSON.parse(File.read(Rails.root.join('spec', 'support', 'qualtrics_fake_response.json'))) }
-
+  
   describe 'POST researcher/studies' do
     let(:valid_new_study_attributes) do
       {
@@ -60,12 +58,6 @@ RSpec.describe 'Studies', api: :v1 do
       let!(:study_with_stages) { create(:study, researchers: researcher1, stages: [create(:stage)]) }
 
       it 'successfully creates a new study' do
-        allow_any_instance_of(QualtricsApi).to(
-          receive(:get_survey_definition)
-            .with(survey_id)
-            .and_return(data['result'])
-        )
-
         api_post 'researcher/studies', params: { study: valid_new_study_attributes }
         expect(response).to have_http_status(:created)
         expect(response_hash).to match(a_hash_including(

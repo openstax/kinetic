@@ -1,10 +1,9 @@
 import { React, styled, dayjs, useNavigate } from '@common';
-import { Box, Icon, Button, Modal  } from '@components';
+import { Box, Icon, Button, Modal, Toast  } from '@components';
 import { StageStatusEnum, Study } from '@api';
 import { colors } from '@theme';
 import { useApi } from '@lib';
 import { CellContext } from '@tanstack/react-table';
-import { NotificationType } from './study-action-notification';
 
 const ModalType = {
     Pause: 'pauseStudy',
@@ -20,9 +19,8 @@ const ActionModalContent: FC<{
     study: Study,
     modalType: string,
     onHide: () => void,
-    cell: CellContext<Study, any>,
-    addNotification: (message: string, type?: NotificationType) => void
-}> = ({ study , modalType, onHide, cell, addNotification }) => {
+    cell: CellContext<Study, any>
+}> = ({ study , modalType, onHide, cell }) => {
     const api = useApi()
     const nav = useNavigate()
 
@@ -35,12 +33,15 @@ const ActionModalContent: FC<{
             api.updateStudy({ id: study.id, updateStudy: { study: study as any } })
                 .then((study) => {
                     cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
-                    addNotification(message)
+                    Toast.show({ message })
                 })
         }
         catch (err) {
             // study.status = oldStatus
-            addNotification(String(err), 'error')
+            Toast.show({
+                error: err,
+                message: String(err),
+            })
             console.error(err) // eslint-disable-line no-console
         }
         onHide()
@@ -49,13 +50,16 @@ const ActionModalContent: FC<{
     const deleteStudy = (study: Study, message: string) => {
         try {
             api.deleteStudy({ studyId: study.id }).then(() => {
-                addNotification(message)
+                Toast.show({ message })
                 study.isHidden = true
                 cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
             })
         } catch (err) {
             study.isHidden = false
-            addNotification(String(err), 'error')
+            Toast.show({
+                error: err,
+                message: String(err),
+            })
             console.error(err) // eslint-disable-line no-console
         }
         onHide()
@@ -196,9 +200,8 @@ const ActionIcon = styled(Icon)(({ disabled }) => ({
 
 export const ActionColumn: React.FC<{
     study: Study,
-    cell: CellContext<Study, any>,
-    addNotification: (message: string, type?: NotificationType) => void
-}> = ({ study, cell, addNotification }) => {
+    cell: CellContext<Study, any>
+}> = ({ study, cell }) => {
     const nav = useNavigate()
     const [modalType, setModalType] = React.useState<ModalTypeEnum>('')
     const [showModal, setShowModal] = React.useState<boolean>(false)
@@ -309,7 +312,6 @@ export const ActionColumn: React.FC<{
                         study={study}
                         onHide={onHide}
                         cell={cell}
-                        addNotification={addNotification}
                     />
                 </Modal.Body>
             </Modal>

@@ -1,11 +1,10 @@
 import { cx, React, styled, useNavigate, useState } from '@common'
 import { Box, Button, Icon, Page } from '@components'
 import { StudyStatus } from '@models'
-import { colors } from '../../../../theme';
+import { colors } from '@theme';
 import 'bootstrap/js/dist/dropdown'
 import { StudiesTable } from './studies-table';
 import { ColumnFiltersState } from '@tanstack/react-table';
-import { useActionNotifications } from './study-action-notification';
 
 const NavTabs = styled.ul({
     padding: '1rem 0',
@@ -32,9 +31,6 @@ export default function ResearcherStudies() {
     const [filters, setFilters] = useState<ColumnFiltersState>([
         { id: 'status', value: ['active', 'paused', 'scheduled'] },
     ])
-
-    // TODO Replace with toasts
-    const { notifications, addNotification, dismissNotification } = useActionNotifications()
 
     const setStatus = (ev: React.MouseEvent<HTMLAnchorElement>) => {
         const status = ev.currentTarget.dataset.status! as StudyStatus
@@ -90,7 +86,6 @@ export default function ResearcherStudies() {
                 setFilters={setFilters}
                 currentStatus={currentStatus}
                 isLaunched={currentStatus === StudyStatus.Launched}
-                addNotification={addNotification}
             />
 
         </Page>

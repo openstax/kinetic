@@ -26,13 +26,14 @@ import SortDown from '../../../../images/icons/sortdown.png';
 import SortDefault from '../../../../images/icons/sort.png';
 import { StudyStatus, useFetchStudies } from '@models';
 import { Dispatch, SetStateAction } from 'react';
-import { NotificationType } from './study-action-notification';
 import { ActionColumn } from './study-actions';
 
 declare module '@tanstack/table-core' {
-    interface ColumnMeta<TData extends RowData, TValue> { // eslint-disable-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+    interface ColumnMeta<TData extends RowData, TValue> {
         type: string
     }
+    // eslint-disable-next-line no-unused-vars
     interface TableMeta<TData extends RowData> { // eslint-disable-line @typescript-eslint/no-unused-vars
         updateData: (rowIndex: number, columnId: string, value: Study) => void
     }
@@ -207,13 +208,11 @@ export const StudiesTable: React.FC<{
     isLaunched: boolean,
     filters: ColumnFiltersState,
     setFilters: Dispatch<SetStateAction<ColumnFiltersState>>,
-    addNotification: (message: string, type?: NotificationType) => void,
     currentStatus: StudyStatus
 }> = ({
     isLaunched,
     filters,
     setFilters,
-    addNotification,
     currentStatus,
 }) => {
     const { studies, setStudies } = useFetchStudies()
@@ -336,7 +335,7 @@ export const StudiesTable: React.FC<{
             accessorKey: 'action',
             header: () => <span>Action</span>,
             enableSorting: false,
-            cell: info => <ActionColumn study={info.row.original} cell={info} addNotification={addNotification}/>,
+            cell: info => <ActionColumn study={info.row.original} cell={info} />,
         },
     ]
 
@@ -347,6 +346,7 @@ export const StudiesTable: React.FC<{
             columnFilters: filters,
             sorting,
         },
+        // getSubRows: study => study.stages,
         onSortingChange: setSorting,
         onColumnFiltersChange: setFilters,
         getCoreRowModel: getCoreRowModel(),
