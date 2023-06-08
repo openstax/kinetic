@@ -3,8 +3,10 @@ import { StageStatusEnum, Study } from '@api';
 import {
     ColumnDef,
     ColumnFiltersState,
+    ExpandedState,
     flexRender,
     getCoreRowModel,
+    getExpandedRowModel,
     getFilteredRowModel,
     getSortedRowModel,
     Header,
@@ -24,9 +26,10 @@ import AZDefault from '../../../../images/icons/azdefault.png';
 import SortUp from '../../../../images/icons/sortup.png';
 import SortDown from '../../../../images/icons/sortdown.png';
 import SortDefault from '../../../../images/icons/sort.png';
-import { StudyStatus, useFetchStudies } from '@models';
+import { getStudyEditUrl, isDraft, StudyStatus, useFetchStudies } from '@models';
 import { Dispatch, SetStateAction } from 'react';
 import { ActionColumn } from './study-actions';
+import { cloneDeep } from 'lodash-es';
 
 declare module '@tanstack/table-core' {
     // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
@@ -93,12 +96,36 @@ const TableHeader: React.FC<{header: Header<Study, unknown> }> = ({ header }) =>
 }
 
 const StyledRow = styled.tr({
-    padding: '10px 0',
     height: `3rem`,
     borderBottom: `1px solid ${colors.lightGray}`,
+    'td': {
+        padding: '1rem .5rem',
+    },
+})
+
+const NestedRow = styled(StyledRow)({
+    backgroundColor: colors.gray,
 })
 
 const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
+    if (row.depth > 0) {
+        return (
+            <NestedRow key={row.id}>
+                {row.getVisibleCells().map((cell) => {
+                    return (
+                        <td key={cell.id} css={{
+                            maxWidth: 250,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                        }}>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </td>
+                    );
+                })}
+            </NestedRow>
+        )
+    }
     return (
         <StyledRow key={row.id}>
             {row.getVisibleCells().map((cell) => {
@@ -220,7 +247,7 @@ export const StudiesTable: React.FC<{
         id: 'opensAt',
         desc: false,
     }])
-
+    const [expanded, setExpanded] = React.useState<ExpandedState>(true);
     const columns: ColumnDef<Study, any>[] = [
         {
             accessorKey: 'titleForResearchers',
@@ -230,14 +257,15 @@ export const StudiesTable: React.FC<{
                 type: 'text',
             },
             cell: (info) => {
-                const studyId = info.row.original.id;
                 return (
-                    <Link
-                        to={`/study/edit/${studyId}`}
-                        css={{ color: colors.purple }}
-                    >
-                        {info.getValue()}
-                    </Link>
+                    <Box css={{ paddingLeft: info.row.depth ? '2rem' : 'default' }}>
+                        <Link
+                            to={getStudyEditUrl(info.row.original)}
+                            css={{ color: colors.purple }}
+                        >
+                            {info.getValue()}
+                        </Link>
+                    </Box>
                 )
             },
         },
@@ -250,12 +278,6 @@ export const StudiesTable: React.FC<{
             filterFn: (row, columnId, filterValue) => {
                 return filterValue.includes(row.getValue(columnId))
             },
-            accessorFn: (row) => {
-                if (!row.stages?.length) {
-                    return 'draft'
-                }
-                return row.stages[0].status
-            },
             cell: (info) => <StatusLabel status={info.getValue() as string} />,
         },
         {
@@ -267,7 +289,6 @@ export const StudiesTable: React.FC<{
             accessorKey: 'closesAt',
             header: () => <span>{currentStatus === StudyStatus.Completed ? 'Closed on' : 'Closes on'}</span>,
             cell: (info) => {
-                // TODO Stage status and nested table rows
                 if (info.row.original.status === StageStatusEnum.Paused || !info.getValue()) {
                     return '-'
                 }
@@ -335,23 +356,44 @@ export const StudiesTable: React.FC<{
             accessorKey: 'action',
             header: () => <span>Action</span>,
             enableSorting: false,
-            cell: info => <ActionColumn study={info.row.original} cell={info} />,
+            cell: info => {
+                return <ActionColumn study={info.row.original} cell={info} />
+            },
         },
     ]
 
     const table: Table<Study> = useReactTable({
+        debugTable: true,
+        filterFromLeafRows: false,
         data: studies,
         columns,
         state: {
             columnFilters: filters,
             sorting,
+            expanded,
         },
-        // getSubRows: study => study.stages,
+        autoResetExpanded: false,
+        getSubRows: (study) => {
+            if (!study.stages || study.stages.length < 2) {
+                return undefined
+            }
+            return study.stages?.map((stage, index) => {
+                return cloneDeep({
+                    ...study,
+                    stages: [],
+                    titleForResearchers: `Session ${index + 1}`,
+                    status: stage.status,
+                    stageId: stage.id,
+                })
+            })
+        },
         onSortingChange: setSorting,
         onColumnFiltersChange: setFilters,
+        onExpandedChange: setExpanded,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        getExpandedRowModel: getExpandedRowModel(),
         meta: {
             updateData: (rowIndex, columnId, value) => {
                 setStudies(oldStudies =>
@@ -381,8 +423,10 @@ export const StudiesTable: React.FC<{
                     </tr>
                 </thead>
                 <tbody>
-                    {table.getRowModel().rows.map((row) =>
-                        <StudyRow row={row} key={row.id} />
+                    {table.getRowModel().rows.map((row) => {
+                        // console.log(row.subRows);
+                        return <StudyRow row={row} key={row.id} />
+                    }
                     )}
                 </tbody>
             </table>

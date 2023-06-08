@@ -4,6 +4,7 @@ import { StageStatusEnum, Study } from '@api';
 import { colors } from '@theme';
 import { useApi } from '@lib';
 import { CellContext } from '@tanstack/react-table';
+import { getStudyEditUrl } from '@models';
 
 const ModalType = {
     Pause: 'pauseStudy',
@@ -213,7 +214,6 @@ export const ActionColumn: React.FC<{
         setShowModal(false)
     }
 
-    const editDisabled = study.status === StageStatusEnum.Completed
     const pauseDisabled = study.status !== StageStatusEnum.Active
     const resumeDisabled = study.status !== StageStatusEnum.Paused
 
@@ -234,10 +234,9 @@ export const ActionColumn: React.FC<{
             <div>
                 <ActionIcon
                     icon="pencilFill"
-                    disabled={editDisabled}
                     height={20}
-                    tooltip={!editDisabled && 'Edit Study'}
-                    onClick={() => !editDisabled && nav(`/study/edit/${study.id}`)}
+                    tooltip={'Edit Study'}
+                    onClick={() => nav(getStudyEditUrl(study))}
                 />
             </div>
             <div>
@@ -278,7 +277,7 @@ export const ActionColumn: React.FC<{
                                 className="dropdown-item cursor-pointer"
                                 onClick={() => setAndShowModal(ModalType.End)}
                             >
-                                End Study Test
+                                End Study
                             </span>
                         </li>
                     }

@@ -9,7 +9,7 @@ import {
     StudyStatusEnum,
 } from '@api'
 import { isNil, useApi } from '@lib'
-import { useEffect, useState } from '@common';
+import { dayjs, useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
 
 export type EditingStudy = NewStudy | Study
@@ -37,9 +37,17 @@ const areStudyStagesLaunchable = (study: ParticipantStudy) => {
 export const isStudyLaunchable = (study: ParticipantStudy) => {
     return Boolean(
         !study.completedAt
-        // && (!study.closesAt || dayjs(study.closesAt).isAfter(dayjs()))
+        && (!study.closesAt || dayjs(study.closesAt).isAfter(dayjs()))
         && areStudyStagesLaunchable(study)
     )
+}
+
+export const getStudyEditUrl = (study: Study) => {
+    if (isDraft(study)) {
+        return `/study/edit/${study.id}`
+    }
+
+    return `/study/overview/${study.id}`
 }
 
 export function isStudy(study: EditingStudy): study is Study {
@@ -72,7 +80,7 @@ export function isReadyForLaunch(study: EditingStudy) {
     return study.status === StudyStatusEnum.ReadyForLaunch
 }
 
-export function isDraft(study: EditingStudy) {
+export function isDraft(study: EditingStudy | Study) {
     return study.status === StudyStatusEnum.Draft
 }
 

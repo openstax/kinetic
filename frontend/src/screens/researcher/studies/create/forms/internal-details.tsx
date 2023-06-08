@@ -17,7 +17,7 @@ export const internalDetailsValidation = (studies: Study[], study: EditingStudy)
     return {
         titleForResearchers: Yup.string().when('step', {
             is: 0,
-            then: (s: Yup.BaseSchema) => s.required('Required').max(100)
+            then: (s: Yup.BaseSchema) => s.required('Required').max(45)
                 .test(
                     'Unique',
                     'This study title is already in use. Please change your study title to make it unique on Kinetic..',

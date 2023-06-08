@@ -925,7 +925,7 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the preferences, will create a default set of prefences if the user not saved them previously 
+     * Returns the preferences, will create a default set of preferences if the user not saved them previously 
      * Obtain the current users preferences
      */
     async getPreferencesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPreferences>> {
@@ -944,7 +944,7 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the preferences, will create a default set of prefences if the user not saved them previously 
+     * Returns the preferences, will create a default set of preferences if the user not saved them previously 
      * Obtain the current users preferences
      */
     async getPreferences(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserPreferences> {
