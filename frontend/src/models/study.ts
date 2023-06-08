@@ -84,11 +84,11 @@ export function isDraft(study: EditingStudy | Study) {
     return study.status === StudyStatusEnum.Draft
 }
 
-export function getStudyPi(study: EditingStudy) {
+export function getStudyPi(study: EditingStudy | ParticipantStudy) {
     return study.researchers?.find(r => r.role === ResearcherRoleEnum.Pi)
 }
 
-export function getStudyLead(study: EditingStudy) {
+export function getStudyLead(study: EditingStudy | ParticipantStudy) {
     return study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)
 }
 

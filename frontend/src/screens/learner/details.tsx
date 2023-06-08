@@ -1,6 +1,6 @@
 import { React, useCallback, useEffect, useNavigate, useParams, useState } from '@common'
 import { ParticipantStudy, PublicResearcher } from '@api'
-import { getFirstStage, isStudyLaunchable, LaunchStudy, studyIsMultipart } from '@models'
+import { getFirstStage, getStudyLead, getStudyPi, isStudyLaunchable, LaunchStudy, studyIsMultipart } from '@models'
 import { dayjs, useApi } from '@lib'
 import { Box, Button, Icon, IconKey, MultiSessionBar, OffCanvas } from '@components'
 import { colors } from '@theme'
@@ -175,6 +175,9 @@ export const StudyDetailsPreview: FC<{
     onHide: () => void,
     preview?: boolean
 }> = ({ study, show, onHide, preview = false }) => {
+    const pi = getStudyPi(study)
+    const lead = getStudyLead(study)
+    console.log(pi)
     return (
         <OffCanvas show={show} title="Study Detail" onHide={onHide}>
             <Box direction="column" flex>
@@ -197,7 +200,9 @@ export const StudyDetailsPreview: FC<{
                     <StudyPart property="feedbackDescription" title="Feedback Available" icon="feedback" study={study} />
                     <MultiSession study={study} />
                     <Box margin={{ bottom: 'large' }} css={{ color: colors.grayText }}>{study.longDescription}</Box>
-                    <Researcher researcher={study.researchers?.[0]} />
+                    {pi && <Researcher researcher={pi} />}
+                    {lead && <Researcher researcher={lead} />}
+                    {/*<Researcher researcher={study.researchers?.[0]} />*/}
                     <StudyPart property="benefits" title="What’s in it for you" icon="heart" study={study} />
                     <Part icon="warning" title="Notice">
                         Your responses to this study will be used to further learning science and

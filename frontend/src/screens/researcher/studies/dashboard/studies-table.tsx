@@ -278,20 +278,37 @@ export const StudiesTable: React.FC<{
             filterFn: (row, columnId, filterValue) => {
                 return filterValue.includes(row.getValue(columnId))
             },
-            cell: (info) => <StatusLabel status={info.getValue() as string} />,
+            cell: (info) => {
+                if (info.row.subRows.length) {
+                    return '-'
+                }
+
+                return <StatusLabel status={info.getValue() as string} />
+            },
         },
         {
             accessorKey: 'opensAt',
             header: () => <span>Opens on</span>,
-            cell: (info) => toDayJS(info.getValue() as Date).format('MM/DD/YYYY'),
+            cell: (info) => {
+                if (info.row.subRows.length) {
+                    return '-'
+                }
+
+                return toDayJS(info.getValue() as Date).format('MM/DD/YYYY')
+            },
         },
         {
             accessorKey: 'closesAt',
             header: () => <span>{currentStatus === StudyStatus.Completed ? 'Closed on' : 'Closes on'}</span>,
             cell: (info) => {
+                if (info.row.subRows.length) {
+                    return '-'
+                }
+
                 if (info.row.original.status === StageStatusEnum.Paused || !info.getValue()) {
                     return '-'
                 }
+
                 return toDayJS(info.getValue() as Date).format('MM/DD/YYYY')
             },
         },
@@ -378,6 +395,9 @@ export const StudiesTable: React.FC<{
                 return undefined
             }
             return study.stages?.map((stage, index) => {
+                if (study.id == 10) {
+                    console.log(stage.status)
+                }
                 return cloneDeep({
                     ...study,
                     stages: [],
