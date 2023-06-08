@@ -1,10 +1,8 @@
-import { React, Yup, cx, styled, useState } from '@common';
+import { cx, React, styled, useState, Yup } from '@common';
 import { useApi, useCurrentResearcher, useUserInfo } from '@lib';
 import { colors } from '@theme';
 import { Researcher } from '@api';
-import {
-    Button, Form, FormCancelButton, FormSaveButton, Tooltip, Box, CharacterCount, Icon, InputField, SelectField,
-} from '@components';
+import { Box, CharacterCount, Form, FormSaveButton, Icon, InputField, SelectField, Tooltip } from '@components';
 
 const urlRegex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
 export const ResearcherValidationSchema = Yup.object().shape({
@@ -44,7 +42,6 @@ const StyledForm = styled(Form<Researcher>)(({ readOnly }) => ({
 
 export const ResearcherAccountForm: React.FC<{className?: string}> = ({ className }) => {
     const api = useApi()
-
     const [researcher, setResearcher] = useState(useCurrentResearcher())
 
     if (!researcher) {
@@ -55,7 +52,6 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
     researcher.firstName = researcher.firstName || userInfo?.first_name
     researcher.lastName = researcher.lastName || userInfo?.last_name
 
-    const [editing, setEditing] = useState(false)
     const [institution, setInstitution] = useState(researcher.institution)
 
     const saveResearcher = async (researcher: Researcher) => {
@@ -72,19 +68,14 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
         catch (err) {
             console.error(err) // eslint-disable-line no-console
         }
-        setEditing(false)
-    }
-
-    const onCancel = () => {
-        setEditing(false)
     }
 
     return (
         <StyledForm
             onSubmit={saveResearcher}
             className={cx(className, 'row')}
-            readOnly={!editing}
-            onCancel={onCancel}
+            // readOnly={!editing}
+            // onCancel={onCancel}
             defaultValues={researcher}
             validationSchema={ResearcherValidationSchema}
         >
@@ -105,7 +96,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
                 <SelectField
                     name="institution"
                     isClearable={true}
-                    placeholder={editing ? 'Select Option' : ''}
+                    placeholder={'Select Option'}
                     onChange={(value) => (typeof value == 'string' && setInstitution(value))}
                     value={institution}
                     defaultValue={institution}
@@ -160,23 +151,11 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
                 <CharacterCount max={250} name={'bio'} />
             </div>
 
-            {!editing &&
-                <Box gap>
-                    <Button primary data-testid="form-edit-btn" onClick={() => setEditing(true)}>
-                        Edit Profile
-                    </Button>
-                </Box>
-            }
-            {editing &&
-                <Box gap>
-                    <FormSaveButton primary>
-                        Save
-                    </FormSaveButton>
-                    <FormCancelButton onClick={onCancel}>
-                        Cancel
-                    </FormCancelButton>
-                </Box>
-            }
+            <Box gap justify='end' className='mt-4'>
+                <FormSaveButton primary>
+                    Save
+                </FormSaveButton>
+            </Box>
         </StyledForm>
     );
 }
