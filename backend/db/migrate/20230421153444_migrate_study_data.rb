@@ -1,6 +1,7 @@
 class MigrateStudyData < ActiveRecord::Migration[6.1]
   def up
     researchers = YAML.load_file(Rails.root.join('db/migrate/researchers.yaml'))
+    researchers = []
     Researcher.create({
       first_name: 'Jeffrey',
       last_name: 'Zhong',
@@ -15,6 +16,7 @@ class MigrateStudyData < ActiveRecord::Migration[6.1]
     end
 
     studies = YAML.load_file(Rails.root.join('db/migrate/study_migration_data.yaml'))
+    studies = []
     studies.each do |data|
       study = Study.includes(:stages, :study_researchers).find(data['id'])
 
