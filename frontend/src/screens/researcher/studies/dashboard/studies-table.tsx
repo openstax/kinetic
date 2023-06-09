@@ -1,5 +1,5 @@
 import { cx, React, styled } from '@common';
-import { StageStatusEnum, Study } from '@api';
+import { StageStatusEnum, Study, StudyStatusEnum } from '@api';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -26,7 +26,7 @@ import AZDefault from '../../../../images/icons/azdefault.png';
 import SortUp from '../../../../images/icons/sortup.png';
 import SortDown from '../../../../images/icons/sortdown.png';
 import SortDefault from '../../../../images/icons/sort.png';
-import { getStudyEditUrl, isDraft, StudyStatus, useFetchStudies } from '@models';
+import { getStudyEditUrl, StudyStatus, useFetchStudies } from '@models';
 import { Dispatch, SetStateAction } from 'react';
 import { ActionColumn } from './study-actions';
 import { cloneDeep } from 'lodash-es';
@@ -154,9 +154,13 @@ const FilterContainer = styled(Box)({
 })
 
 const StatusFilters: React.FC<{
+    status: String,
     table: Table<Study>,
     className?: string,
-}> = ({ table, className }) => {
+}> = ({ status, table, className }) => {
+    const isLaunched = status === StudyStatus.Launched
+    const isDraft = status === StudyStatus.Draft
+
     const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
         const status = e.target.name;
         const checked = e.target.checked;
@@ -170,23 +174,45 @@ const StatusFilters: React.FC<{
         return values.includes(name)
     }
 
-    return (
-        <FilterContainer className={cx(className)} gap='medium'>
-            <span>Show</span>
-            <Box gap align='center'>
-                <input type="checkbox" name="active" checked={isChecked('active')} onChange={handleFilter}/>
-                <small>Active</small>
-            </Box>
-            <Box gap align='center'>
-                <input type='checkbox' name='paused' checked={isChecked('paused')} onChange={handleFilter}/>
-                <small>Paused</small>
-            </Box>
-            <Box gap align='center'>
-                <input type='checkbox' name='scheduled' checked={isChecked('scheduled')} onChange={handleFilter}/>
-                <small>Scheduled</small>
-            </Box>
-        </FilterContainer>
-    )
+    if (isLaunched) {
+        return (
+            <FilterContainer className={cx(className)} gap='medium'>
+                <Box gap align='center'>
+                    <input id='active-filter' type="checkbox" name="active" checked={isChecked(`${StudyStatusEnum.Active}`)} onChange={handleFilter}/>
+                    <label className='small' htmlFor='active-filter'>Active</label>
+                </Box>
+                <Box gap align='center'>
+                    <input id='paused-filter' type='checkbox' name='paused' checked={isChecked(`${StudyStatusEnum.Paused}`)} onChange={handleFilter}/>
+                    <label className='small' htmlFor='paused-filter'>Paused</label>
+                </Box>
+                <Box gap align='center'>
+                    <input id='scheduled-filter' type='checkbox' name='scheduled' checked={isChecked(`${StudyStatusEnum.Scheduled}`)} onChange={handleFilter}/>
+                    <label className='small' htmlFor='scheduled-filter'>Scheduled</label>
+                </Box>
+            </FilterContainer>
+        )
+    }
+
+    if (isDraft) {
+        return (
+            <FilterContainer className={cx(className)} gap='medium'>
+                <Box gap align='center'>
+                    <input id='draft-filter' type="checkbox" name="draft" checked={isChecked(`${StudyStatusEnum.Draft}`)} onChange={handleFilter}/>
+                    <label className='small' htmlFor='draft-filter'>Draft</label>
+                </Box>
+                <Box gap align='center'>
+                    <input id='waiting-period-filter' type='checkbox' name='waiting_period' checked={isChecked(`${StudyStatusEnum.WaitingPeriod}`)} onChange={handleFilter}/>
+                    <label className='small' htmlFor='waiting-period-filter'>Waiting Period</label>
+                </Box>
+                <Box gap align='center'>
+                    <input id='ready-for-launch-filter' type='checkbox' name='ready_for_launch' checked={isChecked(`${StudyStatusEnum.ReadyForLaunch}`)} onChange={handleFilter}/>
+                    <label className='small' htmlFor='ready-for-launch-filter'>Ready For Launch</label>
+                </Box>
+            </FilterContainer>
+        )
+    }
+
+    return null
 }
 
 const StyledLabel = styled.span({
@@ -205,6 +231,10 @@ const StatusLabel: React.FC<{status: string}> = ({ status }) => {
             return <StyledLabel css={{ backgroundColor: '#FAF6D1' }}>Scheduled</StyledLabel>
         case 'draft':
             return <StyledLabel css={{ backgroundColor: '#F6DBED' }}>Draft</StyledLabel>
+        case 'readyForLaunch':
+            return <StyledLabel css={{ backgroundColor: '#DBDBDB' }}>Ready For Launch</StyledLabel>
+        case 'waitingPeriod':
+            return <StyledLabel css={{ backgroundColor: '#DBDBDB' }}>Waiting Period</StyledLabel>
         case 'completed':
             return <StyledLabel css={{ color: colors.purple, backgroundColor: '#DFE1F9' }}>Completed</StyledLabel>
         default:
@@ -232,12 +262,10 @@ const NoData: React.FC = () => {
 }
 
 export const StudiesTable: React.FC<{
-    isLaunched: boolean,
     filters: ColumnFiltersState,
     setFilters: Dispatch<SetStateAction<ColumnFiltersState>>,
     currentStatus: StudyStatus
 }> = ({
-    isLaunched,
     filters,
     setFilters,
     currentStatus,
@@ -247,6 +275,7 @@ export const StudiesTable: React.FC<{
         id: 'opensAt',
         desc: false,
     }])
+
     const [expanded, setExpanded] = React.useState<ExpandedState>(true);
     const columns: ColumnDef<Study, any>[] = [
         {
@@ -290,7 +319,7 @@ export const StudiesTable: React.FC<{
             accessorKey: 'opensAt',
             header: () => <span>Opens on</span>,
             cell: (info) => {
-                if (info.row.subRows.length) {
+                if (info.row.subRows.length || !info.row.original.opensAt) {
                     return '-'
                 }
 
@@ -380,8 +409,7 @@ export const StudiesTable: React.FC<{
     ]
 
     const table: Table<Study> = useReactTable({
-        debugTable: true,
-        filterFromLeafRows: false,
+        filterFromLeafRows: true,
         data: studies,
         columns,
         state: {
@@ -395,9 +423,6 @@ export const StudiesTable: React.FC<{
                 return undefined
             }
             return study.stages?.map((stage, index) => {
-                if (study.id == 10) {
-                    console.log(stage.status)
-                }
                 return cloneDeep({
                     ...study,
                     stages: [],
@@ -433,7 +458,7 @@ export const StudiesTable: React.FC<{
 
     return (
         <Box direction='column' className='studies mt-2'>
-            {isLaunched && <StatusFilters table={table} className='my-2'/>}
+            <StatusFilters status={currentStatus} table={table} className='my-2'/>
             <table data-testid="studies-table" className='w-100'>
                 <thead css={{ height: 40 }}>
                     <tr>

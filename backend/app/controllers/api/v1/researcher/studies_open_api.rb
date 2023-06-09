@@ -125,7 +125,13 @@ class Api::V1::Researcher::StudiesOpenApi
         key :in, :query
         key :description, 'Action you want to take on the study'
         key :required, true
-        key :schema, { type: :string, enum: %w[submit launch] }
+        key :schema, { type: :string, enum: %w[submit launch pause resume] }
+      end
+      parameter do
+        key :name, :stage_id
+        key :in, :query
+        key :description, 'Action you want to take on a specific stage'
+        key :schema, { type: :integer }
       end
       request_body do
         key :description, 'The study updates.'

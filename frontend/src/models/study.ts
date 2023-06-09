@@ -71,6 +71,9 @@ export function getFirstStage(study: Study | ParticipantStudy): Stage | undefine
     return first(study.stages)
 }
 
+export function isActive(study: EditingStudy) {
+    return study.status === StudyStatusEnum.Active
+}
 
 export function isWaiting(study: EditingStudy) {
     return study.status === StudyStatusEnum.WaitingPeriod
@@ -82,6 +85,18 @@ export function isReadyForLaunch(study: EditingStudy) {
 
 export function isDraft(study: EditingStudy | Study) {
     return study.status === StudyStatusEnum.Draft
+}
+
+export function isPaused(study: EditingStudy | Study) {
+    return study.status === StudyStatusEnum.Paused
+}
+
+export function isScheduled(study: EditingStudy | Study) {
+    return study.status === StudyStatusEnum.Scheduled
+}
+
+export function isCompleted(study: EditingStudy | Study) {
+    return study.status === StudyStatusEnum.Completed
 }
 
 export function getStudyPi(study: EditingStudy | ParticipantStudy) {

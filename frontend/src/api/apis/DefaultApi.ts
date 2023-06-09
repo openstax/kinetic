@@ -268,6 +268,7 @@ export interface UpdateStudyRequest {
 export interface UpdateStudyStatusRequest {
     id: number;
     statusAction: UpdateStudyStatusStatusActionEnum;
+    stageId?: number;
     study?: Study;
 }
 
@@ -1666,6 +1667,10 @@ export class DefaultApi extends runtime.BaseAPI {
             queryParameters['status_action'] = requestParameters.statusAction;
         }
 
+        if (requestParameters.stageId !== undefined) {
+            queryParameters['stage_id'] = requestParameters.stageId;
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
@@ -1704,6 +1709,8 @@ export type LandStudyAbortedEnum = typeof LandStudyAbortedEnum[keyof typeof Land
  */
 export const UpdateStudyStatusStatusActionEnum = {
     Submit: 'submit',
-    Launch: 'launch'
+    Launch: 'launch',
+    Pause: 'pause',
+    Resume: 'resume'
 } as const;
 export type UpdateStudyStatusStatusActionEnum = typeof UpdateStudyStatusStatusActionEnum[keyof typeof UpdateStudyStatusStatusActionEnum];

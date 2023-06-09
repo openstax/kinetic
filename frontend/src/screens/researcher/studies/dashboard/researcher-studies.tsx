@@ -5,6 +5,7 @@ import { colors } from '@theme';
 import 'bootstrap/js/dist/dropdown'
 import { StudiesTable } from './studies-table';
 import { ColumnFiltersState } from '@tanstack/react-table';
+import { StudyStatusEnum } from '@api';
 
 const NavTabs = styled.ul({
     padding: '1rem 0',
@@ -37,13 +38,13 @@ export default function ResearcherStudies() {
         setCurrentStatus(status)
         switch (status) {
             case StudyStatus.Completed:
-                setFilters([{ id: 'status', value: ['completed'] }])
+                setFilters([{ id: 'status', value: [StudyStatusEnum.Completed] }])
                 break
             case StudyStatus.Draft:
-                setFilters([{ id: 'status', value: ['draft'] }])
+                setFilters([{ id: 'status', value: [StudyStatusEnum.Draft, StudyStatusEnum.WaitingPeriod, StudyStatusEnum.ReadyForLaunch] }])
                 break
             case StudyStatus.Launched:
-                setFilters([{ id: 'status', value: ['active', 'paused', 'scheduled'] }])
+                setFilters([{ id: 'status', value: [StudyStatusEnum.Active, StudyStatusEnum.Paused, StudyStatusEnum.Scheduled] }])
                 break
         }
     }
@@ -52,7 +53,7 @@ export default function ResearcherStudies() {
         <Page className='studies-dashboard'>
             <Box align="center" justify="between">
                 <h3 className='fw-bold' data-testid='studies-table-header'>
-                        Studies
+                    Studies
                 </h3>
                 <Button
                     primary
@@ -61,7 +62,7 @@ export default function ResearcherStudies() {
                     className='fw-bold'
                 >
                     <Icon icon="plus" height={28}></Icon>
-                        Create New Study
+                    Create New Study
                 </Button>
             </Box>
             <NavTabs className="nav nav-tabs">
@@ -85,7 +86,6 @@ export default function ResearcherStudies() {
                 filters={filters}
                 setFilters={setFilters}
                 currentStatus={currentStatus}
-                isLaunched={currentStatus === StudyStatus.Launched}
             />
 
         </Page>

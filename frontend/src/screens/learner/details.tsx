@@ -177,7 +177,6 @@ export const StudyDetailsPreview: FC<{
 }> = ({ study, show, onHide, preview = false }) => {
     const pi = getStudyPi(study)
     const lead = getStudyLead(study)
-    console.log(pi)
     return (
         <OffCanvas show={show} title="Study Detail" onHide={onHide}>
             <Box direction="column" flex>

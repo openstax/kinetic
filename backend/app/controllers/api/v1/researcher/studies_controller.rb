@@ -75,6 +75,16 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       ResearcherNotifications.notify_kinetic_study_review(@study)
     end
 
+    if params[:stage_id].present?
+      if params[:status_action] == 'pause'
+        
+      end
+
+      if params[:status_action] == 'resume'
+
+      end
+    end
+
     if params[:status_action] == 'launch'
       @study.stages.update_all(status: 'active')
     end

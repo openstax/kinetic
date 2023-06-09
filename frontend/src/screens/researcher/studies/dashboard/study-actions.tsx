@@ -1,10 +1,19 @@
 import { React, styled, dayjs, useNavigate } from '@common';
 import { Box, Icon, Button, Modal, Toast  } from '@components';
-import { StageStatusEnum, Study } from '@api';
+import { StageStatusEnum, Study, StudyStatusEnum } from '@api';
 import { colors } from '@theme';
 import { useApi } from '@lib';
 import { CellContext } from '@tanstack/react-table';
-import { getStudyEditUrl } from '@models';
+import {
+    getStudyEditUrl,
+    isActive,
+    isCompleted,
+    isDraft,
+    isPaused,
+    isReadyForLaunch,
+    isScheduled,
+    isWaiting,
+} from '@models';
 
 const ModalType = {
     Pause: 'pauseStudy',
@@ -214,18 +223,16 @@ export const ActionColumn: React.FC<{
         setShowModal(false)
     }
 
-    const pauseDisabled = study.status !== StageStatusEnum.Active
-    const resumeDisabled = study.status !== StageStatusEnum.Paused
+    const isLeafNode = !!cell.row.depth
 
-    const showEndStudy =
-        study.status === StageStatusEnum.Paused ||
-        (study.status !== StageStatusEnum.Completed && study.status === StageStatusEnum.Active)
+    const pauseDisabled = !isActive(study)
+    const resumeDisabled = !isPaused(study)
 
-    const showReopen = study.status === StageStatusEnum.Completed
+    const showEndStudy = isPaused(study) || (!isCompleted(study) && isActive(study))
 
-    const showDelete =
-        study.status === StageStatusEnum.Draft ||
-        study.status === StageStatusEnum.Scheduled
+    const showReopen = isCompleted(study)
+
+    const showDelete = !isLeafNode && (isDraft(study) || isWaiting(study) || isReadyForLaunch(study) || isScheduled(study))
 
     const showResumeButton = study.status === StageStatusEnum.Paused
 
