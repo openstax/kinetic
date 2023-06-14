@@ -98,4 +98,39 @@ class Study < ApplicationRecord
     next_launchable_stage(user)
   end
 
+  def launch
+    stages.update_all(status: 'active')
+  end
+
+  def approve
+    stages.update_all(status: 'ready_for_launch')
+  end
+
+  def submit
+    (survey_id, secret_key) = CloneSurvey.new.clone(title_for_researchers)
+    stages.each do |stage|
+      stage.update(
+        {
+          status: :waiting_period,
+          config: {
+            type: 'qualtrics',
+            survey_id: survey_id,
+            secret_key: secret_key
+          }
+        }
+      )
+    end
+  end
+
+  def pause
+    stage = stages.find { |stage| stage.status != 'paused' }
+    stage&.update(status: 'paused')
+  end
+
+  def resume
+    stage_index = stages.find_index { |stage| stage.status == 'paused' }
+    # must resume all subsequent stages
+    stages = stages.drop(stage_index)
+    stages&.update_all(status: 'active')
+  end
 end

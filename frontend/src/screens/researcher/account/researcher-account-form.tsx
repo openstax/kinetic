@@ -74,8 +74,6 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
         <StyledForm
             onSubmit={saveResearcher}
             className={cx(className, 'row')}
-            // readOnly={!editing}
-            // onCancel={onCancel}
             defaultValues={researcher}
             validationSchema={ResearcherValidationSchema}
         >

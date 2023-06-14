@@ -72,7 +72,7 @@ export const useLearnerStudies = () => {
                 eligibleStudies.filter(s => !s.isFeatured).slice(-1 * (FEATURED_COUNT - featuredStudies.length))
         )
 
-        const studiesByTopic = groupBy(allStudies, (s) => s.studyTopic) as any as StudyByTopics
+        const studiesByTopic = groupBy(allStudies, (s) => s.topic) as any as StudyByTopics
         if (!studiesByTopic[filter]) {
             setFilter((Object.keys(studiesByTopic) as Array<StudyTopic>)[0])
         }

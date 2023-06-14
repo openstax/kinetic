@@ -21,7 +21,7 @@ const UncheckedCircle = styled.div({
 })
 
 const CheckedCircle = () => (
-    <div css={{
+    <Box align='center' justify='center' css={{
         position: 'absolute',
         border: `2px solid ${colors.kineticResearcher}`,
         width: 15,
@@ -36,13 +36,11 @@ const CheckedCircle = () => (
             background: colors.kineticResearcher,
             width: 7,
             height: 7,
-            top: '25%',
-            right: '20%',
             borderRadius: 50,
         }}>
 
         </div>
-    </div>
+    </Box>
 )
 
 const ImageCard: FC<{
@@ -63,7 +61,7 @@ const ImageCard: FC<{
         >
             <img src={getImageUrl(imageId)} data-testid='card-image' alt={imageId} width={250} height={140} css={{
                 border: `1px solid ${colors.lightGray}`,
-                padding: `0 25px`,
+                // padding: `0 25px`,
             }}/>
             {selectedImage === imageId ? <CheckedCircle/> : <UncheckedCircle/>}
         </div>

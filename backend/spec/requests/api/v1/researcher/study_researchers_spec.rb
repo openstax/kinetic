@@ -52,11 +52,12 @@ RSpec.describe 'Study Researchers', api: :v1 do
 
   describe 'remove a researcher from a study' do
     let(:yet_another_researcher) { create(:researcher) }
-    let(:path) { "researcher/studies/#{study.id}/researcher/#{original_researcher.user_id}" }
+    let(:base_path) { "researcher/studies/#{study.id}/researcher" }
+    # let(:base_path) { "researcher/studies/#{study.id}/researcher/#{original_researcher.user_id}" }
 
     context 'when logged out' do
       it 'gives unauthorized' do
-        api_delete path
+        api_delete "#{base_path}/#{original_researcher.user_id}"
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -65,7 +66,7 @@ RSpec.describe 'Study Researchers', api: :v1 do
       before { stub_random_user }
 
       it 'gives forbidden' do
-        api_delete path
+        api_delete "#{base_path}/#{original_researcher.user_id}"
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -74,7 +75,7 @@ RSpec.describe 'Study Researchers', api: :v1 do
       before { stub_current_user(yet_another_researcher) }
 
       it 'gives forbidden' do
-        api_delete path
+        api_delete "#{base_path}/#{original_researcher.user_id}"
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -83,7 +84,7 @@ RSpec.describe 'Study Researchers', api: :v1 do
       before { stub_current_user(original_researcher) }
 
       it 'removes researcher' do
-        api_delete "researcher/studies/#{study.id}/researcher/#{new_researcher.user_id}"
+        api_delete "#{base_path}/#{new_researcher.user_id}"
         expect(response).to have_http_status(:ok)
         expect(study.researchers.reload).not_to include(new_researcher)
       end
@@ -93,7 +94,7 @@ RSpec.describe 'Study Researchers', api: :v1 do
       before { stub_current_user(original_researcher) }
 
       it 'does not allow deletion' do
-        api_delete path
+        api_delete "#{base_path}/#{original_researcher.user_id}"
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response_hash[:messages]).to include(/is the last researcher/)
         expect(study.researchers.reload).to include(original_researcher)

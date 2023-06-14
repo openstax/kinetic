@@ -43,7 +43,7 @@ export const ResearcherCheckbox = styled(InputField)({
 
 export const ResearcherDetailedCheckbox: FC<{
     name: string,
-    value: string,
+    value?: string,
     label: string,
     desc: string,
     radio?: boolean
@@ -57,7 +57,7 @@ export const ResearcherDetailedCheckbox: FC<{
                 css={{ marginTop: 5 }}
                 type={radio ? 'radio' : 'checkbox'}
                 id={id}
-                value={value}
+                value={value || label}
             />
             <label htmlFor={id}>
                 <Box direction='column' gap='small'>

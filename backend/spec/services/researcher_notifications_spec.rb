@@ -12,10 +12,12 @@ RSpec.describe ResearcherNotifications, type: :mailer do
   let(:removed_researcher_info_response) { [[removed_researcher.user_id, removed_researcher_info]].to_h }
 
   before do
-    allow(UserInfo).to receive(:for_uuids).and_return([
-                                                        added_researcher_info_response,
-                                                        removed_researcher_info_response
-                                                      ])
+    allow(UserInfo).to receive(:for_uuids).and_return(
+      [
+        added_researcher_info_response,
+        removed_researcher_info_response
+      ]
+    )
   end
 
   it 'notifies researchers that were added and removed from study' do

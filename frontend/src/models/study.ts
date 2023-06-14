@@ -11,14 +11,16 @@ import {
 import { isNil, useApi } from '@lib'
 import { dayjs, useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
+import { Toast } from '@nathanstitt/sundry/ui';
 
-export type EditingStudy = NewStudy | Study
-export type SavedStudy = Study | ParticipantStudy
+// export type EditingStudy = NewStudy | Study
+export type EditingStudy = Study
+// export type SavedStudy = Study | ParticipantStudy
 
 export enum StudyStatus {
-    Launched = 'Launched', // eslint-disable-line no-unused-vars
-    Draft = 'Draft', // eslint-disable-line no-unused-vars
-    Completed = 'Completed', // eslint-disable-line no-unused-vars
+    Launched = 'Launched',
+    Draft = 'Draft',
+    Completed = 'Completed',
 }
 
 export const LaunchStudy = async (api: DefaultApi, study: { id: number }, options: { preview?: boolean } = {}) => {
@@ -148,6 +150,40 @@ export const useFetchStudies = () => {
     fetchStudies()
 
     return { studies, setStudies, fetchStudies }
+}
+
+export const useFetchStudy = (id: string) => {
+    const api = useApi()
+    const [study, setStudy] = useState<EditingStudy | null>()
+    const [allStudies, setAllStudies] = useState<Study[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
+    const isNew = 'new' === id
+
+    useEffect(() => {
+        api.getStudies().then(studies => {
+            setLoading(false)
+            setAllStudies(studies.data || [])
+            if (isNew) {
+                return setStudy({
+                    id: -1,
+                    titleForResearchers: '',
+                    internalDescription: '',
+                })
+            }
+            const study = studies.data?.find(s => s.id == Number(id))
+            if (study) {
+                setStudy(study)
+            } else {
+                Toast.show({
+                    error: true,
+                    title: 'Study not found',
+                    message: `Study with id ${id} not found`,
+                })
+            }
+        })
+    }, [id])
+
+    return { loading, study, setStudy, allStudies, setAllStudies }
 }
 
 export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other'

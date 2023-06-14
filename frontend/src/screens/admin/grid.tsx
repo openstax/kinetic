@@ -28,4 +28,3 @@ export const Main = styled(Box)({
     gridArea: 'main',
     overflow: 'auto',
 })
-

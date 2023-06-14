@@ -37,25 +37,20 @@ const getLineColor = (step: Step, currentStep: Step) => {
 export const ResearcherProgressBar: FC<{
     steps: Step[],
     currentStep: Step,
-    setStepIndex: (index: number) => void
-}> = ({ steps, currentStep, setStepIndex }) => {
-    // TODO Remove before merging - dev superpower only
-    const onClickStep = (step: Step) => {
-        // setStepIndex(step.index)
-    }
-
+}> = ({ steps, currentStep }) => {
     return (
         <Box width='100%'>
             {steps.map((step) => {
                 return (
-                    <Box key={step.index} direction='column' flex={{ grow: 1 }} gap='large' onClick={() => onClickStep(step)}>
+                    <Box key={step.index} direction='column' flex={{ grow: 1 }} gap='large'>
                         <Box
+                            height='7px'
+                            width='105%'
                             css={{
                                 background: getLineColor(step, currentStep),
-                                height: 7,
-                                width: '105%',
                                 borderRadius: 5,
                             }}
+                            gap='0'
                             justify='center'
                             align='center'
                         >

@@ -10,7 +10,9 @@ class Api::V1::Researcher::StudiesOpenApi
 
   openapi_component do
     schema :Study do
-      key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
+      # key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
+      # TODO Test this
+      key :required, COMMON_REQUIRED_STUDY_FIELDS
       allOf do
         schema do
           key :$ref, :BaseStudy
@@ -125,7 +127,7 @@ class Api::V1::Researcher::StudiesOpenApi
         key :in, :query
         key :description, 'Action you want to take on the study'
         key :required, true
-        key :schema, { type: :string, enum: %w[submit launch pause resume] }
+        key :schema, { type: :string, enum: %w[submit launch pause resume end reopen] }
       end
       parameter do
         key :name, :stage_id

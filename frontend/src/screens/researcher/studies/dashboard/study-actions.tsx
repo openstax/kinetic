@@ -1,6 +1,6 @@
-import { React, styled, dayjs, useNavigate } from '@common';
-import { Box, Icon, Button, Modal, Toast  } from '@components';
-import { StageStatusEnum, Study, StudyStatusEnum } from '@api';
+import { dayjs, React, styled, useNavigate } from '@common';
+import { Box, Button, Icon, Modal, Toast } from '@components';
+import { StageStatusEnum, Study } from '@api';
 import { colors } from '@theme';
 import { useApi } from '@lib';
 import { CellContext } from '@tanstack/react-table';
@@ -57,6 +57,34 @@ const ActionModalContent: FC<{
         onHide()
     }
 
+
+    const pauseStudy = (study: Study, message: string) => {
+        try {
+            api.updateStudyStatus({
+                id: study.id,
+                statusAction: 'pause',
+            }).then((study) => {
+                Toast.show({ message })
+                cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
+            })
+
+
+            api.deleteStudy({ studyId: study.id }).then(() => {
+                Toast.show({ message })
+                study.isHidden = true
+                cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
+            })
+        } catch (err) {
+            study.isHidden = false
+            Toast.show({
+                error: err,
+                message: String(err),
+            })
+            console.error(err) // eslint-disable-line no-console
+        }
+        onHide()
+    }
+
     const deleteStudy = (study: Study, message: string) => {
         try {
             api.deleteStudy({ studyId: study.id }).then(() => {
@@ -83,11 +111,9 @@ const ActionModalContent: FC<{
                 body="This action will pause the study and participants will no longer be able to view it until you resume."
                 cancelText='Keep Study Active'
                 actionText='Pause Study'
-                onSubmit={() => updateStudy(
-                    study,
-                    StageStatusEnum.Paused,
-                    `Study ${study.titleForResearchers} has been paused.`
-                )}
+                onSubmit={() => {
+                    pauseStudy(study, `Study ${study.titleForResearchers} has been paused.`)
+                }}
                 onCancel={onHide}
             />
         case ModalType.Resume:
@@ -208,6 +234,12 @@ const ActionIcon = styled(Icon)(({ disabled }) => ({
     cursor: disabled ? 'default' : 'pointer',
 }))
 
+const canPause = (cell: CellContext<Study, any>): boolean => {
+    const isLeafNode = !!cell.row.depth
+
+    return true
+}
+
 export const ActionColumn: React.FC<{
     study: Study,
     cell: CellContext<Study, any>
@@ -224,9 +256,12 @@ export const ActionColumn: React.FC<{
     }
 
     const isLeafNode = !!cell.row.depth
-
-    const pauseDisabled = !isActive(study)
-    const resumeDisabled = !isPaused(study)
+    const canPauseOrResume = !isLeafNode || !cell.row.subRows.length
+    const previousSession = cell.row.getParentRow()?.subRows[cell.row.index - 1]
+    console.log(previousSession)
+    const isPreviousSessionPaused = isLeafNode && (previousSession?.original.status == 'paused')
+    const canPause = canPauseOrResume && isActive(study) && isPreviousSessionPaused
+    const canResume = canPauseOrResume && isPaused(study)
 
     const showEndStudy = isPaused(study) || (!isCompleted(study) && isActive(study))
 
@@ -250,19 +285,19 @@ export const ActionColumn: React.FC<{
                 {showResumeButton &&
                     <ActionIcon
                         icon="playFill"
-                        tooltip={!resumeDisabled && 'Resume Study'}
+                        tooltip={canResume && 'Resume Session'}
                         height={20}
-                        disabled={resumeDisabled}
-                        onClick={() => !resumeDisabled && setAndShowModal(ModalType.Resume)}
+                        disabled={!canResume}
+                        onClick={() => canResume && setAndShowModal(ModalType.Resume)}
                     />
                 }
                 {!showResumeButton &&
                     <ActionIcon
                         icon="pauseFill"
-                        tooltip={!pauseDisabled && 'Pause Study'}
+                        tooltip={canPause && 'Pause Session'}
                         height={20}
-                        disabled={pauseDisabled}
-                        onClick={() => !pauseDisabled && setAndShowModal(ModalType.Pause)}
+                        disabled={!canPause}
+                        onClick={() => canPause && setAndShowModal(ModalType.Pause)}
                     />
                 }
             </div>

@@ -7,7 +7,7 @@ RSpec.describe 'Studies', api: :v1 do
   let(:researcher1) { create(:researcher) }
   let(:researcher2) { create(:researcher) }
   let(:researcher3) { create(:researcher) }
-  
+
   describe 'POST researcher/studies' do
     let(:valid_new_study_attributes) do
       {
@@ -16,16 +16,16 @@ RSpec.describe 'Studies', api: :v1 do
         internal_description: 'For researchers only',
         short_description: 'A short description',
         long_description: 'A longer description',
-        study_type: 'Research',
-        study_topic: 'Learning',
-        study_subject: 'Biology',
+        category: 'Research',
+        topic: 'Learning',
+        subject: 'Biology',
         benefits: 'Some benefit to society',
         image_id: 'Schoolfuturecareer_1',
         stages: [
           {
             points: 10,
             duration_minutes: 5,
-            feedback_types: ['debrief, personalized'],
+            feedback_types: ['Debrief, Personalized'],
             config: {
               type: 'qualtrics',
               survey_id: 'SV_12QHR3BE',

@@ -93,15 +93,15 @@ class Api::V1::BaseStudiesOpenApi
         key :description, 'Number of times this study has been completed'
         key :readOnly, true
       end
-      property :study_type do
+      property :category do
         key :type, :string
-        key :description, 'The type of study'
+        key :description, 'The category (type of) study'
       end
-      property :study_topic do
+      property :topic do
         key :type, :string
         key :description, 'The study topic'
       end
-      property :study_subject do
+      property :subject do
         key :type, :string
         key :description, 'The study\'s subject'
       end

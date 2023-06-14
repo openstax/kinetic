@@ -3,7 +3,7 @@ import { Box, React, useNavigate, useState } from '@common';
 import { colors } from '@theme';
 import { StudyCardPreview, Tag } from '../../../../learner/card';
 import { StudyStep } from '../edit-study';
-import { Button, Col, CollapsibleSection, Modal, ResearcherButton, useFormContext } from '@components';
+import { Col, Modal, ResearcherButton, useFormContext } from '@components';
 import { Study } from '@api';
 import { useApi } from '@lib';
 
@@ -53,7 +53,7 @@ const EditingStudyInformation: FC<{ study: EditingStudy }> = ({ study }) => {
                             </li>
                             <li>
                                 <small css={{ color: colors.grayerText }}>
-                                    Tag: <span css={{ color: colors.grayText }}><Tag tag={study.studyType}/></span>
+                                    Tag: <span css={{ color: colors.grayText }}><Tag tag={study.category}/></span>
                                 </small>
                             </li>
                         </ul>

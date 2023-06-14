@@ -5,7 +5,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   before_action :set_study, only: [:update, :destroy, :show, :update_status]
 
   def create
-    inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::NewStudy)
+    inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::Study)
     render(json: error, status: error.status_code) and return if error
 
     created_study = inbound_binding.create_model!(researcher: current_researcher)
@@ -61,33 +61,11 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     end
 
     if params[:status_action] == 'submit'
-      (survey_id, secret_key) = CloneSurvey.new.clone(@study.title_for_researchers)
-      @study.stages.each do |stage|
-        stage.update({
-          status: :waiting_period,
-          config: {
-            type: 'qualtrics',
-            survey_id: survey_id,
-            secret_key: secret_key
-          }
-        })
-      end
+      @study.submit
       ResearcherNotifications.notify_kinetic_study_review(@study)
     end
 
-    if params[:stage_id].present?
-      if params[:status_action] == 'pause'
-        
-      end
-
-      if params[:status_action] == 'resume'
-
-      end
-    end
-
-    if params[:status_action] == 'launch'
-      @study.stages.update_all(status: 'active')
-    end
+    @study.stages.update_all(status: 'active') if params[:status_action] == 'launch'
 
     render json: Api::V1::Bindings::Study.create_from_model(@study), status: :ok
   end

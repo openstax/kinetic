@@ -1,14 +1,12 @@
-import { Box, React, useEffect, useMemo, useNavigate, useParams, useState, Yup } from '@common'
+import { Box, React, useCallback, useEffect, useMemo, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
-import { EditingStudy, isDraft } from '@models';
+import { EditingStudy, isDraft, useFetchStudy } from '@models';
 import {
     Col,
     Form,
-    Icon,
+    FormSubmitHandler,
     LoadingAnimation,
-    Modal,
     Page,
-    ResearcherButton,
     ResearcherProgressBar,
     Step,
     useFormContext,
@@ -25,6 +23,7 @@ import { ReviewStudy, SubmitStudyModal } from './forms/review-study';
 import { Toast } from '@nathanstitt/sundry/ui';
 import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
+import { ExitStudyFormButton } from '../../../../components/researcher/exit-study-form-button';
 
 const buildValidationSchema = (studies: Study[], study: EditingStudy) => {
     return Yup.object().shape({
@@ -48,39 +47,18 @@ const getFormDefaults = (study: EditingStudy, step: StudyStep) => {
 }
 
 export default function EditStudy() {
-    const api = useApi()
     const nav = useNavigate()
-    const [study, setStudy] = useState<EditingStudy | null>()
-    const [allStudies, setAllStudies] = useState<Study[]>([])
     const id = useParams<{ id: string }>().id
-    const isNew = 'new' === id
+    const { loading, study, setStudy, allStudies } = useFetchStudy(id || 'new')
 
-    useEffect(() => {
-        api.getStudies().then(studies => {
-            setAllStudies(studies.data || [])
-            if (isNew) {
-                setStudy({
-                    titleForResearchers: '',
-                    internalDescription: '',
-                })
-                return
-            }
-            const study = studies.data?.find(s => s.id == Number(id))
-            if (study) {
-                setStudy(study)
-            } else {
-                Toast.show({
-                    error: true,
-                    title: 'Study not found',
-                    message: `Study with id ${id} not found`,
-                })
-                nav('/studies')
-            }
-        })
-    }, [id])
+    if (loading) {
+        return <LoadingAnimation />
+    }
 
     if (!study) {
-        return <LoadingAnimation message="Loading study details" />
+        return useEffect(() => {
+            nav('/studies')
+        }, [])
     }
 
     return (
@@ -130,6 +108,7 @@ const FormContent: FC<{
         setValue,
         getValues,
         reset,
+        setFormError,
     } = useFormContext()
     const [showSubmitStudy, setShowSubmitStudy] = useState(false)
     const currentStep = watch('step')
@@ -155,7 +134,8 @@ const FormContent: FC<{
         if (isNew) {
             const savedStudy = await api.addStudy({
                 addStudy: { study: study as NewStudy },
-            })
+            }).catch((err) => setFormError(err))
+
             if (savedStudy) {
                 nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
                 Toast.show({
@@ -280,10 +260,10 @@ const FormContent: FC<{
                         <span></span>
                     </Col>
                     <Col sm={9}>
-                        <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} setStepIndex={(i) => setStep(i)}/>
+                        <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} />
                     </Col>
                     <Col sm={1}>
-                        {currentStep !== StudyStep.InternalDetails && <ExitButton study={getValues() as EditingStudy} saveStudy={saveStudy} />}
+                        {currentStep !== StudyStep.InternalDetails && <ExitStudyFormButton study={getValues() as EditingStudy} saveStudy={saveStudy} />}
                     </Col>
                 </Box>
                 {steps[currentStep].component}
@@ -291,78 +271,5 @@ const FormContent: FC<{
             <ActionFooter step={steps[currentStep]} />
             <SubmitStudyModal study={study as Study} show={showSubmitStudy} setShow={setShowSubmitStudy} />
         </Box>
-    )
-}
-
-const ExitButton: FC<{study: EditingStudy, saveStudy: (study: EditingStudy) => void}> = ({ study, saveStudy }) => {
-    const [showWarning, setShowWarning] = useState<boolean>(false)
-    const { getValues } = useFormContext()
-    const { isDirty } = useFormState()
-
-    const nav = useNavigate()
-    return (
-        <div>
-            <h6
-                css={{
-                    textDecoration: 'underline',
-                    textUnderlineOffset: '.5rem',
-                    color: colors.grayText,
-                    cursor: 'pointer',
-                    alignSelf: 'end',
-                }}
-                onClick={() => {
-                    if (isDirty) {
-                        setShowWarning(true)
-                    } else {
-                        nav('/studies')
-                    }
-                }}
-            >
-                Exit
-            </h6>
-            <Modal
-                center
-                show={showWarning}
-                large
-                onHide={() => setShowWarning(false)}
-            >
-                <Modal.Body>
-                    <Box padding='4rem' align='center' justify='center' direction='column' gap='large'>
-                        <Box gap='large' align='center'>
-                            <Icon height={20} icon="warning" color={colors.red} />
-                            <span className='fs-4 fw-bold'>Exit Page</span>
-                        </Box>
-                        <Box align='center' direction='column'>
-                            <span>You're about to leave this study creation process.</span>
-                            <span>Would you like to save the changes you made thus far?</span>
-                        </Box>
-                        <Box gap='large'>
-                            <ResearcherButton
-                                fixedWidth
-                                onClick={() => {
-                                    nav('/studies')
-                                    Toast.show({
-                                        message: `New edits to the study ${study.titleForResearchers} have been discarded`,
-                                    })
-                                }}
-                                buttonType='secondary'
-                            >
-                                No, discard changes
-                            </ResearcherButton>
-
-                            <ResearcherButton fixedWidth onClick={() => {
-                                saveStudy(getValues() as EditingStudy)
-                                nav('/studies')
-                                Toast.show({
-                                    message: `New edits to the study ${study.titleForResearchers} have successfully been saved`,
-                                })}
-                            }>
-                                Yes, save changes
-                            </ResearcherButton>
-                        </Box>
-                    </Box>
-                </Modal.Body>
-            </Modal>
-        </div>
     )
 }

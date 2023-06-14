@@ -174,8 +174,8 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
     return (
         <Box className={cx({ 'small': !isMobile, 'xx-small': isMobile }, 'mt-auto', 'pt-1')} justify='between' align='center' wrap>
             <Box gap='small'>
-                <Tag tag={study.studyTopic} />
-                <Tag tag={study.studySubject} />
+                <Tag tag={study.topic} />
+                <Tag tag={study.subject} />
             </Box>
             <Box>
                 <span>{getStudyDuration(study)} min</span>

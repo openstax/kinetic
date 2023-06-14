@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import reactRefresh from '@vitejs/plugin-react-refresh'
-import viteSvgr from 'vite-plugin-svgr';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,7 +9,6 @@ export default defineConfig({
     },
     plugins: [
         reactRefresh(),
-        viteSvgr(),
     ],
     resolve: {
         alias: [

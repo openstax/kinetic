@@ -1,12 +1,8 @@
 class MigrateStudyData < ActiveRecord::Migration[6.1]
   def up
     researchers = YAML.load_file(Rails.root.join('db/migrate/researchers.yaml'))
-    researchers = []
-    Researcher.create({
-      first_name: 'Jeffrey',
-      last_name: 'Zhong',
-      user_id: '00000000-0000-0000-0000-000000000099'
-    })
+    # researchers = []
+
     researchers.each do |researcher|
       Researcher.find_or_create_by(
         first_name: researcher['first_name'],
@@ -16,7 +12,7 @@ class MigrateStudyData < ActiveRecord::Migration[6.1]
     end
 
     studies = YAML.load_file(Rails.root.join('db/migrate/study_migration_data.yaml'))
-    studies = []
+    # studies = []
     studies.each do |data|
       study = Study.includes(:stages, :study_researchers).find(data['id'])
 
@@ -40,12 +36,12 @@ class MigrateStudyData < ActiveRecord::Migration[6.1]
       study.update({
         :title_for_researchers => data['title_for_researchers'],
         :internal_description => data['description_for_researchers'],
-        :study_type => data['study_type'],
+        :category => data['study_type'],
         :title_for_participants => data['title_for_participants'],
         :short_description => data['short_description_for_participants'],
         :long_description => data['long_description_for_participants'],
-        :study_topic => data['study_topic'],
-        :study_subject => data['study_subject'],
+        :topic => data['study_topic'],
+        :subject => data['study_subject'],
         :benefits => data['benefits'],
         :opens_at => data['opens_at']&.to_date,
         :closes_at => data['closes_at']&.to_date

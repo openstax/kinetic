@@ -182,7 +182,7 @@ export const StudyDetailsPreview: FC<{
             <Box direction="column" flex>
                 <div css={{ overflowY: 'auto', flex: 1 }}>
                     <h3>{study.titleForParticipants}</h3>
-                    {study.studyTopic && <Box gap align="center" margin={{ vertical: 'large' }}>
+                    {study.topic && <Box gap align="center" margin={{ vertical: 'large' }}>
                         <div css={{ position: 'relative' }}>
                             <Icon icon="chatLeft" color={colors.purple} />
                             <span css={{
@@ -193,7 +193,7 @@ export const StudyDetailsPreview: FC<{
                                 fontSize: 7,
                             }}>#</span>
                         </div>
-                        {study.studyTopic}</Box>
+                        {study.topic}</Box>
                     }
                     <StudyTime study={study} />
                     <StudyPart property="feedbackDescription" title="Feedback Available" icon="feedback" study={study} />

@@ -584,9 +584,9 @@ CREATE TABLE public.studies (
     completed_count integer DEFAULT 0 NOT NULL,
     is_hidden boolean DEFAULT false NOT NULL,
     view_count integer DEFAULT 0,
-    study_type character varying,
-    study_topic character varying,
-    study_subject character varying,
+    category character varying,
+    topic character varying,
+    subject character varying,
     internal_description character varying,
     shareable_after_months integer,
     target_sample_size integer

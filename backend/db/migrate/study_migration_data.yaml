@@ -60,7 +60,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'score', 'General Feedback' ]
+      feedback_types: [ 'score', 'general' ]
 
 
 
@@ -82,7 +82,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -104,7 +104,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Debrief' ]
+      feedback_types: [ 'debrief' ]
 
 
 
@@ -126,7 +126,7 @@
   stages:
     - points: 20
       duration_minutes: 15
-      feedback_types: [ 'Score' ]
+      feedback_types: [ 'score' ]
 
 
 
@@ -148,7 +148,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -170,7 +170,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -192,7 +192,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -214,7 +214,7 @@
   stages:
     - points: 30
       duration_minutes: 25
-      feedback_types: [ 'Score' ]
+      feedback_types: [ 'score' ]
     - points: 35
       duration_minutes: 25
       feedback_types: [ 'score' ]
@@ -240,7 +240,7 @@
   stages:
     - points: 20
       duration_minutes: 15
-      feedback_types: [ 'Debrief' ]
+      feedback_types: [ 'debrief' ]
 
 
 
@@ -262,7 +262,7 @@
   stages:
     - points: 20
       duration_minutes: 15
-      feedback_types: [ 'Score', 'Debrief' ]
+      feedback_types: [ 'score', 'debrief' ]
 
 
 
@@ -284,7 +284,7 @@
   stages:
     - points: 30
       duration_minutes: 25
-      feedback_types: [ 'Score' ]
+      feedback_types: [ 'score' ]
 
 
 
@@ -306,7 +306,7 @@
   stages:
     - points: 30
       duration_minutes: 25
-      feedback_types: [ 'Score' ]
+      feedback_types: [ 'score' ]
     - points: 35
       duration_minutes: 25
       feedback_types: [ 'score' ]
@@ -332,7 +332,7 @@
   stages:
     - points: 20
       duration_minutes: 15
-      feedback_types: [ 'Debrief' ]
+      feedback_types: [ 'debrief' ]
 
 
 
@@ -354,7 +354,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -376,7 +376,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -398,7 +398,7 @@
   stages:
     - points: 20
       duration_minutes: 15
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -420,7 +420,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -442,7 +442,7 @@
   stages:
     - points: 20
       duration_minutes: 15
-      feedback_types: [ 'Score' ]
+      feedback_types: [ 'score' ]
 
 
 - id: 21
@@ -463,7 +463,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Score', 'General Feedback' ]
+      feedback_types: [ 'score', 'general' ]
 
 
 
@@ -485,7 +485,7 @@
   stages:
     - points: 20
       duration_minutes: 15
-      feedback_types: [ 'Score', 'General Feedback' ]
+      feedback_types: [ 'score', 'general' ]
 
 
 
@@ -507,7 +507,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -529,7 +529,7 @@
   stages:
     - points: 20
       duration_minutes: 15
-      feedback_types: [ 'Score', 'General Feedback' ]
+      feedback_types: [ 'score', 'general' ]
 
 
 
@@ -551,7 +551,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Score', 'General Feedback' ]
+      feedback_types: [ 'score', 'general' ]
 
 
 
@@ -573,7 +573,7 @@
   stages:
     - points: 30
       duration_minutes: 25
-      feedback_types: [ 'Score' ]
+      feedback_types: [ 'score' ]
 
 
 
@@ -595,7 +595,7 @@
   stages:
     - points: 20
       duration_minutes: 15
-      feedback_types: [ 'General Feedback' ]
+      feedback_types: [ 'general' ]
 
 
 - id: 31
@@ -616,8 +616,11 @@
   stages:
     - points: 30
       duration_minutes: 25
-      feedback_types: [ 'Score' ]
-
+      feedback_types: [ 'score' ]
+    - points: 35
+      duration_minutes: 25
+      feedback_types: [ 'score' ]
+      available_after_days: 7
 
 
 - id: 32
@@ -638,7 +641,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -661,7 +664,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -683,7 +686,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -705,7 +708,7 @@
   stages:
     - points: 30
       duration_minutes: 25
-      feedback_types: [ 'Score' ]
+      feedback_types: [ 'score' ]
 
 
 
@@ -727,7 +730,7 @@
   stages:
     - points: 30
       duration_minutes: 25
-      feedback_types: [ 'Score', 'Debrief' ]
+      feedback_types: [ 'score', 'debrief' ]
 
 
 
@@ -749,7 +752,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -771,7 +774,7 @@
   stages:
     - points: 20
       duration_minutes: 15
-      feedback_types: [ 'Debrief' ]
+      feedback_types: [ 'debrief' ]
 
 
 
@@ -793,7 +796,7 @@
   stages:
     - points: 20
       duration_minutes: 15
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]
 
 
 
@@ -815,7 +818,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Debrief' ]
+      feedback_types: [ 'debrief' ]
 
 
 
@@ -837,7 +840,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Debrief' ]
+      feedback_types: [ 'debrief' ]
 
 
 
@@ -859,7 +862,7 @@
   stages:
     - points: 10
       duration_minutes: 5
-      feedback_types: [ 'Debrief' ]
+      feedback_types: [ 'debrief' ]
 
 
 
@@ -881,7 +884,7 @@
   stages:
     - points: 20
       duration_minutes: 15
-      feedback_types: [ 'Debrief' ]
+      feedback_types: [ 'debrief' ]
 
 
 
@@ -903,4 +906,4 @@
   stages:
     - points: 20
       duration_minutes: 15
-      feedback_types: [ 'Score', 'Personalized Feedback' ]
+      feedback_types: [ 'score', 'personalized' ]

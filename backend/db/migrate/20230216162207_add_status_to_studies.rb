@@ -1,9 +1,9 @@
 class AddStatusToStudies < ActiveRecord::Migration[6.1]
   def change
     add_column :studies, :view_count, :integer, default: 0
-    add_column :studies, :study_type, :string
-    add_column :studies, :study_topic, :string
-    add_column :studies, :study_subject, :string
+    add_column :studies, :category, :string
+    add_column :studies, :topic, :string
+    add_column :studies, :subject, :string
     add_column :studies, :internal_description, :string
     add_column :studies, :shareable_after_months, :integer
     add_column :studies, :target_sample_size, :integer

@@ -223,32 +223,36 @@ const StyledLabel = styled.span({
 
 const StatusLabel: React.FC<{status: string}> = ({ status }) => {
     switch(status) {
-        case 'active':
+        case StudyStatusEnum.Active:
             return <StyledLabel css={{ color: '#1A654E', backgroundColor: '#C8EAD2' }}>Active</StyledLabel>
-        case 'paused':
+        case StudyStatusEnum.Paused:
             return <StyledLabel css={{ backgroundColor: '#DBDBDB' }}>Paused</StyledLabel>
-        case 'scheduled':
+        case StudyStatusEnum.Scheduled:
             return <StyledLabel css={{ backgroundColor: '#FAF6D1' }}>Scheduled</StyledLabel>
-        case 'draft':
+        case StudyStatusEnum.Draft:
             return <StyledLabel css={{ backgroundColor: '#F6DBED' }}>Draft</StyledLabel>
-        case 'readyForLaunch':
+        case StudyStatusEnum.ReadyForLaunch:
             return <StyledLabel css={{ backgroundColor: '#DBDBDB' }}>Ready For Launch</StyledLabel>
-        case 'waitingPeriod':
+        case StudyStatusEnum.WaitingPeriod:
             return <StyledLabel css={{ backgroundColor: '#DBDBDB' }}>Waiting Period</StyledLabel>
-        case 'completed':
+        case StudyStatusEnum.Completed:
             return <StyledLabel css={{ color: colors.purple, backgroundColor: '#DFE1F9' }}>Completed</StyledLabel>
         default:
             return null;
     }
 }
 
-const NoData: React.FC = () => {
+const NoData: React.FC<{
+    allStudies: Study[],
+    filteredStudiesLength: number
+}> = ({ allStudies, filteredStudiesLength }) => {
+    if (filteredStudiesLength) return null
     return (
         <Box direction='column' align='center' justify='center' className='mt-10' gap='large'>
             <h3 css={{ color: colors.lightGray }}>
                 No data
             </h3>
-            <span>
+            {!allStudies.length && <span>
                 <Link
                     to='/study/create'
                     css={{ color: colors.purple }}
@@ -256,7 +260,7 @@ const NoData: React.FC = () => {
                 >
                     + Create your first research study on Kinetic
                 </Link>
-            </span>
+            </span>}
         </Box>
     )
 }
@@ -273,7 +277,7 @@ export const StudiesTable: React.FC<{
     const { studies, setStudies } = useFetchStudies()
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: 'opensAt',
-        desc: false,
+        desc: true,
     }])
 
     const [expanded, setExpanded] = React.useState<ExpandedState>(true);
@@ -358,17 +362,15 @@ export const StudiesTable: React.FC<{
             },
             cell: (info) => {
                 const study = info.row.original;
-                // TODO Stage.targetSampleSize
-                // if (study.completedCount == 0 || study.targetSampleSize == 0) {
-                //     return null
-                // }
+                if (study.completedCount == 0 || study.targetSampleSize == 0) {
+                    return null
+                }
                 if (currentStatus === StudyStatus.Completed) {
                     return <span>{study.completedCount}</span>
                 }
-                // TODO Stage.targetSampleSize
                 return (
                     <span>
-                        {/*{study.completedCount}/{study.targetSampleSize}*/}
+                        {study.completedCount}/{study.targetSampleSize}
                     </span>
                 )
             },
@@ -475,7 +477,7 @@ export const StudiesTable: React.FC<{
                     )}
                 </tbody>
             </table>
-            {!table.getRowModel().rows.length && <NoData/>}
+            <NoData filteredStudiesLength={table.getRowModel().rows.length} allStudies={studies}/>
         </Box>
     )
 }

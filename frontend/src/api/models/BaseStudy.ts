@@ -141,23 +141,23 @@ export interface BaseStudy {
      */
     readonly completedCount?: number;
     /**
-     * The type of study
+     * The category (type of) study
      * @type {string}
      * @memberof BaseStudy
      */
-    studyType?: string;
+    category?: string;
     /**
      * The study topic
      * @type {string}
      * @memberof BaseStudy
      */
-    studyTopic?: string;
+    topic?: string;
     /**
      * The study's subject
      * @type {string}
      * @memberof BaseStudy
      */
-    studySubject?: string;
+    subject?: string;
     /**
      * The study's stages.
      * @type {Array<Stage>}
@@ -231,9 +231,9 @@ export function BaseStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
         'shareableAfterMonths': !exists(json, 'shareable_after_months') ? undefined : json['shareable_after_months'],
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
-        'studyType': !exists(json, 'study_type') ? undefined : json['study_type'],
-        'studyTopic': !exists(json, 'study_topic') ? undefined : json['study_topic'],
-        'studySubject': !exists(json, 'study_subject') ? undefined : json['study_subject'],
+        'category': !exists(json, 'category') ? undefined : json['category'],
+        'topic': !exists(json, 'topic') ? undefined : json['topic'],
+        'subject': !exists(json, 'subject') ? undefined : json['subject'],
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
         'launchedCount': !exists(json, 'launched_count') ? undefined : json['launched_count'],
         'returnUrl': !exists(json, 'return_url') ? undefined : json['return_url'],
@@ -264,9 +264,9 @@ export function BaseStudyToJSON(value?: BaseStudy | null): any {
         'is_mandatory': value.isMandatory,
         'view_count': value.viewCount,
         'shareable_after_months': value.shareableAfterMonths,
-        'study_type': value.studyType,
-        'study_topic': value.studyTopic,
-        'study_subject': value.studySubject,
+        'category': value.category,
+        'topic': value.topic,
+        'subject': value.subject,
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),
     };
 }

@@ -4,7 +4,7 @@ class CloneSurvey
 
   attr_reader :api
 
-  def initialize(survey_id = Rails.application.secrets.qualtrics_template_survey_id)
+  def initialize(survey_id=Rails.application.secrets.qualtrics_template_survey_id)
     @survey_id = survey_id
     @api = QualtricsApi.new
     @source = api.get_survey_definition(survey_id, format: 'qsf')
@@ -12,9 +12,8 @@ class CloneSurvey
 
   def clone(new_name)
     result = @api.create_survey(@source.merge(
-      { SurveyEntry: @source['SurveyEntry'].merge(
-        { SurveyName: new_name })
-      }.deep_stringify_keys)
+                                  { SurveyEntry: @source['SurveyEntry'].merge(
+                                    { SurveyName: new_name }) }.deep_stringify_keys)
     )
     @api.share_survey(
       result['SurveyID'],
@@ -34,8 +33,10 @@ class CloneSurvey
         manageParticipants: false, sendInvites: false, useStatsIqCrosstabs: true,
         viewResponseID: true, useQuotas: true, editThreeSixtyForms: false
       })
-    # TODO simpler one day?
-    secret_key = @source['SurveyElements'].find { |el| el['Element'] == 'FL' }['Payload']['Flow'].first['SSOOptions']['token']['Key']
+    # TODO: simpler one day?
+    secret_key = @source['SurveyElements'].find do |el|
+                   el['Element'] == 'FL'
+                 end['Payload']['Flow'].first['SSOOptions']['token']['Key']
     [result['SurveyID'], secret_key]
   end
 end

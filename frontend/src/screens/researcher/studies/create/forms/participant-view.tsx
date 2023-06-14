@@ -45,7 +45,7 @@ export const participantViewValidation = (studies: Study[], study: EditingStudy)
             is: 2,
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
-        studyTopic: Yup.string().when('step', {
+        topic: Yup.string().when('step', {
             is: 2,
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
@@ -160,13 +160,13 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
 
                         <Col sm={6} direction='column' gap>
                             <SelectField
-                                name="studyTopic"
+                                name="topic"
                                 placeholder="Study Topic*"
                                 options={studyTopics.map(s => ({ value: s, label: s }))}
                             />
-                            <FieldErrorMessage name=' studyTopic' />
+                            <FieldErrorMessage name='topic' />
                             <SelectField
-                                name="studySubject"
+                                name="subject"
                                 placeholder="Study Content Area (optional)"
                                 options={studySubjects.map(s => ({ value: s, label: s }))}
                             />

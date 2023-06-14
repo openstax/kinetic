@@ -7,7 +7,9 @@ class Api::V1::Admin::StudiesController < Api::V1::Admin::BaseController
   end
 
   def approve
-    Study.find(params[:id]).stages.update_all status: 'ready_for_launch'
+    study = Study.find(params[:id])
+    error404 unless study.present?
+    study.approve
     render status: :ok, json: query_studies('waiting_period')
   end
 

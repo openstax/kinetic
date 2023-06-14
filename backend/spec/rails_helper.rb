@@ -91,10 +91,4 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.include ResponseHelpers
 
-  # Can remove this filter after we switch to allowing multiple stages
-  # config.around(:example, multi_stage: true) do |example|
-  #   ENV['ALLOW_MULTIPLE_STAGES'] = 'true'
-  #   example.run
-  #   ENV['ALLOW_MULTIPLE_STAGES'] = 'false'
-  # end
 end

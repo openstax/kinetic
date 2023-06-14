@@ -13,9 +13,9 @@ FactoryBot.define do
     short_description { Faker::Lorem.paragraph_by_chars(number: rand(40..120)) }
     long_description { Faker::Lorem.paragraph_by_chars(number: rand(80..250)) }
     internal_description { Faker::Lorem.paragraph_by_chars(number: rand(80..250)) }
-    study_type { 'Research' }
-    study_topic { 'Learning' }
-    study_subject { 'Biology' }
+    category { 'Research' }
+    topic { 'Learning' }
+    subject { 'Biology' }
     benefits { Faker::Lorem.paragraph_by_chars(number: rand(50..170)) }
     image_id { 'Schoolfuturecareer_1' }
     target_sample_size { 100 }

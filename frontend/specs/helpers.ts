@@ -118,7 +118,7 @@ export const createStudy = async ({
     await page.fill('[name=titleForResearchers]', name)
     await page.fill('[name=internalDescription]', faker.commerce.color())
 
-    await selectFirstDropdownItem({ page, fieldName: 'studyType' })
+    await selectFirstDropdownItem({ page, fieldName: 'category' })
 
     await expect(page.locator('testId=primary-action')).not.toBeDisabled()
     await page.click('testId=primary-action')
@@ -146,8 +146,8 @@ export const createStudy = async ({
     await page.fill('[name=titleForParticipants]', name)
     await page.fill('[name=shortDescription]', faker.commerce.department())
     await page.fill('[name=longDescription]', faker.commerce.department())
-    await selectFirstDropdownItem({ page, fieldName: 'studyTopic' })
-    await selectFirstDropdownItem({ page, fieldName: 'studySubject' })
+    await selectFirstDropdownItem({ page, fieldName: 'topic' })
+    await selectFirstDropdownItem({ page, fieldName: 'subject' })
     await page.click("input[value='10']")
     await page.click("input[value='score']")
     await page.click("input[value='debrief']")

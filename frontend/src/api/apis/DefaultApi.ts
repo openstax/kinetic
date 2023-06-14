@@ -1711,6 +1711,8 @@ export const UpdateStudyStatusStatusActionEnum = {
     Submit: 'submit',
     Launch: 'launch',
     Pause: 'pause',
-    Resume: 'resume'
+    Resume: 'resume',
+    End: 'end',
+    Reopen: 'reopen'
 } as const;
 export type UpdateStudyStatusStatusActionEnum = typeof UpdateStudyStatusStatusActionEnum[keyof typeof UpdateStudyStatusStatusActionEnum];

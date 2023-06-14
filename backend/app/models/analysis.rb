@@ -12,13 +12,6 @@ class Analysis < ApplicationRecord
 
   validates :title, :repository_url, presence: true
 
-  # def responses_before(cutoff:, is_testing:)
-  #   response_exports
-  #     .where(is_testing: is_testing)
-  #     .where(ResponseExport.arel_table[:cutoff_at].lteq(cutoff))
-  #     .order(created_at: :desc)
-  # end
-
   def can_read_study_id?(id)
     # TODO: eventually this will need to be updated to include "shared" studies
     researchers.find { |r| r.study_researchers.exists?(study_id: id) }

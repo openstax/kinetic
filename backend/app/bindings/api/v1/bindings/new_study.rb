@@ -69,14 +69,14 @@ module Api::V1::Bindings
     # Number of times this study has been completed
     attr_accessor :completed_count
 
-    # The type of study
-    attr_accessor :study_type
+    # The category (type of) study
+    attr_accessor :category
 
     # The study topic
-    attr_accessor :study_topic
+    attr_accessor :topic
 
     # The study's subject
-    attr_accessor :study_subject
+    attr_accessor :subject
 
     # The study's stages.
     attr_accessor :stages
@@ -130,9 +130,9 @@ module Api::V1::Bindings
         :'view_count' => :'view_count',
         :'shareable_after_months' => :'shareable_after_months',
         :'completed_count' => :'completed_count',
-        :'study_type' => :'study_type',
-        :'study_topic' => :'study_topic',
-        :'study_subject' => :'study_subject',
+        :'category' => :'category',
+        :'topic' => :'topic',
+        :'subject' => :'subject',
         :'stages' => :'stages',
         :'launched_count' => :'launched_count',
         :'return_url' => :'return_url'
@@ -165,9 +165,9 @@ module Api::V1::Bindings
         :'view_count' => :'Float',
         :'shareable_after_months' => :'Float',
         :'completed_count' => :'Float',
-        :'study_type' => :'String',
-        :'study_topic' => :'String',
-        :'study_subject' => :'String',
+        :'category' => :'String',
+        :'topic' => :'String',
+        :'subject' => :'String',
         :'stages' => :'Array<Stage>',
         :'launched_count' => :'Float',
         :'return_url' => :'String'
@@ -280,16 +280,16 @@ module Api::V1::Bindings
         self.completed_count = attributes[:'completed_count']
       end
 
-      if attributes.key?(:'study_type')
-        self.study_type = attributes[:'study_type']
+      if attributes.key?(:'category')
+        self.category = attributes[:'category']
       end
 
-      if attributes.key?(:'study_topic')
-        self.study_topic = attributes[:'study_topic']
+      if attributes.key?(:'topic')
+        self.topic = attributes[:'topic']
       end
 
-      if attributes.key?(:'study_subject')
-        self.study_subject = attributes[:'study_subject']
+      if attributes.key?(:'subject')
+        self.subject = attributes[:'subject']
       end
 
       if attributes.key?(:'stages')
@@ -403,9 +403,9 @@ module Api::V1::Bindings
           view_count == o.view_count &&
           shareable_after_months == o.shareable_after_months &&
           completed_count == o.completed_count &&
-          study_type == o.study_type &&
-          study_topic == o.study_topic &&
-          study_subject == o.study_subject &&
+          category == o.category &&
+          topic == o.topic &&
+          subject == o.subject &&
           stages == o.stages &&
           launched_count == o.launched_count &&
           return_url == o.return_url
@@ -420,7 +420,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, is_mandatory, view_count, shareable_after_months, completed_count, study_type, study_topic, study_subject, stages, launched_count, return_url].hash
+      [title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, is_mandatory, view_count, shareable_after_months, completed_count, category, topic, subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

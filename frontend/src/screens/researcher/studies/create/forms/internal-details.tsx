@@ -33,7 +33,7 @@ export const internalDetailsValidation = (studies: Study[], study: EditingStudy)
             is: 0,
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
-        studyType: Yup.string().when('step', {
+        category: Yup.string().when('step', {
             is: 0,
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
@@ -85,36 +85,31 @@ export const InternalDetails: FC = () => {
 
                 <Col sm={4} direction='column' gap>
                     <ResearcherDetailedCheckbox
-                        name='studyType'
-                        value='Cognitive Task & Assessment'
+                        name='category'
                         label='Cognitive Task & Assessment'
                         desc='Measures of human cognition, such as working memory, reasoning, and problem-solving, as well as prior knowledge and skills'
                         radio
                     />
                     <ResearcherDetailedCheckbox
-                        name='studyType'
-                        value='Learner Characteristics'
+                        name='category'
                         label='Learner Characteristics'
                         desc='Individual differences measures related to learning and education that provide insight into who is the learner'
                         radio
                     />
                     <ResearcherDetailedCheckbox
-                        name='studyType'
-                        value='Educational Research'
+                        name='category'
                         label='Educational Research'
                         desc='Learning and educational studies, such as A/B/N tests, quasi experiments, and single-domain interventional research'
                         radio
                     />
                     <ResearcherDetailedCheckbox
-                        name='studyType'
-                        value='Product & Organizational Research'
+                        name='category'
                         label='Product & Organizational Research'
                         desc='Surveys, assessments, and/or interventions related to understanding learner needs, such as product development and UX design'
                         radio
                     />
                     <ResearcherDetailedCheckbox
-                        name='studyType'
-                        value='Transfer of Learning'
+                        name='category'
                         label='Transfer of Learning'
                         desc='Interventions that assess learning or other outcomes across domains'
                         radio

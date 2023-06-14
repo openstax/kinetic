@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Study do
+RSpec.describe Study, api: :v1 do
   let!(:opens_and_closes_study) { create(:study, title: 'a') }
   let!(:opens_and_closes_before_study) { create(:study, opens_at: 10.days.ago, closes_at: 3.days.ago, title: 'b') }
   let!(:opens_only_study) { create(:study, closes_at: nil, title: 'c') }
@@ -64,6 +64,74 @@ RSpec.describe Study do
         end
       end
     end
+  end
+
+  describe 'update study status' do
+    let(:admin) { create(:admin) }
+    let(:researcher) { create(:researcher) }
+    let(:study) { create(:study, num_stages: 3, researchers: researcher) }
+    let(:path) { "researcher/studies/#{study.id}/update_status" }
+
+    it 'submits a study' do
+      study.submit
+      expect(study.status).to eq 'waiting_period'
+      study.stages.each do |stage|
+        expect(stage.status).to eq 'waiting_period'
+      end
+    end
+
+    it 'approves a study' do
+      study.approve
+      expect(study.status).to eq 'ready_for_launch'
+      study.stages.each do |stage|
+        expect(stage.status).to eq 'ready_for_launch'
+      end
+    end
+
+    it 'pauses a study (first session)' do
+      study.pause
+      expect(study.status).to eq 'paused'
+      expect(study.stage.first.status).to eq 'paused'
+      expect(study.stages[1].status).to eq 'active'
+    end
+
+    it 'resumes a study' do
+      study.resume
+      expect(study.status).to eq 'active'
+      study.stages.each do |stage|
+        expect(stage.status).to eq 'paused'
+      end
+    end
+
+    # it 'updates the study\'s status to completed' do
+    #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'completed' } }
+    #
+    #   expect(response).to have_http_status(:success)
+    #   expect(response_hash).to match(a_hash_including(status: 'completed'))
+    # end
+    #
+    # it 'updates the study\'s status to scheduled' do
+    #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'scheduled' } }
+    #
+    #   expect(response).to have_http_status(:success)
+    #   expect(response_hash).to match(a_hash_including(status: 'scheduled'))
+    # end
+    #
+    # it 'updates the study\'s status to active' do
+    #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'active' } }
+    #
+    #   expect(response).to have_http_status(:success)
+    #   expect(response_hash).to match(a_hash_including(status: 'active'))
+    # end
+
+    # Unneeded, can't revert to draft
+    # it 'updates the study\'s status to draft' do
+    #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'draft' } }
+    #
+    #   expect(response).to have_http_status(:success)
+    #   expect(response_hash).to match(a_hash_including(status: 'draft'))
+    # end
+    #
 
   end
 

@@ -1,8 +1,7 @@
-import { Box, React, useEffect, useNavigate, useParams, useState } from '@common';
-import { useApi } from '@lib';
+import { Box, React, useEffect, useNavigate, useParams } from '@common';
 import { Study } from '@api';
 import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page } from '@components';
-import { getStudyLead, getStudyPi, isReadyForLaunch, isWaiting } from '@models';
+import { getStudyLead, getStudyPi, isReadyForLaunch, isWaiting, useFetchStudy } from '@models';
 import { StudyCardPreview, Tag } from '../../../learner/card';
 import { colors } from '@theme';
 import { FinalizeStudy } from './finalize-study';
@@ -10,23 +9,27 @@ import Waiting from '@images/study-creation/waiting.svg'
 import { EditSubmittedStudy } from './edit-submitted-study';
 
 export default function StudyOverview() {
-    const api = useApi()
     const nav = useNavigate()
     const id = useParams<{ id: string }>().id
-    const [study, setStudy] = useState<Study>()
 
     if (!id) {
-        nav('/studies')
-        return null
+        return useEffect(() => {
+            return nav('/studies')
+        }, [])
     }
 
-    useEffect(() => {
-        api.getStudy({ id: +id }).then(study => setStudy(study))
-    }, [id])
+    const { loading, study } = useFetchStudy(id)
 
-    if (!study) {
+    if (loading) {
         return <LoadingAnimation />
     }
+
+    if (!study) {
+        return useEffect(() => {
+            nav('/studies')
+        }, [])
+    }
+
 
     return (
         <Page hideFooter backgroundColor={colors.white}>
@@ -88,7 +91,7 @@ export const StudyInformation: FC<{ study: Study }> = ({ study }) => {
                                 </li>
                                 <li>
                                     <small css={{ color: colors.grayerText }}>
-                                        Tag: <span css={{ color: colors.grayText }}><Tag tag={study.studyType} /></span>
+                                        Tag: <span css={{ color: colors.grayText }}><Tag tag={study.category} /></span>
                                     </small>
                                 </li>
                             </ul>

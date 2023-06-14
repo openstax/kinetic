@@ -9,7 +9,7 @@ FactoryBot.define do
     available_after_days { 1 }
     points { 10 }
     duration_minutes { 5 }
-    feedback_types { ['debrief, personalized'] }
+    feedback_types { ['Debrief, Personalized'] }
 
     config do
       {
