@@ -24,14 +24,14 @@ class Stage < ApplicationRecord
   before_create :set_order
 
   enum status: [:draft, :active, :paused, :scheduled,
-                :waiting_period, :ready_for_launch, :completed],
-       _default: 'draft'
+    :waiting_period, :ready_for_launch, :completed],
+    _default: 'draft'
 
-  def status
-    s = read_attribute(:status)
-    s
-
-  end
+  # def status
+  #   s = read_attribute(:status)
+  #   s
+  #
+  # end
 
   def is_draft?
     s = read_attribute(:status)
@@ -46,10 +46,11 @@ class Stage < ApplicationRecord
     end
   end
 
+  # TODO On study now
   def is_completed?
     s = read_attribute(:status)
     # Add sample size check to completed once the user can populate that data
-    !study.closes_at.nil? && (s == 'active' && study.closes_at < DateTime.now)
+    !study.closes_at.nil? && study.closes_at < DateTime.now
   end
 
   def is_scheduled?

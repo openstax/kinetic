@@ -51,7 +51,7 @@ class Study < ApplicationRecord
 
   def status
     # todo go off of last stage or first stage? probably last stage
-    'completed' if !closes_at.nil? && (closes_at < DateTime.now)
+    # 'completed' if !closes_at.nil? && (closes_at < DateTime.now)
     stages.last&.status || 'draft'
   end
 
