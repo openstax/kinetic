@@ -30,15 +30,7 @@ class Stage < ApplicationRecord
   def status
     s = read_attribute(:status)
     s
-    if is_draft?
-      draft_status
-    elsif is_completed?
-      'completed'
-    elsif is_scheduled?
-      'scheduled'
-    else
-      s
-    end
+
   end
 
   def is_draft?
