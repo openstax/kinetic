@@ -5,7 +5,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   before_action :set_study, only: [:update, :destroy, :show, :update_status]
 
   def create
-    inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::Study)
+    inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::NewStudy)
     render(json: error, status: error.status_code) and return if error
 
     created_study = inbound_binding.create_model!(researcher: current_researcher)

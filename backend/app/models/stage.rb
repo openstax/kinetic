@@ -29,11 +29,9 @@ class Stage < ApplicationRecord
 
   def status
     s = read_attribute(:status)
-
+    s
     if is_draft?
-      'draft'
-    elsif s == 'paused'
-      'paused'
+      draft_status
     elsif is_completed?
       'completed'
     elsif is_scheduled?
@@ -46,6 +44,14 @@ class Stage < ApplicationRecord
   def is_draft?
     s = read_attribute(:status)
     study.opens_at.nil? && s == 'draft'
+  end
+
+  def draft_status
+    s = read_attribute(:status)
+
+    if s == 'waiting_period'
+
+    end
   end
 
   def is_completed?

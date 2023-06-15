@@ -37,7 +37,7 @@ export interface Study {
      * @type {number}
      * @memberof Study
      */
-    readonly id?: number;
+    readonly id: number;
     /**
      * The study name that participants see.
      * @type {string}
@@ -205,6 +205,7 @@ export type StudyStatusEnum = typeof StudyStatusEnum[keyof typeof StudyStatusEnu
  */
 export function instanceOfStudy(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
     isInstance = isInstance && "titleForResearchers" in value;
     isInstance = isInstance && "internalDescription" in value;
 
@@ -221,7 +222,7 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'],
         'titleForParticipants': !exists(json, 'title_for_participants') ? undefined : json['title_for_participants'],
         'titleForResearchers': json['title_for_researchers'],
         'shortDescription': !exists(json, 'short_description') ? undefined : json['short_description'],

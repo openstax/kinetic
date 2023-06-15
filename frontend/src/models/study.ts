@@ -52,14 +52,6 @@ export const getStudyEditUrl = (study: Study) => {
     return `/study/overview/${study.id}`
 }
 
-export function isStudy(study: EditingStudy): study is Study {
-    return !isNil((study as Study).id)
-}
-
-export function isNewStudy(study: EditingStudy): study is NewStudy {
-    return isNil((study as Study).id)
-}
-
 // TODO can we rely on the backend being up to date? or just use stages?
 export function getStudyStatus(study: EditingStudy) {
     if (!study.stages || !study.stages.length) {
@@ -73,7 +65,7 @@ export function getFirstStage(study: Study | ParticipantStudy): Stage | undefine
     return first(study.stages)
 }
 
-export function isActive(study: EditingStudy) {
+export function isActive(study: Study) {
     return study.status === StudyStatusEnum.Active
 }
 

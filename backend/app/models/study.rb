@@ -111,7 +111,7 @@ class Study < ApplicationRecord
     stages.each do |stage|
       stage.update(
         {
-          status: :waiting_period,
+          status: 'waiting_period',
           config: {
             type: 'qualtrics',
             survey_id: survey_id,

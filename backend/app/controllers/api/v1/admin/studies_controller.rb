@@ -20,11 +20,13 @@ class Api::V1::Admin::StudiesController < Api::V1::Admin::BaseController
   def add_response
     stage = Stage.find(params[:stage_id])
     if params[:file]
-      exp = stage.response_exports.build({
-                                           is_complete: true,
-                                           is_testing: params[:is_testing],
-                                           cutoff_at: Time.now
-                                         })
+      exp = stage.response_exports.build(
+        {
+          is_complete: true,
+          is_testing: params[:is_testing],
+          cutoff_at: Time.now
+        }
+      )
       exp.files.attach(params[:file])
       exp.save!
     end

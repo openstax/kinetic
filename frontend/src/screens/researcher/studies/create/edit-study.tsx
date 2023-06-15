@@ -1,10 +1,9 @@
-import { Box, React, useCallback, useEffect, useMemo, useNavigate, useParams, useState, Yup } from '@common'
+import { Box, React, useEffect, useMemo, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
 import { EditingStudy, isDraft, useFetchStudy } from '@models';
 import {
     Col,
     Form,
-    FormSubmitHandler,
     LoadingAnimation,
     Page,
     ResearcherProgressBar,
@@ -100,7 +99,7 @@ export enum StudyStep {
 }
 
 const FormContent: FC<{
-    study: EditingStudy,
+    study: Study,
     setStudy: (study: EditingStudy) => void
 }> = ({ study, setStudy }) => {
     const {

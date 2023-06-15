@@ -3,16 +3,17 @@
 class Api::V1::Researcher::StudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
-  COMMON_REQUIRED_STUDY_FIELDS = [
-    :title_for_researchers,
-    :internal_description
-  ].freeze
+  COMMON_REQUIRED_STUDY_FIELDS =
+    [
+      :title_for_researchers,
+      :internal_description
+    ].freeze
 
   openapi_component do
     schema :Study do
-      # key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
+      key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
       # TODO Test this
-      key :required, COMMON_REQUIRED_STUDY_FIELDS
+      # key :required, COMMON_REQUIRED_STUDY_FIELDS
       allOf do
         schema do
           key :$ref, :BaseStudy

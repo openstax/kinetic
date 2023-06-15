@@ -312,7 +312,7 @@ export const StudiesTable: React.FC<{
                 return filterValue.includes(row.getValue(columnId))
             },
             cell: (info) => {
-                if (info.row.subRows.length) {
+                if (info.row.getLeafRows().length) {
                     return '-'
                 }
 
@@ -425,7 +425,7 @@ export const StudiesTable: React.FC<{
                 return undefined
             }
             return study.stages?.map((stage, index) => {
-                return cloneDeep({
+                return ({
                     ...study,
                     stages: [],
                     titleForResearchers: `Session ${index + 1}`,

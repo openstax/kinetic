@@ -26,7 +26,7 @@ export const additionalSessionsValidation = () => {
     }
 }
 
-export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {
+export const AdditionalSessions: FC<{study: Study}> = ({ study }) => {
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
             <StepHeader title='Additional sessions (optional)' eta={2}>
@@ -39,7 +39,7 @@ export const AdditionalSessions: FC<{study: EditingStudy}> = ({ study }) => {
 }
 
 const Sessions: FC = () => {
-    const { control } = useFormContext<EditingStudy>()
+    const { control } = useFormContext<Study>()
     const { fields, append, remove } = useFieldArray({
         control,
         name: 'stages',

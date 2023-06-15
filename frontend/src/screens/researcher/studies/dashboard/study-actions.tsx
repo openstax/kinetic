@@ -69,7 +69,7 @@ const ActionModalContent: FC<{
             })
 
 
-            api.deleteStudy({ studyId: study.id }).then(() => {
+            api.deleteStudy({ studyId: study.id! }).then(() => {
                 Toast.show({ message })
                 study.isHidden = true
                 cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
@@ -234,10 +234,20 @@ const ActionIcon = styled(Icon)(({ disabled }) => ({
     cursor: disabled ? 'default' : 'pointer',
 }))
 
-const canPause = (cell: CellContext<Study, any>): boolean => {
-    const isLeafNode = !!cell.row.depth
+const isPausable = (cell: CellContext<Study, any>): boolean => {
+    const hasChildren = cell.row.getLeafRows().length
+    const parent = cell.row.getParentRows()[0]
 
-    return true
+    if (hasChildren) {
+        return false
+    }
+
+    const previousSession = parent?.getLeafRows()[cell.row.index - 1]
+    if (!previousSession) {
+        return true
+    }
+
+    return previousSession?.original.status == 'paused' && isActive(parent?.original)
 }
 
 export const ActionColumn: React.FC<{
@@ -256,12 +266,8 @@ export const ActionColumn: React.FC<{
     }
 
     const isLeafNode = !!cell.row.depth
-    const canPauseOrResume = !isLeafNode || !cell.row.subRows.length
-    const previousSession = cell.row.getParentRow()?.subRows[cell.row.index - 1]
-    console.log(previousSession)
-    const isPreviousSessionPaused = isLeafNode && (previousSession?.original.status == 'paused')
-    const canPause = canPauseOrResume && isActive(study) && isPreviousSessionPaused
-    const canResume = canPauseOrResume && isPaused(study)
+    const canPause = isPausable(cell)
+    const canResume = isPaused(study)
 
     const showEndStudy = isPaused(study) || (!isCompleted(study) && isActive(study))
 
