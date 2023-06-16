@@ -1,4 +1,3 @@
-import { EditingStudy } from '@models';
 import { Box, React, useEffect, useState, Yup } from '@common';
 import { FieldErrorMessage, Icon, Button, Col, useFormContext, StepHeader, FieldTitle } from '@components';
 import { colors } from '@theme';

@@ -103,6 +103,22 @@ RSpec.describe Study, api: :v1 do
       end
     end
 
+    it 'ends a study' do
+      study.end
+      expect(study.status).to eq 'active'
+      study.stages.each do |stage|
+        expect(stage.status).to eq 'paused'
+      end
+    end
+
+    it 'reopens a study' do
+      study.reopen
+      expect(study.status).to eq 'active'
+      study.stages.each do |stage|
+        expect(stage.status).to eq 'paused'
+      end
+    end
+
     # it 'updates the study\'s status to completed' do
     #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'completed' } }
     #

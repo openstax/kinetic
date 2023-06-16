@@ -1,10 +1,10 @@
-import { EditingStudy } from '@models';
 import { Box, React, useNavigate, useState } from '@common';
 import { Icon, Modal, ResearcherButton, useFormContext, useFormState } from '@components';
 import { colors } from '@theme';
 import { Toast } from '@nathanstitt/sundry/ui';
+import { Study } from '@api';
 
-export const ExitStudyFormButton: FC<{study: EditingStudy, saveStudy: (study: EditingStudy) => void}> = ({ study, saveStudy }) => {
+export const ExitStudyFormButton: FC<{study: Study, saveStudy: (study: Study) => void}> = ({ study, saveStudy }) => {
     const [showWarning, setShowWarning] = useState<boolean>(false)
     const { getValues } = useFormContext()
     const { isDirty } = useFormState()
@@ -61,7 +61,7 @@ export const ExitStudyFormButton: FC<{study: EditingStudy, saveStudy: (study: Ed
                             </ResearcherButton>
 
                             <ResearcherButton fixedWidth onClick={() => {
-                                saveStudy(getValues() as EditingStudy)
+                                saveStudy(getValues() as Study)
                                 nav('/studies')
                                 Toast.show({
                                     message: `New edits to the study ${study.titleForResearchers} have successfully been saved`,

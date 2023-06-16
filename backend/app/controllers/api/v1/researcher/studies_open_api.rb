@@ -30,14 +30,6 @@ class Api::V1::Researcher::StudiesOpenApi
       end
     end
 
-    schema :StudyUpdate do
-      allOf do
-        schema do
-          key :$ref, :BaseStudy
-        end
-      end
-    end
-
     schema :Studies do
       property :data do
         key :type, :array
@@ -49,7 +41,7 @@ class Api::V1::Researcher::StudiesOpenApi
     end
   end
 
-  add_properties(:Study, :StudyUpdate) do
+  add_properties(:Study) do
     property :id do
       key :type, :integer
       key :description, 'The study ID.'
@@ -207,7 +199,7 @@ class Api::V1::Researcher::StudiesOpenApi
             key :type, :object
             key :title, :updateStudy
             property :study do
-              key :$ref, :StudyUpdate
+              key :$ref, :Study
             end
           end
         end

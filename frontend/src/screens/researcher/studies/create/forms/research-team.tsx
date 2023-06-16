@@ -10,9 +10,8 @@ import {
     useFormContext,
 } from '@components';
 import { IRB } from '../../../account/researcher-account-page';
-import { EditingStudy } from '@models';
 import { useApi } from '@lib';
-import { Researcher } from '@api';
+import { Researcher, Study } from '@api';
 import { components, DropdownIndicatorProps } from 'react-select';
 
 export const researcherValidation = () => {
@@ -36,7 +35,7 @@ const DropdownIndicator = (props: DropdownIndicatorProps) => {
     );
 };
 
-export const ResearchTeam: FC<{study: EditingStudy}> = ({ study }) => {
+export const ResearchTeam: FC<{study: Study}> = ({ study }) => {
     const api = useApi()
     const [researchers, setResearchers] = useState<Researcher[]>([])
     const { setValue, getValues } = useFormContext()

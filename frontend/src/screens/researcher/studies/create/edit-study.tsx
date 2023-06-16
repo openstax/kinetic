@@ -1,6 +1,6 @@
 import { Box, React, useEffect, useMemo, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
-import { EditingStudy, isDraft, useFetchStudy } from '@models';
+import { isDraft, useFetchStudy } from '@models';
 import {
     Col,
     Form,
@@ -10,6 +10,7 @@ import {
     Step,
     useFormContext,
     useFormState,
+    ExitStudyFormButton,
 } from '@components';
 import { researcherValidation, ResearchTeam } from './forms/research-team';
 import { InternalDetails, internalDetailsValidation } from './forms/internal-details';
@@ -22,9 +23,8 @@ import { ReviewStudy, SubmitStudyModal } from './forms/review-study';
 import { Toast } from '@nathanstitt/sundry/ui';
 import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
-import { ExitStudyFormButton } from '../../../../components/researcher/exit-study-form-button';
 
-const buildValidationSchema = (studies: Study[], study: EditingStudy) => {
+const buildValidationSchema = (studies: Study[], study: Study) => {
     return Yup.object().shape({
         ...internalDetailsValidation(studies, study),
         ...researcherValidation(),
@@ -33,7 +33,7 @@ const buildValidationSchema = (studies: Study[], study: EditingStudy) => {
     })
 }
 
-const getFormDefaults = (study: EditingStudy, step: StudyStep) => {
+const getFormDefaults = (study: Study, step: StudyStep) => {
     const pi = study.researchers?.find(r => r.role === ResearcherRoleEnum.Pi)?.id
     const lead = study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)?.id
     return {
@@ -69,7 +69,7 @@ export default function EditStudy() {
     )
 }
 
-const StudyForm: FCWC<{ study: EditingStudy, studies: Study[] }> = ({ study, studies, children }) => {
+const StudyForm: FCWC<{ study: Study, studies: Study[] }> = ({ study, studies, children }) => {
     const id = useParams<{ id: string }>().id
     const [studyProgressStep] = useLocalstorageState(`study-progress-${id}`, 0)
     let initialStep = +useQueryParam('step') ||studyProgressStep
@@ -100,7 +100,7 @@ export enum StudyStep {
 
 const FormContent: FC<{
     study: Study,
-    setStudy: (study: EditingStudy) => void
+    setStudy: (study: Study) => void
 }> = ({ study, setStudy }) => {
     const {
         watch,
@@ -129,7 +129,7 @@ const FormContent: FC<{
     }
 
     const saveStudy = async () => {
-        const study = getValues() as EditingStudy
+        const study = getValues() as Study
         if (isNew) {
             const savedStudy = await api.addStudy({
                 addStudy: { study: study as NewStudy },
@@ -262,7 +262,7 @@ const FormContent: FC<{
                         <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} />
                     </Col>
                     <Col sm={1}>
-                        {currentStep !== StudyStep.InternalDetails && <ExitStudyFormButton study={getValues() as EditingStudy} saveStudy={saveStudy} />}
+                        {currentStep !== StudyStep.InternalDetails && <ExitStudyFormButton study={getValues() as Study} saveStudy={saveStudy} />}
                     </Col>
                 </Box>
                 {steps[currentStep].component}

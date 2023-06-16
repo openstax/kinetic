@@ -1,11 +1,10 @@
 import { cx, React, useCallback, useState } from '@common'
-import { Box, Icon, MultiSessionBar, Button, ResearcherButton } from '@components'
+import { Box, getImageUrl, Icon, MultiSessionBar, ResearcherButton } from '@components'
 import { useIsMobileDevice } from '@lib'
-import { EditingStudy, getStudyDuration, getStudyPoints, studyHasFeedback, studyIsMultipart } from '@models'
+import { getStudyDuration, getStudyPoints, studyHasFeedback, studyIsMultipart } from '@models'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
-import { getImageUrl } from '@components';
 import { StudyDetailsPreview } from './details';
 
 interface StudyCardProps {
@@ -236,7 +235,7 @@ const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
     )
 }
 
-export const StudyCardPreview: FC<{study: EditingStudy}> = ({ study }) => {
+export const StudyCardPreview: FC<{study: Study}> = ({ study }) => {
     const [showDetails, setShowDetails] = useState<boolean>(false)
     return (
         <Card className="col study" direction='column'>

@@ -1,4 +1,4 @@
-import { EditingStudy, getStudyLead, getStudyPi } from '@models';
+import { getStudyLead, getStudyPi } from '@models';
 import { Box, React, useNavigate, useState } from '@common';
 import { colors } from '@theme';
 import { StudyCardPreview, Tag } from '../../../../learner/card';
@@ -7,7 +7,7 @@ import { Col, Modal, ResearcherButton, useFormContext } from '@components';
 import { Study } from '@api';
 import { useApi } from '@lib';
 
-export const ReviewStudy: FC<{ study: EditingStudy }> = ({ study }) => {
+export const ReviewStudy: FC<{ study: Study }> = ({ study }) => {
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
             <Box gap='large' direction='column'>
@@ -21,7 +21,7 @@ export const ReviewStudy: FC<{ study: EditingStudy }> = ({ study }) => {
     )
 }
 
-const EditingStudyInformation: FC<{ study: EditingStudy }> = ({ study }) => {
+const EditingStudyInformation: FC<{ study: Study }> = ({ study }) => {
     const { setValue } = useFormContext()
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true })
@@ -115,7 +115,7 @@ const EditingStudyInformation: FC<{ study: EditingStudy }> = ({ study }) => {
     )
 }
 
-const AdditionalSessionsOverview: FC<{ study: EditingStudy }> = ({ study }) => {
+const AdditionalSessionsOverview: FC<{ study: Study }> = ({ study }) => {
     const { setValue } = useFormContext()
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true })

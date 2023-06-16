@@ -1,4 +1,4 @@
-import { EditingStudy, studySubjects, studyTopics } from '@models';
+import { studySubjects, studyTopics } from '@models';
 import { Box, React, useMemo, useState, Yup } from '@common';
 import {
     Col,
@@ -19,7 +19,7 @@ import { Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
 import { colors } from '@theme';
 
-export const participantViewValidation = (studies: Study[], study: EditingStudy) => {
+export const participantViewValidation = (studies: Study[], study: Study) => {
     const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])
 
     return {
@@ -73,9 +73,9 @@ export const participantViewValidation = (studies: Study[], study: EditingStudy)
     }
 }
 
-export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
+export const ParticipantView: FC<{study: Study}> = ({ study }) => {
     const [showImagePicker, setShowImagePicker] = useState<boolean>(false)
-    const { setValue, watch, getValues, control } = useFormContext<EditingStudy>()
+    const { setValue, watch, getValues, control } = useFormContext<Study>()
     const { fields, update } = useFieldArray({
         control,
         name: 'stages',
@@ -265,7 +265,7 @@ export const ParticipantView: FC<{study: EditingStudy}> = ({ study }) => {
 
             <Col sm={4} direction='column' align='start'>
                 <p>Preview of what the participant will see</p>
-                <StudyCardPreview study={watch() as EditingStudy} />
+                <StudyCardPreview study={watch() as Study} />
             </Col>
         </Box>
     )

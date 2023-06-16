@@ -1,4 +1,3 @@
-import { EditingStudy } from '@models';
 import { Box, React, useMemo, Yup } from '@common';
 import {
     Col,
@@ -12,7 +11,7 @@ import {
 import { colors } from '@theme';
 import { Study } from '@api';
 
-export const internalDetailsValidation = (studies: Study[], study: EditingStudy) => {
+export const internalDetailsValidation = (studies: Study[], study: Study) => {
     const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])
     return {
         titleForResearchers: Yup.string().when('step', {

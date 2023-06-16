@@ -13,7 +13,6 @@ import { dayjs, useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
 import { Toast } from '@nathanstitt/sundry/ui';
 
-// export type EditingStudy = NewStudy | Study
 export type EditingStudy = Study
 // export type SavedStudy = Study | ParticipantStudy
 
@@ -52,15 +51,6 @@ export const getStudyEditUrl = (study: Study) => {
     return `/study/overview/${study.id}`
 }
 
-// TODO can we rely on the backend being up to date? or just use stages?
-export function getStudyStatus(study: EditingStudy) {
-    if (!study.stages || !study.stages.length) {
-        return StageStatusEnum.Draft
-    }
-
-    return first(study.stages)?.status
-}
-
 export function getFirstStage(study: Study | ParticipantStudy): Stage | undefined {
     return first(study.stages)
 }
@@ -69,35 +59,35 @@ export function isActive(study: Study) {
     return study.status === StudyStatusEnum.Active
 }
 
-export function isWaiting(study: EditingStudy) {
+export function isWaiting(study: Study) {
     return study.status === StudyStatusEnum.WaitingPeriod
 }
 
-export function isReadyForLaunch(study: EditingStudy) {
+export function isReadyForLaunch(study: Study) {
     return study.status === StudyStatusEnum.ReadyForLaunch
 }
 
-export function isDraft(study: EditingStudy | Study) {
+export function isDraft(study: Study) {
     return study.status === StudyStatusEnum.Draft
 }
 
-export function isPaused(study: EditingStudy | Study) {
+export function isPaused(study: Study) {
     return study.status === StudyStatusEnum.Paused
 }
 
-export function isScheduled(study: EditingStudy | Study) {
+export function isScheduled(study: Study) {
     return study.status === StudyStatusEnum.Scheduled
 }
 
-export function isCompleted(study: EditingStudy | Study) {
+export function isCompleted(study: Study | Study) {
     return study.status === StudyStatusEnum.Completed
 }
 
-export function getStudyPi(study: EditingStudy | ParticipantStudy) {
+export function getStudyPi(study: Study | ParticipantStudy) {
     return study.researchers?.find(r => r.role === ResearcherRoleEnum.Pi)
 }
 
-export function getStudyLead(study: EditingStudy | ParticipantStudy) {
+export function getStudyLead(study: Study | ParticipantStudy) {
     return study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)
 }
 
@@ -146,7 +136,7 @@ export const useFetchStudies = () => {
 
 export const useFetchStudy = (id: string) => {
     const api = useApi()
-    const [study, setStudy] = useState<EditingStudy | null>()
+    const [study, setStudy] = useState<Study | null>()
     const [allStudies, setAllStudies] = useState<Study[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const isNew = 'new' === id

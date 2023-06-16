@@ -35,6 +35,7 @@ export * from './researcher/researcher-progress-bar'
 export * from './researcher/researcher-button'
 export * from './researcher/collapsible-section'
 export * from './researcher/form-components'
+export * from './researcher/exit-study-form-button'
 export * from './exit-button'
 
 import { Footer } from './footer'
