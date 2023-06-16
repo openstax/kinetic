@@ -46,7 +46,6 @@ class Stage < ApplicationRecord
     end
   end
 
-  # TODO On study now
   def is_completed?
     s = read_attribute(:status)
     # Add sample size check to completed once the user can populate that data
