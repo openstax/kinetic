@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
+require 'tempfile'
+require 'zip'
+
 class QualtricsApi
 
   def initialize
     @http = HTTPX.plugin(:compression).with(
       headers: { 'X-API-TOKEN': Rails.application.secrets.qualtrics_api_key }
-    )
+    ).plugin(:stream)
   end
 
   def create_survey(definition)
@@ -19,6 +22,44 @@ class QualtricsApi
         SurveyPermissions: permissions
       }
     }.deep_stringify_keys)
+  end
+
+  # https://api.qualtrics.com/6b00592b9c013-start-response-export
+  def start_response_export(survey_id, start_at, cutoff_at)
+    params = {
+      format: 'csv',
+      useLabels: true,
+      endDate: cutoff_at.iso8601,
+      includeDisplayOrder: true
+    }
+    params[:startDate] = start_at.iso8601 if start_at.present?
+    request('POST', "surveys/#{survey_id}/export-responses", json: params)['result']['progressId']
+  end
+
+  #  https://api.qualtrics.com/37e6a66f74ab4-get-response-export-progress
+  def check_export_completion(survey_id, progress_id)
+    request('GET', "surveys/#{survey_id}/export-responses/#{progress_id}")['result']
+  end
+
+  def fetch_export_file(survey_id, file_id, &block)
+    resp = @http.get(path_to("surveys/#{survey_id}/export-responses/#{file_id}/file"), stream: true)
+
+    raise "request failed: #{resp.status}" unless resp.status == 200
+
+    #    zip = Zip::InputStream.new(resp)
+    Tempfile.create([survey_id, '.zip'], binmode: true) do |f|
+      resp.each { |chunk| f.write(chunk) }
+      f.flush
+
+      Zip::File.open(f) do |zip|
+        zip.each(&block)
+      end
+
+    end
+    #   end
+    # zip.each do |entry|
+    #   puts entry.name
+    # end
   end
 
   # https://api.qualtrics.com/9d0928392673d-get-survey
@@ -37,20 +78,23 @@ class QualtricsApi
     body['Questions'].map { |_, qdata| OpenStruct.new(qdata) }
   end
 
+  def path_to(suffix)
+    "#{Rails.application.secrets.qualtrics_api_url}/#{suffix}"
+  end
+
   def request(method, path, json: nil)
     resp = @http.request(
       method,
-      "#{Rails.application.secrets.qualtrics_api_url}/#{path}",
+      path_to(path),
       json: json
     )
+    body = resp.body.read
     unless resp.status == 200
-      body = resp.body.read
-      File.write('/tmp/bad.json', JSON.pretty_generate(JSON.parse(body.force_encoding('UTF-8'))))
-
-      raise "request failed: #{resp.status}"
+      body = JSON.pretty_generate(JSON.parse(body.force_encoding('UTF-8'))) # sometimes qualtrics seems to returns invalid UTF
+      raise "request failed: #{resp.status} #{body}"
     end
 
-    JSON.parse(resp.body.read)
+    JSON.parse(body)
   end
 
 end
