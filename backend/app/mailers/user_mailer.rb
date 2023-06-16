@@ -109,8 +109,6 @@ class UserMailer < ApplicationMailer
         'total_study_sessions' => params[:study].stages.size,
         'date_submitted' => Time.now.strftime('%B %d %Y at %I:%M %p'),
         'member_researcher_full_name' => "#{member.first_name} #{member.last_name}"
-        # 'lead_researcher_full_name' => "#{lead.first_name} #{lead.last_name}",
-        # 'pi_researcher_full_name' => "#{pi.first_name} #{pi.last_name}"
       }
       message.mailgun_variables[:lead_researcher_full_name] = "#{lead.first_name} #{lead.last_name}" unless lead.nil?
       message.mailgun_variables[:pi_researcher_full_name] = "#{pi.first_name} #{pi.last_name}" unless pi.nil?
