@@ -29,7 +29,7 @@ class Stage < ApplicationRecord
 
   def status
     s = read_attribute(:status)
-    'completed' if is_completed?
+    'completed' if completed?
     s
   end
 
@@ -46,9 +46,11 @@ class Stage < ApplicationRecord
   #   end
   # end
 
-  def is_completed?
+  def completed?
     # Add sample size check to completed once the user can populate that data
-    return true if study.completed_count >= study.target_sample_size
+    unless study.target_sample_size.nil?
+      return true if study.completed_count >= study.target_sample_size
+    end
     return true if s == 'completed'
     !study.closes_at.nil? && study.closes_at < DateTime.now
   end

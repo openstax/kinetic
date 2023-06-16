@@ -12,8 +12,6 @@ class Api::V1::Researcher::StudiesOpenApi
   openapi_component do
     schema :Study do
       key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
-      # TODO Test this
-      # key :required, COMMON_REQUIRED_STUDY_FIELDS
       allOf do
         schema do
           key :$ref, :BaseStudy
