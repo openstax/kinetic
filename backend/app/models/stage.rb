@@ -27,28 +27,29 @@ class Stage < ApplicationRecord
     :waiting_period, :ready_for_launch, :completed],
     _default: 'draft'
 
-  # def status
-  #   s = read_attribute(:status)
-  #   s
-  #
-  # end
+  def status
+    s = read_attribute(:status)
+    'completed' if is_completed?
+    s
+  end
 
   def is_draft?
     s = read_attribute(:status)
     study.opens_at.nil? && s == 'draft'
   end
 
-  def draft_status
-    s = read_attribute(:status)
-
-    if s == 'waiting_period'
-
-    end
-  end
+  # def draft_status
+  #   s = read_attribute(:status)
+  #
+  #   if s == 'waiting_period'
+  #
+  #   end
+  # end
 
   def is_completed?
-    s = read_attribute(:status)
     # Add sample size check to completed once the user can populate that data
+    return true if study.completed_count >= study.target_sample_size
+    return true if s == 'completed'
     !study.closes_at.nil? && study.closes_at < DateTime.now
   end
 

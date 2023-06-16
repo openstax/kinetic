@@ -1,20 +1,8 @@
-import {
-    DefaultApi,
-    NewStudy,
-    ParticipantStudy,
-    ResearcherRoleEnum,
-    Stage,
-    StageStatusEnum,
-    Study,
-    StudyStatusEnum,
-} from '@api'
+import { DefaultApi, ParticipantStudy, ResearcherRoleEnum, Stage, Study, StudyStatusEnum } from '@api'
 import { isNil, useApi } from '@lib'
 import { dayjs, useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
 import { Toast } from '@nathanstitt/sundry/ui';
-
-export type EditingStudy = Study
-// export type SavedStudy = Study | ParticipantStudy
 
 export enum StudyStatus {
     Launched = 'Launched',

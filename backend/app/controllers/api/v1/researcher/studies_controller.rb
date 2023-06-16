@@ -58,7 +58,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       ResearcherNotifications.notify_kinetic_study_review(@study)
     end
 
-    if params[:study].present?
+    unless params[:study].empty?
       study_update, error = bind(params.require(:study), Api::V1::Bindings::Study)
       render(json: error, status: error.status_code) and return if error
 
