@@ -28,6 +28,14 @@ class Api::V1::Researcher::StudiesOpenApi
       end
     end
 
+    schema :StudyUpdate do
+      allOf do
+        schema do
+          key :$ref, :BaseStudy
+        end
+      end
+    end
+
     schema :Studies do
       property :data do
         key :type, :array
@@ -39,7 +47,7 @@ class Api::V1::Researcher::StudiesOpenApi
     end
   end
 
-  add_properties(:Study) do
+  add_properties(:Study, :StudyUpdate) do
     property :id do
       key :type, :integer
       key :description, 'The study ID.'
@@ -183,13 +191,6 @@ class Api::V1::Researcher::StudiesOpenApi
         key :required, true
         key :schema, { type: :integer }
       end
-      # parameter do
-      #   key :name, :action
-      #   key :in, :query
-      #   key :description, 'Action you want to take on the study'
-      #   key :required, false
-      #   key :schema, { type: :string, enum: %w[submit launch] }
-      # end
       request_body do
         key :description, 'The study updates.'
         content 'application/json' do

@@ -274,14 +274,16 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
 const ImagePreview: FC<{imageId: string}> = ({ imageId }) => {
     return (
         <Col gap sm={12}>
-            <img src={getImageUrl(imageId)}
-                alt={imageId}
-                className='study-card-image'
-                css={{
-                    border: `1px solid ${colors.lightGray}`,
-                    borderRadius: 8,
-                }}
-            />
+            {imageId &&
+                <img src={getImageUrl(imageId)}
+                    alt={imageId}
+                    className='study-card-image'
+                    css={{
+                        border: `1px solid ${colors.lightGray}`,
+                        borderRadius: 8,
+                    }}
+                />
+            }
             <small css={{ colors: colors.grayText }}>Selected image: {imageId}</small>
         </Col>
     )

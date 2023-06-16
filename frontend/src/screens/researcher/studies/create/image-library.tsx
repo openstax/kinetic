@@ -1,7 +1,6 @@
-import { Button, Col, Modal, ResearcherButton } from '@components'
+import { cardImages, Category, Col, getImageUrl, imageCategories, Modal, ResearcherButton } from '@components'
 import { Box, React, styled, useEffect, useState } from '@common';
 import { colors } from '@theme';
-import { cardImages, Category, getImageUrl, imageCategories } from '../../../../components/study-card-images/card-images';
 
 const CategoryLink = styled.small({
     cursor: 'pointer',

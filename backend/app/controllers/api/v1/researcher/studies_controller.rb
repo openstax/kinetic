@@ -33,7 +33,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   end
 
   def update
-    inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::Study)
+    inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::NewStudy)
     render(json: error, status: error.status_code) and return if error
 
     @study.update(inbound_binding.to_hash.except(:researchers, :stages))

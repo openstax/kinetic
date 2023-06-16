@@ -48,7 +48,8 @@ const legacyImageMap: Record<string, string> = {
 
 export const getImageUrl = (imageId: string | undefined) => {
     if (!imageId) {
-        return `${BaseUrl}/${cardImages[0].imageId}.svg`
+        // TODO In the future, placeholder?
+        return ''
     }
 
     if (legacyImageMap[imageId]) {
