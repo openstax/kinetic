@@ -130,7 +130,6 @@ const Sessions: FC<{study: Study}> = ({ study }) => {
 }
 
 const FormActions: FC<{study: Study}> = ({ study }) => {
-    const nav = useNavigate()
     const { isValid } = useFormState()
     const api = useApi()
     const [show, setShow] = useState(false)

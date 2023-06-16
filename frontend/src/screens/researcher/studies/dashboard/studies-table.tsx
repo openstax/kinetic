@@ -29,7 +29,6 @@ import SortDefault from '../../../../images/icons/sort.png';
 import { getStudyEditUrl, StudyStatus, useFetchStudies } from '@models';
 import { Dispatch, SetStateAction } from 'react';
 import { ActionColumn } from './study-actions';
-import { cloneDeep } from 'lodash-es';
 
 declare module '@tanstack/table-core' {
     // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
@@ -38,7 +37,7 @@ declare module '@tanstack/table-core' {
     }
     // eslint-disable-next-line no-unused-vars
     interface TableMeta<TData extends RowData> { // eslint-disable-line @typescript-eslint/no-unused-vars
-        updateData: (rowIndex: number, columnId: string, value: Study) => void
+        updateData: (updatedStudy: Study) => void
     }
 }
 
@@ -279,8 +278,8 @@ export const StudiesTable: React.FC<{
         id: 'opensAt',
         desc: true,
     }])
-
     const [expanded, setExpanded] = React.useState<ExpandedState>(true);
+
     const columns: ColumnDef<Study, any>[] = [
         {
             accessorKey: 'titleForResearchers',
@@ -362,12 +361,14 @@ export const StudiesTable: React.FC<{
             },
             cell: (info) => {
                 const study = info.row.original;
-                if (study.completedCount == 0 || study.targetSampleSize == 0) {
+                if (study.completedCount == 0) {
                     return null
                 }
-                if (currentStatus === StudyStatus.Completed) {
+
+                if (!study.targetSampleSize) {
                     return <span>{study.completedCount}</span>
                 }
+
                 return (
                     <span>
                         {study.completedCount}/{study.targetSampleSize}
@@ -430,9 +431,14 @@ export const StudiesTable: React.FC<{
                     stages: [],
                     titleForResearchers: `Session ${index + 1}`,
                     status: stage.status,
-                    stageId: stage.id,
                 })
             })
+        },
+        getRowId: (originalRow: Study, index: number, parent?: Row<Study>) => {
+            if (parent) {
+                return `${originalRow.id}${index}`
+            }
+            return `${originalRow.id}`
         },
         onSortingChange: setSorting,
         onColumnFiltersChange: setFilters,
@@ -442,21 +448,21 @@ export const StudiesTable: React.FC<{
         getFilteredRowModel: getFilteredRowModel(),
         getExpandedRowModel: getExpandedRowModel(),
         meta: {
-            updateData: (rowIndex, columnId, value) => {
+            updateData: (updatedStudy: Study) => {
                 setStudies(oldStudies =>
-                    oldStudies?.filter(study => !study.isHidden).map((row, index) => {
-                        if (index === rowIndex) {
-                            return {
-                                ...oldStudies[rowIndex]!,
-                                [columnId]: value,
-                            }
+                    oldStudies?.filter(study => !study.isHidden).map((study) => {
+                        if (study.id === updatedStudy.id) {
+                            return updatedStudy
                         }
-                        return row
+
+                        return study
                     })
                 )
             },
         },
     })
+
+    table.reset
 
     return (
         <Box direction='column' className='studies mt-2'>

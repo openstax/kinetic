@@ -53,11 +53,6 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   end
 
   def update_status
-    if params[:status_action] == 'submit'
-      @study.submit
-      ResearcherNotifications.notify_kinetic_study_review(@study)
-    end
-
     unless params[:study].empty?
       study_update, error = bind(params.require(:study), Api::V1::Bindings::Study)
       render(json: error, status: error.status_code) and return if error
@@ -65,9 +60,18 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       @study.update(study_update.to_hash.except(:researchers, :stages))
     end
 
-    @study.stages.update_all(status: 'active') if params[:status_action] == 'launch'
+    if params[:status_action] == 'submit'
+      @study.submit
+      ResearcherNotifications.notify_kinetic_study_review(@study)
+    end
 
-    render json: Api::V1::Bindings::Study.create_from_model(@study), status: :ok
+    @study.pause if params[:status_action] == 'pause'
+    @study.resume if params[:status_action] == 'resume'
+    @study.end if params[:status_action] == 'end'
+    @study.reopen if params[:status_action] == 'reopen'
+    @study.launch if params[:status_action] == 'launch'
+
+    render json: Api::V1::Bindings::Study.create_from_model(@study.reload), status: :ok
   end
 
   def destroy

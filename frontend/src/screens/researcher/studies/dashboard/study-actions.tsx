@@ -1,6 +1,6 @@
 import { dayjs, React, styled, useNavigate } from '@common';
 import { Box, Button, Icon, Modal, Toast } from '@components';
-import { StageStatusEnum, Study } from '@api';
+import { StageStatusEnum, Study, UpdateStudyStatusStatusActionEnum } from '@api';
 import { colors } from '@theme';
 import { useApi } from '@lib';
 import { CellContext } from '@tanstack/react-table';
@@ -34,52 +34,18 @@ const ActionModalContent: FC<{
     const api = useApi()
     const nav = useNavigate()
 
-    // TODO Update stage status instead of study
-    const updateStudy = (study: Study, status: StageStatusEnum, message: string) => {
-    // const updateStudy = (study: Study, status: string, message: string) => {
-    //     const oldStatus = study.status
-        try {
-            // study.status = status
-            api.updateStudy({ id: study.id, updateStudy: { study: study as any } })
-                .then((study) => {
-                    cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
-                    Toast.show({ message })
-                })
-        }
-        catch (err) {
-            // study.status = oldStatus
-            Toast.show({
-                error: err,
-                message: String(err),
-            })
-            console.error(err) // eslint-disable-line no-console
-        }
-        onHide()
-    }
-
-
-    const pauseStudy = (study: Study, message: string) => {
+    const updateStudyStatus = (study: Study, statusAction: UpdateStudyStatusStatusActionEnum, message: string) => {
         try {
             api.updateStudyStatus({
                 id: study.id,
-                statusAction: 'pause',
+                statusAction,
             }).then((study) => {
                 Toast.show({ message })
-                cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
+                cell.table.options.meta?.updateData(study)
             })
-
-
-            api.deleteStudy({ studyId: study.id! }).then(() => {
-                Toast.show({ message })
-                study.isHidden = true
-                cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
-            })
-        } catch (err) {
-            study.isHidden = false
-            Toast.show({
-                error: err,
-                message: String(err),
-            })
+        }
+        catch (err) {
+            Toast.show({ error: err, message: String(err) })
             console.error(err) // eslint-disable-line no-console
         }
         onHide()
@@ -90,14 +56,11 @@ const ActionModalContent: FC<{
             api.deleteStudy({ studyId: study.id }).then(() => {
                 Toast.show({ message })
                 study.isHidden = true
-                cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
+                cell.table.options.meta?.updateData(study)
             })
         } catch (err) {
             study.isHidden = false
-            Toast.show({
-                error: err,
-                message: String(err),
-            })
+            Toast.show({ error: err, message: String(err) })
             console.error(err) // eslint-disable-line no-console
         }
         onHide()
@@ -112,21 +75,25 @@ const ActionModalContent: FC<{
                 cancelText='Keep Study Active'
                 actionText='Pause Study'
                 onSubmit={() => {
-                    pauseStudy(study, `Study ${study.titleForResearchers} has been paused.`)
+                    updateStudyStatus(
+                        study,
+                        'pause',
+                        `Study ${study.titleForResearchers} has been paused.`
+                    )
                 }}
                 onCancel={onHide}
             />
         case ModalType.Resume:
-            if (dayjs().isBefore(dayjs(study.closesAt))) {
+            if (!study.closesAt || dayjs().isBefore(dayjs(study.closesAt))) {
                 return <StudyActionContainer
                     header="Resume Study"
                     warning={false}
                     body="This action will render the study visible to learners and open for participation."
                     cancelText='Keep Study Paused'
                     actionText='Resume Study'
-                    onSubmit={() => updateStudy(
+                    onSubmit={() => updateStudyStatus(
                         study,
-                        StageStatusEnum.Active,
+                        'resume',
                         `Study ${study.titleForResearchers} has been resumed.`
                     )}
                     onCancel={onHide}
@@ -140,9 +107,9 @@ const ActionModalContent: FC<{
                     onSubmit={() => nav(`/study/edit/${study.id}`)}
                     cancelText='End Study'
                     onCancel={() => {
-                        updateStudy(
+                        updateStudyStatus(
                             study,
-                            StageStatusEnum.Completed,
+                            'end',
                             `Study ${study.titleForResearchers} has been manually closed. It can now be found under 'Completed' studies`
                         )
                         onHide()
@@ -156,9 +123,9 @@ const ActionModalContent: FC<{
                 body="This action will set the study status as 'Completed', rendering it no longer visible to participants."
                 cancelText='Keep Study Active'
                 actionText='End Study'
-                onSubmit={() => updateStudy(
+                onSubmit={() => updateStudyStatus(
                     study,
-                    StageStatusEnum.Completed,
+                    'end',
                     `Study ${study.titleForResearchers} has been manually closed. It can now be found under 'Completed' studies`
                 )}
                 onCancel={onHide}
@@ -182,13 +149,12 @@ const ActionModalContent: FC<{
                 onCancel={onHide}
             />
         case ModalType.Reopen:
-            {/* TODO on submit, route to new study creation flow -> researcher facing info page */}
             return <StudyActionContainer
                 header="Reopen Study"
                 warning={false}
                 body="Reopening the study will make it visible to participants and data collection will resume. 'Reopen Study' will prompt you to review your study parameters before relaunch."
                 actionText='Reopen Study'
-                onSubmit={() => nav(`/study/edit/${study.id}`)}
+                onSubmit={() => nav(`/study/overview/${study.id}`)}
                 cancelText='Keep Study Closed'
                 onCancel={onHide}
             />
@@ -237,6 +203,7 @@ const ActionIcon = styled(Icon)(({ disabled }) => ({
 const isPausable = (cell: CellContext<Study, any>): boolean => {
     const hasChildren = cell.row.getLeafRows().length
     const parent = cell.row.getParentRows()[0]
+    const parent2 = cell.row.getParentRow()
 
     if (hasChildren) {
         return false
@@ -247,7 +214,7 @@ const isPausable = (cell: CellContext<Study, any>): boolean => {
         return true
     }
 
-    return previousSession?.original.status == 'paused' && isActive(parent?.original)
+    return previousSession?.original.status == 'paused' && isActive(cell.row.original)
 }
 
 export const ActionColumn: React.FC<{

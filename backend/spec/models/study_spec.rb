@@ -66,11 +66,28 @@ RSpec.describe Study, api: :v1 do
     end
   end
 
-  describe 'update study status' do
-    let(:admin) { create(:admin) }
-    let(:researcher) { create(:researcher) }
-    let(:study) { create(:study, num_stages: 3, researchers: researcher) }
-    let(:path) { "researcher/studies/#{study.id}/update_status" }
+  describe 'study status' do
+    let!(:admin) { create(:admin) }
+    let!(:researcher) { create(:researcher) }
+    let!(:study) { create(:study, num_stages: 3, researchers: researcher) }
+
+    # TODO Issue around stages not being loaded...?
+    it 'pauses a study' do
+      study.launch
+      # Pause first session
+      study.pause
+      expect(study.status).to eq 'active'
+      expect(study.stages.first.status).to eq 'paused'
+      expect(study.stages[1].status).to eq 'active'
+      expect(study.stages[2].status).to eq 'active'
+
+      # Pause second session
+      study.pause
+      expect(study.status).to eq 'active'
+      expect(study.stages.first.status).to eq 'paused'
+      expect(study.stages[1].status).to eq 'paused'
+      expect(study.stages[2].status).to eq 'active'
+    end
 
     it 'submits a study' do
       study.submit
@@ -88,22 +105,26 @@ RSpec.describe Study, api: :v1 do
       end
     end
 
-    it 'pauses a study (first session)' do
-      study.pause
-      expect(study.status).to eq 'paused'
-      expect(study.stage.first.status).to eq 'paused'
-      expect(study.stages[1].status).to eq 'active'
+    it 'launches a study' do
+      study.launch
+      expect(study.status).to eq 'active'
+      study.stages.each do |stage|
+        expect(stage.status).to eq 'active'
+      end
     end
 
     it 'resumes a study' do
+      study.launch
+      study.pause
       study.resume
       expect(study.status).to eq 'active'
       study.stages.each do |stage|
-        expect(stage.status).to eq 'paused'
+        expect(stage.status).to eq 'active'
       end
     end
 
     it 'ends a study' do
+      study.launch
       study.end
       expect(study.status).to eq 'active'
       study.stages.each do |stage|
@@ -112,43 +133,14 @@ RSpec.describe Study, api: :v1 do
     end
 
     it 'reopens a study' do
+      study.launch
+      study.end
       study.reopen
       expect(study.status).to eq 'active'
       study.stages.each do |stage|
         expect(stage.status).to eq 'paused'
       end
     end
-
-    # it 'updates the study\'s status to completed' do
-    #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'completed' } }
-    #
-    #   expect(response).to have_http_status(:success)
-    #   expect(response_hash).to match(a_hash_including(status: 'completed'))
-    # end
-    #
-    # it 'updates the study\'s status to scheduled' do
-    #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'scheduled' } }
-    #
-    #   expect(response).to have_http_status(:success)
-    #   expect(response_hash).to match(a_hash_including(status: 'scheduled'))
-    # end
-    #
-    # it 'updates the study\'s status to active' do
-    #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'active' } }
-    #
-    #   expect(response).to have_http_status(:success)
-    #   expect(response_hash).to match(a_hash_including(status: 'active'))
-    # end
-
-    # Unneeded, can't revert to draft
-    # it 'updates the study\'s status to draft' do
-    #   api_put "researcher/studies/#{study1.id}", params: { study: { status: 'draft' } }
-    #
-    #   expect(response).to have_http_status(:success)
-    #   expect(response_hash).to match(a_hash_including(status: 'draft'))
-    # end
-    #
-
   end
 
   def expect_query_results(query, results)
