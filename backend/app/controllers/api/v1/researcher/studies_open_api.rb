@@ -129,9 +129,9 @@ class Api::V1::Researcher::StudiesOpenApi
         key :schema, { type: :string, enum: %w[submit launch pause resume end reopen] }
       end
       parameter do
-        key :name, :stage_id
+        key :name, :stage_index
         key :in, :query
-        key :description, 'Action you want to take on a specific stage'
+        key :description, 'Action you want to take on a specific stage (by index)'
         key :schema, { type: :integer }
       end
       request_body do

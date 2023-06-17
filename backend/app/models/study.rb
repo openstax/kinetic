@@ -125,26 +125,22 @@ class Study < ApplicationRecord
   end
 
   def pause
-    stage = stages.filter { |stage| stage.status != 'paused' }.first
-    stage&.update(status: 'paused')
+    stages.where.not(status: 'paused').first&.update(status: 'paused')
   end
 
-  def resume
-    stage_index = stages.find_index { |stage| stage.status == 'paused' }
-    # must resume all subsequent stages
-    stages = stages&.drop(stage_index)
-    stages&.update_all(status: 'active')
+  def resume(stage_index = 0)
+    stages.last(stages.length - stage_index).each do |stage|
+      stage.update(status: 'active')
+    end
   end
 
   def end
-    stage = stages.find { |stage| stage.status != 'completed' }
-    stage&.update(status: 'paused')
+    stages.where.not(status: 'completed').first&.update(status: 'completed')
   end
 
-  def reopen
-    stage_index = stages.find_index { |stage| stage.status == 'completed' }
-    # must resume all subsequent stages
-    stages = stages&.drop(stage_index)
-    stages&.update_all(status: 'active')
+  def reopen(stage_index = 0)
+    stages.last(stages.length - stage_index).each do |stage|
+      stage.update(status: 'active')
+    end
   end
 end

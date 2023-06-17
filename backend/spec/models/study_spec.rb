@@ -71,24 +71,6 @@ RSpec.describe Study, api: :v1 do
     let!(:researcher) { create(:researcher) }
     let!(:study) { create(:study, num_stages: 3, researchers: researcher) }
 
-    # TODO Issue around stages not being loaded...?
-    it 'pauses a study' do
-      study.launch
-      # Pause first session
-      study.pause
-      expect(study.status).to eq 'active'
-      expect(study.stages.first.status).to eq 'paused'
-      expect(study.stages[1].status).to eq 'active'
-      expect(study.stages[2].status).to eq 'active'
-
-      # Pause second session
-      study.pause
-      expect(study.status).to eq 'active'
-      expect(study.stages.first.status).to eq 'paused'
-      expect(study.stages[1].status).to eq 'paused'
-      expect(study.stages[2].status).to eq 'active'
-    end
-
     it 'submits a study' do
       study.submit
       expect(study.status).to eq 'waiting_period'
@@ -113,6 +95,30 @@ RSpec.describe Study, api: :v1 do
       end
     end
 
+    it 'pauses a study' do
+      study.launch
+      # Pause first session
+      study.pause
+      expect(study.status).to eq 'active'
+      expect(study.stages.first.status).to eq 'paused'
+      expect(study.stages.second.status).to eq 'active'
+      expect(study.stages.third.status).to eq 'active'
+
+      # Pause second session
+      study.pause
+      expect(study.status).to eq 'active'
+      expect(study.stages.first.status).to eq 'paused'
+      expect(study.stages.second.status).to eq 'paused'
+      expect(study.stages.third.status).to eq 'active'
+
+      # Pause third session
+      study.pause
+      expect(study.status).to eq 'paused'
+      expect(study.stages.first.status).to eq 'paused'
+      expect(study.stages.second.status).to eq 'paused'
+      expect(study.stages.third.status).to eq 'paused'
+    end
+
     it 'resumes a study' do
       study.launch
       study.pause
@@ -121,15 +127,47 @@ RSpec.describe Study, api: :v1 do
       study.stages.each do |stage|
         expect(stage.status).to eq 'active'
       end
+
+    end
+
+    it 'resumes subsequent studies' do
+      study.launch
+      study.pause
+      study.pause
+      study.pause
+      expect(study.status).to eq 'paused'
+
+      # Resume first session, should resume all subsequent paused sessions
+      study.resume(0)
+      expect(study.status).to eq 'active'
+      study.stages.each do |stage|
+        expect(stage.status).to eq 'active'
+      end
     end
 
     it 'ends a study' do
       study.launch
+
+      # end first session
       study.end
       expect(study.status).to eq 'active'
-      study.stages.each do |stage|
-        expect(stage.status).to eq 'paused'
-      end
+      expect(study.stages.first.status).to eq 'completed'
+      expect(study.stages.second.status).to eq 'active'
+      expect(study.stages.third.status).to eq 'active'
+
+      # end second session
+      study.end
+      expect(study.status).to eq 'active'
+      expect(study.stages.first.status).to eq 'completed'
+      expect(study.stages.second.status).to eq 'completed'
+      expect(study.stages.third.status).to eq 'active'
+
+      # end third session
+      study.end
+      expect(study.status).to eq 'completed'
+      expect(study.stages.first.status).to eq 'completed'
+      expect(study.stages.second.status).to eq 'completed'
+      expect(study.stages.third.status).to eq 'completed'
     end
 
     it 'reopens a study' do
@@ -137,8 +175,25 @@ RSpec.describe Study, api: :v1 do
       study.end
       study.reopen
       expect(study.status).to eq 'active'
+      # TODO with stage index
       study.stages.each do |stage|
-        expect(stage.status).to eq 'paused'
+        expect(stage.status).to eq 'active'
+      end
+
+    end
+
+    it 'reopens subsequent studies' do
+      study.launch
+      study.end
+      study.end
+      study.end
+
+      # Reopen first session, should resume all subsequent completed sessions
+      expect(study.status).to eq 'completed'
+      study.reopen(0)
+      expect(study.status).to eq 'active'
+      study.stages.each do |stage|
+        expect(stage.status).to eq 'active'
       end
     end
   end

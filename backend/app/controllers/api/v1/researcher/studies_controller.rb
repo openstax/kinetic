@@ -66,10 +66,10 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     end
 
     @study.pause if params[:status_action] == 'pause'
-    @study.resume if params[:status_action] == 'resume'
     @study.end if params[:status_action] == 'end'
-    @study.reopen if params[:status_action] == 'reopen'
     @study.launch if params[:status_action] == 'launch'
+    @study.resume(params[:stage_index]) if params[:status_action] == 'resume'
+    @study.reopen(params[:stage_index]) if params[:status_action] == 'reopen'
 
     render json: Api::V1::Bindings::Study.create_from_model(@study.reload), status: :ok
   end
