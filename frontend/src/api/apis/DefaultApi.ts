@@ -268,7 +268,7 @@ export interface UpdateStudyRequest {
 export interface UpdateStudyStatusRequest {
     id: number;
     statusAction: UpdateStudyStatusStatusActionEnum;
-    stageId?: number;
+    stageIndex?: number;
     study?: Study;
 }
 
@@ -1667,8 +1667,8 @@ export class DefaultApi extends runtime.BaseAPI {
             queryParameters['status_action'] = requestParameters.statusAction;
         }
 
-        if (requestParameters.stageId !== undefined) {
-            queryParameters['stage_id'] = requestParameters.stageId;
+        if (requestParameters.stageIndex !== undefined) {
+            queryParameters['stage_index'] = requestParameters.stageIndex;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

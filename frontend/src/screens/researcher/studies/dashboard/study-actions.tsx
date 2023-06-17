@@ -34,11 +34,17 @@ const ActionModalContent: FC<{
     const api = useApi()
     const nav = useNavigate()
 
-    const updateStudyStatus = (study: Study, statusAction: UpdateStudyStatusStatusActionEnum, message: string) => {
+    const updateStudyStatus = (
+        study: Study,
+        statusAction: UpdateStudyStatusStatusActionEnum,
+        message: string,
+        stageIndex: number | undefined = undefined
+    ) => {
         try {
             api.updateStudyStatus({
                 id: study.id,
                 statusAction,
+                stageIndex,
             }).then((study) => {
                 Toast.show({ message })
                 cell.table.options.meta?.updateData(study)
@@ -94,7 +100,8 @@ const ActionModalContent: FC<{
                     onSubmit={() => updateStudyStatus(
                         study,
                         'resume',
-                        `Study ${study.titleForResearchers} has been resumed.`
+                        `Study ${study.titleForResearchers} has been resumed.`,
+                        cell.row.index
                     )}
                     onCancel={onHide}
                 />
@@ -202,8 +209,8 @@ const ActionIcon = styled(Icon)(({ disabled }) => ({
 
 const isPausable = (cell: CellContext<Study, any>): boolean => {
     const hasChildren = cell.row.getLeafRows().length
-    const parent = cell.row.getParentRows()[0]
-    const parent2 = cell.row.getParentRow()
+    // const parent = cell.row.getParentRows()[0]
+    const parent = cell.row.getParentRow()
 
     if (hasChildren) {
         return false

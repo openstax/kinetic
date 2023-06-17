@@ -129,7 +129,7 @@ class Study < ApplicationRecord
   end
 
   def resume(stage_index = 0)
-    stages.last(stages.length - stage_index).each do |stage|
+    stages.last(stages.length - stage_index.to_i).each do |stage|
       stage.update(status: 'active')
     end
   end
@@ -139,7 +139,7 @@ class Study < ApplicationRecord
   end
 
   def reopen(stage_index = 0)
-    stages.last(stages.length - stage_index).each do |stage|
+    stages.last(stages.length - stage_index.to_i).each do |stage|
       stage.update(status: 'active')
     end
   end
