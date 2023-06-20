@@ -29,6 +29,7 @@ class Stage < ApplicationRecord
 
   def status
     return 'completed' if completed?
+    return 'scheduled' if scheduled?
     read_attribute(:status)
   end
 
@@ -38,6 +39,10 @@ class Stage < ApplicationRecord
       return true if study.completed_count >= study.target_sample_size
     end
     !study.closes_at.nil? && study.closes_at < DateTime.now
+  end
+
+  def scheduled?
+    study.opens_at.present? && study.opens_at > DateTime.now
   end
 
   def previous_stage

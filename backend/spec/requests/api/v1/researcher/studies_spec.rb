@@ -159,7 +159,7 @@ RSpec.describe 'Studies', api: :v1 do
   end
 
   describe 'PUT researcher/study' do
-    let!(:study1) { create(:study, researchers: researcher1) }
+    let(:study1) { create(:study, researchers: researcher1) }
 
     context 'when logged out' do
       it 'gives unauthorized' do

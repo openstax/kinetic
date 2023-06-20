@@ -33,7 +33,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   end
 
   def update
-    inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::NewStudy)
+    inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
     render(json: error, status: error.status_code) and return if error
 
     @study.update(inbound_binding.to_hash.except(:researchers, :stages))
@@ -54,7 +54,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
   def update_status
     unless params[:study].empty?
-      study_update, error = bind(params.require(:study), Api::V1::Bindings::Study)
+      study_update, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
       render(json: error, status: error.status_code) and return if error
 
       @study.update(study_update.to_hash.except(:researchers, :stages))
