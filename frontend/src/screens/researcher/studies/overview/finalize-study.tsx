@@ -35,9 +35,11 @@ const ReadyForLaunch: FC<{
             <Box direction='column' align='center' className='text-center' gap='large' alignSelf='center' padding={{ left: '3em', right: '3em' }}>
                 <img src={QualtricsReady} alt='qualtrics-ready' height={200}/>
                 <h5 className='fw-bold'>All set up and ready to go!</h5>
+                <h6 className='lh-lg' css={{ color: colors.grayText }}>
+                   The correct permissions are now all set! An access code has now been sent to your email from owlsurveys@rice.edu providing you with further instructions on how to access your Qualtrics template.
+                </h6>
                 <h6 className='lh-lg' css={{ color: colors.grayerText }}>
-                    <div>The correct permissions are now all set! An access code has now been sent to your email from owlsurveys@rice.edu providing you with further instructions on how to access your Qualtrics template.</div>
-                    <div>Once you’ve set up your study in Qualtrics and it’s ready for data collection, return here to finalize it and launch it on Kinetic.</div>
+                    Once you’ve set up your study in Qualtrics and it’s ready for data collection, return here to finalize it and launch it on Kinetic.
                 </h6>
                 <span css={{ color: colors.grayText }}>Didn’t receive an email with your Qualtrics collaboration code? Please email us at <a href="mailto:kinetic@openstax.org">kinetic@openstax.org</a> and we’ll get it all up and running for you</span>
 

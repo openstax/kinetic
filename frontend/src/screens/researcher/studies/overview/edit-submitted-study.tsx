@@ -35,6 +35,10 @@ const studyValidation = Yup.object().shape({
         is: true,
         then: Yup.date().nullable(true).required('Required'),
     }),
+    shareableAfterMonths: Yup.mixed().when('shareStudy', {
+        is: true,
+        then: Yup.number().typeError('Required'),
+    }),
     stages: Yup.array().of(
         Yup.object().shape({
             availableAfterDays: Yup.number().typeError('Required').min(1, 'Only whole numbers above 0 are valid').required('Required'),
@@ -61,7 +65,16 @@ export const EditSubmittedStudy: FC<{
                 ...study,
                 hasSampleSize: !!study.targetSampleSize,
                 hasClosingDate: !!study.closesAt,
-                shareStudy: study.shareableAfterMonths !== null,
+                shareStudy: study.shareableAfterMonths == 0 || !!study.shareableAfterMonths,
+                stages: isReadyForLaunch(study) ? study.stages?.map((stage, index) => {
+                    if (index == 0) {
+                        return stage
+                    }
+                    return ({
+                        ...stage,
+                        availableAfterDays: undefined,
+                    })
+                }) : study.stages,
             }}
             onSubmit={(values, context) => saveStudy(values, context)}
             onCancel={() => {}}
@@ -210,6 +223,7 @@ const OpensAt: FC = () => {
                         label='Pick a Date'
                         withTime
                         format={DateTimeFormats.shortDateTime}
+
                         options={{
                             defaultHour: 9,
                             minDate: 'today',
@@ -223,7 +237,7 @@ const OpensAt: FC = () => {
 }
 
 const ShareStudy: FC<{study: Study}> = ({ study }) => {
-    const { watch } = useFormContext()
+    const { watch, setValue, getValues, trigger } = useFormContext()
 
     return (
         <Box gap='xlarge'>
@@ -234,18 +248,23 @@ const ShareStudy: FC<{study: Study}> = ({ study }) => {
 
             <Col direction='column' gap>
                 <Box gap align='center'>
-                    <ResearcherCheckbox name='shareStudy' type='checkbox' id='share-study' />
+                    <ResearcherCheckbox name='shareStudy' type='checkbox' id='share-study' onChange={() => {
+                        const checked = getValues('shareStudy')
+                        if (!checked) {
+                            setValue('shareableAfterMonths', null, { shouldValidate: true })
+                        }
+                        trigger('shareableAfterMonths')
+                    }} />
                     <label htmlFor="share-study">
                         I would like to share my study with other researchers on Kinetic after an embargo period of
                     </label>
                 </Box>
                 {watch('shareStudy') &&
                     <Box gap align='center'>
-                        <small>After an embargo period of</small>
                         <SelectField
                             name="shareableAfterMonths"
                             placeholder='Select'
-                            value={0}
+                            value={watch('shareableAfterMonths')}
                             options={[
                                 { value: 0, label: 'No embargo' },
                                 { value: 6, label: '6 months' },
@@ -255,6 +274,7 @@ const ShareStudy: FC<{study: Study}> = ({ study }) => {
                         />
                     </Box>
                 }
+                <FieldErrorMessage name='shareableAfterMonths' />
             </Col>
         </Box>
     )
@@ -265,12 +285,12 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
     if (!firstStage) {
         return null
     }
-    const { watch, setValue, getValues } = useFormContext()
+    const { watch, setValue, getValues, trigger } = useFormContext()
 
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
-                <h6>Closing Criteria*</h6>
+                <h6>Closing Criteria (optional)</h6>
                 <small>Select your preferred closing criteria indicating completion of data collection process. Leave blank if unknown.</small>
                 <Box gap css={{ color: colors.kineticResearcher }} align='center'>
                     <small>Recommended Sample Size</small>
@@ -288,8 +308,9 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                             onChange={() => {
                                 const checked = getValues('hasSampleSize')
                                 if (!checked) {
-                                    setValue('targetSampleSize', null, { shouldValidate: true })
+                                    setValue('targetSampleSize', undefined, { shouldValidate: true })
                                 }
+                                trigger('targetSampleSize')
                             }}
                         />
                         <label htmlFor='sample-size'>By sample size</label>
@@ -316,6 +337,7 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                                 if (!checked) {
                                     setValue('closesAt', null, { shouldValidate: true })
                                 }
+                                trigger('closesAt')
                             }}
                         />
                         <label htmlFor='closing-date'>By due date</label>
