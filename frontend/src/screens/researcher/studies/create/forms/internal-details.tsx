@@ -24,7 +24,7 @@ export const internalDetailsValidation = (studies: Study[], study: Study) => {
                         if (!studies.length) {
                             return true
                         }
-                        return allOtherStudies.every(study => study.titleForResearchers?.toLowerCase() !== value?.toLowerCase())
+                        return allOtherStudies.every(study => study.titleForResearchers?.toLowerCase().trim() !== value?.toLowerCase().trim())
                     }
                 ),
         }),
@@ -57,7 +57,7 @@ export const InternalDetails: FC = () => {
                         name='titleForResearchers'
                         type='textarea'
                     />
-                    <FieldErrorMessage name='titleForResearchers' liveCountMax={100}/>
+                    <FieldErrorMessage name='titleForResearchers' liveCountMax={45}/>
                 </Col>
             </Box>
 

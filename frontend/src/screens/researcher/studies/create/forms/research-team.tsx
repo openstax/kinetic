@@ -78,7 +78,7 @@ export const ResearchTeam: FC<{study: Study}> = ({ study }) => {
             <Box gap='xlarge'>
                 <Col sm={3} direction='column' gap>
                     <FieldTitle required>Study PI</FieldTitle>
-                    <small>Select your study PI from the pool of Kinetic  researchers, and enable them to view and manage the study from their own account</small>
+                    <small>Select your study PI from the pool of Kinetic researchers, and enable them to view and manage the study from their own account</small>
                 </Col>
 
                 <Col sm={4} justify='center' gap>
@@ -98,7 +98,7 @@ export const ResearchTeam: FC<{study: Study}> = ({ study }) => {
             <Box gap='xlarge'>
                 <Col sm={3} direction='column' gap>
                     <FieldTitle required>Study Lead</FieldTitle>
-                    <small>Select your study lead from the pool of Kinetic  researchers, and enable them to view and manage the study from their own account</small>
+                    <small>Select your study lead from the pool of Kinetic researchers, and enable them to view and manage the study from their own account</small>
                 </Col>
 
                 <Col sm={4} justify='center' gap>

@@ -33,7 +33,7 @@ export const participantViewValidation = (studies: Study[], study: Study) => {
                         if (!studies.length) {
                             return true
                         }
-                        return allOtherStudies.every(study => study.titleForParticipants?.toLowerCase() !== value?.toLowerCase())
+                        return allOtherStudies.every(study => study.titleForParticipants?.toLowerCase().trim() !== value?.toLowerCase().trim())
                     }
                 ),
         }),
@@ -242,22 +242,17 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
                         </Col>
 
                         <Col sm={6} direction='column' gap align='start' justify='center'>
-                            <ImagePreview imageId={getValues('imageId') || '' } />
                             <ResearcherButton buttonType='secondary' testId='image-picker' onClick={() => setShowImagePicker(true)}>
-                                {study.imageId ? 'Change Selected Image' : 'Select Study Card Image'}
+                                {getValues('imageId') ? 'Change Selected Image' : 'Select Study Card Image'}
                             </ResearcherButton>
                             <ImageLibrary
                                 show={showImagePicker}
                                 onHide={() => setShowImagePicker(false)}
-                                onSelect={(imageId) => setValue('imageId', imageId, { shouldValidate: true })}
+                                onSelect={(imageId) => setValue('imageId', imageId, { shouldValidate: true, shouldDirty: true })}
                                 currentImage={getValues('imageId')}
                             />
                             <FieldErrorMessage name='imageId' />
-                            <input
-                                type='text'
-                                className='d-none'
-                                name='imageId'
-                            />
+                            <input type='text' className='d-none' name='imageId'/>
                         </Col>
                     </Box>
                 </Box>
@@ -268,24 +263,6 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
                 <StudyCardPreview study={watch() as Study} />
             </Col>
         </Box>
-    )
-}
-
-const ImagePreview: FC<{imageId: string}> = ({ imageId }) => {
-    return (
-        <Col gap sm={12}>
-            {imageId &&
-                <img src={getImageUrl(imageId)}
-                    alt={imageId}
-                    className='study-card-image'
-                    css={{
-                        border: `1px solid ${colors.lightGray}`,
-                        borderRadius: 8,
-                    }}
-                />
-            }
-            <small css={{ colors: colors.grayText }}>Selected image: {imageId}</small>
-        </Col>
     )
 }
 

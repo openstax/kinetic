@@ -354,7 +354,7 @@ export const StudiesTable: React.FC<{
             },
         },
         {
-            accessorKey: 'sampleSize',
+            accessorKey: 'completedCount',
             size: 175,
             header: () => {
                 return (

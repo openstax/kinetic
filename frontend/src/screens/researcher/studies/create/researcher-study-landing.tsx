@@ -1,5 +1,5 @@
 import { Box, React, styled, useNavigate, useState } from '@common'
-import { Button, Footer, Page, ResearcherButton, TopNavBar } from '@components';
+import { Button, ExitButton, Footer, Page, ResearcherButton, TopNavBar } from '@components';
 import { colors } from '@theme';
 import { Link } from 'react-router-dom';
 import StartProcess from '@images/study-creation/start-process.svg'
@@ -47,6 +47,7 @@ const StepsOverview: FC = () => {
 
     return (
         <Box direction='column' align='center'>
+            <ExitButton />
             <Box width='750px' gap='large' direction='column'>
                 <h2 className='fw-bold'>A brief overview of the study creation flow</h2>
                 <Box gap='large'>
@@ -109,6 +110,7 @@ const StepsOverview: FC = () => {
 const Introduction: FC<{onClickStart: () => void}> = ({ onClickStart }) => {
     return (
         <Box direction='column' align='center'>
+            <ExitButton />
             <Box direction='column' width='650px' className='text-center' align='center'>
                 <h2 className='fw-bold mt-2'>Create a study to collect new data</h2>
                 <img className='mt-2' height={240} width={300} src={StartProcess} alt='get-started'/>
