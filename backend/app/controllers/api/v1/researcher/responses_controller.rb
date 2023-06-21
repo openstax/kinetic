@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::Researcher::ResponsesController < ApplicationController
-
-  include ActionController::HttpAuthentication::Token::ControllerMethods
+class Api::V1::Researcher::ResponsesController < Api::V1::BaseController
 
   def fetch
     (status, responses) = find_or_create_responses(
@@ -34,12 +32,6 @@ class Api::V1::Researcher::ResponsesController < ApplicationController
       end
     end
     [:ok, responses]
-  end
-
-  def has_enclaves_token?
-    authenticate_with_http_token do |token, _o|
-      Rails.application.secrets.enclave_api_key == token
-    end
   end
 
 end

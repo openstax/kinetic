@@ -18,7 +18,9 @@ Rails.application.routes.draw do
         end
         post 'studies/:id/update_status', to: 'studies#update_status'
 
-        resources :analysis, except: [:destroy]
+        resources :analysis, except: [:destroy] do
+          resources :runs, only: [:create], shallow: true
+        end
 
         get 'responses/:api_key', to: 'responses#fetch'
 

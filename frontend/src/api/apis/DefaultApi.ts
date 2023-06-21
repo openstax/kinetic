@@ -24,6 +24,7 @@ import type {
   AnalysisListing,
   BannerNotice,
   BannersListing,
+  CreateAnalysisRun,
   Environment,
   Launch,
   ParticipantStudies,
@@ -67,6 +68,8 @@ import {
     BannerNoticeToJSON,
     BannersListingFromJSON,
     BannersListingToJSON,
+    CreateAnalysisRunFromJSON,
+    CreateAnalysisRunToJSON,
     EnvironmentFromJSON,
     EnvironmentToJSON,
     LaunchFromJSON,
@@ -153,6 +156,10 @@ export interface AdminQueryStudiesRequest {
 
 export interface AdminResponsesForStudyRequest {
     id: number;
+}
+
+export interface CreateAnalysisRunRequest {
+    createAnalysisRun: CreateAnalysisRun;
 }
 
 export interface CreateBannerRequest {
@@ -591,6 +598,39 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async adminResponsesForStudy(requestParameters: AdminResponsesForStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponsesListing> {
         const response = await this.adminResponsesForStudyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Create an analysis run
+     */
+    async createAnalysisRunRaw(requestParameters: CreateAnalysisRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Analysis>> {
+        if (requestParameters.createAnalysisRun === null || requestParameters.createAnalysisRun === undefined) {
+            throw new runtime.RequiredError('createAnalysisRun','Required parameter requestParameters.createAnalysisRun was null or undefined when calling createAnalysisRun.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/researcher/analysis/:analysis_id/runs`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateAnalysisRunToJSON(requestParameters.createAnalysisRun),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AnalysisFromJSON(jsonValue));
+    }
+
+    /**
+     * Create an analysis run
+     */
+    async createAnalysisRun(requestParameters: CreateAnalysisRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Analysis> {
+        const response = await this.createAnalysisRunRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

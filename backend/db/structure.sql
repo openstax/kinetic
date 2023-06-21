@@ -10,17 +10,16 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: pg_stat_statements; Type: EXTENSION; Schema: -; Owner: -
+-- Name: api_key(text, integer); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE EXTENSION IF NOT EXISTS pg_stat_statements WITH SCHEMA public;
-
-
---
--- Name: EXTENSION pg_stat_statements; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION pg_stat_statements IS 'track planning and execution statistics of all SQL statements executed';
+CREATE FUNCTION public.api_key(text, integer) RETURNS text
+    LANGUAGE sql
+    AS $_$
+          select $1 || '_' || string_agg(substr(characters, (random() * length(characters) + 0.5)::integer, 1), '') as random_word
+          from (values('ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789')) as symbols(characters)
+          join generate_series(1, $2) on 1 = 1
+          $_$;
 
 
 --
@@ -192,7 +191,7 @@ CREATE TABLE public.analyses (
     title text NOT NULL,
     description text NOT NULL,
     repository_url text NOT NULL,
-    api_key text DEFAULT public.random_string(18),
+    api_key text DEFAULT public.api_key('st'::text, 18),
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL
 );
@@ -245,6 +244,74 @@ CREATE SEQUENCE public.analysis_researchers_id_seq
 --
 
 ALTER SEQUENCE public.analysis_researchers_id_seq OWNED BY public.analysis_researchers.id;
+
+
+--
+-- Name: analysis_run_messages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.analysis_run_messages (
+    id bigint NOT NULL,
+    analysis_run_id bigint NOT NULL,
+    message text NOT NULL,
+    stage integer NOT NULL,
+    level integer NOT NULL,
+    created_at timestamp with time zone
+);
+
+
+--
+-- Name: analysis_run_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.analysis_run_messages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: analysis_run_messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.analysis_run_messages_id_seq OWNED BY public.analysis_run_messages.id;
+
+
+--
+-- Name: analysis_runs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.analysis_runs (
+    id bigint NOT NULL,
+    analysis_id bigint NOT NULL,
+    api_key text DEFAULT public.api_key('rn'::text, 18) NOT NULL,
+    message text NOT NULL,
+    messages jsonb DEFAULT '{}'::jsonb,
+    did_succeed boolean DEFAULT false,
+    started_at timestamp with time zone,
+    finished_at timestamp with time zone
+);
+
+
+--
+-- Name: analysis_runs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.analysis_runs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: analysis_runs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.analysis_runs_id_seq OWNED BY public.analysis_runs.id;
 
 
 --
@@ -584,9 +651,9 @@ CREATE TABLE public.studies (
     completed_count integer DEFAULT 0 NOT NULL,
     is_hidden boolean DEFAULT false NOT NULL,
     view_count integer DEFAULT 0,
-    category character varying,
-    topic character varying,
-    subject character varying,
+    study_type character varying,
+    study_topic character varying,
+    study_subject character varying,
     internal_description character varying,
     shareable_after_months integer,
     target_sample_size integer
@@ -753,6 +820,20 @@ ALTER TABLE ONLY public.analysis_researchers ALTER COLUMN id SET DEFAULT nextval
 
 
 --
+-- Name: analysis_run_messages id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analysis_run_messages ALTER COLUMN id SET DEFAULT nextval('public.analysis_run_messages_id_seq'::regclass);
+
+
+--
+-- Name: analysis_runs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analysis_runs ALTER COLUMN id SET DEFAULT nextval('public.analysis_runs_id_seq'::regclass);
+
+
+--
 -- Name: banners id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -890,6 +971,22 @@ ALTER TABLE ONLY public.analyses
 
 ALTER TABLE ONLY public.analysis_researchers
     ADD CONSTRAINT analysis_researchers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: analysis_run_messages analysis_run_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analysis_run_messages
+    ADD CONSTRAINT analysis_run_messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: analysis_runs analysis_runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.analysis_runs
+    ADD CONSTRAINT analysis_runs_pkey PRIMARY KEY (id);
 
 
 --
@@ -1090,6 +1187,27 @@ CREATE INDEX index_analysis_researchers_on_researcher_id ON public.analysis_rese
 
 
 --
+-- Name: index_analysis_run_messages_on_analysis_run_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_analysis_run_messages_on_analysis_run_id ON public.analysis_run_messages USING btree (analysis_run_id);
+
+
+--
+-- Name: index_analysis_runs_on_analysis_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_analysis_runs_on_analysis_id ON public.analysis_runs USING btree (analysis_id);
+
+
+--
+-- Name: index_analysis_runs_on_api_key; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_analysis_runs_on_api_key ON public.analysis_runs USING btree (api_key);
+
+
+--
 -- Name: index_launched_stages_on_stage_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1097,24 +1215,10 @@ CREATE INDEX index_launched_stages_on_stage_id ON public.launched_stages USING b
 
 
 --
--- Name: index_launched_stages_on_user_id_and_stage_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_launched_stages_on_user_id_and_stage_id ON public.launched_stages USING btree (user_id, stage_id);
-
-
---
 -- Name: index_launched_studies_on_study_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_launched_studies_on_study_id ON public.launched_studies USING btree (study_id);
-
-
---
--- Name: index_launched_studies_on_user_id_and_study_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_launched_studies_on_user_id_and_study_id ON public.launched_studies USING btree (user_id, study_id);
 
 
 --
@@ -1338,8 +1442,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211129180319'),
 ('20220110162620'),
 ('20220303160442'),
+('20220324192614'),
+('20220406201351'),
 ('20220407193306'),
+('20220407205649'),
 ('20220408162010'),
+('20220429195630'),
 ('20220810173840'),
 ('20220817161302'),
 ('20220824152243'),
@@ -1355,6 +1463,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230216162207'),
 ('20230404161002'),
 ('20230421153444'),
-('20230524011047');
+('20230524011047'),
+('20230616223657');
 
 
