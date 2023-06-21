@@ -18,9 +18,9 @@ Rails.application.routes.draw do
         end
         post 'studies/:id/update_status', to: 'studies#update_status'
 
-        resources :analysis, except: [:destroy] do
-          resources :runs, only: [:create], shallow: true
-        end
+        resources :analysis, except: [:destroy] #  do
+        #   resources :runs, only: [:create], shallow: true
+        # end
 
         get 'responses/:api_key', to: 'responses#fetch'
 
@@ -32,6 +32,13 @@ Rails.application.routes.draw do
           put :land
           put :stats
           delete :opt_out
+        end
+      end
+
+      namespace :enclave do
+        resources :runs, only: [:create] do
+          put 'notify', to: 'runs#notify', on: :collection
+          post 'log', to: 'runs#log', on: :collection
         end
       end
 

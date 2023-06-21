@@ -35,8 +35,7 @@ class CreateAnalyisRuns < ActiveRecord::Migration[6.1]
 
       t.text :api_key, null: false, default: -> { "api_key('rn', 18)" }, index: { unique: true }
       t.text :message, null: false
-      #      t.jsonb :error_messages, default: {}
-      t.jsonb :messages, default: {}
+
       t.boolean :did_succeed, default: false
       t.timestamp :started_at   # has finished_at vs updated_at
       t.timestamp :finished_at
