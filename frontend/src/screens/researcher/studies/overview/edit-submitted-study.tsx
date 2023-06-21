@@ -2,7 +2,6 @@ import { Study } from '@api';
 import { useApi } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import {
-    Button,
     Col,
     DateTime,
     DateTimeField,
@@ -11,7 +10,9 @@ import {
     Form,
     FormSaveButton,
     Icon,
-    InputField, Modal, ResearcherButton,
+    InputField,
+    Modal,
+    ResearcherButton,
     ResearcherCheckbox,
     SelectField,
     useFormContext,
