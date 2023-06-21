@@ -14,14 +14,34 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class AnalysisListing
-    # The analysis.
-    attr_accessor :data
+  class AnalysisRun
+    # Api key to use for recording progress of run
+    attr_accessor :api_key
+
+    # Id of Analysis
+    attr_accessor :analysis_id
+
+    # Api key to obtain analysis data
+    attr_accessor :analysis_api_key
+
+    # has run succeeded
+    attr_accessor :did_succeed
+
+    # When was run started
+    attr_accessor :started_at
+
+    # When was run completed
+    attr_accessor :finshed_at
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'data' => :'data'
+        :'api_key' => :'api_key',
+        :'analysis_id' => :'analysis_id',
+        :'analysis_api_key' => :'analysis_api_key',
+        :'did_succeed' => :'did_succeed',
+        :'started_at' => :'started_at',
+        :'finshed_at' => :'finshed_at'
       }
     end
 
@@ -33,7 +53,12 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'data' => :'Array<Analysis>'
+        :'api_key' => :'String',
+        :'analysis_id' => :'Integer',
+        :'analysis_api_key' => :'Integer',
+        :'did_succeed' => :'Boolean',
+        :'started_at' => :'String',
+        :'finshed_at' => :'String'
       }
     end
 
@@ -47,21 +72,39 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::AnalysisListing` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::AnalysisRun` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::AnalysisListing`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::AnalysisRun`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'data')
-        if (value = attributes[:'data']).is_a?(Array)
-          self.data = value
-        end
+      if attributes.key?(:'api_key')
+        self.api_key = attributes[:'api_key']
+      end
+
+      if attributes.key?(:'analysis_id')
+        self.analysis_id = attributes[:'analysis_id']
+      end
+
+      if attributes.key?(:'analysis_api_key')
+        self.analysis_api_key = attributes[:'analysis_api_key']
+      end
+
+      if attributes.key?(:'did_succeed')
+        self.did_succeed = attributes[:'did_succeed']
+      end
+
+      if attributes.key?(:'started_at')
+        self.started_at = attributes[:'started_at']
+      end
+
+      if attributes.key?(:'finshed_at')
+        self.finshed_at = attributes[:'finshed_at']
       end
     end
 
@@ -69,12 +112,27 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
+      if @api_key.nil?
+        invalid_properties.push('invalid value for "api_key", api_key cannot be nil.')
+      end
+
+      if @analysis_id.nil?
+        invalid_properties.push('invalid value for "analysis_id", analysis_id cannot be nil.')
+      end
+
+      if @analysis_api_key.nil?
+        invalid_properties.push('invalid value for "analysis_api_key", analysis_api_key cannot be nil.')
+      end
+
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
+      return false if @api_key.nil?
+      return false if @analysis_id.nil?
+      return false if @analysis_api_key.nil?
       true
     end
 
@@ -83,7 +141,12 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          data == o.data
+          api_key == o.api_key &&
+          analysis_id == o.analysis_id &&
+          analysis_api_key == o.analysis_api_key &&
+          did_succeed == o.did_succeed &&
+          started_at == o.started_at &&
+          finshed_at == o.finshed_at
     end
 
     # @see the `==` method
@@ -95,7 +158,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [data].hash
+      [api_key, analysis_id, analysis_api_key, did_succeed, started_at, finshed_at].hash
     end
 
     # Builds the object from hash
