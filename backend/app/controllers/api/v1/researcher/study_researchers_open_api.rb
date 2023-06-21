@@ -3,6 +3,16 @@
 class Api::V1::Researcher::StudyResearchersOpenApi
   include OpenStax::OpenApi::Blocks
 
+  openapi_component do
+    schema :StudyResearcher do
+      allOf do
+        schema do
+          key :$ref, :Researcher
+        end
+      end
+    end
+  end
+
   openapi_path '/researcher/studies/{study_id}/researcher/{user_id}' do
     operation :post do
       key :summary, 'Add a researcher to a study'

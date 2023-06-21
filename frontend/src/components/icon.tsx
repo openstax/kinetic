@@ -5,7 +5,7 @@ import {
     IconifyIcon,
     IconifyIconDefinition,
     setSundryIcons,
-} from '@nathanstitt/sundry'
+} from '@nathanstitt/sundry/ui'
 
 import thumbsUp from '@iconify-icons/bi/hand-thumbs-up-fill'
 import exclamationTriangle from '@iconify-icons/bi/exclamation-triangle-fill'
@@ -13,10 +13,9 @@ import xCircle from '@iconify-icons/bi/x-circle'
 import plusSquare from '@iconify-icons/bi/plus-square-fill'
 import exclamationCircle from '@iconify-icons/bi/exclamation-circle-fill'
 import clock from '@iconify-icons/bi/clock'
+import clockFill from '@iconify-icons/bi/clock-fill'
 import spin from '@iconify-icons/bi/arrow-clockwise'
 import minusSquare from '@iconify-icons/bi/dash-square'
-
-
 import plusCircle from '@iconify-icons/bi/plus-circle'
 import plus from '@iconify-icons/bi/plus'
 import close from '@iconify-icons/bi/x-square'
@@ -28,6 +27,7 @@ import tripleDotVertical from '@iconify-icons/bi/three-dots-vertical'
 import cancel from '@iconify-icons/bi/x-circle'
 import trash from '@iconify-icons/bi/trash'
 import checkCircle from '@iconify-icons/bi/check-circle-fill'
+import emptyCircle from '@iconify-icons/bi/circle'
 import feedback from '@iconify-icons/bi/chat-left-dots-fill'
 import search from '@iconify-icons/bi/search'
 import heart from '@iconify-icons/bi/heart-fill'
@@ -37,6 +37,7 @@ import list from '@iconify-icons/bi/list'
 import multiStage from '@iconify-icons/bi/stack'
 import chatLeft from '@iconify-icons/bi/chat-left-fill'
 import cloudUpload from '@iconify-icons/bi/cloud-upload'
+import cloudDownload from '@iconify-icons/bi/cloud-download'
 import questionCircleFill from '@iconify-icons/bi/question-circle-fill'
 import arrowLeftRight from '@iconify-icons/bi/arrow-left-right'
 import arrowUpDown from '@iconify-icons/bi/arrow-up-down'
@@ -48,9 +49,13 @@ import pencilFill from '@iconify-icons/bi/pencil-fill'
 import pause from '@iconify-icons/bi/pause'
 import pauseFill from '@iconify-icons/bi/pause-fill'
 import playFill from '@iconify-icons/bi/play-fill'
+import chevronLeft from '@iconify-icons/bi/chevron-left'
+import chevronDown from '@iconify-icons/bi/chevron-down'
+import chevronUp from '@iconify-icons/bi/chevron-up'
 
 const SUNDRY_PACKAGED_ICONS = {
     thumbsUp,
+    xSimple: x,
     exclamationCircle,
     exclamationTriangle,
     cancel: xCircle,
@@ -69,6 +74,7 @@ export const ICONS = {
     x,
     close,
     clock,
+    clockFill,
     back,
     search,
     plusCircle,
@@ -81,12 +87,14 @@ export const ICONS = {
     feedback,
     heart,
     warning,
+    emptyCircle,
     rolodex,
     list,
     right,
     multiStage,
     chatLeft,
     cloudUpload,
+    cloudDownload,
     questionCircleFill,
     arrowUpDown,
     arrowLeftRight,
@@ -98,6 +106,9 @@ export const ICONS = {
     pause,
     pauseFill,
     playFill,
+    chevronLeft,
+    chevronDown,
+    chevronUp,
 }
 
 export type IconKey = keyof typeof ICONS

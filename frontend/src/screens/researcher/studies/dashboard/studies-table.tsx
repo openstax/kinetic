@@ -1,10 +1,12 @@
 import { cx, React, styled } from '@common';
-import { Study, StudyStatusEnum } from '@api';
+import { StageStatusEnum, Study, StudyStatusEnum } from '@api';
 import {
     ColumnDef,
     ColumnFiltersState,
+    ExpandedState,
     flexRender,
     getCoreRowModel,
+    getExpandedRowModel,
     getFilteredRowModel,
     getSortedRowModel,
     Header,
@@ -15,28 +17,27 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import { Link } from 'react-router-dom';
-import { colors } from '../../../../theme';
+import { colors } from '@theme';
 import { toDayJS } from '@lib';
-import { Box, Icon } from '@components';
+import { Box, Icon, Tooltip } from '@components';
 import AtoZ from '../../../../images/icons/atoz.png';
 import ZtoA from '../../../../images/icons/ztoa.png';
 import AZDefault from '../../../../images/icons/azdefault.png';
 import SortUp from '../../../../images/icons/sortup.png';
 import SortDown from '../../../../images/icons/sortdown.png';
 import SortDefault from '../../../../images/icons/sort.png';
-import { StudyStatus, useFetchStudies } from '@models';
+import { getStudyEditUrl, isDraft, isDraftLike, StudyStatus, useFetchStudies } from '@models';
 import { Dispatch, SetStateAction } from 'react';
-import { NotificationType } from './study-action-notification';
-import { Tooltip } from '@nathanstitt/sundry';
 import { ActionColumn } from './study-actions';
-import { ImageLibrary } from '../create/image-library';
 
 declare module '@tanstack/table-core' {
-    interface ColumnMeta<TData extends RowData, TValue> { // eslint-disable-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+    interface ColumnMeta<TData extends RowData, TValue> {
         type: string
     }
+    // eslint-disable-next-line no-unused-vars
     interface TableMeta<TData extends RowData> { // eslint-disable-line @typescript-eslint/no-unused-vars
-        updateData: (rowIndex: number, columnId: string, value: Study) => void
+        updateData: (updatedStudy: Study) => void
     }
 }
 
@@ -93,15 +94,40 @@ const TableHeader: React.FC<{header: Header<Study, unknown> }> = ({ header }) =>
     )
 }
 
-const StyledRow = styled.tr({
-    padding: '10px 0',
+const StyledRow = styled.tr(({ hasChildren }: { hasChildren?: boolean }) => ({
     height: `3rem`,
     borderBottom: `1px solid ${colors.lightGray}`,
+    'td': {
+        padding: '1rem .5rem',
+    },
+    backgroundColor: hasChildren ? colors.gray : 'inherit',
+}))
+
+const NestedRow = styled(StyledRow)({
+    backgroundColor: colors.gray,
 })
 
 const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
+    if (row.depth > 0) {
+        return (
+            <NestedRow key={row.id}>
+                {row.getVisibleCells().map((cell) => {
+                    return (
+                        <td key={cell.id} css={{
+                            maxWidth: 250,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                        }}>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </td>
+                    );
+                })}
+            </NestedRow>
+        )
+    }
     return (
-        <StyledRow key={row.id}>
+        <StyledRow key={row.id} data-testid={`study-row-${row.original.id}`} hasChildren={!!row.getLeafRows().length}>
             {row.getVisibleCells().map((cell) => {
                 return (
                     <td key={cell.id} css={{
@@ -128,9 +154,13 @@ const FilterContainer = styled(Box)({
 })
 
 const StatusFilters: React.FC<{
+    status: String,
     table: Table<Study>,
     className?: string,
-}> = ({ table, className }) => {
+}> = ({ status, table, className }) => {
+    const isLaunched = status === StudyStatus.Launched
+    const isDraft = status === StudyStatus.Draft
+
     const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
         const status = e.target.name;
         const checked = e.target.checked;
@@ -144,23 +174,45 @@ const StatusFilters: React.FC<{
         return values.includes(name)
     }
 
-    return (
-        <FilterContainer className={cx(className)} gap='medium'>
-            <span>Show</span>
-            <Box gap align='center'>
-                <input type="checkbox" name="active" checked={isChecked('active')} onChange={handleFilter}/>
-                <small>Active</small>
-            </Box>
-            <Box gap align='center'>
-                <input type='checkbox' name='paused' checked={isChecked('paused')} onChange={handleFilter}/>
-                <small>Paused</small>
-            </Box>
-            <Box gap align='center'>
-                <input type='checkbox' name='scheduled' checked={isChecked('scheduled')} onChange={handleFilter}/>
-                <small>Scheduled</small>
-            </Box>
-        </FilterContainer>
-    )
+    if (isLaunched) {
+        return (
+            <FilterContainer className={cx(className)} gap='medium'>
+                <Box gap align='center'>
+                    <input id='active-filter' type="checkbox" name="active" checked={isChecked(`${StudyStatusEnum.Active}`)} onChange={handleFilter}/>
+                    <label className='small' htmlFor='active-filter'>Active</label>
+                </Box>
+                <Box gap align='center'>
+                    <input id='paused-filter' type='checkbox' name='paused' checked={isChecked(`${StudyStatusEnum.Paused}`)} onChange={handleFilter}/>
+                    <label className='small' htmlFor='paused-filter'>Paused</label>
+                </Box>
+                <Box gap align='center'>
+                    <input id='scheduled-filter' type='checkbox' name='scheduled' checked={isChecked(`${StudyStatusEnum.Scheduled}`)} onChange={handleFilter}/>
+                    <label className='small' htmlFor='scheduled-filter'>Scheduled</label>
+                </Box>
+            </FilterContainer>
+        )
+    }
+
+    if (isDraft) {
+        return (
+            <FilterContainer className={cx(className)} gap='medium'>
+                <Box gap align='center'>
+                    <input id='draft-filter' type="checkbox" name="draft" checked={isChecked(`${StudyStatusEnum.Draft}`)} onChange={handleFilter}/>
+                    <label className='small' htmlFor='draft-filter'>Draft</label>
+                </Box>
+                <Box gap align='center'>
+                    <input id='waiting-period-filter' type='checkbox' name='waiting_period' checked={isChecked(`${StudyStatusEnum.WaitingPeriod}`)} onChange={handleFilter}/>
+                    <label className='small' htmlFor='waiting-period-filter'>Waiting Period</label>
+                </Box>
+                <Box gap align='center'>
+                    <input id='ready-for-launch-filter' type='checkbox' name='ready_for_launch' checked={isChecked(`${StudyStatusEnum.ReadyForLaunch}`)} onChange={handleFilter}/>
+                    <label className='small' htmlFor='ready-for-launch-filter'>Ready For Launch</label>
+                </Box>
+            </FilterContainer>
+        )
+    }
+
+    return null
 }
 
 const StyledLabel = styled.span({
@@ -171,51 +223,55 @@ const StyledLabel = styled.span({
 
 const StatusLabel: React.FC<{status: string}> = ({ status }) => {
     switch(status) {
-        case 'active':
+        case StudyStatusEnum.Active:
             return <StyledLabel css={{ color: '#1A654E', backgroundColor: '#C8EAD2' }}>Active</StyledLabel>
-        case 'paused':
+        case StudyStatusEnum.Paused:
             return <StyledLabel css={{ backgroundColor: '#DBDBDB' }}>Paused</StyledLabel>
-        case 'scheduled':
+        case StudyStatusEnum.Scheduled:
             return <StyledLabel css={{ backgroundColor: '#FAF6D1' }}>Scheduled</StyledLabel>
-        case 'draft':
+        case StudyStatusEnum.Draft:
             return <StyledLabel css={{ backgroundColor: '#F6DBED' }}>Draft</StyledLabel>
-        case 'completed':
+        case StudyStatusEnum.ReadyForLaunch:
+            return <StyledLabel css={{ backgroundColor: '#C8EAD2' }}>Ready For Launch</StyledLabel>
+        case StudyStatusEnum.WaitingPeriod:
+            return <StyledLabel css={{ backgroundColor: '#FAF6D1' }}>Waiting Period</StyledLabel>
+        case StudyStatusEnum.Completed:
             return <StyledLabel css={{ color: colors.purple, backgroundColor: '#DFE1F9' }}>Completed</StyledLabel>
         default:
             return null;
     }
 }
 
-const NoData: React.FC = () => {
+const NoData: React.FC<{
+    allStudies: Study[],
+    filteredStudiesLength: number
+}> = ({ allStudies, filteredStudiesLength }) => {
+    if (filteredStudiesLength) return null
     return (
         <Box direction='column' align='center' justify='center' className='mt-10' gap='large'>
             <h3 css={{ color: colors.lightGray }}>
                 No data
             </h3>
-            <span>
+            {!allStudies.length && <span>
                 <Link
-                    to='/study/edit/new'
+                    to='/study/create'
                     css={{ color: colors.purple }}
                     className='fw-bold'
                 >
                     + Create your first research study on Kinetic
                 </Link>
-            </span>
+            </span>}
         </Box>
     )
 }
 
 export const StudiesTable: React.FC<{
-    isLaunched: boolean,
     filters: ColumnFiltersState,
     setFilters: Dispatch<SetStateAction<ColumnFiltersState>>,
-    addNotification: (message: string, type?: NotificationType) => void,
     currentStatus: StudyStatus
 }> = ({
-    isLaunched,
     filters,
     setFilters,
-    addNotification,
     currentStatus,
 }) => {
     const { studies, setStudies } = useFetchStudies()
@@ -223,6 +279,7 @@ export const StudiesTable: React.FC<{
         id: 'opensAt',
         desc: false,
     }])
+    const [expanded, setExpanded] = React.useState<ExpandedState>(true);
 
     const columns: ColumnDef<Study, any>[] = [
         {
@@ -233,14 +290,15 @@ export const StudiesTable: React.FC<{
                 type: 'text',
             },
             cell: (info) => {
-                const studyId = info.row.original.id;
                 return (
-                    <Link
-                        to={`/study/edit/${studyId}`}
-                        css={{ color: colors.purple }}
-                    >
-                        {info.getValue()}
-                    </Link>
+                    <Box css={{ paddingLeft: info.row.depth ? '2rem' : 'default' }}>
+                        <Link
+                            to={getStudyEditUrl(info.row.original)}
+                            css={{ color: colors.purple }}
+                        >
+                            {info.getValue()}
+                        </Link>
+                    </Box>
                 )
             },
         },
@@ -253,49 +311,80 @@ export const StudiesTable: React.FC<{
             filterFn: (row, columnId, filterValue) => {
                 return filterValue.includes(row.getValue(columnId))
             },
-            cell: (info) => <StatusLabel status={info.getValue() as string} />,
+            cell: (info) => {
+                const isParent = info.row.getLeafRows().length
+                if (isDraftLike(info.row.original)) {
+                    if (!info.row.depth) {
+                        return <StatusLabel status={info.getValue() as string} />
+                    } else {
+                        return '-'
+                    }
+                }
+
+                if (isParent) {
+                    return '-'
+                }
+
+                return <StatusLabel status={info.getValue() as string} />
+            },
         },
         {
             accessorKey: 'opensAt',
             header: () => <span>Opens on</span>,
-            cell: (info) => toDayJS(info.getValue() as Date).format('MM/DD/YYYY'),
+            sortingFn: 'datetime',
+            cell: (info) => {
+                if (info.row.subRows.length || !info.row.original.opensAt) {
+                    return '-'
+                }
+
+                return toDayJS(info.getValue() as Date).format('MM/DD/YYYY')
+            },
         },
         {
             accessorKey: 'closesAt',
             header: () => <span>{currentStatus === StudyStatus.Completed ? 'Closed on' : 'Closes on'}</span>,
             cell: (info) => {
-                if (info.row.original.status === StudyStatusEnum.Paused || !info.getValue()) {
+                if (info.row.subRows.length) {
                     return '-'
                 }
+
+                if (info.row.original.status === StageStatusEnum.Paused || !info.getValue()) {
+                    return '-'
+                }
+
                 return toDayJS(info.getValue() as Date).format('MM/DD/YYYY')
             },
         },
         {
-            accessorKey: 'sampleSize',
+            accessorKey: 'completedCount',
             size: 175,
             header: () => {
+                const tooltipText = currentStatus == StudyStatus.Completed ?
+                    'Total # of study completions' :
+                    'Total number of study completions / desired sample size'
                 return (
                     <Box gap>
                         <span># Participants</span>
-                        {currentStatus !== StudyStatus.Completed &&
-                            <Tooltip tooltip='Total number of study completions / desired sample size' css={{ display: 'flex' }}>
-                                <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={12}/>
-                            </Tooltip>
-                        }
+                        <Tooltip tooltip={tooltipText} css={{ display: 'flex' }}>
+                            <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={12}/>
+                        </Tooltip>
                     </Box>
                 )
             },
             cell: (info) => {
                 const study = info.row.original;
-                if (study.completedCount == 0 || study.targetSampleSize == 0) {
-                    return null
-                }
-                if (currentStatus === StudyStatus.Completed) {
+
+                if (currentStatus == StudyStatus.Completed) {
                     return <span>{study.completedCount}</span>
                 }
+
+                if (!study.targetSampleSize) {
+                    return <span>{study.completedCount} / -</span>
+                }
+
                 return (
                     <span>
-                        {study.completedCount}/{study.targetSampleSize}
+                        {study.completedCount} / {study.targetSampleSize}
                     </span>
                 )
             },
@@ -329,43 +418,69 @@ export const StudiesTable: React.FC<{
             accessorKey: 'action',
             header: () => <span>Action</span>,
             enableSorting: false,
-            cell: info => <ActionColumn study={info.row.original} cell={info} addNotification={addNotification}/>,
+            cell: info => {
+                return <ActionColumn study={info.row.original} cell={info} />
+            },
         },
     ]
 
     const table: Table<Study> = useReactTable({
+        filterFromLeafRows: true,
         data: studies,
         columns,
         state: {
             columnFilters: filters,
             sorting,
+            expanded,
+        },
+        autoResetExpanded: false,
+        getSubRows: (study) => {
+            if (!study.stages || study.stages.length < 2) {
+                return undefined
+            }
+            return study.stages?.map((stage, index) => {
+                return ({
+                    ...study,
+                    stages: [],
+                    titleForResearchers: `Session ${index + 1}`,
+                    status: stage.status,
+                })
+            })
+        },
+        getRowId: (originalRow: Study, index: number, parent?: Row<Study>) => {
+            if (parent) {
+                return `${originalRow.id}${index}`
+            }
+            return `${originalRow.id}`
         },
         onSortingChange: setSorting,
         onColumnFiltersChange: setFilters,
+        onExpandedChange: setExpanded,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        getExpandedRowModel: getExpandedRowModel(),
         meta: {
-            updateData: (rowIndex, columnId, value) => {
+            updateData: (updatedStudy: Study) => {
                 setStudies(oldStudies =>
-                    oldStudies?.filter(study => !study.isHidden).map((row, index) => {
-                        if (index === rowIndex) {
-                            return {
-                                ...oldStudies[rowIndex]!,
-                                [columnId]: value,
-                            }
+                    oldStudies?.filter(study => !study.isHidden).map((study) => {
+                        if (study.id === updatedStudy.id) {
+                            return updatedStudy
                         }
-                        return row
+
+                        return study
                     })
                 )
             },
         },
     })
 
+    table.reset
+
     return (
-        <Box direction='column' className='mt-2'>
-            {isLaunched && <StatusFilters table={table} className='my-2'/>}
-            <table data-test-id="studies-table" className='w-100'>
+        <Box direction='column' className='studies mt-2'>
+            <StatusFilters status={currentStatus} table={table} className='my-2'/>
+            <table data-testid="studies-table" className='w-100'>
                 <thead css={{ height: 40 }}>
                     <tr>
                         {table.getFlatHeaders().map((header) =>
@@ -374,12 +489,12 @@ export const StudiesTable: React.FC<{
                     </tr>
                 </thead>
                 <tbody>
-                    {table.getRowModel().rows.map((row) =>
-                        <StudyRow row={row} key={row.id} />
-                    )}
+                    {table.getRowModel().rows.map((row) => {
+                        return <StudyRow row={row} key={row.id} />
+                    })}
                 </tbody>
             </table>
-            {!table.getRowModel().rows.length && <NoData/>}
+            <NoData filteredStudiesLength={table.getRowModel().rows.length} allStudies={studies}/>
         </Box>
     )
 }

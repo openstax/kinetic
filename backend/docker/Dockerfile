@@ -1,5 +1,5 @@
 FROM ruby:3.0.5
-ARG OPENAPI_VERSION=6.2.1
+ARG OPENAPI_VERSION=6.4.0
 ARG bundler_version
 
 RUN apt-get update && \

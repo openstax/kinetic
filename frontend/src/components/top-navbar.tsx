@@ -9,13 +9,13 @@ import { useCurrentUser, useEnvironment, useIsMobileDevice } from '@lib'
 interface TopNavBarProps {
     className?: string
     controls?: React.ReactElement,
-    hideBanner?: boolean
 }
 
-export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, controls, className, hideBanner = false }) => {
+export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, controls, className }) => {
     const env = useEnvironment()
     const user = useCurrentUser()
     const isMobile = useIsMobileDevice()
+    const hideBanner = user.isResearcher || user.isAdmin
 
     return (
         <nav className={cx('navbar', 'navbar-light', className)}>
@@ -41,6 +41,6 @@ export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, controls, className
                 </div>
             </div>
             {!hideBanner && <BannersBar />}
-        </nav >
+        </nav>
     )
 }

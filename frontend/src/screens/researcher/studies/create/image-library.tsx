@@ -1,7 +1,6 @@
-import { Button, Col, Modal } from '@nathanstitt/sundry';
-import { Box, React, styled, useState } from '@common';
-import { colors } from '../../../../theme';
-import { CardImage, cardImages } from '../../../../components/study-card-images/images';
+import { cardImages, Category, Col, getImageUrl, imageCategories, Modal, ResearcherButton } from '@components'
+import { Box, React, styled, useEffect, useState } from '@common';
+import { colors } from '@theme';
 
 const CategoryLink = styled.small({
     cursor: 'pointer',
@@ -21,7 +20,7 @@ const UncheckedCircle = styled.div({
 })
 
 const CheckedCircle = () => (
-    <div css={{
+    <Box align='center' justify='center' css={{
         position: 'absolute',
         border: `2px solid ${colors.kineticResearcher}`,
         width: 15,
@@ -36,36 +35,34 @@ const CheckedCircle = () => (
             background: colors.kineticResearcher,
             width: 7,
             height: 7,
-            top: '25%',
-            right: '20%',
             borderRadius: 50,
         }}>
 
         </div>
-    </div>
+    </Box>
 )
 
 const ImageCard: FC<{
-    image: CardImage,
+    imageId: string,
     selectedImage: string,
     onSelect: (imageId?: string) => void
-}> = ({ image, selectedImage, onSelect }) => {
+}> = ({ imageId, selectedImage, onSelect }) => {
     return (
         <div
             css={{ position: 'relative', cursor: 'pointer' }}
             onClick={() => {
-                if (image.imageId === selectedImage) {
+                if (imageId === selectedImage) {
                     onSelect('')
                 } else {
-                    onSelect(image.imageId)
+                    onSelect(imageId)
                 }
             }}
         >
-            <image.image width={250} height={140} css={{
+            <img src={getImageUrl(imageId)} data-testid='card-image' alt={imageId} width={250} height={140} css={{
                 border: `1px solid ${colors.lightGray}`,
-                padding: `0 25px`,
+                // padding: `0 25px`,
             }}/>
-            {selectedImage === image.imageId ? <CheckedCircle/> : <UncheckedCircle/>}
+            {selectedImage === imageId ? <CheckedCircle/> : <UncheckedCircle/>}
         </div>
     )
 }
@@ -80,17 +77,26 @@ const ImageCardContainer = styled(Box)({
 export const ImageLibrary: FC<{
     show: boolean,
     onHide: () => void,
-    onSelect: (imageId: string) => string
-}> = ({ show, onHide, onSelect }) => {
-    const [category, setCategory] = useState<string>('Personality')
-    const [selectedImage, setSelectedImage] = useState<string>('')
+    onSelect: (imageId: string) => void,
+    currentImage?: string
+}> = ({ show, onHide, onSelect, currentImage }) => {
+    const currentCategory = cardImages.find(image => image.imageId == currentImage)?.category[0] || 'Learning'
+
+    const [category, setCategory] = useState<Category>(currentCategory)
+    const [selectedImage, setSelectedImage] = useState<string>(currentImage || 'Schoolfuturecareer_1')
+
+    useEffect(() => () => {
+        setCategory(currentCategory)
+        setSelectedImage(currentImage || 'Schoolfuturecareer_1')
+    }, [show])
+
     return (
         <Modal
             onHide={onHide}
             center
             show={show}
             xlarge
-            data-test-id="image-library-modal"
+            data-testid="image-library-modal"
             title='Image Library'
         >
             <Modal.Body css={{ padding: 0, height: 500 }}>
@@ -104,19 +110,20 @@ export const ImageLibrary: FC<{
                         gap='large'
                     >
                         <h6>Category</h6>
-                        <CategoryLink onClick={() => setCategory('Personality')}>Personality</CategoryLink>
-                        <CategoryLink onClick={() => setCategory('Memory')}>Memory</CategoryLink>
-                        <CategoryLink onClick={() => setCategory('Learning')}>Learning</CategoryLink>
-                        <CategoryLink onClick={() => setCategory('School & Future Career')}>School & Future Career</CategoryLink>
+                        {imageCategories.map(c =>
+                            <CategoryLink key={c} onClick={() => setCategory(c)}>
+                                {c}
+                            </CategoryLink>
+                        )}
                     </Col>
                     <Col sm={10} direction='column'>
                         <Box css={{ padding: 20, height: '100%' }} direction='column'>
                             <h4>{category}</h4>
                             <ImageCardContainer wrap gap='xlarge' justify='evenly'>
-                                {cardImages.map(cardImage => (
+                                {cardImages.filter(i => i.category.includes(category)).map(cardImage => (
                                     <ImageCard
                                         key={cardImage.imageId}
-                                        image={cardImage}
+                                        imageId={cardImage.imageId}
                                         selectedImage={selectedImage}
                                         onSelect={(imageId?: string) => setSelectedImage(imageId || '')}
                                     />
@@ -124,20 +131,20 @@ export const ImageLibrary: FC<{
                             </ImageCardContainer>
                         </Box>
                         <Box gap='xlarge' css={{ padding: `10px 20px` }} alignSelf='end'>
-                            <Button
-                                className='btn-researcher-secondary'
-                                css={{ width: 170, justifyContent: 'center' }}
-                            >
+                            <ResearcherButton fixedWidth buttonType='secondary' onClick={() => onHide()}>
                                 Cancel
-                            </Button>
-                            <Button
-                                className='btn-researcher-primary'
+                            </ResearcherButton>
+                            <ResearcherButton
                                 disabled={!selectedImage}
-                                css={{ width: 170, justifyContent: 'center' }}
-                                onClick={() => onSelect(selectedImage)}
+                                fixedWidth
+                                testId='select-card-image'
+                                onClick={() => {
+                                    onSelect(selectedImage)
+                                    onHide()
+                                }}
                             >
                                 Select
-                            </Button>
+                            </ResearcherButton>
                         </Box>
                     </Col>
                 </Box>

@@ -1,4 +1,4 @@
-import { React, cx } from '@common'
+import { cx, React } from '@common'
 import { colors } from '../theme'
 import styled from '@emotion/styled'
 import { Box, BoxProps } from 'boxible'
@@ -62,6 +62,7 @@ export const segmentCircleStyle: CSSObject = {
     justifyContent: 'center',
     padding: 0,
     margin: 0,
+    gap: 0,
 
     '.tooltip-inner': { width: '180px' },
 
@@ -128,21 +129,6 @@ export const SegmentCircle: FCWOC<SegmentCircleProps> = ({ children, past, futur
     )
 }
 
-export const SegmentLabel: React.FC<{ active: boolean, lines: string[] }> = ({ lines, active }) => {
-    return (
-        <Box
-            direction="column"
-            justify='center'
-            align='center'
-            className="explanation" css={{
-                fontSize: 12,
-                color: active ? 'black' : colors.darkGray,
-            }}>
-            {lines.map((txt, i) => <span key={i}>{txt}</span>)}
-        </Box>
-    )
-}
-
 interface SegmentedBarProps {
     className?: string
     completedPercentage: number
@@ -163,7 +149,7 @@ export const SegmentedBar: FCWC<SegmentedBarProps> = ({ className, children, com
                 }}
             >
                 <span
-                    data-test-id="progress-indicator"
+                    data-testid="progress-indicator"
                     data-percentage-complete={completedPercentage}
                     css={{
                         height: '100%',

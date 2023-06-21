@@ -2,10 +2,9 @@ import { cx, React, useCallback } from '@common'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '../theme'
-import { Global } from '@emotion/react'
 import { Box, Footer, RewardsProgressBar, TopNavBar } from '@components'
 import { useIsMobileDevice } from '@lib'
-import { StudyTopicID, studyTopicTagIDs, StudyTopicTags } from '@models'
+import { StudyTopic, studyTopics } from '@models'
 import { StudyByTopics, useLearnerStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
 import { SplashImage } from './learner/splash-image'
@@ -53,8 +52,8 @@ interface StudyListProps {
 const Grid = styled.div({
     display: 'grid',
     gridTemplateColumns: 'repeat(3, [col-start] minmax(100px, 1fr) [col-end])',
-    gridColumnGap: 20,
-    gridRowGap: 20,
+    columnGap: 20,
+    rowGap: 20,
     [media.tablet]: {
         gridTemplateColumns: 'repeat(2, [col-start] minmax(100px, 1fr) [col-end])',
     },
@@ -66,7 +65,7 @@ const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies,
             <h3 css={{ margin: '2rem 0' }}>{title}</h3>
             {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
-            <Grid css={{ overflow: 'auto', paddingBottom: '10px' }} data-test-id="studies-listing">
+            <Grid css={{ overflow: 'auto', paddingBottom: '10px' }} data-testid="studies-listing">
                 {studies.map((s) => <StudyCard onSelect={onSelect} study={s} key={s.id} />)}
             </Grid>
         </div>
@@ -107,15 +106,25 @@ const MobileStudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, st
 
 interface FiltersProps {
     studies: StudyByTopics
-    filter: StudyTopicID
-    setFilter(filter: StudyTopicID): void
+    filter: StudyTopic
+    setFilter(filter: StudyTopic): void
 }
 
-const filterProps = (type: StudyTopicID, filter: StudyTopicID, setType: (t: StudyTopicID) => void) => ({
-    className: type == filter ? 'active' : '',
-    'data-test-id': type,
-    onClick() { setType(type) },
-})
+const TopicFilter: FC<{topic: StudyTopic, filter: StudyTopic, setFilter: (t: StudyTopic) => void}> = ({
+    topic, filter, setFilter,
+}) => {
+    return (
+        <span
+            className={topic == filter ? 'active' : ''}
+            data-testid={topic}
+            onClick={() => setFilter(topic)}
+            role="tab"
+        >
+            {topic}
+        </span>
+
+    )
+}
 
 const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
     if (useIsMobileDevice()) {
@@ -123,7 +132,7 @@ const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
     }
 
     return (
-        <Box gap="large" data-test-id="topic-tabs" wrap margin={{ bottom: 'large' }}
+        <Box gap="large" data-testid="topic-tabs" wrap margin={{ bottom: 'large' }}
             css={{
                 span: {
                     cursor: 'pointer',
@@ -137,11 +146,10 @@ const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
                 },
             }}
         >
-            {studyTopicTagIDs.map((tag) => (
-                studies[tag]?.length ?
-                    <span role="tab" key={tag} {...filterProps(tag, filter, setFilter)}>{StudyTopicTags[tag]}</span> : null
+            {studyTopics.map((topic) => (
+                studies[topic]?.length && <TopicFilter topic={topic} key={topic} filter={filter} setFilter={setFilter} />
             ))}
-        </Box >
+        </Box>
     )
 }
 
@@ -158,10 +166,10 @@ const AllSubjects: FC<AllSubjectsProps> = ({
     if (useIsMobileDevice()) {
         return (
             <>
-                {studyTopicTagIDs
-                    .filter((tag) => !!studies[tag]?.length)
-                    .map((tag) => (
-                        <MobileStudyList key={tag} onSelect={onSelect} title={StudyTopicTags[tag]} className={tag} studies={studies[tag] || []} />
+                {studyTopics
+                    .filter((topic) => !!studies[topic]?.length)
+                    .map((topic) => (
+                        <MobileStudyList key={topic} onSelect={onSelect} title={topic} className={topic} studies={studies[topic] || []} />
                     ))
                 }
             </>
@@ -202,7 +210,6 @@ const LearnerDashboard = () => {
                 <Route path={'details/:studyId'} element={<StudyDetails studies={allStudies} />} />
             </Routes>
             <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
-            <Global styles={{ background: colors.pageBackground }} />
             <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 

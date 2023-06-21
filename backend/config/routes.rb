@@ -16,6 +16,7 @@ Rails.application.routes.draw do
           delete 'researcher/:user_id', to: 'study_researchers#destroy'
           resources :stages, shallow: true, only: [:create, :show, :update, :destroy]
         end
+        post 'studies/:id/update_status', to: 'studies#update_status'
 
         resources :analysis, except: [:destroy]
 
@@ -35,6 +36,11 @@ Rails.application.routes.draw do
       namespace :admin do
         resources :rewards
         resources :banners
+        get 'studies/:status', to: 'studies#index'
+        post 'studies/:id/approve', to: 'studies#approve'
+        get 'study/:id/responses', to: 'studies#responses'
+        post 'stage/:stage_id/responses', to: 'studies#add_response'
+        delete 'responses/:id', to: 'studies#destroy_response'
       end
 
       get :openapi, to: 'open_api#json', constraints: { format: :json }

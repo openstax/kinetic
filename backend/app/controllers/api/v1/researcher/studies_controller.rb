@@ -2,13 +2,16 @@
 
 class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseController
 
-  before_action :set_study, only: [:update, :destroy, :show]
+  before_action :set_study, only: [:update, :destroy, :show, :update_status]
 
   def create
     inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::NewStudy)
     render(json: error, status: error.status_code) and return if error
 
     created_study = inbound_binding.create_model!(researcher: current_researcher)
+    inbound_binding.stages&.each do |s|
+      created_study.stages << Stage.new(s.to_hash.merge({ config: {} }))
+    end
 
     response_binding = Api::V1::Bindings::Study.create_from_model(created_study)
     render json: response_binding, status: :created
@@ -18,8 +21,8 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     studies = current_researcher.studies.includes(:researchers, :stages, :first_launched_study)
     response_binding = Api::V1::Bindings::Studies.new(
       data: studies.map do |study|
-              Api::V1::Bindings::Study.create_from_model(study)
-            end
+        Api::V1::Bindings::Study.create_from_model(study)
+      end
     )
     render json: response_binding, status: :ok
   end
@@ -33,10 +36,42 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
     render(json: error, status: error.status_code) and return if error
 
-    inbound_binding.update_model!(@study)
+    @study.update(inbound_binding.to_hash.except(:researchers, :stages))
+
+    notify_researchers(Array(inbound_binding.researchers)) unless inbound_binding.researchers.nil?
+
+    unless inbound_binding.stages.nil?
+      @study.stages.clear
+      inbound_binding.stages.each do |stage|
+        s = Stage.where(id: stage.id).find_or_create_by(stage.to_hash.merge({ config: {} }))
+        @study.stages << s
+      end
+    end
 
     response_binding = Api::V1::Bindings::Study.create_from_model(@study)
     render json: response_binding, status: :ok
+  end
+
+  def update_status
+    unless params[:study].empty? || params[:study].nil?
+      study_update, error = bind(params[:study], Api::V1::Bindings::StudyUpdate)
+      render(json: error, status: error.status_code) and return if error
+
+      @study.update(study_update.to_hash.except(:researchers, :stages))
+    end
+
+    if params[:status_action] == 'submit'
+      @study.submit
+      ResearcherNotifications.notify_kinetic_study_review(@study)
+    end
+
+    @study.pause if params[:status_action] == 'pause'
+    @study.end if params[:status_action] == 'end'
+    @study.launch if params[:status_action] == 'launch'
+    @study.resume(params[:stage_index]) if params[:status_action] == 'resume'
+    @study.reopen(params[:stage_index]) if params[:status_action] == 'reopen'
+
+    render json: Api::V1::Bindings::Study.create_from_model(@study.reload), status: :ok
   end
 
   def destroy
@@ -45,6 +80,27 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   end
 
   protected
+
+  def notify_researchers(researchers)
+    new_researchers = researchers.map do |researcher|
+      StudyResearcher.find_or_create_by(
+        study_id: @study.id,
+        researcher_id: researcher.id,
+        role: researcher.role
+      )
+    end
+
+    added_researchers = (new_researchers - @study.study_researchers) - [@current_researcher]
+    # removed_researchers = (@study.study_researchers - new_researchers) - [@current_researcher]
+
+    ResearcherNotifications.notify_study_researchers(added_researchers, [])
+
+    StudyResearcher.skip_callback(:destroy, :before,
+                                  :check_destroy_leaves_another_researcher_in_study, raise: false)
+    @study.study_researchers.replace(new_researchers.uniq)
+    StudyResearcher.set_callback(:destroy, :before,
+                                 :check_destroy_leaves_another_researcher_in_study, raise: false)
+  end
 
   def set_study
     @study = Study.find(params[:id])

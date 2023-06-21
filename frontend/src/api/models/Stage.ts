@@ -30,7 +30,7 @@ export interface Stage {
      * @type {number}
      * @memberof Stage
      */
-    readonly order: number;
+    readonly order?: number;
     /**
      * The name of the stage
      * @type {string}
@@ -50,11 +50,29 @@ export interface Stage {
      */
     availableAfterDays?: number;
     /**
+     * Has the stage been completed
+     * @type {boolean}
+     * @memberof Stage
+     */
+    readonly isCompleted?: boolean;
+    /**
+     * Can the stage be launched
+     * @type {boolean}
+     * @memberof Stage
+     */
+    readonly isLaunchable?: boolean;
+    /**
      * The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
      * @type {object}
      * @memberof Stage
      */
     config: object;
+    /**
+     * How long the stage is (in minutes)
+     * @type {number}
+     * @memberof Stage
+     */
+    durationMinutes?: number;
     /**
      * How many points the stage is worth
      * @type {number}
@@ -62,12 +80,34 @@ export interface Stage {
      */
     points?: number;
     /**
-     * How long the stage is (in minutes)
-     * @type {number}
+     * Feedback types for this stage
+     * @type {Array<string>}
      * @memberof Stage
      */
-    durationMinutes?: number;
+    feedbackTypes?: Array<string>;
+    /**
+     * Status of the stage
+     * @type {string}
+     * @memberof Stage
+     */
+    status?: StageStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const StageStatusEnum = {
+    Active: 'active',
+    Paused: 'paused',
+    Scheduled: 'scheduled',
+    Draft: 'draft',
+    WaitingPeriod: 'waiting_period',
+    ReadyForLaunch: 'ready_for_launch',
+    Completed: 'completed'
+} as const;
+export type StageStatusEnum = typeof StageStatusEnum[keyof typeof StageStatusEnum];
+
 
 /**
  * Check if a given object implements the Stage interface.
@@ -75,7 +115,6 @@ export interface Stage {
 export function instanceOfStage(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "order" in value;
     isInstance = isInstance && "config" in value;
 
     return isInstance;
@@ -92,13 +131,17 @@ export function StageFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
     return {
         
         'id': json['id'],
-        'order': json['order'],
+        'order': !exists(json, 'order') ? undefined : json['order'],
         'title': !exists(json, 'title') ? undefined : json['title'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
+        'isCompleted': !exists(json, 'is_completed') ? undefined : json['is_completed'],
+        'isLaunchable': !exists(json, 'is_launchable') ? undefined : json['is_launchable'],
         'config': json['config'],
-        'points': !exists(json, 'points') ? undefined : json['points'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
+        'points': !exists(json, 'points') ? undefined : json['points'],
+        'feedbackTypes': !exists(json, 'feedback_types') ? undefined : json['feedback_types'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
     };
 }
 
@@ -115,8 +158,10 @@ export function StageToJSON(value?: Stage | null): any {
         'description': value.description,
         'available_after_days': value.availableAfterDays,
         'config': value.config,
-        'points': value.points,
         'duration_minutes': value.durationMinutes,
+        'points': value.points,
+        'feedback_types': value.feedbackTypes,
+        'status': value.status,
     };
 }
 

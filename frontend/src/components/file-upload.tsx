@@ -1,5 +1,5 @@
 import { Box, React, styled, useState } from '@common';
-import { Button, FormSaveButton } from '@nathanstitt/sundry';
+import { Button, FormSaveButton } from '@components'
 import { colors } from '../theme';
 import { Icon } from './icon';
 

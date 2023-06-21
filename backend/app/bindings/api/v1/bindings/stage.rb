@@ -30,14 +30,48 @@ module Api::V1::Bindings
     # How many days after previous stage will this become available
     attr_accessor :available_after_days
 
+    # Has the stage been completed
+    attr_accessor :is_completed
+
+    # Can the stage be launched
+    attr_accessor :is_launchable
+
     # The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
     attr_accessor :config
+
+    # How long the stage is (in minutes)
+    attr_accessor :duration_minutes
 
     # How many points the stage is worth
     attr_accessor :points
 
-    # How long the stage is (in minutes)
-    attr_accessor :duration_minutes
+    # Feedback types for this stage
+    attr_accessor :feedback_types
+
+    # Status of the stage
+    attr_accessor :status
+
+    class EnumAttributeValidator
+      attr_reader :datatype
+      attr_reader :allowable_values
+
+      def initialize(datatype, allowable_values)
+        @allowable_values = allowable_values.map do |value|
+          case datatype.to_s
+          when /Integer/i
+            value.to_i
+          when /Float/i
+            value.to_f
+          else
+            value
+          end
+        end
+      end
+
+      def valid?(value)
+        !value || allowable_values.include?(value)
+      end
+    end
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -47,9 +81,13 @@ module Api::V1::Bindings
         :'title' => :'title',
         :'description' => :'description',
         :'available_after_days' => :'available_after_days',
+        :'is_completed' => :'is_completed',
+        :'is_launchable' => :'is_launchable',
         :'config' => :'config',
+        :'duration_minutes' => :'duration_minutes',
         :'points' => :'points',
-        :'duration_minutes' => :'duration_minutes'
+        :'feedback_types' => :'feedback_types',
+        :'status' => :'status'
       }
     end
 
@@ -66,9 +104,13 @@ module Api::V1::Bindings
         :'title' => :'String',
         :'description' => :'String',
         :'available_after_days' => :'Float',
+        :'is_completed' => :'Boolean',
+        :'is_launchable' => :'Boolean',
         :'config' => :'Object',
+        :'duration_minutes' => :'Float',
         :'points' => :'Float',
-        :'duration_minutes' => :'Float'
+        :'feedback_types' => :'Array<String>',
+        :'status' => :'String'
       }
     end
 
@@ -113,16 +155,34 @@ module Api::V1::Bindings
         self.available_after_days = attributes[:'available_after_days']
       end
 
+      if attributes.key?(:'is_completed')
+        self.is_completed = attributes[:'is_completed']
+      end
+
+      if attributes.key?(:'is_launchable')
+        self.is_launchable = attributes[:'is_launchable']
+      end
+
       if attributes.key?(:'config')
         self.config = attributes[:'config']
+      end
+
+      if attributes.key?(:'duration_minutes')
+        self.duration_minutes = attributes[:'duration_minutes']
       end
 
       if attributes.key?(:'points')
         self.points = attributes[:'points']
       end
 
-      if attributes.key?(:'duration_minutes')
-        self.duration_minutes = attributes[:'duration_minutes']
+      if attributes.key?(:'feedback_types')
+        if (value = attributes[:'feedback_types']).is_a?(Array)
+          self.feedback_types = value
+        end
+      end
+
+      if attributes.key?(:'status')
+        self.status = attributes[:'status']
       end
     end
 
@@ -132,10 +192,6 @@ module Api::V1::Bindings
       invalid_properties = Array.new
       if @id.nil?
         invalid_properties.push('invalid value for "id", id cannot be nil.')
-      end
-
-      if @order.nil?
-        invalid_properties.push('invalid value for "order", order cannot be nil.')
       end
 
       if @config.nil?
@@ -149,9 +205,26 @@ module Api::V1::Bindings
     # @return true if the model is valid
     def valid?
       return false if @id.nil?
-      return false if @order.nil?
       return false if @config.nil?
+      status_validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "waiting_period", "ready_for_launch", "completed"])
+      return false unless status_validator.valid?(@status)
       true
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] feedback_types Value to be assigned
+    def feedback_types=(feedback_types)
+      @feedback_types = feedback_types
+    end
+
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] status Object to be assigned
+    def status=(status)
+      validator = EnumAttributeValidator.new('String', ["active", "paused", "scheduled", "draft", "waiting_period", "ready_for_launch", "completed"])
+      unless validator.valid?(status)
+        fail ArgumentError, "invalid value for \"status\", must be one of #{validator.allowable_values}."
+      end
+      @status = status
     end
 
     # Checks equality by comparing each attribute.
@@ -164,9 +237,13 @@ module Api::V1::Bindings
           title == o.title &&
           description == o.description &&
           available_after_days == o.available_after_days &&
+          is_completed == o.is_completed &&
+          is_launchable == o.is_launchable &&
           config == o.config &&
+          duration_minutes == o.duration_minutes &&
           points == o.points &&
-          duration_minutes == o.duration_minutes
+          feedback_types == o.feedback_types &&
+          status == o.status
     end
 
     # @see the `==` method
@@ -178,7 +255,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, order, title, description, available_after_days, config, points, duration_minutes].hash
+      [id, order, title, description, available_after_days, is_completed, is_launchable, config, duration_minutes, points, feedback_types, status].hash
     end
 
     # Builds the object from hash

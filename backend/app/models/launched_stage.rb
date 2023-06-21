@@ -44,9 +44,9 @@ class LaunchedStage < ApplicationRecord
     update!(completed_at: Time.now)
   end
 
-  def next_stage_delayed_and_recently_available?
+  def next_stage_recently_available?
     next_stage = unlaunched_next_stage
-    next_stage.present? && next_stage.delayed? &&
+    next_stage.present? &&
       (completed_at + next_stage.available_after_days.days).to_date == Date.yesterday
   end
 end

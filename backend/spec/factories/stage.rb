@@ -6,9 +6,10 @@ FactoryBot.define do
       path { SecureRandom.hex(6) }
     end
 
-    available_after_days { 0 }
-    duration_minutes { rand(1..50) }
-    points { rand(1..50) }
+    available_after_days { 1 }
+    points { 10 }
+    duration_minutes { 5 }
+    feedback_types { ['Debrief, Personalized'] }
 
     config do
       {

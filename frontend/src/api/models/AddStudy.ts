@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { Study } from './Study';
+import type { NewStudy } from './NewStudy';
 import {
-    StudyFromJSON,
-    StudyFromJSONTyped,
-    StudyToJSON,
-} from './Study';
+    NewStudyFromJSON,
+    NewStudyFromJSONTyped,
+    NewStudyToJSON,
+} from './NewStudy';
 
 /**
  * 
@@ -28,10 +28,10 @@ import {
 export interface AddStudy {
     /**
      * 
-     * @type {Study}
+     * @type {NewStudy}
      * @memberof AddStudy
      */
-    study?: Study;
+    study?: NewStudy;
 }
 
 /**
@@ -53,7 +53,7 @@ export function AddStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'study': !exists(json, 'study') ? undefined : StudyFromJSON(json['study']),
+        'study': !exists(json, 'study') ? undefined : NewStudyFromJSON(json['study']),
     };
 }
 
@@ -66,7 +66,7 @@ export function AddStudyToJSON(value?: AddStudy | null): any {
     }
     return {
         
-        'study': StudyToJSON(value.study),
+        'study': NewStudyToJSON(value.study),
     };
 }
 

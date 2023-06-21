@@ -1,9 +1,6 @@
-import { React, cx } from '@common'
-import { Box, Tooltip, Icon, SegmentedBar, Segment, segmentCircleStyle } from '@components'
-import {
-    useRewardsSchedule,
-    RewardsSegment,
-} from '@models'
+import { Box, cx, React } from '@common'
+import { Icon, Segment, segmentCircleStyle, SegmentedBar, Tooltip } from '@components'
+import { RewardsSegment, useRewardsSchedule } from '@models'
 import { formatDate, toDayJS, useIsMobileDevice } from '@lib'
 import { ParticipantStudy } from '@api'
 import { colors } from '../theme'

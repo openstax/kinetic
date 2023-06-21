@@ -71,5 +71,4 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   def launch_pad
     @launch_pad ||= LaunchPad.new(study_id: @study.id, user_id: current_user.id)
   end
-
 end

@@ -10,6 +10,20 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: pg_stat_statements; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pg_stat_statements; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pg_stat_statements IS 'track planning and execution statistics of all SQL statements executed';
+
+
+--
 -- Name: random_string(integer); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -234,42 +248,6 @@ ALTER SEQUENCE public.analysis_researchers_id_seq OWNED BY public.analysis_resea
 
 
 --
--- Name: analysis_response_exports; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.analysis_response_exports (
-    id bigint NOT NULL,
-    analysis_id bigint NOT NULL,
-    is_complete boolean DEFAULT false,
-    is_empty boolean DEFAULT false,
-    is_testing boolean DEFAULT false,
-    metadata jsonb DEFAULT '{}'::jsonb,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL,
-    cutoff_at timestamp with time zone
-);
-
-
---
--- Name: analysis_response_exports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.analysis_response_exports_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: analysis_response_exports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.analysis_response_exports_id_seq OWNED BY public.analysis_response_exports.id;
-
-
---
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -445,8 +423,7 @@ CREATE TABLE public.researchers (
     last_name character varying,
     research_interest1 character varying,
     research_interest2 character varying,
-    research_interest3 character varying,
-    invite_code character varying
+    research_interest3 character varying
 );
 
 
@@ -467,6 +444,42 @@ CREATE SEQUENCE public.researchers_id_seq
 --
 
 ALTER SEQUENCE public.researchers_id_seq OWNED BY public.researchers.id;
+
+
+--
+-- Name: response_exports; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.response_exports (
+    id bigint NOT NULL,
+    is_complete boolean DEFAULT false,
+    is_empty boolean DEFAULT false,
+    is_testing boolean DEFAULT false,
+    metadata jsonb DEFAULT '{}'::jsonb,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
+    cutoff_at timestamp with time zone,
+    stage_id bigint NOT NULL
+);
+
+
+--
+-- Name: response_exports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.response_exports_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: response_exports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.response_exports_id_seq OWNED BY public.response_exports.id;
 
 
 --
@@ -524,11 +537,11 @@ CREATE TABLE public.stages (
     config jsonb NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    title character varying,
-    description character varying,
-    available_after_days double precision DEFAULT 0.0 NOT NULL,
+    available_after_days double precision DEFAULT 1.0 NOT NULL,
     duration_minutes integer DEFAULT 0 NOT NULL,
-    points integer DEFAULT 0 NOT NULL
+    points integer DEFAULT 0 NOT NULL,
+    status integer DEFAULT 0,
+    feedback_types character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -558,25 +571,25 @@ ALTER SEQUENCE public.stages_id_seq OWNED BY public.stages.id;
 CREATE TABLE public.studies (
     id bigint NOT NULL,
     title_for_researchers character varying,
-    title_for_participants character varying NOT NULL,
-    short_description text NOT NULL,
-    long_description text NOT NULL,
+    title_for_participants character varying DEFAULT ''::character varying,
+    short_description character varying DEFAULT ''::character varying,
+    long_description character varying DEFAULT ''::character varying,
     opens_at timestamp without time zone,
     closes_at timestamp without time zone,
     is_mandatory boolean DEFAULT false NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    tags character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     benefits character varying,
-    feedback_description character varying,
     image_id character varying,
     completed_count integer DEFAULT 0 NOT NULL,
     is_hidden boolean DEFAULT false NOT NULL,
-    status integer DEFAULT 0,
-    target_sample_size integer DEFAULT 0,
     view_count integer DEFAULT 0,
-    researcher_pi_id bigint,
-    researcher_lead_id bigint
+    category character varying,
+    topic character varying,
+    subject character varying,
+    internal_description character varying,
+    shareable_after_months integer,
+    target_sample_size integer
 );
 
 
@@ -638,7 +651,8 @@ CREATE TABLE public.study_researchers (
     study_id bigint NOT NULL,
     researcher_id bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    role integer DEFAULT 0
 );
 
 
@@ -739,13 +753,6 @@ ALTER TABLE ONLY public.analysis_researchers ALTER COLUMN id SET DEFAULT nextval
 
 
 --
--- Name: analysis_response_exports id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.analysis_response_exports ALTER COLUMN id SET DEFAULT nextval('public.analysis_response_exports_id_seq'::regclass);
-
-
---
 -- Name: banners id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -778,6 +785,13 @@ ALTER TABLE ONLY public.participant_metadata ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY public.researchers ALTER COLUMN id SET DEFAULT nextval('public.researchers_id_seq'::regclass);
+
+
+--
+-- Name: response_exports id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.response_exports ALTER COLUMN id SET DEFAULT nextval('public.response_exports_id_seq'::regclass);
 
 
 --
@@ -879,14 +893,6 @@ ALTER TABLE ONLY public.analysis_researchers
 
 
 --
--- Name: analysis_response_exports analysis_response_exports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.analysis_response_exports
-    ADD CONSTRAINT analysis_response_exports_pkey PRIMARY KEY (id);
-
-
---
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -940,6 +946,14 @@ ALTER TABLE ONLY public.research_ids
 
 ALTER TABLE ONLY public.researchers
     ADD CONSTRAINT researchers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: response_exports response_exports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.response_exports
+    ADD CONSTRAINT response_exports_pkey PRIMARY KEY (id);
 
 
 --
@@ -1076,13 +1090,6 @@ CREATE INDEX index_analysis_researchers_on_researcher_id ON public.analysis_rese
 
 
 --
--- Name: index_analysis_response_exports_on_analysis_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_analysis_response_exports_on_analysis_id ON public.analysis_response_exports USING btree (analysis_id);
-
-
---
 -- Name: index_launched_stages_on_stage_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1090,10 +1097,24 @@ CREATE INDEX index_launched_stages_on_stage_id ON public.launched_stages USING b
 
 
 --
+-- Name: index_launched_stages_on_user_id_and_stage_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_launched_stages_on_user_id_and_stage_id ON public.launched_stages USING btree (user_id, stage_id);
+
+
+--
 -- Name: index_launched_studies_on_study_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_launched_studies_on_study_id ON public.launched_studies USING btree (study_id);
+
+
+--
+-- Name: index_launched_studies_on_user_id_and_study_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_launched_studies_on_user_id_and_study_id ON public.launched_studies USING btree (user_id, study_id);
 
 
 --
@@ -1125,6 +1146,20 @@ CREATE UNIQUE INDEX index_researchers_on_user_id ON public.researchers USING btr
 
 
 --
+-- Name: index_response_exports_on_stage_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_response_exports_on_stage_id ON public.response_exports USING btree (stage_id);
+
+
+--
+-- Name: index_stages_on_feedback_types; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_stages_on_feedback_types ON public.stages USING gin (feedback_types);
+
+
+--
 -- Name: index_stages_on_order_and_study_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1136,27 +1171,6 @@ CREATE UNIQUE INDEX index_stages_on_order_and_study_id ON public.stages USING bt
 --
 
 CREATE INDEX index_stages_on_study_id ON public.stages USING btree (study_id);
-
-
---
--- Name: index_studies_on_researcher_lead_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_studies_on_researcher_lead_id ON public.studies USING btree (researcher_lead_id);
-
-
---
--- Name: index_studies_on_researcher_pi_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_studies_on_researcher_pi_id ON public.studies USING btree (researcher_pi_id);
-
-
---
--- Name: index_studies_on_tags; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_studies_on_tags ON public.studies USING gin (tags);
 
 
 --
@@ -1184,7 +1198,7 @@ CREATE INDEX index_study_researchers_on_researcher_id ON public.study_researcher
 -- Name: index_study_researchers_on_researcher_id_and_study_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_study_researchers_on_researcher_id_and_study_id ON public.study_researchers USING btree (researcher_id, study_id);
+CREATE INDEX index_study_researchers_on_researcher_id_and_study_id ON public.study_researchers USING btree (researcher_id, study_id);
 
 
 --
@@ -1199,14 +1213,6 @@ CREATE INDEX index_study_researchers_on_study_id ON public.study_researchers USI
 --
 
 CREATE INDEX index_user_preferences_on_user_id ON public.user_preferences USING btree (user_id);
-
-
---
--- Name: studies fk_rails_037d7b4fac; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.studies
-    ADD CONSTRAINT fk_rails_037d7b4fac FOREIGN KEY (researcher_lead_id) REFERENCES public.researchers(id);
 
 
 --
@@ -1258,14 +1264,6 @@ ALTER TABLE ONLY public.analysis_researchers
 
 
 --
--- Name: analysis_response_exports fk_rails_b38dccc6ab; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.analysis_response_exports
-    ADD CONSTRAINT fk_rails_b38dccc6ab FOREIGN KEY (analysis_id) REFERENCES public.analyses(id);
-
-
---
 -- Name: study_researchers fk_rails_c259172f0c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1314,11 +1312,11 @@ ALTER TABLE ONLY public.stages
 
 
 --
--- Name: studies fk_rails_f36ee2254f; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: response_exports fk_rails_eef903b740; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.studies
-    ADD CONSTRAINT fk_rails_f36ee2254f FOREIGN KEY (researcher_pi_id) REFERENCES public.researchers(id);
+ALTER TABLE ONLY public.response_exports
+    ADD CONSTRAINT fk_rails_eef903b740 FOREIGN KEY (stage_id) REFERENCES public.stages(id);
 
 
 --
@@ -1340,12 +1338,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211129180319'),
 ('20220110162620'),
 ('20220303160442'),
-('20220324192614'),
-('20220406201351'),
 ('20220407193306'),
-('20220407205649'),
 ('20220408162010'),
-('20220429195630'),
 ('20220810173840'),
 ('20220817161302'),
 ('20220824152243'),
@@ -1359,6 +1353,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230109200606'),
 ('20230130155253'),
 ('20230216162207'),
-('20230404161002');
+('20230404161002'),
+('20230421153444'),
+('20230524011047');
 
 

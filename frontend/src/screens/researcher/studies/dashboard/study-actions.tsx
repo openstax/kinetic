@@ -1,11 +1,19 @@
-import { React, styled, useNavigate } from '@common';
-import { Box, Icon } from '@components';
-import { Study, StudyStatusEnum } from '@api';
-import { colors } from '../../../../theme';
-import { Button, dayjs, Modal } from '@nathanstitt/sundry';
+import { dayjs, React, styled, useNavigate } from '@common';
+import { Box, Button, Icon, Modal, Toast } from '@components';
+import { StageStatusEnum, Study, UpdateStudyStatusStatusActionEnum } from '@api';
+import { colors } from '@theme';
 import { useApi } from '@lib';
 import { CellContext } from '@tanstack/react-table';
-import { NotificationType } from './study-action-notification';
+import {
+    getStudyEditUrl,
+    isActive,
+    isCompleted,
+    isDraft, isDraftLike,
+    isPaused,
+    isReadyForLaunch,
+    isScheduled,
+    isWaiting,
+} from '@models';
 
 const ModalType = {
     Pause: 'pauseStudy',
@@ -21,25 +29,29 @@ const ActionModalContent: FC<{
     study: Study,
     modalType: string,
     onHide: () => void,
-    cell: CellContext<Study, any>,
-    addNotification: (message: string, type?: NotificationType) => void
-}> = ({ study , modalType, onHide, cell, addNotification }) => {
+    cell: CellContext<Study, any>
+}> = ({ study , modalType, onHide, cell }) => {
     const api = useApi()
     const nav = useNavigate()
 
-    const updateStudy = (study: Study, status: StudyStatusEnum, message: string) => {
-        const oldStatus = study.status
+    const updateStudyStatus = (
+        study: Study,
+        statusAction: UpdateStudyStatusStatusActionEnum,
+        message: string,
+        stageIndex: number | undefined = undefined
+    ) => {
         try {
-            study.status = status
-            api.updateStudy({ id: study.id, updateStudy: { study: study as any } })
-                .then((study) => {
-                    cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
-                    addNotification(message)
-                })
+            api.updateStudyStatus({
+                id: study.id,
+                statusAction,
+                stageIndex,
+            }).then((study) => {
+                Toast.show({ message })
+                cell.table.options.meta?.updateData(study)
+            })
         }
         catch (err) {
-            study.status = oldStatus
-            addNotification(String(err), 'error')
+            Toast.show({ error: err, message: String(err) })
             console.error(err) // eslint-disable-line no-console
         }
         onHide()
@@ -48,13 +60,13 @@ const ActionModalContent: FC<{
     const deleteStudy = (study: Study, message: string) => {
         try {
             api.deleteStudy({ studyId: study.id }).then(() => {
-                addNotification(message)
+                Toast.show({ message })
                 study.isHidden = true
-                cell.table.options.meta?.updateData(cell.row.index, cell.column.id, study)
+                cell.table.options.meta?.updateData(study)
             })
         } catch (err) {
             study.isHidden = false
-            addNotification(String(err), 'error')
+            Toast.show({ error: err, message: String(err) })
             console.error(err) // eslint-disable-line no-console
         }
         onHide()
@@ -66,27 +78,30 @@ const ActionModalContent: FC<{
                 header="Pause Study"
                 warning={true}
                 body="This action will pause the study and participants will no longer be able to view it until you resume."
-                cancelText='Keep Study Active'
+                cancelText='Continue Study'
                 actionText='Pause Study'
-                onSubmit={() => updateStudy(
-                    study,
-                    StudyStatusEnum.Paused,
-                    `Study ${study.titleForResearchers} has been paused.`
-                )}
+                onSubmit={() => {
+                    updateStudyStatus(
+                        study,
+                        'pause',
+                        `Study ${study.titleForResearchers} has been paused.`
+                    )
+                }}
                 onCancel={onHide}
             />
         case ModalType.Resume:
-            if (dayjs().isBefore(dayjs(study.closesAt))) {
+            if (!study.closesAt || dayjs().isBefore(dayjs(study.closesAt))) {
                 return <StudyActionContainer
                     header="Resume Study"
                     warning={false}
                     body="This action will render the study visible to learners and open for participation."
                     cancelText='Keep Study Paused'
                     actionText='Resume Study'
-                    onSubmit={() => updateStudy(
+                    onSubmit={() => updateStudyStatus(
                         study,
-                        StudyStatusEnum.Active,
-                        `Study ${study.titleForResearchers} has been resumed.`
+                        'resume',
+                        `Study ${study.titleForResearchers} has been resumed.`,
+                        cell.row.depth ? cell.row.index : 0
                     )}
                     onCancel={onHide}
                 />
@@ -96,12 +111,12 @@ const ActionModalContent: FC<{
                     warning={false}
                     body="The study you wish to resume has passed the original closing date. Please choose one of the options below."
                     actionText='Adjust Closing Date'
-                    onSubmit={() => nav(`/study/edit/${study.id}`)}
+                    onSubmit={() => nav(`/study/overview/${study.id}`)}
                     cancelText='End Study'
                     onCancel={() => {
-                        updateStudy(
+                        updateStudyStatus(
                             study,
-                            StudyStatusEnum.Completed,
+                            'end',
                             `Study ${study.titleForResearchers} has been manually closed. It can now be found under 'Completed' studies`
                         )
                         onHide()
@@ -113,11 +128,11 @@ const ActionModalContent: FC<{
                 header='End Study'
                 warning={true}
                 body="This action will set the study status as 'Completed', rendering it no longer visible to participants."
-                cancelText='Keep Study Active'
+                cancelText='Continue Study'
                 actionText='End Study'
-                onSubmit={() => updateStudy(
+                onSubmit={() => updateStudyStatus(
                     study,
-                    StudyStatusEnum.Completed,
+                    'end',
                     `Study ${study.titleForResearchers} has been manually closed. It can now be found under 'Completed' studies`
                 )}
                 onCancel={onHide}
@@ -126,7 +141,8 @@ const ActionModalContent: FC<{
             return <StudyActionContainer
                 header="Delete Study"
                 warning={true}
-                body={study.status === StudyStatusEnum.Scheduled ?
+                data-testid='delete-study'
+                body={study.status === StageStatusEnum.Scheduled ?
                     'This action will delete the study and all data collected thus far. This is permanent and cannot be undone. Are you sure?' :
                     'This action will delete the study draft. This is permanent and cannot be undone. Are you sure?'
                 }
@@ -134,20 +150,19 @@ const ActionModalContent: FC<{
                 actionText='Yes, delete the study'
                 onSubmit={() => deleteStudy(
                     study,
-                    study.status === StudyStatusEnum.Scheduled ?
+                    study.status === StageStatusEnum.Scheduled ?
                         `Scheduled study ${study.titleForResearchers} has been deleted.` :
                         `Study draft ${study.titleForResearchers} has been deleted.`
                 )}
                 onCancel={onHide}
             />
         case ModalType.Reopen:
-            {/* TODO on submit, route to new study creation flow -> researcher facing info page */}
             return <StudyActionContainer
                 header="Reopen Study"
                 warning={false}
                 body="Reopening the study will make it visible to participants and data collection will resume. 'Reopen Study' will prompt you to review your study parameters before relaunch."
                 actionText='Reopen Study'
-                onSubmit={() => nav(`/study/edit/${study.id}`)}
+                onSubmit={() => nav(`/study/overview/${study.id}`)}
                 cancelText='Keep Study Closed'
                 onCancel={onHide}
             />
@@ -168,7 +183,7 @@ const StudyActionContainer: FC<{
     warning, header, body, cancelText, actionText, onSubmit, onCancel,
 }) => {
     return (
-        <Box direction='column' className='py-8 px-16' gap='large' align='center'>
+        <Box direction='column' className='py-4 px-8' gap='large' align='center'>
             <Box gap='large' align='center'>
                 {warning && <Icon icon="warning" css={{ color: colors.red }} height={20}/>}
                 <span className='fs-4 fw-bold'>{header}</span>
@@ -193,11 +208,28 @@ const ActionIcon = styled(Icon)(({ disabled }) => ({
     cursor: disabled ? 'default' : 'pointer',
 }))
 
+const isPausable = (cell: CellContext<Study, any>): boolean => {
+    if (isDraftLike(cell.row.original) || isCompleted(cell.row.original)) return false
+
+    const hasChildren = cell.row.getLeafRows().length
+    const parent = cell.row.getParentRow()
+
+    if (hasChildren) {
+        return false
+    }
+
+    const previousSession = parent?.getLeafRows()[cell.row.index - 1]
+    if (!previousSession) {
+        return true
+    }
+
+    return previousSession?.original.status == 'paused' && isActive(cell.row.original)
+}
+
 export const ActionColumn: React.FC<{
     study: Study,
-    cell: CellContext<Study, any>,
-    addNotification: (message: string, type?: NotificationType) => void
-}> = ({ study, cell, addNotification }) => {
+    cell: CellContext<Study, any>
+}> = ({ study, cell }) => {
     const nav = useNavigate()
     const [modalType, setModalType] = React.useState<ModalTypeEnum>('')
     const [showModal, setShowModal] = React.useState<boolean>(false)
@@ -209,50 +241,47 @@ export const ActionColumn: React.FC<{
         setShowModal(false)
     }
 
-    const editDisabled = study.status === StudyStatusEnum.Completed
-    const pauseDisabled = study.status !== StudyStatusEnum.Active
-    const resumeDisabled = study.status !== StudyStatusEnum.Paused
+    const isLeafNode = !!cell.row.depth
+    const canPause = isPausable(cell)
+    const canResume = isPaused(study)
+    const canEdit = !isCompleted(study)
 
-    const showEndStudy =
-        study.status === StudyStatusEnum.Paused ||
-        (study.status !== StudyStatusEnum.Completed && study.status === StudyStatusEnum.Active)
+    const showEndStudy = isPaused(study) || (!isCompleted(study) && isActive(study))
 
-    const showReopen = study.status === StudyStatusEnum.Completed
+    const showReopen = isCompleted(study)
 
-    const showDelete =
-        study.status === StudyStatusEnum.Draft ||
-        study.status === StudyStatusEnum.Scheduled
+    const showDelete = !isLeafNode && (isDraft(study) || isWaiting(study) || isReadyForLaunch(study) || isScheduled(study))
 
-    const showResumeButton = study.status === StudyStatusEnum.Paused
+    const showResumeButton = study.status === StageStatusEnum.Paused
 
     return (
         <Box gap='xlarge' justify='center' align='center'>
             <div>
                 <ActionIcon
                     icon="pencilFill"
-                    disabled={editDisabled}
                     height={20}
-                    tooltip={!editDisabled && 'Edit Study'}
-                    onClick={() => !editDisabled && nav(`/study/edit/${study.id}`)}
+                    tooltip={canEdit && 'Edit Study'}
+                    disabled={!canEdit}
+                    onClick={() => canEdit && nav(getStudyEditUrl(study))}
                 />
             </div>
             <div>
                 {showResumeButton &&
                     <ActionIcon
                         icon="playFill"
-                        tooltip={!resumeDisabled && 'Resume Study'}
+                        tooltip={canResume && 'Resume Session'}
                         height={20}
-                        disabled={resumeDisabled}
-                        onClick={() => !resumeDisabled && setAndShowModal(ModalType.Resume)}
+                        disabled={!canResume}
+                        onClick={() => canResume && setAndShowModal(ModalType.Resume)}
                     />
                 }
                 {!showResumeButton &&
                     <ActionIcon
                         icon="pauseFill"
-                        tooltip={!pauseDisabled && 'Pause Study'}
+                        tooltip={canPause && 'Pause Session'}
                         height={20}
-                        disabled={pauseDisabled}
-                        onClick={() => !pauseDisabled && setAndShowModal(ModalType.Pause)}
+                        disabled={!canPause}
+                        onClick={() => canPause && setAndShowModal(ModalType.Pause)}
                     />
                 }
             </div>
@@ -262,6 +291,7 @@ export const ActionColumn: React.FC<{
                     height={20}
                     color={colors.purple}
                     id="action-menu-button"
+                    data-testid={`${cell.row.original.id}-action-menu`}
                     className='dropdown-toggle'
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
@@ -274,7 +304,7 @@ export const ActionColumn: React.FC<{
                                 className="dropdown-item cursor-pointer"
                                 onClick={() => setAndShowModal(ModalType.End)}
                             >
-                                End Study Test
+                                End Study
                             </span>
                         </li>
                     }
@@ -308,7 +338,6 @@ export const ActionColumn: React.FC<{
                         study={study}
                         onHide={onHide}
                         cell={cell}
-                        addNotification={addNotification}
                     />
                 </Modal.Body>
             </Modal>

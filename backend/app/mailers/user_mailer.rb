@@ -69,4 +69,50 @@ class UserMailer < ApplicationMailer
     end
   end
 
+  def invite_researcher_to_study
+    mail(
+      to: params[:user].email_address,
+      subject: 'OpenStax Kinetic: You’ve been invited to collaborate on a study',
+      template: 'researcher_collaboration_invite'
+    ) { |format| format.text { render plain: '' } }.tap do |message|
+      message.mailgun_variables = {
+        'researcher_firstName' => params[:user].first_name,
+        'researcher_lastName' => params[:user].last_name,
+        'internal_study_title' => ''
+      }
+    end
+  end
+
+  def remove_researcher_from_study
+    mail(
+      to: params[:user].email_address,
+      subject: "You've been removed from a study",
+      template: 'remove_researcher'
+    ) { |format| format.text { render plain: '' } }.tap do |message|
+      message.mailgun_variables = {
+        'full_name' => params[:user].full_name
+      }
+    end
+  end
+
+  def submit_study_for_review
+    mail(
+      to: 'kinetic@openstax.org',
+      subject: 'Important: Access Request to Qualtrics',
+      template: 'access_request_qualtrics'
+    ) { |format| format.text { render plain: '' } }.tap do |message|
+      member = params[:study].members.first
+      lead = params[:study].lead
+      pi = params[:study].pi
+      message.mailgun_variables = {
+        'internal_study_details' => params[:study].title_for_researchers,
+        'total_study_sessions' => params[:study].stages.size,
+        'date_submitted' => Time.now.strftime('%B %d %Y at %I:%M %p'),
+        'member_researcher_full_name' => "#{member.first_name} #{member.last_name}"
+      }
+      message.mailgun_variables[:lead_researcher_full_name] = "#{lead.first_name} #{lead.last_name}" unless lead.nil?
+      message.mailgun_variables[:pi_researcher_full_name] = "#{pi.first_name} #{pi.last_name}" unless pi.nil?
+    end
+  end
+
 end

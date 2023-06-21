@@ -32,7 +32,7 @@ export const Alert: FC<AlertProps> = ({
     return (
         <div
             role="alert"
-            data-test-id="alert"
+            data-testid="alert"
             className={cx(
                 'alert',
                 bsClassNames('alert', types)[0],

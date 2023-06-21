@@ -31,7 +31,7 @@ const Iframe:React.FC<{ url?: string, onClose: StudyModalProps['onHide'] }> = ({
     return <iframe id="study" css={{ minHeight: 'calc(100vh - 130px)', width: '100%', overflow: 'scroll' }} src={url} />
 }
 
-export const StudyModal:React.FC<StudyModalProps> = ({ onHide, study }) => {
+export const StudyModal: React.FC<StudyModalProps> = ({ onHide, study }) => {
     const api = useApi()
     const [studyUrl, setStudyUrl] = useState('')
     const isPreview = !isParticipantStudy(study)
@@ -47,15 +47,13 @@ export const StudyModal:React.FC<StudyModalProps> = ({ onHide, study }) => {
     }, [study?.id])
     if (!study) { return null }
 
-    const title = isParticipantStudy(study) ? study.title : study.titleForParticipants
-
     return (
         <Modal
             xlarge
             show={true}
             onHide={isPreview ? () => onHide?.() : undefined}
             closeBtn={isPreview}
-            title={title}
+            title={study.titleForParticipants}
             data-is-study-preview-modal={isPreview}
         >
             <Modal.Body css={{ padding: 0 }}>

@@ -18,7 +18,7 @@ module Api::V1::Bindings
     # The Banner ID
     attr_accessor :id
 
-    # The messsage to display.  Limited HTML is supported
+    # The message to display.  Limited HTML is supported
     attr_accessor :message
 
     # When the message starts to display

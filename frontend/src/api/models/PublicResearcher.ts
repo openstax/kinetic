@@ -43,7 +43,49 @@ export interface PublicResearcher {
      * @memberof PublicResearcher
      */
     bio?: string;
+    /**
+     * The researcher's lab page.
+     * @type {string}
+     * @memberof PublicResearcher
+     */
+    labPage?: string;
+    /**
+     * The researcher's interest (1).
+     * @type {string}
+     * @memberof PublicResearcher
+     */
+    researchInterest1?: string;
+    /**
+     * The researcher's interest (2).
+     * @type {string}
+     * @memberof PublicResearcher
+     */
+    researchInterest2?: string;
+    /**
+     * The researcher's interest (3).
+     * @type {string}
+     * @memberof PublicResearcher
+     */
+    researchInterest3?: string;
+    /**
+     * Researchers role
+     * @type {string}
+     * @memberof PublicResearcher
+     */
+    role?: PublicResearcherRoleEnum;
 }
+
+
+/**
+ * @export
+ */
+export const PublicResearcherRoleEnum = {
+    Member: 'member',
+    Pi: 'pi',
+    Lead: 'lead'
+} as const;
+export type PublicResearcherRoleEnum = typeof PublicResearcherRoleEnum[keyof typeof PublicResearcherRoleEnum];
+
 
 /**
  * Check if a given object implements the PublicResearcher interface.
@@ -68,6 +110,11 @@ export function PublicResearcherFromJSONTyped(json: any, ignoreDiscriminator: bo
         'lastName': !exists(json, 'last_name') ? undefined : json['last_name'],
         'institution': !exists(json, 'institution') ? undefined : json['institution'],
         'bio': !exists(json, 'bio') ? undefined : json['bio'],
+        'labPage': !exists(json, 'lab_page') ? undefined : json['lab_page'],
+        'researchInterest1': !exists(json, 'research_interest1') ? undefined : json['research_interest1'],
+        'researchInterest2': !exists(json, 'research_interest2') ? undefined : json['research_interest2'],
+        'researchInterest3': !exists(json, 'research_interest3') ? undefined : json['research_interest3'],
+        'role': !exists(json, 'role') ? undefined : json['role'],
     };
 }
 
@@ -84,6 +131,11 @@ export function PublicResearcherToJSON(value?: PublicResearcher | null): any {
         'last_name': value.lastName,
         'institution': value.institution,
         'bio': value.bio,
+        'lab_page': value.labPage,
+        'research_interest1': value.researchInterest1,
+        'research_interest2': value.researchInterest2,
+        'research_interest3': value.researchInterest3,
+        'role': value.role,
     };
 }
 

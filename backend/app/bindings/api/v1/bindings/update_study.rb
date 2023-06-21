@@ -32,7 +32,7 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'study' => :'StudyUpdate'
+        :'study' => :'Study'
       }
     end
 

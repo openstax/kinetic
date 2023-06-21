@@ -13,7 +13,7 @@ class Api::V1::Researcher::StagesOpenApi
     end
 
     schema :Stage do
-      key :required, %w[id order config return_url]
+      key :required, %w[id config return_url]
     end
 
     schema :QualtricsStage do
@@ -62,18 +62,39 @@ class Api::V1::Researcher::StagesOpenApi
       key :type, :number
       key :description, 'How many days after previous stage will this become available'
     end
+    property :is_completed do
+      key :type, :boolean
+      key :description, 'Has the stage been completed'
+      key :readOnly, true
+    end
+    property :is_launchable do
+      key :type, :boolean
+      key :description, 'Can the stage be launched'
+      key :readOnly, true
+    end
     property :config do
       key :type, :object
       key :description,  'The configuration for a particular kind of stage, e.g. Qualtrics.  ' \
                          'See `QualtricsStage`'
     end
+    property :duration_minutes do
+      key :type, :number
+      key :description, 'How long the stage is (in minutes)'
+    end
     property :points do
       key :type, :number
       key :description, 'How many points the stage is worth'
     end
-    property :duration_minutes do
-      key :type, :number
-      key :description, 'How long the stage is (in minutes)'
+    property :feedback_types do
+      key :type, :array
+      key :minLength, 0
+      key :items, { 'type' => 'string' }
+      key :description, 'Feedback types for this stage'
+    end
+    property :status do
+      key :type, :string
+      key :description, 'Status of the stage'
+      key :enum, %w[active paused scheduled draft waiting_period ready_for_launch completed]
     end
   end
 

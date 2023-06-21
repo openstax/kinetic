@@ -72,7 +72,7 @@ const Sidebar = () => {
     )
 }
 
-export default function AdminHome() {
+export default function AccountDetails() {
     const env = useEnvironment()
     const api = useApi()
     const userInfo = useUserInfo()
