@@ -133,6 +133,7 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
     const { isValid } = useFormState()
     const api = useApi()
     const [show, setShow] = useState(false)
+    const { getValues } = useFormContext()
 
     if (isReadyForLaunch(study)) {
         return (
@@ -140,10 +141,11 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
                 <Box className='container-lg' align='center' justify='end'>
                     <ResearcherButton
                         disabled={!isValid}
+                        data-testid='launch-study-button'
                         onClick={() => {
                             api.updateStudyStatus({
                                 id: study.id,
-                                study: study as Study,
+                                study: getValues() as Study,
                                 statusAction: 'launch',
                             }).then(() => {
                                 setShow(true)

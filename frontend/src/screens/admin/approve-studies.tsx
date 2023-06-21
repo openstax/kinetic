@@ -59,7 +59,7 @@ const StudyRow: FC<{study: Study, setStudies: (studies: Study[] | undefined) => 
     return (
         <tr className='align-middle'>
             <td scope="row" className='text-center'>
-                <input type={'checkbox'} onChange={setSelected} />
+                <input type={'checkbox'} onChange={setSelected} data-testid={`${study.id}-checkbox`} />
             </td>
             <td>
                 {study.titleForResearchers}
@@ -67,6 +67,7 @@ const StudyRow: FC<{study: Study, setStudies: (studies: Study[] | undefined) => 
             <td>
                 <ResearcherButton
                     disabled={!selected}
+                    data-testid={`${study.id}-approve`}
                     onClick={() => {
                         api.adminApproveStudy({ id: study.id }).then(response => {
                             setStudies(response.data)

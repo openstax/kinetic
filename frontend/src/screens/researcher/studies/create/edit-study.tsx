@@ -252,7 +252,8 @@ const FormContent: FC<{
     ]
 
     return (
-        <Box direction='column' justify='between'>
+        <Box direction='column' justify='between' className='edit-study-form'>
+            <SubmitStudyModal study={study as Study} show={showSubmitStudy} setShow={setShowSubmitStudy} />
             <div className="py-2">
                 <Box justify='between' gap='xxlarge'>
                     <Col sm={1}>
@@ -268,7 +269,6 @@ const FormContent: FC<{
                 {steps[currentStep].component}
             </div>
             <ActionFooter step={steps[currentStep]} />
-            <SubmitStudyModal study={study as Study} show={showSubmitStudy} setShow={setShowSubmitStudy} />
         </Box>
     )
 }

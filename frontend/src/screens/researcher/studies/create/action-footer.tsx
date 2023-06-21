@@ -43,6 +43,7 @@ export const ActionFooter: FC<{ step: Step, }> = ({ step }) => {
                     {step.primaryAction ?
                         <ResearcherButton
                             fixedWidth
+                            data-testid='study-primary-action'
                             disabled={step.primaryAction.disabled}
                             onClick={() => step.primaryAction?.action?.()}
                         >

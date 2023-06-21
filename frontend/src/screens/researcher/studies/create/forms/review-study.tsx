@@ -171,12 +171,13 @@ export const SubmitStudyModal: FC<{
 }> = ({ study, show, setShow }) => {
     const api = useApi()
     const [submitted, setSubmitted] = useState(false)
+    const [submitting, setSubmitting] = useState(false)
     if (submitted) {
         return <SubmitSuccess show={submitted} />
     }
 
     const submitStudy = () => {
-        api.updateStudyStatus({
+        return api.updateStudyStatus({
             id: study.id,
             statusAction: 'submit',
         })
@@ -197,10 +198,13 @@ export const SubmitStudyModal: FC<{
                         <ResearcherButton buttonType='secondary' onClick={() => setShow(false)}>
                             Not yet, edit study
                         </ResearcherButton>
-                        <ResearcherButton onClick={() => {
-                            submitStudy()
-                            setSubmitted(true)
-                            setShow(false)
+                        <ResearcherButton data-testid='submit-study-button' busyMessage='Submitting' busy={submitting} onClick={() => {
+                            setSubmitting(true)
+                            submitStudy().then(() => {
+                                setSubmitted(true)
+                                setSubmitting(false)
+                                setShow(false)
+                            })
                         }}>
                             Yes, submit study
                         </ResearcherButton>
@@ -223,7 +227,7 @@ const SubmitSuccess: FC<{ show: boolean }> = ({ show }) => {
                         <span>Follow the instructions to build your task and come back here to proceed with finalizing your study and launching it on Kinetic.</span>
                     </Box>
 
-                    <ResearcherButton onClick={() => {
+                    <ResearcherButton data-testid='submit-study-success-button' onClick={() => {
                         nav('/studies')
                     }}>
                         Return to Studies Dashboard

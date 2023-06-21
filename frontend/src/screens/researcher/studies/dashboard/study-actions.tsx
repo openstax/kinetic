@@ -141,6 +141,7 @@ const ActionModalContent: FC<{
             return <StudyActionContainer
                 header="Delete Study"
                 warning={true}
+                data-testid='delete-study'
                 body={study.status === StageStatusEnum.Scheduled ?
                     'This action will delete the study and all data collected thus far. This is permanent and cannot be undone. Are you sure?' :
                     'This action will delete the study draft. This is permanent and cannot be undone. Are you sure?'
@@ -209,7 +210,6 @@ const ActionIcon = styled(Icon)(({ disabled }) => ({
 
 const isPausable = (cell: CellContext<Study, any>): boolean => {
     const hasChildren = cell.row.getLeafRows().length
-    // const parent = cell.row.getParentRows()[0]
     const parent = cell.row.getParentRow()
 
     if (hasChildren) {
@@ -287,6 +287,7 @@ export const ActionColumn: React.FC<{
                     height={20}
                     color={colors.purple}
                     id="action-menu-button"
+                    data-testid={`${cell.row.original.id}-action-menu`}
                     className='dropdown-toggle'
                     data-bs-toggle="dropdown"
                     aria-expanded="false"

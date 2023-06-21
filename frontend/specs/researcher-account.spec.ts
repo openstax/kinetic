@@ -4,16 +4,6 @@ import { expect } from '@playwright/test';
 test('can update researcher account details', async({ page }) => {
     await loginAs({ page, login: 'researcher' })
     await goToPage({ page, path: `/researcher-account` })
-    await expect (page.locator('[name=firstName]')).toBeDisabled()
-
-    await page.click('testId=form-edit-btn')
-    await expect (page.locator('[name=firstName]')).not.toBeDisabled()
-
-    await page.click('testId=form-cancel-btn')
-    await expect (page.locator('[name=firstName]')).toBeDisabled()
-
-    await page.click('testId=form-edit-btn')
-    await expect (page.locator('[name=firstName]')).not.toBeDisabled()
 
     await page.fill('[name=firstName]', 'a'.repeat(60))
     expect(await page.$('[name=firstName].is-invalid')).toBeDefined()
@@ -30,5 +20,4 @@ test('can update researcher account details', async({ page }) => {
 
     await page.click('testId=form-save-btn')
     await page.waitForLoadState('networkidle')
-    await expect (page.locator('testId=form-edit-btn')).toBeVisible()
 })

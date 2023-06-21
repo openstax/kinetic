@@ -53,8 +53,8 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   end
 
   def update_status
-    unless params[:study].empty?
-      study_update, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
+    unless params[:study].empty? || params[:study].nil?
+      study_update, error = bind(params[:study], Api::V1::Bindings::StudyUpdate)
       render(json: error, status: error.status_code) and return if error
 
       @study.update(study_update.to_hash.except(:researchers, :stages))

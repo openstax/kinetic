@@ -81,7 +81,7 @@ const QualtricsConfirmationContainer: FC<{
     if (study.stages?.length === 1) {
         return (
             <QualtricsConfirmation gap align='center'>
-                <ResearcherCheckbox type='checkbox' name='userHasCheckedQualtrics.0' id='confirm-qualtrics'/>
+                <ResearcherCheckbox type='checkbox' name='userHasCheckedQualtrics.0' data-testid='confirm-qualtrics' id='confirm-qualtrics'/>
                 <label htmlFor='confirm-qualtrics'>Yes, I have set up my study in Qualtrics</label>
             </QualtricsConfirmation>
         )
@@ -91,7 +91,7 @@ const QualtricsConfirmationContainer: FC<{
         <div>
             {study.stages?.map((stage, index) => (
                 <QualtricsConfirmation gap align='center' key={stage.order} className='mt-1'>
-                    <ResearcherCheckbox type='checkbox' name={`userHasCheckedQualtrics.${index}`} id={`confirm-qualtrics-${index}`} />
+                    <ResearcherCheckbox type='checkbox' name={`userHasCheckedQualtrics.${index}`} data-testid={`confirm-qualtrics-${index}`} id={`confirm-qualtrics-${index}`} />
                     <label htmlFor={`confirm-qualtrics-${index}`}>Yes, I have set up Session {index + 1} in Qualtrics</label>
                 </QualtricsConfirmation>
             ))}

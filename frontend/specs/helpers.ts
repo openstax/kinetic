@@ -81,20 +81,17 @@ export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin
     await page.waitForSelector('.studies')
 }
 
+// TODO Can't delete active studies?
 export const rmStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
     await loginAs({ page, login: 'researcher' })
-    await goToPage({ page, path: `/study/edit/${studyId}` })
-    if (await page.$('testId=delete-study-btn')) {
-        await page.click('testId=delete-study-btn')
-    } else {
-        await setFlatpickrDate({ selector: '[data-field-name=closesAt]', page, date: dayjs().subtract(1, 'day') })
-        await page.click('testId=form-save-btn')
-    }
+    await goToPage({ page, path: `/studies` })
+    // await page.click(`testId=${studyId}-action-menu`)
+    // await page.click(`testId=delete-study`)
 }
 
 export const getIdFromUrl = async (page: Page): Promise<number | undefined> => {
     const id = await page.evaluate(() => {
-        return window.location.href.match(/\/(\d+)$/)[1]
+        return window.location.href.match(/(\/\d+)/)[1].replace('/', '')
     })
     if (id) {
         return Number(id)
@@ -104,30 +101,64 @@ export const getIdFromUrl = async (page: Page): Promise<number | undefined> => {
 interface createStudyArgs {
     page: Page
     name: string
-    isMandatory?: boolean
-    topic?: string
-    subject?: string
-    opensAt?: dayjs.Dayjs,
+    approveAndLaunchStudy?: boolean
+    multiSession?: boolean
+}
+
+// TODO Helper function for closing criteria on study overview page (once that page is finalized)
+// export const setClosingCriteria = async(page: Page) => {
+//
+// }
+
+export const approveWaitingStudy = async(page: Page, studyId: number) => {
+    await goToPage({ page, path: '/admin/approve-studies', loginAs: 'admin' })
+    await page.click(`testId=${studyId}-checkbox`)
+    await page.click(`testId=${studyId}-approve`)
+    await logout({ page })
+}
+
+export const launchApprovedStudy = async(page: Page, studyId: number, multiSession: boolean = false) => {
+    await goToPage({ page, path: `/study/overview/${studyId}`, loginAs: 'researcher' })
+    await expect(page.locator('testId=launch-study-button')).toBeDisabled()
+
+    if (multiSession) {
+        await page.getByTestId('confirm-qualtrics-0').check();
+        await page.getByTestId('confirm-qualtrics-1').check();
+        // await page.click('[name=userHasCheckedQualtrics]')
+        // await page.click('[name=userHasCheckedQualtrics]')
+    } else {
+        await page.getByTestId('confirm-qualtrics').check();
+        // await page.getByRole('checkbox', { name: 'userHasCheckedQualtrics' }).check();
+        // await page.click('[name=userHasCheckedQualtrics]')
+    }
+    await setDateField({ page, fieldName: 'opensAt', date: dayjs() })
+
+    await expect(page.locator('testId=launch-study-button')).not.toBeDisabled()
+    await page.click('testId=launch-study-button')
+    await page.waitForLoadState('networkidle')
+    await page.click('testId=primary-action')
+    await logout({ page })
 }
 
 export const createStudy = async ({
-    page, name,
+    page,
+    name,
+    approveAndLaunchStudy = false,
+    multiSession = false,
 }: createStudyArgs) => {
     // Step 1 - Internal Details
     await goToPage({ page, path: '/study/edit/new', loginAs: 'researcher' })
     await page.fill('[name=titleForResearchers]', name)
     await page.fill('[name=internalDescription]', faker.commerce.color())
+    await page.click("input[value='Learner Characteristics']")
 
-    await selectFirstDropdownItem({ page, fieldName: 'category' })
-
-    await expect(page.locator('testId=primary-action')).not.toBeDisabled()
-    await page.click('testId=primary-action')
+    await expect(page.locator('testId=study-primary-action')).not.toBeDisabled()
+    await page.click('testId=study-primary-action')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(200)
 
     // Study should reroute to study/edit/:id
     const studyId = await getIdFromUrl(page)
-    console.log(studyId)
 
     // Step 2 - Research Team
     await page.locator('.select', { has: page.locator(`input[name=researcherPi]`) }).click()
@@ -138,8 +169,8 @@ export const createStudy = async ({
     await page.waitForTimeout(100)
     await page.keyboard.press('Enter')
 
-    await expect(page.locator('testId=primary-action')).not.toBeDisabled()
-    await page.click('testId=primary-action')
+    await expect(page.locator('testId=study-primary-action')).not.toBeDisabled()
+    await page.click('testId=study-primary-action')
     await page.waitForLoadState('networkidle')
 
     // Step 3 - Participant View
@@ -159,29 +190,40 @@ export const createStudy = async ({
     await page.click('testId=select-card-image')
     await expect(page.locator('testId=image-library-modal')).not.toBeVisible()
 
-    await expect(page.locator('testId=primary-action')).not.toBeDisabled()
-    await page.click('testId=primary-action')
+    await expect(page.locator('testId=study-primary-action')).not.toBeDisabled()
+    await page.click('testId=study-primary-action')
     await page.waitForLoadState('networkidle')
 
     // Step 4 - Additional Sessions
-    await page.click('testId=add-session')
-    await page.click("input[value='25']")
-    await page.click("input[value='personalized']")
-
-    await expect(page.locator('testId=primary-action')).not.toBeDisabled()
-    await page.click('testId=primary-action')
+    await expect(page.getByTestId('study-step-header')).toContainText('Additional sessions')
+    if (multiSession) {
+        await page.click('testId=add-session')
+        await page.click("input[value='25']")
+        await page.click("input[value='personalized']")
+    }
+    await expect(page.locator('testId=study-primary-action')).not.toBeDisabled()
+    await page.click('testId=study-primary-action')
     await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(100)
 
     // Submit study
-    await expect(page.locator('testId=primary-action')).not.toBeDisabled()
-    await page.click('testId=primary-action')
-    await expect(page.locator('.modal-content')).toBeVisible()
-    await page.click('.modal-content >> testId=primary-action')
-
+    await expect(page.locator('testId=study-primary-action')).toMatchText('Submit Study')
+    await expect(page.locator('testId=study-primary-action')).not.toBeDisabled()
+    await page.click('testId=study-primary-action')
+    await page.waitForTimeout(200)
+    await page.click('testId=submit-study-button')
     await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1000)
-
+    await page.waitForTimeout(100)
+    await page.click('testId=submit-study-success-button')
+    await page.waitForTimeout(100)
     await logout({ page })
+
+    // Test draft statuses before approve and launch when dashboard is finalized
+    if (approveAndLaunchStudy) {
+        await approveWaitingStudy(page, studyId)
+        await launchApprovedStudy(page, studyId, multiSession)
+    }
+
     return studyId
 }
 

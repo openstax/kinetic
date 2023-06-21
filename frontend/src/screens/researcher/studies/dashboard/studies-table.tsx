@@ -126,7 +126,7 @@ const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
         )
     }
     return (
-        <StyledRow key={row.id}>
+        <StyledRow key={row.id} data-testid={`study-row-${row.original.id}`}>
             {row.getVisibleCells().map((cell) => {
                 return (
                     <td key={cell.id} css={{
@@ -477,10 +477,8 @@ export const StudiesTable: React.FC<{
                 </thead>
                 <tbody>
                     {table.getRowModel().rows.map((row) => {
-                        // console.log(row.subRows);
                         return <StudyRow row={row} key={row.id} />
-                    }
-                    )}
+                    })}
                 </tbody>
             </table>
             <NoData filteredStudiesLength={table.getRowModel().rows.length} allStudies={studies}/>

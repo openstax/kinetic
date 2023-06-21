@@ -17,7 +17,7 @@ export const StepHeader: FCWOC<{
     eta: number,
 }> = ({ title, eta, children }) => {
     return (
-        <Col gap sm={8}>
+        <Col gap sm={8} data-testid='study-step-header'>
             <Box gap='xlarge'>
                 <h3 className='fw-bold'>{title}</h3>
                 <Box gap align='center'>
