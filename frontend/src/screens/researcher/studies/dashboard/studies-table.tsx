@@ -232,9 +232,9 @@ const StatusLabel: React.FC<{status: string}> = ({ status }) => {
         case StudyStatusEnum.Draft:
             return <StyledLabel css={{ backgroundColor: '#F6DBED' }}>Draft</StyledLabel>
         case StudyStatusEnum.ReadyForLaunch:
-            return <StyledLabel css={{ backgroundColor: '#DBDBDB' }}>Ready For Launch</StyledLabel>
+            return <StyledLabel css={{ backgroundColor: '#C8EAD2' }}>Ready For Launch</StyledLabel>
         case StudyStatusEnum.WaitingPeriod:
-            return <StyledLabel css={{ backgroundColor: '#DBDBDB' }}>Waiting Period</StyledLabel>
+            return <StyledLabel css={{ backgroundColor: '#FAF6D1' }}>Waiting Period</StyledLabel>
         case StudyStatusEnum.Completed:
             return <StyledLabel css={{ color: colors.purple, backgroundColor: '#DFE1F9' }}>Completed</StyledLabel>
         default:
