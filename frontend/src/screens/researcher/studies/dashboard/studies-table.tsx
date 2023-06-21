@@ -26,7 +26,7 @@ import AZDefault from '../../../../images/icons/azdefault.png';
 import SortUp from '../../../../images/icons/sortup.png';
 import SortDown from '../../../../images/icons/sortdown.png';
 import SortDefault from '../../../../images/icons/sort.png';
-import { getStudyEditUrl, StudyStatus, useFetchStudies } from '@models';
+import { getStudyEditUrl, isDraft, isDraftLike, StudyStatus, useFetchStudies } from '@models';
 import { Dispatch, SetStateAction } from 'react';
 import { ActionColumn } from './study-actions';
 
@@ -311,7 +311,16 @@ export const StudiesTable: React.FC<{
                 return filterValue.includes(row.getValue(columnId))
             },
             cell: (info) => {
-                if (info.row.getLeafRows().length) {
+                const isParent = info.row.getLeafRows().length
+                if (isDraftLike(info.row.original)) {
+                    if (!info.row.depth) {
+                        return <StatusLabel status={info.getValue() as string} />
+                    } else {
+                        return '-'
+                    }
+                }
+
+                if (isParent) {
                     return '-'
                 }
 

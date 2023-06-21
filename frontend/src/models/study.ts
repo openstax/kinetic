@@ -59,6 +59,10 @@ export function isDraft(study: Study) {
     return study.status === StudyStatusEnum.Draft
 }
 
+export function isDraftLike(study: Study) {
+    return isDraft(study) || isWaiting(study) || isReadyForLaunch(study)
+}
+
 export function isPaused(study: Study) {
     return study.status === StudyStatusEnum.Paused
 }
