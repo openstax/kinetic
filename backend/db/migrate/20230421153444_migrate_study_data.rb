@@ -1,16 +1,5 @@
 class MigrateStudyData < ActiveRecord::Migration[6.1]
   def up
-    researchers = YAML.load_file(Rails.root.join('db/migrate/researchers.yaml'))
-    researchers = []
-
-    researchers.each do |researcher|
-      Researcher.find_or_create_by(
-        first_name: researcher['first_name'],
-        last_name: researcher['last_name'],
-        user_id: researcher['uuid']
-      )
-    end
-
     studies = YAML.load_file(Rails.root.join('db/migrate/study_migration_data.yaml'))
     studies = []
     studies.each do |data|

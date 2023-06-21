@@ -71,7 +71,7 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
         <Button
             busy={isBusy}
             css={{ justifyContent: 'center' }}
-            busyMessage="Launching Study…"
+            busyMessage="Launching Study"
             primary
             disabled={!isStudyLaunchable(study)}
             data-testid="launch-study"

@@ -359,30 +359,32 @@ export const StudiesTable: React.FC<{
             accessorKey: 'completedCount',
             size: 175,
             header: () => {
+                const tooltipText = currentStatus == StudyStatus.Completed ?
+                    'Total # of study completions' :
+                    'Total number of study completions / desired sample size'
                 return (
                     <Box gap>
                         <span># Participants</span>
-                        {currentStatus !== StudyStatus.Completed &&
-                            <Tooltip tooltip='Total number of study completions / desired sample size' css={{ display: 'flex' }}>
-                                <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={12}/>
-                            </Tooltip>
-                        }
+                        <Tooltip tooltip={tooltipText} css={{ display: 'flex' }}>
+                            <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={12}/>
+                        </Tooltip>
                     </Box>
                 )
             },
             cell: (info) => {
                 const study = info.row.original;
-                if (study.completedCount == 0) {
-                    return null
+
+                if (currentStatus == StudyStatus.Completed) {
+                    return <span>{study.completedCount}</span>
                 }
 
                 if (!study.targetSampleSize) {
-                    return <span>{study.completedCount}</span>
+                    return <span>{study.completedCount} / -</span>
                 }
 
                 return (
                     <span>
-                        {study.completedCount}/{study.targetSampleSize}
+                        {study.completedCount} / {study.targetSampleSize}
                     </span>
                 )
             },
