@@ -51,9 +51,7 @@ const ReadyForLaunch: FC<{
                         userHasCheckedQualtrics: Yup.array().test(
                             'All checked',
                             'Check all boxes to continue',
-                            (checks?: boolean[]) => {
-                                return !!checks?.length && checks.every(c => c)
-                            }
+                            (checks?: boolean[]) => !!checks?.length && checks.every(c => c)
                         ),
                     })}
                     onSubmit={() => {}}

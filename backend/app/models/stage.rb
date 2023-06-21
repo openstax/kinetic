@@ -28,13 +28,15 @@ class Stage < ApplicationRecord
     _default: 'draft'
 
   def status
+    return 'paused' if read_attribute(:status) == 'paused'
     return 'completed' if completed?
     return 'scheduled' if scheduled?
     read_attribute(:status)
   end
 
   def completed?
-    return true if read_attribute(:status) == 'completed'
+    s = read_attribute(:status)
+    return true if s == 'completed'
     unless study.target_sample_size.nil? || study.target_sample_size == 0
       return true if study.completed_count >= study.target_sample_size
     end

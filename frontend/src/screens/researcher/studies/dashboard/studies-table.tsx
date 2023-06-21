@@ -94,13 +94,14 @@ const TableHeader: React.FC<{header: Header<Study, unknown> }> = ({ header }) =>
     )
 }
 
-const StyledRow = styled.tr({
+const StyledRow = styled.tr(({ hasChildren }: { hasChildren?: boolean }) => ({
     height: `3rem`,
     borderBottom: `1px solid ${colors.lightGray}`,
     'td': {
         padding: '1rem .5rem',
     },
-})
+    backgroundColor: hasChildren ? colors.gray : 'inherit',
+}))
 
 const NestedRow = styled(StyledRow)({
     backgroundColor: colors.gray,
@@ -126,7 +127,7 @@ const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
         )
     }
     return (
-        <StyledRow key={row.id} data-testid={`study-row-${row.original.id}`}>
+        <StyledRow key={row.id} data-testid={`study-row-${row.original.id}`} hasChildren={!!row.getLeafRows().length}>
             {row.getVisibleCells().map((cell) => {
                 return (
                     <td key={cell.id} css={{
@@ -276,7 +277,7 @@ export const StudiesTable: React.FC<{
     const { studies, setStudies } = useFetchStudies()
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: 'opensAt',
-        desc: true,
+        desc: false,
     }])
     const [expanded, setExpanded] = React.useState<ExpandedState>(true);
 
@@ -330,6 +331,7 @@ export const StudiesTable: React.FC<{
         {
             accessorKey: 'opensAt',
             header: () => <span>Opens on</span>,
+            sortingFn: 'datetime',
             cell: (info) => {
                 if (info.row.subRows.length || !info.row.original.opensAt) {
                     return '-'

@@ -8,7 +8,7 @@ import {
     getStudyEditUrl,
     isActive,
     isCompleted,
-    isDraft,
+    isDraft, isDraftLike,
     isPaused,
     isReadyForLaunch,
     isScheduled,
@@ -78,7 +78,7 @@ const ActionModalContent: FC<{
                 header="Pause Study"
                 warning={true}
                 body="This action will pause the study and participants will no longer be able to view it until you resume."
-                cancelText='Keep Study Active'
+                cancelText='Continue Study'
                 actionText='Pause Study'
                 onSubmit={() => {
                     updateStudyStatus(
@@ -101,7 +101,7 @@ const ActionModalContent: FC<{
                         study,
                         'resume',
                         `Study ${study.titleForResearchers} has been resumed.`,
-                        cell.row.index
+                        cell.row.depth ? cell.row.index : 0
                     )}
                     onCancel={onHide}
                 />
@@ -111,7 +111,7 @@ const ActionModalContent: FC<{
                     warning={false}
                     body="The study you wish to resume has passed the original closing date. Please choose one of the options below."
                     actionText='Adjust Closing Date'
-                    onSubmit={() => nav(`/study/edit/${study.id}`)}
+                    onSubmit={() => nav(`/study/overview/${study.id}`)}
                     cancelText='End Study'
                     onCancel={() => {
                         updateStudyStatus(
@@ -128,7 +128,7 @@ const ActionModalContent: FC<{
                 header='End Study'
                 warning={true}
                 body="This action will set the study status as 'Completed', rendering it no longer visible to participants."
-                cancelText='Keep Study Active'
+                cancelText='Continue Study'
                 actionText='End Study'
                 onSubmit={() => updateStudyStatus(
                     study,
@@ -183,7 +183,7 @@ const StudyActionContainer: FC<{
     warning, header, body, cancelText, actionText, onSubmit, onCancel,
 }) => {
     return (
-        <Box direction='column' className='py-8 px-16' gap='large' align='center'>
+        <Box direction='column' className='py-4 px-8' gap='large' align='center'>
             <Box gap='large' align='center'>
                 {warning && <Icon icon="warning" css={{ color: colors.red }} height={20}/>}
                 <span className='fs-4 fw-bold'>{header}</span>
@@ -209,6 +209,8 @@ const ActionIcon = styled(Icon)(({ disabled }) => ({
 }))
 
 const isPausable = (cell: CellContext<Study, any>): boolean => {
+    if (isDraftLike(cell.row.original) || isCompleted(cell.row.original)) return false
+
     const hasChildren = cell.row.getLeafRows().length
     const parent = cell.row.getParentRow()
 
@@ -242,6 +244,7 @@ export const ActionColumn: React.FC<{
     const isLeafNode = !!cell.row.depth
     const canPause = isPausable(cell)
     const canResume = isPaused(study)
+    const canEdit = !isCompleted(study)
 
     const showEndStudy = isPaused(study) || (!isCompleted(study) && isActive(study))
 
@@ -257,8 +260,9 @@ export const ActionColumn: React.FC<{
                 <ActionIcon
                     icon="pencilFill"
                     height={20}
-                    tooltip={'Edit Study'}
-                    onClick={() => nav(getStudyEditUrl(study))}
+                    tooltip={canEdit && 'Edit Study'}
+                    disabled={!canEdit}
+                    onClick={() => canEdit && nav(getStudyEditUrl(study))}
                 />
             </div>
             <div>

@@ -144,7 +144,7 @@ const Sessions: FC<{study: Study}> = ({ study }) => {
 }
 
 const FormActions: FC<{study: Study}> = ({ study }) => {
-    const { isValid } = useFormState()
+    const { isValid, isDirty } = useFormState()
     const api = useApi()
     const [show, setShow] = useState(false)
     const { getValues } = useFormContext()
@@ -176,7 +176,7 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
 
     return (
         <Box className='container-lg' align='center' justify='end'>
-            <FormSaveButton className='btn-researcher-primary mt-2' disabled={!isValid}>
+            <FormSaveButton className='btn-researcher-primary mt-2' disabled={!isValid || !isDirty}>
                 Publish Changes
             </FormSaveButton>
         </Box>
