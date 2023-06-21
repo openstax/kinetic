@@ -1,5 +1,4 @@
-import { React, Box, styled } from '@common'
-import { BoxProps } from 'boxible'
+import { Box, React, styled } from '@common'
 
 export const Grid = styled.div({
     display: 'grid',

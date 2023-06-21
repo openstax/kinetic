@@ -2,7 +2,7 @@ import { cx, React, useCallback, useState } from '@common'
 import { Box, getImageUrl, Icon, MultiSessionBar, ResearcherButton } from '@components'
 import { useIsMobileDevice } from '@lib'
 import { getStudyDuration, getStudyPoints, studyHasFeedback, studyIsMultipart } from '@models'
-import { ParticipantStudy } from '@api'
+import { ParticipantStudy, Study } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
 import { StudyDetailsPreview } from './details';
@@ -176,9 +176,10 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
                 <Tag tag={study.topic} />
                 <Tag tag={study.subject} />
             </Box>
-            <Box>
+            <Box gap='small'>
+                {studyIsMultipart(study) && <span>*Total</span>}
                 <span>{getStudyDuration(study)} min</span>
-                &nbsp;&middot;
+                &middot;
                 <span>{getStudyPoints(study)} pts</span>
             </Box>
         </Box>

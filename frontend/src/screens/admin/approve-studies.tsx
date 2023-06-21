@@ -16,13 +16,11 @@ export function ApproveStudies() {
     }, [])
 
     if (!studies?.length) {
-        return (
-            <NoStudiesToApprove />
-        )
+        return <NoStudiesToApprove />
     }
 
     return (
-        <Main className='waiting-studies pt-2' gap='large'>
+        <Main className='waiting-studies pt-2 container-lg' gap='large'>
             <h3>Studies awaiting approval</h3>
 
             <table className="table table-hover table-bordered">

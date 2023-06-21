@@ -1,6 +1,15 @@
 import { React, useCallback, useEffect, useNavigate, useParams, useState } from '@common'
 import { ParticipantStudy, PublicResearcher } from '@api'
-import { getFirstStage, getStudyLead, getStudyPi, isStudyLaunchable, LaunchStudy, studyIsMultipart } from '@models'
+import {
+    getFirstStage,
+    getStudyDuration,
+    getStudyLead,
+    getStudyPi,
+    getStudyPoints,
+    isStudyLaunchable,
+    LaunchStudy,
+    studyIsMultipart,
+} from '@models'
 import { dayjs, useApi } from '@lib'
 import { Box, Button, Icon, IconKey, MultiSessionBar, OffCanvas } from '@components'
 import { colors } from '@theme'
@@ -103,8 +112,8 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
                 <Box gap>
                     <Icon icon="clock" color={colors.purple} />
                     <Box>
-                        <span>*Total: {study.totalDuration}min</span>
-                        {study.totalPoints && <span>&nbsp;&middot; {study.totalPoints}pts</span>}
+                        <span>*Total: {getStudyDuration(study)}min</span>
+                        <span>&nbsp;&middot; {getStudyPoints(study)}pts</span>
                     </Box>
                 </Box>
                 <Box css={{ color: colors.grayText }} direction='column'>
