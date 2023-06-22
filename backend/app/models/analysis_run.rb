@@ -4,7 +4,7 @@ class AnalysisRun < ApplicationRecord
 
   belongs_to :analysis
 
-  has_many :messages, class_name: 'AnalysisRunMessage'
+  has_many :messages, -> { order(created_at: :asc) }, class_name: 'AnalysisRunMessage'
 
   delegate :id, :api_key, to: :analysis, prefix: :analysis
 

@@ -37,7 +37,7 @@ Rails.application.routes.draw do
 
       namespace :enclave do
         resources :runs, only: [:create] do
-          put 'notify', to: 'runs#notify', on: :collection
+          put 'completion', to: 'runs#completion', on: :collection
           post 'log', to: 'runs#log', on: :collection
         end
       end

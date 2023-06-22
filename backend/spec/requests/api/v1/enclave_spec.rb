@@ -42,7 +42,11 @@ RSpec.describe 'Enclave', api: :v1 do
       end
 
       it 'sends a completion notice' do
-        api_put 'enclave/runs/notify', params: { api_key: run.api_key, status: 'failure' }
+        run.messages.create({ stage: 'archive', level: 'info', message: 'something' })
+        expect {
+          api_put 'enclave/runs/completion', params: { api_key: run.api_key, status: 'failure', error: 'a bad thing happened' }
+          expect(run.messages.last.message).to eq 'a bad thing happened'
+        }.to change { AnalysisRunMessage.count }.by(1)
         expect(run.reload.finished_at).not_to be_nil
 
         email = ActionMailer::Base.deliveries.last

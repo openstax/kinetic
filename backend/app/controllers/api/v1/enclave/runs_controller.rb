@@ -22,7 +22,8 @@ class Api::V1::Enclave::RunsController < Api::V1::BaseController
     head :ok
   end
 
-  def notify
+  def completion
+    @run.messages.create(level: 'error', stage: 'end', message: params[:error]) if params[:error]
     @run.update!(
       did_succeed: params[:status] == 'success',
       finished_at: Time.now
