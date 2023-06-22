@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EnclaveMailer < ApplicationMailer
 
   default from: 'OpenStax Kinetic <noreply@mg.kinetic.openstax.org>'
