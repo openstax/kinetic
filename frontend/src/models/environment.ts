@@ -44,6 +44,10 @@ export class Environment {
         this.researcher = config.researcher || null
     }
 
+    setResearcher(r: Researcher) {
+        this.researcher = r;
+    }
+
     get host() {
         if (this.config.accountsEnvName === 'production') {
             return `https://openstax.org`;

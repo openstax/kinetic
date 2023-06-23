@@ -1,5 +1,5 @@
 import { Box, React, styled, useNavigate, useState } from '@common'
-import { Button, ExitButton, Footer, Page, ResearcherButton, TopNavBar } from '@components';
+import { ExitButton, Page, ResearcherButton } from '@components';
 import { colors } from '@theme';
 import { Link } from 'react-router-dom';
 import StartProcess from '@images/study-creation/start-process.svg'

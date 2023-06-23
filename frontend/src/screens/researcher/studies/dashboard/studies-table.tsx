@@ -26,7 +26,7 @@ import AZDefault from '../../../../images/icons/azdefault.png';
 import SortUp from '../../../../images/icons/sortup.png';
 import SortDown from '../../../../images/icons/sortdown.png';
 import SortDefault from '../../../../images/icons/sort.png';
-import { getStudyEditUrl, isDraft, isDraftLike, StudyStatus, useFetchStudies } from '@models';
+import { getStudyEditUrl, isDraftLike, StudyStatus, useFetchStudies } from '@models';
 import { Dispatch, SetStateAction } from 'react';
 import { ActionColumn } from './study-actions';
 
@@ -372,6 +372,7 @@ export const StudiesTable: React.FC<{
                 )
             },
             cell: (info) => {
+
                 const study = info.row.original;
 
                 if (currentStatus == StudyStatus.Completed) {
@@ -379,7 +380,7 @@ export const StudiesTable: React.FC<{
                 }
 
                 if (!study.targetSampleSize) {
-                    return <span>{study.completedCount} / -</span>
+                    return <span>{study.completedCount} / N/A</span>
                 }
 
                 return (

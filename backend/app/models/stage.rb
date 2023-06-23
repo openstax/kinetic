@@ -28,19 +28,27 @@ class Stage < ApplicationRecord
        _default: 'draft'
 
   def status
-    return 'paused' if read_attribute(:status) == 'paused'
+    s = read_attribute(:status)
+
+    return 'paused' if s == 'paused'
     return 'completed' if completed?
     return 'scheduled' if scheduled?
+    return s if draft_like?
+    return 'active' if active?
 
-    read_attribute(:status)
+    s
+  end
+
+  def draft_like?
+    s = read_attribute(:status)
+    %w[draft waiting_period ready_for_launch].include?(s)
   end
 
   def completed?
     s = read_attribute(:status)
     return true if s == 'completed'
 
-    if !(study.target_sample_size.nil? || study.target_sample_size.zero?) &&
-       (study.completed_count >= study.target_sample_size)
+    if study.target_sample_size.present? && (study.completed_count >= study.target_sample_size)
       return true
     end
 
@@ -49,6 +57,10 @@ class Stage < ApplicationRecord
 
   def scheduled?
     study.opens_at.present? && study.opens_at > DateTime.now
+  end
+
+  def active?
+    study.opens_at.present? && study.opens_at < DateTime.now
   end
 
   def previous_stage

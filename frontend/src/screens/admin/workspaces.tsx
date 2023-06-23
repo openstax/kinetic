@@ -1,9 +1,9 @@
-import { React, useEffect, useState, styled } from '@common'
+import { React, styled, useEffect, useState } from '@common'
 import { Study } from '@api'
 import { useApi, useParamId } from '@lib'
 import { Main, Sidebar } from './grid'
 import { EditStudy } from './workspaces/edit-study'
-import { NavLink, useParams } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const Nav = styled(NavLink)({
     display: 'flex',

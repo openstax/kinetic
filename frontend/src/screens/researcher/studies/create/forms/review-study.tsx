@@ -192,7 +192,9 @@ export const SubmitStudyModal: FC<{
             <Modal.Body>
                 <Box padding='4rem' align='center' justify='center' direction='column' gap='xlarge'>
                     <Box align='center' className='text-center' direction='column'>
-                        <span>You’re about to submit your study to the Kinetic team so that the appropriate permissions are set. Please review and confirm any final changes. You won’t be able to change your Kinetic study information past this point. Are you ready to proceed?</span>
+                        <p>You’re about to submit your study to the Kinetic team so that the appropriate permissions are set. Please review and confirm any final changes.</p>
+                        <p className='fw-bold text-danger'>You won’t be able to change your Kinetic study information past this point.</p>
+                        <p>Are you ready to proceed?</p>
                     </Box>
                     <Box gap='large'>
                         <ResearcherButton buttonType='secondary' onClick={() => setShow(false)}>

@@ -60,11 +60,10 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       @study.update(study_update.to_hash.except(:researchers, :stages))
     end
 
+    @study.update_status(params[:status_action], params[:stage_index])
     if params[:status_action] == 'submit'
-      @study.submit
       ResearcherNotifications.notify_kinetic_study_review(@study)
     end
-
     @study.update_status(params[:status_action], params[:stage_index])
 
     render json: Api::V1::Bindings::Study.create_from_model(@study.reload), status: :ok
@@ -89,7 +88,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     added_researchers = (new_researchers - @study.study_researchers) - [@current_researcher]
     # removed_researchers = (@study.study_researchers - new_researchers) - [@current_researcher]
 
-    ResearcherNotifications.notify_study_researchers(added_researchers, [])
+    ResearcherNotifications.notify_study_researchers(added_researchers, [], @study)
 
     StudyResearcher.skip_callback(:destroy, :before,
                                   :check_destroy_leaves_another_researcher_in_study, raise: false)

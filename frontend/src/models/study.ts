@@ -71,7 +71,7 @@ export function isScheduled(study: Study) {
     return study.status === StudyStatusEnum.Scheduled
 }
 
-export function isCompleted(study: Study | Study) {
+export function isCompleted(study: Study) {
     return study.status === StudyStatusEnum.Completed
 }
 

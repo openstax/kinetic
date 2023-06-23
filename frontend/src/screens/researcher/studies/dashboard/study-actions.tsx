@@ -162,7 +162,7 @@ const ActionModalContent: FC<{
                 warning={false}
                 body="Reopening the study will make it visible to participants and data collection will resume. 'Reopen Study' will prompt you to review your study parameters before relaunch."
                 actionText='Reopen Study'
-                onSubmit={() => nav(`/study/overview/${study.id}`)}
+                onSubmit={() => nav(`/study/overview/${study.id}?reopen=true`)}
                 cancelText='Keep Study Closed'
                 onCancel={onHide}
             />

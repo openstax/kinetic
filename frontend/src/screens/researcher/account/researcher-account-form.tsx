@@ -1,5 +1,5 @@
 import { cx, React, styled, useState, Yup } from '@common';
-import { useApi, useCurrentResearcher, useUserInfo } from '@lib';
+import { useApi, useCurrentResearcher, useEnvironment, useUserInfo } from '@lib';
 import { colors } from '@theme';
 import { Researcher } from '@api';
 import { Box, CharacterCount, Form, FormSaveButton, Icon, InputField, SelectField, Tooltip, useFormState } from '@components';
@@ -42,6 +42,7 @@ const StyledForm = styled(Form<Researcher>)(({ readOnly }) => ({
 
 export const ResearcherAccountForm: React.FC<{className?: string}> = ({ className }) => {
     const api = useApi()
+    const env = useEnvironment()
     const [researcher, setResearcher] = useState(useCurrentResearcher())
 
     if (!researcher) {
@@ -64,6 +65,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
                 updateResearcher: { researcher },
             })
             setResearcher(r)
+            env.setResearcher(r)
         }
         catch (err) {
             console.error(err) // eslint-disable-line no-console

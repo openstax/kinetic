@@ -1,14 +1,5 @@
 import { Box, React, useMemo, Yup } from '@common';
-import {
-    Col,
-    FieldErrorMessage,
-    FieldTitle,
-    Icon,
-    InputField,
-    ResearcherDetailedCheckbox,
-    StepHeader,
-} from '@components';
-import { colors } from '@theme';
+import { Col, FieldErrorMessage, FieldTitle, InputField, ResearcherDetailedCheckbox, StepHeader } from '@components';
 import { Study } from '@api';
 
 export const internalDetailsValidation = (studies: Study[], study: Study) => {
