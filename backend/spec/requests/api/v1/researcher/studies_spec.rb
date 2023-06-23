@@ -7,6 +7,7 @@ RSpec.describe 'Studies', api: :v1 do
   let(:researcher1) { create(:researcher) }
   let(:researcher2) { create(:researcher) }
   let(:researcher3) { create(:researcher) }
+  let(:researcher4) { create(:researcher) }
 
   describe 'POST researcher/studies' do
     let(:valid_new_study_attributes) do
@@ -160,6 +161,7 @@ RSpec.describe 'Studies', api: :v1 do
 
   describe 'PUT researcher/study' do
     let(:study1) { create(:study, researchers: researcher1) }
+    let(:study2) { create(:study, researchers: researcher1, title_for_researchers: 'Researcher add/drop') }
 
     context 'when logged out' do
       it 'gives unauthorized' do
@@ -223,10 +225,43 @@ RSpec.describe 'Studies', api: :v1 do
         )
       end
 
+      it 'adds new study researchers' do
+        # Add a Lead and PI
+        researcher1.update_attribute(:role, 'member')
+        researcher2.update_attribute(:role, 'lead')
+        researcher4.update_attribute(:role, 'pi')
+        api_put "researcher/studies/#{study2.id}", params: { study: { researchers: [
+          researcher1,
+          researcher2,
+          researcher4
+        ] } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match a_hash_including(
+          researchers: a_collection_containing_exactly(
+            a_hash_including({
+              id: researcher1.id,
+              bio: researcher1.bio,
+              role: researcher1.role
+            }),
+            a_hash_including({
+              id: researcher2.id,
+              bio: researcher2.bio,
+              role: researcher2.role
+            }),
+            a_hash_including({
+              id: researcher4.id,
+              bio: researcher4.bio,
+              role: researcher4.role
+            }),
+          )
+        )
+      end
+
       it 'cannot blank required fields' do
         expect {
           api_put "researcher/studies/#{study1.id}",
-                  params: { study: { internal_description: '' } }
+            params: { study: { internal_description: '' } }
         }.not_to change { study1.internal_description }
         expect(response).to have_http_status(:unprocessable_entity)
       end
