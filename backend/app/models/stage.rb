@@ -36,7 +36,6 @@ class Stage < ApplicationRecord
     return 'waiting_period' if s == 'waiting_period'
     return 'ready_for_launch' if s == 'ready_for_launch'
     return 'active' if active?
-
     s
   end
 

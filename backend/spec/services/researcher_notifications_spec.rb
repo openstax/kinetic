@@ -10,6 +10,7 @@ RSpec.describe ResearcherNotifications, type: :mailer do
   let(:removed_researcher) { create(:researcher) }
   let(:removed_researcher_info) { OpenStruct.new(uuid: removed_researcher.user_id, full_name: Faker::Name.name, email_address: Faker::Internet.email) }
   let(:removed_researcher_info_response) { [[removed_researcher.user_id, removed_researcher_info]].to_h }
+  let(:study) { create(:study, num_stages: 1) }
 
   before do
     allow(UserInfo).to receive(:for_uuids).and_return(
@@ -22,7 +23,7 @@ RSpec.describe ResearcherNotifications, type: :mailer do
 
   it 'notifies researchers that were added and removed from study' do
     assert_emails 1 do
-      described_class.notify_study_researchers([added_researcher], [removed_researcher])
+      described_class.notify_study_researchers([added_researcher], [removed_researcher], study)
     end
 
     # Invited email

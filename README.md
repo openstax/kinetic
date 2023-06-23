@@ -63,6 +63,11 @@ $> git push prod main
 $> git push <remote> feature-branch:main
 ```
 
+Connecting to a remote heroku instance, eg. for staging:
+```bash
+heroku run 'bundle exec rails c' -a kinetic-web
+```
+
 ### Deploying Homepage to Openstax CMS.
 
 Access the [cms](https://openstax.org/admin).

@@ -86,7 +86,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     added_researchers = (new_researchers - @study.study_researchers) - [@current_researcher]
     # removed_researchers = (@study.study_researchers - new_researchers) - [@current_researcher]
 
-    ResearcherNotifications.notify_study_researchers(added_researchers, [])
+    ResearcherNotifications.notify_study_researchers(added_researchers, [], @study)
 
     StudyResearcher.skip_callback(:destroy, :before,
                                   :check_destroy_leaves_another_researcher_in_study, raise: false)

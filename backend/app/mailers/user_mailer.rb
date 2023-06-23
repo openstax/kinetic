@@ -78,7 +78,7 @@ class UserMailer < ApplicationMailer
       message.mailgun_variables = {
         'researcher_firstName' => params[:user].first_name,
         'researcher_lastName' => params[:user].last_name,
-        'internal_study_title' => ''
+        'internal_study_title' => params[:study].title_for_researchers
       }
     end
   end
