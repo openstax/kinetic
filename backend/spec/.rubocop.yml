@@ -47,7 +47,7 @@ RSpec/NestedGroups:
   Max: 4
 
 RSpec/MultipleExpectations:
-  Max: 7
+  Max: 12
 
 Naming/AccessorMethodName:
   Enabled: false

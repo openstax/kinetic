@@ -67,15 +67,19 @@ RSpec.describe Study, api: :v1 do
   end
 
   describe 'study status' do
-    let!(:admin) { create(:admin) }
     let!(:researcher) { create(:researcher) }
     let!(:study) { create(:study, num_stages: 3, researchers: researcher) }
+
+    before do
+      mock_qualtrics_clone_survey! new_id: '1234'
+    end
 
     it 'submits a study' do
       study.submit
       expect(study.status).to eq 'waiting_period'
       study.stages.each do |stage|
         expect(stage.status).to eq 'waiting_period'
+        expect(stage.config['survey_id']).to eq '1234'
       end
     end
 

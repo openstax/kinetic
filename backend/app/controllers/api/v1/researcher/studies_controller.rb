@@ -65,11 +65,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       ResearcherNotifications.notify_kinetic_study_review(@study)
     end
 
-    @study.pause if params[:status_action] == 'pause'
-    @study.end if params[:status_action] == 'end'
-    @study.launch if params[:status_action] == 'launch'
-    @study.resume(params[:stage_index]) if params[:status_action] == 'resume'
-    @study.reopen(params[:stage_index]) if params[:status_action] == 'reopen'
+    @study.update_status(params[:status_action], params[:stage_index])
 
     render json: Api::V1::Bindings::Study.create_from_model(@study.reload), status: :ok
   end

@@ -39,7 +39,8 @@ class Stage < ApplicationRecord
     s = read_attribute(:status)
     return true if s == 'completed'
 
-    if !(study.target_sample_size.nil? || study.target_sample_size.zero?) && (study.completed_count >= study.target_sample_size)
+    if !(study.target_sample_size.nil? || study.target_sample_size.zero?) &&
+       (study.completed_count >= study.target_sample_size)
       return true
     end
 

@@ -29,6 +29,7 @@ class Api::V1::Enclave::RunsController < Api::V1::BaseController
       finished_at: Time.now
     )
     EnclaveMailer.completed(@run).deliver
+    @run.attach_output(params[:output_path]) if @run.did_succeed?
     head :ok
   end
 

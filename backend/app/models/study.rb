@@ -144,4 +144,15 @@ class Study < ApplicationRecord
   def reopen_if_possible(new_closing_date)
     return unless new_closing_date
   end
+
+  # called from studies controller to update status using action and stage_index from params
+  def update_status(action, stage_index)
+    if %w[pause end launch].include?(action)
+      send(action)
+    elsif %w[resume reopen].include?(action)
+      send(action, stage_index)
+    elsif action != 'submit' # nothing to do when action is a normal submit
+      raise ArgumentError, "Invalid action: #{action}"
+    end
+  end
 end

@@ -46,7 +46,6 @@ class QualtricsApi
 
     raise "request failed: #{resp.status}" unless resp.status == 200
 
-    #    zip = Zip::InputStream.new(resp)
     Tempfile.create([survey_id, '.zip'], binmode: true) do |f|
       resp.each { |chunk| f.write(chunk) }
       f.flush
@@ -56,10 +55,6 @@ class QualtricsApi
       end
 
     end
-    #   end
-    # zip.each do |entry|
-    #   puts entry.name
-    # end
   end
 
   # https://api.qualtrics.com/9d0928392673d-get-survey
