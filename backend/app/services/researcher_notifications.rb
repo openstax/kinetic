@@ -10,7 +10,7 @@ class ResearcherNotifications
 
       added_researchers.each do |researcher|
         user = users_info.find do |user_info|
-          user_info[researcher.user_id]&.uuid == researcher.user_id
+          user_info[researcher.user_id]&.uuid.to_s == researcher.user_id.to_s
         end
         UserMailer.with(user: user[researcher.user_id],
                         study: study).invite_researcher_to_study.deliver

@@ -76,8 +76,8 @@ class UserMailer < ApplicationMailer
       template: 'researcher_collaboration_invite'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
-        'researcher_firstName' => params[:user].first_name,
-        'researcher_lastName' => params[:user].last_name,
+        'researcher_first_name' => params[:user].first_name,
+        'researcher_last_name' => params[:user].last_name,
         'internal_study_title' => params[:study].title_for_researchers
       }
     end
