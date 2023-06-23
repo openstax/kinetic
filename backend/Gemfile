@@ -71,6 +71,7 @@ gem 'sentry-ruby'
 # CORS
 gem 'rack-cors'
 
+gem 'rubyzip'
 gem 'sssecrets' # for generating api keys
 
 group :test do

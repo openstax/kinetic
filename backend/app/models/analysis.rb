@@ -5,10 +5,13 @@ class Analysis < ApplicationRecord
   has_many :analysis_researchers
   has_many :researchers, through: :analysis_researchers
 
+  has_many :runs, class_name: 'AnalysisRun'
   has_many :study_analyses
   has_many :studies, through: :study_analyses
   has_many :stages, through: :studies
   has_many :response_exports, through: :stages
+
+  attribute :api_key, :string, default: -> { SimpleStructuredSecrets.new('a', 'n').generate }
 
   validates :title, :repository_url, presence: true
 

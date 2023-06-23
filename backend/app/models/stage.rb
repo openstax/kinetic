@@ -3,7 +3,7 @@
 class Stage < ApplicationRecord
   belongs_to :study, inverse_of: :stages
 
-  has_many :response_exports
+  has_many :response_exports, inverse_of: :stage
 
   has_many :launches, class_name: 'LaunchedStage', foreign_key: :stage_id
 
