@@ -60,13 +60,9 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       @study.update(study_update.to_hash.except(:researchers, :stages))
     end
 
-    @study.update_status(params[:status_action], params[:stage_index])
-    if params[:status_action] == 'submit'
-      ResearcherNotifications.notify_kinetic_study_review(@study)
-    end
-    @study.update_status(params[:status_action], params[:stage_index])
+    @study.update_status!(params[:status_action], params[:stage_index])
 
-    render json: Api::V1::Bindings::Study.create_from_model(@study.reload), status: :ok
+    render json: Api::V1::Bindings::Study.create_from_model(@study), status: :ok
   end
 
   def destroy

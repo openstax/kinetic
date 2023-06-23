@@ -76,9 +76,7 @@ RSpec.describe 'Studies', api: :v1 do
 
       it 'submits the study for review' do
         api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=submit"
-
         expect(response).to have_http_status(:success)
-
         expect(response_hash).to match(a_hash_including(
                                          stages: a_collection_containing_exactly(
                                            a_hash_including({ status: 'waiting_period' })

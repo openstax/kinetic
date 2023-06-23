@@ -146,13 +146,17 @@ class Study < ApplicationRecord
   end
 
   # called from studies controller to update status using action and stage_index from params
-  def update_status(action, stage_index)
+  def update_status!(action, stage_index)
     if %w[pause end launch].include?(action)
       send(action)
     elsif %w[resume reopen].include?(action)
       send(action, stage_index)
-    elsif action != 'submit' # nothing to do when action is a normal submit
+    elsif action == 'submit'
+      submit
+      ResearcherNotifications.notify_kinetic_study_review(self)
+    else
       raise ArgumentError, "Invalid action: #{action}"
     end
+    save!
   end
 end
