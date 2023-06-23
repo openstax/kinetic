@@ -33,7 +33,7 @@ class Stage < ApplicationRecord
     return 'paused' if s == 'paused'
     return 'completed' if completed?
     return 'scheduled' if scheduled?
-    return 'draft' if draft_like?
+    return s if draft_like?
     return 'active' if active?
 
     s
