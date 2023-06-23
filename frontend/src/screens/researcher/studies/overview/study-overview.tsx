@@ -1,7 +1,7 @@
 import { Box, React, useEffect, useNavigate, useParams } from '@common';
 import { Study } from '@api';
 import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page } from '@components';
-import { getStudyLead, getStudyPi, isReadyForLaunch, isWaiting, useFetchStudy } from '@models';
+import { getStudyLead, getStudyPi, isCompleted, isReadyForLaunch, isWaiting, useFetchStudy } from '@models';
 import { StudyCardPreview, Tag } from '../../../learner/card';
 import { colors } from '@theme';
 import { FinalizeStudy } from './finalize-study';

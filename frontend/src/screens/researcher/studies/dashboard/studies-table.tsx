@@ -336,7 +336,9 @@ export const StudiesTable: React.FC<{
                 if (info.row.subRows.length || !info.row.original.opensAt) {
                     return '-'
                 }
-
+                if (info.row.original.id == 264) {
+                    console.log(info.getValue())
+                }
                 return toDayJS(info.getValue() as Date).format('MM/DD/YYYY')
             },
         },
@@ -372,6 +374,7 @@ export const StudiesTable: React.FC<{
                 )
             },
             cell: (info) => {
+
                 const study = info.row.original;
 
                 if (currentStatus == StudyStatus.Completed) {
@@ -379,7 +382,7 @@ export const StudiesTable: React.FC<{
                 }
 
                 if (!study.targetSampleSize) {
-                    return <span>{study.completedCount} / -</span>
+                    return <span>{study.completedCount} / N/A</span>
                 }
 
                 return (

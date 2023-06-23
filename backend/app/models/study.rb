@@ -139,6 +139,15 @@ class Study < ApplicationRecord
     end
   end
 
+  def update_status(action, stage_index)
+    submit if action == 'submit'
+    pause if action == 'pause'
+    self.end if action == 'end'
+    launch if action == 'launch'
+    resume(stage_index) if action == 'resume'
+    reopen(stage_index) if action == 'reopen'
+  end
+
   def reopen_if_possible(new_closing_date)
     return unless new_closing_date
   end

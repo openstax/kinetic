@@ -67,7 +67,6 @@ RSpec.describe Study, api: :v1 do
   end
 
   describe 'study status' do
-    let!(:admin) { create(:admin) }
     let!(:researcher) { create(:researcher) }
     let!(:study) { create(:study, num_stages: 3, researchers: researcher) }
 
@@ -95,7 +94,7 @@ RSpec.describe Study, api: :v1 do
       end
     end
 
-    it 'pauses a study' do
+    it 'pauses first session of a study' do
       study.launch
       # Pause first session
       study.pause
@@ -103,15 +102,24 @@ RSpec.describe Study, api: :v1 do
       expect(study.stages.first.status).to eq 'paused'
       expect(study.stages.second.status).to eq 'active'
       expect(study.stages.third.status).to eq 'active'
+    end
 
-      # Pause second session
+    it 'pauses second session of a study' do
+      study.launch
+      # Pause first two sessions
+      study.pause
       study.pause
       expect(study.status).to eq 'active'
       expect(study.stages.first.status).to eq 'paused'
       expect(study.stages.second.status).to eq 'paused'
       expect(study.stages.third.status).to eq 'active'
+    end
 
-      # Pause third session
+    it 'pauses third session of a study' do
+      study.launch
+      # Pause all three sessions
+      study.pause
+      study.pause
       study.pause
       expect(study.status).to eq 'paused'
       expect(study.stages.first.status).to eq 'paused'
@@ -145,24 +153,32 @@ RSpec.describe Study, api: :v1 do
       end
     end
 
-    it 'ends a study' do
+    it 'ends first session' do
       study.launch
 
-      # end first session
       study.end
       expect(study.status).to eq 'active'
       expect(study.stages.first.status).to eq 'completed'
       expect(study.stages.second.status).to eq 'active'
       expect(study.stages.third.status).to eq 'active'
+    end
 
-      # end second session
+    it 'ends second session' do
+      study.launch
+
+      study.end
       study.end
       expect(study.status).to eq 'active'
       expect(study.stages.first.status).to eq 'completed'
       expect(study.stages.second.status).to eq 'completed'
       expect(study.stages.third.status).to eq 'active'
+    end
 
-      # end third session
+    it 'ends third session' do
+      study.launch
+
+      study.end
+      study.end
       study.end
       expect(study.status).to eq 'completed'
       expect(study.stages.first.status).to eq 'completed'

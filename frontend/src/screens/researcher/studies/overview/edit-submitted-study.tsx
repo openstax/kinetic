@@ -1,5 +1,5 @@
 import { Study } from '@api';
-import { useApi } from '@lib';
+import { useApi, useQueryParam } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import {
     Col,
@@ -19,7 +19,7 @@ import {
     useFormState,
 } from '@components';
 import { Box, React, useNavigate, useState, Yup } from '@common';
-import { getFirstStage, isReadyForLaunch } from '@models';
+import { getFirstStage, isCompleted, isReadyForLaunch } from '@models';
 import { colors } from '@theme';
 
 const studyValidation = Yup.object().shape({
@@ -52,15 +52,19 @@ export const EditSubmittedStudy: FC<{
     formDisabled?: boolean
 }> = ({ study, formDisabled = false }) => {
     const api = useApi()
+    const reopening: boolean = useQueryParam('reopen') || false
+
     const saveStudy = async (study: Study, context: FormContext<any>) => {
         const { reset } = context
         const savedStudy = await api.updateStudy({ id: Number(study.id), updateStudy: { study: study } })
         reset(savedStudy, { keepIsValid: true })
     }
 
+    const isDisabled = formDisabled || (!reopening && isCompleted(study))
+    console.log(isDisabled)
     return (
         <Form
-            readOnly={formDisabled}
+            readOnly={isDisabled}
             validationSchema={studyValidation}
             defaultValues={{
                 ...study,
@@ -287,7 +291,7 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
     if (!firstStage) {
         return null
     }
-    const { watch, setValue, getValues, trigger } = useFormContext()
+    const { watch, setValue, getValues, trigger, isReadOnly } = useFormContext()
 
     return (
         <Box gap='xlarge'>
@@ -345,10 +349,10 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                         <label htmlFor='closing-date'>By due date</label>
                     </Col>
                     <Col sm={5}>
-                        <DateTime
+                        <DateTimeField
                             name='closesAt'
-                            readOnly={!watch('hasClosingDate')}
-                            placeholder='Pick a Date'
+                            readOnly={isReadOnly || !watch('hasClosingDate')}
+                            label='Pick a Date'
                             format={DateTimeFormats.shortDateTime}
                             options={{
                                 defaultHour: 9,
