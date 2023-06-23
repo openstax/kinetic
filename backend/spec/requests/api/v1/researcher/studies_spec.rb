@@ -254,15 +254,14 @@ RSpec.describe 'Studies', api: :v1 do
               id: researcher4.id,
               bio: researcher4.bio,
               role: researcher4.role
-            }),
+            })
           )
         )
       end
 
       it 'cannot blank required fields' do
         expect {
-          api_put "researcher/studies/#{study1.id}",
-            params: { study: { internal_description: '' } }
+          api_put "researcher/studies/#{study1.id}", params: { study: { internal_description: '' } }
         }.not_to change { study1.internal_description }
         expect(response).to have_http_status(:unprocessable_entity)
       end
