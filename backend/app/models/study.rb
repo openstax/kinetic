@@ -123,7 +123,7 @@ class Study < ApplicationRecord
     stages.where.not(status: 'paused').first&.update(status: 'paused')
   end
 
-  def resume(stage_index = 0)
+  def resume(stage_index=0)
     stages.last(stages.length - stage_index.to_i).each do |stage|
       stage.update(status: 'active')
     end
@@ -133,15 +133,13 @@ class Study < ApplicationRecord
     stages.where.not(status: 'completed').first&.update(status: 'completed')
   end
 
-  def reopen(stage_index = 0)
+  def reopen(stage_index=0)
     stages.last(stages.length - stage_index.to_i).each do |stage|
       stage.update(status: 'active')
     end
   end
 
   def reopen_if_possible(new_closing_date)
-    if new_closing_date
-
-    end
+    return unless new_closing_date
   end
 end

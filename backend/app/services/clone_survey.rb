@@ -12,9 +12,9 @@ class CloneSurvey
 
   def clone(new_name)
     result = @api.create_survey(@source.merge(
-      { SurveyEntry: @source['SurveyEntry'].merge(
-        { SurveyName: new_name }
-      ) }.deep_stringify_keys
+                                  { SurveyEntry: @source['SurveyEntry'].merge(
+                                    { SurveyName: new_name }
+                                  ) }.deep_stringify_keys
     ))
     @api.share_survey(
       result['SurveyID'],

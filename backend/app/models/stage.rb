@@ -24,22 +24,25 @@ class Stage < ApplicationRecord
   before_create :set_order
 
   enum status: [:draft, :active, :paused, :scheduled,
-    :waiting_period, :ready_for_launch, :completed],
-    _default: 'draft'
+                :waiting_period, :ready_for_launch, :completed],
+       _default: 'draft'
 
   def status
     return 'paused' if read_attribute(:status) == 'paused'
     return 'completed' if completed?
     return 'scheduled' if scheduled?
+
     read_attribute(:status)
   end
 
   def completed?
     s = read_attribute(:status)
     return true if s == 'completed'
-    unless study.target_sample_size.nil? || study.target_sample_size == 0
-      return true if study.completed_count >= study.target_sample_size
+
+    if !(study.target_sample_size.nil? || study.target_sample_size.zero?) && (study.completed_count >= study.target_sample_size)
+      return true
     end
+
     !study.closes_at.nil? && study.closes_at < DateTime.now
   end
 
