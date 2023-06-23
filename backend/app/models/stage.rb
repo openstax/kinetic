@@ -29,14 +29,19 @@ class Stage < ApplicationRecord
 
   def status
     s = read_attribute(:status)
+
     return 'paused' if s == 'paused'
     return 'completed' if completed?
     return 'scheduled' if scheduled?
-    return 'draft' if s == 'draft'
-    return 'waiting_period' if s == 'waiting_period'
-    return 'ready_for_launch' if s == 'ready_for_launch'
+    return 'draft' if draft_like?
     return 'active' if active?
+
     s
+  end
+
+  def draft_like?
+    s = read_attribute(:status)
+    %w[draft waiting_period ready_for_launch].include?(s)
   end
 
   def completed?
