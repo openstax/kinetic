@@ -175,7 +175,7 @@ RSpec.describe Study, api: :v1 do
       study.end
       study.reopen
       expect(study.status).to eq 'active'
-      # TODO with stage index
+
       study.stages.each do |stage|
         expect(stage.status).to eq 'active'
       end

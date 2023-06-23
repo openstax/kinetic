@@ -68,12 +68,6 @@ export interface ParticipantStudyStage {
      */
     readonly points?: number;
     /**
-     * When the study opens for participation; null means not open.
-     * @type {Date}
-     * @memberof ParticipantStudyStage
-     */
-    opensAt?: Date | null;
-    /**
      * When the study closes for participation; null means does not close.
      * @type {Date}
      * @memberof ParticipantStudyStage
@@ -142,7 +136,6 @@ export function ParticipantStudyStageFromJSONTyped(json: any, ignoreDiscriminato
         'isLaunchable': !exists(json, 'is_launchable') ? undefined : json['is_launchable'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
         'points': !exists(json, 'points') ? undefined : json['points'],
-        'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'feedbackTypes': !exists(json, 'feedback_types') ? undefined : json['feedback_types'],
         'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
@@ -159,7 +152,6 @@ export function ParticipantStudyStageToJSON(value?: ParticipantStudyStage | null
     }
     return {
         
-        'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'feedback_types': value.feedbackTypes,
         'target_sample_size': value.targetSampleSize,

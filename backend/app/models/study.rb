@@ -50,8 +50,6 @@ class Study < ApplicationRecord
   }
 
   def status
-    # todo go off of last stage or first stage? probably last stage
-    # 'completed' if !closes_at.nil? && (closes_at < DateTime.now)
     stages.last&.status || 'draft'
   end
 
@@ -63,9 +61,6 @@ class Study < ApplicationRecord
     stages.sum(:duration_minutes)
   end
 
-  # TODO: handle this case from debshila:
-  # just keep one case in mind: learner x completes stage 1 and we reach end date,
-  # meeting end date closes stage 1 but leaves subsequent stages open until the interval is reached
   def available?
     !is_hidden? && opens_at && Time.now > opens_at && (closes_at.nil? || Time.now <= closes_at)
   end
@@ -141,6 +136,12 @@ class Study < ApplicationRecord
   def reopen(stage_index = 0)
     stages.last(stages.length - stage_index.to_i).each do |stage|
       stage.update(status: 'active')
+    end
+  end
+
+  def reopen_if_possible(new_closing_date)
+    if new_closing_date
+
     end
   end
 end

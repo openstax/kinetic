@@ -39,9 +39,6 @@ module Api::V1::Bindings
     # How many points the stage is worth
     attr_accessor :points
 
-    # When the study opens for participation; null means not open.
-    attr_accessor :opens_at
-
     # When the study closes for participation; null means does not close.
     attr_accessor :closes_at
 
@@ -87,7 +84,6 @@ module Api::V1::Bindings
         :'is_launchable' => :'is_launchable',
         :'duration_minutes' => :'duration_minutes',
         :'points' => :'points',
-        :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
         :'feedback_types' => :'feedback_types',
         :'target_sample_size' => :'target_sample_size',
@@ -111,7 +107,6 @@ module Api::V1::Bindings
         :'is_launchable' => :'Boolean',
         :'duration_minutes' => :'Integer',
         :'points' => :'Integer',
-        :'opens_at' => :'Time',
         :'closes_at' => :'Time',
         :'feedback_types' => :'Array<String>',
         :'target_sample_size' => :'Float',
@@ -122,7 +117,6 @@ module Api::V1::Bindings
     # List of attributes with nullable: true
     def self.openapi_nullable
       Set.new([
-        :'opens_at',
         :'closes_at',
       ])
     end
@@ -172,10 +166,6 @@ module Api::V1::Bindings
 
       if attributes.key?(:'points')
         self.points = attributes[:'points']
-      end
-
-      if attributes.key?(:'opens_at')
-        self.opens_at = attributes[:'opens_at']
       end
 
       if attributes.key?(:'closes_at')
@@ -241,7 +231,6 @@ module Api::V1::Bindings
           is_launchable == o.is_launchable &&
           duration_minutes == o.duration_minutes &&
           points == o.points &&
-          opens_at == o.opens_at &&
           closes_at == o.closes_at &&
           feedback_types == o.feedback_types &&
           target_sample_size == o.target_sample_size &&
@@ -257,7 +246,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [order, title, description, available_after_days, is_completed, is_launchable, duration_minutes, points, opens_at, closes_at, feedback_types, target_sample_size, status].hash
+      [order, title, description, available_after_days, is_completed, is_launchable, duration_minutes, points, closes_at, feedback_types, target_sample_size, status].hash
     end
 
     # Builds the object from hash

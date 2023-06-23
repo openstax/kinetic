@@ -81,7 +81,7 @@ export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin
     await page.waitForSelector('.studies')
 }
 
-// TODO Can't delete active studies?
+// TODO Can't delete active studies now.
 export const rmStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
     await loginAs({ page, login: 'researcher' })
     await goToPage({ page, path: `/studies` })
@@ -124,14 +124,14 @@ export const launchApprovedStudy = async(page: Page, studyId: number, multiSessi
     if (multiSession) {
         await page.getByTestId('confirm-qualtrics-0').check();
         await page.getByTestId('confirm-qualtrics-1').check();
-        // await page.click('[name=userHasCheckedQualtrics]')
-        // await page.click('[name=userHasCheckedQualtrics]')
     } else {
         await page.getByTestId('confirm-qualtrics').check();
-        // await page.getByRole('checkbox', { name: 'userHasCheckedQualtrics' }).check();
-        // await page.click('[name=userHasCheckedQualtrics]')
     }
+
     await setDateField({ page, fieldName: 'opensAt', date: dayjs() })
+
+    await page.locator('input[name=hasSampleSize]').check()
+    await page.fill('[name=targetSampleSize]', '50')
 
     await expect(page.locator('testId=launch-study-button')).not.toBeDisabled()
     await page.click('testId=launch-study-button')

@@ -209,7 +209,12 @@ const ActionIcon = styled(Icon)(({ disabled }) => ({
 }))
 
 const isPausable = (cell: CellContext<Study, any>): boolean => {
-    if (isDraftLike(cell.row.original) || isCompleted(cell.row.original)) return false
+    const study = cell.row.original
+    if (
+        isDraftLike(study) ||
+        isCompleted(study) ||
+        isScheduled(study)
+    ) return false
 
     const hasChildren = cell.row.getLeafRows().length
     const parent = cell.row.getParentRow()
@@ -218,12 +223,12 @@ const isPausable = (cell: CellContext<Study, any>): boolean => {
         return false
     }
 
-    const previousSession = parent?.getLeafRows()[cell.row.index - 1]
-    if (!previousSession) {
+    const previousSession = parent?.getLeafRows()[cell.row.index - 1]?.original
+    if (!previousSession || previousSession?.id === study.id) {
         return true
     }
 
-    return previousSession?.original.status == 'paused' && isActive(cell.row.original)
+    return isPaused(previousSession) && isActive(study)
 }
 
 export const ActionColumn: React.FC<{

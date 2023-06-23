@@ -67,6 +67,7 @@ export const EditSubmittedStudy: FC<{
                 hasSampleSize: !!study.targetSampleSize,
                 hasClosingDate: !!study.closesAt,
                 shareStudy: study.shareableAfterMonths == 0 || !!study.shareableAfterMonths,
+                shareableAfterMonths: study.shareableAfterMonths == undefined ? null : study.shareableAfterMonths,
                 stages: isReadyForLaunch(study) ? study.stages?.map((stage, index) => {
                     if (index == 0) {
                         return stage
@@ -224,7 +225,6 @@ const OpensAt: FC = () => {
                         label='Pick a Date'
                         withTime
                         format={DateTimeFormats.shortDateTime}
-
                         options={{
                             defaultHour: 9,
                             minDate: 'today',
@@ -254,6 +254,7 @@ const ShareStudy: FC<{study: Study}> = ({ study }) => {
                         if (!checked) {
                             setValue('shareableAfterMonths', null, { shouldValidate: true })
                         }
+                        console.log(getValues('shareableAfterMonths'))
                         trigger('shareableAfterMonths')
                     }} />
                     <label htmlFor="share-study">

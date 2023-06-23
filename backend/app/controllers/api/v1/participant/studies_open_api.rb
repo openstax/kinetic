@@ -40,7 +40,6 @@ class Api::V1::Participant::StudiesOpenApi
       end
     end
 
-    # TODO: Add stage info to this
     schema :ParticipantStudyStage do
       property :order do
         key :type, :integer
@@ -81,12 +80,6 @@ class Api::V1::Participant::StudiesOpenApi
         key :type, :integer
         key :description, 'How many points the stage is worth'
         key :readOnly, true
-      end
-      property :opens_at do
-        key :type, :string
-        key :nullable, true
-        key :format, 'date-time'
-        key :description, 'When the study opens for participation; null means not open.'
       end
       property :closes_at do
         key :type, :string

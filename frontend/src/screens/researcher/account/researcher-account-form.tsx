@@ -2,7 +2,7 @@ import { cx, React, styled, useState, Yup } from '@common';
 import { useApi, useCurrentResearcher, useUserInfo } from '@lib';
 import { colors } from '@theme';
 import { Researcher } from '@api';
-import { Box, CharacterCount, Form, FormSaveButton, Icon, InputField, SelectField, Tooltip } from '@components';
+import { Box, CharacterCount, Form, FormSaveButton, Icon, InputField, SelectField, Tooltip, useFormState } from '@components';
 
 const urlRegex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
 export const ResearcherValidationSchema = Yup.object().shape({
@@ -149,11 +149,19 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
                 <CharacterCount max={250} name={'bio'} />
             </div>
 
-            <Box gap justify='end' className='mt-4'>
-                <FormSaveButton primary>
-                    Save
-                </FormSaveButton>
-            </Box>
+            <FormSave />
         </StyledForm>
     );
+}
+
+const FormSave: FC = () => {
+    const { isDirty, isValid } = useFormState()
+
+    return (
+        <Box gap justify='end' className='mt-4'>
+            <FormSaveButton primary disabled={!isValid || !isDirty}>
+                Save
+            </FormSaveButton>
+        </Box>
+    )
 }

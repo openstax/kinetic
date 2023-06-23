@@ -90,7 +90,7 @@ export const ResearchTeam: FC<{study: Study}> = ({ study }) => {
                         components={{ DropdownIndicator }}
                         onChange={updateResearchers}
                     />
-                    <small>An email invitation will be sent once you click “Continue’</small>
+                    <small>An email invitation will be sent once you click “Continue"</small>
                     <FieldErrorMessage name='researcherPi' />
                 </Col>
             </Box>
@@ -110,7 +110,7 @@ export const ResearchTeam: FC<{study: Study}> = ({ study }) => {
                         components={{ DropdownIndicator }}
                         onChange={updateResearchers}
                     />
-                    <small>An email invitation will be sent once you click “Continue’</small>
+                    <small>An email invitation will be sent once you click “Continue"</small>
                     <FieldErrorMessage name='researcherLead' />
                 </Col>
             </Box>

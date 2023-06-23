@@ -1,12 +1,12 @@
 class MigrateStudyData < ActiveRecord::Migration[6.1]
   def up
     studies = YAML.load_file(Rails.root.join('db/migrate/study_migration_data.yaml'))
-    studies = []
     studies.each do |data|
       study = Study.includes(:stages, :study_researchers).find(data['id'])
 
       if study.nil?
-        raise("Cant find study with id: #{data['id']}")
+        puts("Cant find study with id: #{data['id']}")
+        next
       end
 
       lead = Researcher.find_by(user_id: data['study_lead_uuid'])

@@ -37,7 +37,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     render(json: error, status: error.status_code) and return if error
 
     @study.update(inbound_binding.to_hash.except(:researchers, :stages))
-
+    # @study.reopen_if_possible(inbound_binding.to_hash[:opens_at]) if inbound_binding.to_hash[:closes_at].present?
     notify_researchers(Array(inbound_binding.researchers)) unless inbound_binding.researchers.nil?
 
     unless inbound_binding.stages.nil?
