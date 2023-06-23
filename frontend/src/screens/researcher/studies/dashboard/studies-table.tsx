@@ -26,7 +26,7 @@ import AZDefault from '../../../../images/icons/azdefault.png';
 import SortUp from '../../../../images/icons/sortup.png';
 import SortDown from '../../../../images/icons/sortdown.png';
 import SortDefault from '../../../../images/icons/sort.png';
-import { getStudyEditUrl, isDraft, isDraftLike, StudyStatus, useFetchStudies } from '@models';
+import { getStudyEditUrl, isDraftLike, StudyStatus, useFetchStudies } from '@models';
 import { Dispatch, SetStateAction } from 'react';
 import { ActionColumn } from './study-actions';
 
@@ -336,9 +336,7 @@ export const StudiesTable: React.FC<{
                 if (info.row.subRows.length || !info.row.original.opensAt) {
                     return '-'
                 }
-                if (info.row.original.id == 264) {
-                    console.log(info.getValue())
-                }
+
                 return toDayJS(info.getValue() as Date).format('MM/DD/YYYY')
             },
         },

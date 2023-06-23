@@ -4,7 +4,6 @@ import {
     Col,
     FieldErrorMessage,
     FieldTitle,
-    getImageUrl,
     InputField,
     ResearcherButton,
     ResearcherDetailedCheckbox,
@@ -17,7 +16,6 @@ import { StudyCardPreview } from '../../../../learner/card';
 import { first } from 'lodash-es';
 import { Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
-import { colors } from '@theme';
 
 export const participantViewValidation = (studies: Study[], study: Study) => {
     const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])

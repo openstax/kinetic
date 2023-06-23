@@ -3,7 +3,6 @@ import { useApi, useQueryParam } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import {
     Col,
-    DateTime,
     DateTimeField,
     DateTimeFormats,
     FieldErrorMessage,
@@ -61,7 +60,7 @@ export const EditSubmittedStudy: FC<{
     }
 
     const isDisabled = formDisabled || (!reopening && isCompleted(study))
-    console.log(isDisabled)
+
     return (
         <Form
             readOnly={isDisabled}
@@ -241,7 +240,7 @@ const OpensAt: FC = () => {
     )
 }
 
-const ShareStudy: FC<{study: Study}> = ({ study }) => {
+const ShareStudy: FC<{study: Study}> = () => {
     const { watch, setValue, getValues, trigger } = useFormContext()
 
     return (

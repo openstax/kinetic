@@ -1,5 +1,5 @@
-import { Box, React, useEffect, useState, Yup } from '@common';
-import { FieldErrorMessage, Icon, Button, Col, useFormContext, StepHeader, FieldTitle } from '@components';
+import { Box, React, Yup } from '@common';
+import { Button, Col, FieldTitle, Icon, StepHeader, useFormContext } from '@components';
 import { colors } from '@theme';
 import { NewStage, Stage, Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
@@ -24,7 +24,7 @@ export const additionalSessionsValidation = () => {
     }
 }
 
-export const AdditionalSessions: FC<{study: Study}> = ({ study }) => {
+export const AdditionalSessions: FC<{study: Study}> = () => {
     return (
         <Box className='mt-6' direction='column' gap='xlarge'>
             <StepHeader title='Additional sessions (optional)' eta={2}>
