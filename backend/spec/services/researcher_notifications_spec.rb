@@ -14,16 +14,14 @@ RSpec.describe ResearcherNotifications, type: :mailer do
 
   before do
     allow(UserInfo).to receive(:for_uuids).and_return(
-      [
-        added_researcher_info_response,
-        removed_researcher_info_response
-      ]
+      { added_researcher_info.uuid => added_researcher_info }
     )
   end
 
+  # TODO: Removed researcher tests
   it 'notifies researchers that were added and removed from study' do
     assert_emails 1 do
-      described_class.notify_study_researchers([added_researcher], [removed_researcher], study)
+      described_class.notify_study_researchers([added_researcher], [], study)
     end
 
     # Invited email

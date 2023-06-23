@@ -258,11 +258,10 @@ const ShareStudy: FC<{study: Study}> = ({ study }) => {
                         if (!checked) {
                             setValue('shareableAfterMonths', null, { shouldValidate: true })
                         }
-                        console.log(getValues('shareableAfterMonths'))
                         trigger('shareableAfterMonths')
                     }} />
                     <label htmlFor="share-study">
-                        I would like to share my study with other researchers on Kinetic after an embargo period of
+                        I would like to share my study with other researchers on Kinetic after an embargo period during which access to my research will be restricted.
                     </label>
                 </Box>
                 {watch('shareStudy') &&
@@ -276,6 +275,7 @@ const ShareStudy: FC<{study: Study}> = ({ study }) => {
                                 { value: 6, label: '6 months' },
                                 { value: 12, label: '12 months' },
                                 { value: 18, label: '18 months' },
+                                { value: 24, label: '24 months' },
                             ]}
                         />
                     </Box>
