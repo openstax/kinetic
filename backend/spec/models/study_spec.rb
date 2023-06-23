@@ -71,7 +71,7 @@ RSpec.describe Study, api: :v1 do
     let!(:study) { create(:study, num_stages: 3, researchers: researcher) }
 
     before do
-      mock_qualtrics_clone_survey! new_id: '1234'
+      stub_qualtrics_clone_survey! new_id: '1234'
     end
 
     it 'submits a study' do

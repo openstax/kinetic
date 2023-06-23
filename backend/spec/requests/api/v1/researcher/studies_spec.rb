@@ -55,7 +55,7 @@ RSpec.describe 'Studies', api: :v1 do
     context 'when signed in as a researcher' do
       before do
         stub_current_user(researcher1)
-        mock_qualtrics_clone_survey!
+        stub_qualtrics_clone_survey!
       end
 
       let!(:study_with_stages) { create(:study, researchers: researcher1, stages: [create(:stage)]) }

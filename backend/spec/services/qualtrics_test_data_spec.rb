@@ -12,7 +12,7 @@ RSpec.describe QualtricsTestData do
   let(:secret_key) { 'faY0ccV2dtF19TMS' }
 
   before do
-    mock_qualtrics_survey_definition!
+    stub_qualtrics_survey_definition!
     analysis.studies << study
     study.stages.first.update!(config: { type: 'qualtrics', survey_id: survey_id })
   end
