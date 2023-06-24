@@ -115,6 +115,41 @@ RSpec.describe 'Studies', api: :v1 do
           )
         )
       end
+
+      # TODO after fleshed out instructions
+      # it 'reopens a completed study' do
+      #   api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=end"
+      #   debugger
+      #   api_put "researcher/studies/#{study_with_stages.id}", params: { study: {
+      #     target_sample_size: 400,
+      #     closes_at: 10.days.from_now
+      #   } }
+      #
+      #   expect(response).to have_http_status(:success)
+      #   expect(response_hash).to match(
+      #     a_hash_including(
+      #       stages: a_collection_containing_exactly(
+      #         a_hash_including({
+      #           status: 'active'
+      #         })
+      #       )
+      #     )
+      #   )
+      # end
+
+      # TODO after fleshed out instructions
+      # it 'fails to reopen a completed study that cannot re-open' do
+      #   api_put "researcher/studies/#{study_with_stages.id}", params: { study: {
+      #     opens_at: 1.day.ago
+      #   # target_sample_size: 400,
+      #   # closes_at: 10.days.from_now
+      #   } }
+      #
+      #   expect(response).to have_http_status(:success)
+      #   expect(response_hash).to match(
+      #     a_hash_including(status: 'completed')
+      #   )
+      # end
     end
   end
 
@@ -161,11 +196,10 @@ RSpec.describe 'Studies', api: :v1 do
 
   describe 'PUT researcher/study' do
     let(:study1) { create(:study, researchers: researcher1) }
-    let(:study2) { create(:study, researchers: researcher1, title_for_researchers: 'Researcher add/drop') }
-
+    let(:study2) { create(:study, researchers: [researcher1], title_for_researchers: 'Researcher add/drop') }
     context 'when logged out' do
       it 'gives unauthorized' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { is_mandatory: true } }
+        api_put "researcher/studies/#{study1.id}", params: { study: { title_for_researchers: 'Test' } }
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -175,8 +209,8 @@ RSpec.describe 'Studies', api: :v1 do
 
       it 'gives forbidden' do
         expect {
-          api_put "researcher/studies/#{study1.id}", params: { study: { is_mandatory: true } }
-        }.not_to change { study1.reload; study1.is_mandatory }
+          api_put "researcher/studies/#{study1.id}", params: { study: { title_for_researchers: 'Test' } }
+        }.not_to change { study1.reload; study1.title_for_researchers }
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -185,11 +219,11 @@ RSpec.describe 'Studies', api: :v1 do
       before { stub_current_user(researcher1) }
 
       it 'updates the study' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { is_mandatory: true } }
+        api_put "researcher/studies/#{study1.id}", params: { study: { title_for_researchers: 'Test' } }
 
         expect(response).to have_http_status(:success)
         expect(response_hash).to match(
-          a_hash_including(is_mandatory: true)
+          a_hash_including(title_for_researchers: 'Test')
         )
       end
 
@@ -253,6 +287,46 @@ RSpec.describe 'Studies', api: :v1 do
               id: researcher4.id,
               bio: researcher4.bio,
               role: researcher4.role
+            }),
+          )
+        )
+      end
+
+      it 'replaces an existing study PI' do
+        # Add a Lead and PI
+        researcher1.update_attribute(:role, 'member')
+        researcher2.update_attribute(:role, 'lead')
+        researcher4.update_attribute(:role, 'pi')
+        api_put "researcher/studies/#{study2.id}", params: { study: { researchers: [
+          researcher1,
+          researcher2,
+          researcher4
+        ] } }
+
+        researcher3.update_attribute(:role, 'pi')
+        api_put "researcher/studies/#{study2.id}", params: { study: { researchers: [
+          researcher1,
+          researcher2,
+          researcher3
+        ] } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match a_hash_including(
+          researchers: a_collection_containing_exactly(
+            a_hash_including({
+              id: researcher1.id,
+              bio: researcher1.bio,
+              role: researcher1.role
+            }),
+            a_hash_including({
+              id: researcher2.id,
+              bio: researcher2.bio,
+              role: researcher2.role
+            }),
+            a_hash_including({
+              id: researcher3.id,
+              bio: researcher3.bio,
+              role: researcher3.role
             }),
           )
         )

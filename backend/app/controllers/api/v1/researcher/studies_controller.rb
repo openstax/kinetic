@@ -37,7 +37,8 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     render(json: error, status: error.status_code) and return if error
 
     notify_researchers(inbound_binding.researchers || [])
-    # @study.reopen_if_possible(inbound_binding.to_hash[:opens_at]) if inbound_binding.to_hash[:closes_at].present?
+    # TODO after fleshed out instructions
+    # @study.reopen_if_possible(inbound_binding.to_hash)
     @study.update(inbound_binding.to_hash.except(:researchers, :stages))
 
     unless inbound_binding.stages.nil?
@@ -75,24 +76,26 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   protected
 
   def notify_researchers(researchers)
-    new_researchers = researchers.map do |researcher|
-      StudyResearcher.find_or_create_by(
-        study_id: @study.id,
-        researcher_id: researcher.id,
-        role: researcher.role
-      )
+    new_researcher_ids = researchers.map(&:id)
+    old_researcher_ids = @study.study_researchers.map(&:researcher_id)
+
+    added_researchers_ids = (new_researcher_ids - old_researcher_ids) - [@current_researcher.id]
+    removed_researchers_ids = (old_researcher_ids - new_researcher_ids) - [@current_researcher.id]
+
+    researchers.each do |researcher|
+      if added_researchers_ids.include?(researcher.id)
+        @study.study_researchers.create!(
+          researcher_id: researcher.id,
+          role: researcher.role
+        )
+      end
     end
 
-    added_researchers = (new_researchers - @study.study_researchers) - [@current_researcher]
-    # removed_researchers = (@study.study_researchers - new_researchers) - [@current_researcher]
+    removed_researchers_ids.each do |removed_researcher_id|
+      @study.study_researchers.delete(@study.study_researchers.find_by(researcher_id: removed_researcher_id))
+    end
 
-    ResearcherNotifications.notify_study_researchers(added_researchers, [], @study)
-
-    StudyResearcher.skip_callback(:destroy, :before,
-                                  :check_destroy_leaves_another_researcher_in_study, raise: false)
-    @study.study_researchers.replace(new_researchers.uniq)
-    StudyResearcher.set_callback(:destroy, :before,
-                                 :check_destroy_leaves_another_researcher_in_study, raise: false)
+    ResearcherNotifications.notify_study_researchers(@study.study_researchers, [], @study)
   end
 
   def set_study

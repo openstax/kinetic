@@ -148,7 +148,11 @@ class Study < ApplicationRecord
     reopen(stage_index) if action == 'reopen'
   end
 
-  def reopen_if_possible(new_closing_date)
-    return unless new_closing_date
-  end
+  # TODO after fleshed out instructions
+  # def reopen_if_possible(study_updates)
+  #   if status == 'completed'
+
+  # if study_updates[:closes_at]
+  # return unless new_closing_date
+  # end
 end
