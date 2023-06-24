@@ -70,11 +70,16 @@ RSpec.describe Study, api: :v1 do
     let!(:researcher) { create(:researcher) }
     let!(:study) { create(:study, num_stages: 3, researchers: researcher) }
 
+    before do
+      stub_qualtrics_clone_survey! new_id: '1234'
+    end
+
     it 'submits a study' do
       study.submit
       expect(study.status).to eq 'waiting_period'
       study.stages.each do |stage|
         expect(stage.status).to eq 'waiting_period'
+        expect(stage.config['survey_id']).to eq '1234'
       end
     end
 
@@ -191,7 +196,7 @@ RSpec.describe Study, api: :v1 do
       study.end
       study.reopen
       expect(study.status).to eq 'active'
-
+      # TODO: with stage index
       study.stages.each do |stage|
         expect(stage.status).to eq 'active'
       end

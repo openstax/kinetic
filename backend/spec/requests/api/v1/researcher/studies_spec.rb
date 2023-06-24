@@ -54,7 +54,10 @@ RSpec.describe 'Studies', api: :v1 do
     end
 
     context 'when signed in as a researcher' do
-      before { stub_current_user(researcher1) }
+      before do
+        stub_current_user(researcher1)
+        stub_qualtrics_clone_survey!
+      end
 
       let!(:study_with_stages) { create(:study, researchers: researcher1, stages: [create(:stage)]) }
 
@@ -74,9 +77,7 @@ RSpec.describe 'Studies', api: :v1 do
 
       it 'submits the study for review' do
         api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=submit"
-
         expect(response).to have_http_status(:success)
-
         expect(response_hash).to match(a_hash_including(
                                          stages: a_collection_containing_exactly(
                                            a_hash_including({ status: 'waiting_period' })
@@ -287,7 +288,7 @@ RSpec.describe 'Studies', api: :v1 do
               id: researcher4.id,
               bio: researcher4.bio,
               role: researcher4.role
-            }),
+            })
           )
         )
       end
@@ -334,8 +335,7 @@ RSpec.describe 'Studies', api: :v1 do
 
       it 'cannot blank required fields' do
         expect {
-          api_put "researcher/studies/#{study1.id}",
-            params: { study: { internal_description: '' } }
+          api_put "researcher/studies/#{study1.id}", params: { study: { internal_description: '' } }
         }.not_to change { study1.internal_description }
         expect(response).to have_http_status(:unprocessable_entity)
       end

@@ -50,6 +50,8 @@ class Study < ApplicationRecord
   }
 
   def status
+    # TODO: go off of last stage or first stage? probably last stage
+    # 'completed' if !closes_at.nil? && (closes_at < DateTime.now)
     stages.last&.status || 'draft'
   end
 
@@ -133,26 +135,28 @@ class Study < ApplicationRecord
     stages.where.not(status: 'completed').first&.update(status: 'completed')
   end
 
-  def reopen(stage_index=0)
+  def reopen(stage_index = 0)
     stages.last(stages.length - stage_index.to_i).each do |stage|
       stage.update(status: 'active')
     end
   end
 
-  def update_status(action, stage_index)
-    submit if action == 'submit'
-    pause if action == 'pause'
-    self.end if action == 'end'
-    launch if action == 'launch'
-    resume(stage_index) if action == 'resume'
-    reopen(stage_index) if action == 'reopen'
-  end
-
-  # TODO after fleshed out instructions
-  # def reopen_if_possible(study_updates)
-  #   if status == 'completed'
-
-  # if study_updates[:closes_at]
-  # return unless new_closing_date
+  # def reopen_if_possible(new_closing_date)
+  #   return unless new_closing_date
   # end
+
+  # called from studies controller to update status using action and stage_index from params
+  def update_status!(action, stage_index)
+    if %w[pause end launch].include?(action)
+      send(action)
+    elsif %w[resume reopen].include?(action)
+      send(action, stage_index)
+    elsif action == 'submit'
+      submit
+      ResearcherNotifications.notify_kinetic_study_review(self)
+    else
+      raise ArgumentError, "Invalid action: #{action}"
+    end
+    save!
+  end
 end

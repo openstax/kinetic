@@ -33,6 +33,13 @@ Rails.application.routes.draw do
         end
       end
 
+      namespace :enclave do
+        resources :runs, only: [:create] do
+          put 'completion', to: 'runs#completion', on: :collection
+          post 'log', to: 'runs#log', on: :collection
+        end
+      end
+
       namespace :admin do
         resources :rewards
         resources :banners

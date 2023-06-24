@@ -11,20 +11,15 @@ RSpec.describe QualtricsTestData do
 
   let(:secret_key) { 'faY0ccV2dtF19TMS' }
 
-  let(:data) { JSON.parse(File.read(Rails.root.join('spec', 'support', 'qualtrics_fake_response.json'))) }
-
   before do
+    stub_qualtrics_survey_definition!
     analysis.studies << study
     study.stages.first.update!(config: { type: 'qualtrics', survey_id: survey_id })
   end
 
   it 'generates a CSV' do
     allow(ResponseExport).to receive(:new_random_seed).and_return(42)
-    allow_any_instance_of(QualtricsApi).to(
-      receive(:get_survey_definition)
-        .with(survey_id)
-        .and_return(data['result'])
-    )
+
     expect {
       study.stages.first.response_exports.create!(is_testing: true, cutoff_at: Date.today)
     }.to change { study.response_exports.count }.by(1)
