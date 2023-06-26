@@ -7,10 +7,13 @@ class CloneSurvey
   def initialize(survey_id=Rails.application.secrets.qualtrics_template_survey_id)
     @survey_id = survey_id
     @api = QualtricsApi.new
-    @source = api.get_survey_definition(survey_id, format: 'qsf')
   end
 
   def clone(new_name)
+    return [@survey_id, 'dev-no-key'] unless Rails.env.production?
+
+    @source = api.get_survey_definition(survey_id, format: 'qsf')
+
     result = @api.create_survey(@source.merge(
                                   { SurveyEntry: @source['SurveyEntry'].merge(
                                     { SurveyName: new_name }
