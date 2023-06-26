@@ -13,9 +13,10 @@ export default function StudyOverview() {
     const id = useParams<{ id: string }>().id
 
     if (!id) {
-        return useEffect(() => {
+        useEffect(() => {
             return nav('/studies')
         }, [])
+        return <></>
     }
 
     const { loading, study } = useFetchStudy(id)
@@ -25,9 +26,10 @@ export default function StudyOverview() {
     }
 
     if (!study) {
-        return useEffect(() => {
+        useEffect(() => {
             nav('/studies')
         }, [])
+        return <></>
     }
 
 
