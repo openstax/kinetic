@@ -37,7 +37,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     render(json: error, status: error.status_code) and return if error
 
     notify_researchers(inbound_binding.researchers || [])
-    # TODO after fleshed out instructions
+    # TODO: after fleshed out instructions
     # @study.reopen_if_possible(inbound_binding.to_hash)
     @study.update(inbound_binding.to_hash.except(:researchers, :stages))
 
@@ -81,16 +81,18 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     removed_researchers_ids = (old_researcher_ids - new_researcher_ids) - [@current_researcher.id]
 
     researchers.each do |researcher|
-      if added_researchers_ids.include?(researcher.id)
-        @study.study_researchers.create!(
-          researcher_id: researcher.id,
-          role: researcher.role
-        )
-      end
+      next unless added_researchers_ids.include?(researcher.id)
+
+      @study.study_researchers.create!(
+        researcher_id: researcher.id,
+        role: researcher.role
+      )
     end
 
     removed_researchers_ids.each do |removed_researcher_id|
-      @study.study_researchers.delete(@study.study_researchers.find_by(researcher_id: removed_researcher_id))
+      @study.study_researchers.delete(
+        @study.study_researchers.find_by(researcher_id: removed_researcher_id)
+      )
     end
 
     ResearcherNotifications.notify_study_researchers(@study.study_researchers, [], @study)

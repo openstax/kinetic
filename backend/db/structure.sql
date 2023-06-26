@@ -10,6 +10,20 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: pg_stat_statements; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pg_stat_statements; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pg_stat_statements IS 'track planning and execution statistics of all SQL statements executed';
+
+
+--
 -- Name: api_key(text, integer); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -288,7 +302,6 @@ CREATE TABLE public.analysis_runs (
     analysis_id bigint NOT NULL,
     api_key text DEFAULT public.api_key('rn'::text, 18) NOT NULL,
     message text NOT NULL,
-    messages jsonb DEFAULT '{}'::jsonb,
     did_succeed boolean DEFAULT false,
     started_at timestamp with time zone,
     finished_at timestamp with time zone
@@ -1215,10 +1228,24 @@ CREATE INDEX index_launched_stages_on_stage_id ON public.launched_stages USING b
 
 
 --
+-- Name: index_launched_stages_on_user_id_and_stage_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_launched_stages_on_user_id_and_stage_id ON public.launched_stages USING btree (user_id, stage_id);
+
+
+--
 -- Name: index_launched_studies_on_study_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_launched_studies_on_study_id ON public.launched_studies USING btree (study_id);
+
+
+--
+-- Name: index_launched_studies_on_user_id_and_study_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_launched_studies_on_user_id_and_study_id ON public.launched_studies USING btree (user_id, study_id);
 
 
 --
@@ -1442,12 +1469,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211129180319'),
 ('20220110162620'),
 ('20220303160442'),
-('20220324192614'),
-('20220406201351'),
 ('20220407193306'),
-('20220407205649'),
 ('20220408162010'),
-('20220429195630'),
 ('20220810173840'),
 ('20220817161302'),
 ('20220824152243'),

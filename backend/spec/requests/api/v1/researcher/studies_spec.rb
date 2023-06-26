@@ -117,7 +117,7 @@ RSpec.describe 'Studies', api: :v1 do
         )
       end
 
-      # TODO after fleshed out instructions
+      # TODO: after fleshed out instructions
       # it 'reopens a completed study' do
       #   api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=end"
       #   debugger
@@ -138,7 +138,7 @@ RSpec.describe 'Studies', api: :v1 do
       #   )
       # end
 
-      # TODO after fleshed out instructions
+      # TODO: after fleshed out instructions
       # it 'fails to reopen a completed study that cannot re-open' do
       #   api_put "researcher/studies/#{study_with_stages.id}", params: { study: {
       #     opens_at: 1.day.ago
@@ -198,6 +198,7 @@ RSpec.describe 'Studies', api: :v1 do
   describe 'PUT researcher/study' do
     let(:study1) { create(:study, researchers: researcher1) }
     let(:study2) { create(:study, researchers: [researcher1], title_for_researchers: 'Researcher add/drop') }
+
     context 'when logged out' do
       it 'gives unauthorized' do
         api_put "researcher/studies/#{study1.id}", params: { study: { title_for_researchers: 'Test' } }
@@ -328,7 +329,7 @@ RSpec.describe 'Studies', api: :v1 do
               id: researcher3.id,
               bio: researcher3.bio,
               role: researcher3.role
-            }),
+            })
           )
         )
       end
