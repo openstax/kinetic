@@ -27,16 +27,13 @@ RSpec.describe 'Rake task for activity:report' do
     }
   end
 
-  let(:mock_reply) { OpenStruct.new(response: OpenStruct.new(body: { items: [accounts_user] }.to_json)) }
-
   before do
+    stub_user_query(accounts_user)
     launch_pad.launch
     launch_pad.land
   end
 
   it 'generates csv with launch' do
-    allow(OpenStax::Accounts::Api).to receive(:search_accounts).and_return(mock_reply)
-
     task = Rake::Task[task_name]
     stdout = capture_stdout do
       task.invoke

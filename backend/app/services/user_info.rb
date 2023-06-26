@@ -29,6 +29,8 @@ class UserInfo
   end
 
   def self.query_accounts(query)
+    return JSON.generate({ 'items' => [] }) unless Rails.env.production?
+
     OpenStax::Accounts::Api.search_accounts(query).response.body
   end
 end
