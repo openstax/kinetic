@@ -17,18 +17,18 @@ class UserInfo
     uuids.in_groups_of(10) do |uuid_group|
 
       search = uuid_group.map { |uuid| "uuid:#{uuid}" }
+      body = query_accounts(search.join(' '))
 
-      JSON.parse(
-        OpenStax::Accounts::Api
-          .search_accounts(search.join(' '))
-          .response.body
-      )['items'].each do |account|
-
+      JSON.parse(body)['items'].each do |account|
         account['email_address'] = email_for_account(account)
-
         user_uuids[account['uuid']] = OpenStruct.new(account)
       end
     end
+
     user_uuids
+  end
+
+  def self.query_accounts(query)
+    OpenStax::Accounts::Api.search_accounts(query).response.body
   end
 end
