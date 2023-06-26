@@ -26,7 +26,7 @@ export const participantViewValidation = (studies: Study[], study: Study) => {
             then: (s: Yup.BaseSchema) =>
                 s.required('Required').max(45).test(
                     'Unique',
-                    'This study title is already in use. Please change your study title to make it unique on Kinetic..',
+                    'This study title is already in use. Please change your study title to make it unique on Kinetic.',
                     (value: string) => {
                         if (!studies.length) {
                             return true

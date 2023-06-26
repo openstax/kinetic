@@ -1,12 +1,19 @@
-import { React, useNavigate, useState, useParams } from '@common'
+import { React, useNavigate, useParams, useState } from '@common'
 import {
-    Alert, EditingForm as Form, InputField, PageNotFound, Box,
+    Alert,
+    Box,
+    Col,
+    EditingForm as Form,
+    FieldErrorMessage,
+    FieldTitle,
+    InputField,
+    PageNotFound,
+    ResearcherButton,
 } from '@components'
 import { Analysis } from '@api'
-import { AnalysisValidationSchema } from '@models'
-import { useApi, errorToString } from '@lib'
+import { getAnalysisValidationSchema } from '@models'
+import { errorToString, useApi, useQueryParam } from '@lib'
 import { SelectedStudies } from './selected-studies'
-
 
 interface EditAnalysisProps {
     listing: Array<Analysis>
@@ -35,8 +42,18 @@ const EditorInfo: FC<{ analysis: Analysis }> = ({ analysis }) => {
     )
 }
 
+const useAnalysis = () => {
+
+}
+
 export const EditAnalysis: FC<EditAnalysisProps> = ({ listing, onEditSuccess }) => {
     const { analysisId } = useParams<string>();
+    const studyId = useQueryParam('studyId') || null
+
+    if (studyId) {
+
+    }
+
     const analysis = (!analysisId || analysisId == 'new') ?
         newAnalysis : listing.find(a => String(a.id) == analysisId)
 
@@ -74,18 +91,85 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ listing, onEditSuccess }) 
                 showControls
                 onCancel={onCancel}
                 enableReinitialize
-                defaultValues={analysis}
-                validationSchema={AnalysisValidationSchema}
+                defaultValues={{
+                    ...analysis,
+                }}
+                validationSchema={getAnalysisValidationSchema(listing)}
             >
-
                 <Alert warning={true} onDismiss={() => setError('')} message={error} />
-                <EditorInfo analysis={analysis} />
-                <InputField autoFocus name="title" label="Title" />
+                <h3 className='fw-bold'>Analysis Basics</h3>
+                <Title />
+
+
+                {/*<EditorInfo analysis={analysis} />*/}
                 <InputField name="repositoryUrl" label="Repository URL" />
                 <InputField name="description" type="textarea" label="Description" />
                 <SelectedStudies />
+
+                <BottomBar />
             </Form>
 
         </div>
+    )
+}
+
+const Title: FC<{}> = () => {
+    return (
+        <Box gap='xlarge'>
+            <Col sm={3} direction='column' gap>
+                <FieldTitle required>Analysis Title</FieldTitle>
+                <small>
+                    This is an internal title to help you organize your analysis reports. This title is only visible to you
+                </small>
+            </Col>
+
+            <Col sm={4} direction='column' gap>
+                <InputField
+                    autoFocus
+                    name='title'
+                    type='textarea'
+                />
+                <FieldErrorMessage name='title' liveCountMax={100}/>
+            </Col>
+        </Box>
+    )
+}
+
+const Description: FC<{}> = () => {
+    return (
+        <Box gap='xlarge'>
+            <Col sm={3} direction='column' gap>
+                <FieldTitle required>Analysis Description</FieldTitle>
+                <small>
+                    Please provide a brief overview of analysis plan, research methods and analysis methods in description.
+                </small>
+            </Col>
+
+            <Col sm={4} direction='column' gap>
+                <InputField
+                    autoFocus
+                    name='title'
+                    type='textarea'
+                />
+                <FieldErrorMessage name='title' liveCountMax={100}/>
+            </Col>
+        </Box>
+    )
+}
+
+
+const BottomBar: FC<{}> = () => {
+    return (
+        <Box className='fixed-bottom bg-white mt-auto' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
+            <Box className='container-lg' align='center' justify='end'>
+                <ResearcherButton
+                    data-testid='save-analysis-button'
+                    // disabled={disabled}
+                    onClick={() => console.log('submit')}
+                >
+                    Save & Continue
+                </ResearcherButton>
+            </Box>
+        </Box>
     )
 }

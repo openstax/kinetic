@@ -1,6 +1,6 @@
 import { Box, React, useEffect, useNavigate, useParams } from '@common';
 import { Study } from '@api';
-import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page } from '@components';
+import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page, ResearcherButton } from '@components';
 import { getStudyLead, getStudyPi, isReadyForLaunch, isWaiting, useFetchStudy } from '@models';
 import { StudyCardPreview, Tag } from '../../../learner/card';
 import { colors } from '@theme';
@@ -13,9 +13,10 @@ export default function StudyOverview() {
     const id = useParams<{ id: string }>().id
 
     if (!id) {
-        return useEffect(() => {
-            return nav('/studies')
+        useEffect(() => {
+            nav('/studies')
         }, [])
+        return <></>
     }
 
     const { loading, study } = useFetchStudy(id)
@@ -25,9 +26,10 @@ export default function StudyOverview() {
     }
 
     if (!study) {
-        return useEffect(() => {
+        useEffect(() => {
             nav('/studies')
         }, [])
+        return <></>
     }
 
 
@@ -61,6 +63,27 @@ const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
             <CollapsibleSection title='Edit Study' description='Make changes to open and close criteria' open={true}>
                 <EditSubmittedStudy study={study} />
             </CollapsibleSection>
+
+            <AnalysisSection study={study} />
+        </Box>
+    )
+}
+
+const AnalysisSection: FC <{study: Study}> = ({ study }) => {
+    const nav = useNavigate()
+
+    return (
+        <Box className='p-2' align='center' justify='between' css={{ border: `1px solid ${colors.lightGray}` }}>
+            <Box direction='column' gap>
+                <h5>Create data analysis</h5>
+                <small css={{ color: colors.grayText }}>
+                        TODO Analysis Description
+                </small>
+            </Box>
+
+            <ResearcherButton onClick={() => nav(`/analysis/edit/new?studyId=${study.id}`)}>
+                + Create New Analysis
+            </ResearcherButton>
         </Box>
     )
 }

@@ -4,7 +4,6 @@ import { Study, Studies, StudyAnalysis } from '@api'
 import { useApi } from '@lib'
 import { useFieldArray } from 'react-hook-form'
 
-
 export type SelectableStudy = Study & { selected: boolean }
 
 export const SelectedStudies = () => {
@@ -17,7 +16,7 @@ export const SelectedStudies = () => {
 
     const { fields, append, remove } = useFieldArray<{ studies: StudyAnalysis[] }>({ name: 'studies' });
 
-    const onChange=useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
+    const onChange = useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
         if (ev.target.checked) {
             append({ studyId: Number(ev.target.value) })
         } else if (ev.target.dataset.index != null){

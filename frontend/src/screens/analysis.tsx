@@ -1,12 +1,12 @@
-import { React, Box, useEffect, useState } from '@common'
+import { Box, React, useEffect, useState } from '@common'
 import { useApi } from '@lib'
-import { LoadingAnimation, TopNavBar, LinkButton } from '@components'
-import { Route, Routes } from 'react-router-dom'
+import { LoadingAnimation, Page, TopNavBar } from '@components'
+import { Link, Route, Routes } from 'react-router-dom'
 import { Analysis } from '@api'
 import { ListAnalysis } from './analysis/listing'
 import { EditAnalysis } from './analysis/edit'
 import { useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { colors } from '@theme';
 
 const AddAnalysis = () => {
     return (
@@ -30,18 +30,29 @@ const AnalysisDashboard = () => {
     if (analysis === null) return <LoadingAnimation />
 
     return (
-        <div>
-            <TopNavBar controls={<LinkButton primary to="/analysis/edit/new">Add Analysis</LinkButton>} />
-
-            <Box className="analysis">
-                <ListAnalysis listing={analysis} />
+        <Page className='analysis' backgroundColor={colors.white} hideFooter>
+            <Box>
+                {/*<ListAnalysis listing={analysis} />*/}
                 <Routes>
                     <Route path="edit/:analysisId" element={<EditAnalysis listing={analysis} onEditSuccess={fetch} />} />
                     <Route path="*" element={<AddAnalysis />} />
                 </Routes>
             </Box>
-        </div>
+        </Page>
     )
+
+    // return (
+    //     <div>
+    //         <TopNavBar />
+    //         <Box className="analysis">
+    //             <ListAnalysis listing={analysis} />
+    //             <Routes>
+    //                 <Route path="edit/:analysisId" element={<EditAnalysis listing={analysis} onEditSuccess={fetch} />} />
+    //                 <Route path="*" element={<AddAnalysis />} />
+    //             </Routes>
+    //         </Box>
+    //     </div>
+    // )
 }
 
 export default AnalysisDashboard

@@ -55,9 +55,10 @@ export default function EditStudy() {
     }
 
     if (!study) {
-        return useEffect(() => {
+        useEffect(() => {
             nav('/studies')
         }, [])
+        return <></>
     }
 
     return (
