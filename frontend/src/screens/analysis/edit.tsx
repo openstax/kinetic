@@ -85,7 +85,7 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies, onEditS
                     ...analysis,
                     title: studyTitle,
                     description: study?.internalDescription || '',
-                    studyIds: studyId ? [...(analysis?.studyIds || []), studyId ] : analysis.studyIds,
+                    studyIds: studyId ? [...(analysis?.studyIds || []), Number(studyId) ] : analysis.studyIds,
                 }}
                 validationSchema={getAnalysisValidationSchema(analyses)}
             >

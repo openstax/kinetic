@@ -1,20 +1,22 @@
-import { React, styled, useCallback, useEffect, useState } from '@common'
-import { Box, Icon, ResearcherCheckbox, SelectField, TableHeader, useFormContext } from '@components'
-import { Study, StudyAnalysis } from '@api'
+import { React, styled, useEffect } from '@common'
+import { Box, Icon, SelectField, TableHeader, useFormContext } from '@components'
+import { Study } from '@api'
 import {
     ColumnDef,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
-    getPaginationRowModel, getSortedRowModel, PaginationState,
+    getPaginationRowModel,
+    getSortedRowModel,
+    PaginationState,
     Row,
-    RowData, SortingState,
+    RowData,
+    SortingState,
     Table,
     useReactTable,
 } from '@tanstack/react-table';
 import { colors } from '@theme';
-import { uniqueId } from 'lodash-es';
-import { studyCategories, studyTopics } from '@models';
+import { studyCategories } from '@models';
 
 declare module '@tanstack/table-core' {
     // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
@@ -25,13 +27,12 @@ declare module '@tanstack/table-core' {
 
 export const SelectedStudies: FC<{studies: Study[], defaultStudy: Study | null}> = ({ studies, defaultStudy }) => {
     const { table } = useStudyTable(studies, defaultStudy)
-
     return (
         <Box direction="column" justify='between' gap>
             <StudyTypeFilter table={table} />
             <h6>{table.getSelectedRowModel().flatRows.length} selected</h6>
-            <table data-testid="studies-table" className='w-100 flex-grow-1' >
-                <thead css={{ height: 40 }}>
+            <table data-testid="studies-table">
+                <thead>
                     <tr>
                         {table.getFlatHeaders().map((header) =>
                             <TableHeader header={header} key={header.id} />
@@ -74,14 +75,6 @@ const StyledRow = styled.tr({
     },
 })
 
-const Table = styled.table({
-
-})
-
-const TBody = styled.tbody({
-
-})
-
 const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
     return (
         <StyledRow key={row.id} data-testid={`study-row-${row.original.id}`}>
@@ -103,51 +96,54 @@ const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
     )
 }
 
+const SelectionCheckbox: React.FC<{ studyId: number, row: Row<Study> }> = ({ studyId, row }) => {
+    const { setValue, watch } = useFormContext()
+    const selectedIds = watch('studyIds') || []
+
+    const onChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+        let updatedIds: number[]
+        if (ev.target.checked) {
+            updatedIds = [...selectedIds, studyId]
+        } else {
+            updatedIds = selectedIds.filter((id: number) => id != studyId)
+        }
+        setValue('studyIds', updatedIds, { shouldValidate: true })
+        row.getToggleSelectedHandler()(ev)
+    }
+
+    return (
+        <input type='checkbox'
+            key={studyId}
+            data-index={row.index}
+            onChange={onChange}
+            checked={selectedIds.includes(studyId)}
+        />
+    )
+}
+
 const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
-    const [selectedIds, setSelectedIds] = useState(defaultStudy ? [defaultStudy.id] : [])
     const [rowSelection, setRowSelection] = React.useState({})
-    const [globalFilter, setGlobalFilter] = React.useState('')
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [pagination, setPagination] = React.useState<PaginationState>({
         pageSize: 8,
         pageIndex: 0,
     })
 
-    const { setValue, getValues, register, watch } = useFormContext()
-    console.log(watch('studies'))
-    // console.log(selectedIds)
+    useEffect(() => {
+        if (defaultStudy) {
+            setRowSelection({
+                [defaultStudy.id]: true,
+            })
+        }
+    }, [defaultStudy])
+
     const columns = React.useMemo<ColumnDef<Study>[]>(() => [
         {
             id: 'select',
             header: () => <></>,
             size: 20,
-            cell: ({ row, table }) => {
-                const study = row.original
-                return (
-                    <div>
-                        <input type='checkbox'
-                            key={study.id}
-                            {...register(`studies`)}
-                            // defaultChecked={study.id == defaultStudy?.id}
-                            checked={row.getIsSelected()}
-                            value={study.id}
-                            data-index={row.index}
-                            onChange={(event) => {
-                                const studyId = Number(event.target.value)
-                                row.getToggleSelectedHandler()(event)
-                                // if (event.target.checked) {
-                                //     setSelectedIds(old => [...old, studyId])
-                                // } else {
-                                //     setSelectedIds(old => old.filter(id => id != studyId))
-                                // }
-                                // setValue('studies', selectedIds)
-
-                                // debugger
-                                // setValue('studies', Object.keys(rowSelection))
-                            }}
-                        />
-                    </div>
-                )
+            cell: ({ row }) => {
+                return <SelectionCheckbox studyId={row.original.id} row={row} />
             },
         },
         {
@@ -164,6 +160,7 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
         {
             accessorKey: 'targetSampleSize',
             header: () => 'Sample Size',
+            sortingFn: 'alphanumeric',
             cell: (info) => {
                 return (
                     <span>
@@ -206,15 +203,9 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
         getRowId: (row) => String(row.id),
         pageCount: Math.ceil(studies.length / pagination.pageSize),
         enableRowSelection: true,
-        onRowSelectionChange: (selectionState) => {
-            console.log(selectionState)
-            return setRowSelection(selectionState)
-        },
+        onRowSelectionChange: setRowSelection,
         onSortingChange: setSorting,
-        onPaginationChange: (updaterOrValue) => {
-            // setValue('studies', Object.keys(rowSelection))
-            setPagination(updaterOrValue)
-        },
+        onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -225,18 +216,44 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
 }
 
 const PaginationContainer: FC<{table: Table<Study>}> = ({ table }) => {
+    const currentPage = table.getState().pagination.pageIndex
+    const pages = [...Array(table.getPageCount()).keys()]
     return (
-        <Box align='center' justify='center' className='mt-2'>
+        <Box align='center' justify='center' className='mt-2' gap='large'>
             <Icon
                 icon='chevronLeft'
+                height={24}
                 onClick={() => table.previousPage()}
                 disabled={table.getCanPreviousPage()}
                 className='cursor-pointer'
             />
 
+            <Box gap>
+                {pages.map((page: number) => {
+                    if (currentPage == page) {
+                        return (
+                            <Box justify='center'
+                                key={page}
+                                css={{
+                                    backgroundColor: colors.kineticResearcher,
+                                    color: colors.white,
+                                    width: 25,
+                                }}>
+                                <span>{page + 1}</span>
+                            </Box>
+                        )
+                    }
+                    return (
+                        <Box key={page} justify='center' width='25px' className='cursor-pointer' onClick={() => table.setPageIndex(page)}>
+                            <span>{page + 1}</span>
+                        </Box>
+                    )
+                })}
+            </Box>
 
             <Icon
                 icon='chevronRight'
+                height={24}
                 onClick={() => table.nextPage()}
                 disabled={table.getCanNextPage()}
                 className='cursor-pointer'
