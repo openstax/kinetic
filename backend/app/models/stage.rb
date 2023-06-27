@@ -3,6 +3,8 @@
 class Stage < ApplicationRecord
   belongs_to :study, inverse_of: :stages
 
+  has_many :response_exports, inverse_of: :stage
+
   has_many :launches, class_name: 'LaunchedStage', foreign_key: :stage_id
 
   self.implicit_order_column = 'order'
@@ -20,6 +22,46 @@ class Stage < ApplicationRecord
   }, class_name: 'Stage', foreign_key: 'study_id', primary_key: 'study_id'
 
   before_create :set_order
+
+  enum status: [:draft, :active, :paused, :scheduled,
+                :waiting_period, :ready_for_launch, :completed],
+       _default: 'draft'
+
+  def status
+    s = read_attribute(:status)
+
+    return 'paused' if s == 'paused'
+    return 'completed' if completed?
+    return 'scheduled' if scheduled?
+    return s if draft_like?
+    return 'active' if active?
+
+    s
+  end
+
+  def draft_like?
+    s = read_attribute(:status)
+    %w[draft waiting_period ready_for_launch].include?(s)
+  end
+
+  def completed?
+    s = read_attribute(:status)
+    return true if s == 'completed'
+
+    if study.target_sample_size.present? && (study.completed_count >= study.target_sample_size)
+      return true
+    end
+
+    !study.closes_at.nil? && study.closes_at < DateTime.now
+  end
+
+  def scheduled?
+    study.opens_at.present? && study.opens_at > DateTime.now
+  end
+
+  def active?
+    study.opens_at.present? && study.opens_at < DateTime.now
+  end
 
   def previous_stage
     siblings.where(Stage.arel_table[:order].lt(order)).order(:order).last
@@ -55,14 +97,8 @@ class Stage < ApplicationRecord
     # can complete a previous launch, but cannot launch once it's completed
     return launch.incomplete? if launch.present?
 
-    return true if available_after_days.zero? # can be launched immediatly
-
     # can launch once the days interval is past
     prev_launch.completed_at.before?(available_after_days.days.ago)
-  end
-
-  def delayed?
-    available_after_days.positive?
   end
 
   def launcher(user_id)

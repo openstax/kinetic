@@ -23,7 +23,7 @@ class LaunchPad
       raise(LaunchError, 'You have already completed this study.') if launched_study.completed?
 
       stage = study.next_stage_for_user(user)
-      raise 'No stage to launch exists' if stage.nil?
+      raise(LaunchError, 'No stage to launch exists') if stage.nil?
 
       stage.launch_by_user!(user)
       stage

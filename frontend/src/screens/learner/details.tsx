@@ -1,11 +1,18 @@
-import { React, useState, useCallback, useNavigate, useParams } from '@common'
+import { React, useCallback, useEffect, useNavigate, useParams, useState } from '@common'
 import { ParticipantStudy, PublicResearcher } from '@api'
-import { LaunchStudy, isStudyLaunchable, StudyTopicID, StudyTopicTags, tagOfType, studyIsMultipart } from '@models'
-import { useApi, dayjs } from '@lib'
 import {
-    OffCanvas, Icon, IconKey, Box, Button, MultiSessionBar,
-} from '@components'
-import { colors } from '../../theme'
+    getFirstStage,
+    getStudyDuration,
+    getStudyLead,
+    getStudyPi,
+    getStudyPoints,
+    isStudyLaunchable,
+    LaunchStudy,
+    studyIsMultipart,
+} from '@models'
+import { dayjs, useApi } from '@lib'
+import { Box, Button, Icon, IconKey, MultiSessionBar, OffCanvas } from '@components'
+import { colors } from '@theme'
 
 interface StudyDetailsProps {
     study: ParticipantStudy
@@ -64,10 +71,10 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
         <Button
             busy={isBusy}
             css={{ justifyContent: 'center' }}
-            busyMessage="Launching Study…"
+            busyMessage="Launching Study"
             primary
             disabled={!isStudyLaunchable(study)}
-            data-test-id="launch-study"
+            data-testid="launch-study"
             onClick={onLaunch}
         >
             {action} study
@@ -96,14 +103,17 @@ const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
 }
 
 const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
+    const firstStage = getFirstStage(study)
+    if (!firstStage?.durationMinutes || !firstStage.points) return null
+
     if (studyIsMultipart(study)) {
         return (
             <Box className='mb-1' direction='column'>
                 <Box gap>
                     <Icon icon="clock" color={colors.purple} />
                     <Box>
-                        <span>*Total: {study.totalDuration}min</span>
-                        {study.totalPoints && <span>&nbsp;&middot; {study.totalPoints}pts</span>}
+                        <span>*Total: {getStudyDuration(study)}min</span>
+                        <span>&nbsp;&middot; {getStudyPoints(study)}pts</span>
                     </Box>
                 </Box>
                 <Box css={{ color: colors.grayText }} direction='column'>
@@ -120,8 +130,8 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
     return (
         <Box gap align="center" className='mb-1'>
             <Icon icon="clock" color={colors.purple} />
-            <div>{study.totalDuration}min</div>
-            {!!study.totalPoints && <span>{study.totalPoints}pts</span>}
+            <div>{firstStage.durationMinutes}min</div>
+            <span>{firstStage.points}pts</span>
         </Box>
     )
 }
@@ -147,21 +157,41 @@ const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher })
 export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
     const { studyId: sid } = useParams<{ studyId: string }>()
     const nav = useNavigate()
+    const api = useApi()
     const studyId = Number(sid || '')
     const study = studies.find(s => s.id === studyId)
     const onHide = useCallback(() => nav('/studies'), [nav])
 
+    useEffect(() => {
+        if (study) {
+            api.studyStats({
+                id: study.id,
+                view: true,
+            })
+        }
+    }, [study])
+
     if (!study) return null
 
-    const topic = tagOfType<StudyTopicID>(study, 'topic')
-    const tag = topic ? StudyTopicTags[topic] : ''
-
     return (
-        <OffCanvas show={!!study} title="Study Detail" onHide={onHide}>
+        <StudyDetailsPreview study={study} show={!!study} onHide={onHide} />
+    )
+}
+
+export const StudyDetailsPreview: FC<{
+    study: ParticipantStudy,
+    show: boolean,
+    onHide: () => void,
+    preview?: boolean
+}> = ({ study, show, onHide, preview = false }) => {
+    const pi = getStudyPi(study)
+    const lead = getStudyLead(study)
+    return (
+        <OffCanvas show={show} title="Study Detail" onHide={onHide}>
             <Box direction="column" flex>
                 <div css={{ overflowY: 'auto', flex: 1 }}>
-                    <h3>{study.title}</h3>
-                    {tag && <Box gap align="center" margin={{ vertical: 'large' }}>
+                    <h3>{study.titleForParticipants}</h3>
+                    {study.topic && <Box gap align="center" margin={{ vertical: 'large' }}>
                         <div css={{ position: 'relative' }}>
                             <Icon icon="chatLeft" color={colors.purple} />
                             <span css={{
@@ -172,20 +202,22 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
                                 fontSize: 7,
                             }}>#</span>
                         </div>
-                        {tag}</Box>
+                        {study.topic}</Box>
                     }
                     <StudyTime study={study} />
                     <StudyPart property="feedbackDescription" title="Feedback Available" icon="feedback" study={study} />
                     <MultiSession study={study} />
                     <Box margin={{ bottom: 'large' }} css={{ color: colors.grayText }}>{study.longDescription}</Box>
-                    <Researcher researcher={study.researchers?.[0]} />
+                    {pi && <Researcher researcher={pi} />}
+                    {lead && <Researcher researcher={lead} />}
+                    {/*<Researcher researcher={study.researchers?.[0]} />*/}
                     <StudyPart property="benefits" title="What’s in it for you" icon="heart" study={study} />
                     <Part icon="warning" title="Notice">
                         Your responses to this study will be used to further learning science and
                         education research. All your data will be kept confidential and anonymous.
                     </Part>
                 </div>
-                <LaunchStudyButton study={study} />
+                {!preview && <LaunchStudyButton study={study} />}
             </Box>
         </OffCanvas>
     )

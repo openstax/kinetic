@@ -34,7 +34,7 @@ const Points: React.FC<StudyMessagingProps> = ({ study }) => {
 const NonAbortedMessage: React.FC<StudyMessagingProps> = ({ study }) => {
     if (study.abortedAt) return null
     return (
-        <div data-test-id="completed-msg">
+        <div data-testid="completed-msg">
             <h3>Success!</h3>
             <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
                 You‘ve completed {!study.completedAt && 'stage of '} a Kinetic activity.
@@ -47,7 +47,7 @@ const NonAbortedMessage: React.FC<StudyMessagingProps> = ({ study }) => {
 const AbortedMessage: React.FC<StudyMessagingProps> = ({ study }) => {
     if (!study.abortedAt) return null
     return (
-        <div data-test-id="aborted-msg">
+        <div data-testid="aborted-msg">
             <h3>Try again later!</h3>
             <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
                 You can re-attempt the study later by selecting it from your dashboard.
@@ -76,7 +76,7 @@ const StudyMessaging: React.FC<StudyMessagingProps & { onReturnClick(): void }> 
                     <Points {...props} />
                     <AbortedMessage {...props} />
                     <NonAbortedMessage {...props} />
-                    <Button primary data-test-id="view-studies" onClick={onReturnClick}>
+                    <Button primary data-testid="view-studies" onClick={onReturnClick}>
                         Go back to dashboard
                     </Button>
                 </Box>

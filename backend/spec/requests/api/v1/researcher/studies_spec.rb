@@ -6,16 +6,34 @@ RSpec.describe 'Studies', api: :v1 do
 
   let(:researcher1) { create(:researcher) }
   let(:researcher2) { create(:researcher) }
+  let(:researcher3) { create(:researcher) }
+  let(:researcher4) { create(:researcher) }
 
   describe 'POST researcher/studies' do
     let(:valid_new_study_attributes) do
       {
         title_for_participants: 'Participant study title',
         title_for_researchers: 'Researcher study title',
+        internal_description: 'For researchers only',
         short_description: 'A short description',
         long_description: 'A longer description',
-        is_mandatory: false,
-        tags: ['type:research_study']
+        category: 'Research',
+        topic: 'Learning',
+        subject: 'Biology',
+        benefits: 'Some benefit to society',
+        image_id: 'Schoolfuturecareer_1',
+        stages: [
+          {
+            points: 10,
+            duration_minutes: 5,
+            feedback_types: ['Debrief, Personalized'],
+            config: {
+              type: 'qualtrics',
+              survey_id: 'SV_12QHR3BE',
+              secret_key: '1234567890123456'
+            }
+          }
+        ]
       }
     end
 
@@ -36,23 +54,103 @@ RSpec.describe 'Studies', api: :v1 do
     end
 
     context 'when signed in as a researcher' do
-      before { stub_current_user(researcher1) }
+      before do
+        stub_current_user(researcher1)
+        stub_qualtrics_clone_survey!
+      end
+
+      let!(:study_with_stages) { create(:study, researchers: researcher1, stages: [create(:stage)]) }
 
       it 'successfully creates a new study' do
         api_post 'researcher/studies', params: { study: valid_new_study_attributes }
         expect(response).to have_http_status(:created)
+        expect(response_hash).to match(a_hash_including(
+                                         title_for_participants: 'Participant study title',
+                                         return_url: kind_of(String),
+                                         researchers: a_collection_including(
+                                           a_hash_including(
+                                             user_id: researcher1.user_id
+                                           )
+                                         )
+        ))
+      end
+
+      it 'submits the study for review' do
+        api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=submit"
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match(a_hash_including(
+                                         stages: a_collection_containing_exactly(
+                                           a_hash_including({ status: 'waiting_period' })
+                                         )
+        ))
+      end
+
+      it 'launches the study and the study status should be active' do
+        api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=launch",
+                 params: { study: { opens_at: 1.day.ago } }
+
+        expect(response).to have_http_status(:success)
         expect(response_hash).to match(
           a_hash_including(
-            title_for_participants: 'Participant study title',
-            return_url: kind_of(String),
-            researchers: a_collection_including(
-              a_hash_including(
-                user_id: researcher1.user_id
-              )
+            stages: a_collection_containing_exactly(
+              a_hash_including({
+                status: 'active'
+              })
             )
           )
         )
       end
+
+      it 'launches the study and the study status should be scheduled' do
+        api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=launch",
+                 params: { study: { opens_at: 1.day.from_now } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match(
+          a_hash_including(
+            stages: a_collection_containing_exactly(
+              a_hash_including({
+                status: 'scheduled'
+              })
+            )
+          )
+        )
+      end
+
+      # TODO: after fleshed out instructions
+      # it 'reopens a completed study' do
+      #   api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=end"
+      #   debugger
+      #   api_put "researcher/studies/#{study_with_stages.id}", params: { study: {
+      #     target_sample_size: 400,
+      #     closes_at: 10.days.from_now
+      #   } }
+      #
+      #   expect(response).to have_http_status(:success)
+      #   expect(response_hash).to match(
+      #     a_hash_including(
+      #       stages: a_collection_containing_exactly(
+      #         a_hash_including({
+      #           status: 'active'
+      #         })
+      #       )
+      #     )
+      #   )
+      # end
+
+      # TODO: after fleshed out instructions
+      # it 'fails to reopen a completed study that cannot re-open' do
+      #   api_put "researcher/studies/#{study_with_stages.id}", params: { study: {
+      #     opens_at: 1.day.ago
+      #   # target_sample_size: 400,
+      #   # closes_at: 10.days.from_now
+      #   } }
+      #
+      #   expect(response).to have_http_status(:success)
+      #   expect(response_hash).to match(
+      #     a_hash_including(status: 'completed')
+      #   )
+      # end
     end
   end
 
@@ -97,12 +195,13 @@ RSpec.describe 'Studies', api: :v1 do
     end
   end
 
-  describe 'PATCH researcher/study' do
-    let!(:study1) { create(:study, researchers: researcher1) }
+  describe 'PUT researcher/study' do
+    let(:study1) { create(:study, researchers: researcher1) }
+    let(:study2) { create(:study, researchers: [researcher1], title_for_researchers: 'Researcher add/drop') }
 
     context 'when logged out' do
       it 'gives unauthorized' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { is_mandatory: true } }
+        api_put "researcher/studies/#{study1.id}", params: { study: { title_for_researchers: 'Test' } }
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -112,37 +211,137 @@ RSpec.describe 'Studies', api: :v1 do
 
       it 'gives forbidden' do
         expect {
-          api_put "researcher/studies/#{study1.id}", params: { study: { is_mandatory: true } }
-        }.not_to change { study1.reload; study1.is_mandatory }
+          api_put "researcher/studies/#{study1.id}", params: { study: { title_for_researchers: 'Test' } }
+        }.not_to change { study1.reload; study1.title_for_researchers }
         expect(response).to have_http_status(:forbidden)
       end
     end
 
     context 'when signed as the owning researcher' do
-      before { stub_current_user(researcher1) }
+      before do
+        stub_current_user(researcher1)
+        stub_user_query
+      end
 
       it 'updates the study' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { is_mandatory: true } }
+        api_put "researcher/studies/#{study1.id}", params: { study: { title_for_researchers: 'Test' } }
 
         expect(response).to have_http_status(:success)
         expect(response_hash).to match(
-          a_hash_including(is_mandatory: true)
+          a_hash_including(title_for_researchers: 'Test')
+        )
+      end
+
+      it 'updates the study researchers' do
+        researcher1.update_attribute(:role, 'member')
+        researcher2.update_attribute(:role, 'pi')
+        researcher3.update_attribute(:role, 'lead')
+        api_put "researcher/studies/#{study1.id}", params: { study: { researchers: [
+          researcher1,
+          researcher2,
+          researcher3
+        ] } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match a_hash_including(
+          researchers: a_collection_containing_exactly(
+            a_hash_including({
+              id: researcher1.id,
+              bio: researcher1.bio,
+              role: researcher1.role
+            }),
+            a_hash_including({
+              id: researcher2.id,
+              bio: researcher2.bio,
+              role: researcher2.role
+            }),
+            a_hash_including({
+              id: researcher3.id,
+              bio: researcher3.bio,
+              role: researcher3.role
+            })
+          )
+        )
+      end
+
+      it 'adds new study researchers' do
+        # Add a Lead and PI
+        researcher1.update_attribute(:role, 'member')
+        researcher2.update_attribute(:role, 'lead')
+        researcher4.update_attribute(:role, 'pi')
+        api_put "researcher/studies/#{study2.id}", params: { study: { researchers: [
+          researcher1,
+          researcher2,
+          researcher4
+        ] } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match a_hash_including(
+          researchers: a_collection_containing_exactly(
+            a_hash_including({
+              id: researcher1.id,
+              bio: researcher1.bio,
+              role: researcher1.role
+            }),
+            a_hash_including({
+              id: researcher2.id,
+              bio: researcher2.bio,
+              role: researcher2.role
+            }),
+            a_hash_including({
+              id: researcher4.id,
+              bio: researcher4.bio,
+              role: researcher4.role
+            })
+          )
+        )
+      end
+
+      it 'replaces an existing study PI' do
+        # Add a Lead and PI
+        researcher1.update_attribute(:role, 'member')
+        researcher2.update_attribute(:role, 'lead')
+        researcher4.update_attribute(:role, 'pi')
+        api_put "researcher/studies/#{study2.id}", params: { study: { researchers: [
+          researcher1,
+          researcher2,
+          researcher4
+        ] } }
+
+        researcher3.update_attribute(:role, 'pi')
+        api_put "researcher/studies/#{study2.id}", params: { study: { researchers: [
+          researcher1,
+          researcher2,
+          researcher3
+        ] } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match a_hash_including(
+          researchers: a_collection_containing_exactly(
+            a_hash_including({
+              id: researcher1.id,
+              bio: researcher1.bio,
+              role: researcher1.role
+            }),
+            a_hash_including({
+              id: researcher2.id,
+              bio: researcher2.bio,
+              role: researcher2.role
+            }),
+            a_hash_including({
+              id: researcher3.id,
+              bio: researcher3.bio,
+              role: researcher3.role
+            })
+          )
         )
       end
 
       it 'cannot blank required fields' do
         expect {
-          api_put "researcher/studies/#{study1.id}",
-                  params: { study: { title_for_participants: '' } }
-        }.not_to change { study1.title_for_participants }
+          api_put "researcher/studies/#{study1.id}", params: { study: { internal_description: '' } }
+        }.not_to change { study1.internal_description }
         expect(response).to have_http_status(:unprocessable_entity)
-      end
-
-      it 'can set funky tags to whatever they want' do
-        expect {
-          api_put "researcher/studies/#{study1.id}",
-                  params: { study: { tags: ['howdy'] } }
-        }.to change { study1.reload; study1.tags }
       end
     end
   end

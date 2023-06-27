@@ -11,6 +11,7 @@
             "@common": ["./common.ts"],
             "@components": ["./components/index.ts"],
             "@models": ["./models/index.ts"],
+            "@theme": ["./theme.ts"],
             "@api": ["./api/index.ts"]
         },
         "target": "ESNext",

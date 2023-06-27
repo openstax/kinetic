@@ -44,11 +44,29 @@ export interface StageUpdate {
      */
     availableAfterDays?: number;
     /**
+     * Has the stage been completed
+     * @type {boolean}
+     * @memberof StageUpdate
+     */
+    readonly isCompleted?: boolean;
+    /**
+     * Can the stage be launched
+     * @type {boolean}
+     * @memberof StageUpdate
+     */
+    readonly isLaunchable?: boolean;
+    /**
      * The configuration for a particular kind of stage, e.g. Qualtrics.  See `QualtricsStage`
      * @type {object}
      * @memberof StageUpdate
      */
     config: object;
+    /**
+     * How long the stage is (in minutes)
+     * @type {number}
+     * @memberof StageUpdate
+     */
+    durationMinutes?: number;
     /**
      * How many points the stage is worth
      * @type {number}
@@ -56,12 +74,34 @@ export interface StageUpdate {
      */
     points?: number;
     /**
-     * How long the stage is (in minutes)
-     * @type {number}
+     * Feedback types for this stage
+     * @type {Array<string>}
      * @memberof StageUpdate
      */
-    durationMinutes?: number;
+    feedbackTypes?: Array<string>;
+    /**
+     * Status of the stage
+     * @type {string}
+     * @memberof StageUpdate
+     */
+    status?: StageUpdateStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const StageUpdateStatusEnum = {
+    Active: 'active',
+    Paused: 'paused',
+    Scheduled: 'scheduled',
+    Draft: 'draft',
+    WaitingPeriod: 'waiting_period',
+    ReadyForLaunch: 'ready_for_launch',
+    Completed: 'completed'
+} as const;
+export type StageUpdateStatusEnum = typeof StageUpdateStatusEnum[keyof typeof StageUpdateStatusEnum];
+
 
 /**
  * Check if a given object implements the StageUpdate interface.
@@ -87,9 +127,13 @@ export function StageUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'title': !exists(json, 'title') ? undefined : json['title'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
+        'isCompleted': !exists(json, 'is_completed') ? undefined : json['is_completed'],
+        'isLaunchable': !exists(json, 'is_launchable') ? undefined : json['is_launchable'],
         'config': json['config'],
-        'points': !exists(json, 'points') ? undefined : json['points'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
+        'points': !exists(json, 'points') ? undefined : json['points'],
+        'feedbackTypes': !exists(json, 'feedback_types') ? undefined : json['feedback_types'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
     };
 }
 
@@ -106,8 +150,10 @@ export function StageUpdateToJSON(value?: StageUpdate | null): any {
         'description': value.description,
         'available_after_days': value.availableAfterDays,
         'config': value.config,
-        'points': value.points,
         'duration_minutes': value.durationMinutes,
+        'points': value.points,
+        'feedback_types': value.feedbackTypes,
+        'status': value.status,
     };
 }
 

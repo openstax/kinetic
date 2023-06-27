@@ -14,6 +14,8 @@ export const useBanners = (): useBannersReturnT => {
     const env = useEnvironment()
     const now = toDayJS(new Date)
 
+    // TODO Replace with @rooks/useLocalStorageState,
+    //  would allow us to remove another dependency
     const [removed, setRemoved] = useLocalStorageState('viewed-banners', {
         defaultValue: [] as string[],
     })

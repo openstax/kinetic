@@ -13,6 +13,19 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Researcher } from './Researcher';
+import {
+    ResearcherFromJSON,
+    ResearcherFromJSONTyped,
+    ResearcherToJSON,
+} from './Researcher';
+import type { Stage } from './Stage';
+import {
+    StageFromJSON,
+    StageFromJSONTyped,
+    StageToJSON,
+} from './Stage';
+
 /**
  * 
  * @export
@@ -50,17 +63,11 @@ export interface StudyUpdate {
      */
     longDescription?: string;
     /**
-     * The tags of the study object, used for grouping and filtering.
-     * @type {Array<string>}
-     * @memberof StudyUpdate
-     */
-    tags?: Array<string>;
-    /**
-     * Description of feedback displayed to the user upon study completion
+     * An internal study description for researchers.
      * @type {string}
      * @memberof StudyUpdate
      */
-    feedbackDescription?: string;
+    internalDescription?: string;
     /**
      * Freeform id of image that should be displayed on study card
      * @type {string}
@@ -80,6 +87,12 @@ export interface StudyUpdate {
      */
     isHidden?: boolean;
     /**
+     * When the study was launched; null means not launched
+     * @type {Date}
+     * @memberof StudyUpdate
+     */
+    readonly firstLaunchedAt?: Date;
+    /**
      * When the study opens for participation; null means not open.
      * @type {Date}
      * @memberof StudyUpdate
@@ -92,12 +105,100 @@ export interface StudyUpdate {
      */
     closesAt?: Date | null;
     /**
+     * Desired sample size set by researcher
+     * @type {number}
+     * @memberof StudyUpdate
+     */
+    targetSampleSize?: number | null;
+    /**
+     * Status of the study
+     * @type {string}
+     * @memberof StudyUpdate
+     */
+    readonly status?: StudyUpdateStatusEnum;
+    /**
+     * The study's researchers.
+     * @type {Array<Researcher>}
+     * @memberof StudyUpdate
+     */
+    researchers?: Array<Researcher>;
+    /**
      * Mandatory studies must be completed by all users
      * @type {boolean}
      * @memberof StudyUpdate
      */
     isMandatory?: boolean;
+    /**
+     * How many times the study has been viewed
+     * @type {number}
+     * @memberof StudyUpdate
+     */
+    viewCount?: number;
+    /**
+     * How many months until the study is public
+     * @type {number}
+     * @memberof StudyUpdate
+     */
+    shareableAfterMonths?: number | null;
+    /**
+     * Number of times this study has been completed
+     * @type {number}
+     * @memberof StudyUpdate
+     */
+    readonly completedCount?: number;
+    /**
+     * The category (type of) study
+     * @type {string}
+     * @memberof StudyUpdate
+     */
+    category?: string;
+    /**
+     * The study topic
+     * @type {string}
+     * @memberof StudyUpdate
+     */
+    topic?: string;
+    /**
+     * The study's subject
+     * @type {string}
+     * @memberof StudyUpdate
+     */
+    subject?: string;
+    /**
+     * The study's stages.
+     * @type {Array<Stage>}
+     * @memberof StudyUpdate
+     */
+    stages?: Array<Stage>;
+    /**
+     * How many times the study has been launched
+     * @type {number}
+     * @memberof StudyUpdate
+     */
+    readonly launchedCount?: number;
+    /**
+     * The URL to which stages should return after completing
+     * @type {string}
+     * @memberof StudyUpdate
+     */
+    readonly returnUrl?: string;
 }
+
+
+/**
+ * @export
+ */
+export const StudyUpdateStatusEnum = {
+    Active: 'active',
+    Paused: 'paused',
+    Scheduled: 'scheduled',
+    Draft: 'draft',
+    WaitingPeriod: 'waiting_period',
+    ReadyForLaunch: 'ready_for_launch',
+    Completed: 'completed'
+} as const;
+export type StudyUpdateStatusEnum = typeof StudyUpdateStatusEnum[keyof typeof StudyUpdateStatusEnum];
+
 
 /**
  * Check if a given object implements the StudyUpdate interface.
@@ -123,14 +224,26 @@ export function StudyUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'titleForResearchers': !exists(json, 'title_for_researchers') ? undefined : json['title_for_researchers'],
         'shortDescription': !exists(json, 'short_description') ? undefined : json['short_description'],
         'longDescription': !exists(json, 'long_description') ? undefined : json['long_description'],
-        'tags': !exists(json, 'tags') ? undefined : json['tags'],
-        'feedbackDescription': !exists(json, 'feedback_description') ? undefined : json['feedback_description'],
+        'internalDescription': !exists(json, 'internal_description') ? undefined : json['internal_description'],
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
         'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
+        'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
         'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
+        'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
+        'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
+        'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
+        'shareableAfterMonths': !exists(json, 'shareable_after_months') ? undefined : json['shareable_after_months'],
+        'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
+        'category': !exists(json, 'category') ? undefined : json['category'],
+        'topic': !exists(json, 'topic') ? undefined : json['topic'],
+        'subject': !exists(json, 'subject') ? undefined : json['subject'],
+        'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
+        'launchedCount': !exists(json, 'launched_count') ? undefined : json['launched_count'],
+        'returnUrl': !exists(json, 'return_url') ? undefined : json['return_url'],
     };
 }
 
@@ -147,14 +260,21 @@ export function StudyUpdateToJSON(value?: StudyUpdate | null): any {
         'title_for_researchers': value.titleForResearchers,
         'short_description': value.shortDescription,
         'long_description': value.longDescription,
-        'tags': value.tags,
-        'feedback_description': value.feedbackDescription,
+        'internal_description': value.internalDescription,
         'image_id': value.imageId,
         'benefits': value.benefits,
         'is_hidden': value.isHidden,
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
+        'target_sample_size': value.targetSampleSize,
+        'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(ResearcherToJSON)),
         'is_mandatory': value.isMandatory,
+        'view_count': value.viewCount,
+        'shareable_after_months': value.shareableAfterMonths,
+        'category': value.category,
+        'topic': value.topic,
+        'subject': value.subject,
+        'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),
     };
 }
 

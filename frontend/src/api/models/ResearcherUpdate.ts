@@ -32,6 +32,12 @@ export interface ResearcherUpdate {
      */
     userId?: string;
     /**
+     * The researcher's avatar URL.
+     * @type {string}
+     * @memberof ResearcherUpdate
+     */
+    readonly avatarUrl?: string;
+    /**
      * The researcher's first name.
      * @type {string}
      * @memberof ResearcherUpdate
@@ -43,12 +49,6 @@ export interface ResearcherUpdate {
      * @memberof ResearcherUpdate
      */
     lastName?: string;
-    /**
-     * The researcher's avatar URL.
-     * @type {string}
-     * @memberof ResearcherUpdate
-     */
-    readonly avatarUrl?: string;
     /**
      * The researcher's institution.
      * @type {string}
@@ -86,12 +86,24 @@ export interface ResearcherUpdate {
      */
     researchInterest3?: string;
     /**
-     * The researcher's invite code.
+     * Researchers role
      * @type {string}
      * @memberof ResearcherUpdate
      */
-    inviteCode?: string;
+    role?: ResearcherUpdateRoleEnum;
 }
+
+
+/**
+ * @export
+ */
+export const ResearcherUpdateRoleEnum = {
+    Member: 'member',
+    Pi: 'pi',
+    Lead: 'lead'
+} as const;
+export type ResearcherUpdateRoleEnum = typeof ResearcherUpdateRoleEnum[keyof typeof ResearcherUpdateRoleEnum];
+
 
 /**
  * Check if a given object implements the ResearcherUpdate interface.
@@ -114,16 +126,16 @@ export function ResearcherUpdateFromJSONTyped(json: any, ignoreDiscriminator: bo
         
         'id': !exists(json, 'id') ? undefined : json['id'],
         'userId': !exists(json, 'user_id') ? undefined : json['user_id'],
+        'avatarUrl': !exists(json, 'avatar_url') ? undefined : json['avatar_url'],
         'firstName': !exists(json, 'first_name') ? undefined : json['first_name'],
         'lastName': !exists(json, 'last_name') ? undefined : json['last_name'],
-        'avatarUrl': !exists(json, 'avatar_url') ? undefined : json['avatar_url'],
         'institution': !exists(json, 'institution') ? undefined : json['institution'],
         'bio': !exists(json, 'bio') ? undefined : json['bio'],
         'labPage': !exists(json, 'lab_page') ? undefined : json['lab_page'],
         'researchInterest1': !exists(json, 'research_interest1') ? undefined : json['research_interest1'],
         'researchInterest2': !exists(json, 'research_interest2') ? undefined : json['research_interest2'],
         'researchInterest3': !exists(json, 'research_interest3') ? undefined : json['research_interest3'],
-        'inviteCode': !exists(json, 'invite_code') ? undefined : json['invite_code'],
+        'role': !exists(json, 'role') ? undefined : json['role'],
     };
 }
 
@@ -146,7 +158,7 @@ export function ResearcherUpdateToJSON(value?: ResearcherUpdate | null): any {
         'research_interest1': value.researchInterest1,
         'research_interest2': value.researchInterest2,
         'research_interest3': value.researchInterest3,
-        'invite_code': value.inviteCode,
+        'role': value.role,
     };
 }
 

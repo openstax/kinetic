@@ -11,7 +11,7 @@ class Api::V1::Admin::BannersOpenApi
       end
       property :message do
         key :type, :string
-        key :description, 'The messsage to display.  Limited HTML is supported'
+        key :description, 'The message to display.  Limited HTML is supported'
       end
       property :start_at do
         key :type, :string
@@ -68,7 +68,7 @@ class Api::V1::Admin::BannersOpenApi
     end
 
     operation :get do
-      key :summary, 'Retrive list of all banners'
+      key :summary, 'Retrieve list of all banners'
       key :description, <<~DESC
         Returns listing of all banners, expired or not
       DESC

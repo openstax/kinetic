@@ -15,8 +15,10 @@ export default defineConfig({
             { find: '@common', replacement: '/src/common' },
             { find: '@lib', replacement: '/src/lib' },
             { find: '@components', replacement: '/src/components' },
+            { find: '@theme', replacement: '/src/theme' },
             { find: '@models', replacement: '/src/models' },
             { find: '@api', replacement: '/src/api/index' },
+            { find: '@images', replacement: '/src/images' },
         ],
     },
     server: {

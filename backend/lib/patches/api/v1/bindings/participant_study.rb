@@ -39,7 +39,6 @@ Rails.application.config.to_prepare do
 
     def self.attributes_from_study_model(model, user)
       model.attributes_for_binding(self).tap do |attributes|
-        attributes[:title] = model.title_for_participants
         attributes[:is_featured] = model.is_featured?
         attributes[:total_points] = model.total_points
         attributes[:total_duration] = model.total_duration
@@ -47,8 +46,10 @@ Rails.application.config.to_prepare do
           Api::V1::Bindings::ParticipantStudyStage.create_from_model(stage_model, user)
         end
 
-        attributes[:researchers] = model.researchers.map do |researcher_model|
-          Api::V1::Bindings::PublicResearcher.create_from_model(researcher_model)
+        attributes[:researchers] = model.study_researchers.map do |study_researcher|
+          researcher = study_researcher.researcher
+          researcher[:role] = study_researcher.role
+          Api::V1::Bindings::Researcher.create_from_model(researcher)
         end
       end
     end

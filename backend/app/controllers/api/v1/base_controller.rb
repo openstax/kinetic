@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V1::BaseController < ApplicationController
+
+  include ActionController::HttpAuthentication::Token::ControllerMethods
   include OpenStax::OpenApi::Blocks
   include OpenStax::OpenApi::Bind
 
@@ -30,6 +32,16 @@ class Api::V1::BaseController < ApplicationController
   end
 
   protected
+
+  def render_forbidden_unless_enclave_api_key!
+    head :forbidden unless has_enclaves_token?
+  end
+
+  def has_enclaves_token?
+    authenticate_with_http_token do |token, _o|
+      Rails.application.secrets.enclave_api_key == token
+    end
+  end
 
   def binding_error(status_code:, messages:)
     Api::V1::Bindings::ServerError.new(status_code: status_code, messages: messages)

@@ -29,7 +29,7 @@ class Api::V1::PreferencesOpenApi
     operation :get do
       key :summary, 'Obtain the current users preferences'
       key :description, <<~DESC
-        Returns the preferences, will create a default set of prefences if the user not saved them previously
+        Returns the preferences, will create a default set of preferences if the user not saved them previously
       DESC
       key :operationId, 'getPreferences'
       response 200 do

@@ -82,7 +82,6 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-
   config.include ApiV1Helpers, api: :v1
   ApiV1Helpers.more_rspec_config(config)
 
@@ -90,11 +89,6 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
   config.include ResponseHelpers
+  config.include MockingHelpers
 
-  # Can remove this filter after we switch to allowing multiple stages
-  config.around(:example, multi_stage: true) do |example|
-    ENV['ALLOW_MULTIPLE_STAGES'] = 'true'
-    example.run
-    ENV['ALLOW_MULTIPLE_STAGES'] = 'false'
-  end
 end

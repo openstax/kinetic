@@ -4,13 +4,17 @@ class Api::V1::Participant::StudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
   COMMON_REQUIRED_STUDY_FIELDS = [
-    :title, :short_description, :tags, :total_points, :total_duration
+    :title, :short_description, :total_points, :total_duration
   ].freeze
 
   add_components do
-
     schema :ParticipantStudy do
       key :required, [:id] + COMMON_REQUIRED_STUDY_FIELDS
+      allOf do
+        schema do
+          key :$ref, :BaseStudy
+        end
+      end
     end
 
     schema :ParticipantStudyCompletion do
@@ -25,7 +29,6 @@ class Api::V1::Participant::StudiesOpenApi
         key :description, 'When the study was completed; null indicates study is not yet complete'
       end
     end
-
   end
 
   add_components do
@@ -34,25 +37,6 @@ class Api::V1::Participant::StudiesOpenApi
       property :url do
         key :type, :string
         key :description, 'The URL to send a user to start a study stage'
-      end
-    end
-
-    schema :PublicResearcher do
-      property :first_name do
-        key :type, :string
-        key :description, 'The researcher\'s first name.'
-      end
-      property :last_name do
-        key :type, :string
-        key :description, 'The researcher\'s last name.'
-      end
-      property :institution do
-        key :type, :string
-        key :description, 'The researcher\'s institution.'
-      end
-      property :bio do
-        key :type, :string
-        key :description, 'The researcher\'s bio.'
       end
     end
 
@@ -79,7 +63,7 @@ class Api::V1::Participant::StudiesOpenApi
       end
       property :is_completed do
         key :type, :boolean
-        key :description, 'Has the stage been launched'
+        key :description, 'Has the stage been completed'
         key :readOnly, true
       end
       property :is_launchable do
@@ -96,6 +80,27 @@ class Api::V1::Participant::StudiesOpenApi
         key :type, :integer
         key :description, 'How many points the stage is worth'
         key :readOnly, true
+      end
+      property :closes_at do
+        key :type, :string
+        key :nullable, true
+        key :format, 'date-time'
+        key :description, 'When the study closes for participation; null means does not close.'
+      end
+      property :feedback_types do
+        key :type, :array
+        key :minLength, 0
+        key :items, { 'type' => 'string' }
+        key :description, 'Feedback types for this stage'
+      end
+      property :target_sample_size do
+        key :type, :number
+        key :description, 'Desired sample size set by researcher'
+      end
+      property :status do
+        key :type, :string
+        key :description, 'Status of the study'
+        key :enum, %w[active paused scheduled draft waiting_period ready_for_launch completed]
       end
     end
     schema :ParticipantStudies do
@@ -114,35 +119,6 @@ class Api::V1::Participant::StudiesOpenApi
       key :type, :integer
       key :description, 'The study ID.'
     end
-    property :title do
-      key :type, :string
-      key :description, 'The study title that participants see.'
-    end
-    property :short_description do
-      key :type, :string
-      key :description, 'The shorty study description that participants see.'
-    end
-    property :long_description do
-      key :type, :string
-      key :description, 'The long study description that participants see.'
-    end
-    property :tags do
-      key :type, :array
-      key :items, { 'type' => 'string' }
-      key :description, 'The tags of the study object, used for grouping and filtering.'
-    end
-    property :feedback_description do
-      key :type, :string
-      key :description, 'Description of feedback displayed to the user upon study completion'
-    end
-    property :image_id do
-      key :type, :string
-      key :description, 'Freeform id of image that should be displayed on study card'
-    end
-    property :benefits do
-      key :type, :string
-      key :description, 'Description of how the study benefits participants'
-    end
     property :popularity_rating do
       key :type, :number
       key :description, 'How popular the study is on a fractional scale of 0.0 to 1.0'
@@ -152,32 +128,15 @@ class Api::V1::Participant::StudiesOpenApi
       key :description, 'Should this study be feautured more prominently?'
       key :readOnly, true
     end
-    property :first_launched_at do
-      key :type, :string
-      key :format, 'date-time'
-      key :description, 'When the study was launched; null means not launched'
-    end
     property :completed_at do
       key :type, :string
       key :format, 'date-time'
       key :description, 'When the study was completed; null means not completed.'
     end
-    property :closes_at do
-      key :type, :string
-      key :format, 'date-time'
-      key :description, 'When the study ends; null means open indefinitely.'
-    end
     property :opted_out_at do
       key :type, :string
       key :format, 'date-time'
       key :description, 'When the study was opted-out of; null means not opted out.'
-    end
-    property :researchers do
-      key :type, :array
-      key :description, 'The study\'s researchers.'
-      items do
-        key :$ref, :PublicResearcher
-      end
     end
     property :total_points do
       key :type, :integer
@@ -186,17 +145,6 @@ class Api::V1::Participant::StudiesOpenApi
     property :total_duration do
       key :type, :integer
       key :description, 'The study\'s total duration in minutes.'
-    end
-    property :stages do
-      key :type, :array
-      key :description, 'The study\'s stages.'
-      items do
-        key :$ref, :ParticipantStudyStage
-      end
-    end
-    property :is_mandatory do
-      key :type, :boolean
-      key :description, 'Mandatory studies must be completed by all users'
     end
   end
 
@@ -245,7 +193,7 @@ class Api::V1::Participant::StudiesOpenApi
         key :schema, { type: :boolean }
       end
       response 200 do
-        key :description, 'Success.  Returns info on how to launch the user.'
+        key :description, 'Success. Returns info on how to launch the user.'
         content 'application/json' do
           schema { key :$ref, :Launch }
         end
@@ -294,6 +242,39 @@ class Api::V1::Participant::StudiesOpenApi
         key :description, 'Success.  Returns study completion status.'
         content 'application/json' do
           schema { key :$ref, :ParticipantStudyCompletion }
+        end
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+  end
+
+  openapi_path '/participant/studies/{id}/stats' do
+    operation :put do
+      key :summary, 'Track stats for a study'
+      key :description, 'Stats include view count, etc.'
+      key :operationId, 'studyStats'
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'ID of the study to track.'
+        key :required, true
+        key :schema, { type: :integer }
+      end
+      parameter do
+        key :name, :view
+        key :in, :query
+        key :description, 'Command to increment view_count on a study'
+        key :required, false
+        key :schema, { type: :boolean }
+      end
+
+      response 200 do
+        key :description, 'Success.  Returns study with updated view count.'
+        content 'application/json' do
+          schema { key :$ref, :ParticipantStudy }
         end
       end
       extend Api::V1::OpenApiResponses::AuthenticationError

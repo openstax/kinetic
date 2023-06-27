@@ -1,27 +1,45 @@
 # frozen_string_literal: true
 
 class Study < ApplicationRecord
-  # list of fields to set to nil when they're ommited in an api udpate
-  NULLABLE_FIELDS = %w[opens_at closes_at].freeze
   has_many :study_researchers, inverse_of: :study, dependent: :destroy
   has_many :researchers, through: :study_researchers, dependent: :destroy
   # need the double quotes, order is a postgresql semi-reserved word
   has_many :stages, -> { order('"order"') }, inverse_of: :study, dependent: :destroy
   has_many :launched_stages, through: :stages
-  has_many :launched_studies
+  has_many :launched_studies, counter_cache: true
 
+  has_many :response_exports, through: :stages
   has_many :study_analysis
   has_many :analysis, through: :study_analysis
 
-  has_one  :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
+  has_one :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
 
   scope :multi_stage, -> { joins(:stages).group('studies.id').having('count(study_id) > 1') }
+
+  has_one :pi,
+          -> {
+            joins(:study_researchers).where(researchers: { study_researchers: { role: 'pi' } })
+          },
+          foreign_key: 'study_researchers.study_id',
+          class_name: 'Researcher'
+  has_one :lead,
+          -> {
+            joins(:study_researchers).where(researchers: { study_researchers: { role: 'lead' } })
+          },
+          foreign_key: 'study_researchers.study_id',
+          class_name: 'Researcher'
+
+  has_many :members,
+           -> {
+             joins(:study_researchers).where(researchers: { study_researchers: { role: 'member' } })
+           },
+           foreign_key: 'study_researchers.study_id',
+           class_name: 'Researcher'
 
   # Delete researchers to avoid them complaining about not leaving a researcher undeleted
   before_destroy(prepend: true) { study_researchers.delete_all }
 
   arel = Study.arel_table
-
   scope :available, -> {
     where
       .not(opens_at: nil)
@@ -30,6 +48,12 @@ class Study < ApplicationRecord
       .where(arel[:closes_at].eq(nil).or(
                arel[:closes_at].gteq(Time.now)))
   }
+
+  def status
+    # TODO: go off of last stage or first stage? probably last stage
+    # 'completed' if !closes_at.nil? && (closes_at < DateTime.now)
+    stages.last&.status || 'draft'
+  end
 
   def total_points
     stages.sum(:points)
@@ -45,6 +69,10 @@ class Study < ApplicationRecord
 
   def can_delete?
     launched_studies.none?
+  end
+
+  def launched_count
+    launched_studies.size
   end
 
   def is_featured?
@@ -69,4 +97,66 @@ class Study < ApplicationRecord
     next_launchable_stage(user)
   end
 
+  def launch
+    stages.update_all(status: 'active')
+  end
+
+  def approve
+    stages.update_all(status: 'ready_for_launch')
+  end
+
+  def submit
+    (survey_id, secret_key) = CloneSurvey.new.clone(title_for_researchers)
+    stages.each do |stage|
+      stage.update(
+        {
+          status: 'waiting_period',
+          config: {
+            type: 'qualtrics',
+            survey_id: survey_id,
+            secret_key: secret_key
+          }
+        }
+      )
+    end
+  end
+
+  def pause
+    stages.where.not(status: 'paused').first&.update(status: 'paused')
+  end
+
+  def resume(stage_index=0)
+    stages.last(stages.length - stage_index.to_i).each do |stage|
+      stage.update(status: 'active')
+    end
+  end
+
+  def end
+    stages.where.not(status: 'completed').first&.update(status: 'completed')
+  end
+
+  def reopen(stage_index=0)
+    stages.last(stages.length - stage_index.to_i).each do |stage|
+      stage.update(status: 'active')
+    end
+  end
+
+  # def reopen_if_possible(new_closing_date)
+  #   return unless new_closing_date
+  # end
+
+  # called from studies controller to update status using action and stage_index from params
+  def update_status!(action, stage_index)
+    if %w[pause end launch].include?(action)
+      send(action)
+    elsif %w[resume reopen].include?(action)
+      send(action, stage_index)
+    elsif action == 'submit'
+      submit
+      ResearcherNotifications.notify_kinetic_study_review(self)
+    else
+      raise ArgumentError, "Invalid action: #{action}"
+    end
+    save!
+  end
 end

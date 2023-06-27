@@ -1,54 +1,14 @@
-
-import * as Yup from 'yup'
-import {
-    NewStudy, Study, DefaultApi, ParticipantStudy,
-} from '@api'
-import { isNil, dayjs } from '@lib'
-import { StudyTypeTags } from './tags'
-
-export type EditingStudy = NewStudy | Study
-export type SavedStudy = Study | ParticipantStudy
+import { DefaultApi, ParticipantStudy, ResearcherRoleEnum, Stage, Study, StudyStatusEnum } from '@api'
+import { isNil, useApi } from '@lib'
+import { dayjs, useEffect, useState } from '@common';
+import { first, sumBy } from 'lodash-es';
+import { Toast } from '@nathanstitt/sundry/ui';
 
 export enum StudyStatus {
-    Active = 'Active', // eslint-disable-line no-unused-vars
-    Scheduled = 'Scheduled', // eslint-disable-line no-unused-vars
-    Completed = 'Completed', // eslint-disable-line no-unused-vars
+    Launched = 'Launched',
+    Draft = 'Draft',
+    Completed = 'Completed',
 }
-
-export const getStatus = (study: Study): StudyStatus => {
-    const now = new Date()
-    if (study.opensAt && study.opensAt > now) {
-        return StudyStatus.Scheduled
-    }
-    if (study.closesAt && study.closesAt < now) {
-        return StudyStatus.Completed
-    }
-    return StudyStatus.Active
-}
-
-export const getStatusName = (study: Study): string => {
-    const status = getStatus(study)
-    if (status == StudyStatus.Active) return 'Active'
-    if (status == StudyStatus.Scheduled) return 'Scheduled'
-    if (status == StudyStatus.Completed) return 'Completed'
-    return ''
-}
-
-export const StudyValidationSchema = Yup.object().shape({
-    titleForParticipants: Yup.string().required('Required'),
-    shortDescription: Yup.string().required('Required'),
-    longDescription: Yup.string().required('Required'),
-    tags: Yup.array().of(Yup.string()).test(
-        'has-type',
-        'studies must have a type set',
-        (tags) => Boolean(tags?.find(t => t?.match(/^type:/)))
-    ).test(
-        'has-topic',
-        'studies must have a topic set',
-        (tags) => Boolean(tags?.find(t => t?.match(/^topic:/)))
-    ),
-});
-
 
 export const LaunchStudy = async (api: DefaultApi, study: { id: number }, options: { preview?: boolean } = {}) => {
     const launch = await api.launchStudy({ id: study.id, preview: options.preview || false })
@@ -71,37 +31,153 @@ export const isStudyLaunchable = (study: ParticipantStudy) => {
     )
 }
 
-export function isStudy(study: EditingStudy): study is Study {
-    return !isNil((study as Study).id)
+export const getStudyEditUrl = (study: Study) => {
+    if (isDraft(study)) {
+        return `/study/edit/${study.id}`
+    }
+
+    return `/study/overview/${study.id}`
 }
 
-export function isNewStudy(study: EditingStudy): study is NewStudy {
-    return isNil((study as Study).id)
+export function getFirstStage(study: Study | ParticipantStudy): Stage | undefined {
+    return first(study.stages)
+}
+
+export function isActive(study: Study) {
+    return study.status === StudyStatusEnum.Active
+}
+
+export function isWaiting(study: Study) {
+    return study.status === StudyStatusEnum.WaitingPeriod
+}
+
+export function isReadyForLaunch(study: Study) {
+    return study.status === StudyStatusEnum.ReadyForLaunch
+}
+
+export function isDraft(study: Study) {
+    return study.status === StudyStatusEnum.Draft
+}
+
+export function isDraftLike(study: Study) {
+    return isDraft(study) || isWaiting(study) || isReadyForLaunch(study)
+}
+
+export function isPaused(study: Study) {
+    return study.status === StudyStatusEnum.Paused
+}
+
+export function isScheduled(study: Study) {
+    return study.status === StudyStatusEnum.Scheduled
+}
+
+export function isCompleted(study: Study) {
+    return study.status === StudyStatusEnum.Completed
+}
+
+export function getStudyPi(study: Study | ParticipantStudy) {
+    return study.researchers?.find(r => r.role === ResearcherRoleEnum.Pi)
+}
+
+export function getStudyLead(study: Study | ParticipantStudy) {
+    return study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)
 }
 
 export function isParticipantStudy(study?: any): study is ParticipantStudy {
-    return study && !isNil((study).id) && !isNil((study).title)
+    return study && !isNil((study).id) && !isNil((study).titleForParticipants)
 }
 
-export function tagsOfType(study: SavedStudy, type: string) {
-    const r = RegExp(`^${type}`)
-    return study.tags.filter(t => t.match(r))
-}
-
-export function tagOfType<T = string>(study: SavedStudy, type: string): T | undefined {
-    const r = RegExp(`^${type}`)
-    return study.tags.find(t => t.match(r)) as any as T
-}
-
-export function studyTypeName(study: SavedStudy): string {
-    const tag = tagOfType(study, 'type')
-    if (tag) {
-        const label = (StudyTypeTags as any)[tag]
-        return label || ''
-    }
-    return ''
-}
-
-export function studyIsMultipart(study: ParticipantStudy): boolean {
+export function studyIsMultipart(study: ParticipantStudy | Study): boolean {
     return Boolean(study.stages && study.stages.length > 1)
 }
+
+export function studyHasFeedback(study: ParticipantStudy): boolean {
+    if (!study.stages) {
+        return false
+    }
+    return study.stages.some(stage => stage.feedbackTypes && stage.feedbackTypes.length > 0)
+}
+
+export function getStudyPoints(study: ParticipantStudy): number {
+    if (!study.stages) return 0
+
+    return sumBy(study.stages, (s) => +(s.points || 0))
+}
+
+export function getStudyDuration(study: ParticipantStudy): number {
+    if (!study.stages) return 0
+
+    return sumBy(study.stages, (s) => +(s.durationMinutes || 0))
+}
+
+export const useFetchStudies = () => {
+    const api = useApi()
+    const [studies, setStudies] = useState<Study[]>([])
+    const fetchStudies = () => {
+        useEffect(() => {
+            api.getStudies().then(res => {
+                setStudies((res.data || []).filter(study => !study.isHidden))
+            })
+        }, [])
+    }
+
+    fetchStudies()
+
+    return { studies, setStudies, fetchStudies }
+}
+
+export const useFetchStudy = (id: string) => {
+    const api = useApi()
+    const [study, setStudy] = useState<Study | null>()
+    const [allStudies, setAllStudies] = useState<Study[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
+    const isNew = 'new' === id
+
+    useEffect(() => {
+        api.getStudies().then(studies => {
+            setLoading(false)
+            setAllStudies(studies.data || [])
+            if (isNew) {
+                return setStudy({
+                    id: -1,
+                    titleForResearchers: '',
+                    internalDescription: '',
+                })
+            }
+            const study = studies.data?.find(s => s.id == Number(id))
+            if (study) {
+                setStudy(study)
+            } else {
+                Toast.show({
+                    error: true,
+                    title: 'Study not found',
+                    message: `Study with id ${id} not found`,
+                })
+            }
+        })
+    }, [id])
+
+    return { loading, study, setStudy, allStudies, setAllStudies }
+}
+
+export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other'
+export const studyTopics: StudyTopic[] = [
+    'Learning',
+    'Memory',
+    'Personality',
+    'School & Career',
+    'Other',
+]
+
+export type StudySubject = 'Biology' | 'Business Ethics' | 'Chemistry' | 'Physics' | 'Psychology' | 'Sociology' | 'Statistics' | 'US History'
+
+export const studySubjects: StudySubject[] = [
+    'Biology',
+    'Business Ethics',
+    'Chemistry',
+    'Physics',
+    'Psychology',
+    'Sociology',
+    'Statistics',
+    'US History',
+]

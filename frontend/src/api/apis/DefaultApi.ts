@@ -24,6 +24,7 @@ import type {
   AnalysisListing,
   BannerNotice,
   BannersListing,
+  CreateAnalysisRun,
   Environment,
   Launch,
   ParticipantStudies,
@@ -32,6 +33,7 @@ import type {
   Researcher,
   ResearchersList,
   Responses,
+  ResponsesListing,
   Reward,
   RewardsListing,
   ServerError,
@@ -66,6 +68,8 @@ import {
     BannerNoticeToJSON,
     BannersListingFromJSON,
     BannersListingToJSON,
+    CreateAnalysisRunFromJSON,
+    CreateAnalysisRunToJSON,
     EnvironmentFromJSON,
     EnvironmentToJSON,
     LaunchFromJSON,
@@ -82,6 +86,8 @@ import {
     ResearchersListToJSON,
     ResponsesFromJSON,
     ResponsesToJSON,
+    ResponsesListingFromJSON,
+    ResponsesListingToJSON,
     RewardFromJSON,
     RewardToJSON,
     RewardsListingFromJSON,
@@ -130,6 +136,32 @@ export interface AddStudyRequest {
     addStudy?: AddStudy;
 }
 
+export interface AdminAddResponsesRequest {
+    stageId: number;
+    isTesting?: boolean;
+    file?: Blob;
+}
+
+export interface AdminApproveStudyRequest {
+    id: number;
+}
+
+export interface AdminDestroyResponseRequest {
+    id: number;
+}
+
+export interface AdminQueryStudiesRequest {
+    status: string;
+}
+
+export interface AdminResponsesForStudyRequest {
+    id: number;
+}
+
+export interface CreateAnalysisRunRequest {
+    createAnalysisRun: CreateAnalysisRun;
+}
+
 export interface CreateBannerRequest {
     addBanner: AddBanner;
 }
@@ -175,6 +207,10 @@ export interface GetStageRequest {
     id: number;
 }
 
+export interface GetStudyRequest {
+    id: number;
+}
+
 export interface LandStudyRequest {
     id: number;
     aborted?: LandStudyAbortedEnum;
@@ -190,6 +226,11 @@ export interface LaunchStudyRequest {
 export interface RemoveResearcherFromStudyRequest {
     studyId: number;
     userId: string;
+}
+
+export interface StudyStatsRequest {
+    id: number;
+    view?: boolean;
 }
 
 export interface UpdateAnalysisRequest {
@@ -229,6 +270,13 @@ export interface UpdateStageRequest {
 export interface UpdateStudyRequest {
     id: number;
     updateStudy?: UpdateStudy;
+}
+
+export interface UpdateStudyStatusRequest {
+    id: number;
+    statusAction: UpdateStudyStatusStatusActionEnum;
+    stageIndex?: number;
+    study?: Study;
 }
 
 /**
@@ -371,6 +419,218 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async addStudy(requestParameters: AddStudyRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Study> {
         const response = await this.addStudyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * add a response file
+     */
+    async adminAddResponsesRaw(requestParameters: AdminAddResponsesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponsesListing>> {
+        if (requestParameters.stageId === null || requestParameters.stageId === undefined) {
+            throw new runtime.RequiredError('stageId','Required parameter requestParameters.stageId was null or undefined when calling adminAddResponses.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const consumes: runtime.Consume[] = [
+            { contentType: 'multipart/form-data' },
+        ];
+        // @ts-ignore: canConsumeForm may be unused
+        const canConsumeForm = runtime.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): any };
+        let useForm = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new URLSearchParams();
+        }
+
+        if (requestParameters.isTesting !== undefined) {
+            formParams.append('is_testing', requestParameters.isTesting as any);
+        }
+
+        if (requestParameters.file !== undefined) {
+            formParams.append('file', requestParameters.file as any);
+        }
+
+        const response = await this.request({
+            path: `/admin/stage/{stage_id}/responses`.replace(`{${"stage_id"}}`, encodeURIComponent(String(requestParameters.stageId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: formParams,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResponsesListingFromJSON(jsonValue));
+    }
+
+    /**
+     * add a response file
+     */
+    async adminAddResponses(requestParameters: AdminAddResponsesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponsesListing> {
+        const response = await this.adminAddResponsesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Approve a study
+     */
+    async adminApproveStudyRaw(requestParameters: AdminApproveStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Studies>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling adminApproveStudy.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/studies/{id}/approve`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudiesFromJSON(jsonValue));
+    }
+
+    /**
+     * Approve a study
+     */
+    async adminApproveStudy(requestParameters: AdminApproveStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Studies> {
+        const response = await this.adminApproveStudyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * remove a response file
+     */
+    async adminDestroyResponseRaw(requestParameters: AdminDestroyResponseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponsesListing>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling adminDestroyResponse.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/responses/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResponsesListingFromJSON(jsonValue));
+    }
+
+    /**
+     * remove a response file
+     */
+    async adminDestroyResponse(requestParameters: AdminDestroyResponseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponsesListing> {
+        const response = await this.adminDestroyResponseRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns listing of all studies with status approval, 
+     * Retrieve all studies with status
+     */
+    async adminQueryStudiesRaw(requestParameters: AdminQueryStudiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Studies>> {
+        if (requestParameters.status === null || requestParameters.status === undefined) {
+            throw new runtime.RequiredError('status','Required parameter requestParameters.status was null or undefined when calling adminQueryStudies.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/studies/{status}`.replace(`{${"status"}}`, encodeURIComponent(String(requestParameters.status))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudiesFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns listing of all studies with status approval, 
+     * Retrieve all studies with status
+     */
+    async adminQueryStudies(requestParameters: AdminQueryStudiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Studies> {
+        const response = await this.adminQueryStudiesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns listing of all responses for a study 
+     * Retrieve all responses for study
+     */
+    async adminResponsesForStudyRaw(requestParameters: AdminResponsesForStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponsesListing>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling adminResponsesForStudy.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/study/{id}/responses`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ResponsesListingFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns listing of all responses for a study 
+     * Retrieve all responses for study
+     */
+    async adminResponsesForStudy(requestParameters: AdminResponsesForStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponsesListing> {
+        const response = await this.adminResponsesForStudyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Create an analysis run
+     */
+    async createAnalysisRunRaw(requestParameters: CreateAnalysisRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Analysis>> {
+        if (requestParameters.createAnalysisRun === null || requestParameters.createAnalysisRun === undefined) {
+            throw new runtime.RequiredError('createAnalysisRun','Required parameter requestParameters.createAnalysisRun was null or undefined when calling createAnalysisRun.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/researcher/analysis/:analysis_id/runs`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateAnalysisRunToJSON(requestParameters.createAnalysisRun),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AnalysisFromJSON(jsonValue));
+    }
+
+    /**
+     * Create an analysis run
+     */
+    async createAnalysisRun(requestParameters: CreateAnalysisRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Analysis> {
+        const response = await this.createAnalysisRunRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -591,7 +851,7 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      * Returns listing of all banners, expired or not 
-     * Retrive list of all banners
+     * Retrieve list of all banners
      */
     async getBannersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BannersListing>> {
         const queryParameters: any = {};
@@ -610,7 +870,7 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      * Returns listing of all banners, expired or not 
-     * Retrive list of all banners
+     * Retrieve list of all banners
      */
     async getBanners(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BannersListing> {
         const response = await this.getBannersRaw(initOverrides);
@@ -706,7 +966,7 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the preferences, will create a default set of prefences if the user not saved them previously 
+     * Returns the preferences, will create a default set of preferences if the user not saved them previously 
      * Obtain the current users preferences
      */
     async getPreferencesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPreferences>> {
@@ -725,7 +985,7 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns the preferences, will create a default set of prefences if the user not saved them previously 
+     * Returns the preferences, will create a default set of preferences if the user not saved them previously 
      * Obtain the current users preferences
      */
     async getPreferences(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserPreferences> {
@@ -916,6 +1176,38 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Get a single study
+     * Get a single study
+     */
+    async getStudyRaw(requestParameters: GetStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Study>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getStudy.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researcher/studies/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudyFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a single study
+     * Get a single study
+     */
+    async getStudy(requestParameters: GetStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Study> {
+        const response = await this.getStudyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Land a study stage
      * Land a study stage
      */
@@ -1054,6 +1346,42 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async removeResearcherFromStudy(requestParameters: RemoveResearcherFromStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.removeResearcherFromStudyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Stats include view count, etc.
+     * Track stats for a study
+     */
+    async studyStatsRaw(requestParameters: StudyStatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ParticipantStudy>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling studyStats.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.view !== undefined) {
+            queryParameters['view'] = requestParameters.view;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/participant/studies/{id}/stats`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ParticipantStudyFromJSON(jsonValue));
+    }
+
+    /**
+     * Stats include view count, etc.
+     * Track stats for a study
+     */
+    async studyStats(requestParameters: StudyStatsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ParticipantStudy> {
+        const response = await this.studyStatsRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -1360,6 +1688,53 @@ export class DefaultApi extends runtime.BaseAPI {
         return await response.value();
     }
 
+    /**
+     * Updates the status of a study
+     * Updates the status of a study
+     */
+    async updateStudyStatusRaw(requestParameters: UpdateStudyStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Study>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateStudyStatus.');
+        }
+
+        if (requestParameters.statusAction === null || requestParameters.statusAction === undefined) {
+            throw new runtime.RequiredError('statusAction','Required parameter requestParameters.statusAction was null or undefined when calling updateStudyStatus.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.statusAction !== undefined) {
+            queryParameters['status_action'] = requestParameters.statusAction;
+        }
+
+        if (requestParameters.stageIndex !== undefined) {
+            queryParameters['stage_index'] = requestParameters.stageIndex;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/researcher/studies/{id}/update_status`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StudyToJSON(requestParameters.study),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudyFromJSON(jsonValue));
+    }
+
+    /**
+     * Updates the status of a study
+     * Updates the status of a study
+     */
+    async updateStudyStatus(requestParameters: UpdateStudyStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Study> {
+        const response = await this.updateStudyStatusRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
 }
 
 /**
@@ -1369,3 +1744,15 @@ export const LandStudyAbortedEnum = {
     Refusedconsent: 'refusedconsent'
 } as const;
 export type LandStudyAbortedEnum = typeof LandStudyAbortedEnum[keyof typeof LandStudyAbortedEnum];
+/**
+ * @export
+ */
+export const UpdateStudyStatusStatusActionEnum = {
+    Submit: 'submit',
+    Launch: 'launch',
+    Pause: 'pause',
+    Resume: 'resume',
+    End: 'end',
+    Reopen: 'reopen'
+} as const;
+export type UpdateStudyStatusStatusActionEnum = typeof UpdateStudyStatusStatusActionEnum[keyof typeof UpdateStudyStatusStatusActionEnum];

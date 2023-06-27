@@ -5,6 +5,7 @@ import {
     Box, Icon, Col, EditingForm as Form, Alert, DateTimeField, InputField,
 } from '@components'
 import { useApi, useFetchState } from '@lib'
+import { Main } from './grid'
 
 const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, onUpdate }) => {
     const [error, setError] = useState('')
@@ -32,10 +33,11 @@ const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, on
             sm={12} align="stretch" direction="column" className="mb-2 border"
         >
             <Box className="card-header" justify="end">
-                <Icon icon="trash" data-test-id="delete-reward" onClick={onDelete} />
+                <Icon icon="trash" data-testid="delete-reward" onClick={onDelete} />
             </Box>
             <Box className="card-body" direction="column">
                 <Form
+                    name="reward"
                     onSubmit={saveReward}
                     showControls={!reward.id}
                     validationSchema={Yup.object().shape({
@@ -74,15 +76,14 @@ export function AdminRewards() {
     if (state.busy) return state.busy
 
     return (
-        <div className="rewards">
+        <Main className="container pt-2">
             <Box justify="between" align="center" margin="bottom">
                 <h4>Scheduled Rewards</h4>
-                <Icon height={15} icon="plusCircle" data-test-id="add-reward" onClick={state.addNewRecord} />
+                <Icon height={15} icon="plusCircle" data-testid="add-reward" onClick={state.addNewRecord} />
             </Box>
             {state.records.map((reward, i) => (
                 <RewardCard key={reward.id || i} reward={reward} onUpdate={state.fetchRecords} />
             ))}
-
-        </div>
+        </Main>
     )
 }

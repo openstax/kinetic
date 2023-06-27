@@ -71,6 +71,9 @@ gem 'sentry-ruby'
 # CORS
 gem 'rack-cors'
 
+gem 'rubyzip'
+gem 'sssecrets' # for generating api keys
+
 group :test do
   # Code Climate integration
   gem 'codecov', require: false
@@ -91,6 +94,8 @@ end
 
 group :development do
   gem 'listen', '~> 3.3'
+  # provides LSP support
+  gem 'solargraph'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
