@@ -218,7 +218,10 @@ RSpec.describe 'Studies', api: :v1 do
     end
 
     context 'when signed as the owning researcher' do
-      before { stub_current_user(researcher1) }
+      before do
+        stub_current_user(researcher1)
+        stub_user_query
+      end
 
       it 'updates the study' do
         api_put "researcher/studies/#{study1.id}", params: { study: { title_for_researchers: 'Test' } }

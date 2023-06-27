@@ -8,7 +8,11 @@ module MockingHelpers
   end
 
   def stub_qualtrics_clone_survey!(new_id: 'new_id', key: 'invalid_test_key')
-    stub_qualtrics_survey_definition!
     allow_any_instance_of(CloneSurvey).to receive(:clone).and_return([new_id, key])
+  end
+
+  def stub_user_query(user=nil)
+    json = user ? JSON.generate({ items: [user] }) : File.read(Rails.root.join('spec', 'support', 'accounts_users_response.json'))
+    allow(UserInfo).to receive(:query_accounts).and_return(json)
   end
 end

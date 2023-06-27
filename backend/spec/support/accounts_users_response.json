@@ -1,0 +1,40 @@
+{
+  "total_count": 1,
+  "items": [
+    {
+      "id": 12345,
+      "username": "test-account",
+      "name": "Test Account",
+      "first_name": "Test",
+      "last_name": "Account",
+      "full_name": "Test Account",
+      "uuid": "3e00a821-098e-40b6-bdd0-ec6febfc2e88",
+      "support_identifier": "cs_1234567890",
+      "is_test": false,
+      "opt_out_of_cookies": false,
+      "using_openstax": false,
+      "faculty_status": "no_faculty_info",
+      "needs_complete_edu_profile": false,
+      "self_reported_role": "unknown_role",
+      "school_type": "unknown_school_type",
+      "school_location": "unknown_school_location",
+      "is_administrator": false,
+      "contact_infos": [
+        {
+          "id": 49,
+          "type": "EmailAddress",
+          "value": "test@test.com",
+          "is_verified": true,
+          "is_guessed_preferred": true
+        }
+      ],
+      "applications": [
+        {
+          "id": 2,
+          "name": "OpenStax Tutor"
+        }
+      ],
+      "signed_contract_names": []
+    }
+  ]
+}
