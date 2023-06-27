@@ -160,6 +160,15 @@ export const useFetchStudy = (id: string) => {
     return { loading, study, setStudy, allStudies, setAllStudies }
 }
 
+export type StudyCategory = 'Cognitive Task & Assessment' | 'Learner Characteristics' | 'Educational Research' | 'Product & Organizational Research' | 'Transfer of Learning'
+export const studyCategories: StudyCategory[] = [
+    'Cognitive Task & Assessment',
+    'Learner Characteristics',
+    'Educational Research',
+    'Product & Organizational Research',
+    'Transfer of Learning',
+]
+
 export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other'
 export const studyTopics: StudyTopic[] = [
     'Learning',

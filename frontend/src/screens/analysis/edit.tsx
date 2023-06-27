@@ -60,6 +60,7 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies, onEditS
     const [error, setError] = useState('')
 
     const saveAnalysis = async (analysis: Analysis) => {
+        debugger
         try {
             if (analysis.id) {
                 await api.updateAnalysis({ id: analysis.id, updateAnalysis: { analysis } })
@@ -146,7 +147,6 @@ const Objectives: FC<{}> = () => {
     )
 }
 
-
 const BottomBar: FC<{}> = () => {
     const { isValid, isDirty } = useFormState()
 
@@ -156,8 +156,7 @@ const BottomBar: FC<{}> = () => {
                 <FormSaveButton
                     data-testid='save-analysis-button'
                     className='btn-researcher-primary'
-                    disabled={!isValid || !isDirty}
-
+                    disabled={!isValid}
                 >
                     Save & Continue
                 </FormSaveButton>
