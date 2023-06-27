@@ -55,7 +55,7 @@ export interface Analysis {
      * @type {string}
      * @memberof Analysis
      */
-    repositoryUrl: string;
+    repositoryUrl?: string;
     /**
      * Api Key of analysis
      * @type {string}
@@ -68,6 +68,12 @@ export interface Analysis {
      * @memberof Analysis
      */
     researchers?: Array<AnalysisResearcher>;
+    /**
+     * The study ids that the analysis reads from.
+     * @type {Array<number>}
+     * @memberof Analysis
+     */
+    studyIds?: Array<number>;
     /**
      * The studies that the analysis reads from.
      * @type {Array<StudyAnalysis>}
@@ -83,7 +89,6 @@ export function instanceOfAnalysis(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "title" in value;
     isInstance = isInstance && "description" in value;
-    isInstance = isInstance && "repositoryUrl" in value;
 
     return isInstance;
 }
@@ -101,9 +106,10 @@ export function AnalysisFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'id': !exists(json, 'id') ? undefined : json['id'],
         'title': json['title'],
         'description': json['description'],
-        'repositoryUrl': json['repository_url'],
+        'repositoryUrl': !exists(json, 'repository_url') ? undefined : json['repository_url'],
         'apiKey': !exists(json, 'api_key') ? undefined : json['api_key'],
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(AnalysisResearcherFromJSON)),
+        'studyIds': !exists(json, 'study_ids') ? undefined : json['study_ids'],
         'studies': !exists(json, 'studies') ? undefined : ((json['studies'] as Array<any>).map(StudyAnalysisFromJSON)),
     };
 }
@@ -123,6 +129,7 @@ export function AnalysisToJSON(value?: Analysis | null): any {
         'repository_url': value.repositoryUrl,
         'api_key': value.apiKey,
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(AnalysisResearcherToJSON)),
+        'study_ids': value.studyIds,
         'studies': value.studies === undefined ? undefined : ((value.studies as Array<any>).map(StudyAnalysisToJSON)),
     };
 }

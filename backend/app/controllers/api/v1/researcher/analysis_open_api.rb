@@ -30,7 +30,7 @@ class Api::V1::Researcher::AnalysisOpenApi
     end
 
     schema :Analysis do
-      key :required, %w[title description repository_url]
+      key :required, %w[title description]
     end
 
     schema :AnalysisUpdate
@@ -75,6 +75,12 @@ class Api::V1::Researcher::AnalysisOpenApi
       items do
         key :$ref, :AnalysisResearcher
       end
+    end
+
+    property :study_ids do
+      key :type, :array
+      key :description, 'The study ids that the analysis reads from.'
+      key :items, { 'type' => 'number' }
     end
 
     property :studies do

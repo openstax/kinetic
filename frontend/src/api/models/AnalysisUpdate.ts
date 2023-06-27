@@ -69,6 +69,12 @@ export interface AnalysisUpdate {
      */
     researchers?: Array<AnalysisResearcher>;
     /**
+     * The study ids that the analysis reads from.
+     * @type {Array<number>}
+     * @memberof AnalysisUpdate
+     */
+    studyIds?: Array<number>;
+    /**
      * The studies that the analysis reads from.
      * @type {Array<StudyAnalysis>}
      * @memberof AnalysisUpdate
@@ -101,6 +107,7 @@ export function AnalysisUpdateFromJSONTyped(json: any, ignoreDiscriminator: bool
         'repositoryUrl': !exists(json, 'repository_url') ? undefined : json['repository_url'],
         'apiKey': !exists(json, 'api_key') ? undefined : json['api_key'],
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(AnalysisResearcherFromJSON)),
+        'studyIds': !exists(json, 'study_ids') ? undefined : json['study_ids'],
         'studies': !exists(json, 'studies') ? undefined : ((json['studies'] as Array<any>).map(StudyAnalysisFromJSON)),
     };
 }
@@ -120,6 +127,7 @@ export function AnalysisUpdateToJSON(value?: AnalysisUpdate | null): any {
         'repository_url': value.repositoryUrl,
         'api_key': value.apiKey,
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(AnalysisResearcherToJSON)),
+        'study_ids': value.studyIds,
         'studies': value.studies === undefined ? undefined : ((value.studies as Array<any>).map(StudyAnalysisToJSON)),
     };
 }

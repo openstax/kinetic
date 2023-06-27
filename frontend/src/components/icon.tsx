@@ -50,6 +50,7 @@ import pause from '@iconify-icons/bi/pause'
 import pauseFill from '@iconify-icons/bi/pause-fill'
 import playFill from '@iconify-icons/bi/play-fill'
 import chevronLeft from '@iconify-icons/bi/chevron-left'
+import chevronRight from '@iconify-icons/bi/chevron-right'
 import chevronDown from '@iconify-icons/bi/chevron-down'
 import chevronUp from '@iconify-icons/bi/chevron-up'
 
@@ -107,6 +108,7 @@ export const ICONS = {
     pauseFill,
     playFill,
     chevronLeft,
+    chevronRight,
     chevronDown,
     chevronUp,
 }

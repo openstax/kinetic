@@ -13,6 +13,11 @@ export const getAnalysisValidationSchema = (analyses: Analysis[]) => {
                 return analyses.every(analysis => analysis.title?.toLowerCase().trim() !== value?.toLowerCase().trim())
             }
         ),
-        repositoryUrl: Yup.string().url().required(),
+        description: Yup.string().required('Required').max(250),
+        studyIds: Yup.array().test(
+            'At least one',
+            'Select at least one study',
+            (studyIds?: number[]) => (studyIds?.length || 0) > 0
+        ),
     })
 }

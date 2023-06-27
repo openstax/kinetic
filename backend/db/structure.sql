@@ -204,10 +204,10 @@ CREATE TABLE public.analyses (
     id bigint NOT NULL,
     title text NOT NULL,
     description text NOT NULL,
-    repository_url text NOT NULL,
     api_key text DEFAULT public.api_key('an'::text, 18),
     created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
+    updated_at timestamp(6) with time zone NOT NULL,
+    repository_url text DEFAULT ''::text
 );
 
 
@@ -1487,6 +1487,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230404161002'),
 ('20230421153444'),
 ('20230524011047'),
-('20230616223657');
+('20230616223657'),
+('20230626173336');
 
 
