@@ -459,7 +459,7 @@ GEM
       rubocop-capybara
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
-    rubyzip (2.3.2)
+    rubyzip (3.0.0.alpha)
     sentry-rails (5.7.0)
       railties (>= 5.0)
       sentry-ruby (~> 5.7.0)
@@ -575,7 +575,7 @@ DEPENDENCIES
   rubocop
   rubocop-rails
   rubocop-rspec
-  rubyzip
+  rubyzip (= 3.0.0.alpha)
   sentry-rails
   sentry-ruby
   simplecov

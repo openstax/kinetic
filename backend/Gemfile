@@ -71,7 +71,9 @@ gem 'sentry-ruby'
 # CORS
 gem 'rack-cors'
 
-gem 'rubyzip'
+# alpha needed for https://github.com/rubyzip/rubyzip/commit/e70e1d3080efc09fa83963b0b2b08116532ee760
+gem 'rubyzip', '3.0.0.alpha'
+
 gem 'sssecrets' # for generating api keys
 
 group :test do
