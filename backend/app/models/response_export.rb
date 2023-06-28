@@ -25,6 +25,10 @@ class ResponseExport < ApplicationRecord
     is_testing ? generate_test_data : fetch_real_responses
   end
 
+  def is_stale?(cutoff)
+    created_at < (cutoff + 1.day)
+  end
+
   protected
 
   def fetch_real_responses
