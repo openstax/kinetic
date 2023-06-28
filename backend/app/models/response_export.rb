@@ -26,7 +26,7 @@ class ResponseExport < ApplicationRecord
   end
 
   def is_stale?(cutoff)
-    created_at < (cutoff + 1.day)
+    created_at < cutoff
   end
 
   protected
