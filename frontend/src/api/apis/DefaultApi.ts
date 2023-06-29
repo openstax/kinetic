@@ -170,6 +170,10 @@ export interface CreateRewardRequest {
     addReward: AddReward;
 }
 
+export interface DeleteAnalysisRequest {
+    id: number;
+}
+
 export interface DeleteBannerRequest {
     id: number;
 }
@@ -188,6 +192,10 @@ export interface DeleteStageRequest {
 
 export interface DeleteStudyRequest {
     studyId: number;
+}
+
+export interface GetAnalysisRequest {
+    id: number;
 }
 
 export interface GetParticipantStudyRequest {
@@ -701,6 +709,37 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Delete an analysis
+     * Delete an analysis
+     */
+    async deleteAnalysisRaw(requestParameters: DeleteAnalysisRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteAnalysis.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researcher/analysis/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete an analysis
+     * Delete an analysis
+     */
+    async deleteAnalysis(requestParameters: DeleteAnalysisRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAnalysisRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Remove a banner
      */
     async deleteBannerRaw(requestParameters: DeleteBannerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -847,6 +886,38 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async deleteStudy(requestParameters: DeleteStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteStudyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Get a single analysis
+     * Get a single analysis
+     */
+    async getAnalysisRaw(requestParameters: GetAnalysisRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Analysis>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getAnalysis.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researcher/analysis/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AnalysisFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a single analysis
+     * Get a single analysis
+     */
+    async getAnalysis(requestParameters: GetAnalysisRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Analysis> {
+        const response = await this.getAnalysisRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

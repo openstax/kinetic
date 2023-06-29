@@ -37,7 +37,7 @@ export interface Analysis {
      * @type {number}
      * @memberof Analysis
      */
-    id?: number;
+    readonly id: number;
     /**
      * Title of analysis
      * @type {string}
@@ -87,6 +87,7 @@ export interface Analysis {
  */
 export function instanceOfAnalysis(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
     isInstance = isInstance && "title" in value;
     isInstance = isInstance && "description" in value;
 
@@ -103,7 +104,7 @@ export function AnalysisFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'],
         'title': json['title'],
         'description': json['description'],
         'repositoryUrl': !exists(json, 'repository_url') ? undefined : json['repository_url'],
@@ -123,7 +124,6 @@ export function AnalysisToJSON(value?: Analysis | null): any {
     }
     return {
         
-        'id': value.id,
         'title': value.title,
         'description': value.description,
         'repository_url': value.repositoryUrl,

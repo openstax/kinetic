@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseController
+  before_action :set_analysis, only: [:show, :update, :destroy]
 
   def index
     analysis = current_researcher.analysis.includes(:study_analyses)
@@ -11,8 +12,7 @@ class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseControl
   end
 
   def show
-    analysis = current_researcher.analysis.find(params[:id])
-    response_binding = Api::V1::Bindings::Analysis.create_from_model(analysis)
+    response_binding = Api::V1::Bindings::Analysis.create_from_model(@analysis)
     render json: response_binding, status: :ok
   end
 
@@ -32,22 +32,31 @@ class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseControl
   end
 
   def update
-    analysis = current_researcher.analysis.find(params[:id])
     inbound_binding, error = bind(params.require(:analysis), Api::V1::Bindings::AnalysisUpdate)
-
     render(json: error, status: error.status_code) and return if error
 
     update = inbound_binding.to_hash
     study_ids = update.delete(:studies)&.pluck(:study_id)
-    analysis.reset_study_analysis_to_ids(study_ids) if study_ids.present?
-    analysis.update(update)
+    @analysis.reset_study_analysis_to_ids(study_ids) if study_ids.present?
+    @analysis.update(update)
 
-    if analysis.errors.any?
-      render(json: analysis.errors.full_messages.first, status: 422) and return
+    if @analysis.errors.any?
+      render(json: @analysis.errors.full_messages.first, status: 422) and return
     end
 
-    response_binding = Api::V1::Bindings::Analysis.create_from_model(analysis)
+    response_binding = Api::V1::Bindings::Analysis.create_from_model(@analysis)
     render json: response_binding, status: :ok
+  end
+
+  def destroy
+    @analysis.destroy!
+    head :ok
+  end
+
+  protected
+
+  def set_analysis
+    @analysis = current_researcher.analysis.find(params[:id])
   end
 
 end

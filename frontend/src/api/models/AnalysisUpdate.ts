@@ -37,7 +37,7 @@ export interface AnalysisUpdate {
      * @type {number}
      * @memberof AnalysisUpdate
      */
-    id?: number;
+    readonly id?: number;
     /**
      * Title of analysis
      * @type {string}
@@ -121,7 +121,6 @@ export function AnalysisUpdateToJSON(value?: AnalysisUpdate | null): any {
     }
     return {
         
-        'id': value.id,
         'title': value.title,
         'description': value.description,
         'repository_url': value.repositoryUrl,

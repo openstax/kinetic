@@ -1,10 +1,19 @@
 import { Analysis, Study } from '@api';
-import { React, Box, useNavigate } from '@common';
-import { Icon, ResearcherButton, Tooltip } from '@components';
-import { ColumnDef } from '@tanstack/react-table';
+import { React, Box, useNavigate, useEffect } from '@common';
+import { Icon, ResearcherButton, StyledRow, TableHeader, Tooltip } from '@components';
+import {
+    ColumnDef, flexRender,
+    getCoreRowModel,
+    getFilteredRowModel, getPaginationRowModel,
+    getSortedRowModel, Row, SortingState,
+    Table,
+    useReactTable,
+} from '@tanstack/react-table';
 import { colors } from '@theme';
+import { toDayJS, useApi } from '@lib';
+import { Link } from 'react-router-dom';
 
-export const AnalysisDashboard:FC<{analyses: Analysis[]}> = ({ analyses }) => {
+export const AnalysisDashboard: FC<{analyses: Analysis[], fetchAnalyses(): void}> = ({ analyses, fetchAnalyses }) => {
     const nav = useNavigate()
     return (
         <Box className='analysis-overview' direction='column' width='100%' gap='large'>
@@ -14,43 +23,88 @@ export const AnalysisDashboard:FC<{analyses: Analysis[]}> = ({ analyses }) => {
                     + Create New Analysis
                 </ResearcherButton>
             </Box>
-
+            <AnalysisTable analyses={analyses} />
 
         </Box>
     )
 }
 
+const AnalysisRow: React.FC<{row: Row<Analysis> }> = ({ row }) => {
+    return (
+        <StyledRow key={row.id} data-testid={`analysis-row-${row.original.id}`}>
+            {row.getVisibleCells().map((cell) => {
+                return (
+                    <td key={cell.id} css={{
+                        maxWidth: 250,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                    }}>
+                        <div css={{ height: '1rem' }}>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </div>
+                    </td>
+                );
+            })}
+        </StyledRow>
+    )
+}
+
+
+const AnalysisTable: FC<{analyses: Analysis[]}> = ({ analyses }) => {
+    const { table } = useAnalysisTable(analyses)
+    return (
+        <table data-testid="analysis-table" className='mt-6'>
+            <thead>
+                <tr>
+                    {table.getFlatHeaders().map((header) =>
+                        <TableHeader header={header} key={header.id} />
+                    )}
+                </tr>
+            </thead>
+            <tbody>
+                {table.getRowModel().rows.map((row) => {
+                    return <AnalysisRow row={row} key={row.id} />
+                })}
+            </tbody>
+        </table>
+    )
+}
+
 const useAnalysisTable = (analyses: Analysis[]) => {
-    const columns = React.useMemo<ColumnDef<Study>[]>(() => [
+    const api = useApi()
+    const [sorting, setSorting] = React.useState<SortingState>([])
+
+    const columns = React.useMemo<ColumnDef<Analysis>[]>(() => [
         {
             accessorKey: 'title',
             header: () => 'Title',
             size: 300,
             meta: { type: 'text' },
-            cell: (info) => info.getValue() as string,
+            cell: (info) => {
+                return <Link to={`/analysis/overview/${info.row.original.id}`}>{info.getValue() as string}</Link>
+            },
         },
         {
             accessorKey: 'finishedAt',
             header: () => (
-                <Box gap>
-                    <span>Last run on</span>
-                    <Tooltip tooltip='Total number of study completions' className='d-flex'>
-                        <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={14}/>
-                    </Tooltip>
-                </Box>
+                <span>Last run on</span>
             ),
-            sortingFn: 'alphanumeric',
+            sortingFn: 'datetime',
             cell: (info) => {
+                const finishedAt = info.getValue() as Date
+                if (!finishedAt) return '-'
+
                 return (
                     <span>
-                        {(info.cell.getValue() as string) || '-'}
+                        {toDayJS(finishedAt).format('MM/DD/YYYY')}
                     </span>
                 )
             },
         },
         {
-            accessorKey: 'category',
-            header: () => 'Study Type',
+            accessorKey: 'status',
+            header: () => 'Last run status',
             meta: { type: 'text' },
             cell: (info) => {
                 return (
@@ -59,15 +113,32 @@ const useAnalysisTable = (analyses: Analysis[]) => {
             },
         },
         {
-            id: 'researchTeam',
-            header: () => 'Research Team',
-            meta: { type: 'text' },
+            id: 'runs',
+            header: () => '# of runs',
+            sortingFn: 'alphanumeric',
             cell: ({ row }) => {
-                const isMyStudy = !!row.original.researchers?.find(r => r.userId == currentResearcher?.userId)
-                return (
-                    isMyStudy ? 'Your Team' : 'Shared on Kinetic'
-                )
+                return 'TODO: analysis.runs.length'
+                // row.original
+                // const isMyStudy = !!row.original.researchers?.find(r => r.userId == currentResearcher?.userId)
+                // return (
+                //     isMyStudy ? 'Your Team' : 'Shared on Kinetic'
+                // )
             },
         },
     ], [])
+
+    const table: Table<Analysis> = useReactTable({
+        data: analyses,
+        columns,
+        state: {
+            sorting,
+        },
+        getRowId: (row) => String(row.id),
+        onSortingChange: setSorting,
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+    })
+
+    return { table }
 }

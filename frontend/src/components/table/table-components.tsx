@@ -41,7 +41,7 @@ export const SortIcon: React.FC<{header: Header<Study, unknown> }> = ({ header }
     )
 }
 
-export const TableHeader: React.FC<{header: Header<Study, unknown> }> = ({ header }) => {
+export const TableHeader: React.FC<{header: Header<any, unknown> }> = ({ header }) => {
     const canSort = header.column.getCanSort()
     return (
         <StyledHeader css={{ width: header.getSize() }}>
@@ -61,3 +61,11 @@ export const TableHeader: React.FC<{header: Header<Study, unknown> }> = ({ heade
         </StyledHeader>
     )
 }
+
+export const StyledRow = styled.tr({
+    borderBottom: `1px solid ${colors.lightGray}`,
+    'td': {
+        padding: '1rem .5rem',
+        height: '10px',
+    },
+})

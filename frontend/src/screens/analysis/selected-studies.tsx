@@ -1,5 +1,5 @@
 import { React, styled, useEffect } from '@common'
-import { Box, Icon, SelectField, TableHeader, Tooltip, useFormContext } from '@components'
+import { Box, Icon, SelectField, StyledRow, TableHeader, Tooltip, useFormContext } from '@components'
 import { Study } from '@api'
 import {
     ColumnDef,
@@ -54,7 +54,6 @@ export const SelectedStudies: FC<{studies: Study[], defaultStudy: Study | null}>
 }
 
 const CustomOption = (props: any) => {
-    console.log(props)
     const category: StudyCategory = props.value
     const description = studyCategoryDescriptions[category]
     return (
@@ -84,14 +83,6 @@ const StudyTypeFilter: FC<{table: Table<Study>}> = ({ table }) => {
         </Box>
     )
 }
-
-const StyledRow = styled.tr({
-    borderBottom: `1px solid ${colors.lightGray}`,
-    'td': {
-        padding: '1rem .5rem',
-        height: '10px',
-    },
-})
 
 const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
     return (
@@ -168,7 +159,6 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
                     ref={setCheckAll}
                     checked={table.getIsAllRowsSelected()}
                     onChange={(event) => {
-                        // table.toggleAllRowsSelected(event.target.checked)
                         if (event.target.checked) {
                             const selectedStudyIds = table.getRowModel().rows.map(row => row.original.id)
                             setValue('studyIds', selectedStudyIds, { shouldValidate: true })

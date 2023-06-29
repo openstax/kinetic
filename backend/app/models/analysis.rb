@@ -15,6 +15,11 @@ class Analysis < ApplicationRecord
 
   validates :title, presence: true
 
+  before_destroy(prepend: true) do
+    study_analyses.destroy_all
+    analysis_researchers.destroy_all
+  end
+
   def can_read_study_id?(id)
     # TODO: eventually this will need to be updated to include "shared" studies
     researchers.find { |r| r.study_researchers.exists?(study_id: id) }

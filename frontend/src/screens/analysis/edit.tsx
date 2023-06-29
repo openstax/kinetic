@@ -11,12 +11,19 @@ import {
     Toast,
     useFormState,
 } from '@components'
-import { Analysis, Study } from '@api'
-import { getAnalysisValidationSchema } from '@models'
+import { Analysis, DefaultApi, Study } from '@api'
+import {
+    useCreateOrUpdateAnalysis,
+    getAnalysisValidationSchema,
+    useUpdateAnalysis,
+    useCreateAnalysis,
+    useFetchAnalysis, useFetchAnalyses,
+} from '@models'
 import { errorToString, useApi, useQueryParam } from '@lib'
 import { SelectedStudies } from './selected-studies'
 import { FormSaveButton } from '@nathanstitt/sundry/form';
 import { ResearcherFAQ } from './researcher-faq';
+import { useMutation, useQueryClient } from 'react-query'
 
 interface EditAnalysisProps {
     analyses: Analysis[]
@@ -36,6 +43,10 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies, onEditS
     const [studyTitle, setStudyTitle] = useState<string>('')
     const { analysisId } = useParams<string>();
     const studyId = useQueryParam<number>('studyId') || null
+    const api = useApi()
+    const nav = useNavigate()
+    const queryClient = useQueryClient()
+    const mutate = useMutation
 
     useEffect(() => {
         if (studyId) {
@@ -56,27 +67,39 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies, onEditS
     const analysis = (!analysisId || analysisId == 'new') ?
         newAnalysis : analyses.find(a => String(a.id) == analysisId)
 
-    const nav = useNavigate()
-    const api = useApi()
-
     const [error, setError] = useState('')
+
+    const updateAnalysis = useUpdateAnalysis()
+    const createAnalysis = useCreateAnalysis()
+    const { refetch } = useFetchAnalyses()
 
     const saveAnalysis = async (analysis: Analysis) => {
         try {
             if (analysis.id) {
-                await api.updateAnalysis({ id: analysis.id, updateAnalysis: { analysis } })
+                // const updatedAnalysis = await updateAnalysis(analysis)
+                const updatedAnalysis = await api.updateAnalysis({ id: analysis.id, updateAnalysis: { analysis } })
                 Toast.show({
-                    message: '',
+                    message: `Successfully updated analysis ${updatedAnalysis.title}`,
                 })
             } else {
                 const savedAnalysis = await api.addAnalysis({ addAnalysis: { analysis } })
+                Toast.show({
+                    message: `Successfully created analysis ${analysis.title}`,
+                })
+
+                queryClient.setQueryData(['analyses', { id: savedAnalysis.id }], (a) => console.log(a))
+
+                // queryClient.setQueryData('analyses', (oldData ) => [...oldData, savedAnalysis])
                 nav(`/analysis/edit/${savedAnalysis.id}`)
             }
-            // TODO Route to analysis overview page?
-            onEditSuccess()
-        }
-        catch (err) {
+            await refetch()
+
+        // TODO Route to analysis overview page?
+        // onEditSuccess()
+        } catch (err) {
+            debugger
             setError(await errorToString(err))
+        } finally {
         }
     }
 
@@ -88,11 +111,11 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies, onEditS
                 onSubmit={saveAnalysis}
                 defaultValues={{
                     ...analysis,
-                    title: studyTitle,
-                    description: study?.internalDescription || '',
+                    title: analysis.title || studyTitle,
+                    description: analysis.description || study?.internalDescription || '',
                     studyIds: studyId ? [...(analysis?.studyIds || []), Number(studyId) ] : analysis.studyIds,
                 }}
-                validationSchema={getAnalysisValidationSchema(analyses)}
+                validationSchema={getAnalysisValidationSchema(analyses, analysis)}
             >
                 <Alert warning={true} onDismiss={() => setError('')} message={error} />
                 <Col gap='large'>
@@ -120,11 +143,7 @@ const Title: FC<{}> = () => {
             </Col>
 
             <Col sm={4} direction='column' gap>
-                <InputField
-                    autoFocus
-                    name='title'
-                    type='textarea'
-                />
+                <InputField autoFocus name='title' type='textarea'/>
                 <FieldErrorMessage name='title' liveCountMax={100}/>
             </Col>
         </Box>
@@ -142,11 +161,7 @@ const Objectives: FC<{}> = () => {
             </Col>
 
             <Col sm={4} direction='column' gap>
-                <InputField
-                    autoFocus
-                    name='description'
-                    type='textarea'
-                />
+                <InputField name='description' type='textarea'/>
                 <FieldErrorMessage name='description' liveCountMax={250}/>
             </Col>
         </Box>
@@ -166,14 +181,6 @@ const BottomBar: FC<{}> = () => {
                 >
                     Save & Continue
                 </FormSaveButton>
-
-                {/*<ResearcherButton*/}
-                {/*    data-testid='save-analysis-button'*/}
-                {/*    disabled={!isValid || !isDirty}*/}
-                {/*    onClick={() => handleSubmit(() => {})}*/}
-                {/*>*/}
-                {/*    Save & Continue*/}
-                {/*</ResearcherButton>*/}
             </Box>
         </Box>
     )

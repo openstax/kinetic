@@ -18,7 +18,7 @@ Rails.application.routes.draw do
         end
         post 'studies/:id/update_status', to: 'studies#update_status'
 
-        resources :analysis, except: [:destroy]
+        resources :analysis
 
         get 'responses/:api_key', to: 'responses#fetch'
 
