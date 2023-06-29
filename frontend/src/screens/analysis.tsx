@@ -7,8 +7,10 @@ import { EditAnalysis } from './analysis/edit'
 import { useCallback } from 'react'
 import { colors } from '@theme';
 import dayjs from 'dayjs';
+import { AnalysisOverview } from './analysis/overview';
+import { AnalysisDashboard } from './analysis/dashboard';
 
-const AnalysisDashboard = () => {
+const AnalysisRoutes = () => {
     const api = useApi()
     const [analyses, setAnalyses] = useState<Analysis[] | null>(null)
     const [studies, setStudies] = useState<Study[]>([])
@@ -18,7 +20,7 @@ const AnalysisDashboard = () => {
             setAnalyses(res.data || [])
         })
 
-        // TODO Get available studies new endpoint
+        // TODO Get available studies new endpoint or filter clientside?
         api.getStudies().then((studies) => {
             const filtered = (studies.data || []).filter(s => {
                 // TODO Logic
@@ -42,11 +44,12 @@ const AnalysisDashboard = () => {
             <Box>
                 <Routes>
                     <Route path="edit/:analysisId" element={<EditAnalysis analyses={analyses} studies={studies} onEditSuccess={fetch} />} />
-                    {/*<Route path="*" element={<AddAnalysis />} />*/}
+                    <Route path="overview/:analysisId" element={<AnalysisOverview />} />
+                    <Route path="*" element={<AnalysisDashboard analyses={analyses} />} />
                 </Routes>
             </Box>
         </Page>
     )
 }
 
-export default AnalysisDashboard
+export default AnalysisRoutes
