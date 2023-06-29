@@ -1,19 +1,22 @@
-import { Analysis, Study } from '@api';
-import { React, Box, useNavigate, useEffect } from '@common';
-import { Icon, ResearcherButton, StyledRow, TableHeader, Tooltip } from '@components';
+import { Analysis } from '@api';
+import { Box, React, useNavigate } from '@common';
+import { ResearcherButton, StyledRow, TableHeader } from '@components';
 import {
-    ColumnDef, flexRender,
+    ColumnDef,
+    flexRender,
     getCoreRowModel,
-    getFilteredRowModel, getPaginationRowModel,
-    getSortedRowModel, Row, SortingState,
+    getFilteredRowModel,
+    getSortedRowModel,
+    Row,
+    SortingState,
     Table,
     useReactTable,
 } from '@tanstack/react-table';
-import { colors } from '@theme';
-import { toDayJS, useApi } from '@lib';
+import { toDayJS } from '@lib';
 import { Link } from 'react-router-dom';
+import { colors } from '@theme';
 
-export const AnalysisDashboard: FC<{analyses: Analysis[], fetchAnalyses(): void}> = ({ analyses, fetchAnalyses }) => {
+export const AnalysisDashboard: FC<{analyses: Analysis[]}> = ({ analyses }) => {
     const nav = useNavigate()
     return (
         <Box className='analysis-overview' direction='column' width='100%' gap='large'>
@@ -24,7 +27,6 @@ export const AnalysisDashboard: FC<{analyses: Analysis[], fetchAnalyses(): void}
                 </ResearcherButton>
             </Box>
             <AnalysisTable analyses={analyses} />
-
         </Box>
     )
 }
@@ -54,25 +56,27 @@ const AnalysisRow: React.FC<{row: Row<Analysis> }> = ({ row }) => {
 const AnalysisTable: FC<{analyses: Analysis[]}> = ({ analyses }) => {
     const { table } = useAnalysisTable(analyses)
     return (
-        <table data-testid="analysis-table" className='mt-6'>
-            <thead>
-                <tr>
-                    {table.getFlatHeaders().map((header) =>
-                        <TableHeader header={header} key={header.id} />
-                    )}
-                </tr>
-            </thead>
-            <tbody>
-                {table.getRowModel().rows.map((row) => {
-                    return <AnalysisRow row={row} key={row.id} />
-                })}
-            </tbody>
-        </table>
+        <Box direction='column'>
+            <table data-testid="analysis-table" className='mt-6'>
+                <thead>
+                    <tr>
+                        {table.getFlatHeaders().map((header) =>
+                            <TableHeader header={header} key={header.id} />
+                        )}
+                    </tr>
+                </thead>
+                <tbody>
+                    {table.getRowModel().rows.map((row) => {
+                        return <AnalysisRow row={row} key={row.id} />
+                    })}
+                </tbody>
+            </table>
+            <NoAnalyses filteredLength={table.getRowModel().rows.length} analyses={analyses}/>
+        </Box>
     )
 }
 
 const useAnalysisTable = (analyses: Analysis[]) => {
-    const api = useApi()
     const [sorting, setSorting] = React.useState<SortingState>([])
 
     const columns = React.useMemo<ColumnDef<Analysis>[]>(() => [
@@ -141,4 +145,23 @@ const useAnalysisTable = (analyses: Analysis[]) => {
     })
 
     return { table }
+}
+
+const NoAnalyses: React.FC<{
+    analyses: Analysis[],
+    filteredLength: number
+}> = ({ analyses, filteredLength }) => {
+    if (filteredLength) return null
+    return (
+        <Box direction='column' align='center' justify='center' className='mt-10' gap='large'>
+            <h3 css={{ color: colors.lightGray }}>
+                No data
+            </h3>
+            {!analyses.length && <span>
+                <Link to='/analysis/edit/new' className='fw-bold'>
+                    + Run your first analysis on Kinetic
+                </Link>
+            </span>}
+        </Box>
+    )
 }

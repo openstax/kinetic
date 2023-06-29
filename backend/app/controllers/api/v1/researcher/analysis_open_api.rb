@@ -30,7 +30,7 @@ class Api::V1::Researcher::AnalysisOpenApi
     end
 
     schema :Analysis do
-      key :required, %w[id title description]
+      key :required, %w[title description]
     end
 
     schema :AnalysisUpdate

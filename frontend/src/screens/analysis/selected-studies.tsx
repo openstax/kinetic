@@ -30,6 +30,7 @@ declare module '@tanstack/table-core' {
 
 export const SelectedStudies: FC<{studies: Study[], defaultStudy: Study | null}> = ({ studies, defaultStudy }) => {
     const { table } = useStudyTable(studies, defaultStudy)
+
     return (
         <Box direction="column" justify='between' gap>
             <StudyTypeFilter table={table} />

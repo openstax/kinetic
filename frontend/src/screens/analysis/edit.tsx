@@ -11,24 +11,16 @@ import {
     Toast,
     useFormState,
 } from '@components'
-import { Analysis, DefaultApi, Study } from '@api'
-import {
-    useCreateOrUpdateAnalysis,
-    getAnalysisValidationSchema,
-    useUpdateAnalysis,
-    useCreateAnalysis,
-    useFetchAnalysis, useFetchAnalyses,
-} from '@models'
+import { Analysis, Study } from '@api'
+import { getAnalysisValidationSchema, useCreateAnalysis, useFetchAnalyses, useUpdateAnalysis } from '@models'
 import { errorToString, useApi, useQueryParam } from '@lib'
 import { SelectedStudies } from './selected-studies'
 import { FormSaveButton } from '@nathanstitt/sundry/form';
 import { ResearcherFAQ } from './researcher-faq';
-import { useMutation, useQueryClient } from 'react-query'
 
 interface EditAnalysisProps {
     analyses: Analysis[]
     studies: Study[]
-    onEditSuccess(): void
 }
 
 const newAnalysis: Analysis = {
@@ -37,17 +29,11 @@ const newAnalysis: Analysis = {
     studies: [],
 }
 
-
-export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies, onEditSuccess }) => {
-    const [study, setStudy] = useState<Study | null>(null)
+const useDefaultStudy = (studies: Study[], analyses: Analysis[]) => {
     const [studyTitle, setStudyTitle] = useState<string>('')
-    const { analysisId } = useParams<string>();
-    const studyId = useQueryParam<number>('studyId') || null
-    const api = useApi()
-    const nav = useNavigate()
-    const queryClient = useQueryClient()
-    const mutate = useMutation
+    const [study, setStudy] = useState<Study | null>(null)
 
+    const studyId = useQueryParam<number>('studyId') || null
     useEffect(() => {
         if (studyId) {
             const study = studies.find(s => s.id == studyId) || null
@@ -63,6 +49,17 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies, onEditS
         }
 
     }, [studyId, studies])
+
+    return { study, studyTitle }
+}
+
+
+export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies }) => {
+    const { analysisId } = useParams<string>();
+    const studyId = useQueryParam<number>('studyId') || null
+    const api = useApi()
+    const nav = useNavigate()
+    const { study, studyTitle } = useDefaultStudy(studies, analyses)
 
     const analysis = (!analysisId || analysisId == 'new') ?
         newAnalysis : analyses.find(a => String(a.id) == analysisId)
@@ -81,25 +78,18 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies, onEditS
                 Toast.show({
                     message: `Successfully updated analysis ${updatedAnalysis.title}`,
                 })
+                nav(`/analysis/overview/${updatedAnalysis.id}`)
             } else {
                 const savedAnalysis = await api.addAnalysis({ addAnalysis: { analysis } })
                 Toast.show({
                     message: `Successfully created analysis ${analysis.title}`,
                 })
-
-                queryClient.setQueryData(['analyses', { id: savedAnalysis.id }], (a) => console.log(a))
-
-                // queryClient.setQueryData('analyses', (oldData ) => [...oldData, savedAnalysis])
-                nav(`/analysis/edit/${savedAnalysis.id}`)
+                nav(`/analysis/overview/${savedAnalysis.id}`)
             }
             await refetch()
-
-        // TODO Route to analysis overview page?
-        // onEditSuccess()
         } catch (err) {
             debugger
             setError(await errorToString(err))
-        } finally {
         }
     }
 
@@ -143,7 +133,7 @@ const Title: FC<{}> = () => {
             </Col>
 
             <Col sm={4} direction='column' gap>
-                <InputField autoFocus name='title' type='textarea'/>
+                <InputField name='title' type='textarea'/>
                 <FieldErrorMessage name='title' liveCountMax={100}/>
             </Col>
         </Box>

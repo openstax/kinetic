@@ -136,10 +136,6 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @id.nil?
-        invalid_properties.push('invalid value for "id", id cannot be nil.')
-      end
-
       if @title.nil?
         invalid_properties.push('invalid value for "title", title cannot be nil.')
       end
@@ -154,7 +150,6 @@ module Api::V1::Bindings
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @id.nil?
       return false if @title.nil?
       return false if @description.nil?
       true
