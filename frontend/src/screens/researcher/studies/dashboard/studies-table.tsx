@@ -312,7 +312,6 @@ export const StudiesTable: React.FC<{
                 )
             },
             cell: (info) => {
-
                 const study = info.row.original;
 
                 if (currentStatus == StudyStatus.Completed) {

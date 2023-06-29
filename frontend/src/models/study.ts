@@ -169,6 +169,14 @@ export const studyCategories: StudyCategory[] = [
     'Transfer of Learning',
 ]
 
+export const studyCategoryDescriptions = {
+    'Cognitive Task & Assessment': 'Measures of human cognition, such as working memory, reasoning, and problem-solving, as well as prior knowledge and skills',
+    'Learner Characteristics': 'Individual differences measures related to learning and education that provide insight into who is the learner',
+    'Educational Research': 'Learning and educational studies, such as A/B/N tests, quasi experiments, and single-domain interventional research',
+    'Product & Organizational Research': 'Surveys, assessments, and/or interventions related to understanding learner needs, such as product development and UX design',
+    'Transfer of Learning': 'Interventions that assess learning or other outcomes across domains',
+}
+
 export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other'
 export const studyTopics: StudyTopic[] = [
     'Learning',

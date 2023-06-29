@@ -7,12 +7,17 @@ RSpec.describe 'Analysis', api: :v1 do
   let(:researcher1) { create(:researcher) }
   let(:researcher2) { create(:researcher) }
 
+  let(:study1) { create(:study) }
+  let(:study2) { create(:study) }
+  let(:study3) { create(:study) }
+
   describe 'POST researcher/analysis' do
     let(:valid_new_analysis_attributes) do
       {
         title: 'Participant analysis title',
         repository_url: 'https://github.com/openstax/kinetic.git',
-        description: 'A short description'
+        description: 'A short description',
+        study_ids: [study1.id, study2.id, study3.id]
       }
     end
 

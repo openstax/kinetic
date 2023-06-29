@@ -1,5 +1,5 @@
 import { React, styled, useEffect } from '@common'
-import { Box, Icon, SelectField, TableHeader, useFormContext } from '@components'
+import { Box, Icon, SelectField, TableHeader, Tooltip, useFormContext } from '@components'
 import { Study } from '@api'
 import {
     ColumnDef,
@@ -14,9 +14,12 @@ import {
     SortingState,
     Table,
     useReactTable,
-} from '@tanstack/react-table';
-import { colors } from '@theme';
-import { studyCategories } from '@models';
+} from '@tanstack/react-table'
+import { colors } from '@theme'
+import { studyCategories, StudyCategory, studyCategoryDescriptions } from '@models'
+import { components } from 'react-select'
+import { useCurrentResearcher } from '@lib';
+import { useRefElement } from 'rooks';
 
 declare module '@tanstack/table-core' {
     // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
@@ -50,14 +53,29 @@ export const SelectedStudies: FC<{studies: Study[], defaultStudy: Study | null}>
     )
 }
 
+const CustomOption = (props: any) => {
+    console.log(props)
+    const category: StudyCategory = props.value
+    const description = studyCategoryDescriptions[category]
+    return (
+        <components.Option {...props} className='p-1'>
+            <Box direction='column' gap>
+                <span className='fw-bold'>{category}</span>
+                <small>{description}</small>
+            </Box>
+        </components.Option>
+    )
+}
+
 const StudyTypeFilter: FC<{table: Table<Study>}> = ({ table }) => {
     return (
         <Box gap='large' align='center'>
-            <span>Show</span>
-            <div css={{ width: 300 }}>
+            <span>Filter by:</span>
+            <div css={{ width: '25rem' }}>
                 <SelectField
                     name="category"
                     isClearable
+                    components={{ Option: CustomOption }}
                     placeholder="Study Type"
                     options={studyCategories.map(s => ({ value: s, label: s }))}
                     onChange={(value) => table.getColumn('category')?.setFilterValue(value)}
@@ -129,6 +147,11 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
         pageIndex: 0,
     })
 
+    const { setValue } = useFormContext()
+
+    const currentResearcher = useCurrentResearcher()
+    const [setCheckAll, checkAll] = useRefElement<HTMLInputElement>()
+
     useEffect(() => {
         if (defaultStudy) {
             setRowSelection({
@@ -140,7 +163,22 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
     const columns = React.useMemo<ColumnDef<Study>[]>(() => [
         {
             id: 'select',
-            header: () => <></>,
+            header: () => (
+                <input type='checkbox'
+                    ref={setCheckAll}
+                    checked={table.getIsAllRowsSelected()}
+                    onChange={(event) => {
+                        // table.toggleAllRowsSelected(event.target.checked)
+                        if (event.target.checked) {
+                            const selectedStudyIds = table.getRowModel().rows.map(row => row.original.id)
+                            setValue('studyIds', selectedStudyIds, { shouldValidate: true })
+                        } else {
+                            setValue('studyIds', [], { shouldValidate: true })
+                        }
+                        table.getToggleAllRowsSelectedHandler()(event)
+                    }}
+                />
+            ),
             size: 20,
             cell: ({ row }) => {
                 return <SelectionCheckbox studyId={row.original.id} row={row} />
@@ -152,19 +190,30 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
             size: 350,
             meta: { type: 'text' },
             cell: (info) => {
+                const value = info.getValue() as string
                 return (
-                    info.getValue()
+                    <Box justify='between' css={{ paddingRight: '2rem' }}>
+                        <span>{value}</span>
+                        <Icon height={20} color={colors.lightGray} icon='infoCircleFill' tooltip={info.row.original.internalDescription}></Icon>
+                    </Box>
                 )
             },
         },
         {
-            accessorKey: 'targetSampleSize',
-            header: () => 'Sample Size',
+            accessorKey: 'completedCount',
+            header: () => (
+                <Box gap>
+                    <span>Sample Size</span>
+                    <Tooltip tooltip='Total number of study completions' className='d-flex'>
+                        <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={14}/>
+                    </Tooltip>
+                </Box>
+            ),
             sortingFn: 'alphanumeric',
             cell: (info) => {
                 return (
                     <span>
-                        {(info.cell.getValue() as string) || 'N/A'}
+                        {(info.cell.getValue() as string) || '-'}
                     </span>
                 )
             },
@@ -183,10 +232,10 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
             id: 'researchTeam',
             header: () => 'Research Team',
             meta: { type: 'text' },
-            cell: (info) => {
-                // TODO Figure out research team
+            cell: ({ row }) => {
+                const isMyStudy = !!row.original.researchers?.find(r => r.userId == currentResearcher?.userId)
                 return (
-                    info.getValue()
+                    isMyStudy ? 'Your Team' : 'Shared on Kinetic'
                 )
             },
         },
@@ -201,7 +250,6 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
             pagination,
         },
         getRowId: (row) => String(row.id),
-        pageCount: Math.ceil(studies.length / pagination.pageSize),
         enableRowSelection: true,
         onRowSelectionChange: setRowSelection,
         onSortingChange: setSorting,
@@ -212,12 +260,22 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
         getPaginationRowModel: getPaginationRowModel(),
     })
 
+    useEffect(() => {
+        if (checkAll) {
+            checkAll.indeterminate = table.getIsSomeRowsSelected()
+        }
+    }, [checkAll, table.getSelectedRowModel().rows])
     return { table }
 }
 
 const PaginationContainer: FC<{table: Table<Study>}> = ({ table }) => {
     const currentPage = table.getState().pagination.pageIndex
     const pages = [...Array(table.getPageCount()).keys()]
+
+    if (!table.getFilteredRowModel().rows.length) {
+        return null
+    }
+
     return (
         <Box align='center' justify='center' className='mt-2' gap='large'>
             <Icon

@@ -8,6 +8,7 @@ import {
     Form,
     InputField,
     PageNotFound,
+    Toast,
     useFormState,
 } from '@components'
 import { Analysis, Study } from '@api'
@@ -15,6 +16,7 @@ import { getAnalysisValidationSchema } from '@models'
 import { errorToString, useApi, useQueryParam } from '@lib'
 import { SelectedStudies } from './selected-studies'
 import { FormSaveButton } from '@nathanstitt/sundry/form';
+import { ResearcherFAQ } from './researcher-faq';
 
 interface EditAnalysisProps {
     analyses: Analysis[]
@@ -60,14 +62,17 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies, onEditS
     const [error, setError] = useState('')
 
     const saveAnalysis = async (analysis: Analysis) => {
-        debugger
         try {
             if (analysis.id) {
                 await api.updateAnalysis({ id: analysis.id, updateAnalysis: { analysis } })
+                Toast.show({
+                    message: '',
+                })
             } else {
                 const savedAnalysis = await api.addAnalysis({ addAnalysis: { analysis } })
                 nav(`/analysis/edit/${savedAnalysis.id}`)
             }
+            // TODO Route to analysis overview page?
             onEditSuccess()
         }
         catch (err) {
@@ -99,6 +104,7 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies, onEditS
 
                 <BottomBar />
             </Form>
+            <ResearcherFAQ />
         </div>
     )
 }

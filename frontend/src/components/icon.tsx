@@ -39,6 +39,7 @@ import chatLeft from '@iconify-icons/bi/chat-left-fill'
 import cloudUpload from '@iconify-icons/bi/cloud-upload'
 import cloudDownload from '@iconify-icons/bi/cloud-download'
 import questionCircleFill from '@iconify-icons/bi/question-circle-fill'
+import questionCircle from '@iconify-icons/bi/question-circle'
 import arrowLeftRight from '@iconify-icons/bi/arrow-left-right'
 import arrowUpDown from '@iconify-icons/bi/arrow-up-down'
 import arrowLeft from '@iconify-icons/bi/arrow-left'
@@ -53,6 +54,7 @@ import chevronLeft from '@iconify-icons/bi/chevron-left'
 import chevronRight from '@iconify-icons/bi/chevron-right'
 import chevronDown from '@iconify-icons/bi/chevron-down'
 import chevronUp from '@iconify-icons/bi/chevron-up'
+import infoCircleFill from '@iconify-icons/bi/info-circle-fill'
 
 const SUNDRY_PACKAGED_ICONS = {
     thumbsUp,
@@ -97,6 +99,7 @@ export const ICONS = {
     cloudUpload,
     cloudDownload,
     questionCircleFill,
+    questionCircle,
     arrowUpDown,
     arrowLeftRight,
     arrowLeft,
@@ -111,6 +114,7 @@ export const ICONS = {
     chevronRight,
     chevronDown,
     chevronUp,
+    infoCircleFill,
 }
 
 export type IconKey = keyof typeof ICONS
