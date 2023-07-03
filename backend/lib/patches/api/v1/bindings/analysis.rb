@@ -8,6 +8,7 @@ Rails.application.config.to_prepare do
       new(attributes).tap do |bnd|
         bnd.studies = model.study_analyses.as_json(only: [:study_id])
         bnd.study_ids = bnd.studies.map { |s| s.values }.flatten
+        bnd.runs = model.runs.as_json
       end
     end
   end

@@ -10,7 +10,6 @@ FactoryBot.define do
 
     title { Faker::Lorem.paragraph_by_chars(number: rand(20..45)) }
     description { Faker::Lorem.paragraph_by_chars(number: rand(40..120)) }
-    repository_url { Faker::Internet.url }
     api_key { SecureRandom.hex(6) }
 
     after(:create) do |analysis, evaluator|

@@ -12,7 +12,7 @@ import {
     useFormState,
 } from '@components'
 import { Analysis, Study } from '@api'
-import { getAnalysisValidationSchema, useCreateAnalysis, useFetchAnalyses, useUpdateAnalysis } from '@models'
+import { getAnalysisValidationSchema, useFetchAnalyses } from '@models'
 import { errorToString, useApi, useQueryParam } from '@lib'
 import { SelectedStudies } from './selected-studies'
 import { FormSaveButton } from '@nathanstitt/sundry/form';
@@ -66,14 +66,11 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies }) => {
 
     const [error, setError] = useState('')
 
-    const updateAnalysis = useUpdateAnalysis()
-    const createAnalysis = useCreateAnalysis()
     const { refetch } = useFetchAnalyses()
 
     const saveAnalysis = async (analysis: Analysis) => {
         try {
             if (analysis.id) {
-                // const updatedAnalysis = await updateAnalysis(analysis)
                 const updatedAnalysis = await api.updateAnalysis({ id: analysis.id, updateAnalysis: { analysis } })
                 Toast.show({
                     message: `Successfully updated analysis ${updatedAnalysis.title}`,
@@ -88,7 +85,6 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies }) => {
             }
             await refetch()
         } catch (err) {
-            debugger
             setError(await errorToString(err))
         }
     }
@@ -122,7 +118,7 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies }) => {
     )
 }
 
-const Title: FC<{}> = () => {
+const Title = () => {
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
@@ -140,7 +136,7 @@ const Title: FC<{}> = () => {
     )
 }
 
-const Objectives: FC<{}> = () => {
+const Objectives = () => {
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
@@ -158,7 +154,7 @@ const Objectives: FC<{}> = () => {
     )
 }
 
-const BottomBar: FC<{}> = () => {
+const BottomBar = () => {
     const { isValid, isDirty } = useFormState()
 
     return (

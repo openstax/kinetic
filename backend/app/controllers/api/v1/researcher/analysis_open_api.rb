@@ -31,6 +31,13 @@ class Api::V1::Researcher::AnalysisOpenApi
 
     schema :Analysis do
       key :required, %w[title description]
+      property :runs do
+        key :type, :array
+        key :description, 'The analysis runs.'
+        items do
+          key :$ref, :AnalysisRun
+        end
+      end
     end
 
     schema :AnalysisUpdate

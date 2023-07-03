@@ -8,7 +8,11 @@ class Api::V1::Researcher::AnalysisRunOpenApi
 
     schema :AnalysisRun do
       key :required, %w[api_key analysis_id analysis_api_key]
-
+      property :id do
+        key :type, :integer
+        key :description, 'ID of analysis run'
+        key :readOnly, true
+      end
       property :api_key do
         key :type, :string
         key :description, 'Api key to use for recording progress of run'
@@ -30,7 +34,7 @@ class Api::V1::Researcher::AnalysisRunOpenApi
         key :format, 'datetime'
         key :description, 'When was run started'
       end
-      property :finshed_at do
+      property :finished_at do
         key :type, :string
         key :format, 'datetime'
         key :description, 'When was run completed'

@@ -15,6 +15,7 @@ import {
 import { toDayJS } from '@lib';
 import { Link } from 'react-router-dom';
 import { colors } from '@theme';
+import { lastRun } from '@models';
 
 export const AnalysisDashboard: FC<{analyses: Analysis[]}> = ({ analyses }) => {
     const nav = useNavigate()
@@ -90,7 +91,10 @@ const useAnalysisTable = (analyses: Analysis[]) => {
             },
         },
         {
-            accessorKey: 'finishedAt',
+            accessorKey: 'lastRun',
+            accessorFn: (analysis) => {
+                return lastRun(analysis)?.finishedAt
+            },
             header: () => (
                 <span>Last run on</span>
             ),

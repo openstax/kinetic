@@ -15,6 +15,9 @@ require 'time'
 
 module Api::V1::Bindings
   class AnalysisRun
+    # ID of analysis run
+    attr_accessor :id
+
     # Api key to use for recording progress of run
     attr_accessor :api_key
 
@@ -31,17 +34,18 @@ module Api::V1::Bindings
     attr_accessor :started_at
 
     # When was run completed
-    attr_accessor :finshed_at
+    attr_accessor :finished_at
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
+        :'id' => :'id',
         :'api_key' => :'api_key',
         :'analysis_id' => :'analysis_id',
         :'analysis_api_key' => :'analysis_api_key',
         :'did_succeed' => :'did_succeed',
         :'started_at' => :'started_at',
-        :'finshed_at' => :'finshed_at'
+        :'finished_at' => :'finished_at'
       }
     end
 
@@ -53,12 +57,13 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
+        :'id' => :'Integer',
         :'api_key' => :'String',
         :'analysis_id' => :'Integer',
         :'analysis_api_key' => :'Integer',
         :'did_succeed' => :'Boolean',
         :'started_at' => :'String',
-        :'finshed_at' => :'String'
+        :'finished_at' => :'String'
       }
     end
 
@@ -83,6 +88,10 @@ module Api::V1::Bindings
         h[k.to_sym] = v
       }
 
+      if attributes.key?(:'id')
+        self.id = attributes[:'id']
+      end
+
       if attributes.key?(:'api_key')
         self.api_key = attributes[:'api_key']
       end
@@ -103,8 +112,8 @@ module Api::V1::Bindings
         self.started_at = attributes[:'started_at']
       end
 
-      if attributes.key?(:'finshed_at')
-        self.finshed_at = attributes[:'finshed_at']
+      if attributes.key?(:'finished_at')
+        self.finished_at = attributes[:'finished_at']
       end
     end
 
@@ -141,12 +150,13 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
+          id == o.id &&
           api_key == o.api_key &&
           analysis_id == o.analysis_id &&
           analysis_api_key == o.analysis_api_key &&
           did_succeed == o.did_succeed &&
           started_at == o.started_at &&
-          finshed_at == o.finshed_at
+          finished_at == o.finished_at
     end
 
     # @see the `==` method
@@ -158,7 +168,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [api_key, analysis_id, analysis_api_key, did_succeed, started_at, finshed_at].hash
+      [id, api_key, analysis_id, analysis_api_key, did_succeed, started_at, finished_at].hash
     end
 
     # Builds the object from hash

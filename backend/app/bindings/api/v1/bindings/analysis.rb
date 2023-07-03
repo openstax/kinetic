@@ -15,6 +15,9 @@ require 'time'
 
 module Api::V1::Bindings
   class Analysis
+    # The analysis runs.
+    attr_accessor :runs
+
     # ID of analysis
     attr_accessor :id
 
@@ -42,6 +45,7 @@ module Api::V1::Bindings
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
+        :'runs' => :'runs',
         :'id' => :'id',
         :'title' => :'title',
         :'description' => :'description',
@@ -61,6 +65,7 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
+        :'runs' => :'Array<AnalysisRun>',
         :'id' => :'Integer',
         :'title' => :'String',
         :'description' => :'String',
@@ -92,6 +97,12 @@ module Api::V1::Bindings
         end
         h[k.to_sym] = v
       }
+
+      if attributes.key?(:'runs')
+        if (value = attributes[:'runs']).is_a?(Array)
+          self.runs = value
+        end
+      end
 
       if attributes.key?(:'id')
         self.id = attributes[:'id']
@@ -160,6 +171,7 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
+          runs == o.runs &&
           id == o.id &&
           title == o.title &&
           description == o.description &&
@@ -179,7 +191,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title, description, repository_url, api_key, researchers, study_ids, studies].hash
+      [runs, id, title, description, repository_url, api_key, researchers, study_ids, studies].hash
     end
 
     # Builds the object from hash

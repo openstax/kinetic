@@ -19,6 +19,12 @@ import {
     AnalysisResearcherFromJSONTyped,
     AnalysisResearcherToJSON,
 } from './AnalysisResearcher';
+import type { AnalysisRun } from './AnalysisRun';
+import {
+    AnalysisRunFromJSON,
+    AnalysisRunFromJSONTyped,
+    AnalysisRunToJSON,
+} from './AnalysisRun';
 import type { StudyAnalysis } from './StudyAnalysis';
 import {
     StudyAnalysisFromJSON,
@@ -32,6 +38,12 @@ import {
  * @interface Analysis
  */
 export interface Analysis {
+    /**
+     * The analysis runs.
+     * @type {Array<AnalysisRun>}
+     * @memberof Analysis
+     */
+    runs?: Array<AnalysisRun>;
     /**
      * ID of analysis
      * @type {number}
@@ -103,6 +115,7 @@ export function AnalysisFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
+        'runs': !exists(json, 'runs') ? undefined : ((json['runs'] as Array<any>).map(AnalysisRunFromJSON)),
         'id': !exists(json, 'id') ? undefined : json['id'],
         'title': json['title'],
         'description': json['description'],
@@ -123,6 +136,7 @@ export function AnalysisToJSON(value?: Analysis | null): any {
     }
     return {
         
+        'runs': value.runs === undefined ? undefined : ((value.runs as Array<any>).map(AnalysisRunToJSON)),
         'title': value.title,
         'description': value.description,
         'repository_url': value.repositoryUrl,

@@ -20,6 +20,12 @@ import { exists, mapValues } from '../runtime';
  */
 export interface AnalysisRun {
     /**
+     * ID of analysis run
+     * @type {number}
+     * @memberof AnalysisRun
+     */
+    readonly id?: number;
+    /**
      * Api key to use for recording progress of run
      * @type {string}
      * @memberof AnalysisRun
@@ -54,7 +60,7 @@ export interface AnalysisRun {
      * @type {string}
      * @memberof AnalysisRun
      */
-    finshedAt?: string;
+    finishedAt?: string;
 }
 
 /**
@@ -79,12 +85,13 @@ export function AnalysisRunFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
+        'id': !exists(json, 'id') ? undefined : json['id'],
         'apiKey': json['api_key'],
         'analysisId': json['analysis_id'],
         'analysisApiKey': json['analysis_api_key'],
         'didSucceed': !exists(json, 'did_succeed') ? undefined : json['did_succeed'],
         'startedAt': !exists(json, 'started_at') ? undefined : json['started_at'],
-        'finshedAt': !exists(json, 'finshed_at') ? undefined : json['finshed_at'],
+        'finishedAt': !exists(json, 'finished_at') ? undefined : json['finished_at'],
     };
 }
 
@@ -102,7 +109,7 @@ export function AnalysisRunToJSON(value?: AnalysisRun | null): any {
         'analysis_api_key': value.analysisApiKey,
         'did_succeed': value.didSucceed,
         'started_at': value.startedAt,
-        'finshed_at': value.finshedAt,
+        'finished_at': value.finishedAt,
     };
 }
 

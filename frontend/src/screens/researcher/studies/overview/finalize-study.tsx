@@ -30,7 +30,7 @@ const ReadyForLaunch: FC<{
         <Box direction='column' gap='xxlarge'>
             <Box align='center' justify='between'>
                 <h3>{study?.titleForResearchers}</h3>
-                <ExitButton />
+                <ExitButton navTo='/studies'/>
             </Box>
             <Box direction='column' align='center' className='text-center' gap='large' alignSelf='center' padding={{ left: '3em', right: '3em' }}>
                 <img src={QualtricsReady} alt='qualtrics-ready' height={200}/>

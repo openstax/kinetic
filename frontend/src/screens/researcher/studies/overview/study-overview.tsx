@@ -55,7 +55,7 @@ const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
         <Box direction='column' gap='xxlarge'>
             <Box align='center' justify='between'>
                 <h3>{study?.titleForResearchers}</h3>
-                <ExitButton />
+                <ExitButton navTo='/studies'/>
             </Box>
 
             <StudyInformation study={study} />
@@ -203,7 +203,7 @@ const WaitingForTemplate: FC<{study: Study}> = ({ study }) => {
         <Box direction='column' gap='xxlarge'>
             <Box align='center' justify='between'>
                 <h3>{study?.titleForResearchers}</h3>
-                <ExitButton />
+                <ExitButton navTo='/studies'/>
             </Box>
             <Box direction='column' align='center' className='text-center' gap='large' alignSelf='center'>
                 <img src={Waiting} alt='waiting' height={200}/>
