@@ -12,7 +12,7 @@ class CloneSurvey
   def clone(new_name)
     return [@survey_id, 'dev-no-key'] unless Rails.env.production?
 
-    @source = api.get_survey_definition(survey_id, format: 'qsf')
+    @source = api.get_survey_definition(@survey_id, format: 'qsf')
 
     result = @api.create_survey(@source.merge(
                                   { SurveyEntry: @source['SurveyEntry'].merge(
