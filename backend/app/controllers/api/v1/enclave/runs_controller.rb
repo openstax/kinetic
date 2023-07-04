@@ -2,7 +2,7 @@
 
 class Api::V1::Enclave::RunsController < Api::V1::BaseController
 
-  before_action :render_forbidden_unless_enclave_api_key!
+  before_action :forbid_unless_enclave_api_key!
   before_action :find_run, except: [:create]
 
   def create

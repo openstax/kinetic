@@ -155,7 +155,7 @@ const Objectives = () => {
 }
 
 const BottomBar = () => {
-    const { isValid, isDirty } = useFormState()
+    const { isValid } = useFormState()
 
     return (
         <Box className='fixed-bottom bg-white mt-auto' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>

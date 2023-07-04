@@ -14,46 +14,56 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class AnalysisRun
-    # ID of analysis run
+  class AnalysisRunMessage
+    # ID of analysis run message
     attr_accessor :id
 
-    # Api key to use for recording progress of run
-    attr_accessor :api_key
+    # ID of analysis run
+    attr_accessor :analysis_run_id
 
-    # Commit message of the analysis run
+    # The message
     attr_accessor :message
 
-    # The analysis run messages.
-    attr_accessor :messages
+    # Current stage of the process
+    attr_accessor :stage
 
-    # Id of Analysis
-    attr_accessor :analysis_id
+    # Status of the stage
+    attr_accessor :level
 
-    # Api key to obtain analysis data
-    attr_accessor :analysis_api_key
+    # When was run message was created
+    attr_accessor :created_at
 
-    # has run succeeded
-    attr_accessor :did_succeed
+    class EnumAttributeValidator
+      attr_reader :datatype
+      attr_reader :allowable_values
 
-    # When was run started
-    attr_accessor :started_at
+      def initialize(datatype, allowable_values)
+        @allowable_values = allowable_values.map do |value|
+          case datatype.to_s
+          when /Integer/i
+            value.to_i
+          when /Float/i
+            value.to_f
+          else
+            value
+          end
+        end
+      end
 
-    # When was run completed
-    attr_accessor :finished_at
+      def valid?(value)
+        !value || allowable_values.include?(value)
+      end
+    end
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'id' => :'id',
-        :'api_key' => :'api_key',
+        :'analysis_run_id' => :'analysis_run_id',
         :'message' => :'message',
-        :'messages' => :'messages',
-        :'analysis_id' => :'analysis_id',
-        :'analysis_api_key' => :'analysis_api_key',
-        :'did_succeed' => :'did_succeed',
-        :'started_at' => :'started_at',
-        :'finished_at' => :'finished_at'
+        :'stage' => :'stage',
+        :'level' => :'level',
+        :'created_at' => :'created_at'
       }
     end
 
@@ -66,14 +76,11 @@ module Api::V1::Bindings
     def self.openapi_types
       {
         :'id' => :'Integer',
-        :'api_key' => :'String',
+        :'analysis_run_id' => :'Integer',
         :'message' => :'String',
-        :'messages' => :'Array<AnalysisRunMessage>',
-        :'analysis_id' => :'Integer',
-        :'analysis_api_key' => :'Integer',
-        :'did_succeed' => :'Boolean',
-        :'started_at' => :'String',
-        :'finished_at' => :'String'
+        :'stage' => :'String',
+        :'level' => :'String',
+        :'created_at' => :'String'
       }
     end
 
@@ -87,13 +94,13 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::AnalysisRun` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::AnalysisRunMessage` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::AnalysisRun`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::AnalysisRunMessage`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
@@ -102,38 +109,24 @@ module Api::V1::Bindings
         self.id = attributes[:'id']
       end
 
-      if attributes.key?(:'api_key')
-        self.api_key = attributes[:'api_key']
+      if attributes.key?(:'analysis_run_id')
+        self.analysis_run_id = attributes[:'analysis_run_id']
       end
 
       if attributes.key?(:'message')
         self.message = attributes[:'message']
       end
 
-      if attributes.key?(:'messages')
-        if (value = attributes[:'messages']).is_a?(Array)
-          self.messages = value
-        end
+      if attributes.key?(:'stage')
+        self.stage = attributes[:'stage']
       end
 
-      if attributes.key?(:'analysis_id')
-        self.analysis_id = attributes[:'analysis_id']
+      if attributes.key?(:'level')
+        self.level = attributes[:'level']
       end
 
-      if attributes.key?(:'analysis_api_key')
-        self.analysis_api_key = attributes[:'analysis_api_key']
-      end
-
-      if attributes.key?(:'did_succeed')
-        self.did_succeed = attributes[:'did_succeed']
-      end
-
-      if attributes.key?(:'started_at')
-        self.started_at = attributes[:'started_at']
-      end
-
-      if attributes.key?(:'finished_at')
-        self.finished_at = attributes[:'finished_at']
+      if attributes.key?(:'created_at')
+        self.created_at = attributes[:'created_at']
       end
     end
 
@@ -141,28 +134,37 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @api_key.nil?
-        invalid_properties.push('invalid value for "api_key", api_key cannot be nil.')
-      end
-
-      if @analysis_id.nil?
-        invalid_properties.push('invalid value for "analysis_id", analysis_id cannot be nil.')
-      end
-
-      if @analysis_api_key.nil?
-        invalid_properties.push('invalid value for "analysis_api_key", analysis_api_key cannot be nil.')
-      end
-
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @api_key.nil?
-      return false if @analysis_id.nil?
-      return false if @analysis_api_key.nil?
+      stage_validator = EnumAttributeValidator.new('String', ["archive", "review", "package", "run", "check", "end"])
+      return false unless stage_validator.valid?(@stage)
+      level_validator = EnumAttributeValidator.new('String', ["info", "error", "debug"])
+      return false unless level_validator.valid?(@level)
       true
+    end
+
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] stage Object to be assigned
+    def stage=(stage)
+      validator = EnumAttributeValidator.new('String', ["archive", "review", "package", "run", "check", "end"])
+      unless validator.valid?(stage)
+        fail ArgumentError, "invalid value for \"stage\", must be one of #{validator.allowable_values}."
+      end
+      @stage = stage
+    end
+
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] level Object to be assigned
+    def level=(level)
+      validator = EnumAttributeValidator.new('String', ["info", "error", "debug"])
+      unless validator.valid?(level)
+        fail ArgumentError, "invalid value for \"level\", must be one of #{validator.allowable_values}."
+      end
+      @level = level
     end
 
     # Checks equality by comparing each attribute.
@@ -171,14 +173,11 @@ module Api::V1::Bindings
       return true if self.equal?(o)
       self.class == o.class &&
           id == o.id &&
-          api_key == o.api_key &&
+          analysis_run_id == o.analysis_run_id &&
           message == o.message &&
-          messages == o.messages &&
-          analysis_id == o.analysis_id &&
-          analysis_api_key == o.analysis_api_key &&
-          did_succeed == o.did_succeed &&
-          started_at == o.started_at &&
-          finished_at == o.finished_at
+          stage == o.stage &&
+          level == o.level &&
+          created_at == o.created_at
     end
 
     # @see the `==` method
@@ -190,7 +189,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, api_key, message, messages, analysis_id, analysis_api_key, did_succeed, started_at, finished_at].hash
+      [id, analysis_run_id, message, stage, level, created_at].hash
     end
 
     # Builds the object from hash

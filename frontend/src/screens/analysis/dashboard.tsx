@@ -15,7 +15,8 @@ import {
 import { toDayJS } from '@lib';
 import { Link } from 'react-router-dom';
 import { colors } from '@theme';
-import { lastRun } from '@models';
+import { getLastRun } from '@models';
+import { RunStatus } from './overview';
 
 export const AnalysisDashboard: FC<{analyses: Analysis[]}> = ({ analyses }) => {
     const nav = useNavigate()
@@ -80,6 +81,7 @@ const AnalysisTable: FC<{analyses: Analysis[]}> = ({ analyses }) => {
 const useAnalysisTable = (analyses: Analysis[]) => {
     const [sorting, setSorting] = React.useState<SortingState>([])
 
+    console.log(analyses)
     const columns = React.useMemo<ColumnDef<Analysis>[]>(() => [
         {
             accessorKey: 'title',
@@ -93,21 +95,17 @@ const useAnalysisTable = (analyses: Analysis[]) => {
         {
             accessorKey: 'lastRun',
             accessorFn: (analysis) => {
-                return lastRun(analysis)?.finishedAt
+                return getLastRun(analysis)?.startedAt
             },
             header: () => (
                 <span>Last run on</span>
             ),
             sortingFn: 'datetime',
             cell: (info) => {
-                const finishedAt = info.getValue() as Date
-                if (!finishedAt) return '-'
+                const lastRun = getLastRun(info.row.original)?.startedAt
+                if (!lastRun) return '-'
 
-                return (
-                    <span>
-                        {toDayJS(finishedAt).format('MM/DD/YYYY')}
-                    </span>
-                )
+                return toDayJS(lastRun).format('MM/DD/YYYY hh:mm:ss A')
             },
         },
         {
@@ -115,23 +113,17 @@ const useAnalysisTable = (analyses: Analysis[]) => {
             header: () => 'Last run status',
             meta: { type: 'text' },
             cell: (info) => {
-                return (
-                    info.getValue()
-                )
+                const lastRun = getLastRun(info.row.original)
+                if (!lastRun) return 'N/A'
+                return <RunStatus analysisRun={lastRun} />
             },
         },
         {
             id: 'runs',
             header: () => '# of runs',
+            accessorFn: (originalRow) => originalRow.runs?.length,
             sortingFn: 'alphanumeric',
-            cell: ({ row }) => {
-                return 'TODO: analysis.runs.length'
-                // row.original
-                // const isMyStudy = !!row.original.researchers?.find(r => r.userId == currentResearcher?.userId)
-                // return (
-                //     isMyStudy ? 'Your Team' : 'Shared on Kinetic'
-                // )
-            },
+            cell: ({ row }) => row.original.runs?.length || '-',
         },
     ], [])
 

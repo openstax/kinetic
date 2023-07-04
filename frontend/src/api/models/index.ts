@@ -9,6 +9,7 @@ export * from './Analysis';
 export * from './AnalysisListing';
 export * from './AnalysisResearcher';
 export * from './AnalysisRun';
+export * from './AnalysisRunMessage';
 export * from './AnalysisUpdate';
 export * from './BannerMessage';
 export * from './BannerNotice';

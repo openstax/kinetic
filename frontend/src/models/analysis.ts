@@ -1,11 +1,11 @@
 import * as Yup from 'yup'
-import { Analysis } from '@api';
+import { Analysis, AnalysisRun } from '@api';
 import { useQuery } from 'react-query';
 import { useMemo } from '@common';
 import { useApi } from '@lib';
 import { last } from 'lodash-es';
 
-export const lastRun = (analysis: Analysis) => {
+export const getLastRun = (analysis: Analysis) => {
     return last(analysis.runs)
 }
 
@@ -44,4 +44,16 @@ export const useFetchAnalysis = (id: number) => {
     return useQuery('fetchAnalysisById', () => {
         return api.getAnalysis({ id: id })
     })
+}
+
+export const isRunUnderReview = (run: AnalysisRun) => {
+    return !run.finishedAt
+}
+
+export const runHasError = (run: AnalysisRun) => {
+    return run.finishedAt && !run.didSucceed
+}
+
+export const hasRunSucceeded = (run: AnalysisRun) => {
+    return run.finishedAt && run.didSucceed
 }

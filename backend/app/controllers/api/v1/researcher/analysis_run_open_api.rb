@@ -5,7 +5,6 @@ class Api::V1::Researcher::AnalysisRunOpenApi
   include OpenStax::OpenApi::Blocks
 
   openapi_component do
-
     schema :AnalysisRun do
       key :required, %w[api_key analysis_id analysis_api_key]
       property :id do
@@ -16,6 +15,17 @@ class Api::V1::Researcher::AnalysisRunOpenApi
       property :api_key do
         key :type, :string
         key :description, 'Api key to use for recording progress of run'
+      end
+      property :message do
+        key :type, :string
+        key :description, 'Commit message of the analysis run'
+      end
+      property :messages do
+        key :type, :array
+        key :description, 'The analysis run messages.'
+        items do
+          key :$ref, :AnalysisRunMessage
+        end
       end
       property :analysis_id do
         key :type, :integer
@@ -38,6 +48,38 @@ class Api::V1::Researcher::AnalysisRunOpenApi
         key :type, :string
         key :format, 'datetime'
         key :description, 'When was run completed'
+      end
+    end
+
+    schema :AnalysisRunMessage do
+      property :id do
+        key :type, :integer
+        key :description, 'ID of analysis run message'
+        key :readOnly, true
+      end
+      property :analysis_run_id do
+        key :type, :integer
+        key :description, 'ID of analysis run'
+        key :readOnly, true
+      end
+      property :message do
+        key :type, :string
+        key :description, 'The message'
+      end
+      property :stage do
+        key :type, :string
+        key :description, 'Current stage of the process'
+        key :enum, %w[archive review package run check end]
+      end
+      property :level do
+        key :type, :string
+        key :description, 'Status of the stage'
+        key :enum, %w[info error debug]
+      end
+      property :created_at do
+        key :type, :string
+        key :format, 'datetime'
+        key :description, 'When was run message was created'
       end
     end
 

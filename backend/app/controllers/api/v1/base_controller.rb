@@ -33,7 +33,7 @@ class Api::V1::BaseController < ApplicationController
 
   protected
 
-  def render_forbidden_unless_enclave_api_key!
+  def forbid_unless_enclave_api_key!
     head :forbidden unless has_enclaves_token?
   end
 

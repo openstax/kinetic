@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { AnalysisRunMessage } from './AnalysisRunMessage';
+import {
+    AnalysisRunMessageFromJSON,
+    AnalysisRunMessageFromJSONTyped,
+    AnalysisRunMessageToJSON,
+} from './AnalysisRunMessage';
+
 /**
  * 
  * @export
@@ -31,6 +38,18 @@ export interface AnalysisRun {
      * @memberof AnalysisRun
      */
     apiKey: string;
+    /**
+     * Commit message of the analysis run
+     * @type {string}
+     * @memberof AnalysisRun
+     */
+    message?: string;
+    /**
+     * The analysis run messages.
+     * @type {Array<AnalysisRunMessage>}
+     * @memberof AnalysisRun
+     */
+    messages?: Array<AnalysisRunMessage>;
     /**
      * Id of Analysis
      * @type {number}
@@ -87,6 +106,8 @@ export function AnalysisRunFromJSONTyped(json: any, ignoreDiscriminator: boolean
         
         'id': !exists(json, 'id') ? undefined : json['id'],
         'apiKey': json['api_key'],
+        'message': !exists(json, 'message') ? undefined : json['message'],
+        'messages': !exists(json, 'messages') ? undefined : ((json['messages'] as Array<any>).map(AnalysisRunMessageFromJSON)),
         'analysisId': json['analysis_id'],
         'analysisApiKey': json['analysis_api_key'],
         'didSucceed': !exists(json, 'did_succeed') ? undefined : json['did_succeed'],
@@ -105,6 +126,8 @@ export function AnalysisRunToJSON(value?: AnalysisRun | null): any {
     return {
         
         'api_key': value.apiKey,
+        'message': value.message,
+        'messages': value.messages === undefined ? undefined : ((value.messages as Array<any>).map(AnalysisRunMessageToJSON)),
         'analysis_id': value.analysisId,
         'analysis_api_key': value.analysisApiKey,
         'did_succeed': value.didSucceed,

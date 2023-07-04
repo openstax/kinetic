@@ -55,6 +55,7 @@ import chevronRight from '@iconify-icons/bi/chevron-right'
 import chevronDown from '@iconify-icons/bi/chevron-down'
 import chevronUp from '@iconify-icons/bi/chevron-up'
 import infoCircleFill from '@iconify-icons/bi/info-circle-fill'
+import info from '@iconify-icons/bi/info'
 
 const SUNDRY_PACKAGED_ICONS = {
     thumbsUp,
@@ -115,6 +116,7 @@ export const ICONS = {
     chevronDown,
     chevronUp,
     infoCircleFill,
+    info,
 }
 
 export type IconKey = keyof typeof ICONS
