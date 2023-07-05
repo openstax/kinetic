@@ -96,7 +96,7 @@ const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
                     }}>
-                        <div css={{ height: '1rem' }}>
+                        <div>
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </div>
                     </td>
@@ -124,7 +124,9 @@ const SelectionCheckbox: React.FC<{ studyId: number, row: Row<Study> }> = ({ stu
     return (
         <input type='checkbox'
             key={studyId}
+            className='select-study-checkbox'
             data-index={row.index}
+            data-test-id={`${studyId}-checkbox`}
             onChange={onChange}
             checked={selectedIds.includes(studyId)}
         />

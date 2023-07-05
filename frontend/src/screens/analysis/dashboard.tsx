@@ -59,7 +59,7 @@ const AnalysisTable: FC<{analyses: Analysis[]}> = ({ analyses }) => {
     const { table } = useAnalysisTable(analyses)
     return (
         <Box direction='column'>
-            <table data-testid="analysis-table" className='mt-6'>
+            <table data-testid="analyses-table" className='mt-6'>
                 <thead>
                     <tr>
                         {table.getFlatHeaders().map((header) =>
@@ -81,7 +81,6 @@ const AnalysisTable: FC<{analyses: Analysis[]}> = ({ analyses }) => {
 const useAnalysisTable = (analyses: Analysis[]) => {
     const [sorting, setSorting] = React.useState<SortingState>([])
 
-    console.log(analyses)
     const columns = React.useMemo<ColumnDef<Analysis>[]>(() => [
         {
             accessorKey: 'title',

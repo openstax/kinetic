@@ -103,12 +103,8 @@ interface createStudyArgs {
     name: string
     approveAndLaunchStudy?: boolean
     multiSession?: boolean
+    description?: string
 }
-
-// TODO Helper function for closing criteria on study overview page (once that page is finalized)
-// export const setClosingCriteria = async(page: Page) => {
-//
-// }
 
 export const approveWaitingStudy = async(page: Page, studyId: number) => {
     await goToPage({ page, path: '/admin/approve-studies', loginAs: 'admin' })
@@ -137,7 +133,6 @@ export const launchApprovedStudy = async(page: Page, studyId: number, multiSessi
     await page.click('testId=launch-study-button')
     await page.waitForLoadState('networkidle')
     await page.click('testId=primary-action')
-    await logout({ page })
 }
 
 export const createStudy = async ({
@@ -145,11 +140,12 @@ export const createStudy = async ({
     name,
     approveAndLaunchStudy = false,
     multiSession = false,
+    description = faker.commerce.color(),
 }: createStudyArgs) => {
     // Step 1 - Internal Details
     await goToPage({ page, path: '/study/edit/new', loginAs: 'researcher' })
     await page.fill('[name=titleForResearchers]', name)
-    await page.fill('[name=internalDescription]', faker.commerce.color())
+    await page.fill('[name=internalDescription]', description)
     await page.click("input[value='Learner Characteristics']")
 
     await expect(page.locator('testId=study-primary-action')).not.toBeDisabled()

@@ -1,11 +1,16 @@
-import { faker, goToPage, test } from '../test';
+import { goToPage, loginAs, test } from '../test';
+import { createAnalysis } from './analysis-helper';
 
 
-test('can create an analysis', async ({ page }) => {
-    const name = faker.commerce.productName()
+test('can create an analysis from a study', async ({ page }) => {
+    await createAnalysis({ page, withStudy: true })
+})
 
-    await goToPage({ page, path: '/analysis/edit/new', loginAs: 'researcher' })
+test('can create an analysis without a study', async ({ page }) => {
+    await createAnalysis({ page, withStudy: false })
+})
 
-
-    // await createStudy({ page, name })
+test('can access analyses table as a researcher', async({ page }) => {
+    await goToPage({ page, path: `/analysis`, loginAs: 'researcher' })
+    await page.isVisible('testId=analyses-table')
 })

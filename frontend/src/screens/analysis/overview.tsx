@@ -238,7 +238,7 @@ export const RunStatus: FC<{analysisRun: AnalysisRun}> = ({ analysisRun }) => {
         return (
             <Box gap align='center'>
                 <StyledLabel css={{ color: '#6B38A8', backgroundColor: '#EADDFB' }}>Under Review</StyledLabel>
-                <StatusIcon height={24} icon='info' tooltip='Review takes on average 1 to 2 business days' />
+                <StatusIcon icon='info' tooltip='Review takes on average 1 to 2 business days' />
             </Box>
         )
     }
@@ -247,8 +247,8 @@ export const RunStatus: FC<{analysisRun: AnalysisRun}> = ({ analysisRun }) => {
         return (
             <Box gap align='center'>
                 <StyledLabel css={{ color: '#D4450C', backgroundColor: '#F8D5CD' }}>Error</StyledLabel>
-                <StatusIcon height={24} icon='tripleDot' />
-                <ErrorLog run={analysisRun} show={showErrorModal} setShow={setShowErrorModal}/>
+                <StatusIcon icon='tripleDot' onClick={() => setShowErrorModal(true)} tooltip='View error log'/>
+                <ErrorLog run={analysisRun} show={showErrorModal} setShow={setShowErrorModal} />
             </Box>
         )
     }
@@ -286,6 +286,8 @@ const StatusIcon = styled(Icon)({
     padding: 2,
     color: colors.white,
     cursor: 'pointer',
+    height: 24,
+    width: 24,
 })
 
 const useRunsTable = (analysis: Analysis) => {
