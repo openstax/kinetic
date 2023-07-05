@@ -12,7 +12,7 @@ class EnclaveMailer < ApplicationMailer
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
         'analysis_title' => run.analysis.title,
-        # TODO @nathan should this logic be reversed?
+        # TODO: @nathan should this logic be reversed?
         'results_title' => run.did_succeed ? 'View errors' : 'Download results',
         'results_link' => 'not yet implemented'
       }

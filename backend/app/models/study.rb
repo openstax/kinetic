@@ -28,11 +28,11 @@ class Study < ApplicationRecord
           class_name: 'Researcher'
 
   has_many :members,
-    -> {
-      joins(:study_researchers).where(researchers: { study_researchers: { role: 'member' } })
-    },
-    foreign_key: 'study_researchers.study_id',
-    class_name: 'Researcher'
+           -> {
+             joins(:study_researchers).where(researchers: { study_researchers: { role: 'member' } })
+           },
+           foreign_key: 'study_researchers.study_id',
+           class_name: 'Researcher'
 
   # Delete researchers to avoid them complaining about not leaving a researcher undeleted
   before_destroy(prepend: true) { study_researchers.delete_all }
@@ -43,18 +43,20 @@ class Study < ApplicationRecord
 
   scope :available, -> {
     where
-    .not(opens_at: nil)
-    .where(is_hidden: false)
-    .where(arel[:opens_at].lteq(Time.now))
-    .where(arel[:closes_at].eq(nil).or(
-      arel[:closes_at].gteq(Time.now)))
+      .not(opens_at: nil)
+      .where(is_hidden: false)
+      .where(arel[:opens_at].lteq(Time.now))
+      .where(arel[:closes_at].eq(nil).or(
+               arel[:closes_at].gteq(Time.now)))
   }
 
-  # TODO Double check logic
+  # TODO: Double check logic
   scope :shareable, -> {
-    where
-    .not(shareable_after_months: nil)
-    .where('closes_at > ?', shareable_after_months.months.ago) unless shareable_after_months.nil?
+    unless shareable_after_months.nil?
+      where
+        .not(shareable_after_months: nil)
+        .where('closes_at > ?', shareable_after_months.months.ago)
+    end
   }
 
   def status

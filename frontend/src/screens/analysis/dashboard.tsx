@@ -44,7 +44,7 @@ const AnalysisRow: React.FC<{row: Row<Analysis> }> = ({ row }) => {
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
                     }}>
-                        <div css={{ height: '1rem' }}>
+                        <div>
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </div>
                     </td>

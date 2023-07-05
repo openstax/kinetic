@@ -7,7 +7,7 @@ Rails.application.config.to_prepare do
       attributes = model.attributes_for_binding(self)
       new(attributes).tap do |bnd|
         bnd.studies = model.study_analyses.as_json(only: [:study_id])
-        bnd.study_ids = bnd.studies.map { |s| s.values }.flatten
+        bnd.study_ids = bnd.studies.map(&:values).flatten
         bnd.runs = model.runs.map do |analysis_run|
           Api::V1::Bindings::AnalysisRun.create_from_model(analysis_run)
         end

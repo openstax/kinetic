@@ -42,7 +42,7 @@ export const AnalysisOverview: FC<{analyses: Analysis[]}> = () => {
                 <ExitButton navTo='/analysis'/>
             </Box>
 
-            {analysis.runs?.length && <RunsTable analysis={analysis}/>}
+            {!!analysis.runs?.length && <RunsTable analysis={analysis}/>}
 
             <CollapsibleSection title='Help Materials' open={!analysis.runs?.length}>
                 <HelpMaterials />
