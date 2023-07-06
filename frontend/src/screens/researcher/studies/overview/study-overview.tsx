@@ -60,7 +60,7 @@ const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
 
             <StudyInformation study={study} />
 
-            <CollapsibleSection title='Edit Study' description='Make changes to open and close criteria' open={true}>
+            <CollapsibleSection title='Edit Study' description='Make changes to open and close criteria' open={false}>
                 <EditSubmittedStudy study={study} />
             </CollapsibleSection>
 
@@ -75,9 +75,9 @@ const AnalysisSection: FC <{study: Study}> = ({ study }) => {
     return (
         <Box className='p-2' align='center' justify='between' css={{ border: `1px solid ${colors.lightGray}` }}>
             <Box direction='column' gap>
-                <h5>Create data analysis</h5>
+                <h5>Analyze Data</h5>
                 <small css={{ color: colors.grayText }}>
-                        TODO Analysis Description
+                    Write your R code to analyze the data relevant for this study
                 </small>
             </Box>
 

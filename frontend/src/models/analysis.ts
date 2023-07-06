@@ -10,13 +10,22 @@ export const getLastRun = (analysis: Analysis) => {
 }
 
 export const getAnalysisValidationSchema = (analyses: Analysis[], analysis: Analysis) => {
-    const allOtherAnalyses = useMemo(() => analyses?.filter(a => 'id' in analysis && a.id !== analysis.id), [analyses])
-
+    const allOtherAnalyses = useMemo(() => {
+        if (analysis.id) {
+            return analyses?.filter(a => {
+                console.log(a.id, analysis.id, 'id' in analysis)
+                return a.id !== analysis.id
+            })
+        } else {
+            return analyses
+        }
+    }, [analyses, analysis])
     return Yup.object().shape({
         title: Yup.string().required('Required').test(
             'Unique',
             'This analysis title is already in use. Please change your title to make it unique on Kinetic.',
             (value?: string) => {
+                console.log(value, analyses)
                 if (!analyses.length) {
                     return true
                 }

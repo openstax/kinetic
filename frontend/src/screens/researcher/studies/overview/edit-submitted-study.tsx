@@ -231,6 +231,7 @@ const OpensAt: FC = () => {
                         options={{
                             defaultHour: 9,
                             minDate: 'today',
+                            minTime: Date.now(),
                         }}
                         hint='Your Local Timezone'
                     />
@@ -356,6 +357,7 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                             options={{
                                 defaultHour: 9,
                                 minDate: watch('opensAt'),
+                                minTime: watch('opensAt'),
                             }}
                             withTime
                         />

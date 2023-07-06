@@ -1,6 +1,4 @@
-import {
-    interceptStudyLaunch, test, goToPage, createStudy, expect, dayjs, faker, rmStudy, addReward, Locator,
-} from './test'
+import { addReward, createStudy, expect, faker, goToPage, interceptStudyLaunch, Locator, rmStudy, test } from './test'
 
 test('displays studies', async ({ page }) => {
     // const studyName = faker.commerce.productName()
@@ -46,26 +44,20 @@ test('launching study and testing completion', async ({ page }) => {
     const studyId = await createStudy({ page, name: faker.commerce.productName(), approveAndLaunchStudy: true })
     await goToPage({ page, path: '/studies', loginAs: 'user' })
 
-    const firstStudyCard = page.locator('css=.studies.filtered >> [data-testid="studies-listing"]').nth(0)
+    // const firstStudyCard = page.locator('css=.studies.filtered >> [data-testid="studies-listing"]').nth(0)
+    // const firstStudyId = await studyIdForCard(firstStudyCard)
+    // console.log(firstStudyId)
 
-    const firstStudyId = await studyIdForCard(firstStudyCard)
-
-    // TODO Iron out active rules with iris, can researchers launch an immediately open study?
-    // await goToPage({ page, path: `/studies/details/${studyId}`, loginAs: 'user' })
-    // await page.click('testId=launch-study')
-    //
-    // // qualtrics will redirect here once complete
-    // await goToPage({ page, path: `/study/land/${studyId}`, loginAs: 'user' })
-    //
-    // await page.click('testId=view-studies')
-    // await expect(page).toHaveSelector(`[data-study-id="${studyId}"][role="link"]`)
-    //
-    // // test that sort order is the same
+    await goToPage({ page, path: `/studies/details/${studyId}`, loginAs: 'user' })
+    await page.click('testId=launch-study')
+    // qualtrics will redirect here once complete
+    await goToPage({ page, path: `/study/land/${studyId}`, loginAs: 'user' })
+    await page.click('testId=view-studies')
+    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][role="link"]`)
+    // test that sort order is the same
     // expect(firstStudyId).toEqual(await studyIdForCard(firstStudyCard))
-    //
-    // await page.click(`[data-study-id="${studyId}"]`)
-    //
-    // await rmStudy({ page, studyId })
+    await page.click(`[data-study-id="${studyId}"]`)
+    await rmStudy({ page, studyId: studyId })
 })
 
 // TODO Same thing, need active studies

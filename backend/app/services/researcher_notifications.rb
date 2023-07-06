@@ -2,7 +2,7 @@
 
 class ResearcherNotifications
   class << self
-    def notify_study_researchers(added_researchers, _removed_researchers, study)
+    def notify_study_researchers(added_researchers, _removed_researchers, study, current_researcher)
       # Only added researchers for now. Eventually send removed researchers a different email
       uuids = added_researchers.map(&:user_id).uniq
       users_info = UserInfo.for_uuids(uuids)
@@ -10,7 +10,7 @@ class ResearcherNotifications
       return if users_info.empty?
 
       users_info.each do |_, user|
-        UserMailer.with(user: user, study: study).invite_researcher_to_study.deliver
+        UserMailer.with(target_user: user, study: study, current_user: current_researcher).invite_researcher_to_study.deliver
       end
 
       # We aren't supporting this feature for this iteration, but will in the future so leaving this for the future
