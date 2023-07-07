@@ -106,15 +106,17 @@ const HelpMaterials = () => {
                     role="tabpanel"
                     aria-labelledby="steps-tab"
                 >
-                    <ParenList>
-                        <li>Once you click  ‘Open R Studio’, you will see the R Studio environment, running R 4.3.1, open in a new tab in your browser containing all the datasets that you've previously selected for analysis. This environment will come with a host of pre-installed packages (e.g., tidyverse; lme4), and more. You can always install other packages that you need into your workspace.</li>
-                        <li>When landing on R Studio, you will see a simulated dataset (synthetic data) that was carefully crafted based on each of the studies you have just now chosen to analyze.</li>
-                        <li>Against this simulated dataset, you will be able to write your intended script for data analysis.</li>
-                        <li>Any analytic code that you create will persist in this environment even once you close out. You can always come back to your script.</li>
-                        <li>Once you click ‘Submit Analysis’ on the top right-hand corner of the page, your script will be sent to the Kinetic team for review.</li>
-                        <li>Your script will then be exposed to real data to collect your intended analysis, and return aggregate knowledge back to you.</li>
-                        <li>If you find that you’d want to edit your script after submission, simply open RStudio and submit another run of your script with the intended changes.</li>
-                    </ParenList>
+                    <OLWithParens>
+                        <Col gap>
+                            <li>Once you click  ‘Open R Studio’, you will see the R Studio environment, running R 4.3.1, open in a new tab in your browser containing all the datasets that you've previously selected for analysis. This environment will come with a host of pre-installed packages (e.g., tidyverse; lme4), and more. You can always install other packages that you need into your workspace.</li>
+                            <li>When landing on R Studio, you will see a simulated dataset (synthetic data) that was carefully crafted based on each of the studies you have just now chosen to analyze.</li>
+                            <li>Against this simulated dataset, you will be able to write your intended script for data analysis.</li>
+                            <li>Any analytic code that you create will persist in this environment even once you close out. You can always come back to your script.</li>
+                            <li>Once you click ‘Submit Analysis’ on the top right-hand corner of the page, your script will be sent to the Kinetic team for review.</li>
+                            <li>Your script will then be exposed to real data to collect your intended analysis, and return aggregate knowledge back to you.</li>
+                            <li>If you find that you’d want to edit your script after submission, simply open RStudio and submit another run of your script with the intended changes.</li>
+                        </Col>
+                    </OLWithParens>
                 </div>
                 <div
                     className={cx('tab-pane', { active: currentTab == 'Tutorial' })}
@@ -192,7 +194,7 @@ export const AnalysisOverviewFAQ: FC = () => {
     )
 }
 
-const ParenList = styled.ol`
+const OLWithParens = styled.ol`
     counter-reset: list;
     li {
         list-style: none;
