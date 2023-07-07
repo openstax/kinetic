@@ -140,6 +140,7 @@ class Study < ApplicationRecord
   end
 
   def reopen_if_possible
+    return if stages.any? { |stage| stage.status == 'completed' }
     if target_sample_size.present? && completed_count >= target_sample_size
       return
     end
