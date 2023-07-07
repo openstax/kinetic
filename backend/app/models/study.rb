@@ -50,8 +50,6 @@ class Study < ApplicationRecord
   }
 
   def status
-    # TODO: go off of last stage or first stage? probably last stage
-    # 'completed' if !closes_at.nil? && (closes_at < DateTime.now)
     stages.last&.status || 'draft'
   end
 
@@ -135,15 +133,27 @@ class Study < ApplicationRecord
     stages.where.not(status: 'completed').first&.update(status: 'completed')
   end
 
-  def reopen(stage_index=0)
+  def reopen(stage_index = 0)
     stages.last(stages.length - stage_index.to_i).each do |stage|
       stage.update(status: 'active')
     end
   end
 
-  # def reopen_if_possible(new_closing_date)
-  #   return unless new_closing_date
-  # end
+  def reopen_if_possible
+    if target_sample_size.present? && completed_count >= target_sample_size
+      return
+    end
+
+    if closes_at.present? && closes_at <= DateTime.now
+      return
+    end
+
+    reopen
+  end
+
+  def naturally_closed?
+
+  end
 
   # called from studies controller to update status using action and stage_index from params
   def update_status!(action, stage_index)
