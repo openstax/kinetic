@@ -241,12 +241,9 @@ const useStudyTable = (studies: Study[]) => {
         {
             accessorKey: 'category',
             header: () => 'Study Type',
+            size: 220,
             meta: { type: 'text' },
-            cell: (info) => {
-                return (
-                    info.getValue()
-                )
-            },
+            cell: (info) => info.getValue(),
         },
         {
             id: 'researchTeam',

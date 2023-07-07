@@ -8,8 +8,9 @@ const FAQButton = styled(Box)({
     fontSize: 12,
     height: 44,
     width: 44,
-    backgroundColor: colors.lightGray,
-    fontWeight: 400,
+    backgroundColor: colors.kineticResearcher,
+    color: colors.white,
+    fontWeight: 600,
     alignItems: 'center',
     justifyContent: 'center',
 })
