@@ -42,15 +42,15 @@ export const SortIcon: React.FC<{header: Header<Study, unknown> }> = ({ header }
 }
 
 export const TableHeader: React.FC<{header: Header<any, unknown> }> = ({ header }) => {
-    const canSort = header.column.getCanSort()
+    const isRowSelect = header.column.id == 'select'
+    const canSort = header.column.getCanSort() && !isRowSelect
     return (
         <StyledHeader css={{ width: header.getSize() }}>
             <span
                 onClick={() => canSort && header.column.toggleSorting()}
                 className={cx('header-text', { 'cursor-pointer': canSort })}
-                css={{ cursor: header.column.getCanSort() ? 'pointer' : 'auto' }}
             >
-                <Box gap>
+                <Box gap justify={isRowSelect ? 'center' : 'start'}>
                     {flexRender(
                         header.column.columnDef.header,
                         header.getContext()

@@ -1,11 +1,17 @@
 import { Box, React, styled, useState } from '@common';
-import { Button, Icon, OffCanvas } from '@components';
+import { Button, Icon, OffCanvas, Col } from '@components';
+import { colors } from '@theme';
 
-const FAQButton = styled(Icon)({
-    position: 'absolute',
-    bottom: '6rem',
-    right: '6rem',
+const FAQButton = styled(Box)({
     cursor: 'pointer',
+    borderRadius: 25,
+    fontSize: 12,
+    height: 44,
+    width: 44,
+    backgroundColor: colors.lightGray,
+    fontWeight: 400,
+    alignItems: 'center',
+    justifyContent: 'center',
 })
 
 const StyledOffCanvas = styled(OffCanvas)({
@@ -19,15 +25,15 @@ export const ResearcherFAQ: FC = () => {
 
     return (
         <div>
-            <FAQButton height={44} icon='questionCircle' onClick={() => setShow(true)} />
+            <FAQButton onClick={() => setShow(true)}>FAQ</FAQButton>
             <StyledOffCanvas show={show} title='Help' onHide={() => setShow(false)}>
-                <ResearcherFAQContent />
+                <AnalysisBasicsFAQ />
             </StyledOffCanvas>
         </div>
     )
 }
 
-export const ResearcherFAQContent: FC = () => {
+export const AnalysisBasicsFAQ: FC = () => {
     const [currentSection, setCurrentSection] = useState('')
 
     return (

@@ -16,7 +16,7 @@ import { toDayJS } from '@lib';
 import { Link } from 'react-router-dom';
 import { colors } from '@theme';
 import { getLastRun } from '@models';
-import { RunStatus } from './overview';
+import { RunStatus } from './runs-table';
 
 export const AnalysisDashboard: FC<{analyses: Analysis[]}> = ({ analyses }) => {
     const nav = useNavigate()

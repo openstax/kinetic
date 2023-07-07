@@ -10,7 +10,7 @@ import {
     getSortedRowModel,
     PaginationState,
     Row,
-    RowData,
+    RowData, RowSelectionState,
     SortingState,
     Table,
     useReactTable,
@@ -28,11 +28,11 @@ declare module '@tanstack/table-core' {
     }
 }
 
-export const SelectedStudies: FC<{studies: Study[], defaultStudy: Study | null}> = ({ studies, defaultStudy }) => {
-    const { table } = useStudyTable(studies, defaultStudy)
+export const SelectedStudies: FC<{studies: Study[]}> = ({ studies }) => {
+    const { table } = useStudyTable(studies)
 
     return (
-        <Box direction="column" justify='between' gap>
+        <Box direction="column" justify='between' gap className='mt-3'>
             <StudyTypeFilter table={table} />
             <h6>{table.getSelectedRowModel().flatRows.length} selected</h6>
             <table data-testid="studies-table">
@@ -69,7 +69,7 @@ const CustomOption = (props: any) => {
 
 const StudyTypeFilter: FC<{table: Table<Study>}> = ({ table }) => {
     return (
-        <Box gap='large' align='center'>
+        <Box gap='large' align='center' className='mb-1'>
             <span>Filter by:</span>
             <div css={{ width: '25rem' }}>
                 <SelectField
@@ -91,7 +91,7 @@ const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
             {row.getVisibleCells().map((cell) => {
                 return (
                     <td key={cell.id} css={{
-                        maxWidth: 250,
+                        maxWidth: cell.column.getSize(),
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
@@ -133,26 +133,35 @@ const SelectionCheckbox: React.FC<{ studyId: number, row: Row<Study> }> = ({ stu
     )
 }
 
-const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
-    const [rowSelection, setRowSelection] = React.useState({})
-    const [sorting, setSorting] = React.useState<SortingState>([])
+const useStudyTable = (studies: Study[]) => {
+    const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({})
+    const [sorting, setSorting] = React.useState<SortingState>([
+        { id: 'select', desc: true },
+        { id: 'researchTeam', desc: true },
+    ])
     const [pagination, setPagination] = React.useState<PaginationState>({
         pageSize: 8,
         pageIndex: 0,
     })
 
-    const { setValue } = useFormContext()
+    const { setValue, getValues, watch } = useFormContext()
 
     const currentResearcher = useCurrentResearcher()
     const [setCheckAll, checkAll] = useRefElement<HTMLInputElement>()
+    const selectedIds = watch('studyIds')
 
     useEffect(() => {
-        if (defaultStudy) {
-            setRowSelection({
-                [defaultStudy.id]: true,
-            })
+        if (selectedIds?.length) {
+            console.log(selectedIds)
+            const selectionMap = selectedIds.reduce((map: Record<string, boolean>, id: string) => {
+                map[id] = true;
+                return map;
+            }, {});
+
+            setRowSelection(selectionMap)
         }
-    }, [defaultStudy])
+
+    }, [selectedIds])
 
     const columns = React.useMemo<ColumnDef<Study>[]>(() => [
         {
@@ -172,22 +181,40 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
                     }}
                 />
             ),
+            accessorFn: (originalRow) => {
+                const selectedStudyIds = getValues('studyIds')
+                if (!selectedStudyIds) {
+                    return null
+                }
+                return selectedStudyIds.includes(originalRow.id)
+            },
             size: 20,
             cell: ({ row }) => {
-                return <SelectionCheckbox studyId={row.original.id} row={row} />
+                return (
+                    <Box justify='center'>
+                        <SelectionCheckbox studyId={row.original.id} row={row} />
+                    </Box>
+                )
             },
         },
         {
             accessorKey: 'titleForResearchers',
             header: () => 'Title',
-            size: 350,
+            size: 500,
             meta: { type: 'text' },
             cell: (info) => {
                 const value = info.getValue() as string
                 return (
-                    <Box justify='between' css={{ paddingRight: '2rem' }}>
-                        <span>{value}</span>
-                        <Icon height={20} color={colors.lightGray} icon='infoCircleFill' tooltip={info.row.original.internalDescription}></Icon>
+                    <Box justify='between' css={{ paddingRight: '1rem' }} gap='large'>
+                        <span css={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                            {value} longlonglonglonglonglonglonglonglonglong long longlonglonglong longlong long
+                        </span>
+                        <Icon height={24}
+                            className='cursor-pointer'
+                            color={colors.lightGray}
+                            icon='infoCircleFill'
+                            tooltip={info.row.original.internalDescription}
+                        />
                     </Box>
                 )
             },
@@ -205,9 +232,9 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
             sortingFn: 'alphanumeric',
             cell: (info) => {
                 return (
-                    <span>
+                    <Box align='center' justify='center'>
                         {(info.cell.getValue() as string) || '-'}
-                    </span>
+                    </Box>
                 )
             },
         },
@@ -225,14 +252,15 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
             id: 'researchTeam',
             header: () => 'Research Team',
             meta: { type: 'text' },
-            cell: ({ row }) => {
-                const isMyStudy = !!row.original.researchers?.find(r => r.userId == currentResearcher?.userId)
+            accessorFn: (originalRow) => {
+                const isMyStudy = !!originalRow.researchers?.find(r => r.userId == currentResearcher?.userId)
                 return (
                     isMyStudy ? 'Your Team' : 'Shared on Kinetic'
                 )
             },
+            cell: ({ row, column }) => row.getValue(column.id),
         },
-    ], [defaultStudy])
+    ], [])
 
     const table: Table<Study> = useReactTable({
         data: studies,
@@ -242,6 +270,7 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
             sorting,
             pagination,
         },
+        enableMultiSort: true,
         getRowId: (row) => String(row.id),
         enableRowSelection: true,
         onRowSelectionChange: setRowSelection,
@@ -258,6 +287,7 @@ const useStudyTable = (studies: Study[], defaultStudy: Study | null) => {
             checkAll.indeterminate = table.getIsSomeRowsSelected()
         }
     }, [checkAll, table.getSelectedRowModel().rows])
+
     return { table }
 }
 

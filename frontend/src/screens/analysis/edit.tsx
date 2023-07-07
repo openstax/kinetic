@@ -39,7 +39,7 @@ const useDefaultStudy = (studies: Study[], analyses: Analysis[]) => {
             const study = studies.find(s => s.id == studyId) || null
             setStudy(study)
             if (study) {
-                const analysisCopy = analyses.find(a => a.title === study.titleForResearchers)
+                const analysisCopy = analyses.find(a => a.title.toLowerCase().trim() === study.titleForResearchers.toLowerCase().trim())
                 if (analysisCopy) {
                     setStudyTitle(`${analysisCopy.title} (copy)`)
                 } else {
@@ -106,15 +106,18 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies }) => {
             >
                 <Alert warning={true} onDismiss={() => setError('')} message={error} />
                 <Col gap='large'>
-                    <h3 className='fw-bold'>Analysis Basics</h3>
+                    <Box justify='between'>
+                        <h3 className='fw-bold'>Analysis Basics</h3>
+                        <ResearcherFAQ />
+                    </Box>
                     <Title />
                     <Objectives />
-                    <SelectedStudies studies={studies} defaultStudy={study} />
+                    <SelectedStudies studies={studies} />
                 </Col>
 
                 <BottomBar />
             </Form>
-            <ResearcherFAQ />
+
         </div>
     )
 }
