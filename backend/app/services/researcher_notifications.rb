@@ -10,7 +10,8 @@ class ResearcherNotifications
       return if users_info.empty?
 
       users_info.each do |_, user|
-        UserMailer.with(target_user: user, study: study, current_user: current_researcher).invite_researcher_to_study.deliver
+        UserMailer.with(target_user: user, study: study,
+                        current_user: current_researcher).invite_researcher_to_study.deliver
       end
 
       # We aren't supporting this feature for this iteration, but will in the future so leaving this for the future

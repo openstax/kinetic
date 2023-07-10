@@ -1,5 +1,5 @@
 import { Box, React, styled, useState } from '@common';
-import { Button, Icon, OffCanvas, Col } from '@components';
+import { Button, Icon, OffCanvas } from '@components';
 import { colors } from '@theme';
 
 const FAQButton = styled(Box)({

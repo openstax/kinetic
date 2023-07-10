@@ -2,7 +2,8 @@ import { Box, React, styled, useState } from '@common';
 import {
     ColumnDef,
     flexRender,
-    getCoreRowModel, getFilteredRowModel,
+    getCoreRowModel,
+    getFilteredRowModel,
     getSortedRowModel,
     Row,
     SortingState,
@@ -100,7 +101,7 @@ const ErrorLog: FC<{
     run: AnalysisRun,
     show: boolean,
     setShow: Function
-}> = ({ run, show, setShow }) => {
+}> = ({ show, setShow }) => {
     return (
         <Modal center show={show} large onHide={() => setShow(false)}>
             <Modal.Body>

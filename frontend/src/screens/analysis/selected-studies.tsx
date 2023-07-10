@@ -1,4 +1,4 @@
-import { React, styled, useEffect } from '@common'
+import { React, useEffect } from '@common'
 import { Box, Icon, SelectField, StyledRow, TableHeader, Tooltip, useFormContext } from '@components'
 import { Study } from '@api'
 import {
@@ -10,7 +10,8 @@ import {
     getSortedRowModel,
     PaginationState,
     Row,
-    RowData, RowSelectionState,
+    RowData,
+    RowSelectionState,
     SortingState,
     Table,
     useReactTable,
@@ -152,7 +153,6 @@ const useStudyTable = (studies: Study[]) => {
 
     useEffect(() => {
         if (selectedIds?.length) {
-            console.log(selectedIds)
             const selectionMap = selectedIds.reduce((map: Record<string, boolean>, id: string) => {
                 map[id] = true;
                 return map;

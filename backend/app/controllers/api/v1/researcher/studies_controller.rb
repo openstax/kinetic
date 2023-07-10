@@ -95,7 +95,8 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       )
     end
 
-    ResearcherNotifications.notify_study_researchers(@study.study_researchers, [], @study, @current_researcher)
+    ResearcherNotifications.notify_study_researchers(@study.study_researchers, [], @study,
+                                                     @current_researcher)
   end
 
   def set_study
