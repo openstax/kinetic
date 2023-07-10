@@ -37,9 +37,9 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     render(json: error, status: error.status_code) and return if error
 
     notify_researchers(inbound_binding.researchers || [])
-    # TODO: after fleshed out instructions
-    # @study.reopen_if_possible(inbound_binding.to_hash)
-    @study.update(inbound_binding.to_hash.except(:researchers, :stages))
+
+    @study.update!(inbound_binding.to_hash.except(:researchers, :stages))
+    @study.reopen_if_possible
 
     unless inbound_binding.stages.nil?
       @study.stages.clear
@@ -58,7 +58,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       study_update, error = bind(params[:study], Api::V1::Bindings::StudyUpdate)
       render(json: error, status: error.status_code) and return if error
 
-      @study.update(study_update.to_hash.except(:researchers, :stages))
+      @study.update!(study_update.to_hash.except(:researchers, :stages))
     end
 
     @study.update_status!(params[:status_action], params[:stage_index])
@@ -76,6 +76,8 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   def notify_researchers(researchers)
     new_researcher_ids = researchers.map(&:id)
     old_researcher_ids = @study.study_researchers.map(&:researcher_id)
+
+    return if new_researcher_ids == old_researcher_ids
 
     added_researchers_ids = (new_researcher_ids - old_researcher_ids) - [@current_researcher.id]
     removed_researchers_ids = (old_researcher_ids - new_researcher_ids) - [@current_researcher.id]
