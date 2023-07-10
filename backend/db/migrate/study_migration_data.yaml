@@ -907,3 +907,94 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'score', 'personalized' ]
+
+
+- id: 80
+  status: "active"
+  title_for_researchers: "FinLit Credit Cards"
+  description_for_researchers: "This is our financial literacy intervention #1, which is a text-only credit card lesson with pre and post tests and a writing task intervention."
+  study_type: "Learning Research"
+  study_pi_uuid: "a79bcf1a-eddd-444d-a705-74d910f7e711"
+  study_lead_uuid: "2df6731f-5999-4216-942d-eaa71888d816"
+  title_for_participants: "How much do you know about credit cards?"
+  short_description_for_participants: "Credit cards, credit scores, credit reports, and more! Take this mini course on personal finance and increase your financial skills."
+  long_description_for_participants: "Try out this fun new lesson on credit cards! You'll take a quiz so we can see what you already know, read a brief lesson on how you can improve your credit card and budgeting skills, and then reflect on what you learned with a short writing prompt."
+  study_topic: "Learning"
+  study_subject: null
+  benefits: "You'll learn strategies to manage credit cards that you can use immediately in your own life. Your responses will also help us understand how learners act on knowledge."
+  opens_at: 2023-06-22 09:00:00
+  closes_at: null
+  stages:
+    - points: 30
+      duration_minutes: 25
+      feedback_types: [ 'score' ]
+    - points: 10
+      duration_minutes: 5
+      feedback_types: [ 'score' ]
+      available_after_days: 30
+
+
+
+- id: 81
+  status: "active"
+  title_for_researchers: "Need for Achievement"
+  description_for_researchers: "This is a short survey asking respondents to share where they stand in their need to achieve things in life, and what they can do to improve themselves"
+  study_type: "Learner Characteristics"
+  study_pi_uuid: "a79bcf1a-eddd-444d-a705-74d910f7e711"
+  study_lead_uuid: "6a6c8564-7fb0-4d85-a2ec-2dd899c3bb3b"
+  title_for_participants: "How high is your need for achievement?"
+  short_description_for_participants: "We all have a need to accomplish things, gain skills, and set standards for ourselves - where do you stand?"
+  long_description_for_participants: "This is a short survey that explores where you stand in your need to achieve things in life, and what you can do to improve yourself."
+  study_topic: "Personality"
+  study_subject: null
+  benefits: "Your responses will help you see where you stand when it comes to your intrinsic need to achieve things - and what you can do to become better at it."
+  opens_at: 2023-06-22 09:00:00
+  closes_at: null
+  stages:
+    - points: 10
+      duration_minutes: 5
+      feedback_types: [ 'score', 'personalized' ]
+
+
+
+- id: 82
+  status: "active"
+  title_for_researchers: "Five-Dimensional Curiosity Scale (5DC)"
+  description_for_researchers: "This is a short survey to gauge levels of curiosity - and if respondents need to sharpen it further to be better learners"
+  study_type: "Learner Characteristics"
+  study_pi_uuid: "a79bcf1a-eddd-444d-a705-74d910f7e711"
+  study_lead_uuid: "6a6c8564-7fb0-4d85-a2ec-2dd899c3bb3b"
+  title_for_participants: "Are you a curious cat?"
+  short_description_for_participants: "Human beings are curious cats - but how curious are you?"
+  long_description_for_participants: "This is a short survey to explore your levels of curiosity - and see if you need to sharpen it further to be a better learner."
+  study_topic: "Personality"
+  study_subject: null
+  benefits: "Your responses will help you gauge how curious you are as a person - and if you can become better at honing your curiosity."
+  opens_at: 2023-06-22 09:00:00
+  closes_at: null
+  stages:
+    - points: 10
+      duration_minutes: 5
+      feedback_types: [ 'score', 'personalized' ]
+
+
+
+- id: 83
+  status: "active"
+  title_for_researchers: "Kinetic-Personas"
+  description_for_researchers: "Survey aimed at collecting data about Kinetic users: who they are, motivations for using kinetic and their attitudes towards Kinetic"
+  study_type: "Learning Research"
+  study_pi_uuid: "a79bcf1a-eddd-444d-a705-74d910f7e711"
+  study_lead_uuid: "625b77af-a865-44b2-9354-6bcf94dd834c"
+  title_for_participants: "A survey about you!"
+  short_description_for_participants: "Take our survey to explore your experience with Kinetic so far, as we strive to create a more personalized service for you."
+  long_description_for_participants: "Enhance your Kinetic experience with our 22-question survey. Share insights on usage, satisfaction, and motivations. Rest assured, data confidentiality ensured. Let's create a tailored journey together for a better Kinetic."
+  study_topic: 'Personality'
+  study_subject: null
+  benefits: "Your responses will be used to further improve our services. More specifically, these responses will help us better tailor future products and services to you!"
+  opens_at: 2023-06-22 09:00:00
+  closes_at: 2023-12-22 23:59:00
+  stages:
+    - points: 15
+      duration_minutes: 20
+      feedback_types: [ 'debrief' ]
