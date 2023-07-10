@@ -224,9 +224,10 @@ const isPausable = (cell: CellContext<Study, any>): boolean => {
     }
 
     const previousSession = parent?.getLeafRows()[cell.row.index - 1]?.original
-    if (!previousSession || previousSession?.id === study.id) {
+    if (!previousSession) {
         return true
     }
+
 
     return isPaused(previousSession) && isActive(study)
 }
