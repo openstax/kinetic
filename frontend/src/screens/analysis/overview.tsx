@@ -109,27 +109,27 @@ const HelpMaterials = () => {
                     <ol>
                         <Col>
                             <li>
-                                <h5>Click Open R Studio</h5>
+                                <h5 className='fw-bold'>Click Open R Studio</h5>
                                 <p>Once you click  ‘Open R Studio’, you will see the R Studio environment, running R 4.3.1, open in a new tab in your browser containing all the datasets that you've previously selected for analysis. This environment will come with a host of pre-installed packages (e.g., tidyverse; lme4), and more. You can always install other packages that you need into your workspace.</p>
                             </li>
                             <li>
-                                <h5>Review Simulated Dataset</h5>
+                                <h5 className='fw-bold'>Review Simulated Dataset</h5>
                                 <p>When landing on R Studio, you will see a simulated dataset (synthetic data) that was carefully crafted based on each of the studies you have just now chosen to analyze.</p>
                             </li>
                             <li>
-                                <h5>Write Analysis Script</h5>
+                                <h5 className='fw-bold'>Write Analysis Script</h5>
                                 <p>Against this simulated dataset, you will be able to write your intended script for data analysis. Any analytic code that you create will persist in this environment even once you close out. You can always come back to your script.</p>
                             </li>
                             <li>
-                                <h5>Submit Analysis</h5>
+                                <h5 className='fw-bold'>Submit Analysis</h5>
                                 <p>Once you click ‘Submit Analysis’ on the top right-hand corner of the page, your script will be sent to the Kinetic team for review.</p>
                             </li>
                             <li>
-                                <h5>If needed, Edit your Script</h5>
+                                <h5 className='fw-bold'>If needed, Edit your Script</h5>
                                 <p>If you find that you’d want to edit your script after submission, simply open RStudio and submit another run of your script with the intended changes.</p>
                             </li>
                             <li>
-                                <h5>Receive Results</h5>
+                                <h5 className='fw-bold'>Receive Results</h5>
                                 <p>Your script will then be exposed to real data to collect your intended analysis, and return aggregate knowledge back to you.</p>
                             </li>
                         </Col>
