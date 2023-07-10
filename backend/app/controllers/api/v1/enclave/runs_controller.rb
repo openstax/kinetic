@@ -55,6 +55,6 @@ class Api::V1::Enclave::RunsController < Api::V1::BaseController
   end
 
   def find_run
-    @run = AnalysisRun.find_by(api_key: params[:api_key])
+    @run = AnalysisRun.find_by!(api_key: params[:api_key])
   end
 end
