@@ -1,6 +1,6 @@
-import { React, useState, useEffect, useCallback } from '@common'
+import { React, useCallback, useEffect, useState } from '@common'
 import { Box } from '@components'
-import { Study, Studies, StudyAnalysis } from '@api'
+import { Studies, Study, StudyAnalysis } from '@api'
 import { useApi } from '@lib'
 import { useFieldArray } from 'react-hook-form'
 
