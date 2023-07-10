@@ -149,10 +149,6 @@ class Study < ApplicationRecord
     end
   end
 
-  # def reopen_if_possible(new_closing_date)
-  #   return unless new_closing_date
-  # end
-
   # called from studies controller to update status using action and stage_index from params
   def update_status!(action, stage_index)
     if %w[pause end launch].include?(action)
