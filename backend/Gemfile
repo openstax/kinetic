@@ -30,12 +30,6 @@ gem 'lograge'
 # Gives 200 OK from /ping
 gem 'openstax_healthcheck'
 
-# For installing secrets on deploy
-# gem 'aws-sdk-ssm'
-
-# For deploying domain names
-# gem 'aws-sdk-route53'
-
 gem 'dotenv-rails'
 
 gem 'qualtrics_api',
@@ -46,7 +40,7 @@ gem 'will_paginate', '~> 3.1.7'
 
 gem 'activesupport_cache_database'
 
-gem 'aws-sdk-s3', '~> 1.127.0'
+gem 'aws-sdk-s3', '~>  1.116'
 
 gem 'httpx', '~> 0.21'
 # API versioning and documentation
