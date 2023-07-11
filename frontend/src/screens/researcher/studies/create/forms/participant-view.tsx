@@ -14,7 +14,7 @@ import {
 import { ImageLibrary } from '../image-library';
 import { StudyCardPreview } from '../../../../learner/card';
 import { first } from 'lodash-es';
-import { Study } from '@api';
+import { Stage, Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
 
 export const participantViewValidation = (allOtherStudies: Study[]) => {
@@ -45,21 +45,39 @@ export const participantViewValidation = (allOtherStudies: Study[]) => {
             is: 2,
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
-        stages: Yup.array().when('step', {
-            is: (step: number) => step == 2 || step == 3,
-            then: Yup.array().of(
-                Yup.object({
-                    points: Yup.number().required().positive(),
-                    durationMinutes: Yup.number().required().positive(),
-                    feedbackTypes: Yup.array().test(
-                        'At least one',
-                        'Select at least one item',
-                        (feedbackTypes?: string[]) => {
-                            return (feedbackTypes?.length || 0) > 0
-                        }
-                    ),
-                })
-            ),
+        stages: Yup.lazy((stages, options) => {
+            const step = options.parent.step
+            const firstStage = stages[0]
+
+            const stageSchema = Yup.object({
+                points: Yup.number().required().positive(),
+                durationMinutes: Yup.number().required().positive(),
+                feedbackTypes: Yup.array().test(
+                    'At least one',
+                    'Select at least one item',
+                    (feedbackTypes?: string[]) => {
+                        return (feedbackTypes?.length || 0) > 0
+                    }
+                ),
+            })
+            if (step == 2) {
+                return Yup.array().test(
+                    'firstStageValid',
+                    'Invalid',
+                    () => stageSchema.isValidSync(firstStage)
+                )
+            }
+            if (step == 3) {
+                return Yup.array().test(
+                    'allStagesValid',
+                    'Invalid',
+                    () => {
+                        const allSessionsValid = Yup.array().of(stageSchema)
+                        return allSessionsValid.isValidSync(stages)
+                    }
+                )
+            }
+            return Yup.array().of(stageSchema)
         }),
         benefits: Yup.string().when('step', {
             is: 2,
