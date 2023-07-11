@@ -24,11 +24,11 @@ import { Toast } from '@nathanstitt/sundry/ui';
 import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
 
-const buildValidationSchema = (studies: Study[], study: Study) => {
+const buildValidationSchema = (allOtherStudies: Study[]) => {
     return Yup.object().shape({
-        ...internalDetailsValidation(studies, study),
+        ...internalDetailsValidation(allOtherStudies),
         ...researcherValidation(),
-        ...participantViewValidation(studies, study),
+        ...participantViewValidation(allOtherStudies),
         ...additionalSessionsValidation(),
     })
 }
@@ -40,7 +40,7 @@ const getFormDefaults = (study: Study, step: StudyStep) => {
         ...study,
         researcherPi: pi,
         researcherLead: lead,
-        stages: study.stages,
+        stages: study.stages || [],
         step,
     }
 }
@@ -77,11 +77,16 @@ const StudyForm: FCWC<{ study: Study, studies: Study[] }> = ({ study, studies, c
 
     const defaults = useMemo(() => {
         return getFormDefaults(study, initialStep)
-    }, [])
+    }, [study])
+
+    const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])
+    const validationSchema = useMemo(() => {
+        return buildValidationSchema(allOtherStudies)
+    }, [study])
 
     return (
         <Form
-            validationSchema={buildValidationSchema(studies, study)}
+            validationSchema={validationSchema}
             defaultValues={defaults}
             onSubmit={noop}
             onCancel={noop}

@@ -8,7 +8,7 @@ import { StudyFeedback } from './participant-view';
 export const additionalSessionsValidation = () => {
     return {
         stages: Yup.array().when('step', {
-            is: (step: number) => step === 3,
+            is: 3,
             then: Yup.array().of(
                 Yup.object({
                     points: Yup.number().required(),

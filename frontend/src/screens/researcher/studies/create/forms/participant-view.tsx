@@ -1,5 +1,5 @@
 import { studySubjects, studyTopics } from '@models';
-import { Box, React, useMemo, useState, Yup } from '@common';
+import { Box, React, useState, Yup } from '@common';
 import {
     Col,
     FieldErrorMessage,
@@ -17,9 +17,7 @@ import { first } from 'lodash-es';
 import { Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
 
-export const participantViewValidation = (studies: Study[], study: Study) => {
-    const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])
-
+export const participantViewValidation = (allOtherStudies: Study[]) => {
     return {
         titleForParticipants: Yup.string().when('step', {
             is: 2,
@@ -28,7 +26,7 @@ export const participantViewValidation = (studies: Study[], study: Study) => {
                     'Unique',
                     'This study title is already in use. Please change your study title to make it unique on Kinetic.',
                     (value: string) => {
-                        if (!studies.length) {
+                        if (!allOtherStudies.length) {
                             return true
                         }
                         return allOtherStudies.every(study => study.titleForParticipants?.toLowerCase().trim() !== value?.toLowerCase().trim())
@@ -51,7 +49,8 @@ export const participantViewValidation = (studies: Study[], study: Study) => {
             is: 2,
             then: Yup.array().of(
                 Yup.object({
-                    points: Yup.number().required(),
+                    points: Yup.number().required().positive(),
+                    durationMinutes: Yup.number().required().positive(),
                     feedbackTypes: Yup.array().test(
                         'At least one',
                         'Select at least one item',
@@ -301,7 +300,7 @@ export const StudyFeedback: FC<{sessionIndex: number}> = ({ sessionIndex }) => {
                         desc="Tailored information to participant's specific characteristics, behaviors, needs, performance, or some combination"
                     />
 
-                    <FieldErrorMessage name='stages.0.feedbackTypes'/>
+                    <FieldErrorMessage name={`stages.${sessionIndex}.feedbackTypes`} />
                 </Box>
             </Col>
         </Box>
