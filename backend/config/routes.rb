@@ -35,6 +35,7 @@ Rails.application.routes.draw do
 
       namespace :enclave do
         resources :runs, only: [:create] do
+          post 'upload_results', to: 'runs#upload_results', on: :collection
           put 'completion', to: 'runs#completion', on: :collection
           post 'log', to: 'runs#log', on: :collection
         end
