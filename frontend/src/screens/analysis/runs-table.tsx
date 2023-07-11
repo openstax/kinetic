@@ -10,7 +10,7 @@ import {
     Table,
     useReactTable,
 } from '@tanstack/react-table';
-import { Analysis, AnalysisRun } from '@api';
+import { Analysis, AnalysisRun, AnalysisRunMessage } from '@api';
 import { Button, Icon, StyledRow, TableHeader } from '@components';
 import { colors } from '@theme';
 import { hasRunSucceeded, isRunUnderReview, runHasError } from '@models';
@@ -85,7 +85,7 @@ export const RunStatus: FC<{analysisRun: AnalysisRun}> = ({ analysisRun }) => {
             <Box gap align='center'>
                 <StyledLabel css={{ color: '#D4450C', backgroundColor: '#F8D5CD' }}>Error</StyledLabel>
                 <StatusIcon icon='tripleDot' onClick={() => setShowErrorModal(true)} tooltip='View error log'/>
-                <ErrorLog run={analysisRun} show={showErrorModal} setShow={setShowErrorModal} />
+                <ErrorLog messages={analysisRun.messages || []} show={showErrorModal} setShow={setShowErrorModal} />
             </Box>
         )
     }
@@ -98,19 +98,20 @@ export const RunStatus: FC<{analysisRun: AnalysisRun}> = ({ analysisRun }) => {
 }
 
 const ErrorLog: FC<{
-    run: AnalysisRun,
+    messages: AnalysisRunMessage[],
     show: boolean,
     setShow: Function
-}> = ({ show, setShow }) => {
+}> = ({ messages, show, setShow }) => {
     return (
         <Modal center show={show} large onHide={() => setShow(false)}>
             <Modal.Body>
                 <Box padding='4rem' align='center' justify='center' direction='column' gap='large'>
-                    {/*TODO Figure out how to get error log?*/}
-
-                    {/*{run.messages.map(message => {*/}
-                    {/*    */}
-                    {/*})}*/}
+                    {messages.map(message => (
+                        <Box key={message.id} gap>
+                            <span>Level: {message.level}</span>
+                            <span>{message.message}</span>
+                        </Box>
+                    ))}
                 </Box>
             </Modal.Body>
         </Modal>
