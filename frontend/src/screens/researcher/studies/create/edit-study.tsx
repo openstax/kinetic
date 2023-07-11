@@ -72,7 +72,7 @@ export default function EditStudy() {
 const StudyForm: FCWC<{ study: Study, studies: Study[] }> = ({ study, studies, children }) => {
     const id = useParams<{ id: string }>().id
     const [studyProgressStep] = useLocalstorageState(`study-progress-${id}`, 0)
-    let initialStep = +useQueryParam('step') ||studyProgressStep
+    let initialStep = +useQueryParam('step') || studyProgressStep
 
     const defaults = useMemo(() => {
         return getFormDefaults(study, initialStep)
@@ -130,7 +130,9 @@ const FormContent: FC<{
 
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true })
-        setStudyProgressStep(step)
+        if (!isNew) {
+            setStudyProgressStep(step)
+        }
     }
 
     const saveStudy = async () => {
