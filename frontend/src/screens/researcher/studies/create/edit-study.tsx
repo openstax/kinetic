@@ -76,7 +76,7 @@ const StudyForm: FCWC<{ study: Study, studies: Study[] }> = ({ study, studies, c
 
     const defaults = useMemo(() => {
         return getFormDefaults(study, initialStep)
-    }, [study])
+    }, [])
 
     const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])
     const validationSchema = useMemo(() => {
@@ -116,7 +116,6 @@ const FormContent: FC<{
     } = useFormContext()
     const [showSubmitStudy, setShowSubmitStudy] = useState(false)
     const currentStep = watch('step')
-    console.log(currentStep)
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
     const nav = useNavigate()
