@@ -46,7 +46,7 @@ export const participantViewValidation = (allOtherStudies: Study[]) => {
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
         stages: Yup.array().when('step', {
-            is: 2,
+            is: (step: number) => step == 2 || step == 3,
             then: Yup.array().of(
                 Yup.object({
                     points: Yup.number().required().positive(),
@@ -54,7 +54,9 @@ export const participantViewValidation = (allOtherStudies: Study[]) => {
                     feedbackTypes: Yup.array().test(
                         'At least one',
                         'Select at least one item',
-                        (feedbackTypes?: string[]) => (feedbackTypes?.length || 0) > 0
+                        (feedbackTypes?: string[]) => {
+                            return (feedbackTypes?.length || 0) > 0
+                        }
                     ),
                 })
             ),
@@ -73,16 +75,18 @@ export const participantViewValidation = (allOtherStudies: Study[]) => {
 export const ParticipantView: FC<{study: Study}> = ({ study }) => {
     const [showImagePicker, setShowImagePicker] = useState<boolean>(false)
     const { setValue, watch, getValues, control } = useFormContext<Study>()
-    const { fields, update } = useFieldArray({
+    const { update } = useFieldArray({
         control,
         name: 'stages',
+        keyName: 'customId',
     })
     const firstSession = first(study.stages)
 
     const setDurationAndPoints = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const stage = getValues('stages.0')
         if (e.target.value === '10') {
             update(0, {
-                ...fields[0],
+                ...stage,
                 points: 10,
                 durationMinutes: 5,
             })
@@ -90,7 +94,7 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
 
         if (e.target.value === '20') {
             update(0, {
-                ...fields[0],
+                ...stage,
                 points: 20,
                 durationMinutes: 15,
             })
@@ -98,7 +102,7 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
 
         if (e.target.value === '30') {
             update(0, {
-                ...fields[0],
+                ...stage,
                 points: 30,
                 durationMinutes: 25,
             })
@@ -110,7 +114,6 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
             <Col sm={8}>
                 <Box direction='column' gap='xlarge'>
                     <StepHeader title='Participant View' eta={10} />
-
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
                             <FieldTitle required>Study Title for Participants</FieldTitle>
@@ -267,9 +270,7 @@ export const StudyFeedback: FC<{sessionIndex: number}> = ({ sessionIndex }) => {
     return (
         <Box gap='xlarge'>
             <Col sm={4} direction='column' gap>
-                <FieldTitle required>
-                    Feedback
-                </FieldTitle>
+                <FieldTitle required>Feedback</FieldTitle>
                 <small>Share with participants what type of feedback to expect at the end of the study. Preferred feedback indicated.</small>
             </Col>
 

@@ -1,28 +1,9 @@
-import { Box, React, Yup } from '@common';
+import { Box, React } from '@common';
 import { Button, Col, FieldTitle, Icon, StepHeader, useFormContext } from '@components';
 import { colors } from '@theme';
 import { NewStage, Stage, Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
 import { StudyFeedback } from './participant-view';
-
-export const additionalSessionsValidation = () => {
-    return {
-        stages: Yup.array().when('step', {
-            is: 3,
-            then: Yup.array().of(
-                Yup.object({
-                    points: Yup.number().required(),
-                    durationMinutes: Yup.number().required(),
-                    feedbackTypes: Yup.array().test(
-                        'At least one',
-                        'Select at least one item',
-                        (feedbackTypes?: string[]) => (feedbackTypes?.length || 0) > 0
-                    ),
-                })
-            ),
-        }),
-    }
-}
 
 export const AdditionalSessions: FC<{study: Study}> = () => {
     return (
@@ -41,6 +22,7 @@ const Sessions: FC = () => {
     const { fields, append, remove } = useFieldArray({
         control,
         name: 'stages',
+        keyName: 'customId',
     })
 
     const addSession = () => {

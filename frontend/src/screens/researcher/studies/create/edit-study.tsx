@@ -3,6 +3,7 @@ import { useApi, useQueryParam } from '@lib';
 import { isDraft, useFetchStudy } from '@models';
 import {
     Col,
+    ExitStudyFormButton,
     Form,
     LoadingAnimation,
     Page,
@@ -10,12 +11,11 @@ import {
     Step,
     useFormContext,
     useFormState,
-    ExitStudyFormButton,
 } from '@components';
 import { researcherValidation, ResearchTeam } from './forms/research-team';
 import { InternalDetails, internalDetailsValidation } from './forms/internal-details';
 import { ParticipantView, participantViewValidation } from './forms/participant-view';
-import { AdditionalSessions, additionalSessionsValidation } from './forms/additional-sessions';
+import { AdditionalSessions } from './forms/additional-sessions';
 import { NewStudy, ResearcherRoleEnum, Study } from '@api';
 import { ActionFooter } from './action-footer';
 import { colors } from '@theme';
@@ -29,7 +29,6 @@ const buildValidationSchema = (allOtherStudies: Study[]) => {
         ...internalDetailsValidation(allOtherStudies),
         ...researcherValidation(),
         ...participantViewValidation(allOtherStudies),
-        ...additionalSessionsValidation(),
     })
 }
 
@@ -40,7 +39,7 @@ const getFormDefaults = (study: Study, step: StudyStep) => {
         ...study,
         researcherPi: pi,
         researcherLead: lead,
-        stages: study.stages || [],
+        stages: study.stages,
         step,
     }
 }
@@ -117,6 +116,7 @@ const FormContent: FC<{
     } = useFormContext()
     const [showSubmitStudy, setShowSubmitStudy] = useState(false)
     const currentStep = watch('step')
+    console.log(currentStep)
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
     const nav = useNavigate()
