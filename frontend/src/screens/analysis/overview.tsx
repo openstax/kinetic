@@ -7,7 +7,7 @@ import { FAQSection } from './researcher-faq';
 import { Link } from 'react-router-dom';
 import { RunsTable } from './runs-table';
 
-export const AnalysisOverview: FC<{analyses: Analysis[]}> = () => {
+export const AnalysisOverview: FC = () => {
     const { analysisId } = useParams<string>();
     const { data: analysis, isLoading } = useFetchAnalysis(Number(analysisId))
     if (isLoading) return <LoadingAnimation />
