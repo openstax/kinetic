@@ -20,6 +20,9 @@ Rails.application.routes.draw do
 
         resources :analysis do
           put 'run/:run_id', to: 'analysis#update_run'
+          get 'run/:run_id/results',
+              to: 'analysis#download_run_results',
+              as: :run_download
         end
 
         get 'responses/:api_key', to: 'responses#fetch'

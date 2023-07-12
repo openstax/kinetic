@@ -29,7 +29,11 @@ class Api::V1::Enclave::RunsController < Api::V1::BaseController
       finished_at: Time.now
     )
     @run.output.attach(params[:output_signed_id]) if @run.did_succeed?
-    url = @run.did_succeed? ? url_for(run.output) : analysis_url
+    url = if @run.did_succeed?
+            api_default_researcher_analysis_run_download_url(@run.analysis, @run)
+          else
+            analysis_url
+          end
     EnclaveMailer.completed(@run, url).deliver
     render json: { success: true }
   end
@@ -58,7 +62,7 @@ class Api::V1::Enclave::RunsController < Api::V1::BaseController
     @run = AnalysisRun.find_by!(api_key: params[:api_key])
   end
 
-  def analysis_url
-    "#{request.protocol}#{request.host_with_port}/analysis/overview/#{@run.analysis_id}"
+  def analysis_url # can't use standard rails url helpers because it's handled by the FE
+    "#{request.protocol}://#{request.host_with_port}/analysis/overview/#{@run.analysis_id}"
   end
 end

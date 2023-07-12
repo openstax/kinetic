@@ -48,6 +48,12 @@ class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseControl
     render json: response_binding, status: :ok
   end
 
+  def download_run_results
+    run = @analysis.runs.find(params[:run_id])
+    run.update!(params.require(:run).permit(:status))
+    render json: Api::V1::Bindings::Analysis.create_from_model(@analysis)
+  end
+
   def update_run
     run = @analysis.runs.find(params[:run_id])
     run.update!(params.require(:run).permit(:status))
