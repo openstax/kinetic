@@ -14,7 +14,7 @@ import {
 import { ImageLibrary } from '../image-library';
 import { StudyCardPreview } from '../../../../learner/card';
 import { first } from 'lodash-es';
-import { Stage, Study } from '@api';
+import { Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
 
 export const participantViewValidation = (allOtherStudies: Study[]) => {
