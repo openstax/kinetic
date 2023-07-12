@@ -6,7 +6,7 @@ import { colors } from '@theme';
 import { FAQSection } from './researcher-faq';
 import { Link } from 'react-router-dom';
 import { RunsTable } from './runs-table';
-import { IS_PROD } from '../../lib/env'
+import { ENV } from '../../lib/env'
 
 export const AnalysisOverview: FC = () => {
     const { analysisId } = useParams<string>();
@@ -214,7 +214,7 @@ export const AnalysisOverviewFAQ: FC = () => {
 const BottomBar: FC<{analysis: Analysis}> = ({ analysis }) => {
 
     const openEditor = () => {
-        const url = `https://workspaces.kinetic.{IS_PROD ? '' : 'sandbox.'}openstax.org/editor/#${analysis.id}`
+        const url = `https://workspaces.kinetic.${ENV.IS_PRODUCTION ? '' : 'sandbox.'}openstax.org/editor/#${analysis.id}`
         // use window.open so the editor can use window.opener to refocus this window
         window.open(url, 'kinetic-workspaces-editor')
     }

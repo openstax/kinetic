@@ -29,7 +29,7 @@ class Api::V1::Enclave::RunsController < Api::V1::BaseController
       finished_at: Time.now
     )
     @run.output.attach(params[:output_signed_id]) if @run.did_succeed?
-    url = run.did_succeed? ? url_for(run.output) : analysis_url
+    url = @run.did_succeed? ? url_for(run.output) : analysis_url
     EnclaveMailer.completed(@run, url).deliver
     render json: { success: true }
   end
