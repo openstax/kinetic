@@ -1,4 +1,15 @@
-import { addReward, createStudy, expect, faker, goToPage, interceptStudyLaunch, Locator, rmStudy, test } from './test'
+import {
+    addReward,
+    createStudy,
+    expect,
+    faker,
+    goToPage,
+    interceptStudyLaunch,
+    Locator,
+    loginAs,
+    rmStudy,
+    test,
+} from './test'
 
 test('displays studies', async ({ page }) => {
     // const studyName = faker.commerce.productName()
@@ -16,6 +27,7 @@ test('filtering & sorting', async ({ page }) => {
     // const firstStudyId = await createStudy({ page, name: studyName })
     // const secondStudyId = await createStudy({ page, name: studyName })
 
+    // TODO Can use /studies?status=Launched|Draft|Completed
     await goToPage({ page, path: '/studies', loginAs: 'user' })
 
     // await rmStudy({ page, studyId: firstStudyId })
@@ -34,8 +46,6 @@ test('filtering & sorting', async ({ page }) => {
 //     await rmStudy({ page, studyId })
 // })
 
-const studyIdForCard = (l: Locator) => l.evaluate<string, HTMLDivElement>(card => card.dataset.studyId)
-
 test('launching study and testing completion', async ({ page }) => {
     await addReward({ page, points: 5, prize: 'Pony' })
 
@@ -43,19 +53,15 @@ test('launching study and testing completion', async ({ page }) => {
 
     const studyId = await createStudy({ page, name: faker.commerce.productName(), approveAndLaunchStudy: true })
     await goToPage({ page, path: '/studies', loginAs: 'user' })
-
-    // const firstStudyCard = page.locator('css=.studies.filtered >> [data-testid="studies-listing"]').nth(0)
-    // const firstStudyId = await studyIdForCard(firstStudyCard)
-    // console.log(firstStudyId)
-
-    await goToPage({ page, path: `/studies/details/${studyId}`, loginAs: 'user' })
+    await loginAs({ page, login: 'user' })
+    await goToPage({ page, path: `/studies/details/${studyId}` })
     await page.click('testId=launch-study')
+    
     // qualtrics will redirect here once complete
-    await goToPage({ page, path: `/study/land/${studyId}`, loginAs: 'user' })
+    await goToPage({ page, path: `/study/land/${studyId}` })
     await page.click('testId=view-studies')
     await expect(page).toHaveSelector(`[data-study-id="${studyId}"][role="link"]`)
-    // test that sort order is the same
-    // expect(firstStudyId).toEqual(await studyIdForCard(firstStudyCard))
+
     await page.click(`[data-study-id="${studyId}"]`)
     await rmStudy({ page, studyId: studyId })
 })
