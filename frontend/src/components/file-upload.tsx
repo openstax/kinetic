@@ -2,6 +2,7 @@ import { Box, React, styled, useState } from '@common';
 import { Button, FormSaveButton } from '@components'
 import { colors } from '@theme';
 import { Icon } from './icon';
+import { DirectUpload } from '@rails/activestorage'
 
 export interface FileUploadProps {
     className?: string
@@ -37,6 +38,13 @@ const FileUploader: FC<FileUploadProps> = ({
     }
 
     const handleFile = (f: File) => {
+            const du = new DirectUpload(f)
+            debugger
+            du.create((md5) => {
+                console.log(md5)
+                debugger
+            })
+
         if (!hasError(f)) {
             setPreview(URL.createObjectURL(f))
             onChange(f)

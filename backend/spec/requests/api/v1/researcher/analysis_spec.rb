@@ -141,4 +141,18 @@ RSpec.describe 'Analysis', api: :v1 do
     end
   end
 
+  describe 'POST researcher/analysis/:id/run/:run_id' do
+    let(:analysis) { create(:analysis, researchers: [researcher1]) }
+    let(:run) { create(:analysis_run, analysis: analysis) }
+
+    before { stub_current_user(researcher1) }
+
+    it 'updates the status' do
+      expect {
+        api_put "researcher/analysis/#{run.analysis.id}/run/#{run.id}", params: { run: { status: 'canceled' } }
+      }.to change { run.reload.status }.from('pending').to('canceled')
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
 end

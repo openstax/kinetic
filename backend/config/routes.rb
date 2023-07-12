@@ -18,7 +18,9 @@ Rails.application.routes.draw do
         end
         post 'studies/:id/update_status', to: 'studies#update_status'
 
-        resources :analysis
+        resources :analysis do
+          put 'run/:run_id', to: 'analysis#update_run'
+        end
 
         get 'responses/:api_key', to: 'responses#fetch'
 

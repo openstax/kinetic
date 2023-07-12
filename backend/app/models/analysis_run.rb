@@ -13,4 +13,6 @@ class AnalysisRun < ApplicationRecord
   attribute :api_key, :string, default: -> { SimpleStructuredSecrets.new('r', 'n').generate }
   attribute :started_at, :datetime, default: -> { Time.now }
 
+  enum status: [:pending, :complete, :canceled]
+
 end

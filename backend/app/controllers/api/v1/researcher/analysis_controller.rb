@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseController
-  before_action :set_analysis, only: [:show, :update, :destroy]
+  before_action :set_analysis, only: [:show, :update, :destroy, :update_run]
 
   def index
     analysis = current_researcher.analysis.includes(:study_analyses)
@@ -48,6 +48,12 @@ class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseControl
     render json: response_binding, status: :ok
   end
 
+  def update_run
+    run = @analysis.runs.find(params[:run_id])
+    run.update!(params.require(:run).permit(:status))
+    render json: Api::V1::Bindings::Analysis.create_from_model(@analysis)
+  end
+
   def destroy
     @analysis.destroy!
     head :ok
@@ -56,7 +62,7 @@ class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseControl
   protected
 
   def set_analysis
-    @analysis = current_researcher.analysis.find(params[:id])
+    @analysis = current_researcher.analysis.find(params[:id] || params[:analysis_id])
   end
 
 end
