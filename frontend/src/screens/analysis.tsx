@@ -19,7 +19,7 @@ const AnalysisRoutes = () => {
             <Box>
                 <Routes>
                     <Route path="edit/:analysisId" element={<EditAnalysis analyses={analyses || []} studies={studies} />} />
-                    <Route path="overview/:analysisId" element={<AnalysisOverview />} />
+                    <Route path="overview/:analysisId" element={<AnalysisOverview analyses={analyses || []} />} />
                     <Route path="*" element={<AnalysisDashboard analyses={analyses || []} />} />
                 </Routes>
             </Box>
