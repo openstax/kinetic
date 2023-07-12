@@ -116,7 +116,7 @@ class Study < ApplicationRecord
   def submit
     (survey_id, secret_key) = CloneSurvey.new.clone(title_for_researchers)
     stages.each do |stage|
-      stage.update(
+      stage.update!(
         {
           status: 'waiting_period',
           config: {
@@ -130,29 +130,28 @@ class Study < ApplicationRecord
   end
 
   def pause
-    stages.where.not(status: 'paused').first&.update(status: 'paused')
+    stages.where.not(status: 'paused').first&.update!(status: 'paused')
   end
 
   def resume(stage_index=0)
     stages.last(stages.length - stage_index.to_i).each do |stage|
-      stage.update(status: 'active')
+      stage.update!(status: 'active')
     end
   end
 
   def end
-    stages.where.not(status: 'completed').first&.update(status: 'completed')
+    stages.where.not(status: 'completed').first&.update!(status: 'completed')
   end
 
   def reopen(stage_index=0)
     stages.last(stages.length - stage_index.to_i).each do |stage|
-      stage.update(status: 'active')
+      stage.update!(status: 'active')
     end
   end
 
   def reopen_if_possible
-    return if stages.any? { |stage| stage.status == 'completed' }
+    return if stages.any? { |stage| stage.status != 'completed' }
     return if target_sample_size.present? && completed_count >= target_sample_size
-
     return if closes_at.present? && closes_at <= DateTime.now
 
     reopen

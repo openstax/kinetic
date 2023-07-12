@@ -28,7 +28,6 @@ const studyValidation = Yup.object().shape({
         then: Yup.number()
             .nullable(true)
             .required('Required')
-            .max(1000, 'We recommend aiming for a sample size of 1000 or less as we work to amplify our recruitment efforts')
             .min(1, 'Only whole numbers above 0 are valid'),
     }),
     closesAt: Yup.mixed().when('hasClosingDate', {
@@ -321,13 +320,16 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                         />
                         <label htmlFor='sample-size'>By sample size</label>
                     </Col>
-                    <Col sm={5}>
+                    <Col sm={5} gap>
                         <InputField
                             name='targetSampleSize'
                             disabled={!watch('hasSampleSize')}
                             placeholder='1-1000'
                             type='number'
                         />
+                        {watch('targetSampleSize') > 1000 && <small css={{ color: colors.kineticResearcher }}>
+                            We recommend aiming for a sample size of 1000 or less as we work to amplify our recruitment efforts
+                        </small>}
                         <FieldErrorMessage name='targetSampleSize'/>
                     </Col>
                 </Box>

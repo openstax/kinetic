@@ -7,6 +7,7 @@ import { colors } from '@theme';
 import { FinalizeStudy } from './finalize-study';
 import Waiting from '@images/study-creation/waiting.svg'
 import { EditSubmittedStudy } from './edit-submitted-study';
+import { useQueryParam } from '@lib';
 
 export default function StudyOverview() {
     const nav = useNavigate()
@@ -41,6 +42,8 @@ export default function StudyOverview() {
 }
 
 const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
+    const reopening: boolean = useQueryParam('reopen') || false
+
     if (isWaiting(study)) {
         return <WaitingForTemplate study={study} />
     }
@@ -60,7 +63,7 @@ const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
 
             <StudyInformation study={study} />
 
-            <CollapsibleSection title='Edit Study' description='Make changes to open and close criteria' open={false}>
+            <CollapsibleSection title='Edit Study' description='Make changes to open and close criteria' open={reopening}>
                 <EditSubmittedStudy study={study} />
             </CollapsibleSection>
 

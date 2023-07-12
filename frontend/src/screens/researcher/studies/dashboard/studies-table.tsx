@@ -419,8 +419,8 @@ export const StudiesTable: React.FC<{
 
     return (
         <Box direction='column' className='studies mt-2'>
-            <StatusFilters status={currentStatus} table={table} className='my-2'/>
-            <table data-testid="studies-table" className='w-100'>
+            <StatusFilters status={currentStatus} table={table}/>
+            <table data-testid="studies-table" className='w-100 mt-2'>
                 <thead css={{ height: 40 }}>
                     <tr>
                         {table.getFlatHeaders().map((header) =>

@@ -39,7 +39,6 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     notify_researchers(inbound_binding.researchers || [])
 
     @study.update!(inbound_binding.to_hash.except(:researchers, :stages))
-    @study.reopen_if_possible
 
     unless inbound_binding.stages.nil?
       @study.stages.clear
@@ -49,6 +48,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       end
     end
 
+    @study.reopen_if_possible
     response_binding = Api::V1::Bindings::Study.create_from_model(@study)
     render json: response_binding, status: :ok
   end

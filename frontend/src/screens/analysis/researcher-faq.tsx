@@ -4,8 +4,8 @@ import FAQIcon from '@images/icons/faq.svg'
 
 const FAQButton = styled.img({
     cursor: 'pointer',
-    height: 44,
-    width: 44,
+    height: 50,
+    width: 50,
 })
 
 const StyledOffCanvas = styled(OffCanvas)({
