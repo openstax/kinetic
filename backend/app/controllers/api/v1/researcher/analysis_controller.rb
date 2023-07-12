@@ -49,9 +49,13 @@ class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseControl
   end
 
   def download_run_results
-    run = @analysis.runs.find(params[:run_id])
-    run.update!(params.require(:run).permit(:status))
-    render json: Api::V1::Bindings::Analysis.create_from_model(@analysis)
+    analysis = current_researcher&.analysis&.find(params[:analysis_id])&.runs&.find(params[:run_id])
+    unless run && run.output.attached?
+      render text: 'unable to download results, are you logged in?',
+             status: 403 and return
+    end
+
+    redirect_to url_for(run.output)
   end
 
   def update_run
@@ -68,7 +72,10 @@ class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseControl
   protected
 
   def set_analysis
+    return head :forbidden unless current_researcher
+
     @analysis = current_researcher.analysis.find(params[:id] || params[:analysis_id])
+    raise ActiveRecord::RecordNotFound unless @analysis
   end
 
 end
