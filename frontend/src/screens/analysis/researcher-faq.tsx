@@ -1,18 +1,11 @@
 import { Box, React, styled, useState } from '@common';
 import { Button, Icon, OffCanvas } from '@components';
-import { colors } from '@theme';
+import FAQIcon from '@images/icons/faq.svg'
 
-const FAQButton = styled(Box)({
+const FAQButton = styled.img({
     cursor: 'pointer',
-    borderRadius: 25,
-    fontSize: 12,
     height: 44,
     width: 44,
-    backgroundColor: colors.kineticResearcher,
-    color: colors.white,
-    fontWeight: 600,
-    alignItems: 'center',
-    justifyContent: 'center',
 })
 
 const StyledOffCanvas = styled(OffCanvas)({
@@ -26,7 +19,7 @@ export const ResearcherFAQ: FC = () => {
 
     return (
         <div>
-            <FAQButton onClick={() => setShow(true)}>FAQ</FAQButton>
+            <FAQButton src={FAQIcon} alt='faq-icon' onClick={() => setShow(true)} />
             <StyledOffCanvas show={show} title='Help' onHide={() => setShow(false)}>
                 <AnalysisBasicsFAQ />
             </StyledOffCanvas>

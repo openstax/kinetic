@@ -45,6 +45,7 @@ export const RunsTable: FC<{analysis: Analysis}> = ({ analysis }) => {
 
     return (
         <Box direction='column'>
+            <h4>Analysis History</h4>
             <table data-testid="analysis-runs-table" className='mt-2'>
                 <thead>
                     <tr>
@@ -171,6 +172,7 @@ const useRunsTable = (analysis: Analysis) => {
         {
             id: 'actions',
             header: () => 'Action',
+            size: 375,
             enableSorting: false,
             cell: ({ row }) => {
                 const canDownload = hasRunSucceeded(row.original)
@@ -182,6 +184,9 @@ const useRunsTable = (analysis: Analysis) => {
                         </ActionLink>
                         <ActionLink link onClick={() => {}}>
                             Download Script
+                        </ActionLink>
+                        <ActionLink link onClick={() => {}}>
+                            Cancel Analysis
                         </ActionLink>
                     </Box>
                 )

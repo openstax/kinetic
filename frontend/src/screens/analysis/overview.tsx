@@ -12,17 +12,16 @@ export const AnalysisOverview: FC<{analyses: Analysis[]}> = () => {
     const { data: analysis, isLoading } = useFetchAnalysis(Number(analysisId))
     if (isLoading) return <LoadingAnimation />
     if (!analysis) return <PageNotFound name='analysis' />
-
     return (
         <Col className='analysis-overview' sm={12} gap='xlarge'>
             <Box align='center' justify='between' >
-                <h3>{analysis?.title}</h3>
+                <h3 className='fw-bolder'>{analysis?.title}</h3>
                 <ExitButton navTo='/analysis'/>
             </Box>
 
             {!!analysis.runs?.length && <RunsTable analysis={analysis}/>}
 
-            <CollapsibleSection title='Help Materials' open={!analysis.runs?.length}>
+            <CollapsibleSection title='Help Materials' open={!analysis.runs || analysis.runs.length == 0}>
                 <HelpMaterials />
             </CollapsibleSection>
 
@@ -58,10 +57,10 @@ const HelpMaterials = () => {
         <Box direction='column' >
             <HelpTabs className="nav nav-tabs" role="tablist">
                 <li className="nav-item" role="presentation">
-                    <a href="#"
+                    <a data-target="#"
                         id="steps-tab"
                         onClick={() => setCurrentTab('Steps')}
-                        className={cx('nav-link', { active: currentTab == 'Steps' })}
+                        className={cx('nav-link cursor-pointer', { active: currentTab == 'Steps' })}
                         data-bs-toggle="tab"
                         data-bs-target="#steps"
                         role="tab"
@@ -72,10 +71,10 @@ const HelpMaterials = () => {
                     </a>
                 </li>
                 <li className="nav-item" role="presentation">
-                    <a href="#"
+                    <a data-target="#"
                         id="tutorial-tab"
                         onClick={() => setCurrentTab('Tutorial')}
-                        className={cx('nav-link', { active: currentTab == 'Tutorial' })}
+                        className={cx('nav-link cursor-pointer', { active: currentTab == 'Tutorial' })}
                         data-bs-toggle="tab"
                         data-bs-target="#tutorial"
                         role="tab"
@@ -86,10 +85,10 @@ const HelpMaterials = () => {
                     </a>
                 </li>
                 <li className="nav-item" role="presentation">
-                    <a href="#"
+                    <a data-target="#"
                         id="faq-tab"
                         onClick={() => setCurrentTab('FAQ')}
-                        className={cx('nav-link', { active: currentTab == 'FAQ' })}
+                        className={cx('nav-link cursor-pointer', { active: currentTab == 'FAQ' })}
                         data-bs-toggle="tab"
                         data-bs-target="#faq"
                         role="tab"
