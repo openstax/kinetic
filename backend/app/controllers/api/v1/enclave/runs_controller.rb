@@ -19,7 +19,7 @@ class Api::V1::Enclave::RunsController < Api::V1::BaseController
 
   def log
     @run.messages.create(params.permit(:level, :message, :stage))
-    head :ok
+    render json: { success: true }
   end
 
   def completion
@@ -29,9 +29,9 @@ class Api::V1::Enclave::RunsController < Api::V1::BaseController
       finished_at: Time.now
     )
     @run.output.attach(params[:output_signed_id]) if @run.did_succeed?
-    EnclaveMailer.completed(@run).deliver
-
-    head :ok
+    url = run.did_succeed? ? url_for(run.output) : analysis_url
+    EnclaveMailer.completed(@run, url).deliver
+    render json: { success: true }
   end
 
   # stolen from https://github.com/rails/rails/blob/6-1-stable/activestorage/app/controllers/active_storage/direct_uploads_controller.rb
@@ -56,5 +56,9 @@ class Api::V1::Enclave::RunsController < Api::V1::BaseController
 
   def find_run
     @run = AnalysisRun.find_by!(api_key: params[:api_key])
+  end
+
+  def analysis_url
+    "#{request.protocol}#{request.host_with_port}/analysis/overview/#{@run.analysis_id}"
   end
 end
