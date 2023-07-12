@@ -43,7 +43,7 @@ RSpec.describe 'Enclave', api: :v1 do
         }.to change { AnalysisRunMessage.count }.by(1)
       end
 
-      context 'run failed' do
+      context 'when a run fails' do
         it 'sends a failed notice' do
           run.messages.create({ stage: 'archive', level: 'info', message: 'something' })
           expect {

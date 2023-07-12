@@ -62,7 +62,8 @@ class Api::V1::Enclave::RunsController < Api::V1::BaseController
     @run = AnalysisRun.find_by!(api_key: params[:api_key])
   end
 
-  def analysis_url # can't use standard rails url helpers because it's handled by the FE
+  def analysis_url
+    # can't use standard rails url helpers because it's handled by the FE
     "#{request.protocol}://#{request.host_with_port}/analysis/overview/#{@run.analysis_id}"
   end
 end
