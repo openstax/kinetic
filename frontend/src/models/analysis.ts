@@ -52,9 +52,9 @@ export const isRunUnderReview = (run: AnalysisRun) => {
 }
 
 export const runHasError = (run: AnalysisRun) => {
-    return run.finishedAt && !run.didSucceed
+    return run.status == 'error'
 }
 
 export const hasRunSucceeded = (run: AnalysisRun) => {
-    return run.finishedAt && run.didSucceed
+    return run.finishedAt && run.status == 'complete'
 }

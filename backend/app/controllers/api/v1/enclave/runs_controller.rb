@@ -25,7 +25,7 @@ class Api::V1::Enclave::RunsController < Api::V1::BaseController
   def completion
     @run.messages.create(level: 'error', stage: 'end', message: params[:error]) if params[:error]
     @run.update!(
-      did_succeed: params[:status] == 'success',
+      status: params[:status] == 'success' ? :complete : :error,
       finished_at: Time.now
     )
     @run.output.attach(params[:output_signed_id]) if @run.did_succeed?

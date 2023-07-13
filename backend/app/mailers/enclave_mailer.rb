@@ -7,7 +7,7 @@ class EnclaveMailer < ApplicationMailer
   def completed(run, results_url)
     mail(
       to: 'kinetic@openstax.org', # TODO: use this once email is present on researchers: run.analysis.researchers.first.email,
-      subject: "Your analysis has #{run.did_succeed ? 'completed' : 'failed'}",
+      subject: "Your analysis has #{run.did_succeed? ? 'completed' : 'failed'}",
       template: "enclave_analysis_run_#{run.did_succeed? ? 'success' : 'failure'}"
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {

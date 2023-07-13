@@ -69,12 +69,6 @@ export interface AnalysisRun {
      */
     analysisApiKey: number;
     /**
-     * has run succeeded
-     * @type {boolean}
-     * @memberof AnalysisRun
-     */
-    didSucceed?: boolean;
-    /**
      * When was run started
      * @type {string}
      * @memberof AnalysisRun
@@ -95,7 +89,8 @@ export interface AnalysisRun {
 export const AnalysisRunStatusEnum = {
     Pending: 'pending',
     Complete: 'complete',
-    Error: 'error'
+    Error: 'error',
+    Canceled: 'canceled'
 } as const;
 export type AnalysisRunStatusEnum = typeof AnalysisRunStatusEnum[keyof typeof AnalysisRunStatusEnum];
 
@@ -130,7 +125,6 @@ export function AnalysisRunFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'messages': !exists(json, 'messages') ? undefined : ((json['messages'] as Array<any>).map(AnalysisRunMessageFromJSON)),
         'analysisId': json['analysis_id'],
         'analysisApiKey': json['analysis_api_key'],
-        'didSucceed': !exists(json, 'did_succeed') ? undefined : json['did_succeed'],
         'startedAt': !exists(json, 'started_at') ? undefined : json['started_at'],
         'finishedAt': !exists(json, 'finished_at') ? undefined : json['finished_at'],
     };
@@ -151,7 +145,6 @@ export function AnalysisRunToJSON(value?: AnalysisRun | null): any {
         'messages': value.messages === undefined ? undefined : ((value.messages as Array<any>).map(AnalysisRunMessageToJSON)),
         'analysis_id': value.analysisId,
         'analysis_api_key': value.analysisApiKey,
-        'did_succeed': value.didSucceed,
         'started_at': value.startedAt,
         'finished_at': value.finishedAt,
     };

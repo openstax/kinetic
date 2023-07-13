@@ -181,13 +181,15 @@ const useRunsTable = (analysis: Analysis) => {
                     api.updateAnalysisRun({
                         runId: run.id,
                         analysisId: run.analysisId,
-                        updateAnalysisRun: { status: 'cancelled' }
+                        updateAnalysisRun: { status: 'cancelled' },
                     })
                 }
                 return (
                     // TODO download URLs @nathan?
                     <Box gap='medium'>
-                        <ActionLink className={cx({ disabled: !canDownload})} href={`/api/researcher/analysis/{run.analysisId}/run/{run.id}/results`}>
+                        <ActionLink
+                            className={cx({ disabled: !canDownload })}
+                            href={`/api/researcher/analysis/{run.analysisId}/run/{run.id}/results`}>
                             Download Results
                         </ActionLink>
                         <ActionLink onClick={() => cancelRun()}>

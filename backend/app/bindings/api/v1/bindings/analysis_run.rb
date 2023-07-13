@@ -36,9 +36,6 @@ module Api::V1::Bindings
     # Api key to obtain analysis data
     attr_accessor :analysis_api_key
 
-    # has run succeeded
-    attr_accessor :did_succeed
-
     # When was run started
     attr_accessor :started_at
 
@@ -77,7 +74,6 @@ module Api::V1::Bindings
         :'messages' => :'messages',
         :'analysis_id' => :'analysis_id',
         :'analysis_api_key' => :'analysis_api_key',
-        :'did_succeed' => :'did_succeed',
         :'started_at' => :'started_at',
         :'finished_at' => :'finished_at'
       }
@@ -98,7 +94,6 @@ module Api::V1::Bindings
         :'messages' => :'Array<AnalysisRunMessage>',
         :'analysis_id' => :'Integer',
         :'analysis_api_key' => :'Integer',
-        :'did_succeed' => :'Boolean',
         :'started_at' => :'String',
         :'finished_at' => :'String'
       }
@@ -155,10 +150,6 @@ module Api::V1::Bindings
         self.analysis_api_key = attributes[:'analysis_api_key']
       end
 
-      if attributes.key?(:'did_succeed')
-        self.did_succeed = attributes[:'did_succeed']
-      end
-
       if attributes.key?(:'started_at')
         self.started_at = attributes[:'started_at']
       end
@@ -196,7 +187,7 @@ module Api::V1::Bindings
     def valid?
       return false if @id.nil?
       return false if @api_key.nil?
-      status_validator = EnumAttributeValidator.new('String', ["pending", "complete", "error"])
+      status_validator = EnumAttributeValidator.new('String', ["pending", "complete", "error", "canceled"])
       return false unless status_validator.valid?(@status)
       return false if @analysis_id.nil?
       return false if @analysis_api_key.nil?
@@ -206,7 +197,7 @@ module Api::V1::Bindings
     # Custom attribute writer method checking allowed values (enum).
     # @param [Object] status Object to be assigned
     def status=(status)
-      validator = EnumAttributeValidator.new('String', ["pending", "complete", "error"])
+      validator = EnumAttributeValidator.new('String', ["pending", "complete", "error", "canceled"])
       unless validator.valid?(status)
         fail ArgumentError, "invalid value for \"status\", must be one of #{validator.allowable_values}."
       end
@@ -225,7 +216,6 @@ module Api::V1::Bindings
           messages == o.messages &&
           analysis_id == o.analysis_id &&
           analysis_api_key == o.analysis_api_key &&
-          did_succeed == o.did_succeed &&
           started_at == o.started_at &&
           finished_at == o.finished_at
     end
@@ -239,7 +229,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, api_key, message, status, messages, analysis_id, analysis_api_key, did_succeed, started_at, finished_at].hash
+      [id, api_key, message, status, messages, analysis_id, analysis_api_key, started_at, finished_at].hash
     end
 
     # Builds the object from hash

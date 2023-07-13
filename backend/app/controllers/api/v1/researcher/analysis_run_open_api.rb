@@ -23,7 +23,7 @@ class Api::V1::Researcher::AnalysisRunOpenApi
       property :status do
         key :type, :string
         key :description, 'Current status of the run'
-        key :enum, %w[pending complete error]
+        key :enum, %w[pending complete error canceled]
       end
       property :messages do
         key :type, :array
@@ -39,10 +39,6 @@ class Api::V1::Researcher::AnalysisRunOpenApi
       property :analysis_api_key do
         key :type, :integer
         key :description, 'Api key to obtain analysis data'
-      end
-      property :did_succeed do
-        key :type, :boolean
-        key :description, 'has run succeeded'
       end
       property :started_at do
         key :type, :string

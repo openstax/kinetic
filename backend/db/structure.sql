@@ -288,7 +288,6 @@ CREATE TABLE public.analysis_runs (
     analysis_id bigint NOT NULL,
     api_key text DEFAULT public.api_key('rn'::text, 18) NOT NULL,
     message text NOT NULL,
-    did_succeed boolean DEFAULT false,
     started_at timestamp with time zone,
     finished_at timestamp with time zone,
     status integer DEFAULT 0
