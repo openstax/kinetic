@@ -65,7 +65,7 @@ RSpec.describe UserNotifications, type: :mailer do
   end
 
   it 'delivers prize cycle deadline' do
-    Reward.create!(prize: 'A testing session', points: 1, start_at: Date.yesterday, end_at: 2.days.from_now)
+    Reward.create!(prize: 'A testing session', points: 1, start_at: Date.yesterday, end_at: 3.days.from_now + 6.hours)
     assert_emails 1 do
       described_class.deliver_prize_cycle_deadline
       email = ActionMailer::Base.deliveries.last
