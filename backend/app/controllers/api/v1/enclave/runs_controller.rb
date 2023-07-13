@@ -19,23 +19,51 @@ class Api::V1::Enclave::RunsController < Api::V1::BaseController
 
   def log
     @run.messages.create(params.permit(:level, :message, :stage))
-    head :ok
+    render json: { success: true }
   end
 
   def completion
     @run.messages.create(level: 'error', stage: 'end', message: params[:error]) if params[:error]
     @run.update!(
-      did_succeed: params[:status] == 'success',
+      status: params[:status] == 'success' ? :complete : :error,
       finished_at: Time.now
     )
-    EnclaveMailer.completed(@run).deliver
-    @run.attach_output(params[:output_path]) if @run.did_succeed?
-    head :ok
+    @run.output.attach(params[:output_signed_id]) if @run.did_succeed?
+    url = if @run.did_succeed?
+            api_default_researcher_analysis_run_download_url(@run.analysis, @run)
+          else
+            analysis_url
+          end
+    EnclaveMailer.completed(@run, url).deliver
+    render json: { success: true }
   end
 
-  protected
+  # stolen from https://github.com/rails/rails/blob/6-1-stable/activestorage/app/controllers/active_storage/direct_uploads_controller.rb
+  def upload_results
+    args = params.require(:blob).permit(
+      :filename, :byte_size, :checksum, :content_type, metadata: {}
+    ).to_h.symbolize_keys
+    blob = ActiveStorage::Blob.create_before_direct_upload!(**args)
+    render json: direct_upload_json(blob)
+  end
+
+  private
+
+  def direct_upload_json(blob)
+    blob.as_json(root: false, methods: :signed_id).merge(
+      direct_upload: {
+        url: blob.service_url_for_direct_upload,
+        headers: blob.service_headers_for_direct_upload
+      }
+    )
+  end
 
   def find_run
-    @run = AnalysisRun.find_by(api_key: params[:api_key])
+    @run = AnalysisRun.find_by!(api_key: params[:api_key])
+  end
+
+  def analysis_url
+    # can't use standard rails url helpers because it's handled by the FE
+    "#{request.protocol}://#{request.host_with_port}/analysis/overview/#{@run.analysis_id}"
   end
 end

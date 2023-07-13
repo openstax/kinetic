@@ -25,6 +25,10 @@ class ResponseExport < ApplicationRecord
     is_testing ? generate_test_data : fetch_real_responses
   end
 
+  def is_stale?(cutoff)
+    created_at < cutoff
+  end
+
   protected
 
   def fetch_real_responses
@@ -61,14 +65,10 @@ class ResponseExport < ApplicationRecord
   end
 
   def complete_response_fetch(api, retries, completion)
-    attachments = []
     api.fetch_export_file(stage.config['survey_id'], completion['fileId']) do |entry|
-      attachments << {
-        io: entry.get_input_stream,
-        filename: entry.name
-      }
+      files.attach({ io: StringIO.new(entry.get_input_stream.read), filename: entry.name })
     end
-    files.attach(attachments)
+
     update!(
       is_complete: true,
       metadata: metadata.merge(

@@ -1,4 +1,4 @@
-import { Box, React, styled, useState } from '@common';
+import { Box, React, styled, useState, cx } from '@common';
 import {
     ColumnDef,
     flexRender,
@@ -11,11 +11,11 @@ import {
     useReactTable,
 } from '@tanstack/react-table';
 import { Analysis, AnalysisRun, AnalysisRunMessage } from '@api';
-import { Button, Icon, StyledRow, TableHeader } from '@components';
+import { Icon, StyledRow, TableHeader } from '@components';
 import { colors } from '@theme';
 import { hasRunSucceeded, isRunUnderReview, runHasError } from '@models';
 import { Modal } from '@nathanstitt/sundry/modal';
-import { toDayJS } from '@lib';
+import { useApi, toDayJS } from '@lib';
 
 const AnalysisRunRow: React.FC<{row: Row<AnalysisRun> }> = ({ row }) => {
     return (
@@ -174,18 +174,25 @@ const useRunsTable = (analysis: Analysis) => {
             header: () => 'Action',
             size: 375,
             enableSorting: false,
-            cell: ({ row }) => {
-                const canDownload = hasRunSucceeded(row.original)
+            cell: ({ row: { original: run } }: { row: { original: AnalysisRun } }) => {
+                const api = useApi()
+                const canDownload = hasRunSucceeded(run)
+                const cancelRun = () => {
+                    api.updateAnalysisRun({
+                        runId: run.id,
+                        analysisId: run.analysisId,
+                        updateAnalysisRun: { status: 'cancelled' },
+                    })
+                }
                 return (
                     // TODO download URLs @nathan?
                     <Box gap='medium'>
-                        <ActionLink link disabled={!canDownload} onClick={() => {}}>
+                        <ActionLink
+                            className={cx({ disabled: !canDownload })}
+                            href={`/api/researcher/analysis/{run.analysisId}/run/{run.id}/results`}>
                             Download Results
                         </ActionLink>
-                        <ActionLink link onClick={() => {}}>
-                            Download Script
-                        </ActionLink>
-                        <ActionLink link onClick={() => {}}>
+                        <ActionLink onClick={() => cancelRun()}>
                             Cancel Analysis
                         </ActionLink>
                     </Box>
@@ -210,6 +217,6 @@ const useRunsTable = (analysis: Analysis) => {
     return { table }
 }
 
-const ActionLink = styled(Button)({
+const ActionLink = styled.a({
     padding: 'unset',
 })

@@ -6,6 +6,7 @@ import { colors } from '@theme';
 import { FAQSection } from './researcher-faq';
 import { Link } from 'react-router-dom';
 import { RunsTable } from './runs-table';
+import { ENV } from '../../lib/env'
 
 export const AnalysisOverview: FC = () => {
     const { analysisId } = useParams<string>();
@@ -211,6 +212,13 @@ export const AnalysisOverviewFAQ: FC = () => {
 }
 
 const BottomBar: FC<{analysis: Analysis}> = ({ analysis }) => {
+
+    const openEditor = () => {
+        const url = `https://workspaces.kinetic.${ENV.IS_PRODUCTION ? '' : 'sandbox.'}openstax.org/editor/#${analysis.id}`
+        // use window.open so the editor can use window.opener to refocus this window
+        window.open(url, 'kinetic-workspaces-editor')
+    }
+
     return (
         <Box className='fixed-bottom bg-white mt-auto' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
             <Box className='container-lg' align='center' justify='between'>
@@ -220,13 +228,12 @@ const BottomBar: FC<{analysis: Analysis}> = ({ analysis }) => {
                         <span>Back to Analysis Basics</span>
                     </Box>
                 </Link>
-                <a
+                <button
                     className="btn btn-primary btn-researcher-primary"
-                    target="kinetic-workspaces-editor"
-                    href={`https://workspaces.kinetic.sandbox.openstax.org/editor/#${analysis.id}`}
+                    onClick={openEditor}
                 >
                     Open R Studio
-                </a>
+                </button>
             </Box>
         </Box>
     )

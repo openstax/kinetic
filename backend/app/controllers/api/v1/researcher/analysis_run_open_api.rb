@@ -6,7 +6,7 @@ class Api::V1::Researcher::AnalysisRunOpenApi
 
   openapi_component do
     schema :AnalysisRun do
-      key :required, %w[api_key analysis_id analysis_api_key]
+      key :required, %w[id api_key analysis_id analysis_api_key]
       property :id do
         key :type, :integer
         key :description, 'ID of analysis run'
@@ -19,6 +19,11 @@ class Api::V1::Researcher::AnalysisRunOpenApi
       property :message do
         key :type, :string
         key :description, 'Commit message of the analysis run'
+      end
+      property :status do
+        key :type, :string
+        key :description, 'Current status of the run'
+        key :enum, %w[pending complete error canceled]
       end
       property :messages do
         key :type, :array
@@ -34,10 +39,6 @@ class Api::V1::Researcher::AnalysisRunOpenApi
       property :analysis_api_key do
         key :type, :integer
         key :description, 'Api key to obtain analysis data'
-      end
-      property :did_succeed do
-        key :type, :boolean
-        key :description, 'has run succeeded'
       end
       property :started_at do
         key :type, :string
@@ -85,28 +86,42 @@ class Api::V1::Researcher::AnalysisRunOpenApi
 
   end
 
-  openapi_path '/researcher/analysis/:analysis_id/runs' do
+  openapi_path '/researcher/analysis/{analysis_id}/run/{run_id}' do
 
     operation :post do
-      key :summary, 'Create an analysis run'
-      key :operationId, 'createAnalysisRun'
+      key :summary, 'Update an analysis run'
+      key :operationId, 'updateAnalysisRun'
+      parameter do
+        key :name, :run_id
+        key :in, :path
+        key :description, 'ID of the run to update.'
+        key :required, true
+        key :schema, { type: :integer }
+      end
+      parameter do
+        key :name, :analysis_id
+        key :in, :path
+        key :description, 'ID of the analysis that the run belongs to'
+        key :required, true
+        key :schema, { type: :integer }
+      end
       request_body do
         key :description, 'The analysis data'
         key :required, true
         content 'application/json' do
           schema do
-            key :required, %w[message]
+            key :required, %w[status]
             key :type, :object
-            key :title, :createAnalysisRun
-            property :message do
+            key :title, :updateAnalysisRun
+            property :status do
               key :type, :string
-              key :description, 'Message describing run'
+              key :description, 'Updated status'
             end
           end
         end
       end
-      response 201 do
-        key :description, 'Created.  Returns the created analysis.'
+      response 200 do
+        key :description, 'Updated.  Returns the analysis.'
         content 'application/json' do
           schema { key :$ref, :Analysis }
         end
