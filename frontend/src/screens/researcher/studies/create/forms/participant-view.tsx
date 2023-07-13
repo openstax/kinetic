@@ -46,7 +46,7 @@ export const participantViewValidation = (allOtherStudies: Study[]) => {
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
         stages: Yup.lazy((stages, options) => {
-            if (!stages) return Yup.array()
+            if (!stages) return Yup.mixed()
             const step = options.parent.step
             const firstStage = stages[0]
 
@@ -78,7 +78,7 @@ export const participantViewValidation = (allOtherStudies: Study[]) => {
                     }
                 )
             }
-            return Yup.array().of(stageSchema)
+            return Yup.mixed()
         }),
         benefits: Yup.string().when('step', {
             is: 2,

@@ -67,7 +67,6 @@ export const ResearchTeam: FC<{study: Study}> = ({ study }) => {
 
         const lead = researchers.find(r => r.id === getValues('researcherLead'))
         lead && updatedResearchers.push({ ...lead, role: 'lead' })
-        console.log(researchers, updatedResearchers, pi, lead)
         setValue('researchers', updatedResearchers, { shouldValidate: true, shouldTouch: true, shouldDirty: true })
     }
 

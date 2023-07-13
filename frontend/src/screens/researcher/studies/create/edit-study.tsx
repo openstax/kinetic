@@ -127,9 +127,8 @@ const FormContent: FC<{
     }
 
     const { isValid, isDirty } = useFormState()
-
     const setStep = (step: StudyStep) => {
-        setValue('step', step, { shouldValidate: true })
+        setValue('step', step, { shouldValidate: true, shouldTouch: true })
         if (!isNew) {
             setStudyProgressStep(step)
         }
@@ -156,7 +155,6 @@ const FormContent: FC<{
         }
 
         const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
-        console.log(savedStudy)
         reset(getFormDefaults(savedStudy, currentStep), { keepIsValid: true, keepDirty: false })
         setStudy(savedStudy)
     }

@@ -21,7 +21,7 @@ RSpec.describe ResearcherNotifications, type: :mailer do
   # TODO: Removed researcher tests
   it 'notifies researchers that were added and removed from study' do
     assert_emails 1 do
-      described_class.notify_study_researchers([added_researcher], [], study, removed_researcher)
+      described_class.notify_study_researchers(study, removed_researcher)
     end
 
     # Invited email

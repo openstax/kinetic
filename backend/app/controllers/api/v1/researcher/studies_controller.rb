@@ -74,31 +74,35 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   protected
 
   def notify_researchers(researchers)
-    new_researcher_ids = researchers.map(&:id)
-    old_researcher_ids = @study.study_researchers.map(&:researcher_id)
+    return if researchers.empty?
+    new_researchers = researchers.map { |new_researcher| { id: new_researcher.id, role: new_researcher.role } }
+    old_researchers = @study.study_researchers.map { |old_researcher| { id: old_researcher.researcher_id, role: old_researcher.role } }
 
-    return if new_researcher_ids == old_researcher_ids
+    return if new_researchers == old_researchers
 
-    added_researchers_ids = (new_researcher_ids - old_researcher_ids) - [@current_researcher.id]
-    removed_researchers_ids = (old_researcher_ids - new_researcher_ids) - [@current_researcher.id]
+    added_researchers = (new_researchers - old_researchers)
+    removed_researchers = (old_researchers - new_researchers)
 
-    researchers.each do |researcher|
-      next unless added_researchers_ids.include?(researcher.id)
+    new_researchers.each do |researcher|
+      next unless added_researchers.include?(researcher)
 
       @study.study_researchers.create!(
-        researcher_id: researcher.id,
-        role: researcher.role
+        researcher_id: researcher[:id],
+        role: researcher[:role]
       )
     end
 
-    removed_researchers_ids.each do |removed_researcher_id|
+    old_researchers.each do |old_researcher|
+      next unless removed_researchers.include?(old_researcher)
       @study.study_researchers.delete(
-        @study.study_researchers.find_by(researcher_id: removed_researcher_id)
+        @study.study_researchers.find_by(
+          researcher_id: old_researcher[:id],
+          role: old_researcher[:role]
+        )
       )
     end
 
-    ResearcherNotifications.notify_study_researchers(@study.study_researchers, [], @study,
-                                                     @current_researcher)
+    ResearcherNotifications.notify_study_researchers(@study, @current_researcher)
   end
 
   def set_study
