@@ -24,6 +24,9 @@ module Api::V1::Bindings
     # Commit message of the analysis run
     attr_accessor :message
 
+    # Current status of the run
+    attr_accessor :status
+
     # The analysis run messages.
     attr_accessor :messages
 
@@ -42,12 +45,35 @@ module Api::V1::Bindings
     # When was run completed
     attr_accessor :finished_at
 
+    class EnumAttributeValidator
+      attr_reader :datatype
+      attr_reader :allowable_values
+
+      def initialize(datatype, allowable_values)
+        @allowable_values = allowable_values.map do |value|
+          case datatype.to_s
+          when /Integer/i
+            value.to_i
+          when /Float/i
+            value.to_f
+          else
+            value
+          end
+        end
+      end
+
+      def valid?(value)
+        !value || allowable_values.include?(value)
+      end
+    end
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'id' => :'id',
         :'api_key' => :'api_key',
         :'message' => :'message',
+        :'status' => :'status',
         :'messages' => :'messages',
         :'analysis_id' => :'analysis_id',
         :'analysis_api_key' => :'analysis_api_key',
@@ -68,6 +94,7 @@ module Api::V1::Bindings
         :'id' => :'Integer',
         :'api_key' => :'String',
         :'message' => :'String',
+        :'status' => :'String',
         :'messages' => :'Array<AnalysisRunMessage>',
         :'analysis_id' => :'Integer',
         :'analysis_api_key' => :'Integer',
@@ -110,6 +137,10 @@ module Api::V1::Bindings
         self.message = attributes[:'message']
       end
 
+      if attributes.key?(:'status')
+        self.status = attributes[:'status']
+      end
+
       if attributes.key?(:'messages')
         if (value = attributes[:'messages']).is_a?(Array)
           self.messages = value
@@ -141,6 +172,10 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
+      if @id.nil?
+        invalid_properties.push('invalid value for "id", id cannot be nil.')
+      end
+
       if @api_key.nil?
         invalid_properties.push('invalid value for "api_key", api_key cannot be nil.')
       end
@@ -159,10 +194,23 @@ module Api::V1::Bindings
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
+      return false if @id.nil?
       return false if @api_key.nil?
+      status_validator = EnumAttributeValidator.new('String', ["pending", "complete", "error"])
+      return false unless status_validator.valid?(@status)
       return false if @analysis_id.nil?
       return false if @analysis_api_key.nil?
       true
+    end
+
+    # Custom attribute writer method checking allowed values (enum).
+    # @param [Object] status Object to be assigned
+    def status=(status)
+      validator = EnumAttributeValidator.new('String', ["pending", "complete", "error"])
+      unless validator.valid?(status)
+        fail ArgumentError, "invalid value for \"status\", must be one of #{validator.allowable_values}."
+      end
+      @status = status
     end
 
     # Checks equality by comparing each attribute.
@@ -173,6 +221,7 @@ module Api::V1::Bindings
           id == o.id &&
           api_key == o.api_key &&
           message == o.message &&
+          status == o.status &&
           messages == o.messages &&
           analysis_id == o.analysis_id &&
           analysis_api_key == o.analysis_api_key &&
@@ -190,7 +239,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, api_key, message, messages, analysis_id, analysis_api_key, did_succeed, started_at, finished_at].hash
+      [id, api_key, message, status, messages, analysis_id, analysis_api_key, did_succeed, started_at, finished_at].hash
     end
 
     # Builds the object from hash

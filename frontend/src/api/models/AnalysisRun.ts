@@ -31,7 +31,7 @@ export interface AnalysisRun {
      * @type {number}
      * @memberof AnalysisRun
      */
-    readonly id?: number;
+    readonly id: number;
     /**
      * Api key to use for recording progress of run
      * @type {string}
@@ -44,6 +44,12 @@ export interface AnalysisRun {
      * @memberof AnalysisRun
      */
     message?: string;
+    /**
+     * Current status of the run
+     * @type {string}
+     * @memberof AnalysisRun
+     */
+    status?: AnalysisRunStatusEnum;
     /**
      * The analysis run messages.
      * @type {Array<AnalysisRunMessage>}
@@ -82,11 +88,24 @@ export interface AnalysisRun {
     finishedAt?: string;
 }
 
+
+/**
+ * @export
+ */
+export const AnalysisRunStatusEnum = {
+    Pending: 'pending',
+    Complete: 'complete',
+    Error: 'error'
+} as const;
+export type AnalysisRunStatusEnum = typeof AnalysisRunStatusEnum[keyof typeof AnalysisRunStatusEnum];
+
+
 /**
  * Check if a given object implements the AnalysisRun interface.
  */
 export function instanceOfAnalysisRun(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
     isInstance = isInstance && "apiKey" in value;
     isInstance = isInstance && "analysisId" in value;
     isInstance = isInstance && "analysisApiKey" in value;
@@ -104,9 +123,10 @@ export function AnalysisRunFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'id': json['id'],
         'apiKey': json['api_key'],
         'message': !exists(json, 'message') ? undefined : json['message'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
         'messages': !exists(json, 'messages') ? undefined : ((json['messages'] as Array<any>).map(AnalysisRunMessageFromJSON)),
         'analysisId': json['analysis_id'],
         'analysisApiKey': json['analysis_api_key'],
@@ -127,6 +147,7 @@ export function AnalysisRunToJSON(value?: AnalysisRun | null): any {
         
         'api_key': value.apiKey,
         'message': value.message,
+        'status': value.status,
         'messages': value.messages === undefined ? undefined : ((value.messages as Array<any>).map(AnalysisRunMessageToJSON)),
         'analysis_id': value.analysisId,
         'analysis_api_key': value.analysisApiKey,

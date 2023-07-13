@@ -6,7 +6,7 @@ class Api::V1::Researcher::AnalysisRunOpenApi
 
   openapi_component do
     schema :AnalysisRun do
-      key :required, %w[api_key analysis_id analysis_api_key]
+      key :required, %w[id api_key analysis_id analysis_api_key]
       property :id do
         key :type, :integer
         key :description, 'ID of analysis run'
@@ -90,11 +90,25 @@ class Api::V1::Researcher::AnalysisRunOpenApi
 
   end
 
-  openapi_path '/researcher/analysis/:analysis_id/run/:run_id' do
+  openapi_path '/researcher/analysis/{analysis_id}/run/{run_id}' do
 
     operation :post do
       key :summary, 'Update an analysis run'
       key :operationId, 'updateAnalysisRun'
+      parameter do
+        key :name, :run_id
+        key :in, :path
+        key :description, 'ID of the run to update.'
+        key :required, true
+        key :schema, { type: :integer }
+      end
+      parameter do
+        key :name, :analysis_id
+        key :in, :path
+        key :description, 'ID of the analysis that the run belongs to'
+        key :required, true
+        key :schema, { type: :integer }
+      end
       request_body do
         key :description, 'The analysis data'
         key :required, true
