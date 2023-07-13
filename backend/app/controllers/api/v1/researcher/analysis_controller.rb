@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseController
-  before_action :set_analysis, only: [:show, :update, :destroy, :update_run]
+  before_action :set_analysis, only: [:show, :update, :destroy, :update_run, :download_run_results]
 
   def index
     analysis = current_researcher.analysis.includes(:study_analyses)
@@ -49,12 +49,7 @@ class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseControl
   end
 
   def download_run_results
-    analysis = current_researcher&.analysis&.find(params[:analysis_id])&.runs&.find(params[:run_id])
-    unless run && run.output.attached?
-      render text: 'unable to download results, are you logged in?',
-             status: 403 and return
-    end
-
+    run = @analysis.runs.find(params[:run_id])
     redirect_to url_for(run.output)
   end
 
