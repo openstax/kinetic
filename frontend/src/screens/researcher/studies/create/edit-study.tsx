@@ -156,6 +156,7 @@ const FormContent: FC<{
         }
 
         const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
+        console.log(savedStudy)
         reset(getFormDefaults(savedStudy, currentStep), { keepIsValid: true, keepDirty: false })
         setStudy(savedStudy)
     }
