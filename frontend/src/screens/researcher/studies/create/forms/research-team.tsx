@@ -44,7 +44,7 @@ export const ResearchTeam: FC<{study: Study}> = ({ study }) => {
         api.getResearchers().then(researchers => {
             setResearchers(researchers.data || [])
         })
-    }, [])
+    }, [study])
 
     const researcherOptions: SelectOption[] = useMemo(() => {
         return researchers.map(r => ({
@@ -67,8 +67,8 @@ export const ResearchTeam: FC<{study: Study}> = ({ study }) => {
 
         const lead = researchers.find(r => r.id === getValues('researcherLead'))
         lead && updatedResearchers.push({ ...lead, role: 'lead' })
-
-        setValue('researchers', updatedResearchers)
+        console.log(researchers, updatedResearchers, pi, lead)
+        setValue('researchers', updatedResearchers, { shouldValidate: true, shouldTouch: true, shouldDirty: true })
     }
 
     return (

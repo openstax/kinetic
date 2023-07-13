@@ -56,7 +56,7 @@ test('launching study and testing completion', async ({ page }) => {
     await loginAs({ page, login: 'user' })
     await goToPage({ page, path: `/studies/details/${studyId}` })
     await page.click('testId=launch-study')
-    
+
     // qualtrics will redirect here once complete
     await goToPage({ page, path: `/study/land/${studyId}` })
     await page.click('testId=view-studies')
