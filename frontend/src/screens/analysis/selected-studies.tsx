@@ -286,7 +286,7 @@ const useStudyTable = (studies: Study[]) => {
         if (checkAll) {
             checkAll.indeterminate = table.getIsSomePageRowsSelected()
         }
-    }, [checkAll, table.getSelectedRowModel().rows])
+    }, [checkAll, table.getSelectedRowModel().rows, pagination])
 
     return { table }
 }
