@@ -1,6 +1,6 @@
-import { cx, React, styled, Box } from '@common';
+import { Box, cx, React, styled } from '@common';
 import { colors } from '@theme';
-import { flexRender, Header } from '@tanstack/react-table';
+import { flexRender, Header, Table } from '@tanstack/react-table';
 import { Study } from '@api';
 import AtoZ from '../../images/icons/atoz.png';
 import ZtoA from '../../images/icons/ztoa.png';
@@ -8,6 +8,7 @@ import AZDefault from '../../images/icons/azdefault.png';
 import SortUp from '../../images/icons/sortup.png';
 import SortDown from '../../images/icons/sortdown.png';
 import SortDefault from '../../images/icons/sort.png';
+import { Icon } from '../icon';
 
 export const StyledHeader = styled('th')({
     '.header-text': {
@@ -69,3 +70,55 @@ export const StyledRow = styled.tr({
         height: '10px',
     },
 })
+
+export const PaginationContainer: FC<{table: Table<any>}> = ({ table }) => {
+    const currentPage = table.getState().pagination.pageIndex
+    const pages = [...Array(table.getPageCount()).keys()]
+
+    if (!table.getPaginationRowModel().rows.length) {
+        return null
+    }
+
+    return (
+        <Box align='center' justify='center' className='mt-2' gap='large'>
+            <Icon
+                icon='chevronLeft'
+                height={24}
+                onClick={() => table.previousPage()}
+                disabled={table.getCanPreviousPage()}
+                className='cursor-pointer'
+            />
+
+            <Box gap>
+                {pages.map((page: number) => {
+                    if (currentPage == page) {
+                        return (
+                            <Box justify='center'
+                                key={page}
+                                css={{
+                                    backgroundColor: colors.kineticResearcher,
+                                    color: colors.white,
+                                    width: 25,
+                                }}>
+                                <span>{page + 1}</span>
+                            </Box>
+                        )
+                    }
+                    return (
+                        <Box key={page} justify='center' width='25px' className='cursor-pointer' onClick={() => table.setPageIndex(page)}>
+                            <span>{page + 1}</span>
+                        </Box>
+                    )
+                })}
+            </Box>
+
+            <Icon
+                icon='chevronRight'
+                height={24}
+                onClick={() => table.nextPage()}
+                disabled={table.getCanNextPage()}
+                className='cursor-pointer'
+            />
+        </Box>
+    )
+}

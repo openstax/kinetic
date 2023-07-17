@@ -1,12 +1,14 @@
 import { Analysis } from '@api';
 import { Box, React, useNavigate } from '@common';
-import { ResearcherButton, StyledRow, TableHeader } from '@components';
+import { PaginationContainer, ResearcherButton, StyledRow, TableHeader } from '@components';
 import {
     ColumnDef,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
+    getPaginationRowModel,
     getSortedRowModel,
+    PaginationState,
     Row,
     SortingState,
     Table,
@@ -17,6 +19,7 @@ import { Link } from 'react-router-dom';
 import { colors } from '@theme';
 import { getLastRun } from '@models';
 import { RunStatus } from './runs-table';
+import { ResearcherFAQ } from './researcher-faq';
 
 export const AnalysisDashboard: FC<{analyses: Analysis[]}> = ({ analyses }) => {
     const nav = useNavigate()
@@ -29,6 +32,9 @@ export const AnalysisDashboard: FC<{analyses: Analysis[]}> = ({ analyses }) => {
                 </ResearcherButton>
             </Box>
             <AnalysisTable analyses={analyses} />
+            <Box align='end' justify='end'>
+                <ResearcherFAQ />
+            </Box>
         </Box>
     )
 }
@@ -73,6 +79,7 @@ const AnalysisTable: FC<{analyses: Analysis[]}> = ({ analyses }) => {
                     })}
                 </tbody>
             </table>
+            <PaginationContainer table={table} />
             <NoAnalyses filteredLength={table.getRowModel().rows.length} analyses={analyses}/>
         </Box>
     )
@@ -80,6 +87,10 @@ const AnalysisTable: FC<{analyses: Analysis[]}> = ({ analyses }) => {
 
 const useAnalysisTable = (analyses: Analysis[]) => {
     const [sorting, setSorting] = React.useState<SortingState>([])
+    const [pagination, setPagination] = React.useState<PaginationState>({
+        pageSize: 12,
+        pageIndex: 0,
+    })
 
     const columns = React.useMemo<ColumnDef<Analysis>[]>(() => [
         {
@@ -129,14 +140,14 @@ const useAnalysisTable = (analyses: Analysis[]) => {
     const table: Table<Analysis> = useReactTable({
         data: analyses,
         columns,
-        state: {
-            sorting,
-        },
+        state: { sorting, pagination },
         getRowId: (row) => String(row.id),
         onSortingChange: setSorting,
+        onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
     })
 
     return { table }
