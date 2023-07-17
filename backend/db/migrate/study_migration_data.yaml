@@ -998,3 +998,25 @@
     - points: 15
       duration_minutes: 20
       feedback_types: [ 'debrief' ]
+
+
+- id: 116
+  status: "active"
+  title_for_researchers: "Online Readiness Questionnaire"
+  description_for_researchers: "Online readiness assessment prior to taking an online class."
+  study_type: "Learning Research"
+  study_pi_uuid: "a79bcf1a-eddd-444d-a705-74d910f7e711"
+  study_lead_uuid: "6a6c8564-7fb0-4d85-a2ec-2dd899c3bb3b"
+  title_for_participants: "Are you online ready for studying?"
+  short_description_for_participants: "Are you ready for taking an online course/studying in an online context?"
+  long_description_for_participants: "Before enrolling in an online course, you should first assess your readiness for becoming an online learner. This survey will assess your online readiness, and if you need to improve upon it."
+  study_topic: "Others"
+  study_subject: null
+  benefits: "You will receive feedback based on your answers to the following questions that will help you think about yourself as a learner and determine what you need to do to be successful in an online learning environment."
+  opens_at: 2023-06-22 09:00:00
+  closes_at: null
+  stages:
+    - points: 10
+      duration_minutes: 10
+      feedback_types: [ 'debrief' ]
+
