@@ -1,4 +1,3 @@
-
 export const colors = {
     pageBackground: '#f7f8fa',
     orange: '#f47541',
@@ -19,7 +18,6 @@ export const colors = {
     text: '#212529',
     grayText: '#848484',
     grayerText: '#424242',
-    input: { border: '#ced4da' },
     line: '#cfcfcf',
     white: '#ffffff',
 }
@@ -38,6 +36,7 @@ export const media = {
     desktop: `@media (min-width: ${screenSizes['xl']}px)`,
 }
 
+// Unused?
 const makeLine = (side: string) => ({
     [`border${side}`]: `1px solid ${colors.line}`,
     [`margin${side}`]: '1rem',
@@ -50,6 +49,7 @@ export const theme = {
     media,
     line: `1px solid ${colors.line}`,
     subtleBorder: `1px solid ${colors.line}`,
+    // Unused?
     css: {
         topLine: makeLine('Top'),
         bottomLine: makeLine('Bottom'),

@@ -21,6 +21,7 @@ import { studyCategories, StudyCategory, studyCategoryDescriptions } from '@mode
 import { components } from 'react-select'
 import { useCurrentResearcher } from '@lib';
 import { useRefElement } from 'rooks';
+import { difference } from 'lodash-es';
 
 declare module '@tanstack/table-core' {
     // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
@@ -169,15 +170,16 @@ const useStudyTable = (studies: Study[]) => {
             header: () => (
                 <input type='checkbox'
                     ref={setCheckAll}
-                    checked={table.getIsAllRowsSelected()}
+                    checked={table.getIsAllPageRowsSelected()}
                     onChange={(event) => {
+                        const currentlySelectedStudyIds = getValues('studyIds')
+                        const currentPageIds = table.getPaginationRowModel().rows.map(row => row.original.id)
                         if (event.target.checked) {
-                            const selectedStudyIds = table.getRowModel().rows.map(row => row.original.id)
-                            setValue('studyIds', selectedStudyIds, { shouldValidate: true })
+                            setValue('studyIds', [...currentlySelectedStudyIds, ...currentPageIds], { shouldValidate: true })
                         } else {
-                            setValue('studyIds', [], { shouldValidate: true })
+                            setValue('studyIds', difference(currentlySelectedStudyIds, currentPageIds), { shouldValidate: true })
                         }
-                        table.getToggleAllRowsSelectedHandler()(event)
+                        table.getToggleAllPageRowsSelectedHandler()(event)
                     }}
                 />
             ),
@@ -207,7 +209,7 @@ const useStudyTable = (studies: Study[]) => {
                 return (
                     <Box justify='between' css={{ paddingRight: '1rem' }} gap='large'>
                         <span css={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                            {value} longlonglonglonglonglonglonglonglonglong long longlonglonglong longlong long
+                            {value}
                         </span>
                         <Icon height={24}
                             className='cursor-pointer'
@@ -260,6 +262,7 @@ const useStudyTable = (studies: Study[]) => {
     ], [])
 
     const table: Table<Study> = useReactTable({
+        debugTable: true,
         data: studies,
         columns,
         state: {
@@ -281,7 +284,7 @@ const useStudyTable = (studies: Study[]) => {
 
     useEffect(() => {
         if (checkAll) {
-            checkAll.indeterminate = table.getIsSomeRowsSelected()
+            checkAll.indeterminate = table.getIsSomePageRowsSelected()
         }
     }, [checkAll, table.getSelectedRowModel().rows])
 
@@ -292,7 +295,7 @@ const PaginationContainer: FC<{table: Table<Study>}> = ({ table }) => {
     const currentPage = table.getState().pagination.pageIndex
     const pages = [...Array(table.getPageCount()).keys()]
 
-    if (!table.getFilteredRowModel().rows.length) {
+    if (!table.getPaginationRowModel().rows.length) {
         return null
     }
 
