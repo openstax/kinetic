@@ -5,7 +5,6 @@ import {
     faker,
     goToPage,
     interceptStudyLaunch,
-    Locator,
     loginAs,
     rmStudy,
     test,
@@ -20,31 +19,18 @@ test('displays studies', async ({ page }) => {
     // await rmStudy({ page, studyId })
 })
 
-// TODO Filtering by active, draft, completed tabs
 test('filtering & sorting', async ({ page }) => {
     // const studyName = faker.commerce.productName()
 
     // const firstStudyId = await createStudy({ page, name: studyName })
     // const secondStudyId = await createStudy({ page, name: studyName })
 
-    // TODO Can use /studies?status=Launched|Draft|Completed
+
     await goToPage({ page, path: '/studies', loginAs: 'user' })
 
     // await rmStudy({ page, studyId: firstStudyId })
     // await rmStudy({ page, studyId: secondStudyId })
 })
-
-// TODO No way for researchers to set mandatory anymore...
-//  might phase this out eventually
-// test('it auto-launches mandatory studies', async ({ page }) => {
-//     const studyName = faker.commerce.productName()
-//     const studyId = await createStudy({ page, name: studyName })
-//     await goToPage({ page, path: '/studies', loginAs: 'user' })
-//     await expect(page).toMatchText('.modal-header', studyName)
-//     await expect(page).not.toHaveSelector('testId=data-close-btn')
-//
-//     await rmStudy({ page, studyId })
-// })
 
 test('launching study and testing completion', async ({ page }) => {
     await addReward({ page, points: 5, prize: 'Pony' })

@@ -10,7 +10,7 @@ class ResearcherNotifications
 
       users_info.each do |_, user|
         UserMailer.with(target_user: user, study: study,
-          current_user: current_researcher).invite_researcher_to_study.deliver
+                        current_user: current_researcher).invite_researcher_to_study.deliver
       end
     end
 

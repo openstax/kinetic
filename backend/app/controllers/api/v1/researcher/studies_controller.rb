@@ -36,7 +36,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
     render(json: error, status: error.status_code) and return if error
 
-    notify_researchers(inbound_binding.researchers || [])
+    notify_researchers(inbound_binding.researchers || []) if inbound_binding.researchers
 
     @study.update!(inbound_binding.to_hash.except(:researchers, :stages))
 
@@ -74,18 +74,16 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   protected
 
   def notify_researchers(researchers)
-    return if researchers.empty?
-    new_researchers = researchers.map { |new_researcher| { id: new_researcher.id, role: new_researcher.role } }
-    old_researchers = @study.study_researchers.map { |old_researcher| { id: old_researcher.researcher_id, role: old_researcher.role } }
+    new_researchers = researchers.map do |new_researcher|
+      { id: new_researcher.id, role: new_researcher.role }
+    end
+    old_researchers = @study.study_researchers.map do |old_researcher|
+      { id: old_researcher.researcher_id, role: old_researcher.role }
+    end
 
     return if new_researchers == old_researchers
 
-    added_researchers = (new_researchers - old_researchers)
-    removed_researchers = (old_researchers - new_researchers)
-
     new_researchers.each do |researcher|
-      next unless added_researchers.include?(researcher)
-
       @study.study_researchers.create!(
         researcher_id: researcher[:id],
         role: researcher[:role]
@@ -93,7 +91,6 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     end
 
     old_researchers.each do |old_researcher|
-      next unless removed_researchers.include?(old_researcher)
       @study.study_researchers.delete(
         @study.study_researchers.find_by(
           researcher_id: old_researcher[:id],

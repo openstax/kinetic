@@ -61,7 +61,7 @@ const Grid = styled.div({
 
 const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
     return (
-        <div className={cx('container-lg', 'studies', 'my-3', className)} >
+        <div className={cx('container', 'studies', 'my-3', className)} >
             <h3 css={{ margin: '2rem 0' }}>{title}</h3>
             {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
