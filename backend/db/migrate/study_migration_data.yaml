@@ -1017,6 +1017,6 @@
   closes_at: null
   stages:
     - points: 10
-      duration_minutes: 10
+      duration_minutes: 5
       feedback_types: [ 'debrief' ]
 
