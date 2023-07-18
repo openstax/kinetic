@@ -75,7 +75,7 @@ export const PaginationContainer: FC<{table: Table<any>}> = ({ table }) => {
     const currentPage = table.getState().pagination.pageIndex
     const pages = [...Array(table.getPageCount()).keys()]
 
-    if (!table.getPaginationRowModel().rows.length) {
+    if (!table.getPaginationRowModel().rows.length || pages.length <= 1) {
         return null
     }
 
@@ -84,9 +84,8 @@ export const PaginationContainer: FC<{table: Table<any>}> = ({ table }) => {
             <Icon
                 icon='chevronLeft'
                 height={24}
-                onClick={() => table.previousPage()}
-                disabled={table.getCanPreviousPage()}
-                className='cursor-pointer'
+                onClick={() => table.getCanPreviousPage() && table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
             />
 
             <Box gap>
@@ -95,17 +94,17 @@ export const PaginationContainer: FC<{table: Table<any>}> = ({ table }) => {
                         return (
                             <Box justify='center'
                                 key={page}
+                                width='20px'
                                 css={{
                                     backgroundColor: colors.kineticResearcher,
                                     color: colors.white,
-                                    width: 25,
                                 }}>
                                 <span>{page + 1}</span>
                             </Box>
                         )
                     }
                     return (
-                        <Box key={page} justify='center' width='25px' className='cursor-pointer' onClick={() => table.setPageIndex(page)}>
+                        <Box key={page} justify='center' width='20px' className='cursor-pointer' onClick={() => table.setPageIndex(page)}>
                             <span>{page + 1}</span>
                         </Box>
                     )
@@ -115,9 +114,8 @@ export const PaginationContainer: FC<{table: Table<any>}> = ({ table }) => {
             <Icon
                 icon='chevronRight'
                 height={24}
-                onClick={() => table.nextPage()}
-                disabled={table.getCanNextPage()}
-                className='cursor-pointer'
+                onClick={() => table.getCanNextPage() && table.nextPage()}
+                disabled={!table.getCanNextPage()}
             />
         </Box>
     )

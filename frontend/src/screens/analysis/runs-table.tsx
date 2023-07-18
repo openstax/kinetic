@@ -3,15 +3,15 @@ import {
     ColumnDef,
     flexRender,
     getCoreRowModel,
-    getFilteredRowModel,
-    getSortedRowModel,
+    getFilteredRowModel, getPaginationRowModel,
+    getSortedRowModel, PaginationState,
     Row,
     SortingState,
     Table,
     useReactTable,
 } from '@tanstack/react-table';
 import { Analysis, AnalysisRun, AnalysisRunMessage } from '@api';
-import { Icon, StyledRow, TableHeader } from '@components';
+import { Icon, PaginationContainer, StyledRow, TableHeader } from '@components';
 import { colors } from '@theme';
 import { hasRunSucceeded, isRunUnderReview, runHasError } from '@models';
 import { Modal } from '@nathanstitt/sundry/modal';
@@ -60,6 +60,7 @@ export const RunsTable: FC<{analysis: Analysis}> = ({ analysis }) => {
                     })}
                 </tbody>
             </table>
+            <PaginationContainer table={table} />
         </Box>
     )
 }
@@ -134,6 +135,11 @@ const useRunsTable = (analysis: Analysis) => {
         id: 'startedAt',
         desc: true,
     }])
+    const [pagination, setPagination] = React.useState<PaginationState>({
+        pageSize: 12,
+        pageIndex: 0,
+    })
+
     const columns = React.useMemo<ColumnDef<AnalysisRun>[]>(() => [
         {
             accessorKey: 'startedAt',
@@ -204,14 +210,14 @@ const useRunsTable = (analysis: Analysis) => {
     const table: Table<AnalysisRun> = useReactTable({
         data: analysis.runs || [],
         columns,
-        state: {
-            sorting,
-        },
+        state: { sorting, pagination },
         getRowId: (row) => String(row.id),
         onSortingChange: setSorting,
+        onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
     })
 
     return { table }

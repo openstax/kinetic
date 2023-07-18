@@ -142,7 +142,7 @@ const useStudyTable = (studies: Study[]) => {
         { id: 'researchTeam', desc: true },
     ])
     const [pagination, setPagination] = React.useState<PaginationState>({
-        pageSize: 8,
+        pageSize: 6,
         pageIndex: 0,
     })
 
@@ -286,55 +286,3 @@ const useStudyTable = (studies: Study[]) => {
 
     return { table }
 }
-
-// const PaginationContainer: FC<{table: Table<any>}> = ({ table }) => {
-//     const currentPage = table.getState().pagination.pageIndex
-//     const pages = [...Array(table.getPageCount()).keys()]
-//
-//     if (!table.getPaginationRowModel().rows.length) {
-//         return null
-//     }
-//
-//     return (
-//         <Box align='center' justify='center' className='mt-2' gap='large'>
-//             <Icon
-//                 icon='chevronLeft'
-//                 height={24}
-//                 onClick={() => table.previousPage()}
-//                 disabled={table.getCanPreviousPage()}
-//                 className='cursor-pointer'
-//             />
-//
-//             <Box gap>
-//                 {pages.map((page: number) => {
-//                     if (currentPage == page) {
-//                         return (
-//                             <Box justify='center'
-//                                 key={page}
-//                                 css={{
-//                                     backgroundColor: colors.kineticResearcher,
-//                                     color: colors.white,
-//                                     width: 25,
-//                                 }}>
-//                                 <span>{page + 1}</span>
-//                             </Box>
-//                         )
-//                     }
-//                     return (
-//                         <Box key={page} justify='center' width='25px' className='cursor-pointer' onClick={() => table.setPageIndex(page)}>
-//                             <span>{page + 1}</span>
-//                         </Box>
-//                     )
-//                 })}
-//             </Box>
-//
-//             <Icon
-//                 icon='chevronRight'
-//                 height={24}
-//                 onClick={() => table.nextPage()}
-//                 disabled={table.getCanNextPage()}
-//                 className='cursor-pointer'
-//             />
-//         </Box>
-//     )
-// }
