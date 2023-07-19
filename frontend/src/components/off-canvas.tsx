@@ -10,7 +10,6 @@ const useOffCanvas = ({ show, onHide }: { show: boolean, onHide?(): void }) => {
     const cbRef = useCallback((el: HTMLElement | null) => {
         if (!el) return
         const bs = BSOffcanvas.getOrCreateInstance(el)
-        bs
         setBs(bs)
     }, [setBs])
 

@@ -1,5 +1,5 @@
 import { React, useEffect, useLocation } from '@common'
-import { Button } from './button'
+import { Button } from '@components'
 import { LinkButton } from './styled-buttons'
 import { OXColoredStripe } from './ox-colored-stripe'
 import { reloadOnce, forceReload } from '../lib/reload';

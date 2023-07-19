@@ -1,6 +1,5 @@
-import { Button } from '@components';
+import { Button, ButtonProps } from '@components';
 import { cx, React } from '@common';
-import { ButtonProps } from '../button';
 
 interface ResearcherButtonProps {
     buttonType?: 'primary' | 'secondary'

@@ -1,5 +1,5 @@
 import { React, styled, css, keyframes, cx } from '../common'
-import { usePendingState } from '../lib/hooks';
+import { usePendingState } from '@lib';
 
 const Inner = styled.div`
   margin: auto;
@@ -29,7 +29,7 @@ const moveGreen = keyframes`
   }
 `;
 const Green = styled.path`
-  ${Bar}
+  ${Bar};
   fill: #77AF42;
   transform-origin: center left;
   .staxly-animation:not(.paused) & {
@@ -46,7 +46,7 @@ const moveOrange = keyframes`
   }
 `;
 const Orange = styled.path`
-  ${Bar}
+  ${Bar};
   fill: #F47641;
   transform-origin: center right;
   .staxly-animation:not(.paused) & {
@@ -62,7 +62,7 @@ const moveGray = keyframes`
   }
 `;
 const Gray = styled.path`
-  ${Bar}
+  ${Bar};
   fill: #5E6062;
   transform-origin: center right;
   .staxly-animation:not(.paused) & {
@@ -79,7 +79,7 @@ const moveYellow = keyframes`
 `;
 
 const Yellow = styled.path`
-  ${Bar}
+  ${Bar};
   fill: #F4D019;
   transform-origin: center right;
   .staxly-animation:not(.paused) & {
@@ -96,7 +96,7 @@ const moveBlue = keyframes`
 `;
 
 const Blue = styled.path`
-  ${Bar}
+  ${Bar};
   fill: #00246A;
   transform-origin: center;
   .staxly-animation:not(.paused) & {
