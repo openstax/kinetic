@@ -87,7 +87,7 @@ const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
 const FilterContainer = styled(Box)({
     color: colors.grayerText,
     "input[type='checkbox']": {
-        accentColor: colors.purple,
+        accentColor: colors.kineticResearcher,
         width: 16,
         height: 16,
     },
