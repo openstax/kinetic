@@ -22,6 +22,7 @@ const SegmentLabel: React.FC<{ segment: RewardsSegment }> = ({ segment }) => {
             direction="column"
             justify='center'
             align='center'
+            width='50px'
             className="explanation" css={{
                 fontSize: useIsMobileDevice() ? 11 : 12,
                 color: segment.isCurrent ? 'black' : colors.darkGray,
