@@ -204,10 +204,10 @@ CREATE TABLE public.analyses (
     id bigint NOT NULL,
     title text NOT NULL,
     description text NOT NULL,
+    repository_url text,
     api_key text DEFAULT public.api_key('an'::text, 18),
     created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL,
-    repository_url text DEFAULT ''::text
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
