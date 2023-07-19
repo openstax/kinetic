@@ -1,5 +1,5 @@
 import { cx, React } from '@common'
-import { colors } from '../theme'
+import { colors } from '@theme'
 import styled from '@emotion/styled'
 import { Box, BoxProps } from 'boxible'
 import { CSSObject } from '@emotion/react'

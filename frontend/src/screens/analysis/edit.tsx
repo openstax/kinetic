@@ -1,10 +1,8 @@
-import { React, useNavigate, useState, useParams } from '@common'
-import {
-    Alert, EditingForm as Form, InputField, PageNotFound, Box,
-} from '@components'
+import { React, useNavigate, useParams, useState } from '@common'
+import { Alert, Box, EditingForm as Form, InputField, PageNotFound } from '@components'
 import { Analysis } from '@api'
 import { AnalysisValidationSchema } from '@models'
-import { useApi, errorToString } from '@lib'
+import { errorToString, useApi } from '@lib'
 import { SelectedStudies } from './selected-studies'
 
 
