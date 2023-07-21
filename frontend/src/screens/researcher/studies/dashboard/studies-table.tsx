@@ -19,7 +19,7 @@ import {
 import { Link } from 'react-router-dom';
 import { colors } from '@theme';
 import { toDayJS } from '@lib';
-import { Box, Icon, Tooltip, Alert } from '@components';
+import { Box, Icon, Tooltip } from '@components';
 import AtoZ from '../../../../images/icons/atoz.png';
 import ZtoA from '../../../../images/icons/ztoa.png';
 import AZDefault from '../../../../images/icons/azdefault.png';
