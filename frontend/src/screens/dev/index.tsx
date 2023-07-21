@@ -58,7 +58,6 @@ export default function Dev() {
             <nav className="navbar fixed-top navbar-light py-1 bg-light">
                 <div className="container">
                     <LinkButton secondary to="/">
-                        <ChevronDoubleLeft height="16" />
                         Home
                     </LinkButton>
                 </div>

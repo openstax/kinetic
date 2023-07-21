@@ -4,20 +4,10 @@ import {
     Icon as SundryIcon,
     IconifyIcon,
     IconifyIconDefinition,
-    setSundryIcons,
 } from '@nathanstitt/sundry/ui'
 
-import thumbsUp from '@iconify-icons/bi/hand-thumbs-up-fill'
-import exclamationTriangle from '@iconify-icons/bi/exclamation-triangle-fill'
-import xCircle from '@iconify-icons/bi/x-circle'
-import plusSquare from '@iconify-icons/bi/plus-square-fill'
-import exclamationCircle from '@iconify-icons/bi/exclamation-circle-fill'
-import clock from '@iconify-icons/bi/clock'
-import clockFill from '@iconify-icons/bi/clock-fill'
-import spin from '@iconify-icons/bi/arrow-clockwise'
-import minusSquare from '@iconify-icons/bi/dash-square'
-import plusCircle from '@iconify-icons/bi/plus-circle'
-import plus from '@iconify-icons/bi/plus'
+import accessTime from '@iconify-icons/mdi/access-time'
+import addCircle from '@iconify-icons/mdi/add-circle'
 import close from '@iconify-icons/bi/x-square'
 import x from '@iconify-icons/bi/x'
 import back from '@iconify-icons/bi/chevron-double-left'
@@ -53,37 +43,18 @@ import chevronLeft from '@iconify-icons/bi/chevron-left'
 import chevronDown from '@iconify-icons/bi/chevron-down'
 import chevronUp from '@iconify-icons/bi/chevron-up'
 
-const SUNDRY_PACKAGED_ICONS = {
-    thumbsUp,
-    xSimple: x,
-    exclamationCircle,
-    exclamationTriangle,
-    cancel: xCircle,
-    clock,
-    xCircle,
-    spin,
-    close,
-    plusSquare,
-    plus,
-    minusSquare,
-}
-setSundryIcons(SUNDRY_PACKAGED_ICONS)
-
 export const ICONS = {
-    ...SUNDRY_PACKAGED_ICONS,
     x,
     close,
-    clock,
-    clockFill,
+    accessTime,
     back,
     search,
-    plusCircle,
+    addCircle,
     cancel,
     trash,
     tripleDot,
     tripleDotVertical,
     checkCircle,
-    spin,
     feedback,
     heart,
     warning,

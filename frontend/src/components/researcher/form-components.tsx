@@ -21,7 +21,7 @@ export const StepHeader: FCWOC<{
             <Box gap='xlarge'>
                 <h3 className='fw-bold'>{title}</h3>
                 <Box gap align='center'>
-                    <Icon height={20} color={colors.kineticResearcher} icon='clockFill'/>
+                    <Icon height={20} color={colors.kineticResearcher} icon='accessTime'/>
                     <span>ETA: {eta}min</span>
                 </Box>
             </Box>

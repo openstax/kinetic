@@ -42,7 +42,7 @@ export const MultiSessionBar: FC<{ study: ParticipantStudy }> = ({ study }) => {
                     future={!first.isCompleted}
                     past={last.isCompleted}
                 >
-                    <Icon icon="clock" color={colors.purple} />
+                    <Icon icon="accessTime" color={colors.purple} />
                 </SegmentCircle>
                 <SegmentTitle>{duration}</SegmentTitle>
             </Segment>

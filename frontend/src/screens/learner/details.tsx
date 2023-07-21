@@ -110,7 +110,7 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
         return (
             <Box className='mb-1' direction='column'>
                 <Box gap>
-                    <Icon icon="clock" color={colors.purple} />
+                    <Icon icon="accessTime" color={colors.purple} />
                     <Box>
                         <span>*Total: {getStudyDuration(study)}min</span>
                         <span>&nbsp;&middot; {getStudyPoints(study)}pts</span>
@@ -129,7 +129,7 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
 
     return (
         <Box gap align="center" className='mb-1'>
-            <Icon icon="clock" color={colors.purple} />
+            <Icon icon="accessTime" color={colors.purple} />
             <div>{firstStage.durationMinutes}min</div>
             <span>{firstStage.points}pts</span>
         </Box>
