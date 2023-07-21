@@ -27,7 +27,7 @@ export default function ResearcherAccountPage() {
                         <h3>My Account</h3>
                         <a href={`${env.accounts_url}`} target='_blank'>
                             <span>Update Email & Password</span>
-                            <Icon icon="right" />
+                            <Icon icon="chevronRight" />
                         </a>
                     </Box>
 
@@ -55,7 +55,7 @@ export default function ResearcherAccountPage() {
                                     <Col sm={2} css={{ marginLeft: 'auto' }}>
                                         <a href='https://drive.google.com/file/d/1x1M8EcrOOu5U1ZQAtVmhvH3DkTlhtc8I/view' target='_blank'>
                                             <span>Check Details</span>
-                                            <Icon icon="right" />
+                                            <Icon icon="chevronRight" />
                                         </a>
                                     </Col>
                                 </Box>
@@ -90,7 +90,7 @@ export const IRB = () => {
                 <img alt="Rice University logo" css={{ width: 120, height: 50 }} src={RiceLogoURL} className='col-6'/>
                 <Box direction='column' className='col-6 x-small'>
                     <span>IRB Number: IRB-FY2022-19</span>
-                    <span css={{ color: colors.grayText }}>Expires on 09-01-2026</span>
+                    <span css={{ color: colors.text }}>Expires on 09-01-2026</span>
                 </Box>
             </Box>
             <Box direction='column' className='small'>
@@ -115,7 +115,7 @@ export const IRB = () => {
 //             <p>Guidelines for Kinetic use</p>
 //             <Link to='/'>
 //                 <span>Check Details</span>
-//                 <Icon icon="right" />
+//                 <Icon icon="chevronRight" />
 //             </Link>
 //         </Box>
 //     )
@@ -160,7 +160,7 @@ const Avatar: React.FC = () => {
                 <Box align='baseline' gap>
                     <a className='links'>{researcher.avatarUrl ? 'Change Image' : 'Upload Image'}</a>
                     <Tooltip tooltip='Upload a picture that best introduces you to learners'>
-                        <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={14}/>
+                        <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={14}/>
                     </Tooltip>
                 </Box>
             </Box>
@@ -191,7 +191,7 @@ const Avatar: React.FC = () => {
 }
 
 const PageWrapper = styled(Box)({
-    backgroundColor: colors.pageBackground,
+    backgroundColor: colors.ash,
     flexDirection: 'column',
     height: '100vh',
 })
@@ -211,6 +211,6 @@ const Resources = styled(Box)({
     backgroundColor: colors.white,
     padding: 20,
     'a': {
-        color: colors.grayText,
+        color: colors.text,
     },
 })

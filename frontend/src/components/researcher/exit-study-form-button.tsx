@@ -16,7 +16,7 @@ export const ExitStudyFormButton: FC<{study: Study, saveStudy: (study: Study) =>
                 css={{
                     textDecoration: 'underline',
                     textUnderlineOffset: '.5rem',
-                    color: colors.grayText,
+                    color: colors.text,
                     cursor: 'pointer',
                     alignSelf: 'end',
                 }}

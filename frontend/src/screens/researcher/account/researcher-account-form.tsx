@@ -107,7 +107,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
             <Box align='baseline' gap className='mt-1'>
                 <h6>Research Interests</h6>
                 <Tooltip tooltip='Examples: Multimedia Learning; AI in Education; Adaptive Tutoring Systems'>
-                    <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={16}/>
+                    <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={16}/>
                 </Tooltip>
             </Box>
             <div className='col-4'>
@@ -139,7 +139,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
                 <Box align='baseline' gap>
                     <h6 className='field-title'>Bio</h6>
                     <Tooltip tooltip='Simplify your research description for mass appeal'>
-                        <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={16}/>
+                        <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={16}/>
                     </Tooltip>
                 </Box>
 

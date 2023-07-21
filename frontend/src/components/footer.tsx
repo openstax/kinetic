@@ -56,7 +56,7 @@ const Funders = () => {
                         View Other Philanthropic Supporters
                     </a>
 
-                    <p className="x-small" css={{ color: colors.grayText }}>
+                    <p className="x-small" css={{ color: colors.text }}>
                         *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
                     </p>
                 </div>
@@ -67,7 +67,7 @@ const Funders = () => {
 
 export const MobileFooter: React.FC<{ className?: string, includeFunders?: boolean }> = () => {
     return (
-        <div css={{ backgroundColor: colors.blue, color: 'white', a: { color: 'white' } }}>
+        <div css={{ backgroundColor: colors.navy, color: 'white', a: { color: 'white' } }}>
             <div className='container-lg'>
                 <Row className="py-1">
                     <Row className="py-1">
@@ -108,7 +108,7 @@ export const MobileFooter: React.FC<{ className?: string, includeFunders?: boole
 
 export const DesktopFooter: React.FC<{ className?: string, includeFunders?: boolean }> = () => {
     return (
-        <div css={{ backgroundColor: colors.blue, color: 'white', a: { color: 'white' } }}>
+        <div css={{ backgroundColor: colors.navy, color: 'white', a: { color: 'white' } }}>
             <div className='container-lg'>
                 <Row css={{ padding: '20px 0' }}>
                     <Col auto direction="column">

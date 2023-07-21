@@ -16,7 +16,7 @@ const NavTabs = styled.ul({
         paddingRight: '2.5rem',
     },
     'h4': {
-        color: colors.grayText,
+        color: colors.text,
         fontWeight: 'bolder',
     },
     '.active > h4': {

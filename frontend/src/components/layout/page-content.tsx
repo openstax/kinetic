@@ -21,7 +21,7 @@ export const Page: FCWC<{
     backgroundColor?: string,
     hideFooter?: boolean
 }> = ({
-    backgroundColor = colors.pageBackground,
+    backgroundColor = colors.ash,
     hideFooter = false,
     className,
     children,

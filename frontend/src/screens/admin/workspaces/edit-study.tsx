@@ -33,7 +33,7 @@ const Boolean:FC<{val?: boolean}> = ({ val }) => {
     if (val) {
         return <Icon icon="checkCircle" />
     }
-    return <Icon icon="emptyCircle"/>
+    return <Icon icon="circle"/>
 
 }
 

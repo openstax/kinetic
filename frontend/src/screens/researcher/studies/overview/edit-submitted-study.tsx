@@ -297,9 +297,9 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
             <Col sm={3} direction='column' gap>
                 <h6>Closing Criteria (optional)</h6>
                 <small>Select your preferred closing criteria indicating completion of data collection process. Leave blank if unknown.</small>
-                <Box gap css={{ color: colors.kineticResearcher }} align='center'>
+                <Box gap css={{ color: colors.blue }} align='center'>
                     <small>Recommended Sample Size</small>
-                    <Icon icon='questionCircleFill' tooltip='Consider Inflating sample size by 5% of your desired N to enable exclusion as we work to amplify our recruitment efforts'/>
+                    <Icon icon='helpCircle' tooltip='Consider Inflating sample size by 5% of your desired N to enable exclusion as we work to amplify our recruitment efforts'/>
                 </Box>
             </Col>
 

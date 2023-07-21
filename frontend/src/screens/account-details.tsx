@@ -97,7 +97,7 @@ export default function AccountDetails() {
                         <h5 className="mb-0 p-0">General</h5>
                         <a href={`${env.accounts_url}`}>
                             <span>Update Account</span>
-                            <Icon icon="right" />
+                            <Icon icon="chevronRight" />
                         </a>
                     </Box>
 
@@ -117,7 +117,7 @@ export default function AccountDetails() {
                     >
                         <h5 className="mt-5 mb-3 p-0">Email Notifications</h5>
                         <h6>Adjust your preferred email communications. </h6>
-                        <p className="x-small" css={{ color: colors.grayText }}>
+                        <p className="x-small" css={{ color: colors.text }}>
                             *Exception: when you win a prize on Kinetic, we will email you your gift card.
                         </p>
 

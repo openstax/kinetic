@@ -73,7 +73,7 @@ const Feedback: React.FC<StudyCardProps> = ({ study }) => {
 
     return (
         <Box align='center' gap>
-            <Icon height={15} icon="feedback" color={colors.purple} />
+            <Icon height={18} icon="feedback" color={colors.purple} />
             <span>Feedback Available</span>
         </Box>
     )
@@ -86,7 +86,7 @@ const MultiSession: React.FC<StudyCardProps> = ({ study }) => {
         <Box align='center' gap>
             <Icon
                 height={15}
-                icon="multiStage"
+                icon="cardMultiple"
                 color={colors.purple}
                 tooltip="This study has multiple sessions. The other sessions will be released once available."
             />
@@ -227,7 +227,7 @@ const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
             <Researcher className="xx-small" study={study} />
             <small
                 className={cx({ 'x-small': isMobile })}
-                css={{ color: colors.grayText, overflowWrap: 'anywhere' }}
+                css={{ color: colors.text, overflowWrap: 'anywhere' }}
             >
                 {study.shortDescription}
             </small>

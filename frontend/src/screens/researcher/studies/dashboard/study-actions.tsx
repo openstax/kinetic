@@ -14,6 +14,7 @@ import {
     isScheduled,
     isWaiting,
 } from '@models';
+import pencil from '@iconify-icons/bi/pencil';
 
 const ModalType = {
     Pause: 'pauseStudy',
@@ -264,7 +265,7 @@ export const ActionColumn: React.FC<{
         <Box gap='xlarge' justify='center' align='center'>
             <div>
                 <ActionIcon
-                    icon="pencilFill"
+                    icon="pencil"
                     height={20}
                     tooltip={canEdit && 'Edit Study'}
                     disabled={!canEdit}
@@ -274,7 +275,7 @@ export const ActionColumn: React.FC<{
             <div>
                 {showResumeButton &&
                     <ActionIcon
-                        icon="playFill"
+                        icon="play"
                         tooltip={canResume && 'Resume Session'}
                         height={20}
                         disabled={!canResume}
@@ -283,7 +284,7 @@ export const ActionColumn: React.FC<{
                 }
                 {!showResumeButton &&
                     <ActionIcon
-                        icon="pauseFill"
+                        icon="pause"
                         tooltip={canPause && 'Pause Session'}
                         height={20}
                         disabled={!canPause}
@@ -293,7 +294,7 @@ export const ActionColumn: React.FC<{
             </div>
             <div>
                 <Icon
-                    icon="tripleDotVertical"
+                    icon="dotsVertical"
                     height={20}
                     color={colors.purple}
                     id="action-menu-button"

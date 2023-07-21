@@ -6,80 +6,59 @@ import {
     IconifyIconDefinition,
 } from '@nathanstitt/sundry/ui'
 
-import accessTime from '@iconify-icons/mdi/access-time'
-import addCircle from '@iconify-icons/mdi/add-circle'
-import close from '@iconify-icons/bi/x-square'
-import x from '@iconify-icons/bi/x'
-import back from '@iconify-icons/bi/chevron-double-left'
-import right from '@iconify-icons/bi/chevron-right'
-import tripleDot from '@iconify-icons/bi/three-dots'
-import tripleDotVertical from '@iconify-icons/bi/three-dots-vertical'
-import cancel from '@iconify-icons/bi/x-circle'
-import trash from '@iconify-icons/bi/trash'
-import checkCircle from '@iconify-icons/bi/check-circle-fill'
-import emptyCircle from '@iconify-icons/bi/circle'
-import feedback from '@iconify-icons/bi/chat-left-dots-fill'
-import search from '@iconify-icons/bi/search'
-import heart from '@iconify-icons/bi/heart-fill'
-import warning from '@iconify-icons/bi/exclamation-triangle-fill'
-import rolodex from '@iconify-icons/bi/person-rolodex'
-import list from '@iconify-icons/bi/list'
-import multiStage from '@iconify-icons/bi/stack'
-import chatLeft from '@iconify-icons/bi/chat-left-fill'
-import cloudUpload from '@iconify-icons/bi/cloud-upload'
-import cloudDownload from '@iconify-icons/bi/cloud-download'
-import questionCircleFill from '@iconify-icons/bi/question-circle-fill'
-import arrowLeftRight from '@iconify-icons/bi/arrow-left-right'
-import arrowUpDown from '@iconify-icons/bi/arrow-up-down'
-import arrowLeft from '@iconify-icons/bi/arrow-left'
-import arrowRight from '@iconify-icons/bi/arrow-right'
-import arrowUp from '@iconify-icons/bi/arrow-up'
-import arrowDown from '@iconify-icons/bi/arrow-down'
-import pencilFill from '@iconify-icons/bi/pencil-fill'
-import pause from '@iconify-icons/bi/pause'
-import pauseFill from '@iconify-icons/bi/pause-fill'
-import playFill from '@iconify-icons/bi/play-fill'
-import chevronLeft from '@iconify-icons/bi/chevron-left'
-import chevronDown from '@iconify-icons/bi/chevron-down'
-import chevronUp from '@iconify-icons/bi/chevron-up'
+import clockOutline from '@iconify-icons/mdi/clock-outline'
+import plusCircleOutline from '@iconify-icons/mdi/plus-circle-outline'
+import close from '@iconify-icons/mdi/close'
+import chevronRight from '@iconify-icons/mdi/chevron-right'
+import chevronLeft from '@iconify-icons/mdi/chevron-left'
+import chevronDown from '@iconify-icons/mdi/chevron-down'
+import chevronUp from '@iconify-icons/mdi/chevron-up'
+import dotsVertical from '@iconify-icons/mdi/dots-vertical'
+import search from '@iconify-icons/mdi/search'
+import trash from '@iconify-icons/mdi/delete'
+import checkCircle from '@iconify-icons/mdi/check-circle'
+import circle from '@iconify-icons/mdi/circle-outline'
+import feedback from '@iconify-icons/mdi/feedback'
+import heart from '@iconify-icons/mdi/heart'
+import warning from '@iconify-icons/mdi/warning'
+import person from '@iconify-icons/mdi/person'
+import menu from '@iconify-icons/mdi/menu'
+import cardMultiple from '@iconify-icons/mdi/card-multiple'
+import message from '@iconify-icons/mdi/message'
+import cloudUpload from '@iconify-icons/mdi/cloud-upload'
+import cloudDownload from '@iconify-icons/mdi/cloud-download'
+import helpCircle from '@iconify-icons/mdi/help-circle'
+import pencil from '@iconify-icons/mdi/pencil'
+import pause from '@iconify-icons/mdi/pause'
+import play from '@iconify-icons/mdi/play'
+
 
 export const ICONS = {
-    x,
+    clockOutline,
+    plusCircleOutline,
     close,
-    accessTime,
-    back,
+    chevronRight,
+    chevronLeft,
+    chevronDown,
+    chevronUp,
+    dotsVertical,
     search,
-    addCircle,
-    cancel,
     trash,
-    tripleDot,
-    tripleDotVertical,
     checkCircle,
     feedback,
     heart,
     warning,
-    emptyCircle,
-    rolodex,
-    list,
-    right,
-    multiStage,
-    chatLeft,
+    circle,
+    person,
+    menu,
+    cardMultiple,
+    message,
     cloudUpload,
     cloudDownload,
-    questionCircleFill,
-    arrowUpDown,
-    arrowLeftRight,
-    arrowLeft,
-    arrowRight,
-    arrowUp,
-    arrowDown,
-    pencilFill,
+    helpCircle,
+    pencil,
     pause,
-    pauseFill,
-    playFill,
-    chevronLeft,
-    chevronDown,
-    chevronUp,
+    play,
 }
 
 export type IconKey = keyof typeof ICONS

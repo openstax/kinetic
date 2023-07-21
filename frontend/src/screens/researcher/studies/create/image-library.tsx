@@ -4,7 +4,7 @@ import { colors } from '@theme';
 
 const CategoryLink = styled.small({
     cursor: 'pointer',
-    color: colors.kineticResearcher,
+    color: colors.blue,
     textDecoration: 'underline',
     textUnderlineOffset: '.4rem',
 })
@@ -22,7 +22,7 @@ const UncheckedCircle = styled.div({
 const CheckedCircle = () => (
     <Box align='center' justify='center' css={{
         position: 'absolute',
-        border: `2px solid ${colors.kineticResearcher}`,
+        border: `2px solid ${colors.blue}`,
         width: 15,
         height: 15,
         borderRadius: 25,
@@ -30,9 +30,9 @@ const CheckedCircle = () => (
         right: 10,
     }}>
         <div css={{
-            color: colors.kineticResearcher,
+            color: colors.blue,
             position: 'absolute',
-            background: colors.kineticResearcher,
+            background: colors.blue,
             width: 7,
             height: 7,
             borderRadius: 50,
@@ -104,7 +104,7 @@ export const ImageLibrary: FC<{
                     <Col sm={2}
                         direction='column'
                         css={{
-                            backgroundColor: colors.pageBackground,
+                            backgroundColor: colors.ash,
                             padding: `20px 15px`,
                         }}
                         gap='large'

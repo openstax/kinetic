@@ -3,6 +3,7 @@ import { Icon, useFormContext, Col } from '@components';
 import { colors } from '@theme';
 import { uniqueId } from 'lodash-es';
 import { InputField } from '../index';
+import clockOutline from '@iconify-icons/mdi/clock-outline';
 
 export const FieldTitle: FCWC<{required?: boolean}> = ({ required, children }) => {
     return (
@@ -21,7 +22,7 @@ export const StepHeader: FCWOC<{
             <Box gap='xlarge'>
                 <h3 className='fw-bold'>{title}</h3>
                 <Box gap align='center'>
-                    <Icon height={20} color={colors.kineticResearcher} icon='accessTime'/>
+                    <Icon height={20} color={colors.blue} icon='clockOutline'/>
                     <span>ETA: {eta}min</span>
                 </Box>
             </Box>
@@ -35,8 +36,8 @@ export const ResearcherCheckbox = styled(InputField)({
         height: 16,
         width: 16,
         '&:checked': {
-            backgroundColor: colors.kineticResearcher,
-            borderColor: colors.kineticResearcher,
+            backgroundColor: colors.blue,
+            borderColor: colors.blue,
         },
     },
 })
@@ -62,7 +63,7 @@ export const ResearcherDetailedCheckbox: FC<{
             <label htmlFor={id}>
                 <Box direction='column' gap='small'>
                     <span className='fw-semibold'>{label}</span>
-                    <small css={{ color: colors.grayText }}>{desc}</small>
+                    <small css={{ color: colors.text }}>{desc}</small>
                 </Box>
             </label>
         </Box>

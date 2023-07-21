@@ -8,7 +8,7 @@ export const ExitButton: FC = () => {
             css={{
                 textDecoration: 'underline',
                 textUnderlineOffset: '.5rem',
-                color: colors.grayText,
+                color: colors.text,
                 cursor: 'pointer',
                 alignSelf: 'end',
             }}

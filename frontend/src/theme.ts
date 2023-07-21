@@ -1,27 +1,33 @@
 
 export const colors = {
-    pageBackground: '#f7f8fa',
-    orange: '#f47541',
-    blue: '#151B2C',
-    primaryBlue: '#002469',
-    kineticResearcher: '#255ED3',
-    tooltipBlue: '#2874F9',
-    lightBlue: '#62DAFC',
+    // Primary Colors
+    navy: '#151B2C',
+    blue: '#255ED3',
+    purple: '#3D2DCB',
+    ash: '#f7f8fa',
+    white: '#ffffff',
+    text: '#848484',
+
+    // Secondary Colors
+    blue50: '#2874F9',
     red: '#ca2026',
-    yellow: '#F4D019',
+    yellow: '#F4CF18',
+    green: '#0EE094',
+
+    // Tertiary Colors
+
+    orange: '#f47541',
+    primaryBlue: '#002469',
+    lightBlue: '#62DAFC',
     teal: '#0DC0DC',
     darkTeal: '#039AC4',
-    purple: '#6922EA',
+
     gray: '#E8E8E8',
-    green: '#0EE094',
     lightGray: '#DBDBDB',
     darkGray: '#989898',
-    text: '#212529',
-    grayText: '#848484',
     grayerText: '#424242',
     input: { border: '#ced4da' },
     line: '#cfcfcf',
-    white: '#ffffff',
 }
 
 export const screenSizes = {

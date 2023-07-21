@@ -14,7 +14,7 @@ export const StyledLinkButton = styled(Button)<ButtonProps>({
     },
     '&:hover': {
         svg: {
-            color: colors.blue,
+            color: colors.navy,
         },
     },
 })

@@ -15,7 +15,7 @@ const Banner: React.FC<{
         </span>
         <Icon
             height={25}
-            icon="x"
+            icon="close"
             onClick={() => onRemove(banner)}
             color="white"
         />

@@ -44,7 +44,7 @@ declare module '@tanstack/table-core' {
 const StyledHeader = styled('th')({
     '.header-text': {
         fontWeight: 'bold',
-        color: colors.grayText,
+        color: colors.text,
     },
     borderBottom: `3px solid ${colors.lightGray}`,
 });
@@ -366,7 +366,7 @@ export const StudiesTable: React.FC<{
                     <Box gap>
                         <span># Participants</span>
                         <Tooltip tooltip={tooltipText} css={{ display: 'flex' }}>
-                            <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={12}/>
+                            <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={12}/>
                         </Tooltip>
                     </Box>
                 )
@@ -398,7 +398,7 @@ export const StudiesTable: React.FC<{
                         <span>Take Rate</span>
                         <Box>
                             <Tooltip tooltip='Rate of Participants who clicked ‘Begin Study’ against Total number of study previews' css={{ display: 'flex' }}>
-                                <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={12}/>
+                                <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={12}/>
                             </Tooltip>
                         </Box>
                     </Box>

@@ -138,7 +138,7 @@ const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
                     cursor: 'pointer',
                     fontWeight: 'bold',
                     borderBottom: '3px solid transparent',
-                    color: colors.grayText,
+                    color: colors.text,
                     '&.active': {
                         borderBottomColor: colors.purple,
                         color: colors.purple,

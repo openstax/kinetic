@@ -52,7 +52,7 @@ export const Menu: FCWC<MenuProps> = ({
     }
     const toggleProps = { id: btnId, ref: setTarget, onClick: onMenuClick, className: cx(className, 'dropdown-toggler') }
     const menuToggle = isMobile ? (
-        <Icon icon="list"
+        <Icon icon="menu"
             {...toggleProps}
             height={30}
             color="white"
