@@ -38,7 +38,7 @@ const ReadyForLaunch: FC<{
                 <h6 className='lh-lg' css={{ color: colors.text }}>
                    The correct permissions are now all set! An access code has now been sent to your email from owlsurveys@rice.edu providing you with further instructions on how to access your Qualtrics template.
                 </h6>
-                <h6 className='lh-lg' css={{ color: colors.grayerText }}>
+                <h6 className='lh-lg' css={{ color: colors.text }}>
                     Once you’ve set up your study in Qualtrics and it’s ready for data collection, return here to finalize it and launch it on Kinetic.
                 </h6>
                 <span css={{ color: colors.text }}>Didn’t receive an email with your Qualtrics collaboration code? Please email us at <a href="mailto:kinetic@openstax.org">kinetic@openstax.org</a> and we’ll get it all up and running for you</span>

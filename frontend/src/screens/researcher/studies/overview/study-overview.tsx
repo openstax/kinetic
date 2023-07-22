@@ -82,17 +82,17 @@ export const StudyInformation: FC<{ study: Study }> = ({ study }) => {
                         <Col sm={8} direction='column'>
                             <ul>
                                 <li>
-                                    <small css={{ color: colors.grayerText }}>
+                                    <small css={{ color: colors.text }}>
                                         Study Title: <span css={{ color: colors.text }}>{study.titleForResearchers}</span>
                                     </small>
                                 </li>
                                 <li>
-                                    <small css={{ color: colors.grayerText }}>
+                                    <small css={{ color: colors.text }}>
                                         Description: <span css={{ color: colors.text }}>{study.internalDescription}</span>
                                     </small>
                                 </li>
                                 <li>
-                                    <small css={{ color: colors.grayerText }}>
+                                    <small css={{ color: colors.text }}>
                                         Tag: <span css={{ color: colors.text }}><Tag tag={study.category} /></span>
                                     </small>
                                 </li>
@@ -107,22 +107,22 @@ export const StudyInformation: FC<{ study: Study }> = ({ study }) => {
                         <Col sm={8} direction='column'>
                             <ul>
                                 <li>
-                                    <small css={{ color: colors.grayerText }}>
+                                    <small css={{ color: colors.text }}>
                                         IRB: <span css={{ color: colors.text }}>IRB-FY2022-19</span>
                                     </small>
                                 </li>
                                 <li>
-                                    <small css={{ color: colors.grayerText }}>
+                                    <small css={{ color: colors.text }}>
                                         University: <span css={{ color: colors.text }}>Rice University</span>
                                     </small>
                                 </li>
                                 {pi && <li>
-                                    <small css={{ color: colors.grayerText }}>
+                                    <small css={{ color: colors.text }}>
                                         Study PI: <span css={{ color: colors.text }}>{pi.firstName} {pi.lastName}</span>
                                     </small>
                                 </li>}
                                 {lead && <li>
-                                    <small css={{ color: colors.grayerText }}>
+                                    <small css={{ color: colors.text }}>
                                         Study Lead: <span css={{ color: colors.text }}>{lead.firstName} {lead.lastName}</span>
                                     </small>
                                 </li>}
@@ -187,10 +187,10 @@ const WaitingForTemplate: FC<{study: Study}> = ({ study }) => {
             <Box direction='column' align='center' className='text-center' gap='large' alignSelf='center'>
                 <img src={Waiting} alt='waiting' height={200}/>
                 <h5 className='fw-bold'>Almost there! We’re setting up the right permissions</h5>
-                <h6 className='lh-lg' css={{ color: colors.grayerText }}>
+                <h6 className='lh-lg' css={{ color: colors.text }}>
                     Our team is creating a Qualtrics template and setting up the correct permissions for your study. You will receive an email from owlsurveys@rice.edu containing an access code to your Qualtrics template and further instructions via your registered email within the next business day.
                 </h6>
-                <h6 className='lh-lg' css={{ color: colors.grayerText }}>
+                <h6 className='lh-lg' css={{ color: colors.text }}>
                     Follow the instructions to build your task and come back here to proceed with finalizing your study and launching it on Kinetic.
                 </h6>
             </Box>

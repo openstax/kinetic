@@ -24,7 +24,7 @@ const SegmentLabel: React.FC<{ segment: RewardsSegment }> = ({ segment }) => {
             align='center'
             className="explanation" css={{
                 fontSize: useIsMobileDevice() ? 11 : 12,
-                color: segment.isCurrent ? 'black' : colors.darkGray,
+                color: segment.isCurrent ? 'black' : colors.gray70,
             }}>
             <span>{segment.totalPoints}pts</span>
             <span>{toDayJS(segment.endAt).format('DD MMM')}</span>
@@ -79,7 +79,7 @@ const GrandPrize: React.FC<{ segment?: RewardsSegment }> = ({ segment }) => {
         <Box direction='column' align='center'>
             <Icon
                 css={{ background: 'white', marginTop: -5 }}
-                color={segment.achieved ? colors.purple : colors.lightGray}
+                color={segment.achieved ? colors.purple : colors.gray50}
                 icon={segment.isCurrent ? trophyFilledIcon : trophyOutlineIcon}
                 height={25}
             />

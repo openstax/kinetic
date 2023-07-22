@@ -1,4 +1,5 @@
-
+// Color definitions in figma here:
+// https://www.figma.com/file/aoc0hf7t3uI7wu7ghxi625/LD-library--Desktop?type=design&node-id=1010-307&mode=design&t=vmlqtKSi8F2d0xrb-0
 export const colors = {
     // Primary Colors
     navy: '#151B2C',
@@ -6,28 +7,37 @@ export const colors = {
     purple: '#3D2DCB',
     ash: '#f7f8fa',
     white: '#ffffff',
-    text: '#848484',
+    text: '#424242',
 
     // Secondary Colors
-    blue50: '#2874F9',
-    red: '#ca2026',
-    yellow: '#F4CF18',
-    green: '#0EE094',
+    blue50: '#2874F9', // This color is mainly for icon, links.
+    red: '#ca2026', // This color is to show users with an error state, delete/cancel action or error message.
+    yellow: '#F4CF18', // This color is to warn users with an alerting state.
+    green: '#0EE094', // This color is to show users a success action, or message or state.
 
     // Tertiary Colors
+    pine: '#20644F',
+    violet: '#6B38A8',
+    blue30: '#7594F5',
+    yellow50: '#FAF6D1',
+    pine50: '#C9E9D3',
+    violet50: '#EADEFA',
+    coral50: '#F8D5CD',
+    purple50: '#DFE1F9',
+    pink50: '#F6DBED',
 
-    orange: '#f47541',
-    primaryBlue: '#002469',
-    lightBlue: '#62DAFC',
-    teal: '#0DC0DC',
-    darkTeal: '#039AC4',
+    // Neutral colors
+    gray90: '#2F2F2F', // Example: tooltip background color
+    gray70: '#848484', // Secondary text color
+    gray50: '#DBDBDB', // Example: disabled link, CTA, border
+    gray30: '#E3E3E3', // Example: disabled dropdown field, button
+    blanket: '#151B2C', // Use this color covering the content below the modal.
 
-    gray: '#E8E8E8',
-    lightGray: '#DBDBDB',
-    darkGray: '#989898',
-    grayerText: '#424242',
-    input: { border: '#ced4da' },
-    line: '#cfcfcf',
+    // OpenStax Colors
+    osOrange: '#f47541',
+    osBlue: '#002469',
+    osRed: '#D4450C',
+    osTeal: '#0DC0DC',
 }
 
 export const screenSizes = {
@@ -44,26 +54,9 @@ export const media = {
     desktop: `@media (min-width: ${screenSizes['xl']}px)`,
 }
 
-const makeLine = (side: string) => ({
-    [`border${side}`]: `1px solid ${colors.line}`,
-    [`margin${side}`]: '1rem',
-    [`padding${side}`]: '1rem',
-})
-
-
 export const theme = {
     colors,
     media,
-    line: `1px solid ${colors.line}`,
-    subtleBorder: `1px solid ${colors.line}`,
-    css: {
-        topLine: makeLine('Top'),
-        bottomLine: makeLine('Bottom'),
-        box: {
-            border: `1px solid ${colors.line}`,
-            padding: '1rem',
-        },
-    },
 }
 
 type ThemeT = typeof theme

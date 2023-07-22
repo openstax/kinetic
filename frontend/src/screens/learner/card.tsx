@@ -51,7 +51,7 @@ const Card = styled(Box)({
 export const Tag: React.FC<{ tag?: string }> = ({ tag }) => {
     if (!tag) return null
     return (
-        <span className="badge text-dark" css={{ borderRadius: 8, background: colors.gray }}>
+        <span className="badge text-dark" css={{ borderRadius: 8, background: colors.gray30 }}>
             {tag}
         </span>
     )
@@ -216,7 +216,7 @@ const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
                 alt={study.imageId}
                 className='study-card-image'
                 css={{
-                    border: `1px solid ${colors.lightGray}`,
+                    border: `1px solid ${colors.gray50}`,
                     borderRadius: 8,
                 }}
             />

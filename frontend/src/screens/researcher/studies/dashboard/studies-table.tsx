@@ -46,7 +46,7 @@ const StyledHeader = styled('th')({
         fontWeight: 'bold',
         color: colors.text,
     },
-    borderBottom: `3px solid ${colors.lightGray}`,
+    borderBottom: `3px solid ${colors.gray50}`,
 });
 
 const SortIcon: React.FC<{header: Header<Study, unknown> }> = ({ header }) => {
@@ -96,15 +96,15 @@ const TableHeader: React.FC<{header: Header<Study, unknown> }> = ({ header }) =>
 
 const StyledRow = styled.tr(({ hasChildren }: { hasChildren?: boolean }) => ({
     height: `3rem`,
-    borderBottom: `1px solid ${colors.lightGray}`,
+    borderBottom: `1px solid ${colors.gray50}`,
     'td': {
         padding: '1rem .5rem',
     },
-    backgroundColor: hasChildren ? colors.gray : 'inherit',
+    backgroundColor: hasChildren ? colors.gray30 : 'inherit',
 }))
 
 const NestedRow = styled(StyledRow)({
-    backgroundColor: colors.gray,
+    backgroundColor: colors.gray30,
 })
 
 const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
@@ -145,7 +145,7 @@ const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
 }
 
 const FilterContainer = styled(Box)({
-    color: colors.grayerText,
+    color: colors.text,
     "input[type='checkbox']": {
         accentColor: colors.purple,
         width: 16,
@@ -218,7 +218,7 @@ const StatusFilters: React.FC<{
 const StyledLabel = styled.span({
     borderRadius: 20,
     padding: '4px 12px',
-    color: colors.grayerText,
+    color: colors.text,
 })
 
 const StatusLabel: React.FC<{status: string}> = ({ status }) => {
@@ -249,7 +249,7 @@ const NoData: React.FC<{
     if (filteredStudiesLength) return null
     return (
         <Box direction='column' align='center' justify='center' className='mt-10' gap='large'>
-            <h3 css={{ color: colors.lightGray }}>
+            <h3 css={{ color: colors.gray50 }}>
                 No data
             </h3>
             {!allStudies.length && <span>

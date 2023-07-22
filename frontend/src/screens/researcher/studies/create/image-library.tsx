@@ -11,7 +11,7 @@ const CategoryLink = styled.small({
 
 const UncheckedCircle = styled.div({
     position: 'absolute',
-    border: `2px solid ${colors.lightGray}`,
+    border: `2px solid ${colors.gray50}`,
     width: 15,
     height: 15,
     borderRadius: 25,
@@ -59,7 +59,7 @@ const ImageCard: FC<{
             }}
         >
             <img src={getImageUrl(imageId)} data-testid='card-image' alt={imageId} width={250} height={140} css={{
-                border: `1px solid ${colors.lightGray}`,
+                border: `1px solid ${colors.gray50}`,
                 // padding: `0 25px`,
             }}/>
             {selectedImage === imageId ? <CheckedCircle/> : <UncheckedCircle/>}

@@ -33,10 +33,10 @@ const StyledForm = styled(Form<Researcher>)(({ readOnly }) => ({
         justifyContent: 'center',
     },
     '.form-control': {
-        backgroundColor: readOnly ? colors.lightGray : 'transparent',
+        backgroundColor: readOnly ? colors.gray50 : 'transparent',
     },
     '.select': {
-        backgroundColor: readOnly ? colors.lightGray : 'transparent',
+        backgroundColor: readOnly ? colors.gray50 : 'transparent',
     },
 }))
 

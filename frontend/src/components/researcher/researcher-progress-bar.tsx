@@ -24,13 +24,13 @@ export interface Step {
 
 const getLineColor = (step: Step, currentStep: Step) => {
     if (step.index === currentStep.index) {
-        return `linear-gradient(90deg, ${colors.blue} 50%, ${colors.lightGray} 50%)`
+        return `linear-gradient(90deg, ${colors.blue} 50%, ${colors.gray50} 50%)`
     }
 
     if (step.index < currentStep.index) {
         return colors.blue
     } else {
-        return colors.lightGray
+        return colors.gray50
     }
 }
 

@@ -205,7 +205,7 @@ const StudyActionContainer: FC<{
 }
 
 const ActionIcon = styled(Icon)(({ disabled }) => ({
-    color: disabled ? colors.lightGray : colors.purple,
+    color: disabled ? colors.gray50 : colors.purple,
     cursor: disabled ? 'default' : 'pointer',
 }))
 

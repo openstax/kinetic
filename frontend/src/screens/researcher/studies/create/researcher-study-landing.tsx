@@ -32,7 +32,7 @@ const StepSection: FCWC<{
             width='570px'
             css={{ border: `1px solid ${borderColor}`, borderRadius: 10 }}
         >
-            <div css={{ backgroundColor: colors.gray, padding: `1rem`, borderRadius: `10px 10px 0 0` }}>
+            <div css={{ backgroundColor: colors.gray30, padding: `1rem`, borderRadius: `10px 10px 0 0` }}>
                 <h4>{header}</h4>
             </div>
             <div css={{ padding: `0 1rem 1rem` }}>
@@ -91,7 +91,7 @@ const StepsOverview: FC = () => {
                     </ResearcherButton>
                 </Box>
 
-                <StepSection header='Finalize Study' borderColor={colors.lightGray}>
+                <StepSection header='Finalize Study' borderColor={colors.gray50}>
                     <SectionHeader>5. Waiting Period</SectionHeader>
                     <SectionText>
                         Brief time during which the Kinetic team will setup the correct permissions and generate a Qualtrics template for your study

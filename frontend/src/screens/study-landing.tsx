@@ -62,7 +62,7 @@ const StudyMessaging: React.FC<StudyMessagingProps & { onReturnClick(): void }> 
             <Box
                 css={{
                     background: 'white',
-                    border: `2px solid ${colors.lightGray}`,
+                    border: `2px solid ${colors.gray50}`,
                     maxWidth: '100%',
                 }}
             >

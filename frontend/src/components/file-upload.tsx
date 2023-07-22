@@ -75,7 +75,7 @@ const FileUploader: FC<FileUploadProps> = ({
                 height: '100%',
                 width: '100%',
                 padding: '1rem',
-                backgroundColor: dragActive ? colors.lightBlue : 'transparent',
+                backgroundColor: dragActive ? colors.blue50 : 'transparent',
                 opacity: dragActive ? .5 : 1,
                 border: dragActive ? '2px dashed gray' : 'none',
             }}
@@ -120,7 +120,7 @@ const FileUploader: FC<FileUploadProps> = ({
 
 const AvatarPreview = styled.img({
     borderRadius: '50%',
-    border: `1px solid ${colors.lightGray}`,
+    border: `1px solid ${colors.gray50}`,
     height: 200,
     width: 200,
 })

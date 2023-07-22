@@ -35,7 +35,7 @@ const Wrapper = styled(Box)({
             },
             input: {
                 padding: 10,
-                background: colors.lightGray,
+                background: colors.gray50,
                 border: 0,
                 borderRadius: 2,
             },
@@ -57,7 +57,7 @@ const SidebarWrapper = styled.div({
     borderLeft: '1px solid grey',
     height: 'auto',
     a: {
-        color: colors.darkGray,
+        color: colors.gray70,
         fontSize: 18,
     },
 })

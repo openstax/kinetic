@@ -130,7 +130,7 @@ const Avatar: React.FC = () => {
     const imageURL = researcher.avatarUrl || DefaultAvatar;
     const AvatarImage = styled.img({
         borderRadius: '50%',
-        border: `1px solid ${colors.lightGray}`,
+        border: `1px solid ${colors.gray50}`,
         padding: researcher.avatarUrl ? 0 : 25,
         height: 125,
         width: 125,
@@ -198,14 +198,14 @@ const PageWrapper = styled(Box)({
 
 const ProfileSection = styled(Box)({
     backgroundColor: colors.white,
-    border: `1px solid ${colors.lightGray}`,
+    border: `1px solid ${colors.gray50}`,
     borderRadius: 5,
     padding: 30,
 })
 
 const Resources = styled(Box)({
     maxHeight: 250,
-    border: `1px solid ${colors.lightGray}`,
+    border: `1px solid ${colors.gray50}`,
     marginTop: 40,
     borderRadius: 5,
     backgroundColor: colors.white,
