@@ -8,6 +8,7 @@ import {
 
 import clockOutline from '@iconify-icons/mdi/clock-outline'
 import plusCircleOutline from '@iconify-icons/mdi/plus-circle-outline'
+import plus from '@iconify-icons/mdi/plus'
 import close from '@iconify-icons/mdi/close'
 import chevronRight from '@iconify-icons/mdi/chevron-right'
 import chevronLeft from '@iconify-icons/mdi/chevron-left'
@@ -36,6 +37,7 @@ import play from '@iconify-icons/mdi/play'
 export const ICONS = {
     clockOutline,
     plusCircleOutline,
+    plus,
     close,
     chevronRight,
     chevronLeft,
