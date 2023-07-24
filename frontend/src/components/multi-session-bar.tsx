@@ -3,9 +3,8 @@ import { filter } from 'lodash-es'
 import { ParticipantStudy } from '@api'
 import plur from 'plur'
 import { colors } from '../theme'
-import { SegmentedBar, Segment, SegmentTitle, SegmentCircle } from './segment-bar'
+import { Segment, SegmentCircle, SegmentedBar, SegmentTitle } from './segment-bar'
 import { Icon } from './icon'
-import clockOutline from '@iconify-icons/mdi/clock-outline';
 
 export const MultiSessionBar: FC<{ study: ParticipantStudy }> = ({ study }) => {
     if (!study.stages || study.stages.length < 2) return null

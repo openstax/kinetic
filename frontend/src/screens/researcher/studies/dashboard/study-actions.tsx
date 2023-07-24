@@ -8,13 +8,13 @@ import {
     getStudyEditUrl,
     isActive,
     isCompleted,
-    isDraft, isDraftLike,
+    isDraft,
+    isDraftLike,
     isPaused,
     isReadyForLaunch,
     isScheduled,
     isWaiting,
 } from '@models';
-import pencil from '@iconify-icons/bi/pencil';
 
 const ModalType = {
     Pause: 'pauseStudy',

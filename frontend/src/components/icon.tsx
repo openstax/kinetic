@@ -1,9 +1,9 @@
 import * as React from 'react'
 import {
-    IconProps as SundryIconProps,
     Icon as SundryIcon,
     IconifyIcon,
     IconifyIconDefinition,
+    IconProps as SundryIconProps,
 } from '@nathanstitt/sundry/ui'
 
 import clockOutline from '@iconify-icons/mdi/clock-outline'

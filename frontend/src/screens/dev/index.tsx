@@ -1,8 +1,6 @@
-import { React, useEffect, useState, useNavigate } from '@common'
-import { capitalize } from '@lib'
-import { useCurrentUser } from '@lib'
+import { React, useEffect, useNavigate, useState } from '@common'
+import { capitalize, useCurrentUser } from '@lib'
 import { AvailableUsers } from './users'
-import { ChevronDoubleLeft } from '@emotion-icons/bootstrap'
 import { LinkButton } from '@components'
 
 interface UserCardProps {

@@ -1,9 +1,8 @@
 import { Box, React, styled } from '@common';
-import { Icon, useFormContext, Col } from '@components';
+import { Col, Icon, useFormContext } from '@components';
 import { colors } from '@theme';
 import { uniqueId } from 'lodash-es';
 import { InputField } from '../index';
-import clockOutline from '@iconify-icons/mdi/clock-outline';
 
 export const FieldTitle: FCWC<{required?: boolean}> = ({ required, children }) => {
     return (
