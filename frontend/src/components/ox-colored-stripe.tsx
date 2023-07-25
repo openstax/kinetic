@@ -16,7 +16,7 @@ export const OXColoredStripe = () => (
             flex: 1,
         }}></span>
         <span css={{
-            backgroundColor: colors.yellow,
+            backgroundColor: colors.osYellow,
             flex: 2.5,
         }}></span>
         <span css={{
