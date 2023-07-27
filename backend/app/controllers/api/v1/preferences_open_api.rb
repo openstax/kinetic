@@ -22,6 +22,10 @@ class Api::V1::PreferencesOpenApi
         key :type, :boolean
         key :description, 'User wishes to receive email about new sessions becoming available'
       end
+      property :has_viewed_analysis_tutorial do
+        key :type, :boolean
+        key :description, 'User has viewed the analysis tutorial overview on the frontend'
+      end
     end
   end
 
