@@ -128,7 +128,7 @@ const SelectionCheckbox: React.FC<{ studyId: number, row: Row<Study> }> = ({ stu
             key={studyId}
             className='select-study-checkbox'
             data-index={row.index}
-            data-test-id={`${studyId}-checkbox`}
+            data-testid={`${studyId}-checkbox`}
             onChange={onChange}
             checked={selectedIds.includes(studyId)}
         />
