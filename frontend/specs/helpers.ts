@@ -227,6 +227,7 @@ export const selectFirstDropdownItem = async (
     { fieldName, page }: { fieldName: string, page: Page }
 ) => {
     await page.locator('.select', { has: page.locator(`input[name=${fieldName}]`) }).click()
+
     await page.keyboard.press('Enter')
 }
 

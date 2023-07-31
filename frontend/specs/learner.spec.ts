@@ -46,6 +46,8 @@ test('launching study and testing completion', async ({ page }) => {
     // qualtrics will redirect here once complete
     await goToPage({ page, path: `/study/land/${studyId}` })
     await page.click('testId=view-studies')
+    // Our study is under "Learning"
+    await page.click('testId=Learning')
     await expect(page).toHaveSelector(`[data-study-id="${studyId}"][role="link"]`)
 
     await page.click(`[data-study-id="${studyId}"]`)

@@ -35,7 +35,7 @@ export const AnalysisTutorial: FC<{show: boolean}> = ({ show }) => {
             onHide={() => closeTutorial()}
             closeBtn={true}
         >
-            <Modal.Body css={{ padding: 0 }}>
+            <Modal.Body css={{ padding: 0 }} data-testid='analysis-tutorial-modal'>
                 <TutorialStep step={step} setStep={setStep} close={() => closeTutorial()} />
             </Modal.Body>
         </StyledModal>
