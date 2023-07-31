@@ -767,7 +767,8 @@ CREATE TABLE public.user_preferences (
     study_available_email boolean DEFAULT false NOT NULL,
     session_available_email boolean DEFAULT true NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
+    updated_at timestamp(6) with time zone NOT NULL,
+    has_viewed_analysis_tutorial boolean DEFAULT false
 );
 
 
@@ -1489,6 +1490,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230524011047'),
 ('20230616223657'),
 ('20230626173336'),
-('20230712163112');
+('20230712163112'),
+('20230726142755');
 
 
