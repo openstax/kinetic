@@ -1,4 +1,4 @@
-import { Box, Modal, Row, Col, Button, ResearcherButton } from '@components';
+import { Box, Col, Modal, ResearcherButton, Row } from '@components';
 import { React, styled, useState } from '@common';
 import { useApi } from '@lib';
 import { noop } from 'lodash-es';
@@ -6,6 +6,12 @@ import Tutorial1 from '@images/analysis/tutorial1.svg'
 import Tutorial2 from '@images/analysis/tutorial2.svg'
 import Tutorial3 from '@images/analysis/tutorial3.svg'
 import { colors } from '@theme';
+
+const StyledModal = styled(Modal)({
+    '[data-test-id="modal-close-btn"]': {
+        color: 'white',
+    },
+})
 
 export const AnalysisTutorial: FC<{show: boolean}> = ({ show }) => {
     const api = useApi()
@@ -18,32 +24,39 @@ export const AnalysisTutorial: FC<{show: boolean}> = ({ show }) => {
         })
     }
 
-    const renderStep = (step: number, setStep: (step: number) => void) => {
-        switch(step) {
-            case 0:
-                return <Step1 step={step} setStep={setStep} />
-            case 1:
-                return <Step2 step={step} setStep={setStep} />
-            case 2:
-                return <Step3 step={step} setStep={setStep} close={closeTutorial} />
-        }
-    }
-
     return (
-        <Modal
+        <StyledModal
             xlarge
             scrollable={false}
             center
             show={showTutorial}
             onBackdropClick={noop}
+            onEscapeKeyDown={noop}
             onHide={() => closeTutorial()}
-            closeBtn={false}
+            closeBtn={true}
         >
             <Modal.Body css={{ padding: 0 }}>
-                {renderStep(step, setStep)}
+                <TutorialStep step={step} setStep={setStep} close={() => closeTutorial()} />
             </Modal.Body>
-        </Modal>
+        </StyledModal>
     )
+}
+
+const TutorialStep: FC<{
+    step: number,
+    setStep: (step: number) => void,
+    close: () => void
+}> = ({ step, setStep, close }) => {
+    switch(step) {
+        case 0:
+            return <Step1 step={step} setStep={setStep} />
+        case 1:
+            return <Step2 step={step} setStep={setStep} />
+        case 2:
+            return <Step3 step={step} setStep={setStep} close={close} />
+    }
+
+    return null
 }
 
 const Step1: FC<{step: number, setStep: (step: number) => void}> = ({ step, setStep }) => {
@@ -113,7 +126,6 @@ const Step3: FC<{
     setStep: (step: number) => void,
     close: () => void
 }> = ({ step, setStep, close }) => {
-
     return (
         <Row>
             <Col sm={6} padding='xxlarge' gap='xlarge'>
