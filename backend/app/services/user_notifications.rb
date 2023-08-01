@@ -42,7 +42,7 @@ class UserNotifications
     end
 
     # GIVEN the user has opted-in to receive prize cycle deadline emails
-    # WHEN an upcoming deadline is due in 72h AND the user hasn’t qualified for it yet
+    # WHEN an upcoming deadline is due in 72h AND the user hasn't qualified for it yet
     def deliver_prize_cycle_deadline
       users = users_with_emails_for('prize_cycle')
       return unless users.any?
@@ -106,7 +106,7 @@ class UserNotifications
     end
 
     def near_future
-      Date.today + 3.days..Date.today + 4.days
+      3.days.from_now..4.days.from_now
     end
 
     def user_ids_with_emails_for(type, include_unset: false)

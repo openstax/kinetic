@@ -69,9 +69,8 @@ RSpec.describe UserNotifications, type: :mailer do
     assert_emails 1 do
       described_class.deliver_prize_cycle_deadline
       email = ActionMailer::Base.deliveries.last
-      expect(email.subject).to match 'Don’t miss out'
+      expect(email.subject).to match "Don't miss out on an exciting prize!"
     end
-    study1.stages.first.update!(points: 10)
     user1_study1_launch_pad.launch
     user1_study1_launch_pad.land
 

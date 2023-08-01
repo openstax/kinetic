@@ -45,7 +45,7 @@ class UserMailer < ApplicationMailer
   def upcoming_prize_cycle_deadline
     mail(
       to: params[:user].email_address,
-      subject: 'Don’t miss out on an exciting prize!',
+      subject: "Don't miss out on an exciting prize!",
       template: 'upcoming_prize_cycle_deadline'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
