@@ -13,12 +13,12 @@ export const createAnalysis = async({ page, withStudy = false }: createAnalysisP
     const studyId = await createStudy({ page, studyName, description })
     if (withStudy) {
         await goToPage({ page, path: `/analysis/edit/new?studyId=${studyId}`, loginAs: 'researcher' })
-        await expect(page.locator('[name=title]')).toHaveText(name)
+        await expect(page.locator('[name=title]')).toHaveText(studyName)
         await expect(page.locator('[name=description]')).toHaveText(description)
     } else {
         await goToPage({ page, path: `/analysis/edit/new`, loginAs: 'researcher' })
         await expect(page.locator('testId=save-analysis-button')).toBeDisabled()
-        await page.fill('[name=title]', name)
+        await page.fill('[name=title]', studyName)
         await page.fill('[name=description]', description)
         await page.locator('.select-study-checkbox').first().check()
     }
