@@ -1,10 +1,11 @@
-import { addReward } from './helpers'
+import { addReward, loginAs } from './helpers'
 import {
     test, goToPage, setDateField, dayjs, faker, logout,
 } from './test'
 
 test('displays panel only when allowed', async ({ page }) => {
-    await goToPage({ page, path: '/admin', loginAs: 'admin' })
+    await loginAs({ page, login: 'admin' })
+    await goToPage({ page, path: '/admin' })
     await page.waitForFunction(() => document.location.pathname == '/admin/banners/')
 
     await logout({ page })
@@ -15,7 +16,8 @@ test('displays panel only when allowed', async ({ page }) => {
 
 test('can add/update/delete banners', async ({ page }) => {
     const message = faker.commerce.productDescription()
-    await goToPage({ page, path: '/admin/banners/', loginAs: 'admin' })
+    await loginAs({ page, login: 'admin' })
+    await goToPage({ page, path: '/admin/banners/' })
     await page.waitForSelector('data-testid=add-banner')
     await page.waitForTimeout(200)
     await page.click('data-testid=add-banner')

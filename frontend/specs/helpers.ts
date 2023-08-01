@@ -100,7 +100,7 @@ export const getIdFromUrl = async (page: Page): Promise<number | undefined> => {
 
 interface createStudyArgs {
     page: Page
-    name?: string
+    studyName?: string
     approveAndLaunchStudy?: boolean
     multiSession?: boolean
     description?: string
@@ -137,13 +137,15 @@ export const launchApprovedStudy = async(page: Page, studyId: number, multiSessi
 
 export const createStudy = async ({
     page,
-    name = faker.commerce.productName(),
+    studyName = null,
     approveAndLaunchStudy = true,
     multiSession = false,
     description = faker.commerce.color(),
 }: createStudyArgs) => {
+    const name = studyName || faker.commerce.productName()
     // Step 1 - Internal Details
-    await goToPage({ page, path: '/study/edit/new', loginAs: 'researcher' })
+    await loginAs({ page, login: 'researcher' })
+    await goToPage({ page, path: '/study/edit/new' })
     await page.fill('[name=titleForResearchers]', name)
     await page.fill('[name=internalDescription]', description)
     await page.click("input[value='Learner Characteristics']")

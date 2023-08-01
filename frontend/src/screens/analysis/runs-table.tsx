@@ -191,11 +191,10 @@ const useRunsTable = (analysis: Analysis) => {
                     })
                 }
                 return (
-                    // TODO download URLs @nathan?
                     <Box gap='medium'>
                         <ActionLink
                             className={cx({ disabled: !canDownload })}
-                            href={`/api/researcher/analysis/{run.analysisId}/run/{run.id}/results`}>
+                            href={`/api/researcher/analysis/${run.analysisId}/run/${run.id}/results`}>
                             Download Results
                         </ActionLink>
                         <ActionLink onClick={() => cancelRun()}>
