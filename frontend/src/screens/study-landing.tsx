@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { React, useEffect, useState } from '@common'
 import { colors } from '../theme'
-import { ParticipantStudy, DefaultApi, LandStudyRequest, LandStudyAbortedEnum } from '@api'
-import { Button, IncorrectUser, Box, LoadingAnimation, ErrorPage, KineticWaves } from '@components'
-import { useQueryParam, useCurrentUser, useApi, isIframed, sendMessageToParent } from '@lib'
+import { DefaultApi, LandStudyAbortedEnum, LandStudyRequest, ParticipantStudy } from '@api'
+import { Box, Button, ErrorPage, IncorrectUser, KineticWaves, LoadingAnimation } from '@components'
+import { isIframed, sendMessageToParent, useApi, useCurrentUser, useQueryParam } from '@lib'
 
 type LandedStudy = ParticipantStudy & { completedAt?: Date, abortedAt?: Date }
 
@@ -37,7 +37,7 @@ const NonAbortedMessage: React.FC<StudyMessagingProps> = ({ study }) => {
         <div data-testid="completed-msg">
             <h3>Success!</h3>
             <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
-                You‘ve completed {!study.completedAt && 'stage of '} a Kinetic activity.
+                You've completed {!study.completedAt && 'a stage of '} a Kinetic activity.
                 {study.completedAt && ' This task will be marked as complete on your dashboard.'}
             </h5>
         </div>

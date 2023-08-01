@@ -53,13 +53,13 @@ export const interceptStudyLaunch = async ({ page }: { page: Page }) => {
         const response = await page.request.fetch(route.request())
         const body = await response.json()
         body.url = '/'
-        route.fulfill({ response, body: JSON.stringify(body) });
+        return route.fulfill({ response, body: JSON.stringify(body) });
     });
 }
 
 export const interceptStudyLand = async ({ page }: { page: Page }) => {
     await page.route(/study\/land\/d+/, async route => {
-        route.fulfill({ status: 200, body: '{}' })
+        return route.fulfill({ status: 200, body: '{}' })
     });
 }
 
@@ -81,7 +81,7 @@ export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin
     await page.waitForSelector('.studies')
 }
 
-// TODO Can't delete active studies now.
+// TODO Can't delete active studies now. We can repurpose this to delete a draft in the future
 export const rmStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
     await loginAs({ page, login: 'researcher' })
     await goToPage({ page, path: `/studies` })
@@ -100,7 +100,7 @@ export const getIdFromUrl = async (page: Page): Promise<number | undefined> => {
 
 interface createStudyArgs {
     page: Page
-    name: string
+    name?: string
     approveAndLaunchStudy?: boolean
     multiSession?: boolean
     description?: string
@@ -137,8 +137,8 @@ export const launchApprovedStudy = async(page: Page, studyId: number, multiSessi
 
 export const createStudy = async ({
     page,
-    name,
-    approveAndLaunchStudy = false,
+    name = faker.commerce.productName(),
+    approveAndLaunchStudy = true,
     multiSession = false,
     description = faker.commerce.color(),
 }: createStudyArgs) => {
@@ -147,6 +147,7 @@ export const createStudy = async ({
     await page.fill('[name=titleForResearchers]', name)
     await page.fill('[name=internalDescription]', description)
     await page.click("input[value='Learner Characteristics']")
+    await page.waitForTimeout(200)
 
     await expect(page.locator('testId=study-primary-action')).not.toBeDisabled()
     await page.click('testId=study-primary-action')

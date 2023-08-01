@@ -10,7 +10,7 @@ interface createAnalysisProps {
 export const createAnalysis = async({ page, withStudy = false }: createAnalysisProps) => {
     const name = faker.commerce.productName()
     const description = faker.commerce.productName()
-    const studyId = await createStudy({ page, name: name, description, approveAndLaunchStudy: true })
+    const studyId = await createStudy({ page, name: name, description })
     if (withStudy) {
         await goToPage({ page, path: `/analysis/edit/new?studyId=${studyId}`, loginAs: 'researcher' })
         await expect(page.locator('[name=title]')).toHaveText(name)
