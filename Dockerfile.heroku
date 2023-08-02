@@ -14,7 +14,7 @@ COPY backend/Gemfile Gemfile
 COPY backend/Gemfile.lock Gemfile.lock
 RUN bundle install --deployment
 
-FROM node:14-slim as node
+FROM node:20-slim as node
 
 # variables below will be substituted into the JS while building
 # if any are added, they must also be present in frontend/build/env

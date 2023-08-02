@@ -50,13 +50,10 @@ class Study < ApplicationRecord
                arel[:closes_at].gteq(Time.now)))
   }
 
-  # TODO: Double check logic
   scope :shareable, -> {
-    unless shareable_after_months.nil?
-      where
-        .not(shareable_after_months: nil)
-        .where('closes_at > ?', shareable_after_months.months.ago)
-    end
+    where
+    .not(public_on: nil)
+    .where('public_on < ?', DateTime.now)
   }
 
   def status

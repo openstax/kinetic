@@ -135,11 +135,11 @@ export interface StudyUpdate {
      */
     viewCount?: number;
     /**
-     * How many months until the study is public
-     * @type {number}
+     * When the study becomes public for sharing with other researchers. Null means not shareable.
+     * @type {Date}
      * @memberof StudyUpdate
      */
-    shareableAfterMonths?: number | null;
+    publicOn?: Date | null;
     /**
      * Number of times this study has been completed
      * @type {number}
@@ -236,7 +236,7 @@ export function StudyUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
         'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
-        'shareableAfterMonths': !exists(json, 'shareable_after_months') ? undefined : json['shareable_after_months'],
+        'publicOn': !exists(json, 'public_on') ? undefined : (json['public_on'] === null ? null : new Date(json['public_on'])),
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
         'category': !exists(json, 'category') ? undefined : json['category'],
         'topic': !exists(json, 'topic') ? undefined : json['topic'],
@@ -270,7 +270,7 @@ export function StudyUpdateToJSON(value?: StudyUpdate | null): any {
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(ResearcherToJSON)),
         'is_mandatory': value.isMandatory,
         'view_count': value.viewCount,
-        'shareable_after_months': value.shareableAfterMonths,
+        'public_on': value.publicOn === undefined ? undefined : (value.publicOn === null ? null : value.publicOn.toISOString()),
         'category': value.category,
         'topic': value.topic,
         'subject': value.subject,

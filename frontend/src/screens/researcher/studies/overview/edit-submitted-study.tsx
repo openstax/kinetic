@@ -13,7 +13,6 @@ import {
     Modal,
     ResearcherButton,
     ResearcherCheckbox,
-    SelectField,
     useFormContext,
     useFormState,
 } from '@components';
@@ -34,7 +33,7 @@ const studyValidation = Yup.object().shape({
         is: true,
         then: Yup.date().nullable(true).required('Required'),
     }),
-    shareableAfterMonths: Yup.mixed().when('shareStudy', {
+    publicOn: Yup.mixed().when('shareStudy', {
         is: true,
         then: Yup.number().typeError('Required'),
     }),
@@ -68,8 +67,7 @@ export const EditSubmittedStudy: FC<{
                 ...study,
                 hasSampleSize: !!study.targetSampleSize,
                 hasClosingDate: !!study.closesAt,
-                shareStudy: study.shareableAfterMonths == 0 || !!study.shareableAfterMonths,
-                shareableAfterMonths: study.shareableAfterMonths == undefined ? null : study.shareableAfterMonths,
+                shareStudy: !!study.publicOn,
                 stages: isReadyForLaunch(study) ? study.stages?.map((stage, index) => {
                     if (index == 0) {
                         return stage
@@ -255,31 +253,25 @@ const ShareStudy: FC<{study: Study}> = () => {
                     <ResearcherCheckbox name='shareStudy' type='checkbox' id='share-study' onChange={() => {
                         const checked = getValues('shareStudy')
                         if (!checked) {
-                            setValue('shareableAfterMonths', null, { shouldValidate: true })
+                            setValue('publicOn', null, { shouldValidate: true })
                         }
-                        trigger('shareableAfterMonths')
+                        trigger('publicOn')
                     }} />
                     <label htmlFor="share-study">
                         I would like to share my study with other researchers on Kinetic after an embargo period during which access to my research will be restricted.
                     </label>
                 </Box>
                 {watch('shareStudy') &&
-                    <Box gap align='center'>
-                        <SelectField
-                            name="shareableAfterMonths"
-                            placeholder='Select'
-                            value={watch('shareableAfterMonths')}
-                            options={[
-                                { value: 0, label: 'No embargo' },
-                                { value: 6, label: '6 months' },
-                                { value: 12, label: '12 months' },
-                                { value: 18, label: '18 months' },
-                                { value: 24, label: '24 months' },
-                            ]}
+                    <Col>
+                        <DateTimeField
+                            sm={6}
+                            name='publicOn'
+                            label='Pick a Date'
+                            format={DateTimeFormats.shortDate}
                         />
-                    </Box>
+                    </Col>
                 }
-                <FieldErrorMessage name='shareableAfterMonths' />
+                <FieldErrorMessage name='publicOn'/>
             </Col>
         </Box>
     )
