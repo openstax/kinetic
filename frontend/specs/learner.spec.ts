@@ -36,9 +36,9 @@ test('launching study and testing completion', async ({ page }) => {
 })
 
 test('launching study and aborting it', async ({ page }) => {
-    await interceptStudyLaunch({ page })
     const studyId = await createStudy({ page })
     await loginAs({ page, login: 'user' })
+    await interceptStudyLaunch({ page })
     await goToPage({ page, path: `/studies/details/${studyId}` })
     await page.click('testId=launch-study')
 
@@ -55,6 +55,7 @@ test('launching study and aborting it', async ({ page }) => {
     expect(
         await page.evaluate(() => document.location.pathname)
     ).toMatch(RegExp(`/studies/details/${studyId}$`))
+
     // now mark complete with consent granted
     await goToPage({ page, path: `/study/land/${studyId}?consent=true` })
     await page.waitForTimeout(500)
@@ -72,6 +73,10 @@ test('launching study and completing with no consent', async ({ page }) => {
     await loginAs({ page, login: 'user' })
     await goToPage({ page, path: `/studies/details/${studyId}` })
     await page.click('testId=launch-study')
+    expect(
+        await page.evaluate(() => document.location.pathname)
+    ).toMatch(RegExp(`/studies/details/${studyId}$`))
+
     await goToPage({ page, path: `/study/land/${studyId}?consent=false` })
     await page.waitForTimeout(500)
     await expect(page).not.toMatchText(/Points/)
