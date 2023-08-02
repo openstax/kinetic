@@ -1,5 +1,5 @@
 import { expect, Page } from '@playwright/test';
-import { createStudy, getIdFromUrl, goToPage } from '../helpers';
+import { createStudy, getIdFromUrl, goToPage, loginAs } from '../helpers';
 import { faker } from '../test';
 
 interface createAnalysisProps {
@@ -8,15 +8,16 @@ interface createAnalysisProps {
 }
 
 export const createAnalysis = async({ page, withStudy = false }: createAnalysisProps) => {
+    await loginAs({ page, login: 'researcher' })
     const studyName = faker.commerce.productName()
     const description = faker.commerce.productName()
     if (withStudy) {
         const studyId = await createStudy({ page, studyName, description })
-        await goToPage({ page, path: `/analysis/edit/new?studyId=${studyId}`, loginAs: 'researcher' })
+        await goToPage({ page, path: `/analysis/edit/new?studyId=${studyId}` })
         await expect(page.locator('[name=title]')).toHaveText(studyName)
         await expect(page.locator('[name=description]')).toHaveText(description)
     } else {
-        await goToPage({ page, path: `/analysis/edit/new`, loginAs: 'researcher' })
+        await goToPage({ page, path: `/analysis/edit/new` })
         await expect(page.locator('testId=save-analysis-button')).toBeDisabled()
         await page.fill('[name=title]', studyName)
         await page.fill('[name=description]', description)
