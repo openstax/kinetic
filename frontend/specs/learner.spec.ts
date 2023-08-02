@@ -1,4 +1,4 @@
-import { addReward, createStudy, expect, goToPage, interceptStudyLaunch, loginAs, test } from './test'
+import { addReward, createStudy, expect, goToPage, interceptStudyLand, interceptStudyLaunch, loginAs, test } from './test'
 
 test('displays studies', async ({ page }) => {
     await loginAs({ page, login: 'user' })
@@ -17,6 +17,7 @@ test('filtering studies', async ({ page }) => {
 test('launching study and testing completion', async ({ page }) => {
     await addReward({ page, points: 5, prize: 'Pony' })
     await interceptStudyLaunch({ page })
+    await interceptStudyLand({ page })
 
     const studyId = await createStudy({ page })
     await goToPage({ page, path: '/studies' })
@@ -36,9 +37,11 @@ test('launching study and testing completion', async ({ page }) => {
 })
 
 test('launching study and aborting it', async ({ page }) => {
+    await interceptStudyLaunch({ page })
+    await interceptStudyLand({ page })
+
     const studyId = await createStudy({ page })
     await loginAs({ page, login: 'user' })
-    await interceptStudyLaunch({ page })
     await goToPage({ page, path: `/studies/details/${studyId}` })
     await page.click('testId=launch-study')
 
@@ -69,6 +72,8 @@ test('launching study and aborting it', async ({ page }) => {
 
 test('launching study and completing with no consent', async ({ page }) => {
     await interceptStudyLaunch({ page })
+    await interceptStudyLand({ page })
+
     const studyId = await createStudy({ page })
     await loginAs({ page, login: 'user' })
     await goToPage({ page, path: `/studies/details/${studyId}` })
