@@ -211,6 +211,7 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
 }
 
 const OpensAt: FC = () => {
+    const { isReadOnly } = useFormContext()
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
@@ -219,20 +220,19 @@ const OpensAt: FC = () => {
             </Col>
 
             <Col sm={6} direction='column' gap>
-                <div>
-                    <DateTimeField
-                        name='opensAt'
-                        label='Select date'
-                        withTime
-                        format={DateTimeFormats.shortDateTime}
-                        options={{
-                            defaultHour: 9,
-                            minDate: 'today',
-                            minTime: Date.now(),
-                        }}
-                        hint='Your Local Timezone'
-                    />
-                </div>
+                <DateTimeField
+                    name='opensAt'
+                    label='Select date'
+                    readOnly={isReadOnly}
+                    withTime
+                    format={DateTimeFormats.shortDateTime}
+                    options={{
+                        defaultHour: 9,
+                        minDate: 'today',
+                        minTime: Date.now(),
+                    }}
+                    hint='Your Local Timezone'
+                />
             </Col>
         </Box>
     )
@@ -244,7 +244,7 @@ const ShareStudy: FC<{study: Study}> = () => {
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
-                <h6>Share Study on Kinetic (Optional)</h6>
+                <h6>Share your study data on Kinetic (Optional)</h6>
                 <small>Opting in to share your study data on Kinetic will support replication and extension of your work by other researchers</small>
             </Col>
 
@@ -270,7 +270,7 @@ const ShareStudy: FC<{study: Study}> = () => {
                             label='Share study on [select date]'
                             format={DateTimeFormats.shortDate}
                         />
-                        <Icon css={{ color: colors.kineticResearcher }} icon='questionCircleFill' tooltip='We recommend setting a date at least 3 months from when you make your study available to participants to allocate sufficient time for data collection.'/>
+                        <Icon css={{ color: colors.kineticResearcher }} icon='questionCircleFill' tooltip="We recommend picking a date set at least 3 months after your study's opening date to allow enough time for data collection."/>
                     </Box>
                 }
                 <FieldErrorMessage name='publicOn'/>

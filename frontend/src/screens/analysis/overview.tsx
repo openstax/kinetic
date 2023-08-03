@@ -71,20 +71,21 @@ const HelpMaterials = () => {
                         <h6>Steps Overview</h6>
                     </a>
                 </li>
-                <li className="nav-item" role="presentation">
-                    <a data-target="#"
-                        id="tutorial-tab"
-                        onClick={() => setCurrentTab('Tutorial')}
-                        className={cx('nav-link cursor-pointer', { active: currentTab == 'Tutorial' })}
-                        data-bs-toggle="tab"
-                        data-bs-target="#tutorial"
-                        role="tab"
-                        aria-controls="tutorial"
-                        aria-selected={currentTab == 'Tutorial'}
-                    >
-                        <h6>Tutorial Video & Guide</h6>
-                    </a>
-                </li>
+                {/* TODO When Debshila has created the guide, we can add this back in */}
+                {/*<li className="nav-item" role="presentation">*/}
+                {/*    <a data-target="#"*/}
+                {/*        id="tutorial-tab"*/}
+                {/*        onClick={() => setCurrentTab('Tutorial')}*/}
+                {/*        className={cx('nav-link cursor-pointer', { active: currentTab == 'Tutorial' })}*/}
+                {/*        data-bs-toggle="tab"*/}
+                {/*        data-bs-target="#tutorial"*/}
+                {/*        role="tab"*/}
+                {/*        aria-controls="tutorial"*/}
+                {/*        aria-selected={currentTab == 'Tutorial'}*/}
+                {/*    >*/}
+                {/*        <h6>Tutorial Video & Guide</h6>*/}
+                {/*    </a>*/}
+                {/*</li>*/}
                 <li className="nav-item" role="presentation">
                     <a data-target="#"
                         id="faq-tab"
@@ -135,14 +136,15 @@ const HelpMaterials = () => {
                         </Col>
                     </ol>
                 </div>
-                <div
-                    className={cx('tab-pane', { active: currentTab == 'Tutorial' })}
-                    id="Tutorial"
-                    role="tabpanel"
-                    aria-labelledby="profile-tab"
-                >
-                    TODO @Debshila
-                </div>
+                {/* TODO When Debshila has created the guide, we can add this back in */}
+                {/*<div*/}
+                {/*    className={cx('tab-pane', { active: currentTab == 'Tutorial' })}*/}
+                {/*    id="Tutorial"*/}
+                {/*    role="tabpanel"*/}
+                {/*    aria-labelledby="profile-tab"*/}
+                {/*>*/}
+                {/*    TODO @Debshila*/}
+                {/*</div>*/}
                 <div className={cx('tab-pane', { active: currentTab == 'FAQ' })}
                     id="FAQ"
                     role="tabpanel"
