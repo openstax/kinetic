@@ -207,10 +207,10 @@ RSpec.describe 'Studies', api: :v1 do
     end
   end
 
-  describe 'GET researcher/public-studies' do
+  describe 'GET researcher/public_studies' do
     context 'when logged out' do
       it 'gives unauthorized' do
-        api_get 'researcher/public-studies'
+        api_get 'researcher/public_studies'
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -219,7 +219,7 @@ RSpec.describe 'Studies', api: :v1 do
       before { stub_random_user }
 
       it 'gives forbidden' do
-        api_get 'researcher/public-studies'
+        api_get 'researcher/public_studies'
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -232,7 +232,7 @@ RSpec.describe 'Studies', api: :v1 do
       end
 
       it 'returns all owned and public studies' do
-        api_get 'researcher/public-studies'
+        api_get 'researcher/public_studies'
         expect(response).to have_http_status(:success)
         expect(response_hash[:data]).to match a_collection_including(
           a_hash_including(
@@ -251,7 +251,7 @@ RSpec.describe 'Studies', api: :v1 do
           )
         )
       end
-      
+
     end
   end
 

@@ -3,6 +3,7 @@ import { useApi, useQueryParam } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import {
     Col,
+    Row,
     DateTimeField,
     DateTimeFormats,
     FieldErrorMessage,
@@ -15,6 +16,7 @@ import {
     ResearcherCheckbox,
     useFormContext,
     useFormState,
+
 } from '@components';
 import { Box, React, useNavigate, useState, Yup } from '@common';
 import { getFirstStage, isCompleted, isReadyForLaunch } from '@models';
@@ -35,7 +37,7 @@ const studyValidation = Yup.object().shape({
     }),
     publicOn: Yup.mixed().when('shareStudy', {
         is: true,
-        then: Yup.number().typeError('Required'),
+        then: Yup.date().nullable(true).required('Required'),
     }),
     stages: Yup.array().of(
         Yup.object().shape({
@@ -222,7 +224,7 @@ const OpensAt: FC = () => {
                 <div>
                     <DateTimeField
                         name='opensAt'
-                        label='Pick a Date'
+                        label='Select date'
                         withTime
                         format={DateTimeFormats.shortDateTime}
                         options={{
@@ -245,31 +247,33 @@ const ShareStudy: FC<{study: Study}> = () => {
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
                 <h6>Share Study on Kinetic (Optional)</h6>
-                <small>Opt in to share your study with other researchers on Kinetic for replication, extension, etc.</small>
+                <small>Opting in to share your study data on Kinetic will support replication and extension of your work by other researchers</small>
             </Col>
 
             <Col direction='column' gap>
                 <Box gap align='center'>
                     <ResearcherCheckbox name='shareStudy' type='checkbox' id='share-study' onChange={() => {
-                        const checked = getValues('shareStudy')
-                        if (!checked) {
-                            setValue('publicOn', null, { shouldValidate: true })
-                        }
-                        trigger('publicOn')
+                        trigger('publicOn').then(() => {
+                            const checked = getValues('shareStudy')
+                            if (!checked) {
+                                setValue('publicOn', null, { shouldValidate: true, shouldTouch: true })
+                            }
+                        })
                     }} />
                     <label htmlFor="share-study">
-                        I would like to share my study data with other researchers on Kinetic on [select a date] for the purpose of replication, extension, etc.
+                        I would like to share my study data with other researchers on Kinetic for the purpose of replication, extension, etc.
                     </label>
                 </Box>
                 {watch('shareStudy') &&
-                    <Col>
+                    <Box align='center' gap>
                         <DateTimeField
                             sm={6}
                             name='publicOn'
-                            label='Pick a Date'
+                            label='Share study on [select date]'
                             format={DateTimeFormats.shortDate}
                         />
-                    </Col>
+                        <Icon css={{ color: colors.kineticResearcher }} icon='questionCircleFill' tooltip='We recommend setting a date at least 3 months from when you make your study available to participants to allocate sufficient time for data collection.'/>
+                    </Box>
                 }
                 <FieldErrorMessage name='publicOn'/>
             </Col>
@@ -346,7 +350,7 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                         <DateTimeField
                             name='closesAt'
                             readOnly={isReadOnly || !watch('hasClosingDate')}
-                            label='Pick a Date'
+                            label='Select date'
                             format={DateTimeFormats.shortDateTime}
                             options={{
                                 defaultHour: 9,

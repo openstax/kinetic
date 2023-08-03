@@ -1043,7 +1043,7 @@ export class DefaultApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/researcher/studies/public`,
+            path: `/researcher/public_studies`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

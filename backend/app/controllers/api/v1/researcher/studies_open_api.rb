@@ -109,7 +109,7 @@ class Api::V1::Researcher::StudiesOpenApi
     end
   end
 
-  openapi_path '/researcher/studies/public' do
+  openapi_path '/researcher/public_studies' do
     operation :get do
       key :summary, 'Get all public studies available for researcher analyses'
       key :description, <<~DESC

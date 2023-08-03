@@ -3,6 +3,7 @@ import { isNil, useApi } from '@lib'
 import { dayjs, useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
 import { Toast } from '@nathanstitt/sundry/ui';
+import { useQuery } from 'react-query';
 
 export enum StudyStatus {
     Launched = 'Launched',
@@ -108,6 +109,13 @@ export function getStudyDuration(study: ParticipantStudy): number {
     if (!study.stages) return 0
 
     return sumBy(study.stages, (s) => +(s.durationMinutes || 0))
+}
+
+export const useFetchPublicStudies = () => {
+    const api = useApi()
+    return useQuery('fetchPublicStudies', () => {
+        return api.getPublicStudies().then(res => res.data || [])
+    })
 }
 
 export const useFetchStudies = () => {

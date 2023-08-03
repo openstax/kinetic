@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     ) do
 
       namespace :researcher do
-        get 'public-studies', to: 'studies#public_studies'
+        get 'public_studies', to: 'studies#public_studies'
         resources :studies do
           post 'researcher/:user_id', to: 'study_researchers#create'
           delete 'researcher/:user_id', to: 'study_researchers#destroy'
