@@ -66,7 +66,7 @@ module Api::V1::Bindings
     # How many times the study has been viewed
     attr_accessor :view_count
 
-    # When the study becomes public for sharing with other researchers. Null means not shareable.
+    # When the study becomes public for sharing with other researchers.
     attr_accessor :public_on
 
     # Number of times this study has been completed

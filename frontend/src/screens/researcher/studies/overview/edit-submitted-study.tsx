@@ -258,7 +258,7 @@ const ShareStudy: FC<{study: Study}> = () => {
                         trigger('publicOn')
                     }} />
                     <label htmlFor="share-study">
-                        I would like to share my study with other researchers on Kinetic after an embargo period during which access to my research will be restricted.
+                        I would like to share my study data with other researchers on Kinetic on [select a date] for the purpose of replication, extension, etc.
                     </label>
                 </Box>
                 {watch('shareStudy') &&

@@ -207,6 +207,54 @@ RSpec.describe 'Studies', api: :v1 do
     end
   end
 
+  describe 'GET researcher/public-studies' do
+    context 'when logged out' do
+      it 'gives unauthorized' do
+        api_get 'researcher/public-studies'
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when signed in as a non-researcher' do
+      before { stub_random_user }
+
+      it 'gives forbidden' do
+        api_get 'researcher/public-studies'
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'when signed in as a researcher' do
+      before do
+        create(:study, researchers: researcher1)
+        create(:study, researchers: researcher4, public_on: 3.days.ago)
+        stub_current_user(researcher1)
+      end
+
+      it 'returns all owned and public studies' do
+        api_get 'researcher/public-studies'
+        expect(response).to have_http_status(:success)
+        expect(response_hash[:data]).to match a_collection_including(
+          a_hash_including(
+            researchers: a_collection_including(
+              a_hash_including(
+                user_id: researcher1.user_id
+              )
+            )
+          ),
+          a_hash_including(
+            researchers: a_collection_including(
+              a_hash_including(
+                user_id: researcher4.user_id
+              )
+            )
+          )
+        )
+      end
+      
+    end
+  end
+
   describe 'PUT researcher/study' do
     let(:study1) { create(:study, researchers: researcher1) }
     let(:study2) { create(:study, researchers: [researcher1], title_for_researchers: 'Researcher add/drop') }

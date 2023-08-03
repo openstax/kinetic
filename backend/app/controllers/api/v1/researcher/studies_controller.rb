@@ -27,6 +27,17 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     render json: response_binding, status: :ok
   end
 
+  def public_studies
+    studies = current_researcher.studies.includes(:researchers, :stages, :first_launched_study)
+    all_studies = (studies + Study.public_to_researchers).uniq
+    response_binding = Api::V1::Bindings::Studies.new(
+      data: all_studies.map do |study|
+        Api::V1::Bindings::Study.create_from_model(study)
+      end
+    )
+    render json: response_binding, status: :ok
+  end
+
   def show
     response_binding = Api::V1::Bindings::Study.create_from_model(@study)
     render json: response_binding, status: :ok

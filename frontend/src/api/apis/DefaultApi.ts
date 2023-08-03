@@ -1034,6 +1034,34 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Get studies for the calling researcher as well as public studies. 
+     * Get all public studies available for researcher analyses
+     */
+    async getPublicStudiesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Studies>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researcher/studies/public`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudiesFromJSON(jsonValue));
+    }
+
+    /**
+     * Get studies for the calling researcher as well as public studies. 
+     * Get all public studies available for researcher analyses
+     */
+    async getPublicStudies(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Studies> {
+        const response = await this.getPublicStudiesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get a researcher by an ID
      * Get researcher
      */

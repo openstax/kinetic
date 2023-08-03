@@ -87,7 +87,7 @@ class Api::V1::BaseStudiesOpenApi
         key :type, :string
         key :nullable, true
         key :format, 'date-time'
-        key :description, 'When the study becomes public for sharing with other researchers. Null means not shareable.'
+        key :description, 'When the study becomes public for sharing with other researchers.'
       end
       property :completed_count do
         key :type, :number

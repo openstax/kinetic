@@ -137,7 +137,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
 
       it 'hides soft deleted studies' do
         study1.update!(is_hidden: true)
-        expect(Study.available.find_by(id: study1.id)).to be_nil
+        expect(Study.available_to_participants.find_by(id: study1.id)).to be_nil
         api_get 'participant/studies'
         expect(response_hash[:data]).not_to include(a_hash_including(id: study1.id))
       end

@@ -129,7 +129,7 @@ export interface NewStudy {
      */
     viewCount?: number;
     /**
-     * When the study becomes public for sharing with other researchers. Null means not shareable.
+     * When the study becomes public for sharing with other researchers.
      * @type {Date}
      * @memberof NewStudy
      */

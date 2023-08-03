@@ -41,7 +41,7 @@ class Study < ApplicationRecord
 
   scope :multi_stage, -> { joins(:stages).group('studies.id').having('count(study_id) > 1') }
 
-  scope :available, -> {
+  scope :available_to_participants, -> {
     where
       .not(opens_at: nil)
       .where(is_hidden: false)
@@ -50,10 +50,10 @@ class Study < ApplicationRecord
                arel[:closes_at].gteq(Time.now)))
   }
 
-  scope :shareable, -> {
+  scope :public_to_researchers, -> {
     where
-    .not(public_on: nil)
-    .where('public_on < ?', DateTime.now)
+      .not(public_on: nil)
+      .where('public_on < ?', DateTime.now)
   }
 
   def status

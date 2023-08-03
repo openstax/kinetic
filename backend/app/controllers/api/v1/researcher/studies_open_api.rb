@@ -98,7 +98,26 @@ class Api::V1::Researcher::StudiesOpenApi
       DESC
       key :operationId, 'getStudies'
       response 200 do
-        key :description, 'Success.  Returns the studies.'
+        key :description, 'Success. Returns the studies.'
+        content 'application/json' do
+          schema { key :$ref, :Studies }
+        end
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+  end
+
+  openapi_path '/researcher/studies/public' do
+    operation :get do
+      key :summary, 'Get all public studies available for researcher analyses'
+      key :description, <<~DESC
+        Get studies for the calling researcher as well as public studies.
+      DESC
+      key :operationId, 'getPublicStudies'
+      response 200 do
+        key :description, 'Success. Returns the studies.'
         content 'application/json' do
           schema { key :$ref, :Studies }
         end
