@@ -1,7 +1,7 @@
 import { cx, React } from '@common'
 import styled from '@emotion/styled'
 import { HelpLink, ResourceLinks } from './resource-links'
-import { colors } from '../theme'
+import { colors } from '@theme'
 import { Box, Col, Icon, Row } from '@components'
 
 // @ts-ignore
@@ -13,9 +13,6 @@ import RiceLogoURL from '../images/rice-logo.png'
 // @ts-ignore
 import OpenStaxURL from '../images/openstax-logo.png'
 
-import fbIcon from '@iconify-icons/bi/facebook'
-import igIcon from '@iconify-icons/bi/instagram'
-import twIcon from '@iconify-icons/bi/twitter'
 import { useIsMobileDevice } from '@lib';
 
 const Supporter = styled.a({
@@ -56,7 +53,7 @@ const Funders = () => {
                         View Other Philanthropic Supporters
                     </a>
 
-                    <p className="x-small" css={{ color: colors.grayText }}>
+                    <p className="x-small" css={{ color: colors.text }}>
                         *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
                     </p>
                 </div>
@@ -67,7 +64,7 @@ const Funders = () => {
 
 export const MobileFooter: React.FC<{ className?: string, includeFunders?: boolean }> = () => {
     return (
-        <div css={{ backgroundColor: colors.blue, color: 'white', a: { color: 'white' } }}>
+        <div css={{ backgroundColor: colors.navy, color: 'white', a: { color: 'white' } }}>
             <div className='container-lg'>
                 <Row className="py-1">
                     <Row className="py-1">
@@ -82,13 +79,13 @@ export const MobileFooter: React.FC<{ className?: string, includeFunders?: boole
                         <h4>Follow us</h4>
                         <Box gap>
                             <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org">
-                                <Icon icon={fbIcon} height={30}/>
+                                <Icon icon='facebook' height={30}/>
                             </a>
                             <a target="_blank" href="https://www.instagram.com/openstax/">
-                                <Icon icon={igIcon} height={30}/>
+                                <Icon icon='instagram' height={30}/>
                             </a>
                             <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org">
-                                <Icon icon={twIcon} height={30}/>
+                                <Icon icon='twitter' height={30}/>
                             </a>
                         </Box>
                     </Row>
@@ -108,7 +105,7 @@ export const MobileFooter: React.FC<{ className?: string, includeFunders?: boole
 
 export const DesktopFooter: React.FC<{ className?: string, includeFunders?: boolean }> = () => {
     return (
-        <div css={{ backgroundColor: colors.blue, color: 'white', a: { color: 'white' } }}>
+        <div css={{ backgroundColor: colors.navy, color: 'white', a: { color: 'white' } }}>
             <div className='container-lg'>
                 <Row css={{ padding: '20px 0' }}>
                     <Col auto direction="column">
@@ -120,9 +117,9 @@ export const DesktopFooter: React.FC<{ className?: string, includeFunders?: bool
                     <Col auto direction="column">
                         <b>Follow us</b>
                         <Box gap>
-                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org"><Icon icon={fbIcon} /></a>
-                            <a target="_blank" href="https://www.instagram.com/openstax/"><Icon icon={igIcon} /></a>
-                            <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org"><Icon icon={twIcon} /></a>
+                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org"><Icon icon='facebook' /></a>
+                            <a target="_blank" href="https://www.instagram.com/openstax/"><Icon icon='instagram' /></a>
+                            <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org"><Icon icon='twitter' /></a>
                         </Box>
                     </Col>
                     <Col auto direction="column" gap>

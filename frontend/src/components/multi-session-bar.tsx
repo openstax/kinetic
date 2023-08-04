@@ -2,8 +2,8 @@ import { React, useMemo } from '@common'
 import { filter } from 'lodash-es'
 import { ParticipantStudy } from '@api'
 import plur from 'plur'
-import { colors } from '../theme'
-import { SegmentedBar, Segment, SegmentTitle, SegmentCircle } from './segment-bar'
+import { colors } from '@theme'
+import { Segment, SegmentCircle, SegmentedBar, SegmentTitle } from './segment-bar'
 import { Icon } from './icon'
 
 export const MultiSessionBar: FC<{ study: ParticipantStudy }> = ({ study }) => {
@@ -42,7 +42,7 @@ export const MultiSessionBar: FC<{ study: ParticipantStudy }> = ({ study }) => {
                     future={!first.isCompleted}
                     past={last.isCompleted}
                 >
-                    <Icon icon="clock" color={colors.purple} />
+                    <Icon icon="clockOutline" color={colors.purple} />
                 </SegmentCircle>
                 <SegmentTitle>{duration}</SegmentTitle>
             </Segment>

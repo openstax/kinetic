@@ -79,7 +79,7 @@ export function AdminRewards() {
         <Main className="container pt-2">
             <Box justify="between" align="center" margin="bottom">
                 <h4>Scheduled Rewards</h4>
-                <Icon height={15} icon="plusCircle" data-testid="add-reward" onClick={state.addNewRecord} />
+                <Icon height={24} icon="plusCircleOutline" data-testid="add-reward" onClick={state.addNewRecord} />
             </Box>
             {state.records.map((reward, i) => (
                 <RewardCard key={reward.id || i} reward={reward} onUpdate={state.fetchRecords} />

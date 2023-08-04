@@ -270,7 +270,7 @@ const ShareStudy: FC<{study: Study}> = () => {
                             label='Share study on [select date]'
                             format={DateTimeFormats.shortDate}
                         />
-                        <Icon css={{ color: colors.kineticResearcher }} icon='questionCircleFill' tooltip="We recommend picking a date set at least 3 months after your study's opening date to allow enough time for data collection."/>
+                        <Icon css={{ color: colors.blue }} icon='helpCircle' tooltip="We recommend picking a date set at least 3 months after your study's opening date to allow enough time for data collection."/>
                     </Box>
                 }
                 <FieldErrorMessage name='publicOn'/>
@@ -291,9 +291,9 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
             <Col sm={3} direction='column' gap>
                 <h6>Closing Criteria (optional)</h6>
                 <small>Select your preferred closing criteria indicating completion of data collection process. Leave blank if unknown.</small>
-                <Box gap css={{ color: colors.kineticResearcher }} align='center'>
+                <Box gap css={{ color: colors.blue }} align='center'>
                     <small>Recommended Sample Size</small>
-                    <Icon icon='questionCircleFill' tooltip='Consider Inflating sample size by 5% of your desired N to enable exclusion as we work to amplify our recruitment efforts'/>
+                    <Icon icon='helpCircle' tooltip='Consider Inflating sample size by 5% of your desired N to enable exclusion as we work to amplify our recruitment efforts'/>
                 </Box>
             </Col>
 
@@ -321,7 +321,7 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                             placeholder='1-1000'
                             type='number'
                         />
-                        {watch('targetSampleSize') > 1000 && <small css={{ color: colors.kineticResearcher }}>
+                        {watch('targetSampleSize') > 1000 && <small css={{ color: colors.blue }}>
                             We recommend aiming for a sample size of 1000 or less as we work to amplify our recruitment efforts
                         </small>}
                         <FieldErrorMessage name='targetSampleSize'/>

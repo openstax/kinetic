@@ -1,123 +1,100 @@
 import * as React from 'react'
 import {
-    IconProps as SundryIconProps,
     Icon as SundryIcon,
     IconifyIcon,
     IconifyIconDefinition,
+    IconProps as SundryIconProps,
     setSundryIcons,
 } from '@nathanstitt/sundry/ui'
 
-import thumbsUp from '@iconify-icons/bi/hand-thumbs-up-fill'
-import exclamationTriangle from '@iconify-icons/bi/exclamation-triangle-fill'
-import xCircle from '@iconify-icons/bi/x-circle'
-import plusSquare from '@iconify-icons/bi/plus-square-fill'
-import exclamationCircle from '@iconify-icons/bi/exclamation-circle-fill'
-import clock from '@iconify-icons/bi/clock'
-import clockFill from '@iconify-icons/bi/clock-fill'
-import spin from '@iconify-icons/bi/arrow-clockwise'
-import minusSquare from '@iconify-icons/bi/dash-square'
-import plusCircle from '@iconify-icons/bi/plus-circle'
-import plus from '@iconify-icons/bi/plus'
-import close from '@iconify-icons/bi/x-square'
-import x from '@iconify-icons/bi/x'
-import back from '@iconify-icons/bi/chevron-double-left'
-import right from '@iconify-icons/bi/chevron-right'
-import tripleDot from '@iconify-icons/bi/three-dots'
-import tripleDotVertical from '@iconify-icons/bi/three-dots-vertical'
-import cancel from '@iconify-icons/bi/x-circle'
-import trash from '@iconify-icons/bi/trash'
-import checkCircle from '@iconify-icons/bi/check-circle-fill'
-import emptyCircle from '@iconify-icons/bi/circle'
-import feedback from '@iconify-icons/bi/chat-left-dots-fill'
-import search from '@iconify-icons/bi/search'
-import heart from '@iconify-icons/bi/heart-fill'
-import warning from '@iconify-icons/bi/exclamation-triangle-fill'
-import rolodex from '@iconify-icons/bi/person-rolodex'
-import list from '@iconify-icons/bi/list'
-import multiStage from '@iconify-icons/bi/stack'
-import chatLeft from '@iconify-icons/bi/chat-left-fill'
-import cloudUpload from '@iconify-icons/bi/cloud-upload'
-import cloudDownload from '@iconify-icons/bi/cloud-download'
-import questionCircleFill from '@iconify-icons/bi/question-circle-fill'
-import questionCircle from '@iconify-icons/bi/question-circle'
-import arrowLeftRight from '@iconify-icons/bi/arrow-left-right'
-import arrowUpDown from '@iconify-icons/bi/arrow-up-down'
-import arrowLeft from '@iconify-icons/bi/arrow-left'
-import arrowRight from '@iconify-icons/bi/arrow-right'
-import arrowUp from '@iconify-icons/bi/arrow-up'
-import arrowDown from '@iconify-icons/bi/arrow-down'
-import pencilFill from '@iconify-icons/bi/pencil-fill'
-import pause from '@iconify-icons/bi/pause'
-import pauseFill from '@iconify-icons/bi/pause-fill'
-import playFill from '@iconify-icons/bi/play-fill'
-import chevronLeft from '@iconify-icons/bi/chevron-left'
-import chevronRight from '@iconify-icons/bi/chevron-right'
-import chevronDown from '@iconify-icons/bi/chevron-down'
-import chevronUp from '@iconify-icons/bi/chevron-up'
-import infoCircleFill from '@iconify-icons/bi/info-circle-fill'
-import info from '@iconify-icons/bi/info-lg'
-
-const SUNDRY_PACKAGED_ICONS = {
-    thumbsUp,
-    xSimple: x,
-    exclamationCircle,
-    exclamationTriangle,
-    cancel: xCircle,
-    clock,
-    xCircle,
-    spin,
-    close,
-    plusSquare,
-    plus,
-    minusSquare,
-}
-setSundryIcons(SUNDRY_PACKAGED_ICONS)
+import clockOutline from '@iconify-icons/mdi/clock-outline'
+import plusCircleOutline from '@iconify-icons/mdi/plus-circle-outline'
+import plus from '@iconify-icons/mdi/plus'
+import minus from '@iconify-icons/mdi/minus'
+import close from '@iconify-icons/mdi/close'
+import chevronRight from '@iconify-icons/mdi/chevron-right'
+import chevronLeft from '@iconify-icons/mdi/chevron-left'
+import chevronDown from '@iconify-icons/mdi/chevron-down'
+import chevronUp from '@iconify-icons/mdi/chevron-up'
+import dotsVertical from '@iconify-icons/mdi/dots-vertical'
+import search from '@iconify-icons/mdi/search'
+import trash from '@iconify-icons/mdi/delete'
+import checkCircle from '@iconify-icons/mdi/check-circle'
+import circle from '@iconify-icons/mdi/circle-outline'
+import feedback from '@iconify-icons/mdi/feedback'
+import heart from '@iconify-icons/mdi/heart'
+import warning from '@iconify-icons/mdi/warning'
+import person from '@iconify-icons/mdi/person'
+import menu from '@iconify-icons/mdi/menu'
+import cardMultiple from '@iconify-icons/mdi/card-multiple'
+import message from '@iconify-icons/mdi/message'
+import cloudUpload from '@iconify-icons/mdi/cloud-upload'
+import cloudDownload from '@iconify-icons/mdi/cloud-download'
+import helpCircle from '@iconify-icons/mdi/help-circle'
+import pencil from '@iconify-icons/mdi/pencil'
+import pause from '@iconify-icons/mdi/pause'
+import play from '@iconify-icons/mdi/play'
+import info from '@iconify-icons/mdi/info'
+import thumbsUp from '@iconify-icons/mdi/thumb-up'
+import alert from '@iconify-icons/mdi/alert'
+import alertCircle from '@iconify-icons/mdi/alert-circle'
+import reload from '@iconify-icons/mdi/reload'
+import trophy from '@iconify-icons/mdi/trophy'
+import trophyOutline from '@iconify-icons/mdi/trophy-outline'
+import facebook from '@iconify-icons/mdi/facebook'
+import instagram from '@iconify-icons/mdi/instagram'
+import twitter from '@iconify-icons/mdi/twitter'
 
 export const ICONS = {
-    ...SUNDRY_PACKAGED_ICONS,
-    x,
+    clockOutline,
+    plusCircleOutline,
+    plus,
     close,
-    clock,
-    clockFill,
-    back,
     search,
-    plusCircle,
-    cancel,
     trash,
-    tripleDot,
-    tripleDotVertical,
     checkCircle,
-    spin,
     feedback,
     heart,
     warning,
-    emptyCircle,
-    rolodex,
-    list,
-    right,
-    multiStage,
-    chatLeft,
     cloudUpload,
     cloudDownload,
-    questionCircleFill,
-    questionCircle,
-    arrowUpDown,
-    arrowLeftRight,
-    arrowLeft,
-    arrowRight,
-    arrowUp,
-    arrowDown,
-    pencilFill,
     pause,
-    pauseFill,
-    playFill,
     chevronLeft,
     chevronRight,
     chevronDown,
     chevronUp,
-    infoCircleFill,
+    dotsVertical,
+    circle,
+    person,
+    menu,
+    cardMultiple,
+    message,
+    helpCircle,
+    pencil,
+    play,
     info,
+    trophy,
+    trophyOutline,
+    facebook,
+    twitter,
+    instagram,
 }
+
+const SUNDRY_PACKAGED_ICONS = {
+    thumbsUp,
+    xSimple: close,
+    cancel: close,
+    xCircle: close,
+    exclamationCircle: alertCircle,
+    exclamationTriangle: alert,
+    clock: clockOutline,
+    spin: reload,
+    close,
+    plusSquare: plus,
+    plus,
+    minusSquare: minus,
+}
+setSundryIcons(SUNDRY_PACKAGED_ICONS)
 
 export type IconKey = keyof typeof ICONS
 export type IconSpec = IconKey | IconifyIconDefinition | IconifyIcon

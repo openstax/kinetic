@@ -12,7 +12,6 @@ export * from './ui-states'
 export * from './incorrect-user'
 
 export * from './off-canvas'
-export * from './logo'
 
 export * from './rewards-progress-bar'
 export * from './banners-bar'

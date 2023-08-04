@@ -1,6 +1,6 @@
 import { React } from '@common'
 import styled from '@emotion/styled'
-import { colors } from '../theme'
+import { colors } from '@theme'
 
 import { useApi, useEnvironment, useIsMobileDevice, useUserInfo, useUserPreferences } from '@lib'
 import {
@@ -35,7 +35,7 @@ const Wrapper = styled(Box)({
             },
             input: {
                 padding: 10,
-                background: colors.lightGray,
+                background: colors.gray50,
                 border: 0,
                 borderRadius: 2,
             },
@@ -57,7 +57,7 @@ const SidebarWrapper = styled.div({
     borderLeft: '1px solid grey',
     height: 'auto',
     a: {
-        color: colors.darkGray,
+        color: colors.gray70,
         fontSize: 18,
     },
 })
@@ -97,7 +97,7 @@ export default function AccountDetails() {
                         <h5 className="mb-0 p-0">General</h5>
                         <a href={`${env.accounts_url}`}>
                             <span>Update Account</span>
-                            <Icon icon="right" />
+                            <Icon icon="chevronRight" />
                         </a>
                     </Box>
 
@@ -117,7 +117,7 @@ export default function AccountDetails() {
                     >
                         <h5 className="mt-5 mb-3 p-0">Email Notifications</h5>
                         <h6>Adjust your preferred email communications. </h6>
-                        <p className="x-small" css={{ color: colors.grayText }}>
+                        <p className="x-small" css={{ color: colors.text }}>
                             *Exception: when you win a prize on Kinetic, we will email you your gift card.
                         </p>
 

@@ -166,7 +166,7 @@ const StyledStep = styled.div<{ active: boolean }>(({ active }) => ({
     borderRadius: 25,
     height: 5,
     width: 20,
-    backgroundColor: active ? colors.blue : colors.gray,
+    backgroundColor: active ? colors.blue : colors.gray50,
 }))
 
 const StepIndicator: FC<{step: number, setStep: (step: number) => void}> = ({ step, setStep }) => {

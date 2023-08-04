@@ -8,7 +8,8 @@ import {
     getStudyEditUrl,
     isActive,
     isCompleted,
-    isDraft, isDraftLike,
+    isDraft,
+    isDraftLike,
     isPaused,
     isReadyForLaunch,
     isScheduled,
@@ -204,7 +205,7 @@ const StudyActionContainer: FC<{
 }
 
 const ActionIcon = styled(Icon)(({ disabled }) => ({
-    color: disabled ? colors.lightGray : colors.purple,
+    color: disabled ? colors.gray50 : colors.purple,
     cursor: disabled ? 'default' : 'pointer',
 }))
 
@@ -264,7 +265,7 @@ export const ActionColumn: React.FC<{
         <Box gap='xlarge' justify='center' align='center'>
             <div>
                 <ActionIcon
-                    icon="pencilFill"
+                    icon="pencil"
                     height={20}
                     tooltip={canEdit && 'Edit Study'}
                     disabled={!canEdit}
@@ -274,7 +275,7 @@ export const ActionColumn: React.FC<{
             <div>
                 {showResumeButton &&
                     <ActionIcon
-                        icon="playFill"
+                        icon="play"
                         tooltip={canResume && 'Resume Session'}
                         height={20}
                         disabled={!canResume}
@@ -283,7 +284,7 @@ export const ActionColumn: React.FC<{
                 }
                 {!showResumeButton &&
                     <ActionIcon
-                        icon="pauseFill"
+                        icon="pause"
                         tooltip={canPause && 'Pause Session'}
                         height={20}
                         disabled={!canPause}
@@ -293,7 +294,7 @@ export const ActionColumn: React.FC<{
             </div>
             <div>
                 <Icon
-                    icon="tripleDotVertical"
+                    icon="dotsVertical"
                     height={20}
                     color={colors.purple}
                     id="action-menu-button"

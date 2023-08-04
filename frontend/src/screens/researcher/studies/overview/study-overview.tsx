@@ -76,10 +76,10 @@ const AnalysisSection: FC <{study: Study}> = ({ study }) => {
     const nav = useNavigate()
 
     return (
-        <Box className='p-2' align='center' justify='between' css={{ border: `1px solid ${colors.lightGray}` }}>
+        <Box className='p-2' align='center' justify='between' css={{ border: `1px solid ${colors.gray50}` }}>
             <Box direction='column' gap>
                 <h5>Analyze Data</h5>
-                <small css={{ color: colors.grayText }}>
+                <small css={{ color: colors.text }}>
                     Write your R code to analyze the data relevant for this study
                 </small>
             </Box>
@@ -106,18 +106,18 @@ export const StudyInformation: FC<{ study: Study }> = ({ study }) => {
                         <Col sm={8} direction='column'>
                             <ul>
                                 <li>
-                                    <small css={{ color: colors.grayerText }}>
-                                        Study Title: <span css={{ color: colors.grayText }}>{study.titleForResearchers}</span>
+                                    <small css={{ color: colors.text }}>
+                                        Study Title: <span css={{ color: colors.text }}>{study.titleForResearchers}</span>
                                     </small>
                                 </li>
                                 <li>
-                                    <small css={{ color: colors.grayerText }}>
-                                        Description: <span css={{ color: colors.grayText }}>{study.internalDescription}</span>
+                                    <small css={{ color: colors.text }}>
+                                        Description: <span css={{ color: colors.text }}>{study.internalDescription}</span>
                                     </small>
                                 </li>
                                 <li>
-                                    <small css={{ color: colors.grayerText }}>
-                                        Tag: <span css={{ color: colors.grayText }}><Tag tag={study.category} /></span>
+                                    <small css={{ color: colors.text }}>
+                                        Tag: <span css={{ color: colors.text }}><Tag tag={study.category} /></span>
                                     </small>
                                 </li>
                             </ul>
@@ -131,23 +131,23 @@ export const StudyInformation: FC<{ study: Study }> = ({ study }) => {
                         <Col sm={8} direction='column'>
                             <ul>
                                 <li>
-                                    <small css={{ color: colors.grayerText }}>
-                                        IRB: <span css={{ color: colors.grayText }}>IRB-FY2022-19</span>
+                                    <small css={{ color: colors.text }}>
+                                        IRB: <span css={{ color: colors.text }}>IRB-FY2022-19</span>
                                     </small>
                                 </li>
                                 <li>
-                                    <small css={{ color: colors.grayerText }}>
-                                        University: <span css={{ color: colors.grayText }}>Rice University</span>
+                                    <small css={{ color: colors.text }}>
+                                        University: <span css={{ color: colors.text }}>Rice University</span>
                                     </small>
                                 </li>
                                 {pi && <li>
-                                    <small css={{ color: colors.grayerText }}>
-                                        Study PI: <span css={{ color: colors.grayText }}>{pi.firstName} {pi.lastName}</span>
+                                    <small css={{ color: colors.text }}>
+                                        Study PI: <span css={{ color: colors.text }}>{pi.firstName} {pi.lastName}</span>
                                     </small>
                                 </li>}
                                 {lead && <li>
-                                    <small css={{ color: colors.grayerText }}>
-                                        Study Lead: <span css={{ color: colors.grayText }}>{lead.firstName} {lead.lastName}</span>
+                                    <small css={{ color: colors.text }}>
+                                        Study Lead: <span css={{ color: colors.text }}>{lead.firstName} {lead.lastName}</span>
                                     </small>
                                 </li>}
                             </ul>
@@ -180,7 +180,7 @@ const AdditionalSessionsInformation: FC<{ study: Study}> = ({ study }) => {
     return (
         <Box direction='column' gap='large'>
             <svg css={{ strokeWidth: 2, height: 40 }}>
-                <line x1="0" y1="30" x2="500" y2="30" strokeDasharray={10} stroke={colors.grayText} />
+                <line x1="0" y1="30" x2="500" y2="30" strokeDasharray={10} stroke={colors.text} />
             </svg>
 
             <Box justify='between' direction='column'>
@@ -211,10 +211,10 @@ const WaitingForTemplate: FC<{study: Study}> = ({ study }) => {
             <Box direction='column' align='center' className='text-center' gap='large' alignSelf='center'>
                 <img src={Waiting} alt='waiting' height={200}/>
                 <h5 className='fw-bold'>Almost there! We’re setting up the right permissions</h5>
-                <h6 className='lh-lg' css={{ color: colors.grayerText }}>
+                <h6 className='lh-lg' css={{ color: colors.text }}>
                     Our team is creating a Qualtrics template and setting up the correct permissions for your study. You will receive an email from owlsurveys@rice.edu containing an access code to your Qualtrics template and further instructions via your registered email within the next business day.
                 </h6>
-                <h6 className='lh-lg' css={{ color: colors.grayerText }}>
+                <h6 className='lh-lg' css={{ color: colors.text }}>
                     Follow the instructions to build your task and come back here to proceed with finalizing your study and launching it on Kinetic.
                 </h6>
             </Box>

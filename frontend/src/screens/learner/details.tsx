@@ -30,7 +30,7 @@ const Part: FCWC<{ title: string, icon: IconKey }> = ({
                 <Icon icon={icon} color={colors.purple} />
                 <span>{title}</span>
             </Box>
-            <div css={{ marginBottom: '0.5rem', color: colors.grayText }}>{children}</div>
+            <div css={{ marginBottom: '0.5rem', color: colors.text }}>{children}</div>
         </Box>
     )
 }
@@ -90,7 +90,7 @@ const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
         <Box direction="column" margin={{ bottom: 'large' }}>
             <Box align='center' gap>
                 <Icon
-                    icon="multiStage"
+                    icon="cardMultiple"
                     color={colors.purple}
                 />
                 <span>Multi-Session</span>
@@ -110,13 +110,13 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
         return (
             <Box className='mb-1' direction='column'>
                 <Box gap>
-                    <Icon icon="clock" color={colors.purple} />
+                    <Icon icon="clockOutline" color={colors.purple} />
                     <Box>
                         <span>*Total: {getStudyDuration(study)}min</span>
                         <span>&nbsp;&middot; {getStudyPoints(study)}pts</span>
                     </Box>
                 </Box>
-                <Box css={{ color: colors.grayText }} direction='column'>
+                <Box css={{ color: colors.text }} direction='column'>
                     {study.stages?.map((stage, index) => (
                         <small key={index}>
                             Session {index + 1}: {stage.durationMinutes}min {stage.points}pts
@@ -129,7 +129,7 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
 
     return (
         <Box gap align="center" className='mb-1'>
-            <Icon icon="clock" color={colors.purple} />
+            <Icon icon="clockOutline" color={colors.purple} />
             <div>{firstStage.durationMinutes}min</div>
             <span>{firstStage.points}pts</span>
         </Box>
@@ -141,7 +141,7 @@ const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher })
     if (!researcher || !researcher.firstName || !researcher.lastName) return null
 
     return (
-        <Part icon="rolodex" title="About Researcher" >
+        <Part icon="person" title="About Researcher">
             <Box direction="column">
                 <Box gap>
                     <span>{researcher.firstName} {researcher.lastName}</span>
@@ -193,7 +193,7 @@ export const StudyDetailsPreview: FC<{
                     <h3>{study.titleForParticipants}</h3>
                     {study.topic && <Box gap align="center" margin={{ vertical: 'large' }}>
                         <div css={{ position: 'relative' }}>
-                            <Icon icon="chatLeft" color={colors.purple} />
+                            <Icon icon="message" color={colors.purple} />
                             <span css={{
                                 position: 'absolute',
                                 left: 6,
@@ -202,12 +202,12 @@ export const StudyDetailsPreview: FC<{
                                 fontSize: 7,
                             }}>#</span>
                         </div>
-                        {study.topic}</Box>
-                    }
+                        {study.topic}
+                    </Box>}
                     <StudyTime study={study} />
                     <StudyPart property="feedbackDescription" title="Feedback Available" icon="feedback" study={study} />
                     <MultiSession study={study} />
-                    <Box margin={{ bottom: 'large' }} css={{ color: colors.grayText }}>{study.longDescription}</Box>
+                    <Box margin={{ bottom: 'large' }} css={{ color: colors.text }}>{study.longDescription}</Box>
                     {pi && <Researcher researcher={pi} />}
                     {lead && <Researcher researcher={lead} />}
                     {/*<Researcher researcher={study.researchers?.[0]} />*/}

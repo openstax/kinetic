@@ -1,7 +1,7 @@
 import { cx, React, useCallback } from '@common'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
-import { colors, media } from '../theme'
+import { colors, media } from '@theme'
 import { Box, Footer, RewardsProgressBar, TopNavBar } from '@components'
 import { useIsMobileDevice } from '@lib'
 import { StudyTopic, studyTopics } from '@models'
@@ -138,7 +138,7 @@ const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
                     cursor: 'pointer',
                     fontWeight: 'bold',
                     borderBottom: '3px solid transparent',
-                    color: colors.grayText,
+                    color: colors.text,
                     '&.active': {
                         borderBottomColor: colors.purple,
                         color: colors.purple,

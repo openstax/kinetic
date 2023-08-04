@@ -1,5 +1,5 @@
 import { cx, React } from '@common'
-import { colors } from '../theme'
+import { colors } from '@theme'
 import styled from '@emotion/styled'
 import { Box, BoxProps } from 'boxible'
 import { CSSObject } from '@emotion/react'
@@ -79,7 +79,7 @@ export const segmentCircleStyle: CSSObject = {
         },
     },
     '&.future': {
-        background: colors.lightGray,
+        background: colors.gray50,
     },
     '&.current': {
         background: 'white',
@@ -95,9 +95,9 @@ export const segmentCircleStyle: CSSObject = {
         },
     },
     '&.past:not(.achieved)': {
-        background: colors.lightGray,
+        background: colors.gray50,
         '&:before': {
-            color: colors.darkGray,
+            color: colors.gray70,
             content: '"✕"',
         },
     },
@@ -143,7 +143,7 @@ export const SegmentedBar: FCWC<SegmentedBarProps> = ({ className, children, com
                     minHeight: `${barWidth}px`,
                     maxHeight: `${barWidth}px`,
                     borderRadius: '4px',
-                    background: colors.lightGray,
+                    background: colors.gray50,
                     zIndex: -1,
                     position: 'relative',
                 }}

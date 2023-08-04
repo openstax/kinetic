@@ -3,9 +3,7 @@ import { Icon, Segment, segmentCircleStyle, SegmentedBar, Tooltip } from '@compo
 import { RewardsSegment, useRewardsSchedule } from '@models'
 import { formatDate, toDayJS, useIsMobileDevice } from '@lib'
 import { ParticipantStudy } from '@api'
-import { colors } from '../theme'
-import trophyFilledIcon from '@iconify-icons/bi/trophy-fill'
-import trophyOutlineIcon from '@iconify-icons/bi/trophy'
+import { colors } from '@theme'
 import { CSSObject } from '@emotion/react'
 
 interface RewardsProgressBarProps {
@@ -24,7 +22,7 @@ const SegmentLabel: React.FC<{ segment: RewardsSegment }> = ({ segment }) => {
             align='center'
             className="explanation" css={{
                 fontSize: useIsMobileDevice() ? 11 : 12,
-                color: segment.isCurrent ? 'black' : colors.darkGray,
+                color: segment.isCurrent ? 'black' : colors.gray70,
                 textWrap: 'nowrap',
             }}>
             <span>{segment.totalPoints}pts</span>
@@ -80,8 +78,8 @@ const GrandPrize: React.FC<{ segment?: RewardsSegment }> = ({ segment }) => {
         <Box direction='column' align='center'>
             <Icon
                 css={{ background: 'white', marginTop: -5 }}
-                color={segment.achieved ? colors.purple : colors.lightGray}
-                icon={segment.isCurrent ? trophyFilledIcon : trophyOutlineIcon}
+                color={segment.achieved ? colors.purple : colors.gray50}
+                icon={segment.isCurrent ? 'trophy' : 'trophyOutline'}
                 height={25}
             />
             <SegmentLabel segment={segment} />

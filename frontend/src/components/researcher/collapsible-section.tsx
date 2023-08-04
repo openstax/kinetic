@@ -18,12 +18,12 @@ export const CollapsibleSection: FCWC<{
     const [expanded, toggleExpanded] = useToggle(open || !collapsible)
 
     return (
-        <Box css={{ backgroundColor: colors.pageBackground }} className='p-2' direction='column'>
+        <Box css={{ backgroundColor: colors.ash }} className='p-2' direction='column'>
             <Box justify='between'>
                 <Box direction='column' gap>
                     <h5>{title}</h5>
                     {description &&
-                        <small css={{ color: colors.grayText }}>
+                        <small css={{ color: colors.text }}>
                             {description}
                         </small>
                     }

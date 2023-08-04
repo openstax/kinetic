@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { React, useEffect, useState } from '@common'
-import { colors } from '../theme'
+import { colors } from '@theme'
 import { DefaultApi, LandStudyAbortedEnum, LandStudyRequest, ParticipantStudy } from '@api'
 import { Box, Button, ErrorPage, IncorrectUser, KineticWaves, LoadingAnimation } from '@components'
 import { isIframed, sendMessageToParent, useApi, useCurrentUser, useQueryParam } from '@lib'
@@ -62,7 +62,7 @@ const StudyMessaging: React.FC<StudyMessagingProps & { onReturnClick(): void }> 
             <Box
                 css={{
                     background: 'white',
-                    border: `2px solid ${colors.lightGray}`,
+                    border: `2px solid ${colors.gray50}`,
                     maxWidth: '100%',
                 }}
             >

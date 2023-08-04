@@ -16,6 +16,6 @@ export const CharacterCount: FC<{ max: number, name: string }> = ({ max, name })
     }
 
     return (
-        <small css={{ color: colors.grayText }}>{length} / {max} character</small>
+        <small css={{ color: colors.text }}>{length} / {max} character</small>
     )
 }

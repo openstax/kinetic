@@ -19,7 +19,7 @@ const SectionHeader = styled.h5({
 })
 
 const SectionText = styled.small({
-    color: colors.grayText,
+    color: colors.text,
 })
 
 const StepSection: FCWC<{
@@ -32,7 +32,7 @@ const StepSection: FCWC<{
             width='570px'
             css={{ border: `1px solid ${borderColor}`, borderRadius: 10 }}
         >
-            <div css={{ backgroundColor: colors.gray, padding: `1rem`, borderRadius: `10px 10px 0 0` }}>
+            <div css={{ backgroundColor: colors.gray30, padding: `1rem`, borderRadius: `10px 10px 0 0` }}>
                 <h4>{header}</h4>
             </div>
             <div css={{ padding: `0 1rem 1rem` }}>
@@ -51,7 +51,7 @@ const StepsOverview: FC = () => {
             <Box width='750px' gap='large' direction='column'>
                 <h2 className='fw-bold'>A brief overview of the study creation flow</h2>
                 <Box gap='large'>
-                    <StepSection header='Study Details' borderColor={colors.kineticResearcher}>
+                    <StepSection header='Study Details' borderColor={colors.blue}>
                         <SectionHeader>
                             1. Internal Details - 2min ETA
                         </SectionHeader>
@@ -73,7 +73,7 @@ const StepsOverview: FC = () => {
                             Add study information and describe your study in a way that appeals to your target participant population
                         </SectionText>
 
-                        <hr css={{ borderTop: `2px dashed ${colors.grayText}` }}/>
+                        <hr css={{ borderTop: `2px dashed ${colors.text}` }}/>
 
                         <SectionHeader>
                             Additional Sessions (optional) - 2min ETA
@@ -91,7 +91,7 @@ const StepsOverview: FC = () => {
                     </ResearcherButton>
                 </Box>
 
-                <StepSection header='Finalize Study' borderColor={colors.lightGray}>
+                <StepSection header='Finalize Study' borderColor={colors.gray50}>
                     <SectionHeader>5. Waiting Period</SectionHeader>
                     <SectionText>
                         Brief time during which the Kinetic team will setup the correct permissions and generate a Qualtrics template for your study
@@ -115,7 +115,7 @@ const Introduction: FC<{onClickStart: () => void}> = ({ onClickStart }) => {
                 <h2 className='fw-bold mt-2'>Create a study to collect new data</h2>
                 <img className='mt-2' height={240} width={300} src={StartProcess} alt='get-started'/>
                 <h5 className='lh-lg mt-2'>The following steps will guide you through some fundamental questions that will help you determine your study needs. This process can take about 10-20 minutes.</h5>
-                <h6 className='mt-2' css={{ color: colors.grayText }}>
+                <h6 className='mt-2' css={{ color: colors.text }}>
                     <span>If you’re rather looking to access existing Kinetic data, please visit the </span>
                     <Link to='/analysis'>analysis center.</Link>
                 </h6>

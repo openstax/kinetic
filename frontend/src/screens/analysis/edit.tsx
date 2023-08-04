@@ -3,9 +3,10 @@ import {
     Alert,
     Box,
     Col,
+    EditingForm as Form,
     FieldErrorMessage,
     FieldTitle,
-    Form,
+    FormSaveButton,
     InputField,
     PageNotFound,
     Toast,
@@ -15,7 +16,6 @@ import { Analysis, Study } from '@api'
 import { getAnalysisValidationSchema, useFetchAnalyses } from '@models'
 import { errorToString, useApi, useQueryParam } from '@lib'
 import { SelectedStudies } from './selected-studies'
-import { FormSaveButton } from '@nathanstitt/sundry/form';
 import { ResearcherFAQ } from './researcher-faq';
 
 interface EditAnalysisProps {
@@ -95,6 +95,7 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies }) => {
     return (
         <div className="container analysis mt-2">
             <Form
+                name='analysis-form'
                 onSubmit={saveAnalysis}
                 defaultValues={{
                     ...analysis,

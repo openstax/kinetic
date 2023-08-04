@@ -13,9 +13,9 @@ import { Icon } from '../icon';
 export const StyledHeader = styled('th')({
     '.header-text': {
         fontWeight: 'bold',
-        color: colors.grayText,
+        color: colors.text,
     },
-    borderBottom: `3px solid ${colors.lightGray}`,
+    borderBottom: `3px solid ${colors.gray50}`,
 });
 
 export const SortIcon: React.FC<{header: Header<Study, unknown> }> = ({ header }) => {
@@ -64,7 +64,7 @@ export const TableHeader: React.FC<{header: Header<any, unknown> }> = ({ header 
 }
 
 export const StyledRow = styled.tr({
-    borderBottom: `1px solid ${colors.lightGray}`,
+    borderBottom: `1px solid ${colors.gray50}`,
     'td': {
         padding: '1rem .5rem',
         height: '10px',
@@ -96,7 +96,7 @@ export const PaginationContainer: FC<{table: Table<any>}> = ({ table }) => {
                                 key={page}
                                 width='20px'
                                 css={{
-                                    backgroundColor: colors.kineticResearcher,
+                                    backgroundColor: colors.blue,
                                     color: colors.white,
                                 }}>
                                 <span>{page + 1}</span>

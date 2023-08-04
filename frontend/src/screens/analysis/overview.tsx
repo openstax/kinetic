@@ -40,13 +40,13 @@ const HelpTabs = styled.ul({
         paddingRight: '2.5rem',
     },
     'h6': {
-        color: colors.grayText,
+        color: colors.text,
         fontWeight: 'bolder',
     },
     '.active > h6': {
-        color: colors.kineticResearcher,
+        color: colors.blue,
         paddingBottom: '.5rem',
-        borderBottom: `4px solid ${colors.kineticResearcher}`,
+        borderBottom: `4px solid ${colors.blue}`,
     },
 })
 

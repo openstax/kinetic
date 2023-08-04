@@ -68,7 +68,7 @@ export const RunsTable: FC<{analysis: Analysis}> = ({ analysis }) => {
 const StyledLabel = styled.span({
     borderRadius: 20,
     padding: '4px 12px',
-    color: colors.grayerText,
+    color: colors.text,
 })
 
 export const RunStatus: FC<{analysisRun: AnalysisRun}> = ({ analysisRun }) => {
@@ -86,7 +86,7 @@ export const RunStatus: FC<{analysisRun: AnalysisRun}> = ({ analysisRun }) => {
         return (
             <Box gap align='center'>
                 <StyledLabel css={{ color: '#D4450C', backgroundColor: '#F8D5CD' }}>Error</StyledLabel>
-                <StatusIcon icon='tripleDot' onClick={() => setShowErrorModal(true)} tooltip='View error log'/>
+                <StatusIcon icon='dotsVertical' onClick={() => setShowErrorModal(true)} tooltip='View error log'/>
                 <ErrorLog messages={analysisRun.messages || []} show={showErrorModal} setShow={setShowErrorModal} />
             </Box>
         )
@@ -121,7 +121,7 @@ const ErrorLog: FC<{
 }
 
 const StatusIcon = styled(Icon)({
-    backgroundColor: colors.lightGray,
+    backgroundColor: colors.gray50,
     borderRadius: 25,
     padding: 2,
     color: colors.white,

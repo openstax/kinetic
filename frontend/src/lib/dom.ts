@@ -1,5 +1,5 @@
 import { useMediaMatch } from 'rooks'
-import { screenSizes } from '../theme'
+import { screenSizes } from '@theme'
 
 // TODO: maybe we should check for more attributes other than screensize
 export const useIsMobileDevice = () => {

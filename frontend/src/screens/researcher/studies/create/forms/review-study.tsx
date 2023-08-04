@@ -42,18 +42,18 @@ const EditingStudyInformation: FC<{ study: Study }> = ({ study }) => {
                     <Col sm={8} direction='column'>
                         <ul>
                             <li>
-                                <small css={{ color: colors.grayerText }}>
-                                    Study Title: <span css={{ color: colors.grayText }}>{study.titleForResearchers}</span>
+                                <small css={{ color: colors.text }}>
+                                    Study Title: <span css={{ color: colors.text }}>{study.titleForResearchers}</span>
                                 </small>
                             </li>
                             <li>
-                                <small css={{ color: colors.grayerText }}>
-                                    Description: <span css={{ color: colors.grayText }}>{study.internalDescription}</span>
+                                <small css={{ color: colors.text }}>
+                                    Description: <span css={{ color: colors.text }}>{study.internalDescription}</span>
                                 </small>
                             </li>
                             <li>
-                                <small css={{ color: colors.grayerText }}>
-                                    Tag: <span css={{ color: colors.grayText }}><Tag tag={study.category}/></span>
+                                <small css={{ color: colors.text }}>
+                                    Tag: <span css={{ color: colors.text }}><Tag tag={study.category}/></span>
                                 </small>
                             </li>
                         </ul>
@@ -70,24 +70,24 @@ const EditingStudyInformation: FC<{ study: Study }> = ({ study }) => {
                     <Col sm={8} direction='column'>
                         <ul>
                             <li>
-                                <small css={{ color: colors.grayerText }}>
-                                    IRB: <span css={{ color: colors.grayText }}>IRB-FY2022-19</span>
+                                <small css={{ color: colors.text }}>
+                                    IRB: <span css={{ color: colors.text }}>IRB-FY2022-19</span>
                                 </small>
                             </li>
                             <li>
-                                <small css={{ color: colors.grayerText }}>
-                                    University: <span css={{ color: colors.grayText }}>Rice University</span>
+                                <small css={{ color: colors.text }}>
+                                    University: <span css={{ color: colors.text }}>Rice University</span>
                                 </small>
                             </li>
                             {pi && <li>
-                                <small css={{ color: colors.grayerText }}>
-                                    Study PI: <span css={{ color: colors.grayText }}>{pi.firstName} {pi.lastName}</span>
+                                <small css={{ color: colors.text }}>
+                                    Study PI: <span css={{ color: colors.text }}>{pi.firstName} {pi.lastName}</span>
                                 </small>
                             </li>}
                             {lead && <li>
-                                <small css={{ color: colors.grayerText }}>
+                                <small css={{ color: colors.text }}>
                                     Study Lead: <span
-                                        css={{ color: colors.grayText }}>{lead.firstName} {lead.lastName}</span>
+                                        css={{ color: colors.text }}>{lead.firstName} {lead.lastName}</span>
                                 </small>
                             </li>}
                         </ul>
@@ -130,7 +130,7 @@ const AdditionalSessionsOverview: FC<{ study: Study }> = ({ study }) => {
     return (
         <Box direction='column' gap='large'>
             <svg css={{ strokeWidth: 2, height: 40 }}>
-                <line x1="0" y1="30" x2="500" y2="30" strokeDasharray={10} stroke={colors.grayText}/>
+                <line x1="0" y1="30" x2="500" y2="30" strokeDasharray={10} stroke={colors.text}/>
             </svg>
 
             <Box justify='between' direction='column'>

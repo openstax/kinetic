@@ -70,7 +70,7 @@ export function AdminBanners() {
         <Main className="container pt-2">
             <Box justify="between" align="center" margin="bottom">
                 <h4>Scheduled Banners</h4>
-                <Icon height={15} icon="plusCircle" data-testid="add-banner" onClick={state.addNewRecord} />
+                <Icon height={24} icon="plusCircleOutline" data-testid="add-banner" onClick={state.addNewRecord} />
             </Box>
             {state.records.map((banner, i) => <Banner key={banner.id || i} banner={banner} onUpdate={state.fetchRecords} />)}
         </Main>

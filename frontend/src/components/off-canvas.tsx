@@ -10,7 +10,6 @@ const useOffCanvas = ({ show, onHide }: { show: boolean, onHide?(): void }) => {
     const cbRef = useCallback((el: HTMLElement | null) => {
         if (!el) return
         const bs = BSOffcanvas.getOrCreateInstance(el)
-        bs
         setBs(bs)
     }, [setBs])
 
@@ -60,7 +59,7 @@ export const OffCanvas: FCWC<OffCanvasProps> = ({ show, onHide, className, child
         >
             <div className="offcanvas-header">
                 <h5 className="offcanvas-title" id={id}>{title}</h5>
-                <Icon height={24} icon="x" onClick={close} />
+                <Icon height={24} icon="close" onClick={close} />
             </div>
             <Box className="offcanvas-body" direction="column">
                 {children}

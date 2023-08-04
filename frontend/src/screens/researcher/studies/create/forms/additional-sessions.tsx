@@ -49,7 +49,7 @@ const Sessions: FC = () => {
                 align='center'
                 data-testid='add-session'
                 css={{
-                    border: `1px solid ${colors.lightGray}`,
+                    border: `1px solid ${colors.gray50}`,
                     padding: 12,
                 }}
                 onClick={addSession}
@@ -72,8 +72,8 @@ const AdditionalSession: FC<{
     const prevStagePoints = getValues(`stages.${index - 1}.points`)
 
     return (
-        <Col direction='column' css={{ border: `1px solid ${colors.lightGray}`, borderRadius: 10 }}>
-            <Box css={{ backgroundColor: colors.gray, padding: `1rem`, borderRadius: `10px 10px 0 0` }} justify='between'>
+        <Col direction='column' css={{ border: `1px solid ${colors.gray50}`, borderRadius: 10 }}>
+            <Box css={{ backgroundColor: colors.gray30, padding: `1rem`, borderRadius: `10px 10px 0 0` }} justify='between'>
                 <h4>Session {index + 1}</h4>
                 <Icon color={colors.red} icon='trash' onClick={() => onDelete(index) } />
             </Box>

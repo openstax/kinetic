@@ -1,26 +1,26 @@
 import { Box, React } from '../common'
-import { colors } from '../theme'
+import { colors } from '@theme'
 
 export const OXColoredStripe = () => (
     <Box height="10" className="ox-colored-stripe">
         <span css={{
-            backgroundColor: colors.orange,
+            backgroundColor: colors.osOrange,
             flex: 3.5,
         }}></span>
         <span css={{
-            backgroundColor: colors.primaryBlue,
+            backgroundColor: colors.osBlue,
             flex: 1.5,
         }}></span>
         <span css={{
-            backgroundColor: colors.red,
+            backgroundColor: colors.osRed,
             flex: 1,
         }}></span>
         <span css={{
-            backgroundColor: colors.yellow,
+            backgroundColor: colors.osYellow,
             flex: 2.5,
         }}></span>
         <span css={{
-            backgroundColor: colors.teal,
+            backgroundColor: colors.osTeal,
             flex: 1.5,
         }}></span>
     </Box>

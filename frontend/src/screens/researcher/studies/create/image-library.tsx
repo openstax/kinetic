@@ -4,14 +4,14 @@ import { colors } from '@theme';
 
 const CategoryLink = styled.small({
     cursor: 'pointer',
-    color: colors.kineticResearcher,
+    color: colors.blue,
     textDecoration: 'underline',
     textUnderlineOffset: '.4rem',
 })
 
 const UncheckedCircle = styled.div({
     position: 'absolute',
-    border: `2px solid ${colors.lightGray}`,
+    border: `2px solid ${colors.gray50}`,
     width: 15,
     height: 15,
     borderRadius: 25,
@@ -22,7 +22,7 @@ const UncheckedCircle = styled.div({
 const CheckedCircle = () => (
     <Box align='center' justify='center' css={{
         position: 'absolute',
-        border: `2px solid ${colors.kineticResearcher}`,
+        border: `2px solid ${colors.blue}`,
         width: 15,
         height: 15,
         borderRadius: 25,
@@ -30,9 +30,9 @@ const CheckedCircle = () => (
         right: 10,
     }}>
         <div css={{
-            color: colors.kineticResearcher,
+            color: colors.blue,
             position: 'absolute',
-            background: colors.kineticResearcher,
+            background: colors.blue,
             width: 7,
             height: 7,
             borderRadius: 50,
@@ -59,7 +59,7 @@ const ImageCard: FC<{
             }}
         >
             <img src={getImageUrl(imageId)} data-testid='card-image' alt={imageId} width={250} height={140} css={{
-                border: `1px solid ${colors.lightGray}`,
+                border: `1px solid ${colors.gray50}`,
                 // padding: `0 25px`,
             }}/>
             {selectedImage === imageId ? <CheckedCircle/> : <UncheckedCircle/>}
@@ -104,7 +104,7 @@ export const ImageLibrary: FC<{
                     <Col sm={2}
                         direction='column'
                         css={{
-                            backgroundColor: colors.pageBackground,
+                            backgroundColor: colors.ash,
                             padding: `20px 15px`,
                         }}
                         gap='large'

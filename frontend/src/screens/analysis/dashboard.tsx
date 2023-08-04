@@ -160,7 +160,7 @@ const NoAnalyses: React.FC<{
     if (filteredLength) return null
     return (
         <Box direction='column' align='center' justify='center' className='mt-10' gap='large'>
-            <h3 css={{ color: colors.lightGray }}>
+            <h3 css={{ color: colors.gray50 }}>
                 No data
             </h3>
             {!analyses.length && <span>

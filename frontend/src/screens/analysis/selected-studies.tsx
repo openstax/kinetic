@@ -213,8 +213,8 @@ const useStudyTable = (studies: Study[]) => {
                         </span>
                         <Icon height={24}
                             className='cursor-pointer'
-                            color={colors.lightGray}
-                            icon='infoCircleFill'
+                            color={colors.gray50}
+                            icon='helpCircle'
                             tooltip={info.row.original.internalDescription}
                         />
                     </Box>
@@ -227,7 +227,7 @@ const useStudyTable = (studies: Study[]) => {
                 <Box gap>
                     <span>Sample Size</span>
                     <Tooltip tooltip='Total number of study completions' className='d-flex'>
-                        <Icon css={{ color: colors.tooltipBlue }} icon='questionCircleFill' height={14}/>
+                        <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={14}/>
                     </Tooltip>
                 </Box>
             ),

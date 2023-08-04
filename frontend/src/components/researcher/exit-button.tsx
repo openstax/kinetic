@@ -9,7 +9,7 @@ export const ExitButton: FC<{navTo: string}> = ({ navTo }) => {
             css={{
                 textDecoration: 'underline',
                 textUnderlineOffset: '.5rem',
-                color: colors.grayText,
+                color: colors.text,
                 cursor: 'pointer',
                 alignSelf: 'end',
             }}

@@ -2,7 +2,7 @@ import { BannerMessage } from '@api'
 import { Box, Icon } from '@components'
 import { cx, React } from '@common'
 import { useBanners } from '@models'
-import { colors } from '../theme'
+import { colors } from '@theme'
 import { useIsMobileDevice } from '@lib';
 
 const Banner: React.FC<{
@@ -15,7 +15,7 @@ const Banner: React.FC<{
         </span>
         <Icon
             height={25}
-            icon="x"
+            icon="close"
             onClick={() => onRemove(banner)}
             color="white"
         />
