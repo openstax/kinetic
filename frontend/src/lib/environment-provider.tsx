@@ -4,7 +4,7 @@ import { ErrorPage, IncorrectUser, LoadingAnimation } from '@components'
 import { useLocation } from 'react-router-dom'
 import { ENV } from './env'
 import { useApi } from './api-config'
-import { UserPreferences } from '@api'
+import { useQuery } from 'react-query';
 
 export const EnvironmentContext = React.createContext<Environment | null>(null)
 
@@ -54,9 +54,8 @@ export const useUserInfo = () => {
 
 export const useUserPreferences = () => {
     const api = useApi()
-    const [preferences, setPreferences] = useState<UserPreferences | null>(null)
-    useEffect(() => {
-        api.getPreferences().then(setPreferences)
-    }, [])
-    return preferences
+
+    return useQuery('getPreferences', () => {
+        return api.getPreferences()
+    })
 }
