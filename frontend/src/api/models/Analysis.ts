@@ -19,6 +19,12 @@ import {
     AnalysisResearcherFromJSONTyped,
     AnalysisResearcherToJSON,
 } from './AnalysisResearcher';
+import type { AnalysisRun } from './AnalysisRun';
+import {
+    AnalysisRunFromJSON,
+    AnalysisRunFromJSONTyped,
+    AnalysisRunToJSON,
+} from './AnalysisRun';
 import type { StudyAnalysis } from './StudyAnalysis';
 import {
     StudyAnalysisFromJSON,
@@ -33,11 +39,17 @@ import {
  */
 export interface Analysis {
     /**
+     * The analysis runs.
+     * @type {Array<AnalysisRun>}
+     * @memberof Analysis
+     */
+    runs?: Array<AnalysisRun>;
+    /**
      * ID of analysis
      * @type {number}
      * @memberof Analysis
      */
-    id?: number;
+    readonly id?: number;
     /**
      * Title of analysis
      * @type {string}
@@ -55,7 +67,7 @@ export interface Analysis {
      * @type {string}
      * @memberof Analysis
      */
-    repositoryUrl: string;
+    repositoryUrl?: string;
     /**
      * Api Key of analysis
      * @type {string}
@@ -68,6 +80,12 @@ export interface Analysis {
      * @memberof Analysis
      */
     researchers?: Array<AnalysisResearcher>;
+    /**
+     * The study ids that the analysis reads from.
+     * @type {Array<number>}
+     * @memberof Analysis
+     */
+    studyIds?: Array<number>;
     /**
      * The studies that the analysis reads from.
      * @type {Array<StudyAnalysis>}
@@ -83,7 +101,6 @@ export function instanceOfAnalysis(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "title" in value;
     isInstance = isInstance && "description" in value;
-    isInstance = isInstance && "repositoryUrl" in value;
 
     return isInstance;
 }
@@ -98,12 +115,14 @@ export function AnalysisFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
+        'runs': !exists(json, 'runs') ? undefined : ((json['runs'] as Array<any>).map(AnalysisRunFromJSON)),
         'id': !exists(json, 'id') ? undefined : json['id'],
         'title': json['title'],
         'description': json['description'],
-        'repositoryUrl': json['repository_url'],
+        'repositoryUrl': !exists(json, 'repository_url') ? undefined : json['repository_url'],
         'apiKey': !exists(json, 'api_key') ? undefined : json['api_key'],
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(AnalysisResearcherFromJSON)),
+        'studyIds': !exists(json, 'study_ids') ? undefined : json['study_ids'],
         'studies': !exists(json, 'studies') ? undefined : ((json['studies'] as Array<any>).map(StudyAnalysisFromJSON)),
     };
 }
@@ -117,12 +136,13 @@ export function AnalysisToJSON(value?: Analysis | null): any {
     }
     return {
         
-        'id': value.id,
+        'runs': value.runs === undefined ? undefined : ((value.runs as Array<any>).map(AnalysisRunToJSON)),
         'title': value.title,
         'description': value.description,
         'repository_url': value.repositoryUrl,
         'api_key': value.apiKey,
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(AnalysisResearcherToJSON)),
+        'study_ids': value.studyIds,
         'studies': value.studies === undefined ? undefined : ((value.studies as Array<any>).map(StudyAnalysisToJSON)),
     };
 }

@@ -3,6 +3,7 @@ import { isNil, useApi } from '@lib'
 import { dayjs, useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
 import { Toast } from '@nathanstitt/sundry/ui';
+import { useQuery } from 'react-query';
 
 export enum StudyStatus {
     Launched = 'Launched',
@@ -110,6 +111,13 @@ export function getStudyDuration(study: ParticipantStudy): number {
     return sumBy(study.stages, (s) => +(s.durationMinutes || 0))
 }
 
+export const useFetchPublicStudies = () => {
+    const api = useApi()
+    return useQuery('fetchPublicStudies', () => {
+        return api.getPublicStudies().then(res => res.data || [])
+    })
+}
+
 export const useFetchStudies = () => {
     const api = useApi()
     const [studies, setStudies] = useState<Study[]>([])
@@ -158,6 +166,23 @@ export const useFetchStudy = (id: string) => {
     }, [id])
 
     return { loading, study, setStudy, allStudies, setAllStudies }
+}
+
+export type StudyCategory = 'Cognitive Task & Assessment' | 'Learner Characteristics' | 'Educational Research' | 'Product & Organizational Research' | 'Transfer of Learning'
+export const studyCategories: StudyCategory[] = [
+    'Cognitive Task & Assessment',
+    'Learner Characteristics',
+    'Educational Research',
+    'Product & Organizational Research',
+    'Transfer of Learning',
+]
+
+export const studyCategoryDescriptions = {
+    'Cognitive Task & Assessment': 'Measures of human cognition, such as working memory, reasoning, and problem-solving, as well as prior knowledge and skills',
+    'Learner Characteristics': 'Individual differences measures related to learning and education that provide insight into who is the learner',
+    'Educational Research': 'Learning and educational studies, such as A/B/N tests, quasi experiments, and single-domain interventional research',
+    'Product & Organizational Research': 'Surveys, assessments, and/or interventions related to understanding learner needs, such as product development and UX design',
+    'Transfer of Learning': 'Interventions that assess learning or other outcomes across domains',
 }
 
 export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other'

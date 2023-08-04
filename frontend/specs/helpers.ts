@@ -53,13 +53,13 @@ export const interceptStudyLaunch = async ({ page }: { page: Page }) => {
         const response = await page.request.fetch(route.request())
         const body = await response.json()
         body.url = '/'
-        route.fulfill({ response, body: JSON.stringify(body) });
+        return route.fulfill({ response, body: JSON.stringify(body) });
     });
 }
 
 export const interceptStudyLand = async ({ page }: { page: Page }) => {
     await page.route(/study\/land\/d+/, async route => {
-        route.fulfill({ status: 200, body: '{}' })
+        return route.fulfill({ status: 200, body: '{}' })
     });
 }
 
@@ -81,7 +81,7 @@ export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin
     await page.waitForSelector('.studies')
 }
 
-// TODO Can't delete active studies now.
+// TODO Can't delete active studies now. We can repurpose this to delete a draft in the future
 export const rmStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
     await loginAs({ page, login: 'researcher' })
     await goToPage({ page, path: `/studies` })
@@ -100,15 +100,11 @@ export const getIdFromUrl = async (page: Page): Promise<number | undefined> => {
 
 interface createStudyArgs {
     page: Page
-    name: string
+    studyName?: string
     approveAndLaunchStudy?: boolean
     multiSession?: boolean
+    description?: string
 }
-
-// TODO Helper function for closing criteria on study overview page (once that page is finalized)
-// export const setClosingCriteria = async(page: Page) => {
-//
-// }
 
 export const approveWaitingStudy = async(page: Page, studyId: number) => {
     await goToPage({ page, path: '/admin/approve-studies', loginAs: 'admin' })
@@ -137,20 +133,23 @@ export const launchApprovedStudy = async(page: Page, studyId: number, multiSessi
     await page.click('testId=launch-study-button')
     await page.waitForLoadState('networkidle')
     await page.click('testId=primary-action')
-    await logout({ page })
 }
 
 export const createStudy = async ({
     page,
-    name,
-    approveAndLaunchStudy = false,
+    studyName = null,
+    approveAndLaunchStudy = true,
     multiSession = false,
+    description = faker.commerce.color(),
 }: createStudyArgs) => {
+    const name = studyName || faker.commerce.productName()
     // Step 1 - Internal Details
-    await goToPage({ page, path: '/study/edit/new', loginAs: 'researcher' })
+    await loginAs({ page, login: 'researcher' })
+    await goToPage({ page, path: '/study/edit/new' })
     await page.fill('[name=titleForResearchers]', name)
-    await page.fill('[name=internalDescription]', faker.commerce.color())
+    await page.fill('[name=internalDescription]', description)
     await page.click("input[value='Learner Characteristics']")
+    await page.waitForTimeout(200)
 
     await expect(page.locator('testId=study-primary-action')).not.toBeDisabled()
     await page.click('testId=study-primary-action')
@@ -231,6 +230,7 @@ export const selectFirstDropdownItem = async (
     { fieldName, page }: { fieldName: string, page: Page }
 ) => {
     await page.locator('.select', { has: page.locator(`input[name=${fieldName}]`) }).click()
+
     await page.keyboard.press('Enter')
 }
 

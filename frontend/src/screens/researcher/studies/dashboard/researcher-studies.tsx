@@ -1,4 +1,4 @@
-import { cx, React, styled, useNavigate, useState } from '@common'
+import { cx, React, styled, useEffect, useNavigate, useState } from '@common'
 import { Box, Button, Icon, Page } from '@components'
 import { StudyStatus } from '@models'
 import { colors } from '@theme';
@@ -6,6 +6,7 @@ import 'bootstrap/js/dist/dropdown'
 import { StudiesTable } from './studies-table';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { StudyStatusEnum } from '@api';
+import { useSearchParams } from 'react-router-dom';
 
 const NavTabs = styled.ul({
     padding: '1rem 0',
@@ -28,14 +29,15 @@ const NavTabs = styled.ul({
 
 export default function ResearcherStudies() {
     const nav = useNavigate()
+    let [searchParams, setSearchParams] = useSearchParams();
     const [currentStatus, setCurrentStatus] = useState<StudyStatus>(StudyStatus.Launched)
     const [filters, setFilters] = useState<ColumnFiltersState>([
         { id: 'status', value: ['active', 'paused', 'scheduled'] },
     ])
 
-    const setStatus = (ev: React.MouseEvent<HTMLAnchorElement>) => {
-        const status = ev.currentTarget.dataset.status! as StudyStatus
+    const setStatus = (status: StudyStatus) => {
         setCurrentStatus(status)
+        setSearchParams({ status: status })
         switch (status) {
             case StudyStatus.Completed:
                 setFilters([{ id: 'status', value: [StudyStatusEnum.Completed] }])
@@ -48,6 +50,18 @@ export default function ResearcherStudies() {
                 break
         }
     }
+
+    const onStatusChange = (ev: React.MouseEvent<HTMLAnchorElement>) => {
+        const status = ev.currentTarget.dataset.status! as StudyStatus
+        setStatus(status)
+    }
+
+    useEffect(() => {
+        let initialStatus = searchParams.get('status') as StudyStatus || StudyStatus.Launched
+        if (initialStatus in StudyStatus) {
+            setStatus(initialStatus)
+        }
+    }, [searchParams])
 
     return (
         <Page className='studies-dashboard'>
@@ -67,17 +81,17 @@ export default function ResearcherStudies() {
             </Box>
             <NavTabs className="nav nav-tabs">
                 <li className="nav-item">
-                    <a href="#" onClick={setStatus} data-status="Launched" className={cx('nav-link', { active: currentStatus == StudyStatus.Launched })}>
+                    <a data-target='#' onClick={onStatusChange} data-status="Launched" className={cx('nav-link cursor-pointer', { active: currentStatus == StudyStatus.Launched })}>
                         <h4>Launched</h4>
                     </a>
                 </li>
                 <li className="nav-item">
-                    <a href="#" onClick={setStatus} data-status="Draft" className={cx('nav-link', { active: currentStatus == StudyStatus.Draft })}>
+                    <a data-target='#' onClick={onStatusChange} data-status="Draft" className={cx('nav-link cursor-pointer', { active: currentStatus == StudyStatus.Draft })}>
                         <h4>Draft</h4>
                     </a>
                 </li>
                 <li className="nav-item">
-                    <a href="#" onClick={setStatus} data-status="Completed" className={cx('nav-link', { active: currentStatus == StudyStatus.Completed })}>
+                    <a data-target='#' onClick={onStatusChange} data-status="Completed" className={cx('nav-link cursor-pointer', { active: currentStatus == StudyStatus.Completed })}>
                         <h4>Completed</h4>
                     </a>
                 </li>

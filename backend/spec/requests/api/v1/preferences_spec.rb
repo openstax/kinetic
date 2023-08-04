@@ -75,6 +75,12 @@ RSpec.describe 'Environment', api: :v1 do
         expect(UserPreferences.for_user_id(user_id).cycle_deadlines_email).to be true
       end
 
+      it 'updates the settings' do
+        post '/api/v1/preferences', params: { preferences: { has_viewed_analysis_tutorial: true } }
+        expect(response).to have_http_status(:accepted)
+        expect(UserPreferences.for_user_id(user_id).has_viewed_analysis_tutorial).to be true
+      end
+
     end
   end
 

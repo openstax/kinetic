@@ -27,6 +27,17 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     render json: response_binding, status: :ok
   end
 
+  def public_studies
+    studies = current_researcher.studies.includes(:researchers, :stages, :first_launched_study)
+    all_studies = (studies + Study.public_to_researchers).uniq
+    response_binding = Api::V1::Bindings::Studies.new(
+      data: all_studies.map do |study|
+        Api::V1::Bindings::Study.create_from_model(study)
+      end
+    )
+    render json: response_binding, status: :ok
+  end
+
   def show
     response_binding = Api::V1::Bindings::Study.create_from_model(@study)
     render json: response_binding, status: :ok
@@ -36,10 +47,9 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
     render(json: error, status: error.status_code) and return if error
 
-    notify_researchers(inbound_binding.researchers || [])
+    notify_researchers(inbound_binding.researchers || []) if inbound_binding.researchers
 
     @study.update!(inbound_binding.to_hash.except(:researchers, :stages))
-    @study.reopen_if_possible
 
     unless inbound_binding.stages.nil?
       @study.stages.clear
@@ -49,6 +59,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       end
     end
 
+    @study.reopen_if_possible
     response_binding = Api::V1::Bindings::Study.create_from_model(@study)
     render json: response_binding, status: :ok
   end
@@ -74,30 +85,32 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   protected
 
   def notify_researchers(researchers)
-    new_researcher_ids = researchers.map(&:id)
-    old_researcher_ids = @study.study_researchers.map(&:researcher_id)
+    new_researchers = researchers.map do |new_researcher|
+      { id: new_researcher.id, role: new_researcher.role }
+    end
+    old_researchers = @study.study_researchers.map do |old_researcher|
+      { id: old_researcher.researcher_id, role: old_researcher.role }
+    end
 
-    return if new_researcher_ids == old_researcher_ids
+    return if new_researchers == old_researchers
 
-    added_researchers_ids = (new_researcher_ids - old_researcher_ids) - [@current_researcher.id]
-    removed_researchers_ids = (old_researcher_ids - new_researcher_ids) - [@current_researcher.id]
-
-    researchers.each do |researcher|
-      next unless added_researchers_ids.include?(researcher.id)
-
+    new_researchers.each do |researcher|
       @study.study_researchers.create!(
-        researcher_id: researcher.id,
-        role: researcher.role
+        researcher_id: researcher[:id],
+        role: researcher[:role]
       )
     end
 
-    removed_researchers_ids.each do |removed_researcher_id|
+    old_researchers.each do |old_researcher|
       @study.study_researchers.delete(
-        @study.study_researchers.find_by(researcher_id: removed_researcher_id)
+        @study.study_researchers.find_by(
+          researcher_id: old_researcher[:id],
+          role: old_researcher[:role]
+        )
       )
     end
 
-    ResearcherNotifications.notify_study_researchers(@study.study_researchers, [], @study)
+    ResearcherNotifications.notify_study_researchers(@study, @current_researcher)
   end
 
   def set_study

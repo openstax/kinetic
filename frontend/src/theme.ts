@@ -19,7 +19,6 @@ export const colors = {
     text: '#212529',
     grayText: '#848484',
     grayerText: '#424242',
-    input: { border: '#ced4da' },
     line: '#cfcfcf',
     white: '#ffffff',
 }

@@ -18,21 +18,14 @@ RSpec.describe ResearcherNotifications, type: :mailer do
     )
   end
 
-  # TODO: Removed researcher tests
   it 'notifies researchers that were added and removed from study' do
     assert_emails 1 do
-      described_class.notify_study_researchers([added_researcher], [], study)
+      described_class.notify_study_researchers(study, removed_researcher)
     end
 
     # Invited email
     email1 = ActionMailer::Base.deliveries.first
     expect(email1.to).to eq [added_researcher_info.email_address]
     expect(email1.subject).to match 'OpenStax Kinetic: You’ve been invited to collaborate on a study'
-
-    # Will use this when we start notifying removed users as well
-    # Removed email
-    # email2 = ActionMailer::Base.deliveries.last
-    # expect(email2.to).to eq [removed_researcher_info.email_address]
-    # expect(email2.subject).to match "You've been removed from a study"
   end
 end

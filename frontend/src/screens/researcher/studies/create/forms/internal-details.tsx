@@ -1,18 +1,17 @@
-import { Box, React, useMemo, Yup } from '@common';
+import { Box, React, Yup } from '@common';
 import { Col, FieldErrorMessage, FieldTitle, InputField, ResearcherDetailedCheckbox, StepHeader } from '@components';
 import { Study } from '@api';
 
-export const internalDetailsValidation = (studies: Study[], study: Study) => {
-    const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])
+export const internalDetailsValidation = (allOtherStudies: Study[]) => {
     return {
         titleForResearchers: Yup.string().when('step', {
             is: 0,
             then: (s: Yup.BaseSchema) => s.required('Required').max(45)
                 .test(
                     'Unique',
-                    'This study title is already in use. Please change your study title to make it unique on Kinetic..',
+                    'This study title is already in use. Please change your study title to make it unique on Kinetic.',
                     (value?: string) => {
-                        if (!studies.length) {
+                        if (!allOtherStudies.length) {
                             return true
                         }
                         return allOtherStudies.every(study => study.titleForResearchers?.toLowerCase().trim() !== value?.toLowerCase().trim())

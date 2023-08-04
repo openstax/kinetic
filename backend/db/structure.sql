@@ -204,7 +204,7 @@ CREATE TABLE public.analyses (
     id bigint NOT NULL,
     title text NOT NULL,
     description text NOT NULL,
-    repository_url text NOT NULL,
+    repository_url text,
     api_key text DEFAULT public.api_key('an'::text, 18),
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL
@@ -302,9 +302,9 @@ CREATE TABLE public.analysis_runs (
     analysis_id bigint NOT NULL,
     api_key text DEFAULT public.api_key('rn'::text, 18) NOT NULL,
     message text NOT NULL,
-    did_succeed boolean DEFAULT false,
     started_at timestamp with time zone,
-    finished_at timestamp with time zone
+    finished_at timestamp with time zone,
+    status integer DEFAULT 0
 );
 
 
@@ -668,8 +668,8 @@ CREATE TABLE public.studies (
     topic character varying,
     subject character varying,
     internal_description character varying,
-    shareable_after_months integer,
-    target_sample_size integer
+    target_sample_size integer,
+    public_on timestamp with time zone
 );
 
 
@@ -767,7 +767,8 @@ CREATE TABLE public.user_preferences (
     study_available_email boolean DEFAULT false NOT NULL,
     session_available_email boolean DEFAULT true NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
+    updated_at timestamp(6) with time zone NOT NULL,
+    has_viewed_analysis_tutorial boolean DEFAULT false
 );
 
 
@@ -1487,6 +1488,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230404161002'),
 ('20230421153444'),
 ('20230524011047'),
-('20230616223657');
+('20230616223657'),
+('20230626173336'),
+('20230712163112'),
+('20230726142755'),
+('20230802165629');
 
 

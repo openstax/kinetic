@@ -13,7 +13,6 @@ import {
     Modal,
     ResearcherButton,
     ResearcherCheckbox,
-    SelectField,
     useFormContext,
     useFormState,
 } from '@components';
@@ -28,16 +27,15 @@ const studyValidation = Yup.object().shape({
         then: Yup.number()
             .nullable(true)
             .required('Required')
-            .max(1000, 'We recommend aiming for a sample size of 1000 or less as we work to amplify our recruitment efforts')
             .min(1, 'Only whole numbers above 0 are valid'),
     }),
     closesAt: Yup.mixed().when('hasClosingDate', {
         is: true,
         then: Yup.date().nullable(true).required('Required'),
     }),
-    shareableAfterMonths: Yup.mixed().when('shareStudy', {
+    publicOn: Yup.mixed().when('shareStudy', {
         is: true,
-        then: Yup.number().typeError('Required'),
+        then: Yup.date().nullable(true).required('Required'),
     }),
     stages: Yup.array().of(
         Yup.object().shape({
@@ -69,8 +67,7 @@ export const EditSubmittedStudy: FC<{
                 ...study,
                 hasSampleSize: !!study.targetSampleSize,
                 hasClosingDate: !!study.closesAt,
-                shareStudy: study.shareableAfterMonths == 0 || !!study.shareableAfterMonths,
-                shareableAfterMonths: study.shareableAfterMonths == undefined ? null : study.shareableAfterMonths,
+                shareStudy: !!study.publicOn,
                 stages: isReadyForLaunch(study) ? study.stages?.map((stage, index) => {
                     if (index == 0) {
                         return stage
@@ -214,6 +211,7 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
 }
 
 const OpensAt: FC = () => {
+    const { isReadOnly } = useFormContext()
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
@@ -222,19 +220,19 @@ const OpensAt: FC = () => {
             </Col>
 
             <Col sm={6} direction='column' gap>
-                <div>
-                    <DateTimeField
-                        name='opensAt'
-                        label='Pick a Date'
-                        withTime
-                        format={DateTimeFormats.shortDateTime}
-                        options={{
-                            defaultHour: 9,
-                            minDate: 'today',
-                        }}
-                        hint='Your Local Timezone'
-                    />
-                </div>
+                <DateTimeField
+                    name='opensAt'
+                    label='Select date'
+                    readOnly={isReadOnly}
+                    withTime
+                    format={DateTimeFormats.shortDateTime}
+                    options={{
+                        defaultHour: 9,
+                        minDate: 'today',
+                        minTime: Date.now(),
+                    }}
+                    hint='Your Local Timezone'
+                />
             </Col>
         </Box>
     )
@@ -246,40 +244,36 @@ const ShareStudy: FC<{study: Study}> = () => {
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
-                <h6>Share Study on Kinetic (Optional)</h6>
-                <small>Opt in to share your study with other researchers on Kinetic for replication, extension, etc.</small>
+                <h6>Share your study data on Kinetic (Optional)</h6>
+                <small>Opting in to share your study data on Kinetic will support replication and extension of your work by other researchers</small>
             </Col>
 
             <Col direction='column' gap>
                 <Box gap align='center'>
                     <ResearcherCheckbox name='shareStudy' type='checkbox' id='share-study' onChange={() => {
-                        const checked = getValues('shareStudy')
-                        if (!checked) {
-                            setValue('shareableAfterMonths', null, { shouldValidate: true })
-                        }
-                        trigger('shareableAfterMonths')
+                        trigger('publicOn').then(() => {
+                            const checked = getValues('shareStudy')
+                            if (!checked) {
+                                setValue('publicOn', null, { shouldValidate: true, shouldTouch: true })
+                            }
+                        })
                     }} />
                     <label htmlFor="share-study">
-                        I would like to share my study with other researchers on Kinetic after an embargo period during which access to my research will be restricted.
+                        I would like to share my study data with other researchers on Kinetic for the purpose of replication, extension, etc.
                     </label>
                 </Box>
                 {watch('shareStudy') &&
-                    <Box gap align='center'>
-                        <SelectField
-                            name="shareableAfterMonths"
-                            placeholder='Select'
-                            value={watch('shareableAfterMonths')}
-                            options={[
-                                { value: 0, label: 'No embargo' },
-                                { value: 6, label: '6 months' },
-                                { value: 12, label: '12 months' },
-                                { value: 18, label: '18 months' },
-                                { value: 24, label: '24 months' },
-                            ]}
+                    <Box align='center' gap>
+                        <DateTimeField
+                            sm={6}
+                            name='publicOn'
+                            label='Share study on [select date]'
+                            format={DateTimeFormats.shortDate}
                         />
+                        <Icon css={{ color: colors.kineticResearcher }} icon='questionCircleFill' tooltip="We recommend picking a date set at least 3 months after your study's opening date to allow enough time for data collection."/>
                     </Box>
                 }
-                <FieldErrorMessage name='shareableAfterMonths' />
+                <FieldErrorMessage name='publicOn'/>
             </Col>
         </Box>
     )
@@ -320,13 +314,16 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                         />
                         <label htmlFor='sample-size'>By sample size</label>
                     </Col>
-                    <Col sm={5}>
+                    <Col sm={5} gap>
                         <InputField
                             name='targetSampleSize'
                             disabled={!watch('hasSampleSize')}
                             placeholder='1-1000'
                             type='number'
                         />
+                        {watch('targetSampleSize') > 1000 && <small css={{ color: colors.kineticResearcher }}>
+                            We recommend aiming for a sample size of 1000 or less as we work to amplify our recruitment efforts
+                        </small>}
                         <FieldErrorMessage name='targetSampleSize'/>
                     </Col>
                 </Box>
@@ -351,11 +348,12 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                         <DateTimeField
                             name='closesAt'
                             readOnly={isReadOnly || !watch('hasClosingDate')}
-                            label='Pick a Date'
+                            label='Select date'
                             format={DateTimeFormats.shortDateTime}
                             options={{
                                 defaultHour: 9,
                                 minDate: watch('opensAt'),
+                                minTime: watch('opensAt'),
                             }}
                             withTime
                         />

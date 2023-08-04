@@ -117,16 +117,10 @@ GEM
     aws-sdk-kms (1.61.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-route53 (1.69.0)
-      aws-sdk-core (~> 3, >= 3.165.0)
-      aws-sigv4 (~> 1.1)
     aws-sdk-s3 (1.117.2)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
-    aws-sdk-ssm (1.147.0)
-      aws-sdk-core (~> 3, >= 3.165.0)
-      aws-sigv4 (~> 1.1)
     aws-sigv4 (1.5.2)
       aws-eventstream (~> 1, >= 1.0.2)
     axiom-types (0.1.1)
@@ -459,7 +453,7 @@ GEM
       rubocop-capybara
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
-    rubyzip (2.3.2)
+    rubyzip (3.0.0.alpha)
     sentry-rails (5.7.0)
       railties (>= 5.0)
       sentry-ruby (~> 5.7.0)
@@ -547,9 +541,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport_cache_database
-  aws-sdk-route53
   aws-sdk-s3 (~> 1.116)
-  aws-sdk-ssm
   bootsnap (>= 1.4.4)
   byebug
   codecov
@@ -575,7 +567,7 @@ DEPENDENCIES
   rubocop
   rubocop-rails
   rubocop-rspec
-  rubyzip
+  rubyzip (= 3.0.0.alpha)
   sentry-rails
   sentry-ruby
   simplecov

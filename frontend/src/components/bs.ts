@@ -1,4 +1,4 @@
-import { omit } from '../lib'
+import { omit } from '@lib'
 
 export interface BSVariants {
     primary?: boolean
@@ -41,4 +41,3 @@ export const bsClassNames = (
     }
     return [classNames, omit(props, ...BS_VARIANTS)]
 }
-

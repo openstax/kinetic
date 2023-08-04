@@ -1,47 +1,33 @@
-import { React, Box, useEffect, useState } from '@common'
-import { useApi } from '@lib'
-import { LoadingAnimation, TopNavBar, LinkButton } from '@components'
+import { Box, React } from '@common'
+import { LoadingAnimation, Page } from '@components'
 import { Route, Routes } from 'react-router-dom'
-import { Analysis } from '@api'
-import { ListAnalysis } from './analysis/listing'
 import { EditAnalysis } from './analysis/edit'
-import { useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { colors } from '@theme';
+import { AnalysisOverview } from './analysis/overview';
+import { AnalysisDashboard } from './analysis/dashboard';
+import { useFetchAnalyses, useFetchPublicStudies } from '@models'
+import { useUserPreferences } from '@lib';
+import { AnalysisTutorial } from './analysis/analysis-tutorial';
 
-const AddAnalysis = () => {
-    return (
-        <div className="p-8">
-            <h3>Looks like you have not yet created any analyses</h3>
-            <Link to="/analysis/edit/new">Add new</Link>
-        </div>
-    )
-}
-const AnalysisDashboard = () => {
-    const api = useApi()
-    const [analysis, setAnalysis] = useState<Array<Analysis> | null>(null)
+const AnalysisRoutes = () => {
+    const preferences = useUserPreferences()
+    const { data: studies, isLoading: isLoadingStudies } = useFetchPublicStudies()
+    const { data: analyses, isLoading: isLoadingAnalyses } = useFetchAnalyses()
 
-    const fetch = useCallback(() => {
-        api.listAnalysis().then((res) => {
-            setAnalysis(res.data || [])
-        })
-    },[])
-    useEffect(fetch, [])
-
-    if (analysis === null) return <LoadingAnimation />
+    if (isLoadingAnalyses || isLoadingStudies) return <LoadingAnimation />
 
     return (
-        <div>
-            <TopNavBar controls={<LinkButton primary to="/analysis/edit/new">Add Analysis</LinkButton>} />
-
-            <Box className="analysis">
-                <ListAnalysis listing={analysis} />
+        <Page className='analysis' backgroundColor={colors.white} hideFooter>
+            <AnalysisTutorial show={!preferences?.hasViewedAnalysisTutorial}/>
+            <Box>
                 <Routes>
-                    <Route path="edit/:analysisId" element={<EditAnalysis listing={analysis} onEditSuccess={fetch} />} />
-                    <Route path="*" element={<AddAnalysis />} />
+                    <Route path="edit/:analysisId" element={<EditAnalysis analyses={analyses || []} studies={studies || []} />} />
+                    <Route path="overview/:analysisId" element={<AnalysisOverview />} />
+                    <Route path="*" element={<AnalysisDashboard analyses={analyses || []} />} />
                 </Routes>
             </Box>
-        </div>
+        </Page>
     )
 }
 
-export default AnalysisDashboard
+export default AnalysisRoutes

@@ -7,12 +7,17 @@ RSpec.describe 'Analysis', api: :v1 do
   let(:researcher1) { create(:researcher) }
   let(:researcher2) { create(:researcher) }
 
+  let(:study1) { create(:study) }
+  let(:study2) { create(:study) }
+  let(:study3) { create(:study) }
+
   describe 'POST researcher/analysis' do
     let(:valid_new_analysis_attributes) do
       {
         title: 'Participant analysis title',
         repository_url: 'https://github.com/openstax/kinetic.git',
-        description: 'A short description'
+        description: 'A short description',
+        study_ids: [study1.id, study2.id, study3.id]
       }
     end
 
@@ -133,6 +138,20 @@ RSpec.describe 'Analysis', api: :v1 do
         }.not_to change { analysis1.reload.title }
         expect(response).to have_http_status(:unprocessable_entity)
       end
+    end
+  end
+
+  describe 'POST researcher/analysis/:id/run/:run_id' do
+    let(:analysis) { create(:analysis, researchers: [researcher1]) }
+    let(:run) { create(:analysis_run, analysis: analysis) }
+
+    before { stub_current_user(researcher1) }
+
+    it 'updates the status' do
+      expect {
+        api_put "researcher/analysis/#{run.analysis.id}/run/#{run.id}", params: { run: { status: 'canceled' } }
+      }.to change { run.reload.status }.from('pending').to('canceled')
+      expect(response).to have_http_status(:ok)
     end
   end
 

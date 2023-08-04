@@ -24,7 +24,6 @@ import type {
   AnalysisListing,
   BannerNotice,
   BannersListing,
-  CreateAnalysisRun,
   Environment,
   Launch,
   ParticipantStudies,
@@ -41,6 +40,7 @@ import type {
   Studies,
   Study,
   UpdateAnalysis,
+  UpdateAnalysisRun,
   UpdateBanner,
   UpdatePreferences,
   UpdateResearcher,
@@ -68,8 +68,6 @@ import {
     BannerNoticeToJSON,
     BannersListingFromJSON,
     BannersListingToJSON,
-    CreateAnalysisRunFromJSON,
-    CreateAnalysisRunToJSON,
     EnvironmentFromJSON,
     EnvironmentToJSON,
     LaunchFromJSON,
@@ -102,6 +100,8 @@ import {
     StudyToJSON,
     UpdateAnalysisFromJSON,
     UpdateAnalysisToJSON,
+    UpdateAnalysisRunFromJSON,
+    UpdateAnalysisRunToJSON,
     UpdateBannerFromJSON,
     UpdateBannerToJSON,
     UpdatePreferencesFromJSON,
@@ -158,16 +158,16 @@ export interface AdminResponsesForStudyRequest {
     id: number;
 }
 
-export interface CreateAnalysisRunRequest {
-    createAnalysisRun: CreateAnalysisRun;
-}
-
 export interface CreateBannerRequest {
     addBanner: AddBanner;
 }
 
 export interface CreateRewardRequest {
     addReward: AddReward;
+}
+
+export interface DeleteAnalysisRequest {
+    id: number;
 }
 
 export interface DeleteBannerRequest {
@@ -188,6 +188,10 @@ export interface DeleteStageRequest {
 
 export interface DeleteStudyRequest {
     studyId: number;
+}
+
+export interface GetAnalysisRequest {
+    id: number;
 }
 
 export interface GetParticipantStudyRequest {
@@ -236,6 +240,12 @@ export interface StudyStatsRequest {
 export interface UpdateAnalysisRequest {
     id: number;
     updateAnalysis?: UpdateAnalysis;
+}
+
+export interface UpdateAnalysisRunRequest {
+    runId: number;
+    analysisId: number;
+    updateAnalysisRun: UpdateAnalysisRun;
 }
 
 export interface UpdateBannerRequest {
@@ -602,39 +612,6 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Create an analysis run
-     */
-    async createAnalysisRunRaw(requestParameters: CreateAnalysisRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Analysis>> {
-        if (requestParameters.createAnalysisRun === null || requestParameters.createAnalysisRun === undefined) {
-            throw new runtime.RequiredError('createAnalysisRun','Required parameter requestParameters.createAnalysisRun was null or undefined when calling createAnalysisRun.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/researcher/analysis/:analysis_id/runs`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: CreateAnalysisRunToJSON(requestParameters.createAnalysisRun),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AnalysisFromJSON(jsonValue));
-    }
-
-    /**
-     * Create an analysis run
-     */
-    async createAnalysisRun(requestParameters: CreateAnalysisRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Analysis> {
-        const response = await this.createAnalysisRunRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Add a banner
      */
     async createBannerRaw(requestParameters: CreateBannerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BannerNotice>> {
@@ -698,6 +675,37 @@ export class DefaultApi extends runtime.BaseAPI {
     async createReward(requestParameters: CreateRewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Reward> {
         const response = await this.createRewardRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Delete an analysis
+     * Delete an analysis
+     */
+    async deleteAnalysisRaw(requestParameters: DeleteAnalysisRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteAnalysis.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researcher/analysis/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete an analysis
+     * Delete an analysis
+     */
+    async deleteAnalysis(requestParameters: DeleteAnalysisRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteAnalysisRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -850,6 +858,38 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Get a single analysis
+     * Get a single analysis
+     */
+    async getAnalysisRaw(requestParameters: GetAnalysisRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Analysis>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getAnalysis.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researcher/analysis/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AnalysisFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a single analysis
+     * Get a single analysis
+     */
+    async getAnalysis(requestParameters: GetAnalysisRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Analysis> {
+        const response = await this.getAnalysisRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Returns listing of all banners, expired or not 
      * Retrieve list of all banners
      */
@@ -990,6 +1030,34 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getPreferences(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserPreferences> {
         const response = await this.getPreferencesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get studies for the calling researcher as well as public studies. 
+     * Get all public studies available for researcher analyses
+     */
+    async getPublicStudiesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Studies>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researcher/public_studies`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudiesFromJSON(jsonValue));
+    }
+
+    /**
+     * Get studies for the calling researcher as well as public studies. 
+     * Get all public studies available for researcher analyses
+     */
+    async getPublicStudies(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Studies> {
+        const response = await this.getPublicStudiesRaw(initOverrides);
         return await response.value();
     }
 
@@ -1416,6 +1484,47 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async updateAnalysis(requestParameters: UpdateAnalysisRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Analysis> {
         const response = await this.updateAnalysisRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update an analysis run
+     */
+    async updateAnalysisRunRaw(requestParameters: UpdateAnalysisRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Analysis>> {
+        if (requestParameters.runId === null || requestParameters.runId === undefined) {
+            throw new runtime.RequiredError('runId','Required parameter requestParameters.runId was null or undefined when calling updateAnalysisRun.');
+        }
+
+        if (requestParameters.analysisId === null || requestParameters.analysisId === undefined) {
+            throw new runtime.RequiredError('analysisId','Required parameter requestParameters.analysisId was null or undefined when calling updateAnalysisRun.');
+        }
+
+        if (requestParameters.updateAnalysisRun === null || requestParameters.updateAnalysisRun === undefined) {
+            throw new runtime.RequiredError('updateAnalysisRun','Required parameter requestParameters.updateAnalysisRun was null or undefined when calling updateAnalysisRun.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/researcher/analysis/{analysis_id}/run/{run_id}`.replace(`{${"run_id"}}`, encodeURIComponent(String(requestParameters.runId))).replace(`{${"analysis_id"}}`, encodeURIComponent(String(requestParameters.analysisId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateAnalysisRunToJSON(requestParameters.updateAnalysisRun),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AnalysisFromJSON(jsonValue));
+    }
+
+    /**
+     * Update an analysis run
+     */
+    async updateAnalysisRun(requestParameters: UpdateAnalysisRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Analysis> {
+        const response = await this.updateAnalysisRunRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 
-set -xe
+set -e
 
 cd backend
 
-while getopts ":h:upload:" o; do
+usage() {
+    echo "Usage: $0 [-h <help>] [-e <environment to upload to>]" 1>&2
+    exit 1
+}
+
+while getopts ":h:e:" o; do
     case "${o}" in
-        upload)
-            upload=true
+        e)
+            env=$OPTARG
             ;;
         *)
             usage
@@ -21,7 +26,8 @@ done
 ./bin/rake openstax_openapi:generate_model_bindings[1]
 
 
-if [ -z "${upload}" ]; then
-  tar cvzf kinetic-r-api.tar.gz -C clients/0.1.0 -s /^r/kinetic/ r
-  aws s3 cp kinetic-r-api.tar.gz s3://kinetic-workspaces-config/configs/
+if [ -n "${env}" ]; then
+  echo uploading R bindings for enclave
+  tar czf /tmp/kinetic-r-api.tar.gz -C clients/0.1.0 -s /^r/kinetic/ r
+  aws s3 cp /tmp/kinetic-r-api.tar.gz s3://kinetic-$env-workspaces-config/configs/
 fi

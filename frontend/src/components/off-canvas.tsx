@@ -60,7 +60,7 @@ export const OffCanvas: FCWC<OffCanvasProps> = ({ show, onHide, className, child
         >
             <div className="offcanvas-header">
                 <h5 className="offcanvas-title" id={id}>{title}</h5>
-                <Icon icon="close" onClick={close} />
+                <Icon height={24} icon="x" onClick={close} />
             </div>
             <Box className="offcanvas-body" direction="column">
                 {children}

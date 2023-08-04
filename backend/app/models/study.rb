@@ -14,8 +14,6 @@ class Study < ApplicationRecord
 
   has_one :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
 
-  scope :multi_stage, -> { joins(:stages).group('studies.id').having('count(study_id) > 1') }
-
   has_one :pi,
           -> {
             joins(:study_researchers).where(researchers: { study_researchers: { role: 'pi' } })
@@ -40,13 +38,22 @@ class Study < ApplicationRecord
   before_destroy(prepend: true) { study_researchers.delete_all }
 
   arel = Study.arel_table
-  scope :available, -> {
+
+  scope :multi_stage, -> { joins(:stages).group('studies.id').having('count(study_id) > 1') }
+
+  scope :available_to_participants, -> {
     where
       .not(opens_at: nil)
       .where(is_hidden: false)
       .where(arel[:opens_at].lteq(Time.now))
       .where(arel[:closes_at].eq(nil).or(
                arel[:closes_at].gteq(Time.now)))
+  }
+
+  scope :public_to_researchers, -> {
+    where
+      .not(public_on: nil)
+      .where('public_on < ?', DateTime.now)
   }
 
   def status
@@ -106,7 +113,7 @@ class Study < ApplicationRecord
   def submit
     (survey_id, secret_key) = CloneSurvey.new.clone(title_for_researchers)
     stages.each do |stage|
-      stage.update(
+      stage.update!(
         {
           status: 'waiting_period',
           config: {
@@ -120,35 +127,32 @@ class Study < ApplicationRecord
   end
 
   def pause
-    stages.where.not(status: 'paused').first&.update(status: 'paused')
+    stages.where.not(status: 'paused').first&.update!(status: 'paused')
   end
 
   def resume(stage_index=0)
     stages.last(stages.length - stage_index.to_i).each do |stage|
-      stage.update(status: 'active')
+      stage.update!(status: 'active')
     end
   end
 
   def end
-    stages.where.not(status: 'completed').first&.update(status: 'completed')
+    stages.where.not(status: 'completed').first&.update!(status: 'completed')
   end
 
   def reopen(stage_index=0)
     stages.last(stages.length - stage_index.to_i).each do |stage|
-      stage.update(status: 'active')
+      stage.update!(status: 'active')
     end
   end
 
   def reopen_if_possible
-    return if stages.any? { |stage| stage.status == 'completed' }
+    return if stages.any? { |stage| stage.status != 'completed' }
     return if target_sample_size.present? && completed_count >= target_sample_size
-
     return if closes_at.present? && closes_at <= DateTime.now
 
     reopen
   end
-
-  def naturally_closed?; end
 
   # called from studies controller to update status using action and stage_index from params
   def update_status!(action, stage_index)

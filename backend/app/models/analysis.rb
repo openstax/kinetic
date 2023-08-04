@@ -13,7 +13,12 @@ class Analysis < ApplicationRecord
 
   attribute :api_key, :string, default: -> { SimpleStructuredSecrets.new('a', 'n').generate }
 
-  validates :title, :repository_url, presence: true
+  validates :title, presence: true
+
+  before_destroy(prepend: true) do
+    study_analyses.destroy_all
+    analysis_researchers.destroy_all
+  end
 
   def can_read_study_id?(id)
     # TODO: eventually this will need to be updated to include "shared" studies

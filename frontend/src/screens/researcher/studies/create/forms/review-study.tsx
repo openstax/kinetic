@@ -24,7 +24,7 @@ export const ReviewStudy: FC<{ study: Study }> = ({ study }) => {
 const EditingStudyInformation: FC<{ study: Study }> = ({ study }) => {
     const { setValue } = useFormContext()
     const setStep = (step: StudyStep) => {
-        setValue('step', step, { shouldValidate: true })
+        setValue('step', step, { shouldValidate: true, shouldTouch: true })
     }
     const pi = getStudyPi(study);
     const lead = getStudyLead(study);
@@ -118,7 +118,7 @@ const EditingStudyInformation: FC<{ study: Study }> = ({ study }) => {
 const AdditionalSessionsOverview: FC<{ study: Study }> = ({ study }) => {
     const { setValue } = useFormContext()
     const setStep = (step: StudyStep) => {
-        setValue('step', step, { shouldValidate: true })
+        setValue('step', step, { shouldValidate: true, shouldTouch: true })
     }
 
     const stageCount = study.stages?.length || 0

@@ -25,6 +25,7 @@ const SegmentLabel: React.FC<{ segment: RewardsSegment }> = ({ segment }) => {
             className="explanation" css={{
                 fontSize: useIsMobileDevice() ? 11 : 12,
                 color: segment.isCurrent ? 'black' : colors.darkGray,
+                textWrap: 'nowrap',
             }}>
             <span>{segment.totalPoints}pts</span>
             <span>{toDayJS(segment.endAt).format('DD MMM')}</span>
@@ -124,18 +125,6 @@ const RewardSegment: React.FC<{
     )
 }
 
-// return (
-//     <div
-//         css={{
-//             ...segmentStyle,
-//             left: `calc(${(segment.totalPoints / totalPoints) * 100}% - ${segmentWidth / 2}px)`,
-//         }}
-//     >
-//         {body}
-//     </div>
-// )
-// }
-
 const SegmentInfo: React.FC<{ schedule: RewardsSegment[] }> = ({ schedule }) => {
     const segment = schedule.find(s => s.recentlyAchieved) || schedule.find(s => s.isCurrent)
     if (!segment) return null
@@ -166,7 +155,6 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
         schedule,
         pointsEarned,
         totalPoints,
-
     } = useRewardsSchedule(studies)
     const completion = (pointsEarned / totalPoints) * 100
 
