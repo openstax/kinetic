@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     ) do
 
       namespace :researcher do
+        get 'public_studies', to: 'studies#public_studies'
         resources :studies do
           post 'researcher/:user_id', to: 'study_researchers#create'
           delete 'researcher/:user_id', to: 'study_researchers#destroy'
@@ -18,7 +19,12 @@ Rails.application.routes.draw do
         end
         post 'studies/:id/update_status', to: 'studies#update_status'
 
-        resources :analysis, except: [:destroy]
+        resources :analysis do
+          put 'run/:run_id', to: 'analysis#update_run'
+          get 'run/:run_id/results',
+              to: 'analysis#download_run_results',
+              as: :run_download
+        end
 
         get 'responses/:api_key', to: 'responses#fetch'
 
@@ -35,6 +41,7 @@ Rails.application.routes.draw do
 
       namespace :enclave do
         resources :runs, only: [:create] do
+          post 'upload_results', to: 'runs#upload_results', on: :collection
           put 'completion', to: 'runs#completion', on: :collection
           post 'log', to: 'runs#log', on: :collection
         end

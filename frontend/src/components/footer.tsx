@@ -1,7 +1,7 @@
 import { cx, React } from '@common'
 import styled from '@emotion/styled'
 import { HelpLink, ResourceLinks } from './resource-links'
-import { colors } from '../theme'
+import { colors } from '@theme'
 import { Box, Col, Icon, Row } from '@components'
 
 // @ts-ignore

@@ -1,6 +1,6 @@
 import { React } from '@common'
 import styled from '@emotion/styled'
-import { colors } from '../theme'
+import { colors } from '@theme'
 
 import { useApi, useEnvironment, useIsMobileDevice, useUserInfo, useUserPreferences } from '@lib'
 import {

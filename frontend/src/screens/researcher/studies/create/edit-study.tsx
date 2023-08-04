@@ -3,6 +3,7 @@ import { useApi, useQueryParam } from '@lib';
 import { isDraft, useFetchStudy } from '@models';
 import {
     Col,
+    ExitStudyFormButton,
     Form,
     LoadingAnimation,
     Page,
@@ -10,12 +11,11 @@ import {
     Step,
     useFormContext,
     useFormState,
-    ExitStudyFormButton,
 } from '@components';
 import { researcherValidation, ResearchTeam } from './forms/research-team';
 import { InternalDetails, internalDetailsValidation } from './forms/internal-details';
 import { ParticipantView, participantViewValidation } from './forms/participant-view';
-import { AdditionalSessions, additionalSessionsValidation } from './forms/additional-sessions';
+import { AdditionalSessions } from './forms/additional-sessions';
 import { NewStudy, ResearcherRoleEnum, Study } from '@api';
 import { ActionFooter } from './action-footer';
 import { colors } from '@theme';
@@ -24,12 +24,11 @@ import { Toast } from '@nathanstitt/sundry/ui';
 import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
 
-const buildValidationSchema = (studies: Study[], study: Study) => {
+const buildValidationSchema = (allOtherStudies: Study[]) => {
     return Yup.object().shape({
-        ...internalDetailsValidation(studies, study),
+        ...internalDetailsValidation(allOtherStudies),
         ...researcherValidation(),
-        ...participantViewValidation(studies, study),
-        ...additionalSessionsValidation(),
+        ...participantViewValidation(allOtherStudies),
     })
 }
 
@@ -73,15 +72,20 @@ export default function EditStudy() {
 const StudyForm: FCWC<{ study: Study, studies: Study[] }> = ({ study, studies, children }) => {
     const id = useParams<{ id: string }>().id
     const [studyProgressStep] = useLocalstorageState(`study-progress-${id}`, 0)
-    let initialStep = +useQueryParam('step') ||studyProgressStep
+    let initialStep = +useQueryParam('step') || studyProgressStep
 
     const defaults = useMemo(() => {
         return getFormDefaults(study, initialStep)
     }, [])
 
+    const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])
+    const validationSchema = useMemo(() => {
+        return buildValidationSchema(allOtherStudies)
+    }, [study])
+
     return (
         <Form
-            validationSchema={buildValidationSchema(studies, study)}
+            validationSchema={validationSchema}
             defaultValues={defaults}
             onSubmit={noop}
             onCancel={noop}
@@ -123,10 +127,11 @@ const FormContent: FC<{
     }
 
     const { isValid, isDirty } = useFormState()
-
     const setStep = (step: StudyStep) => {
-        setValue('step', step, { shouldValidate: true })
-        setStudyProgressStep(step)
+        setValue('step', step, { shouldValidate: true, shouldTouch: true })
+        if (!isNew) {
+            setStudyProgressStep(step)
+        }
     }
 
     const saveStudy = async () => {

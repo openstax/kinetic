@@ -45,7 +45,7 @@ class UserMailer < ApplicationMailer
   def upcoming_prize_cycle_deadline
     mail(
       to: params[:user].email_address,
-      subject: 'Don’t miss out on an exciting prize!',
+      subject: "Don't miss out on an exciting prize!",
       template: 'upcoming_prize_cycle_deadline'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
@@ -71,13 +71,13 @@ class UserMailer < ApplicationMailer
 
   def invite_researcher_to_study
     mail(
-      to: params[:user].email_address,
+      to: params[:target_user].email_address,
       subject: 'OpenStax Kinetic: You’ve been invited to collaborate on a study',
       template: 'researcher_collaboration_invite'
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
-        'researcher_first_name' => params[:user].first_name,
-        'researcher_last_name' => params[:user].last_name,
+        'researcher_first_name' => params[:current_user].first_name,
+        'researcher_last_name' => params[:current_user].last_name,
         'internal_study_title' => params[:study].title_for_researchers
       }
     end

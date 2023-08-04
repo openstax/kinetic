@@ -1,5 +1,5 @@
 import { Box, React } from '../common'
-import { colors } from '../theme'
+import { colors } from '@theme'
 
 export const OXColoredStripe = () => (
     <Box height="10" className="ox-colored-stripe">

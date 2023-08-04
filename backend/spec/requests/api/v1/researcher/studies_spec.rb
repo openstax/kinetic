@@ -117,40 +117,52 @@ RSpec.describe 'Studies', api: :v1 do
         )
       end
 
-      # TODO: after fleshed out instructions
-      # it 'reopens a completed study' do
-      #   api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=end"
-      #   debugger
-      #   api_put "researcher/studies/#{study_with_stages.id}", params: { study: {
-      #     target_sample_size: 400,
-      #     closes_at: 10.days.from_now
-      #   } }
-      #
-      #   expect(response).to have_http_status(:success)
-      #   expect(response_hash).to match(
-      #     a_hash_including(
-      #       stages: a_collection_containing_exactly(
-      #         a_hash_including({
-      #           status: 'active'
-      #         })
-      #       )
-      #     )
-      #   )
-      # end
+      it 'ends and reopens study' do
+        api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=end"
 
-      # TODO: after fleshed out instructions
-      # it 'fails to reopen a completed study that cannot re-open' do
-      #   api_put "researcher/studies/#{study_with_stages.id}", params: { study: {
-      #     opens_at: 1.day.ago
-      #   # target_sample_size: 400,
-      #   # closes_at: 10.days.from_now
-      #   } }
-      #
-      #   expect(response).to have_http_status(:success)
-      #   expect(response_hash).to match(
-      #     a_hash_including(status: 'completed')
-      #   )
-      # end
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match(
+          a_hash_including(
+            stages: a_collection_containing_exactly(
+              a_hash_including({
+                status: 'completed'
+              })
+            )
+          )
+        )
+
+        api_put "researcher/studies/#{study_with_stages.id}", params: { study: {
+          opens_at: 1.day.ago,
+          closes_at: 10.days.from_now
+        } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match(
+          a_hash_including(
+            stages: a_collection_containing_exactly(
+              a_hash_including({
+                status: 'active'
+              })
+            )
+          )
+        )
+      end
+
+      it 'fails to reopen a completed study that cannot re-open' do
+        study_with_stages.launch
+        study_with_stages.end
+        study_with_stages.update_attribute(:opens_at, 2.days.ago)
+        study_with_stages.update_attribute(:closes_at, 1.day.ago)
+
+        api_put "researcher/studies/#{study_with_stages.id}", params: { study: {
+          closes_at: 1.day.ago
+        } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match(
+          a_hash_including(status: 'completed')
+        )
+      end
     end
   end
 
@@ -192,6 +204,54 @@ RSpec.describe 'Studies', api: :v1 do
           )
         )
       end
+    end
+  end
+
+  describe 'GET researcher/public_studies' do
+    context 'when logged out' do
+      it 'gives unauthorized' do
+        api_get 'researcher/public_studies'
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when signed in as a non-researcher' do
+      before { stub_random_user }
+
+      it 'gives forbidden' do
+        api_get 'researcher/public_studies'
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'when signed in as a researcher' do
+      before do
+        create(:study, researchers: researcher1)
+        create(:study, researchers: researcher4, public_on: 3.days.ago)
+        stub_current_user(researcher1)
+      end
+
+      it 'returns all owned and public studies' do
+        api_get 'researcher/public_studies'
+        expect(response).to have_http_status(:success)
+        expect(response_hash[:data]).to match a_collection_including(
+          a_hash_including(
+            researchers: a_collection_including(
+              a_hash_including(
+                user_id: researcher1.user_id
+              )
+            )
+          ),
+          a_hash_including(
+            researchers: a_collection_including(
+              a_hash_including(
+                user_id: researcher4.user_id
+              )
+            )
+          )
+        )
+      end
+
     end
   end
 

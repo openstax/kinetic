@@ -1,6 +1,6 @@
 import { Box, React, styled, useState } from '@common';
 import { Button, FormSaveButton } from '@components'
-import { colors } from '../theme';
+import { colors } from '@theme';
 import { Icon } from './icon';
 
 export interface FileUploadProps {

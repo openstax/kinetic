@@ -43,6 +43,12 @@ export interface UserPreferences {
      * @memberof UserPreferences
      */
     sessionAvailableEmail?: boolean;
+    /**
+     * User has viewed the analysis tutorial overview on the frontend
+     * @type {boolean}
+     * @memberof UserPreferences
+     */
+    hasViewedAnalysisTutorial?: boolean;
 }
 
 /**
@@ -68,6 +74,7 @@ export function UserPreferencesFromJSONTyped(json: any, ignoreDiscriminator: boo
         'prizeCycleEmail': !exists(json, 'prize_cycle_email') ? undefined : json['prize_cycle_email'],
         'studyAvailableEmail': !exists(json, 'study_available_email') ? undefined : json['study_available_email'],
         'sessionAvailableEmail': !exists(json, 'session_available_email') ? undefined : json['session_available_email'],
+        'hasViewedAnalysisTutorial': !exists(json, 'has_viewed_analysis_tutorial') ? undefined : json['has_viewed_analysis_tutorial'],
     };
 }
 
@@ -84,6 +91,7 @@ export function UserPreferencesToJSON(value?: UserPreferences | null): any {
         'prize_cycle_email': value.prizeCycleEmail,
         'study_available_email': value.studyAvailableEmail,
         'session_available_email': value.sessionAvailableEmail,
+        'has_viewed_analysis_tutorial': value.hasViewedAnalysisTutorial,
     };
 }
 

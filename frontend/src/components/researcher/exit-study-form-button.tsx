@@ -48,7 +48,6 @@ export const ExitStudyFormButton: FC<{study: Study, saveStudy: (study: Study) =>
                         </Box>
                         <Box gap='large'>
                             <ResearcherButton
-                                fixedWidth
                                 onClick={() => {
                                     nav('/studies')
                                     Toast.show({
@@ -60,7 +59,7 @@ export const ExitStudyFormButton: FC<{study: Study, saveStudy: (study: Study) =>
                                 No, discard changes
                             </ResearcherButton>
 
-                            <ResearcherButton fixedWidth onClick={() => {
+                            <ResearcherButton onClick={() => {
                                 saveStudy(getValues() as Study)
                                 nav('/studies')
                                 Toast.show({

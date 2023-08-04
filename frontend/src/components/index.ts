@@ -36,7 +36,9 @@ export * from './researcher/collapsible-section'
 export * from './researcher/form-components'
 export * from './researcher/exit-study-form-button'
 export * from './researcher/confirmation-modal'
-export * from './exit-button'
+export * from './researcher/exit-button'
+
+export * from './table/table-components'
 
 import { Footer } from './footer'
 import { Icon, IconProps, IconKey } from './icon'

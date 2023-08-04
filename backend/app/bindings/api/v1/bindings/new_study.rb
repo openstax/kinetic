@@ -63,8 +63,8 @@ module Api::V1::Bindings
     # How many times the study has been viewed
     attr_accessor :view_count
 
-    # How many months until the study is public
-    attr_accessor :shareable_after_months
+    # When the study becomes public for sharing with other researchers.
+    attr_accessor :public_on
 
     # Number of times this study has been completed
     attr_accessor :completed_count
@@ -128,7 +128,7 @@ module Api::V1::Bindings
         :'researchers' => :'researchers',
         :'is_mandatory' => :'is_mandatory',
         :'view_count' => :'view_count',
-        :'shareable_after_months' => :'shareable_after_months',
+        :'public_on' => :'public_on',
         :'completed_count' => :'completed_count',
         :'category' => :'category',
         :'topic' => :'topic',
@@ -163,7 +163,7 @@ module Api::V1::Bindings
         :'researchers' => :'Array<Researcher>',
         :'is_mandatory' => :'Boolean',
         :'view_count' => :'Float',
-        :'shareable_after_months' => :'Float',
+        :'public_on' => :'Time',
         :'completed_count' => :'Float',
         :'category' => :'String',
         :'topic' => :'String',
@@ -180,7 +180,7 @@ module Api::V1::Bindings
         :'opens_at',
         :'closes_at',
         :'target_sample_size',
-        :'shareable_after_months',
+        :'public_on',
       ])
     end
 
@@ -272,8 +272,8 @@ module Api::V1::Bindings
         self.view_count = attributes[:'view_count']
       end
 
-      if attributes.key?(:'shareable_after_months')
-        self.shareable_after_months = attributes[:'shareable_after_months']
+      if attributes.key?(:'public_on')
+        self.public_on = attributes[:'public_on']
       end
 
       if attributes.key?(:'completed_count')
@@ -401,7 +401,7 @@ module Api::V1::Bindings
           researchers == o.researchers &&
           is_mandatory == o.is_mandatory &&
           view_count == o.view_count &&
-          shareable_after_months == o.shareable_after_months &&
+          public_on == o.public_on &&
           completed_count == o.completed_count &&
           category == o.category &&
           topic == o.topic &&
@@ -420,7 +420,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, is_mandatory, view_count, shareable_after_months, completed_count, category, topic, subject, stages, launched_count, return_url].hash
+      [title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, is_mandatory, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

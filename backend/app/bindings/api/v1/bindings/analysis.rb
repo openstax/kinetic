@@ -15,6 +15,9 @@ require 'time'
 
 module Api::V1::Bindings
   class Analysis
+    # The analysis runs.
+    attr_accessor :runs
+
     # ID of analysis
     attr_accessor :id
 
@@ -33,18 +36,23 @@ module Api::V1::Bindings
     # The researchers working with the analysis.
     attr_accessor :researchers
 
+    # The study ids that the analysis reads from.
+    attr_accessor :study_ids
+
     # The studies that the analysis reads from.
     attr_accessor :studies
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
+        :'runs' => :'runs',
         :'id' => :'id',
         :'title' => :'title',
         :'description' => :'description',
         :'repository_url' => :'repository_url',
         :'api_key' => :'api_key',
         :'researchers' => :'researchers',
+        :'study_ids' => :'study_ids',
         :'studies' => :'studies'
       }
     end
@@ -57,12 +65,14 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
+        :'runs' => :'Array<AnalysisRun>',
         :'id' => :'Integer',
         :'title' => :'String',
         :'description' => :'String',
         :'repository_url' => :'String',
         :'api_key' => :'String',
         :'researchers' => :'Array<AnalysisResearcher>',
+        :'study_ids' => :'Array<Float>',
         :'studies' => :'Array<StudyAnalysis>'
       }
     end
@@ -87,6 +97,12 @@ module Api::V1::Bindings
         end
         h[k.to_sym] = v
       }
+
+      if attributes.key?(:'runs')
+        if (value = attributes[:'runs']).is_a?(Array)
+          self.runs = value
+        end
+      end
 
       if attributes.key?(:'id')
         self.id = attributes[:'id']
@@ -114,6 +130,12 @@ module Api::V1::Bindings
         end
       end
 
+      if attributes.key?(:'study_ids')
+        if (value = attributes[:'study_ids']).is_a?(Array)
+          self.study_ids = value
+        end
+      end
+
       if attributes.key?(:'studies')
         if (value = attributes[:'studies']).is_a?(Array)
           self.studies = value
@@ -133,10 +155,6 @@ module Api::V1::Bindings
         invalid_properties.push('invalid value for "description", description cannot be nil.')
       end
 
-      if @repository_url.nil?
-        invalid_properties.push('invalid value for "repository_url", repository_url cannot be nil.')
-      end
-
       invalid_properties
     end
 
@@ -145,7 +163,6 @@ module Api::V1::Bindings
     def valid?
       return false if @title.nil?
       return false if @description.nil?
-      return false if @repository_url.nil?
       true
     end
 
@@ -154,12 +171,14 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
+          runs == o.runs &&
           id == o.id &&
           title == o.title &&
           description == o.description &&
           repository_url == o.repository_url &&
           api_key == o.api_key &&
           researchers == o.researchers &&
+          study_ids == o.study_ids &&
           studies == o.studies
     end
 
@@ -172,7 +191,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title, description, repository_url, api_key, researchers, studies].hash
+      [runs, id, title, description, repository_url, api_key, researchers, study_ids, studies].hash
     end
 
     # Builds the object from hash

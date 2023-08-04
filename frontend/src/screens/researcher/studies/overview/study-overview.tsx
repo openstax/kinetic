@@ -1,12 +1,13 @@
 import { Box, React, useEffect, useNavigate, useParams } from '@common';
 import { Study } from '@api';
-import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page } from '@components';
+import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page, ResearcherButton } from '@components';
 import { getStudyLead, getStudyPi, isReadyForLaunch, isWaiting, useFetchStudy } from '@models';
 import { StudyCardPreview, Tag } from '../../../learner/card';
 import { colors } from '@theme';
 import { FinalizeStudy } from './finalize-study';
 import Waiting from '@images/study-creation/waiting.svg'
 import { EditSubmittedStudy } from './edit-submitted-study';
+import { useQueryParam } from '@lib';
 
 export default function StudyOverview() {
     const nav = useNavigate()
@@ -14,7 +15,7 @@ export default function StudyOverview() {
 
     if (!id) {
         useEffect(() => {
-            return nav('/studies')
+            nav('/studies')
         }, [])
         return <></>
     }
@@ -41,6 +42,8 @@ export default function StudyOverview() {
 }
 
 const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
+    const reopening: boolean = useQueryParam('reopen') || false
+
     if (isWaiting(study)) {
         return <WaitingForTemplate study={study} />
     }
@@ -55,14 +58,35 @@ const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
         <Box direction='column' gap='xxlarge'>
             <Box align='center' justify='between'>
                 <h3>{study?.titleForResearchers}</h3>
-                <ExitButton />
+                <ExitButton navTo='/studies'/>
             </Box>
 
             <StudyInformation study={study} />
 
-            <CollapsibleSection title='Edit Study' description='Make changes to open and close criteria' open={true}>
+            <CollapsibleSection title='Edit Study' description='Make changes to open and close criteria' open={reopening}>
                 <EditSubmittedStudy study={study} />
             </CollapsibleSection>
+
+            <AnalysisSection study={study} />
+        </Box>
+    )
+}
+
+const AnalysisSection: FC <{study: Study}> = ({ study }) => {
+    const nav = useNavigate()
+
+    return (
+        <Box className='p-2' align='center' justify='between' css={{ border: `1px solid ${colors.gray50}` }}>
+            <Box direction='column' gap>
+                <h5>Analyze Data</h5>
+                <small css={{ color: colors.text }}>
+                    Write your R code to analyze the data relevant for this study
+                </small>
+            </Box>
+
+            <ResearcherButton onClick={() => nav(`/analysis/edit/new?studyId=${study.id}`)}>
+                + Create New Analysis
+            </ResearcherButton>
         </Box>
     )
 }
@@ -182,7 +206,7 @@ const WaitingForTemplate: FC<{study: Study}> = ({ study }) => {
         <Box direction='column' gap='xxlarge'>
             <Box align='center' justify='between'>
                 <h3>{study?.titleForResearchers}</h3>
-                <ExitButton />
+                <ExitButton navTo='/studies'/>
             </Box>
             <Box direction='column' align='center' className='text-center' gap='large' alignSelf='center'>
                 <img src={Waiting} alt='waiting' height={200}/>

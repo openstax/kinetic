@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { AnalysisRunMessage } from './AnalysisRunMessage';
+import {
+    AnalysisRunMessageFromJSON,
+    AnalysisRunMessageFromJSONTyped,
+    AnalysisRunMessageToJSON,
+} from './AnalysisRunMessage';
+
 /**
  * 
  * @export
@@ -20,11 +27,35 @@ import { exists, mapValues } from '../runtime';
  */
 export interface AnalysisRun {
     /**
+     * ID of analysis run
+     * @type {number}
+     * @memberof AnalysisRun
+     */
+    readonly id: number;
+    /**
      * Api key to use for recording progress of run
      * @type {string}
      * @memberof AnalysisRun
      */
     apiKey: string;
+    /**
+     * Commit message of the analysis run
+     * @type {string}
+     * @memberof AnalysisRun
+     */
+    message?: string;
+    /**
+     * Current status of the run
+     * @type {string}
+     * @memberof AnalysisRun
+     */
+    status?: AnalysisRunStatusEnum;
+    /**
+     * The analysis run messages.
+     * @type {Array<AnalysisRunMessage>}
+     * @memberof AnalysisRun
+     */
+    messages?: Array<AnalysisRunMessage>;
     /**
      * Id of Analysis
      * @type {number}
@@ -38,12 +69,6 @@ export interface AnalysisRun {
      */
     analysisApiKey: number;
     /**
-     * has run succeeded
-     * @type {boolean}
-     * @memberof AnalysisRun
-     */
-    didSucceed?: boolean;
-    /**
      * When was run started
      * @type {string}
      * @memberof AnalysisRun
@@ -54,14 +79,28 @@ export interface AnalysisRun {
      * @type {string}
      * @memberof AnalysisRun
      */
-    finshedAt?: string;
+    finishedAt?: string;
 }
+
+
+/**
+ * @export
+ */
+export const AnalysisRunStatusEnum = {
+    Pending: 'pending',
+    Complete: 'complete',
+    Error: 'error',
+    Canceled: 'canceled'
+} as const;
+export type AnalysisRunStatusEnum = typeof AnalysisRunStatusEnum[keyof typeof AnalysisRunStatusEnum];
+
 
 /**
  * Check if a given object implements the AnalysisRun interface.
  */
 export function instanceOfAnalysisRun(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
     isInstance = isInstance && "apiKey" in value;
     isInstance = isInstance && "analysisId" in value;
     isInstance = isInstance && "analysisApiKey" in value;
@@ -79,12 +118,15 @@ export function AnalysisRunFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
+        'id': json['id'],
         'apiKey': json['api_key'],
+        'message': !exists(json, 'message') ? undefined : json['message'],
+        'status': !exists(json, 'status') ? undefined : json['status'],
+        'messages': !exists(json, 'messages') ? undefined : ((json['messages'] as Array<any>).map(AnalysisRunMessageFromJSON)),
         'analysisId': json['analysis_id'],
         'analysisApiKey': json['analysis_api_key'],
-        'didSucceed': !exists(json, 'did_succeed') ? undefined : json['did_succeed'],
         'startedAt': !exists(json, 'started_at') ? undefined : json['started_at'],
-        'finshedAt': !exists(json, 'finshed_at') ? undefined : json['finshed_at'],
+        'finishedAt': !exists(json, 'finished_at') ? undefined : json['finished_at'],
     };
 }
 
@@ -98,11 +140,13 @@ export function AnalysisRunToJSON(value?: AnalysisRun | null): any {
     return {
         
         'api_key': value.apiKey,
+        'message': value.message,
+        'status': value.status,
+        'messages': value.messages === undefined ? undefined : ((value.messages as Array<any>).map(AnalysisRunMessageToJSON)),
         'analysis_id': value.analysisId,
         'analysis_api_key': value.analysisApiKey,
-        'did_succeed': value.didSucceed,
         'started_at': value.startedAt,
-        'finshed_at': value.finshedAt,
+        'finished_at': value.finishedAt,
     };
 }
 

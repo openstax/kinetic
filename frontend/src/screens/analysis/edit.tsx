@@ -1,63 +1,91 @@
-import { React, useNavigate, useParams, useState } from '@common'
-import { Alert, Box, EditingForm as Form, InputField, PageNotFound } from '@components'
-import { Analysis } from '@api'
-import { AnalysisValidationSchema } from '@models'
-import { errorToString, useApi } from '@lib'
+import { React, useEffect, useNavigate, useParams, useState } from '@common'
+import {
+    Alert,
+    Box,
+    Col,
+    EditingForm as Form,
+    FieldErrorMessage,
+    FieldTitle,
+    FormSaveButton,
+    InputField,
+    PageNotFound,
+    Toast,
+    useFormState,
+} from '@components'
+import { Analysis, Study } from '@api'
+import { getAnalysisValidationSchema, useFetchAnalyses } from '@models'
+import { errorToString, useApi, useQueryParam } from '@lib'
 import { SelectedStudies } from './selected-studies'
-
+import { ResearcherFAQ } from './researcher-faq';
 
 interface EditAnalysisProps {
-    listing: Array<Analysis>
-    onEditSuccess(): void
+    analyses: Analysis[]
+    studies: Study[]
 }
 
 const newAnalysis: Analysis = {
     title: '',
     description: '',
-    repositoryUrl: '',
     studies: [],
 }
 
+const useDefaultStudy = (studies: Study[], analyses: Analysis[]) => {
+    const [studyTitle, setStudyTitle] = useState<string>('')
+    const [study, setStudy] = useState<Study | null>(null)
 
-const EditorInfo: FC<{ analysis: Analysis }> = ({ analysis }) => {
-    if (!analysis.id) return null
+    const studyId = useQueryParam<number>('studyId') || null
+    useEffect(() => {
+        if (studyId) {
+            const study = studies.find(s => s.id == studyId) || null
+            setStudy(study)
+            if (study) {
+                const analysisCopy = analyses.find(a => a.title.toLowerCase().trim() === study.titleForResearchers.toLowerCase().trim())
+                if (analysisCopy) {
+                    setStudyTitle(`${analysisCopy.title} (copy)`)
+                } else {
+                    setStudyTitle(study.titleForResearchers)
+                }
+            }
+        }
 
-    return (
-        <Box align="center" justify="around">
-            <InputField name="apiKey" label="Api Key" readOnly />
-            <a
-                className="btn btn-primary" target="kinetic-workspaces-editor"
-                href={`https://workspaces.kinetic.sandbox.openstax.org/editor/#${analysis.id}`}
-            >Edit Code</a>
-        </Box>
-    )
+    }, [studyId, studies])
+
+    return { study, studyTitle }
 }
 
-export const EditAnalysis: FC<EditAnalysisProps> = ({ listing, onEditSuccess }) => {
-    const { analysisId } = useParams<string>();
-    const analysis = (!analysisId || analysisId == 'new') ?
-        newAnalysis : listing.find(a => String(a.id) == analysisId)
 
-    const nav = useNavigate()
+export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies }) => {
+    const { analysisId } = useParams<string>();
+    const studyId = useQueryParam<number>('studyId') || null
     const api = useApi()
+    const nav = useNavigate()
+    const { study, studyTitle } = useDefaultStudy(studies, analyses)
+
+    const analysis = (!analysisId || analysisId == 'new') ?
+        newAnalysis : analyses.find(a => String(a.id) == analysisId)
 
     const [error, setError] = useState('')
 
-    const onCancel = () => {
-        nav('/analysis')
-    }
+    const { refetch } = useFetchAnalyses()
 
     const saveAnalysis = async (analysis: Analysis) => {
         try {
             if (analysis.id) {
-                await api.updateAnalysis({ id: analysis.id, updateAnalysis: { analysis } })
+                const updatedAnalysis = await api.updateAnalysis({ id: analysis.id, updateAnalysis: { analysis } })
+                Toast.show({
+                    message: `Successfully updated analysis ${updatedAnalysis.title}`,
+                })
+                await refetch()
+                nav(`/analysis/overview/${updatedAnalysis.id}`)
             } else {
                 const savedAnalysis = await api.addAnalysis({ addAnalysis: { analysis } })
-                nav(`/analysis/edit/${savedAnalysis.id}`)
+                Toast.show({
+                    message: `Successfully created analysis ${analysis.title}`,
+                })
+                await refetch()
+                nav(`/analysis/overview/${savedAnalysis.id}`)
             }
-            onEditSuccess()
-        }
-        catch (err) {
+        } catch (err) {
             setError(await errorToString(err))
         }
     }
@@ -65,25 +93,86 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ listing, onEditSuccess }) 
     if (!analysis) return <PageNotFound name="Analysis" />
 
     return (
-        <div className="container analysis mt-8">
+        <div className="container analysis mt-2">
             <Form
-                name="analysis"
+                name='analysis-form'
                 onSubmit={saveAnalysis}
-                showControls
-                onCancel={onCancel}
-                enableReinitialize
-                defaultValues={analysis}
-                validationSchema={AnalysisValidationSchema}
+                defaultValues={{
+                    ...analysis,
+                    title: analysis.title || studyTitle,
+                    description: analysis.description || study?.internalDescription || '',
+                    studyIds: studyId ? [...(analysis?.studyIds || []), Number(studyId) ] : analysis.studyIds,
+                }}
+                validationSchema={getAnalysisValidationSchema(analyses, analysis)}
             >
-
                 <Alert warning={true} onDismiss={() => setError('')} message={error} />
-                <EditorInfo analysis={analysis} />
-                <InputField autoFocus name="title" label="Title" />
-                <InputField name="repositoryUrl" label="Repository URL" />
-                <InputField name="description" type="textarea" label="Description" />
-                <SelectedStudies />
+                <Col gap='large'>
+                    <Box justify='between'>
+                        <h3 className='fw-bold'>Analysis Basics</h3>
+                        <ResearcherFAQ />
+                    </Box>
+                    <Title />
+                    <Objectives />
+                    <SelectedStudies studies={studies} />
+                </Col>
+
+                <BottomBar />
             </Form>
 
         </div>
+    )
+}
+
+const Title = () => {
+    return (
+        <Box gap='xlarge'>
+            <Col sm={3} direction='column' gap>
+                <FieldTitle required>Analysis Title</FieldTitle>
+                <small>
+                    This is an internal title to help you organize your analysis reports. This title is only visible to you
+                </small>
+            </Col>
+
+            <Col sm={4} direction='column' gap>
+                <InputField name='title' type='textarea'/>
+                <FieldErrorMessage name='title' liveCountMax={100}/>
+            </Col>
+        </Box>
+    )
+}
+
+const Objectives = () => {
+    return (
+        <Box gap='xlarge'>
+            <Col sm={3} direction='column' gap>
+                <FieldTitle required>Analysis Objectives</FieldTitle>
+                <small>
+                    Clearly define your objectives for running this analysis with emphasis on the questions you’re hoping to investigate
+                </small>
+            </Col>
+
+            <Col sm={4} direction='column' gap>
+                <InputField name='description' type='textarea'/>
+                <FieldErrorMessage name='description' liveCountMax={250}/>
+            </Col>
+        </Box>
+    )
+}
+
+const BottomBar = () => {
+    const { isValid } = useFormState()
+
+    return (
+        <Box className='fixed-bottom bg-white mt-auto' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
+            <Box className='container-lg' align='center' justify='end'>
+                <FormSaveButton
+                    data-testid='save-analysis-button'
+                    className='btn-researcher-primary'
+                    disabled={!isValid}
+                >
+                    Save & Continue
+                </FormSaveButton>
+            </Box>
+        </Box>
     )
 }

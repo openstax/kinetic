@@ -6,8 +6,8 @@ export const colors = {
     blue: '#255ED3',
     purple: '#3D2DCB',
     ash: '#f7f8fa',
-    white: '#ffffff',
     text: '#424242',
+    white: '#ffffff',
 
     // Secondary Colors
     blue50: '#2874F9', // This color is mainly for icon, links.

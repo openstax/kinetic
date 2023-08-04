@@ -30,7 +30,14 @@ class Api::V1::Researcher::AnalysisOpenApi
     end
 
     schema :Analysis do
-      key :required, %w[title description repository_url]
+      key :required, %w[title description]
+      property :runs do
+        key :type, :array
+        key :description, 'The analysis runs.'
+        items do
+          key :$ref, :AnalysisRun
+        end
+      end
     end
 
     schema :AnalysisUpdate
@@ -50,6 +57,7 @@ class Api::V1::Researcher::AnalysisOpenApi
     property :id do
       key :type, :integer
       key :description, 'ID of analysis'
+      key :readOnly, true
     end
 
     property :title do
@@ -77,6 +85,12 @@ class Api::V1::Researcher::AnalysisOpenApi
       end
     end
 
+    property :study_ids do
+      key :type, :array
+      key :description, 'The study ids that the analysis reads from.'
+      key :items, { 'type' => 'number' }
+    end
+
     property :studies do
       key :type, :array
       key :description, 'The studies that the analysis reads from.'
@@ -88,7 +102,6 @@ class Api::V1::Researcher::AnalysisOpenApi
   end
 
   openapi_path '/researcher/analysis' do
-
     operation :get do
       key :summary, 'Retrieve all analysis'
       key :operationId, 'listAnalysis'
@@ -135,6 +148,29 @@ class Api::V1::Researcher::AnalysisOpenApi
   end
 
   openapi_path '/researcher/analysis/{id}' do
+    operation :get do
+      key :summary, 'Get a single analysis'
+      key :description, 'Get a single analysis'
+      key :operationId, 'getAnalysis'
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'ID of the analysis to get.'
+        key :required, true
+        key :schema, { type: :integer }
+      end
+      response 200 do
+        key :description, 'Success, Returns the analysis'
+        content 'application/json' do
+          schema { key :$ref, :Analysis }
+        end
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+
     operation :put do
       key :summary, 'Update a analysis'
       key :description, 'Update a analysis'
@@ -160,12 +196,32 @@ class Api::V1::Researcher::AnalysisOpenApi
         end
       end
       response 200 do
-        key :description, 'Success.  Returns the updated analysis.'
+        key :description, 'Success. Returns the updated analysis.'
         content 'application/json' do
           schema do
             key :$ref, :Analysis
           end
         end
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+
+    operation :delete do
+      key :summary, 'Delete an analysis'
+      key :description, 'Delete an analysis'
+      key :operationId, 'deleteAnalysis'
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'ID of the analysis to delete.'
+        key :required, true
+        key :schema, { type: :integer }
+      end
+      response 200 do
+        key :description, 'Success.'
       end
       extend Api::V1::OpenApiResponses::AuthenticationError
       extend Api::V1::OpenApiResponses::ForbiddenError

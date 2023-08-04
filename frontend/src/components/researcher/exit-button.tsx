@@ -1,10 +1,11 @@
 import { colors } from '@theme';
-import { React, useNavigate } from '@common';
+import { React } from '@common';
+import { Link } from 'react-router-dom';
 
-export const ExitButton: FC = () => {
-    const nav = useNavigate()
+export const ExitButton: FC<{navTo: string}> = ({ navTo }) => {
     return (
-        <h6
+        <Link
+            to={navTo}
             css={{
                 textDecoration: 'underline',
                 textUnderlineOffset: '.5rem',
@@ -12,9 +13,8 @@ export const ExitButton: FC = () => {
                 cursor: 'pointer',
                 alignSelf: 'end',
             }}
-            onClick={() => {nav('/studies')}}
         >
             Exit
-        </h6>
+        </Link>
     )
 }

@@ -7,7 +7,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   def index
     launched_studies = current_user.launched_studies.includes(:stages, study: [:researchers])
 
-    unlaunched_studies = Study.available.includes(:researchers)
+    unlaunched_studies = Study.available_to_participants.includes(:researchers)
                            .where.not(id: launched_studies.map(&:study_id))
 
     studies = launched_studies + unlaunched_studies
@@ -22,7 +22,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   def show
     model =
       current_user.launched_studies.where(study_id: params[:id]).first ||
-      Study.available.find(params[:id])
+      Study.available_to_participants.find(params[:id])
     raise ActiveRecord::RecordNotFound if model.is_hidden?
 
     response_binding = Api::V1::Bindings::ParticipantStudy.create_from_model(model, current_user)

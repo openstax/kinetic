@@ -4,11 +4,13 @@ import {
     IconifyIcon,
     IconifyIconDefinition,
     IconProps as SundryIconProps,
+    setSundryIcons,
 } from '@nathanstitt/sundry/ui'
 
 import clockOutline from '@iconify-icons/mdi/clock-outline'
 import plusCircleOutline from '@iconify-icons/mdi/plus-circle-outline'
 import plus from '@iconify-icons/mdi/plus'
+import minus from '@iconify-icons/mdi/minus'
 import close from '@iconify-icons/mdi/close'
 import chevronRight from '@iconify-icons/mdi/chevron-right'
 import chevronLeft from '@iconify-icons/mdi/chevron-left'
@@ -32,36 +34,57 @@ import helpCircle from '@iconify-icons/mdi/help-circle'
 import pencil from '@iconify-icons/mdi/pencil'
 import pause from '@iconify-icons/mdi/pause'
 import play from '@iconify-icons/mdi/play'
-
+import info from '@iconify-icons/mdi/info'
+import thumbsUp from '@iconify-icons/mdi/thumb-up'
+import alert from '@iconify-icons/mdi/alert'
+import alertCircle from '@iconify-icons/mdi/alert-circle'
+import reload from '@iconify-icons/mdi/reload'
 
 export const ICONS = {
     clockOutline,
     plusCircleOutline,
     plus,
     close,
-    chevronRight,
-    chevronLeft,
-    chevronDown,
-    chevronUp,
-    dotsVertical,
     search,
     trash,
     checkCircle,
     feedback,
     heart,
     warning,
+    cloudUpload,
+    cloudDownload,
+    pause,
+    chevronLeft,
+    chevronRight,
+    chevronDown,
+    chevronUp,
+    dotsVertical,
     circle,
     person,
     menu,
     cardMultiple,
     message,
-    cloudUpload,
-    cloudDownload,
     helpCircle,
     pencil,
-    pause,
     play,
+    info,
 }
+
+const SUNDRY_PACKAGED_ICONS = {
+    thumbsUp,
+    xSimple: close,
+    cancel: close,
+    xCircle: close,
+    exclamationCircle: alertCircle,
+    exclamationTriangle: alert,
+    clock: clockOutline,
+    spin: reload,
+    close,
+    plusSquare: plus,
+    plus,
+    minusSquare: minus,
+}
+setSundryIcons(SUNDRY_PACKAGED_ICONS)
 
 export type IconKey = keyof typeof ICONS
 export type IconSpec = IconKey | IconifyIconDefinition | IconifyIcon

@@ -21,6 +21,7 @@ $link-color: #0d6efd;
 .btn-researcher-primary {
     --bs-btn-font-weight: 600;
     --bs-btn-color: var(--bs-white);
+    --bs-btn-disabled-color: var(--bs-black);
     --bs-btn-bg: #255ED3;
     --bs-btn-border-color: #255ED3;
     --bs-btn-border-radius: .5rem;
@@ -31,7 +32,8 @@ $link-color: #0d6efd;
     --bs-btn-active-color: var(--bs-btn-hover-color);
     --bs-btn-active-bg: #{shade-color(#255ED3, 20%)};
     --bs-btn-active-border-color: #{shade-color(#255ED3, 20%)};
-    --bs-btn-disabled-bg: #{shade-color(#DBDBDB, 10%)}
+    --bs-btn-disabled-bg: #{shade-color(#DBDBDB, 10%)};
+    --bs-btn-disabled-border-color: var(--bs-gray);
 }
 
 .btn-researcher-secondary {
@@ -47,5 +49,6 @@ $link-color: #0d6efd;
     --bs-btn-active-color: var(--bs-btn-hover-color);
     --bs-btn-active-bg: #{shade-color(#FFF, 20%)};
     --bs-btn-active-border-color: #{shade-color(#FFF, 20%)};
-    --bs-btn-disabled-bg: #{shade-color(#DBDBDB, 10%)}
+    --bs-btn-disabled-bg: #{shade-color(#DBDBDB, 10%)};
+    --bs-btn-disabled-border-color: var(--bs-gray);
 }

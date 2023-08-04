@@ -11,7 +11,7 @@ RSpec.describe Study, api: :v1 do
 
   describe '#open?' do
     it 'returns open studies' do
-      expect_query_results(described_class.available, [opens_and_closes_study, opens_only_study])
+      expect_query_results(described_class.available_to_participants, [opens_and_closes_study, opens_only_study])
     end
   end
 

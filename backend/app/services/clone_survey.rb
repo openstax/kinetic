@@ -10,7 +10,7 @@ class CloneSurvey
   end
 
   def clone(new_name)
-    return [@survey_id, 'dev-no-key'] unless Rails.env.production?
+    return [@survey_id, '1234567890123456'] unless Rails.env.production?
 
     @source = api.get_survey_definition(@survey_id, format: 'qsf')
 

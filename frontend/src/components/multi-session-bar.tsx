@@ -2,7 +2,7 @@ import { React, useMemo } from '@common'
 import { filter } from 'lodash-es'
 import { ParticipantStudy } from '@api'
 import plur from 'plur'
-import { colors } from '../theme'
+import { colors } from '@theme'
 import { Segment, SegmentCircle, SegmentedBar, SegmentTitle } from './segment-bar'
 import { Icon } from './icon'
 

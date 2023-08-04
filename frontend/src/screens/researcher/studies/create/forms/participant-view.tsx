@@ -1,5 +1,5 @@
 import { studySubjects, studyTopics } from '@models';
-import { Box, React, useMemo, useState, Yup } from '@common';
+import { Box, React, useState, Yup } from '@common';
 import {
     Col,
     FieldErrorMessage,
@@ -17,18 +17,16 @@ import { first } from 'lodash-es';
 import { Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
 
-export const participantViewValidation = (studies: Study[], study: Study) => {
-    const allOtherStudies = useMemo(() => studies?.filter(s => 'id' in study && s.id !== study.id), [studies])
-
+export const participantViewValidation = (allOtherStudies: Study[]) => {
     return {
         titleForParticipants: Yup.string().when('step', {
             is: 2,
             then: (s: Yup.BaseSchema) =>
                 s.required('Required').max(45).test(
                     'Unique',
-                    'This study title is already in use. Please change your study title to make it unique on Kinetic..',
+                    'This study title is already in use. Please change your study title to make it unique on Kinetic.',
                     (value: string) => {
-                        if (!studies.length) {
+                        if (!allOtherStudies.length) {
                             return true
                         }
                         return allOtherStudies.every(study => study.titleForParticipants?.toLowerCase().trim() !== value?.toLowerCase().trim())
@@ -47,18 +45,40 @@ export const participantViewValidation = (studies: Study[], study: Study) => {
             is: 2,
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
-        stages: Yup.array().when('step', {
-            is: 2,
-            then: Yup.array().of(
-                Yup.object({
-                    points: Yup.number().required(),
-                    feedbackTypes: Yup.array().test(
-                        'At least one',
-                        'Select at least one item',
-                        (feedbackTypes?: string[]) => (feedbackTypes?.length || 0) > 0
-                    ),
-                })
-            ),
+        stages: Yup.lazy((stages, options) => {
+            if (!stages) return Yup.mixed()
+            const step = options.parent.step
+            const firstStage = stages[0]
+
+            const stageSchema = Yup.object({
+                points: Yup.number().required().positive(),
+                durationMinutes: Yup.number().required().positive(),
+                feedbackTypes: Yup.array().test(
+                    'At least one',
+                    'Select at least one item',
+                    (feedbackTypes?: string[]) => {
+                        return (feedbackTypes?.length || 0) > 0
+                    }
+                ),
+            })
+            if (step == 2) {
+                return Yup.array().test(
+                    'firstStageValid',
+                    'Invalid',
+                    () => stageSchema.isValidSync(firstStage)
+                )
+            }
+            if (step == 3) {
+                return Yup.array().test(
+                    'allStagesValid',
+                    'Invalid',
+                    () => {
+                        const allSessionsValid = Yup.array().of(stageSchema)
+                        return allSessionsValid.isValidSync(stages)
+                    }
+                )
+            }
+            return Yup.mixed()
         }),
         benefits: Yup.string().when('step', {
             is: 2,
@@ -74,16 +94,18 @@ export const participantViewValidation = (studies: Study[], study: Study) => {
 export const ParticipantView: FC<{study: Study}> = ({ study }) => {
     const [showImagePicker, setShowImagePicker] = useState<boolean>(false)
     const { setValue, watch, getValues, control } = useFormContext<Study>()
-    const { fields, update } = useFieldArray({
+    const { update } = useFieldArray({
         control,
         name: 'stages',
+        keyName: 'customId',
     })
     const firstSession = first(study.stages)
 
     const setDurationAndPoints = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const stage = getValues('stages.0')
         if (e.target.value === '10') {
             update(0, {
-                ...fields[0],
+                ...stage,
                 points: 10,
                 durationMinutes: 5,
             })
@@ -91,7 +113,7 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
 
         if (e.target.value === '20') {
             update(0, {
-                ...fields[0],
+                ...stage,
                 points: 20,
                 durationMinutes: 15,
             })
@@ -99,7 +121,7 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
 
         if (e.target.value === '30') {
             update(0, {
-                ...fields[0],
+                ...stage,
                 points: 30,
                 durationMinutes: 25,
             })
@@ -111,7 +133,6 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
             <Col sm={8}>
                 <Box direction='column' gap='xlarge'>
                     <StepHeader title='Participant View' eta={10} />
-
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
                             <FieldTitle required>Study Title for Participants</FieldTitle>
@@ -268,9 +289,7 @@ export const StudyFeedback: FC<{sessionIndex: number}> = ({ sessionIndex }) => {
     return (
         <Box gap='xlarge'>
             <Col sm={4} direction='column' gap>
-                <FieldTitle required>
-                    Feedback
-                </FieldTitle>
+                <FieldTitle required>Feedback</FieldTitle>
                 <small>Share with participants what type of feedback to expect at the end of the study. Preferred feedback indicated.</small>
             </Col>
 
@@ -301,7 +320,7 @@ export const StudyFeedback: FC<{sessionIndex: number}> = ({ sessionIndex }) => {
                         desc="Tailored information to participant's specific characteristics, behaviors, needs, performance, or some combination"
                     />
 
-                    <FieldErrorMessage name='stages.0.feedbackTypes'/>
+                    <FieldErrorMessage name={`stages.${sessionIndex}.feedbackTypes`} />
                 </Box>
             </Col>
         </Box>

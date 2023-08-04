@@ -8,13 +8,24 @@ import './lib/sentry'
 import './index.css'
 import './styles/main.scss'
 import { theme } from '@theme'
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+        },
+    },
+})
 
 const App = () => (
     <React.StrictMode>
         <Router>
             <ThemeProvider theme={theme}>
                 <EnvironmentProvider>
-                    <AppRoutes />
+                    <QueryClientProvider client={queryClient}>
+                        <AppRoutes />
+                    </QueryClientProvider>
                 </EnvironmentProvider>
             </ThemeProvider>
         </Router>

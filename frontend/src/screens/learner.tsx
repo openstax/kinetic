@@ -1,7 +1,7 @@
 import { cx, React, useCallback } from '@common'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
-import { colors, media } from '../theme'
+import { colors, media } from '@theme'
 import { Box, Footer, RewardsProgressBar, TopNavBar } from '@components'
 import { useIsMobileDevice } from '@lib'
 import { StudyTopic, studyTopics } from '@models'
@@ -61,7 +61,7 @@ const Grid = styled.div({
 
 const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
     return (
-        <div className={cx('container-lg', 'studies', 'my-3', className)} >
+        <div className={cx('container', 'studies', 'my-3', className)} >
             <h3 css={{ margin: '2rem 0' }}>{title}</h3>
             {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
