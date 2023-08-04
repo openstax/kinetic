@@ -6,7 +6,7 @@ import { colors } from '@theme';
 import { FAQSection } from './researcher-faq';
 import { Link } from 'react-router-dom';
 import { RunsTable } from './runs-table';
-import { ENV } from '../../lib/env'
+import { ENV } from '@lib'
 
 export const AnalysisOverview: FC = () => {
     const { analysisId } = useParams<string>();

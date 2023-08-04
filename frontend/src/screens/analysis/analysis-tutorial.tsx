@@ -1,6 +1,6 @@
 import { Box, Col, Modal, ResearcherButton, Row } from '@components';
 import { React, styled, useState } from '@common';
-import { useApi } from '@lib';
+import { useApi, useUserPreferences } from '@lib';
 import { noop } from 'lodash-es';
 import Tutorial1 from '@images/analysis/tutorial1.svg'
 import Tutorial2 from '@images/analysis/tutorial2.svg'
@@ -17,10 +17,13 @@ export const AnalysisTutorial: FC<{show: boolean}> = ({ show }) => {
     const api = useApi()
     const [showTutorial, setShowTutorial] = useState(show)
     const [step, setStep] = useState(0)
+    const { refetch } = useUserPreferences()
 
     const closeTutorial = () => {
         api.updatePreferences({ updatePreferences: { preferences: { hasViewedAnalysisTutorial: true } } }).then(() => {
-            setShowTutorial(false)
+            refetch().then(() => {
+                setShowTutorial(false)
+            })
         })
     }
 
