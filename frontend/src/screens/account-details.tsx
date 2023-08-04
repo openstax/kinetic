@@ -78,7 +78,7 @@ export default function AccountDetails() {
     const userInfo = useUserInfo()
     const isMobile = useIsMobileDevice()
 
-    const prefs = useUserPreferences()
+    const { data: prefs } = useUserPreferences()
     if (!userInfo || !prefs) return <LoadingAnimation message="Loading account…" />;
 
     const email = userInfo.contact_infos.find(e => e.type == 'EmailAddress')

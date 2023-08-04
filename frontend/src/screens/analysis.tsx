@@ -10,7 +10,7 @@ import { useUserPreferences } from '@lib';
 import { AnalysisTutorial } from './analysis/analysis-tutorial';
 
 const AnalysisRoutes = () => {
-    const preferences = useUserPreferences()
+    const { data: preferences } = useUserPreferences()
     const { data: studies, isLoading: isLoadingStudies } = useFetchPublicStudies()
     const { data: analyses, isLoading: isLoadingAnalyses } = useFetchAnalyses()
 
