@@ -4,8 +4,6 @@ import { Icon } from './icon'
 import { Box } from 'boxible'
 import { uniqueId } from 'lodash-es'
 import { usePopper } from 'react-popper'
-import chevronUp from '@iconify-icons/bi/chevron-up'
-import chevronDown from '@iconify-icons/bi/chevron-down'
 
 export interface MenuProps {
     alignEnd?: boolean
@@ -62,7 +60,7 @@ export const Menu: FCWC<MenuProps> = ({
             fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap', userSelect: 'none', color: isOpen ? 'white' : '#b8bbbf',
         }} {...toggleProps}>
             <span>Hi {userInfo?.first_name}</span>
-            <Icon icon={isOpen ? chevronUp : chevronDown} />
+            <Icon icon={isOpen ? 'chevronUp' : 'chevronDown'} />
         </Box>
     )
 

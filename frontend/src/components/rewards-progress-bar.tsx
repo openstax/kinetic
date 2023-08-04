@@ -4,8 +4,6 @@ import { RewardsSegment, useRewardsSchedule } from '@models'
 import { formatDate, toDayJS, useIsMobileDevice } from '@lib'
 import { ParticipantStudy } from '@api'
 import { colors } from '@theme'
-import trophyFilledIcon from '@iconify-icons/bi/trophy-fill'
-import trophyOutlineIcon from '@iconify-icons/bi/trophy'
 import { CSSObject } from '@emotion/react'
 
 interface RewardsProgressBarProps {
@@ -81,7 +79,7 @@ const GrandPrize: React.FC<{ segment?: RewardsSegment }> = ({ segment }) => {
             <Icon
                 css={{ background: 'white', marginTop: -5 }}
                 color={segment.achieved ? colors.purple : colors.gray50}
-                icon={segment.isCurrent ? trophyFilledIcon : trophyOutlineIcon}
+                icon={segment.isCurrent ? 'trophy' : 'trophyOutline'}
                 height={25}
             />
             <SegmentLabel segment={segment} />

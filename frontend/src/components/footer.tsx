@@ -13,9 +13,6 @@ import RiceLogoURL from '../images/rice-logo.png'
 // @ts-ignore
 import OpenStaxURL from '../images/openstax-logo.png'
 
-import fbIcon from '@iconify-icons/bi/facebook'
-import igIcon from '@iconify-icons/bi/instagram'
-import twIcon from '@iconify-icons/bi/twitter'
 import { useIsMobileDevice } from '@lib';
 
 const Supporter = styled.a({
@@ -82,13 +79,13 @@ export const MobileFooter: React.FC<{ className?: string, includeFunders?: boole
                         <h4>Follow us</h4>
                         <Box gap>
                             <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org">
-                                <Icon icon={fbIcon} height={30}/>
+                                <Icon icon='facebook' height={30}/>
                             </a>
                             <a target="_blank" href="https://www.instagram.com/openstax/">
-                                <Icon icon={igIcon} height={30}/>
+                                <Icon icon='instagram' height={30}/>
                             </a>
                             <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org">
-                                <Icon icon={twIcon} height={30}/>
+                                <Icon icon='twitter' height={30}/>
                             </a>
                         </Box>
                     </Row>
@@ -120,9 +117,9 @@ export const DesktopFooter: React.FC<{ className?: string, includeFunders?: bool
                     <Col auto direction="column">
                         <b>Follow us</b>
                         <Box gap>
-                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org"><Icon icon={fbIcon} /></a>
-                            <a target="_blank" href="https://www.instagram.com/openstax/"><Icon icon={igIcon} /></a>
-                            <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org"><Icon icon={twIcon} /></a>
+                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org"><Icon icon='facebook' /></a>
+                            <a target="_blank" href="https://www.instagram.com/openstax/"><Icon icon='instagram' /></a>
+                            <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org"><Icon icon='twitter' /></a>
                         </Box>
                     </Col>
                     <Col auto direction="column" gap>

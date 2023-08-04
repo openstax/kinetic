@@ -39,6 +39,11 @@ import thumbsUp from '@iconify-icons/mdi/thumb-up'
 import alert from '@iconify-icons/mdi/alert'
 import alertCircle from '@iconify-icons/mdi/alert-circle'
 import reload from '@iconify-icons/mdi/reload'
+import trophy from '@iconify-icons/mdi/trophy'
+import trophyOutline from '@iconify-icons/mdi/trophy-outline'
+import facebook from '@iconify-icons/mdi/facebook'
+import instagram from '@iconify-icons/mdi/instagram'
+import twitter from '@iconify-icons/mdi/twitter'
 
 export const ICONS = {
     clockOutline,
@@ -68,6 +73,11 @@ export const ICONS = {
     pencil,
     play,
     info,
+    trophy,
+    trophyOutline,
+    facebook,
+    twitter,
+    instagram,
 }
 
 const SUNDRY_PACKAGED_ICONS = {
