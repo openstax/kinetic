@@ -25,8 +25,8 @@ export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, controls, className
                         <NavbarLogoLink />
                         {children}
                         <Box gap="xlarge" align="center">
-                            {!isMobile && <Link to="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Studies</Link>}
-                            {!isMobile && <Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Analysis</Link>}
+                            {!isMobile && user.isResearcher && <Link to="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Studies</Link>}
+                            {!isMobile && user.isResearcher && <Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Analysis</Link>}
                             {controls}
                             <Menu alignEnd >
                                 {isMobile && <li><Link className="dropdown-item" to="/studies">Studies</Link></li>}
