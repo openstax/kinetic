@@ -33,7 +33,8 @@ class MigrateStudyData < ActiveRecord::Migration[6.1]
         :subject => data['study_subject'],
         :benefits => data['benefits'],
         :opens_at => data['opens_at']&.to_date,
-        :closes_at => data['closes_at']&.to_date
+        :closes_at => data['closes_at']&.to_date,
+        :public_on => data['public_on'] == 'now' ? DateTime.now : data['public_on']&.to_date
       })
 
       data['stages'].each_with_index do |stage_data, index|
