@@ -17,6 +17,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'debrief' ]
+  public_on: now
 
 
 
@@ -39,6 +40,7 @@
     - points: 30
       duration_minutes: 25
       feedback_types: [ 'score' ]
+  public_on: null
 
 
 
@@ -61,6 +63,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'general' ]
+  public_on: now
 
 
 
@@ -83,6 +86,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: now
 
 
 
@@ -105,6 +109,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'debrief' ]
+  public_on: now
 
 
 
@@ -127,6 +132,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'score' ]
+  public_on: now
 
 
 
@@ -149,6 +155,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: now
 
 
 
@@ -171,6 +178,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: now
 
 
 
@@ -193,6 +201,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: now
 
 
 
@@ -216,9 +225,10 @@
       duration_minutes: 25
       feedback_types: [ 'score' ]
     - points: 35
-      duration_minutes: 25
+      duration_minutes: 15
       feedback_types: [ 'score' ]
       available_after_days: '7'
+  public_on: null
 
 
 
@@ -241,6 +251,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'debrief' ]
+  public_on: now
 
 
 
@@ -263,6 +274,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'score', 'debrief' ]
+  public_on: null
 
 
 
@@ -285,6 +297,7 @@
     - points: 30
       duration_minutes: 25
       feedback_types: [ 'score' ]
+  public_on: null
 
 
 
@@ -308,9 +321,10 @@
       duration_minutes: 25
       feedback_types: [ 'score' ]
     - points: 35
-      duration_minutes: 25
+      duration_minutes: 15
       feedback_types: [ 'score' ]
       available_after_days: '7'
+  public_on: null
 
 
 
@@ -333,6 +347,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'debrief' ]
+  public_on: null
 
 
 
@@ -355,6 +370,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: now
 
 
 
@@ -377,6 +393,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: now
 
 
 
@@ -399,6 +416,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'score', 'personalized' ]
+  public_on: now
 
 
 
@@ -421,6 +439,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: now
 
 
 
@@ -443,6 +462,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'score' ]
+  public_on: null
 
 
 - id: 21
@@ -464,6 +484,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'general' ]
+  public_on: now
 
 
 
@@ -486,6 +507,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'score', 'general' ]
+  public_on: null
 
 
 
@@ -508,6 +530,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: now
 
 
 
@@ -530,6 +553,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'score', 'general' ]
+  public_on: null
 
 
 
@@ -552,6 +576,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'general' ]
+  public_on: null
 
 
 
@@ -574,6 +599,7 @@
     - points: 30
       duration_minutes: 25
       feedback_types: [ 'score' ]
+  public_on: null
 
 
 
@@ -596,6 +622,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'general' ]
+  public_on: null
 
 
 - id: 31
@@ -618,9 +645,10 @@
       duration_minutes: 25
       feedback_types: [ 'score' ]
     - points: 35
-      duration_minutes: 25
+      duration_minutes: 15
       feedback_types: [ 'score' ]
-      available_after_days: 7
+      available_after_days: '7'
+  public_on: null
 
 
 - id: 32
@@ -642,6 +670,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: null
 
 
 
@@ -665,6 +694,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: now
 
 
 
@@ -687,6 +717,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: now
 
 
 
@@ -709,6 +740,7 @@
     - points: 30
       duration_minutes: 25
       feedback_types: [ 'score' ]
+  public_on: null
 
 
 
@@ -731,6 +763,7 @@
     - points: 30
       duration_minutes: 25
       feedback_types: [ 'score', 'debrief' ]
+  public_on: null
 
 
 
@@ -753,6 +786,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: null
 
 
 
@@ -775,6 +809,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'debrief' ]
+  public_on: null
 
 
 
@@ -797,6 +832,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'score', 'personalized' ]
+  public_on: now
 
 
 
@@ -819,6 +855,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'debrief' ]
+  public_on: null
 
 
 
@@ -841,6 +878,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'debrief' ]
+  public_on: null
 
 
 
@@ -863,6 +901,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'debrief' ]
+  public_on: null
 
 
 
@@ -878,35 +917,59 @@
   long_description_for_participants: 'Have you used educational technology tools in a math class before? We want to hear what you loved and hated about technology in your math classroom. Then get creative to think about what would have helped your learning more.'
   study_topic: 'Learning'
   study_subject: null
-  benefits: You'll reflect on your own learning (metacognitive awareness) while helping the next generation of learners! Plus we'll share some free online math learning resources.
+  benefits: "You'll reflect on your own learning (metacognitive awareness) while helping the next generation of learners! Plus we'll share some free online math learning resources."
   opens_at: 2023-02-17 09:00:00
   closes_at: null
   stages:
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'debrief' ]
+  public_on: null
+
+
+- id: '78'
+  status: 'active'
+  title_for_researchers: 'Elaborative Learning Strategies'
+  description_for_researchers: 'This is intended to understand the impact of elaborative learning strategies on student performance.'
+  study_type: 'Learning Research'
+  study_pi_uuid: 'c99d9360-da1f-4ee7-a418-e16cf95d9c78'
+  study_lead_uuid: 'e6232b42-2461-4f02-9c04-0394cebd6267'
+  title_for_participants: 'Does creating personal connections help you learn?'
+  short_description_for_participants: 'Can your personal experiences help you remember content? Come find out how much you learned! This study explores how learning strategies influence performance.'
+  long_description_for_participants: "You will read a passage about the field of Industrial-Organizational Psychology. Then, you'll take a 22-question quiz assessing your knowledge of the passage content. Once finished, you will receive your quiz score to find out how much you've learned!"
+  study_topic: 'Learning'
+  study_subject: 'Psychology'
+  benefits: 'By participating in this study, you will support research that aims to understand how learning strategies can aid future student learning and performance, plus you will learn about a useful psychology topic!'
+  opens_at: 2023-05-15 09:00:00
+  closes_at: null
+  stages:
+    - points: 30
+      duration_minutes: 25
+      feedback_types: [ 'debrief', 'score' ]
+  public_on: null
 
 
 
 - id: 79
   status: 'active'
   title_for_researchers: 'Perfectionism'
-  description_for_researchers: This is intended to gauge learners' tendencies towards perfectionism, and evaluate via scores whether it's helpful to them or hindering their progress
+  description_for_researchers: "This is intended to gauge learners' tendencies towards perfectionism, and evaluate via scores whether it's helpful to them or hindering their progress"
   study_type: 'Learner Characteristics'
   study_pi_uuid: a79bcf1a-eddd-444d-a705-74d910f7e711
   study_lead_uuid: 6a6c8564-7fb0-4d85-a2ec-2dd899c3bb3b
   title_for_participants: 'Are you a perfectionist?'
-  short_description_for_participants: Despite what society tells us, being a perfectionist isn't all that it's cracked up to be - are you one?
+  short_description_for_participants: "Despite what society tells us, being a perfectionist isn't all that it's cracked up to be - are you one?"
   long_description_for_participants: 'You will answer a total of 45 questions regarding your tendencies towards expecting perfectionism from yourself and others, and the pressure you feel to be a perfectionist.'
   study_topic: 'Personality'
   study_subject: null
-  benefits: You'll find out how much you of a perfectionist you are - and whether that's beneficial to you or if it's hindering your life.
+  benefits: "You'll find out how much you of a perfectionist you are - and whether that's beneficial to you or if it's hindering your life."
   opens_at: 2023-03-15 09:00:00
   closes_at: null
   stages:
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'score', 'personalized' ]
+  public_on: null
 
 
 - id: 80
@@ -928,10 +991,11 @@
     - points: 30
       duration_minutes: 25
       feedback_types: [ 'score' ]
-    - points: 10
+    - points: 35
       duration_minutes: 5
       feedback_types: [ 'score' ]
-      available_after_days: 30
+      available_after_days: '30'
+  public_on: null
 
 
 
@@ -954,6 +1018,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: null
 
 
 
@@ -976,6 +1041,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
+  public_on: null
 
 
 
@@ -995,9 +1061,10 @@
   opens_at: 2023-06-22 09:00:00
   closes_at: 2023-12-22 23:59:00
   stages:
-    - points: 15
-      duration_minutes: 20
+    - points: 20
+      duration_minutes: 15
       feedback_types: [ 'debrief' ]
+  public_on: null
 
 
 - id: 116
@@ -1019,4 +1086,5 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'debrief' ]
+  public_on: null
 
