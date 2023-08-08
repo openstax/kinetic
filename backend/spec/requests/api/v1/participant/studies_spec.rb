@@ -103,7 +103,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
             id: study1.id,
             title_for_participants: study1.title_for_participants,
             short_description: study1.short_description,
-            popularity_rating: a_value_within(0.1).of(0.0),
+            popularity_rating: 0,
             researchers: a_collection_containing_exactly(
               a_hash_including({
                 first_name: kind_of(String),
@@ -116,7 +116,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
             id: study2.id,
             title_for_participants: study2.title_for_participants,
             short_description: study2.short_description,
-            popularity_rating: a_value_within(0.1).of(0.33),
+            popularity_rating: 0,
             first_launched_at: kind_of(String),
             researchers: a_collection_containing_exactly(
               a_hash_including({
@@ -128,7 +128,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
           ),
           a_hash_including(
             id: study3.id,
-            popularity_rating: a_value_within(0.1).of(0.66),
+            popularity_rating: 1,
             first_launched_at: kind_of(String),
             completed_at: kind_of(String)
           )

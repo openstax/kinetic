@@ -33,7 +33,7 @@ class LaunchedStudy < ApplicationRecord
   def completed!
     update!(completed_at: Time.now)
     completed = LaunchedStudy.where(study_id: study_id).complete.count
-    Study.find(study_id).update_columns(completed_count: completed)
+    Study.update(study_id, completed_count: completed)
   end
 
   def aborted!
