@@ -3,9 +3,9 @@ import {
     Alert,
     Box,
     Col,
-    EditingForm as Form,
     FieldErrorMessage,
     FieldTitle,
+    Form,
     FormSaveButton,
     InputField,
     PageNotFound,
@@ -95,7 +95,7 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies }) => {
     return (
         <div className="container analysis mt-2">
             <Form
-                name='analysis-form'
+                showControls={false}
                 onSubmit={saveAnalysis}
                 defaultValues={{
                     ...analysis,

@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
 class LaunchedStudy < ApplicationRecord
-  belongs_to :study, counter_cache: :completed_count
+  belongs_to :study
   has_many :stages, through: :study
-
-  # foreign_key: :user_id, primary_key: :user_id
 
   before_create { self.first_launched_at ||= Time.now }
 
@@ -27,7 +25,7 @@ class LaunchedStudy < ApplicationRecord
     update!(opted_out_at: Time.now, consent_granted: false)
   end
 
-  # Chose not to reset opted_out_at, in case it might be useful to find students who changed thier mind between steps
+  # Chose not to reset opted_out_at, in case it might be useful to find students who changed their mind between steps
   def consented!
     update!(consent_granted: true)
   end
@@ -35,7 +33,7 @@ class LaunchedStudy < ApplicationRecord
   def completed!
     update!(completed_at: Time.now)
     completed = LaunchedStudy.where(study_id: study_id).complete.count
-    Study.update_counters(study_id, completed_count: completed)
+    Study.update(study_id, completed_count: completed)
   end
 
   def aborted!
