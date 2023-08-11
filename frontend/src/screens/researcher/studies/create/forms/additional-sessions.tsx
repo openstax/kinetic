@@ -123,7 +123,8 @@ const AdditionalSession: FC<{
 
                 <Box gap='xlarge'>
                     <Col sm={4} direction='column' gap>
-                        <FieldTitle required>Session Points</FieldTitle>
+                        <FieldTitle>Session Points</FieldTitle>
+                        <small>Each additional session observes a 5pt increment from previous session points to support learner engagement.</small>
                     </Col>
 
                     <Col sm={6} gap>

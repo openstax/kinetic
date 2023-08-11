@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 module CookieAuthentication
+  # Return rails.session[:masquerading]
   def current_user_uuid
+    return session[:masquerading] unless session[:masquerading].nil?
+
     @current_user_uuid ||=
       if Kinetic.allow_stubbed_authentication?
         if ENV['STUBBED_USER_UUID']

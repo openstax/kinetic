@@ -7,8 +7,9 @@ import { AppRoutes } from './routes'
 import './lib/sentry'
 import './index.css'
 import './styles/main.scss'
-import { theme } from '@theme'
+import { mantineTheme, theme } from '@theme'
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { MantineProvider } from '@mantine/core';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -21,13 +22,13 @@ const queryClient = new QueryClient({
 const App = () => (
     <React.StrictMode>
         <Router>
-            <ThemeProvider theme={theme}>
+            <MantineProvider withGlobalStyles withNormalizeCSS theme={mantineTheme}>
                 <EnvironmentProvider>
                     <QueryClientProvider client={queryClient}>
                         <AppRoutes />
                     </QueryClientProvider>
                 </EnvironmentProvider>
-            </ThemeProvider>
+            </MantineProvider>
         </Router>
     </React.StrictMode>
 )

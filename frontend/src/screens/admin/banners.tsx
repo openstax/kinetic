@@ -61,6 +61,7 @@ const Banner: React.FC<{ banner: BannerNotice, onUpdate(): void }> = ({ banner, 
 export function AdminBanners() {
     const api = useApi()
     const state = useFetchState<BannerNotice>({
+        // TODO Order banners most recent -> oldest
         fetch: async () => api.getBanners().then(list => list.data),
         addRecord: async () => BannerNoticeFromJSON({}),
     })
