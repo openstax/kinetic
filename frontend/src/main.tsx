@@ -1,13 +1,12 @@
 import { React } from '@common'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { ThemeProvider } from '@emotion/react';
 import { EnvironmentProvider, whenDomReady } from '@lib'
 import { AppRoutes } from './routes'
 import './lib/sentry'
 import './index.css'
 import './styles/main.scss'
-import { mantineTheme, theme } from '@theme'
+import { mantineTheme } from '@theme'
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { MantineProvider } from '@mantine/core';
 

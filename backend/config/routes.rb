@@ -55,9 +55,9 @@ Rails.application.routes.draw do
         get 'study/:id/responses', to: 'studies#responses'
         post 'stage/:stage_id/responses', to: 'studies#add_response'
         delete 'responses/:id', to: 'studies#destroy_response'
-        
-        post 'masquerade/researcher/:id', to: 'masquerade#masquerade_as_researcher'
-        post 'masquerade/stop', to: 'masquerade#stop'
+
+        post 'impersonate/researcher/:id', to: 'impersonate#impersonate_researcher'
+        post 'impersonate/stop', to: 'impersonate#stop'
       end
 
       get :openapi, to: 'open_api#json', constraints: { format: :json }

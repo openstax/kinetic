@@ -215,6 +215,10 @@ export interface GetStudyRequest {
     id: number;
 }
 
+export interface ImpersonateResearcherRequest {
+    id: number;
+}
+
 export interface LandStudyRequest {
     id: number;
     aborted?: LandStudyAbortedEnum;
@@ -225,10 +229,6 @@ export interface LandStudyRequest {
 export interface LaunchStudyRequest {
     id: number;
     preview?: boolean;
-}
-
-export interface MasqueradeAsResearcherRequest {
-    id: number;
 }
 
 export interface RemoveResearcherFromStudyRequest {
@@ -1280,6 +1280,35 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Impersonate a researcher
+     */
+    async impersonateResearcherRaw(requestParameters: ImpersonateResearcherRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling impersonateResearcher.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/impersonate/researcher/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Impersonate a researcher
+     */
+    async impersonateResearcher(requestParameters: ImpersonateResearcherRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.impersonateResearcherRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Land a study stage
      * Land a study stage
      */
@@ -1386,36 +1415,6 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Masquerade as a researcher
-     */
-    async masqueradeAsResearcherRaw(requestParameters: MasqueradeAsResearcherRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Researcher>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling masqueradeAsResearcher.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/admin/masquerade/researcher/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResearcherFromJSON(jsonValue));
-    }
-
-    /**
-     * Masquerade as a researcher
-     */
-    async masqueradeAsResearcher(requestParameters: MasqueradeAsResearcherRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Researcher> {
-        const response = await this.masqueradeAsResearcherRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Remove a researcher from a study.  Cannot remove the last researcher.
      * Remove a researcher from a study
      */
@@ -1451,15 +1450,15 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Stop masquerading
+     * Stop impersonating
      */
-    async stopMasqueradingRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async stopImpersonatingRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/admin/masquerade/stop`,
+            path: `/admin/impersonate/stop`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -1469,10 +1468,10 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Stop masquerading
+     * Stop impersonating
      */
-    async stopMasquerading(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.stopMasqueradingRaw(initOverrides);
+    async stopImpersonating(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.stopImpersonatingRaw(initOverrides);
     }
 
     /**

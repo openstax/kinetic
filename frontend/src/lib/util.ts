@@ -31,10 +31,6 @@ function tagTester<T>(name: string) {
     }
 }
 
-export const toPercent = (num: number) => {
-    Math.round(num * 100)
-}
-
 export const isString = tagTester<string>('String')
 export const isNumber = tagTester<number>('Number')
 export const isDate = tagTester<Date>('Date')
@@ -82,5 +78,3 @@ export function retry<T>(
             })
     })
 }
-
-export const emptyFn = () => { }

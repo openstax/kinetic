@@ -73,7 +73,8 @@ class Development::UsersController < ApplicationController
       last_name: u[:last_name],
       contact_infos: [{
         type: 'EmailAddress', value: "#{u[:name].parameterize}@test.openstax.org"
-      }]
+      }],
+      impersonating: !!session[:impersonating]
     }
   end
 

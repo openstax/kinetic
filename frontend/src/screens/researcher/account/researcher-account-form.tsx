@@ -48,7 +48,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
     if (!researcher) {
         return null
     }
-    const userInfo = useUserInfo()
+    const { data: userInfo } = useUserInfo()
     // Default to OpenStax accounts first/last name if blank
     researcher.firstName = researcher.firstName || userInfo?.first_name
     researcher.lastName = researcher.lastName || userInfo?.last_name

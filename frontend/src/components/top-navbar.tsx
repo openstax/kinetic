@@ -47,9 +47,9 @@ const AdminLinks = () => {
                     Manage workspaces
                 </Menu.Item>
             </StyledLink>
-            <StyledLink to="/admin/masquerade-view">
+            <StyledLink to="/admin/impersonate-view">
                 <Menu.Item>
-                    Masquerade View
+                    Impersonate
                 </Menu.Item>
             </StyledLink>
         </>
@@ -122,7 +122,7 @@ export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, className }) => {
 
 const NavMenu = () => {
     const [opened, setOpened] = useState(false);
-    const userInfo = useUserInfo()
+    const { data: userInfo } = useUserInfo()
     const isMobile = useIsMobileDevice()
 
     const menuToggle = isMobile ? (

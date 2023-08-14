@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
-class Api::V1::Admin::MasqueradeOpenApi
+class Api::V1::Admin::ImpersonateOpenApi
   include OpenStax::OpenApi::Blocks
-  openapi_path '/admin/masquerade/researcher/{id}' do
+  openapi_path '/admin/impersonate/researcher/{id}' do
     operation :post do
-      key :summary, 'Masquerade as a researcher'
-      key :operationId, 'masqueradeAsResearcher'
+      key :summary, 'Impersonate a researcher'
+      key :operationId, 'impersonateResearcher'
       parameter do
         key :name, :id
         key :in, :path
-        key :description, 'ID of the researcher to masquerade as.'
+        key :description, 'ID of the researcher to impersonate.'
         key :required, true
         key :schema, { type: :integer }
       end
       response 200 do
-        key :description, 'Success. Returns researcher being impersonated as.'
-        content 'application/json' do
-          schema { key :$ref, :Researcher }
-        end
+        key :description, 'Success.'
+        # content 'application/json' do
+        #   schema { key :$ref, :Researcher }
+        # end
       end
       extend Api::V1::OpenApiResponses::AuthenticationError
       extend Api::V1::OpenApiResponses::ForbiddenError
@@ -26,13 +26,13 @@ class Api::V1::Admin::MasqueradeOpenApi
     end
   end
 
-  openapi_path '/admin/masquerade/stop' do
+  openapi_path '/admin/impersonate/stop' do
     operation :post do
-      key :summary, 'Stop masquerading'
-      key :operationId, 'stopMasquerading'
+      key :summary, 'Stop impersonating'
+      key :operationId, 'stopImpersonating'
 
       response 200 do
-        key :description, 'Success. Stops masquerading.'
+        key :description, 'Success. Stops impersonating.'
         # TODO What?
         # content 'application/json' do
         #   schema { key :$ref, :object }

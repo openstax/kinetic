@@ -75,7 +75,7 @@ const Sidebar = () => {
 export default function AccountDetails() {
     const env = useEnvironment()
     const api = useApi()
-    const userInfo = useUserInfo()
+    const { data: userInfo } = useUserInfo()
     const isMobile = useIsMobileDevice()
 
     const { data: prefs } = useUserPreferences()

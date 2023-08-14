@@ -4,6 +4,7 @@ import { PageNotFound } from '@components'
 import { loadAsync } from './components/async'
 import { useCurrentUser } from '@lib'
 import { analytics } from './lib/analytics'
+import { ImpersonatingBanner } from './components/impersonating-banner';
 
 const Home = loadAsync('Homepage', () => import('./screens/homepage'))
 const Dev = loadAsync('Dev', () => import('./screens/dev'))
@@ -31,7 +32,7 @@ export const AppRoutes = () => {
     }, [location.pathname])
     return (
         <div className="openstax-kinetic" data-user-id={user.id}>
-
+            <ImpersonatingBanner />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/dev/*" element={<Dev />} />

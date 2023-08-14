@@ -1,6 +1,5 @@
-import { API_CONFIGURATION, ENV } from '@lib'
+import { API_CONFIGURATION, ENV, retry } from '@lib'
 import { DefaultApi, Environment as ApiEnv, Researcher } from '@api'
-import { retry } from '../lib/util'
 import { User } from './user'
 
 export interface UserInfo {
@@ -13,6 +12,7 @@ export interface UserInfo {
     is_administrator: boolean
     is_not_gdpr_location: boolean
     is_test: boolean
+    impersonating: boolean
     name: string
     needs_complete_edu_profile: boolean
     opt_out_of_cookies: boolean

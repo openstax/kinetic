@@ -45,11 +45,15 @@ export const useCurrentResearcher = () => useEnvironment()?.researcher
 
 export const useUserInfo = () => {
     const env = useEnvironment()
-    const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
-    useEffect(() => {
-        env.fetchUserInfo().then(setUserInfo)
-    }, [])
-    return userInfo
+    return useQuery('fetchUserInfo', () => {
+        return env.fetchUserInfo()
+    })
+
+    // const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
+    // useEffect(() => {
+    //     env.fetchUserInfo().then(setUserInfo)
+    // }, [])
+    // return userInfo
 }
 
 export const useUserPreferences = () => {

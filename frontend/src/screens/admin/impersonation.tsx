@@ -4,26 +4,25 @@ import { useFetchResearchers } from '@models';
 import { Button, Center, Select, Stack, Title } from '@mantine/core';
 import { LoadingAnimation } from '@components';
 import { Researcher } from '@api';
-import { useApi } from '@lib';
+import { useApi, useUserInfo } from '@lib';
 
-export function MasqueradeView() {
+export function Impersonation() {
     return (
         <Main className='container'>
-            <ResearcherMasquerade />
+            <ResearcherImpersonation />
         </Main>
     )
 }
 
-const ResearcherMasquerade = () => {
+const ResearcherImpersonation = () => {
     const api = useApi()
+    const { refetch } = useUserInfo()
     const { data: researchers, isLoading } = useFetchResearchers()
     const [selectedResearcher, setSelectedResearcher] = useState<Researcher | null>(null)
     if (isLoading || !researchers) return <LoadingAnimation />
 
     const becomeResearcher = (researcherId: number) => {
-        api.masqueradeAsResearcher({ id: researcherId }).then(researcher => {
-            console.log(researcher);
-        })
+        api.impersonateResearcher({ id: researcherId }).then(() => refetch())
     }
 
     return (
@@ -31,10 +30,9 @@ const ResearcherMasquerade = () => {
             <Stack w={400}>
                 <Title order={4}>Become a researcher here</Title>
                 <Select
-                    label='Select a researcher to masquerade as'
+                    label='Select a researcher to impersonate'
                     searchable
                     nothingFound='No results'
-                    clearable
                     onChange={(value) => {
                         if (!value) return setSelectedResearcher(null)
                         const researcher = researchers.find(r => r.id == +value)
