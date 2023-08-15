@@ -2,7 +2,7 @@ import { React } from '@common'
 import styled from '@emotion/styled'
 import { colors } from '@theme'
 
-import { useApi, useEnvironment, useIsMobileDevice, useUserInfo, useUserPreferences } from '@lib'
+import { accounts_url, useApi, useIsMobileDevice, useUserInfo, useUserPreferences } from '@lib'
 import {
     Box,
     Footer,
@@ -73,7 +73,6 @@ const Sidebar = () => {
 }
 
 export default function AccountDetails() {
-    const env = useEnvironment()
     const api = useApi()
     const { data: userInfo } = useUserInfo()
     const isMobile = useIsMobileDevice()
@@ -95,7 +94,7 @@ export default function AccountDetails() {
                     <h2 className="mb-3">My Account</h2>
                     <Box justify='between' align="center">
                         <h5 className="mb-0 p-0">General</h5>
-                        <a href={`${env.accounts_url}`}>
+                        <a href={`${accounts_url()}`}>
                             <span>Update Account</span>
                             <Icon icon="chevronRight" />
                         </a>

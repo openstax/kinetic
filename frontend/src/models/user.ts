@@ -2,16 +2,10 @@ import { ENV } from '@lib'
 import { EnvironmentUser } from '@api'
 import { analytics } from '../lib/analytics'
 
-
-export interface UserPayload {
-    user_id: string
-    is_admin: boolean
-    is_researcher: boolean
-}
-
 export class User {
 
     static bootstrap(env: EnvironmentUser) {
+        console.log('bootstrapping')
         window._MODELS = window._MODELS || {}
         const user = window._MODELS.user || (window._MODELS.user = new User())
         user.id = env.userId
@@ -41,7 +35,6 @@ export class User {
         if (attrs.is_admin != null) this.isAdmin = attrs.is_admin
     }
 
-
     get isValid() {
         return Boolean(this.id)
     }
@@ -66,6 +59,42 @@ export class User {
     }
 }
 
+export const logout =  async () => {
+    if (!ENV.IS_DEV_MODE) return
+    await fetch(`${ENV.API_ADDRESS}/development/users/log_out`, {
+        method: 'DELETE', credentials: 'include',
+    })
+}
+
+export const loginAsUser = async (id: string) => {
+    await fetch(`${ENV.API_ADDRESS}/development/users/${id}/log_in`, {
+        method: 'PUT', credentials: 'include',
+    })
+}
+
 export const ANON_USER = new User()
+window._TEST_METHODS = {}
+window._TEST_METHODS.logout = logout
 window._MODELS = window._MODELS || {}
 window._MODELS.user = ANON_USER
+
+export interface UserInfo {
+    id: string
+    full_name: string
+    first_name: string
+    last_name: string
+    contact_infos: Array<{ type: string, value: string }>
+    faculty_status: string
+    is_administrator: boolean
+    is_not_gdpr_location: boolean
+    is_test: boolean
+    name: string
+    needs_complete_edu_profile: boolean
+    opt_out_of_cookies: boolean
+    school_location: string
+    school_type: string
+    self_reported_role: string
+    support_identifier: string
+    using_openstax: boolean
+    uuid: string
+}

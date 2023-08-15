@@ -1,12 +1,17 @@
-import { ENV } from '../../lib'
-import { User, UserPayload } from '@models'
+import { ENV } from '@lib'
+import { User } from '@models'
+
+interface UserPayload {
+    user_id: string
+    is_admin: boolean
+    is_researcher: boolean
+}
 
 interface UsersPayload {
     admins: UserPayload[]
     researchers?: UserPayload[]
     users: UserPayload[]
 }
-
 
 export class AvailableUsers {
 
@@ -24,6 +29,7 @@ export class AvailableUsers {
     researchers: User[] = []
 
     constructor({ admins, users, researchers }: UsersPayload = { admins: [], users: [], researchers: [] }) {
+        console.log(admins, users, researchers)
         this.admins = admins.map(u => new User({ ...u, isAdmin: true }))
         this.users = users.map(u => new User({ ...u }))
         if (researchers) {

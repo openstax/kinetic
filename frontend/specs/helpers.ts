@@ -65,9 +65,9 @@ export const interceptStudyLand = async ({ page }: { page: Page }) => {
 
 export const logout = async ({ page }: { page: Page }) => {
     await page.goto(TC.ORIGIN)
-    await page.waitForFunction(() => (window as any)._MODELS)
+    await page.waitForFunction(() => (window as any)._TEST_METHODS)
     await page.evaluate(() => {
-        return (window as any)._MODELS?.user?.logout() || Promise.resolve()
+        return (window as any)._TEST_METHODS?.logout() || Promise.resolve()
     })
     await page.goto(TC.ORIGIN)
     await page.waitForSelector('testId=login-link')

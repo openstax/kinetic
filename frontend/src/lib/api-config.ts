@@ -9,8 +9,7 @@ export const API_CONFIGURATION = new Configuration({
 })
 
 export const useApi = () => {
-    const api = useMemo(() => {
+    return useMemo(() => {
         return new DefaultApi(API_CONFIGURATION)
     }, [])
-    return api
 }

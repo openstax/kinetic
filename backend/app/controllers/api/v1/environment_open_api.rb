@@ -33,6 +33,10 @@ class Api::V1::EnvironmentOpenApi
       property :researcher do
         key :$ref, :Researcher
       end
+      property :impersonating do
+        key :type, :boolean
+        key :readOnly, true
+      end
       property :accounts_env_name do
         key :type, :string
         key :readOnly, true

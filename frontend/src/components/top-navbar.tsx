@@ -3,10 +3,11 @@ import { Box } from 'boxible'
 import { NavbarLogoLink } from './navbar-logo-link'
 import { Link, NavLink } from 'react-router-dom';
 import { BannersBar } from './banners-bar'
-import { useCurrentUser, useEnvironment, useIsMobileDevice, useUserInfo } from '@lib'
+import { logoutURL, useCurrentUser, useFetchEnvironment, useIsMobileDevice, useUserInfo } from '@lib'
 import { Menu } from '@mantine/core';
 import { Icon } from './icon';
 import { colors } from '@theme';
+import { logout } from '@models';
 
 interface TopNavBarProps {
     className?: string
@@ -22,7 +23,7 @@ const StyledLink = styled(NavLink)({
 
 const AdminLinks = () => {
     const user = useCurrentUser()
-    if (!user.isAdmin) return null
+    if (!user?.isAdministrator) return null
 
     return (
         <>
@@ -57,36 +58,21 @@ const AdminLinks = () => {
 }
 
 const AccountLinks = () => {
-    const env = useEnvironment()
-
     const user = useCurrentUser()
-    if (user.isAdmin || user.isResearcher) {
-        return (
-            <>
-                <Menu.Label>Account</Menu.Label>
-                <StyledLink to="/researcher-account">
-                    <Menu.Item>
-                        My Account
-                    </Menu.Item>
-                </StyledLink>
-                <StyledLink to={env.logoutURL} onClick={() => user.logout()}>
-                    <Menu.Item>
-                        Log out
-                    </Menu.Item>
-                </StyledLink>
-            </>
-        )
-    }
+    const { refetch } = useFetchEnvironment()
+    const isAdminOrResearcher = user?.isAdministrator || user?.isResearcher
 
     return (
         <>
             <Menu.Label>Account</Menu.Label>
-            <StyledLink to="/account">
+            <StyledLink to={isAdminOrResearcher ? '/researcher-account' : '/account'}>
                 <Menu.Item>
                     My Account
                 </Menu.Item>
             </StyledLink>
-            <StyledLink to={env.logoutURL} onClick={() => user.logout()}>
+            <StyledLink to={logoutURL()} onClick={() => {
+                logout().then(() => refetch())
+            }}>
                 <Menu.Item>
                     Log out
                 </Menu.Item>
@@ -98,7 +84,7 @@ const AccountLinks = () => {
 export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, className }) => {
     const user = useCurrentUser()
     const isMobile = useIsMobileDevice()
-    const hideBanner = user.isResearcher || user.isAdmin
+    const hideBanner = user?.isResearcher || user?.isAdministrator
 
     return (
         <nav className={cx('navbar', 'navbar-light', className)}>
@@ -108,8 +94,8 @@ export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, className }) => {
                         <NavbarLogoLink />
                         {children}
                         <Box gap="xlarge" align="center">
-                            {!isMobile && user.isResearcher && <Link to="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Studies</Link>}
-                            {!isMobile && user.isResearcher && <Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Analysis</Link>}
+                            {!isMobile && user?.isResearcher && <Link to="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Studies</Link>}
+                            {!isMobile && user?.isResearcher && <Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Analysis</Link>}
                             <NavMenu />
                         </Box>
                     </Box>

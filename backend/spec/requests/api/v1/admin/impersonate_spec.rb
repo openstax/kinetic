@@ -20,6 +20,10 @@ RSpec.describe 'Impersonate', api: :v1 do
 
       end
 
+      it 'denotes that you are impersonating' do
+        api_get ""
+      end
+
       it 'can stop impersonating' do
         api_post "admin/impersonate/stop"
         expect(session).to match(hash_excluding(:impersonating))

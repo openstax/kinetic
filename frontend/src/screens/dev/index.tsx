@@ -1,7 +1,9 @@
 import { React, useEffect, useNavigate, useState } from '@common'
-import { capitalize, useCurrentUser } from '@lib'
+import { capitalize, useCurrentUser, useFetchEnvironment } from '@lib'
 import { AvailableUsers } from './users'
 import { LinkButton } from '@components'
+import { loginAsUser } from '@models';
+import { Stack } from '@mantine/core';
 
 interface UserCardProps {
     users: AvailableUsers
@@ -36,7 +38,7 @@ const UserCard:React.FC<UserCardProps> = ({ users, type, becomeUser }) => {
 
 export default function Dev() {
     const [users, setUsers] = useState<AvailableUsers>(new AvailableUsers())
-    const currentUser = useCurrentUser()
+    const { refetch: refetchEnvironment } = useFetchEnvironment()
     const nav = useNavigate()
     useEffect(() => {
         AvailableUsers.fetch().then(setUsers)
@@ -46,23 +48,17 @@ export default function Dev() {
         const userId = ev.currentTarget.dataset.userId
         ev.preventDefault()
         if (userId) {
-            await currentUser.become(userId)
+            await loginAsUser(userId)
+            await refetchEnvironment()
             nav('/')
         }
     }
 
     return (
         <div className="dev-console">
-            <nav className="navbar fixed-top navbar-light py-1 bg-light">
-                <div className="container">
-                    <LinkButton secondary to="/">
-                        Home
-                    </LinkButton>
-                </div>
-            </nav>
+            <LoggedInUser />
             <div className="container mt-8">
 
-                {currentUser?.isValid && <h3>Logged in as: {currentUser.id}</h3>}
                 <div className="row">
                     <UserCard users={users} type="admins" becomeUser={becomeUser} />
                     <UserCard users={users} type="researchers" becomeUser={becomeUser} />
@@ -70,5 +66,24 @@ export default function Dev() {
                 </div>
             </div>
         </div>
+    )
+}
+
+const LoggedInUser = () => {
+    const currentUser = useCurrentUser()
+    console.log(currentUser)
+
+    if (!currentUser?.userId) return null
+    return (
+        <Stack>
+            <nav className="navbar fixed-top navbar-light py-1 bg-light">
+                <div className="container">
+                    <LinkButton secondary to="/">
+                        Home
+                    </LinkButton>
+                </div>
+            </nav>
+            <h3>Logged in as: {currentUser.userId}</h3>
+        </Stack>
     )
 }

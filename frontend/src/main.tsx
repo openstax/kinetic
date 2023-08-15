@@ -21,18 +21,18 @@ const queryClient = new QueryClient({
 const App = () => (
     <React.StrictMode>
         <Router>
-            <MantineProvider withGlobalStyles withNormalizeCSS theme={mantineTheme}>
+            <QueryClientProvider client={queryClient}>
                 <EnvironmentProvider>
-                    <QueryClientProvider client={queryClient}>
+                    <MantineProvider withGlobalStyles withNormalizeCSS theme={mantineTheme}>
                         <AppRoutes />
-                    </QueryClientProvider>
+                    </MantineProvider>
                 </EnvironmentProvider>
-            </MantineProvider>
+            </QueryClientProvider>
         </Router>
     </React.StrictMode>
 )
 
 whenDomReady().then(() => {
     const root = createRoot(document.getElementById('root')!)
-    root.render(<App />,)
+    root.render(<App />)
 })

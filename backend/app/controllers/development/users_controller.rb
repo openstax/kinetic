@@ -74,7 +74,6 @@ class Development::UsersController < ApplicationController
       contact_infos: [{
         type: 'EmailAddress', value: "#{u[:name].parameterize}@test.openstax.org"
       }],
-      impersonating: !!session[:impersonating]
     }
   end
 
@@ -93,7 +92,9 @@ class Development::UsersController < ApplicationController
         user_id: researcher.user_id,
         first_name: researcher.first_name,
         last_name: researcher.last_name,
-        name: "#{researcher.first_name} #{researcher.last_name}"
+        name: "#{researcher.first_name} #{researcher.last_name}",
+        isResearcher: true,
+        isAdmin: false,
       }
     end
   end
@@ -104,7 +105,9 @@ class Development::UsersController < ApplicationController
         user_id: admin.user_id,
         first_name: 'Admin',
         last_name: 'McAdminFace',
-        name: 'Admin McAdminFace'
+        name: 'Admin McAdminFace',
+        isAdmin: true,
+        isResearcher: false,
       }
     end
   end

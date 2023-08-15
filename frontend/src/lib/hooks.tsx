@@ -1,6 +1,6 @@
 import { React, useEffect, useCallback, useMemo, useState } from '@common'
 import { useLocation, useParams } from 'react-router-dom'
-import { LoadingAnimation } from '../components/loading-animation'
+import { LoadingAnimation } from '@components'
 import qs from 'qs'
 
 export const usePendingState = (isEnabled = true, delay = 150) => {

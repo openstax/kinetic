@@ -14,6 +14,9 @@ declare global {
             user?: User
             env?: any
         }
+        _TEST_METHODS?: {
+            logout?: () => void
+        }
     }
 
     interface ImportMeta {

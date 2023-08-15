@@ -4,7 +4,7 @@ import { useFetchResearchers } from '@models';
 import { Button, Center, Select, Stack, Title } from '@mantine/core';
 import { LoadingAnimation } from '@components';
 import { Researcher } from '@api';
-import { useApi, useUserInfo } from '@lib';
+import { useApi, useFetchEnvironment } from '@lib';
 
 export function Impersonation() {
     return (
@@ -16,13 +16,15 @@ export function Impersonation() {
 
 const ResearcherImpersonation = () => {
     const api = useApi()
-    const { refetch } = useUserInfo()
+    const { refetch } = useFetchEnvironment()
     const { data: researchers, isLoading } = useFetchResearchers()
     const [selectedResearcher, setSelectedResearcher] = useState<Researcher | null>(null)
     if (isLoading || !researchers) return <LoadingAnimation />
 
     const becomeResearcher = (researcherId: number) => {
-        api.impersonateResearcher({ id: researcherId }).then(() => refetch())
+        api.impersonateResearcher({ id: researcherId }).then(
+            () => refetch()
+        )
     }
 
     return (
