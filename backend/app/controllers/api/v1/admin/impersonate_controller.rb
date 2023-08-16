@@ -10,6 +10,6 @@ class Api::V1::Admin::ImpersonateController < Api::V1::Admin::BaseController
 
   def stop
     session.delete :impersonating
-    redirect_to Rails.application.secrets.frontend_url + '/admin/impersonate'
+    redirect_to "#{Rails.application.secrets.frontend_url}/admin/impersonate"
   end
 end
