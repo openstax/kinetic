@@ -1,5 +1,5 @@
 import { React, useEffect, useNavigate, useState } from '@common'
-import { capitalize, useApi, useCurrentUser, useFetchEnvironment } from '@lib'
+import { capitalize, useCurrentUser, useFetchEnvironment } from '@lib'
 import { AvailableUsers } from './users'
 import { LinkButton } from '@components'
 import { loginAsUser } from '@models';
@@ -71,7 +71,7 @@ export default function Dev() {
 
 const LoggedInUser = () => {
     const currentUser = useCurrentUser()
-    
+
     if (!currentUser?.userId) return null
     return (
         <Stack>
