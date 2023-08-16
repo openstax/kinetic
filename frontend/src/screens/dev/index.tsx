@@ -72,7 +72,7 @@ export default function Dev() {
 const LoggedInUser = () => {
     const currentUser = useCurrentUser()
 
-    if (!currentUser?.userId) return null
+    if (!currentUser.userId) return null
     return (
         <Stack>
             <nav className="navbar fixed-top navbar-light py-1 bg-light">

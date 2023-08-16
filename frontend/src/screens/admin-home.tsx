@@ -11,7 +11,7 @@ import { Impersonation } from './admin/impersonation'
 
 export default function AdminHome() {
     const user = useCurrentUser()
-    if (!user?.isAdministrator) { return <Navigate to="/studies" /> }
+    if (!user.isAdministrator) { return <Navigate to="/studies" /> }
 
     return (
         <Grid className="admin">

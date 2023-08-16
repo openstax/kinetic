@@ -1,6 +1,6 @@
 import { React } from '@common'
 import { Link } from 'react-router-dom';
-import logoURL from '../images/kinetic-logo.png';
+import logoURL from '@images/kinetic-logo.png';
 
 export const NavbarLogoLink = () => {
     return (

@@ -21,7 +21,7 @@ const StudyOverview = loadAsync('Study Overview', () => import('./screens/resear
 
 const StudiesHomepage = () => {
     const user = useCurrentUser()
-    return user?.isResearcher ? <ResearcherStudies /> : <LearnerDashboard />
+    return user.isResearcher ? <ResearcherStudies /> : <LearnerDashboard />
 }
 
 export const AppRoutes = () => {
@@ -32,7 +32,7 @@ export const AppRoutes = () => {
     }, [location.pathname])
 
     return (
-        <div className="openstax-kinetic" data-user-id={user?.userId}>
+        <div className="openstax-kinetic" data-user-id={user.userId}>
             <ImpersonatingBanner />
             <Routes>
                 <Route path="/" element={<Home />} />

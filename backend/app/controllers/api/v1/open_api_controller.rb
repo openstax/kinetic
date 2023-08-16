@@ -48,7 +48,6 @@ class Api::V1::OpenApiController < ApplicationController
   OPENAPI_CLASSES = [
     Api::V1::OpenApiResponses,
     Api::V1::PreferencesOpenApi,
-    Api::V1::DevOpenApi,
     Api::V1::Researcher::StudiesOpenApi,
     Api::V1::Researcher::StudyResearchersOpenApi,
     Api::V1::Researcher::StagesOpenApi,
