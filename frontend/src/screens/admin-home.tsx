@@ -22,7 +22,7 @@ export default function AdminHome() {
                 <Route path="/approve-studies/" element={<ApproveStudies />} />
                 <Route path="/rewards/" element={<AdminRewards />} />
                 <Route path="/workspaces/:studyId?" element={<AdminWorkspaces />} />
-                <Route path="/impersonate-view/" element={<Impersonation />} />
+                <Route path="/impersonate/" element={<Impersonation />} />
             </Routes>
 
         </Grid>

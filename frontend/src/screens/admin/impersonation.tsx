@@ -4,7 +4,7 @@ import { useFetchResearchers } from '@models';
 import { Button, Center, Select, Stack, Title } from '@mantine/core';
 import { LoadingAnimation } from '@components';
 import { Researcher } from '@api';
-import { useApi, useFetchEnvironment } from '@lib';
+import { ENV } from '@lib';
 
 export function Impersonation() {
     return (
@@ -15,17 +15,9 @@ export function Impersonation() {
 }
 
 const ResearcherImpersonation = () => {
-    const api = useApi()
-    const { refetch } = useFetchEnvironment()
     const { data: researchers, isLoading } = useFetchResearchers()
     const [selectedResearcher, setSelectedResearcher] = useState<Researcher | null>(null)
     if (isLoading || !researchers) return <LoadingAnimation />
-
-    const becomeResearcher = (researcherId: number) => {
-        api.impersonateResearcher({ id: researcherId }).then(
-            () => refetch()
-        )
-    }
 
     return (
         <Center mt='lg'>
@@ -47,7 +39,7 @@ const ResearcherImpersonation = () => {
                     }))}
                 />
                 {selectedResearcher &&
-                    <Button color='blue' onClick={() => becomeResearcher(selectedResearcher?.id)}>
+                    <Button color='blue' component='a' href={`${ENV.API_ADDRESS}/api/v1/admin/impersonate/researcher/${selectedResearcher.id}`}>
                         Become {selectedResearcher.firstName} {selectedResearcher.lastName}
                     </Button>
                 }

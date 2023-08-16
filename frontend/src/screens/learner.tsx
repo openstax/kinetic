@@ -14,6 +14,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import { chunk } from 'lodash-es'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Pagination } from 'swiper';
+import { Title } from '@mantine/core';
 
 const Splash = styled(Box)({
     width: '100%',
@@ -25,7 +26,7 @@ const Splash = styled(Box)({
     },
 })
 
-const SplashHeader = styled.h1({
+const SplashHeader = styled(Title)({
     maxWidth: '55%',
     fontWeight: 700,
     [media.mobile]: {
@@ -228,7 +229,7 @@ const LearnerDashboard = () => {
                 <Box className="container-lg h-100" direction='column' gap='xxlarge' justify={{ desktop: 'center' }}>
                     <SplashHeader>Level up to new ways of learning, and earn prizes!</SplashHeader>
                     <SplashText>
-                            With Kinetic, participate in scientific research and learn tips and tricks to help you become a better learner. All while winning prizes!
+                        With Kinetic, participate in scientific research and learn tips and tricks to help you become a better learner. All while winning prizes!
                     </SplashText>
                 </Box>
             </Splash >

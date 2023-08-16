@@ -2,7 +2,7 @@
 
 module CookieAuthentication
   def current_user_uuid
-    return session[:impersonating] unless session[:impersonating].nil?
+    return session[:impersonating] if session[:impersonating].present?
 
     @current_user_uuid ||=
       if Kinetic.allow_stubbed_authentication?

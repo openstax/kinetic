@@ -218,10 +218,6 @@ export interface GetStudyRequest {
     id: number;
 }
 
-export interface ImpersonateResearcherRequest {
-    id: number;
-}
-
 export interface LandStudyRequest {
     id: number;
     aborted?: LandStudyAbortedEnum;
@@ -1311,35 +1307,6 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
-     * Impersonate a researcher
-     */
-    async impersonateResearcherRaw(requestParameters: ImpersonateResearcherRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling impersonateResearcher.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/admin/impersonate/researcher/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Impersonate a researcher
-     */
-    async impersonateResearcher(requestParameters: ImpersonateResearcherRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.impersonateResearcherRaw(requestParameters, initOverrides);
-    }
-
-    /**
      * Land a study stage
      * Land a study stage
      */
@@ -1478,31 +1445,6 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async removeResearcherFromStudy(requestParameters: RemoveResearcherFromStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.removeResearcherFromStudyRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Stop impersonating
-     */
-    async stopImpersonatingRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/admin/impersonate/stop`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Stop impersonating
-     */
-    async stopImpersonating(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.stopImpersonatingRaw(initOverrides);
     }
 
     /**

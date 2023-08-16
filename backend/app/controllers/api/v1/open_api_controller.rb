@@ -56,7 +56,6 @@ class Api::V1::OpenApiController < ApplicationController
     Api::V1::EnvironmentOpenApi,
     Api::V1::BaseStudiesOpenApi,
     Api::V1::Admin::BannersOpenApi,
-    Api::V1::Admin::ImpersonateOpenApi,
     Api::V1::Admin::RewardsOpenApi,
     Api::V1::Admin::ResponsesOpenApi,
     Api::V1::Admin::StudiesOpenApi,

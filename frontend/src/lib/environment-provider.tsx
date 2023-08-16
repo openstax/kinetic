@@ -19,14 +19,8 @@ export const useFetchEnvironment = () => {
 }
 
 export const EnvironmentProvider: FCWC = ({ children }) => {
-    const { data: env, isLoading, error } = useFetchEnvironment()
+    const { data: env, error, isLoading } = useFetchEnvironment()
     const location = useLocation()
-
-    // useEffect(() => {
-    //     if (env?.user) {
-    //         User.bootstrap(env.user)
-    //     }
-    // }, [env?.user])
 
     if (error) {
         return <ErrorPage error={error} />
@@ -36,7 +30,7 @@ export const EnvironmentProvider: FCWC = ({ children }) => {
         return <LoadingAnimation />
     }
 
-    if (!env?.user.userId && (ENV.IS_PROD_MODE || !location.pathname.startsWith('/dev/user'))) {
+    if (!env.user.userId && (ENV.IS_PROD_MODE || !location.pathname.startsWith('/dev/user'))) {
         return (
             <EnvironmentContext.Provider value={env}>
                 <IncorrectUser />
@@ -51,16 +45,16 @@ export const EnvironmentProvider: FCWC = ({ children }) => {
     )
 }
 
-export const useEnvironment = () => React.useContext(EnvironmentContext)
+export const useEnvironment = () => React.useContext(EnvironmentContext) as Environment
 
 export const useCurrentUser = () => {
     const env = useEnvironment()
-    return env?.user
+    return env.user
 }
 
 export const useCurrentResearcher = () => {
     const env = useEnvironment()
-    return env?.researcher
+    return env.researcher
 }
 
 export const useUserInfo = () => {
@@ -79,10 +73,10 @@ export const useUserPreferences = () => {
 
 export const host = () => {
     const env = useEnvironment()
-    if (env?.accountsEnvName === 'production') {
+    if (env.accountsEnvName === 'production') {
         return `https://openstax.org`;
     }
-    return `https://${env?.accountsEnvName}.openstax.org`;
+    return `https://${env.accountsEnvName}.openstax.org`;
 }
 
 export const loginURL = () => {

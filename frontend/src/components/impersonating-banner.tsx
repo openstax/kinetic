@@ -1,23 +1,12 @@
-import { React, useNavigate } from '@common'
+import { React } from '@common'
 import { Box, Button, Center, Container, Group, Title } from '@mantine/core';
-import { useApi, useEnvironment, useFetchEnvironment, useUserInfo } from '@lib';
+import { ENV, useEnvironment, useUserInfo } from '@lib';
 
 export const ImpersonatingBanner = () => {
-    const api = useApi()
-    const nav = useNavigate()
     const { data: userInfo } = useUserInfo()
-    const { refetch } = useFetchEnvironment()
     const env = useEnvironment()
 
-    const stopImpersonating = () => {
-        api.stopImpersonating().then(() => {
-            refetch().then(() => {
-                nav('/admin/impersonate-view')
-            })
-        })
-    }
-
-    if (!env?.impersonating) return null
+    if (!env.isImpersonating) return null
 
     return (
         <Box bg='osOrange'>
@@ -27,7 +16,7 @@ export const ImpersonatingBanner = () => {
                         <Title order={6}>
                             Currently impersonating as {userInfo?.first_name} {userInfo?.last_name}
                         </Title>
-                        <Button onClick={stopImpersonating}>
+                        <Button component='a' href={`${ENV.API_ADDRESS}/api/v1/admin/impersonate/stop`}>
                             Stop impersonating
                         </Button>
                     </Group>

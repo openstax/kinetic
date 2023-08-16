@@ -33,7 +33,7 @@ class Api::V1::EnvironmentOpenApi
       property :researcher do
         key :$ref, :Researcher
       end
-      property :impersonating do
+      property :is_impersonating do
         key :type, :boolean
         key :readOnly, true
       end

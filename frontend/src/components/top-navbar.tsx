@@ -48,7 +48,7 @@ const AdminLinks = () => {
                     Manage workspaces
                 </Menu.Item>
             </StyledLink>
-            <StyledLink to="/admin/impersonate-view">
+            <StyledLink to="/admin/impersonate">
                 <Menu.Item>
                     Impersonate
                 </Menu.Item>

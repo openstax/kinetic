@@ -61,7 +61,7 @@ export interface Environment {
      * @type {boolean}
      * @memberof Environment
      */
-    readonly impersonating?: boolean;
+    readonly isImpersonating?: boolean;
     /**
      * 
      * @type {string}
@@ -114,7 +114,7 @@ export function EnvironmentFromJSONTyped(json: any, ignoreDiscriminator: boolean
         
         'user': EnvironmentUserFromJSON(json['user']),
         'researcher': !exists(json, 'researcher') ? undefined : ResearcherFromJSON(json['researcher']),
-        'impersonating': !exists(json, 'impersonating') ? undefined : json['impersonating'],
+        'isImpersonating': !exists(json, 'is_impersonating') ? undefined : json['is_impersonating'],
         'accountsEnvName': json['accounts_env_name'],
         'homepageUrl': json['homepage_url'],
         'rewardsSchedule': ((json['rewards_schedule'] as Array<any>).map(RewardsScheduleSegmentFromJSON)),

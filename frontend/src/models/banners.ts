@@ -25,7 +25,7 @@ export const useBanners = (): useBannersReturnT => {
         setRemoved(removed.concat(banner.id))
     }, [setRemoved, removed])
 
-    const banners = (env?.bannersSchedule || []).filter(banner => {
+    const banners = env.bannersSchedule.filter(banner => {
         const sd = toDayJS(banner.startAt)
         const ed = toDayJS(banner.endAt)
         return !removed.includes(banner.id) && (
