@@ -1,6 +1,6 @@
 import { Box, Col, Footer, Form, HelpLink, Icon, Modal, ResourceLinks, Tooltip, TopNavBar } from '@components';
 import { React, styled, useState } from '@common';
-import { accounts_url, useApi, useCurrentResearcher } from '@lib';
+import { accountsUrl, useApi, useCurrentResearcher } from '@lib';
 import { colors } from '@theme';
 import { Researcher } from '@api';
 import CustomerSupportImage from '../../../components/customer-support-image';
@@ -23,7 +23,7 @@ export default function ResearcherAccountPage() {
                 <Col sm={9} css={{ paddingRight: '2rem' }} direction='column'>
                     <Box justify='between' height='40px'>
                         <h3>My Account</h3>
-                        <a href={`${accounts_url()}`} target='_blank'>
+                        <a href={`${accountsUrl()}`} target='_blank'>
                             <span>Update Email & Password</span>
                             <Icon icon="chevronRight" />
                         </a>

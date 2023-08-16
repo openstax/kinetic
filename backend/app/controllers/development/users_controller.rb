@@ -73,7 +73,7 @@ class Development::UsersController < ApplicationController
       last_name: u[:last_name],
       contact_infos: [{
         type: 'EmailAddress', value: "#{u[:name].parameterize}@test.openstax.org"
-      }],
+      }]
     }
   end
 
@@ -94,7 +94,7 @@ class Development::UsersController < ApplicationController
         last_name: researcher.last_name,
         name: "#{researcher.first_name} #{researcher.last_name}",
         isResearcher: true,
-        isAdmin: false,
+        isAdmin: false
       }
     end
   end
@@ -107,7 +107,7 @@ class Development::UsersController < ApplicationController
         last_name: 'McAdminFace',
         name: 'Admin McAdminFace',
         isAdmin: true,
-        isResearcher: false,
+        isResearcher: false
       }
     end
   end

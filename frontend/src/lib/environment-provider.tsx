@@ -86,7 +86,7 @@ export const host = () => {
 }
 
 export const loginURL = () => {
-    const url = accounts_url()
+    const url = accountsUrl()
     if (ENV.IS_DEV_MODE) return url
 
     return `${url}/login/?r=${encodeURIComponent(window.location.href)}`
@@ -95,20 +95,20 @@ export const loginURL = () => {
 export const logoutURL = () => {
     if (ENV.IS_DEV_MODE) return '/dev/user';
     const homepage = encodeURIComponent(`${host()}/kinetic`);
-    return `${accounts_url()}/signout?r=${homepage}`;
+    return `${accountsUrl()}/signout?r=${homepage}`;
 }
 
-export const accounts_url = (): string => {
+export const accountsUrl = (): string => {
     if (ENV.IS_DEV_MODE) return '/dev/user'
     return `${host()}/accounts`;
 }
 
-export const accounts_api_url = (): string => {
+export const accountsApiUrl = (): string => {
     if (ENV.IS_DEV_MODE) return `${ENV.API_ADDRESS}/development/user/api/user`
-    return `${accounts_url()}/api/user`
+    return `${accountsUrl()}/api/user`
 }
 
 export const fetchUserInfo = async (): Promise<UserInfo> => {
-    const resp = await fetch(`${accounts_api_url()}`, { credentials: 'include' })
+    const resp = await fetch(`${accountsApiUrl()}`, { credentials: 'include' })
     return resp.json()
 }

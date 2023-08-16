@@ -12,11 +12,6 @@ module CookieAuthentication
           cookies[:stubbed_user_uuid]
         end
       else
-        if ENV['STUBBED_USER_UUID']
-          Rails.logger.warn("`STUBBED_USER_UUID` environment variable is set but not used in " \
-                            "the #{Rails.env} environment.")
-        end
-
         OpenStax::Auth::Strategy2.user_uuid(request)
       end
   end

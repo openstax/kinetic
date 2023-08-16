@@ -24,6 +24,7 @@ import type {
   AnalysisListing,
   BannerNotice,
   BannersListing,
+  DevUsers,
   Environment,
   Launch,
   ParticipantStudies,
@@ -68,6 +69,8 @@ import {
     BannerNoticeToJSON,
     BannersListingFromJSON,
     BannersListingToJSON,
+    DevUsersFromJSON,
+    DevUsersToJSON,
     EnvironmentFromJSON,
     EnvironmentToJSON,
     LaunchFromJSON,
@@ -859,6 +862,34 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async deleteStudy(requestParameters: DeleteStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteStudyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Returns all users for development environment 
+     * Get all development users
+     */
+    async fetchDevelopmentUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DevUsers>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/development/users`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DevUsersFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns all users for development environment 
+     * Get all development users
+     */
+    async fetchDevelopmentUsers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DevUsers> {
+        const response = await this.fetchDevelopmentUsersRaw(initOverrides);
+        return await response.value();
     }
 
     /**

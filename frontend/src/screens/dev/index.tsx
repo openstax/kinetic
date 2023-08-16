@@ -1,5 +1,5 @@
 import { React, useEffect, useNavigate, useState } from '@common'
-import { capitalize, useCurrentUser, useFetchEnvironment } from '@lib'
+import { capitalize, useApi, useCurrentUser, useFetchEnvironment } from '@lib'
 import { AvailableUsers } from './users'
 import { LinkButton } from '@components'
 import { loginAsUser } from '@models';
@@ -38,6 +38,7 @@ const UserCard:React.FC<UserCardProps> = ({ users, type, becomeUser }) => {
 
 export default function Dev() {
     const [users, setUsers] = useState<AvailableUsers>(new AvailableUsers())
+
     const { refetch: refetchEnvironment } = useFetchEnvironment()
     const nav = useNavigate()
     useEffect(() => {
@@ -58,7 +59,6 @@ export default function Dev() {
         <div className="dev-console">
             <LoggedInUser />
             <div className="container mt-8">
-
                 <div className="row">
                     <UserCard users={users} type="admins" becomeUser={becomeUser} />
                     <UserCard users={users} type="researchers" becomeUser={becomeUser} />
@@ -71,8 +71,7 @@ export default function Dev() {
 
 const LoggedInUser = () => {
     const currentUser = useCurrentUser()
-    console.log(currentUser)
-
+    
     if (!currentUser?.userId) return null
     return (
         <Stack>

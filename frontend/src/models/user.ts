@@ -5,7 +5,6 @@ import { analytics } from '../lib/analytics'
 export class User {
 
     static bootstrap(env: EnvironmentUser) {
-        console.log('bootstrapping')
         window._MODELS = window._MODELS || {}
         const user = window._MODELS.user || (window._MODELS.user = new User())
         user.id = env.userId

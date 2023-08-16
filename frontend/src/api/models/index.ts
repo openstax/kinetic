@@ -16,6 +16,8 @@ export * from './BannerNotice';
 export * from './BannersListing';
 export * from './BaseResearcher';
 export * from './BaseStudy';
+export * from './DevUser';
+export * from './DevUsers';
 export * from './Environment';
 export * from './EnvironmentUser';
 export * from './Launch';

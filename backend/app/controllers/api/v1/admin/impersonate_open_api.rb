@@ -33,7 +33,7 @@ class Api::V1::Admin::ImpersonateOpenApi
 
       response 200 do
         key :description, 'Success. Stops impersonating.'
-        # TODO What?
+        # TODO: What?
         # content 'application/json' do
         #   schema { key :$ref, :object }
         # end
