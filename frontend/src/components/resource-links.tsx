@@ -12,7 +12,7 @@ export const ResourceLinks = () => {
 }
 
 export const HelpLink = () => {
-    const isResearcher = useCurrentUser()?.isResearcher
+    const isResearcher = useCurrentUser().isResearcher
     return (
         <>
             <h4>Need Help?</h4>
