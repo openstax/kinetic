@@ -1,5 +1,29 @@
 # OpenStax Kinetic  - a Research Platform for Education
 
+## Getting Started
+
+To get start make sure you have docker and docker-compose installed. You may also want to install yarn as well. Next try running these commands in the root directory:  
+
+```bash
+$> docker compose build
+$> docker compose up
+```
+You may run into migration issues at first. To fix that go into the back-end terminal with:
+
+```bash
+$> docker compose exec api /bin/bash
+```
+
+Then run:
+
+```bash
+$> bin/rails db:migrate RAILS_ENV=development
+```
+
+and try running the docker compose commands again to see if that fixes it.
+
+When run correctly the front-end may be at http://localhost:4000/.
+
 ## Frontend
 
 To run the front-end for development:
