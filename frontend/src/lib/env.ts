@@ -19,6 +19,7 @@ export const ENV = {
 }
 
 window._MODELS = window._MODELS || {}
+window._TEST_METHODS = window._TEST_METHODS || {}
 window._MODELS.env = ENV
 
 Object.freeze(ENV)

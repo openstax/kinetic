@@ -1,8 +1,18 @@
 import { cx, React, styled, useState, Yup } from '@common';
-import { useApi, useCurrentResearcher, useEnvironment, useUserInfo } from '@lib';
+import { useApi, useCurrentResearcher, useUserInfo } from '@lib';
 import { colors } from '@theme';
 import { Researcher } from '@api';
-import { Box, CharacterCount, Form, FormSaveButton, Icon, InputField, SelectField, Tooltip, useFormState } from '@components';
+import {
+    Box,
+    CharacterCount,
+    Form,
+    FormSaveButton,
+    Icon,
+    InputField,
+    SelectField,
+    Tooltip,
+    useFormState,
+} from '@components';
 
 const urlRegex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
 export const ResearcherValidationSchema = Yup.object().shape({
@@ -42,13 +52,12 @@ const StyledForm = styled(Form<Researcher>)(({ readOnly }) => ({
 
 export const ResearcherAccountForm: React.FC<{className?: string}> = ({ className }) => {
     const api = useApi()
-    const env = useEnvironment()
     const [researcher, setResearcher] = useState(useCurrentResearcher())
-
+    const { refetch: refetchUser } = useUserInfo()
     if (!researcher) {
         return null
     }
-    const userInfo = useUserInfo()
+    const { data: userInfo } = useUserInfo()
     // Default to OpenStax accounts first/last name if blank
     researcher.firstName = researcher.firstName || userInfo?.first_name
     researcher.lastName = researcher.lastName || userInfo?.last_name
@@ -65,7 +74,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
                 updateResearcher: { researcher },
             })
             setResearcher(r)
-            env.setResearcher(r)
+            refetchUser()
         }
         catch (err) {
             console.error(err) // eslint-disable-line no-console

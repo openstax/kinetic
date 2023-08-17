@@ -1,12 +1,17 @@
-import { ENV } from '../../lib'
-import { User, UserPayload } from '@models'
+import { ENV } from '@lib'
+import { User } from '@models'
+
+interface UserPayload {
+    user_id: string
+    is_admin: boolean
+    is_researcher: boolean
+}
 
 interface UsersPayload {
     admins: UserPayload[]
     researchers?: UserPayload[]
     users: UserPayload[]
 }
-
 
 export class AvailableUsers {
 

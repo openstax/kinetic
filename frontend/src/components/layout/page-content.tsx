@@ -1,6 +1,6 @@
 import { cx, React, styled } from '@common';
 import { colors } from '@theme';
-import { TopNavBar } from '../top-navbar';
+import { TopNavBar } from '@components';
 import { Footer } from '../footer';
 import { Global } from '@emotion/react';
 

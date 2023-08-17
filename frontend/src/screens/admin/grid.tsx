@@ -4,7 +4,7 @@ export const Grid = styled.div({
     display: 'grid',
     height: '100vh',
     width: '100vw',
-    gridTemplateColumns: 'minmax(auto, 200px) 1fr',
+    gridTemplateColumns: 'auto 1fr',
     gridTemplateRows: 'auto 1fr auto',
     overflow: 'hidden',
     gridTemplateAreas: `
@@ -20,6 +20,7 @@ export const Sidebar = styled(Box)({
     gridArea: 'sidebar',
     overflow: 'auto',
     flexWrap: 'nowrap',
+    width: 300,
 })
 
 export const Main = styled(Box)({

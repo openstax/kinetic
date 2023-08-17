@@ -2,6 +2,8 @@
 
 module CookieAuthentication
   def current_user_uuid
+    return session[:impersonating] if session[:impersonating].present?
+
     @current_user_uuid ||=
       if Kinetic.allow_stubbed_authentication?
         if ENV['STUBBED_USER_UUID']
@@ -10,11 +12,6 @@ module CookieAuthentication
           cookies[:stubbed_user_uuid]
         end
       else
-        if ENV['STUBBED_USER_UUID']
-          Rails.logger.warn("`STUBBED_USER_UUID` environment variable is set but not used in " \
-                            "the #{Rails.env} environment.")
-        end
-
         OpenStax::Auth::Strategy2.user_uuid(request)
       end
   end

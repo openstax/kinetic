@@ -1,14 +1,14 @@
 import { React } from '@common'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { ThemeProvider } from '@emotion/react';
 import { EnvironmentProvider, whenDomReady } from '@lib'
 import { AppRoutes } from './routes'
 import './lib/sentry'
 import './index.css'
 import './styles/main.scss'
-import { theme } from '@theme'
+import { mantineTheme } from '@theme'
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { MantineProvider } from '@mantine/core';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -21,18 +21,18 @@ const queryClient = new QueryClient({
 const App = () => (
     <React.StrictMode>
         <Router>
-            <ThemeProvider theme={theme}>
+            <QueryClientProvider client={queryClient}>
                 <EnvironmentProvider>
-                    <QueryClientProvider client={queryClient}>
+                    <MantineProvider withGlobalStyles withNormalizeCSS theme={mantineTheme}>
                         <AppRoutes />
-                    </QueryClientProvider>
+                    </MantineProvider>
                 </EnvironmentProvider>
-            </ThemeProvider>
+            </QueryClientProvider>
         </Router>
     </React.StrictMode>
 )
 
 whenDomReady().then(() => {
     const root = createRoot(document.getElementById('root')!)
-    root.render(<App />,)
+    root.render(<App />)
 })

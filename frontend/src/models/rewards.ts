@@ -49,7 +49,7 @@ const calculatePoints = (segment: RewardsScheduleSegment, cycleStart: Date, stud
 export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
     const env = useEnvironment()
 
-    const rs = sortBy(env?.config.rewardsSchedule || [], 'startAt')
+    const rs = sortBy(env.rewardsSchedule, 'startAt')
     const firstSegment = rs[0]
 
     let totalPoints = 0

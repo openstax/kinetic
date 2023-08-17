@@ -64,7 +64,7 @@ export default function ResearcherStudies() {
     }, [searchParams])
 
     return (
-        <Page className='studies-dashboard'>
+        <Page className='studies-dashboard' hideFooter>
             <Box align="center" justify="between">
                 <h3 className='fw-bold' data-testid='studies-table-header'>
                     Studies

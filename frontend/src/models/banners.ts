@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import useLocalStorageState from 'use-local-storage-state'
 import { BannerMessage } from '@api'
 
-type RemoveBannerT = (b: BannerMessage)=>void // eslint-disable-line
+type RemoveBannerT = (b: BannerMessage) => void
 
 type useBannersReturnT = [
     BannerMessage[],
@@ -11,7 +11,8 @@ type useBannersReturnT = [
 ]
 
 export const useBanners = (): useBannersReturnT => {
-    const env = useEnvironment()
+    const env= useEnvironment()
+
     const now = toDayJS(new Date)
 
     // TODO Replace with @rooks/useLocalStorageState,
@@ -24,7 +25,7 @@ export const useBanners = (): useBannersReturnT => {
         setRemoved(removed.concat(banner.id))
     }, [setRemoved, removed])
 
-    const banners = env.config.bannersSchedule.filter(banner => {
+    const banners = env.bannersSchedule.filter(banner => {
         const sd = toDayJS(banner.startAt)
         const ed = toDayJS(banner.endAt)
         return !removed.includes(banner.id) && (
@@ -33,7 +34,6 @@ export const useBanners = (): useBannersReturnT => {
                 (sd.isBefore(now) && ed.isAfter(now))
         )
     })
-
 
     return [banners, removeBanner]
 }

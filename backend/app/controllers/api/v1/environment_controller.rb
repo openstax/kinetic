@@ -13,7 +13,8 @@ class Api::V1::EnvironmentController < Api::V1::BaseController
       accounts_env_name: Rails.application.secrets.accounts[:env_name],
       homepage_url: Rails.application.secrets.homepage_url,
       banners_schedule: Banner.active.to_a || [],
-      rewards_schedule: Reward.all.to_a
+      rewards_schedule: Reward.all.to_a,
+      is_impersonating: session[:impersonating].present?
     )
   end
 end

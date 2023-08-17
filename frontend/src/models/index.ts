@@ -1,6 +1,6 @@
 export * from './user'
 export * from './study'
-export * from './environment'
 export * from './rewards'
 export * from './banners'
 export * from './analysis'
+export * from './researcher'

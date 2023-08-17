@@ -4,6 +4,7 @@ import { PageNotFound } from '@components'
 import { loadAsync } from './components/async'
 import { useCurrentUser } from '@lib'
 import { analytics } from './lib/analytics'
+import { ImpersonatingBanner } from './components/impersonating-banner';
 
 const Home = loadAsync('Homepage', () => import('./screens/homepage'))
 const Dev = loadAsync('Dev', () => import('./screens/dev'))
@@ -29,8 +30,10 @@ export const AppRoutes = () => {
     useEffect(() => {
         analytics.page()
     }, [location.pathname])
+
     return (
-        <div className="openstax-kinetic" data-user-id={user.id}>
+        <div className="openstax-kinetic" data-user-id={user.userId}>
+            <ImpersonatingBanner />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/dev/*" element={<Dev />} />
@@ -38,10 +41,6 @@ export const AppRoutes = () => {
                 <Route path="/study/create" element={<ResearcherStudyLanding />} />
                 <Route path="/study/overview/:id" element={<StudyOverview />} />
                 <Route path="/study/edit/:id" element={<EditStudy />} />
-                <Route path="/study/edit/:id/about-researcher" element={<EditStudy />} />
-                <Route path="/study/edit/:id/researcher-info" element={<EditStudy />} />
-                <Route path="/study/edit/:id/learner-info" element={<EditStudy />} />
-                <Route path="/study/edit/:id/sessions" element={<EditStudy />} />
                 <Route path="/account" element={<AccountDetails />} />
                 <Route path="/researcher-account" element={<ResearcherAccountPage />} />
                 <Route path="/studies/*" element={<StudiesHomepage />} />

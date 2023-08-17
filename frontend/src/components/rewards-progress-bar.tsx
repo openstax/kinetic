@@ -157,9 +157,12 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
     const completion = (pointsEarned / totalPoints) * 100
 
     return (
-        <nav className="navbar sticky-top navbar-light py-1" css={{
+        <nav className="navbar navbar-light py-1" css={{
             backgroundColor: 'white',
             boxShadow: '0px 10px 20px -5px rgba(0, 0, 0, 0.08)',
+            position: 'sticky',
+            top: 0,
+            zIndex: 30,
         }}>
             <div className="container-lg">
 
