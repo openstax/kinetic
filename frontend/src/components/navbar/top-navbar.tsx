@@ -24,7 +24,6 @@ const AccountLinks = loadAsync('Account Links', () => import('./account-links'))
 
 export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, className }) => {
     const user = useCurrentUser()
-    const isMobile = useIsMobileDevice()
     const hideBanner = user.isResearcher || user.isAdministrator
 
     return (
@@ -35,8 +34,7 @@ export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, className }) => {
                         <NavbarLogoLink />
                         {children}
                         <Box gap="xlarge" align="center">
-                            {!isMobile && user.isResearcher && <Link to="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Studies</Link>}
-                            {!isMobile && user.isResearcher && <Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Analysis</Link>}
+                            <DesktopResearcherLinks />
                             <NavMenu />
                         </Box>
                     </Box>
@@ -47,9 +45,27 @@ export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, className }) => {
     )
 }
 
+const DesktopResearcherLinks = () => {
+    const user = useCurrentUser()
+    const isMobile = useIsMobileDevice()
+    if (isMobile || !user.isResearcher) return null
+
+    return (
+        <>
+            <Link to="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
+                Studies
+            </Link>
+            <Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
+                Analysis
+            </Link>
+        </>
+    )
+}
+
 const NavMenu = () => {
     const [opened, setOpened] = useState(false);
     const { data: userInfo } = useUserInfo()
+    const user = useCurrentUser()
     const isMobile = useIsMobileDevice()
 
     const menuToggle = isMobile ? (
@@ -71,7 +87,7 @@ const NavMenu = () => {
 
             <Menu.Dropdown>
                 {isMobile && <Menu.Item><StyledLink to="/studies">Studies</StyledLink></Menu.Item>}
-                <AdminLinks />
+                {user.isAdministrator && <AdminLinks />}
                 <AccountLinks />
             </Menu.Dropdown>
         </Menu>

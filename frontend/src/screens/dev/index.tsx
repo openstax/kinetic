@@ -51,7 +51,7 @@ export default function Dev() {
         if (userId) {
             await loginAsUser(userId)
             await refetchEnvironment()
-            nav('/')
+            nav('/studies')
         }
     }
 

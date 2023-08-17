@@ -71,7 +71,7 @@ export const useUserPreferences = () => {
     })
 }
 
-export const host = () => {
+export const locationOrigin = () => {
     const env = useEnvironment()
     if (env.accountsEnvName === 'production') {
         return `https://openstax.org`;
@@ -88,13 +88,13 @@ export const loginURL = () => {
 
 export const logoutURL = () => {
     if (ENV.IS_DEV_MODE) return '/dev/user';
-    const homepage = encodeURIComponent(`${host()}/kinetic`);
+    const homepage = encodeURIComponent(`${locationOrigin()}/kinetic`);
     return `${accountsUrl()}/signout?r=${homepage}`;
 }
 
 export const accountsUrl = (): string => {
     if (ENV.IS_DEV_MODE) return '/dev/user'
-    return `${host()}/accounts`;
+    return `${locationOrigin()}/accounts`;
 }
 
 export const accountsApiUrl = (): string => {
