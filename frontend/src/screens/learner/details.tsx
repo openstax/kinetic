@@ -144,10 +144,17 @@ const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher })
         <Part icon="person" title="About Researcher">
             <Box direction="column">
                 <Box gap>
+                    Name:
                     <span>{researcher.firstName} {researcher.lastName}</span>
+                </Box>
+                <Box gap>
+                    Institution:
                     <span>{researcher.institution}</span>
                 </Box>
-                <p>{researcher.bio}</p>
+                <Box gap>
+                    Bio:
+                    <p>{researcher.bio}</p>
+                </Box>
             </Box>
         </Part>
     )
@@ -208,8 +215,16 @@ export const StudyDetailsPreview: FC<{
                     <StudyPart property="feedbackDescription" title="Feedback Available" icon="feedback" study={study} />
                     <MultiSession study={study} />
                     <Box margin={{ bottom: 'large' }} css={{ color: colors.text }}>{study.longDescription}</Box>
-                    {pi && <Researcher researcher={pi} />}
-                    {lead && <Researcher researcher={lead} />}
+                    {
+                        pi && lead && pi.id === lead.id ? (
+                            <Researcher researcher={pi} />
+                        ) : (
+                            <>
+                                {pi && <Researcher researcher={pi} />}
+                                {lead && <Researcher researcher={lead} />}
+                            </>
+                        )
+                    }
                     {/*<Researcher researcher={study.researchers?.[0]} />*/}
                     <StudyPart property="benefits" title="What’s in it for you" icon="heart" study={study} />
                     <Part icon="warning" title="Notice">
