@@ -16,7 +16,6 @@ class Api::V1::Researcher::ReportsOpenApi
       end
       response 200 do
         key :description, 'Success. Returns the report CSV.'
-        # TODO CSV or file type?
         content 'text/csv' do
           schema do
             key :type, :string
