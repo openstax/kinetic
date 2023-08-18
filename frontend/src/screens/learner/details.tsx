@@ -1,5 +1,5 @@
 import { React, useCallback, useEffect, useNavigate, useParams, useState } from '@common'
-import { ParticipantStudy, PublicResearcher } from '@api'
+import { ParticipantStudy, PublicResearcher, Study } from '@api'
 import {
     getFirstStage,
     getStudyDuration,
@@ -185,14 +185,28 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
     )
 }
 
+const renderResearcherSection = (study: Study | ParticipantStudy) => {
+    const pi = getStudyPi(study)
+    const lead = getStudyLead(study)
+
+    if (pi && lead && pi.id === lead.id) {
+        return <Researcher researcher={pi} />;
+    }
+
+    return (
+        <>
+            {pi && <Researcher researcher={pi} />}
+            {lead && <Researcher researcher={lead} />}
+        </>
+    );
+};
+
 export const StudyDetailsPreview: FC<{
     study: ParticipantStudy,
     show: boolean,
     onHide: () => void,
     preview?: boolean
 }> = ({ study, show, onHide, preview = false }) => {
-    const pi = getStudyPi(study)
-    const lead = getStudyLead(study)
     return (
         <OffCanvas show={show} title="Study Detail" onHide={onHide}>
             <Box direction="column" flex>
@@ -215,17 +229,7 @@ export const StudyDetailsPreview: FC<{
                     <StudyPart property="feedbackDescription" title="Feedback Available" icon="feedback" study={study} />
                     <MultiSession study={study} />
                     <Box margin={{ bottom: 'large' }} css={{ color: colors.text }}>{study.longDescription}</Box>
-                    {
-                        pi && lead && pi.id === lead.id ? (
-                            <Researcher researcher={pi} />
-                        ) : (
-                            <>
-                                {pi && <Researcher researcher={pi} />}
-                                {lead && <Researcher researcher={lead} />}
-                            </>
-                        )
-                    }
-                    {/*<Researcher researcher={study.researchers?.[0]} />*/}
+                    {renderResearcherSection(study)}
                     <StudyPart property="benefits" title="What’s in it for you" icon="heart" study={study} />
                     <Part icon="warning" title="Notice">
                         Your responses to this study will be used to further learning science and
