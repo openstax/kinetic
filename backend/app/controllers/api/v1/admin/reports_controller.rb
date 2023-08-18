@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::Admin::ReportsController < Api::V1::Admin::BaseController
   def learner_activity
     months_ago = params[:months_ago] || 1
@@ -6,8 +8,7 @@ class Api::V1::Admin::ReportsController < Api::V1::Admin::BaseController
     send_data(
       csv.as_csv_string,
       filename: 'test.csv',
-      type: :csv,
+      type: :csv
     )
-
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::Researcher::ReportsOpenApi
   include OpenStax::OpenApi::Blocks
 
@@ -10,7 +12,7 @@ class Api::V1::Researcher::ReportsOpenApi
         key :name, :months_ago
         key :in, :query
         key :description,
-          'Number of months to include in report'
+            'Number of months to include in report'
         key :required, false
         key :schema, { type: :integer }
       end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'csv'
 
 class LearnerActivityReport
@@ -6,7 +7,7 @@ class LearnerActivityReport
     @months_ago = months_ago
     @user_uuids = []
     @csv_string = CSV.generate do |csv|
-      self.generate_report(csv)
+      generate_report(csv)
     end
   end
 
@@ -14,16 +15,7 @@ class LearnerActivityReport
     @csv_string
   end
 
-  def generate_report(csv)
-    launches = LaunchedStage
-               .joins(:research_id, stage: :study)
-               .where('first_launched_at >= ?', (@months_ago || 1).to_i.months.ago)
-
-    launches.each do |launch|
-      @user_uuids << launch.user_id
-    end
-    users = UserInfo.for_uuids(@user_uuids)
-
+  def build_headers(csv)
     csv << [
       'Study ID',
       'Participant Title',
@@ -40,16 +32,28 @@ class LearnerActivityReport
       'Opted Out',
       'Test Account?'
     ]
+  end
+
+  def get_users(launches)
+    launches.each do |launch|
+      @user_uuids << launch.user_id
+    end
+    UserInfo.for_uuids(@user_uuids)
+  end
+
+  def find_user_email(account)
+    account['contact_infos'].find do |ci|
+      ci['type'] == 'EmailAddress' &&
+        ci['is_verified'] == true &&
+        ci['is_guessed_preferred'] == true
+    end || {}
+  end
+
+  def build_rows(csv, users, launches)
     launches.each do |launch|
       account = users[launch.user_id] || {}
-      email = {}
-      if account['contact_infos']
-        email = account['contact_infos'].find do |ci|
-          ci['type'] == 'EmailAddress' &&
-            ci['is_verified'] == true &&
-            ci['is_guessed_preferred'] == true
-        end || {}
-      end
+      email = find_user_email(account)
+
       csv << [
         launch.stage.study.id,
         launch.stage.study.title_for_participants,
@@ -67,5 +71,15 @@ class LearnerActivityReport
         account['is_test'] ? 'X' : nil
       ]
     end
+  end
+
+  def generate_report(csv)
+    launches = LaunchedStage
+               .joins(:research_id, stage: :study)
+               .where('first_launched_at >= ?', (@months_ago || 1).to_i.months.ago)
+
+    users = get_users(launches)
+    build_headers(csv)
+    build_rows(csv, users, launches)
   end
 end
