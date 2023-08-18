@@ -35,6 +35,11 @@ export default function AdminLinks() {
                     Impersonate
                 </Menu.Item>
             </StyledLink>
+            <StyledLink to="/admin/reports">
+                <Menu.Item>
+                    Reports
+                </Menu.Item>
+            </StyledLink>
         </>
     )
 }
