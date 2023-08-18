@@ -75,8 +75,8 @@ class LearnerActivityReport
 
   def generate_report(csv)
     launches = LaunchedStage
-               .joins(:research_id, stage: :study)
-               .where('first_launched_at >= ?', (@months_ago || 1).to_i.months.ago)
+                 .joins(:research_id, stage: :study)
+                 .where('first_launched_at >= ?', (@months_ago || 1).to_i.months.ago)
 
     users = get_users(launches)
     build_headers(csv)
