@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-To get start make sure you have docker and docker-compose installed. You may also want to install yarn as well. Next try running these commands in the root directory:  
+To get started make sure you have docker and docker-compose installed. You may also want to install yarn as well. Next try running these commands in the root directory:  
 
 ```bash
 $> docker compose build
@@ -14,7 +14,7 @@ You may run into migration issues at first. To fix that go into the back-end ter
 $> docker compose exec api /bin/bash
 ```
 
-Then run:
+Then in that terminal run:
 
 ```bash
 $> bin/rails db:migrate RAILS_ENV=development
