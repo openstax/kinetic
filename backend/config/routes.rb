@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'robots_generator'
-
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   namespace :api do
