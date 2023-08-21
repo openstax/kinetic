@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'robots_generator'
+
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   namespace :api do
@@ -98,7 +100,7 @@ Rails.application.routes.draw do
     get 'study/land/:study_id', as: :returning, via: :get, to: 'static#catchall'
   end
 
-  # mount ActiveStorage::Engine, at: '/files'
+  get '/robots.txt' => RobotsGenerator
 
   match '/', via: :get, to: 'static#catchall'
   match '*path', via: :get, to: 'static#catchall', constraints: lambda { |req|
