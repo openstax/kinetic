@@ -8,6 +8,7 @@ import { AdminRewards } from './admin/rewards'
 import { ApproveStudies } from './admin/approve-studies'
 import { AdminWorkspaces } from './admin/workspaces'
 import { Impersonation } from './admin/impersonation'
+import { AdminReports } from './admin/admin-reports';
 
 export default function AdminHome() {
     const user = useCurrentUser()
@@ -23,8 +24,8 @@ export default function AdminHome() {
                 <Route path="/rewards/" element={<AdminRewards />} />
                 <Route path="/workspaces/:studyId?" element={<AdminWorkspaces />} />
                 <Route path="/impersonate/" element={<Impersonation />} />
+                <Route path="/reports/" element={<AdminReports />} />
             </Routes>
-
         </Grid>
     )
 }

@@ -58,6 +58,8 @@ Rails.application.routes.draw do
 
         get 'impersonate/researcher/:id', to: 'impersonate#impersonate_researcher'
         get 'impersonate/stop', to: 'impersonate#stop'
+
+        get 'reports/learner-activity', to: 'reports#learner_activity'
       end
 
       get :openapi, to: 'open_api#json', constraints: { format: :json }
