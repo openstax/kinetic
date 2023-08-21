@@ -185,7 +185,7 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
     )
 }
 
-const ResearcherSection = (study: Study | ParticipantStudy) => {
+const ResearcherSection: FC<StudyDetailsProps> = ({ study }) =>  {
     const pi = getStudyPi(study)
     const lead = getStudyLead(study)
 
@@ -229,7 +229,7 @@ export const StudyDetailsPreview: FC<{
                     <StudyPart property="feedbackDescription" title="Feedback Available" icon="feedback" study={study} />
                     <MultiSession study={study} />
                     <Box margin={{ bottom: 'large' }} css={{ color: colors.text }}>{study.longDescription}</Box>
-                    {renderResearcherSection(study)}
+                    <ResearcherSection study={study} />
                     <StudyPart property="benefits" title="What’s in it for you" icon="heart" study={study} />
                     <Part icon="warning" title="Notice">
                         Your responses to this study will be used to further learning science and
