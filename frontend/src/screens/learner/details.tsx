@@ -1,5 +1,5 @@
 import { React, useCallback, useEffect, useNavigate, useParams, useState } from '@common'
-import { ParticipantStudy, PublicResearcher, Study } from '@api'
+import { ParticipantStudy, PublicResearcher } from '@api'
 import {
     getFirstStage,
     getStudyDuration,
@@ -160,6 +160,21 @@ const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher })
     )
 }
 
+const ResearcherSection: FC<StudyDetailsProps> = ({ study }) =>  {
+    const pi = getStudyPi(study)
+    const lead = getStudyLead(study)
+
+    if (pi && lead && pi.id === lead.id) {
+        return <Researcher researcher={pi} />;
+    }
+
+    return (
+        <>
+            {pi && <Researcher researcher={pi} />}
+            {lead && <Researcher researcher={lead} />}
+        </>
+    )
+}
 
 export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
     const { studyId: sid } = useParams<{ studyId: string }>()
@@ -184,22 +199,6 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
         <StudyDetailsPreview study={study} show={!!study} onHide={onHide} />
     )
 }
-
-const ResearcherSection: FC<StudyDetailsProps> = ({ study }) =>  {
-    const pi = getStudyPi(study)
-    const lead = getStudyLead(study)
-
-    if (pi && lead && pi.id === lead.id) {
-        return <Researcher researcher={pi} />;
-    }
-
-    return (
-        <>
-            {pi && <Researcher researcher={pi} />}
-            {lead && <Researcher researcher={lead} />}
-        </>
-    );
-};
 
 export const StudyDetailsPreview: FC<{
     study: ParticipantStudy,
