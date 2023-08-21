@@ -6,13 +6,12 @@ class LearnerActivityReport
   def initialize(months_ago:)
     @months_ago = months_ago
     @user_uuids = []
-    @csv_string = CSV.generate do |csv|
-      generate_report(csv)
-    end
   end
 
   def as_csv_string
-    @csv_string
+    CSV.generate do |csv|
+      generate_report(csv)
+    end
   end
 
   def build_headers(csv)
@@ -42,7 +41,7 @@ class LearnerActivityReport
   end
 
   def find_user_email(account)
-    account['contact_infos'].find do |ci|
+    account['contact_infos']&.find do |ci|
       ci['type'] == 'EmailAddress' &&
         ci['is_verified'] == true &&
         ci['is_guessed_preferred'] == true
