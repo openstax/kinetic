@@ -160,7 +160,7 @@ const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher })
     )
 }
 
-const ResearcherSection: FC<StudyDetailsProps> = ({ study }) =>  {
+const ResearcherSection: FC<StudyDetailsProps> = ({ study }) => {
     const pi = getStudyPi(study)
     const lead = getStudyLead(study)
 
