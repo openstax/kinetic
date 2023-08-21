@@ -185,7 +185,7 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
     )
 }
 
-const renderResearcherSection = (study: Study | ParticipantStudy) => {
+const ResearcherSection = (study: Study | ParticipantStudy) => {
     const pi = getStudyPi(study)
     const lead = getStudyLead(study)
 
