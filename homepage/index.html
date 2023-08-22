@@ -368,7 +368,10 @@
           margin-left: 30%;
       }
       #kinetic-homepage .login-signup {
-          margin-top: 80px;
+          margin-top: 8rem;
+      }
+      #kinetic-homepage .start-using {
+        margin-top: 8rem;
       }
       #kinetic-homepage .participate .lines {
           position: absolute;
@@ -481,7 +484,7 @@
                 </a>
               </div>
             </div>
-            <div style="margin-top: 3rem">
+            <div style="margin-top: 4rem">
               <small>
                 *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
               </small>
@@ -743,6 +746,7 @@
                   credentials: 'include'
               }).then(function(resp) {
                   resp.json().then(function(user) {
+                    console.log(user)
                       if (user.id) {
                           revealElements('start-using');
                       } else {
