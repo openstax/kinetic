@@ -217,6 +217,9 @@ GEM
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
+    image_processing (1.12.2)
+      mini_magick (>= 4.9.5, < 5)
+      ruby-vips (>= 2.0.17, < 3)
     jaro_winkler (1.5.5)
     jmespath (1.6.2)
     json (2.6.3)
@@ -263,6 +266,7 @@ GEM
     mime-types (3.4.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2022.0105)
+    mini_magick (4.12.0)
     mini_mime (1.1.2)
     minitest (5.17.0)
     moneta (1.0.0)
@@ -452,6 +456,8 @@ GEM
       rubocop (~> 1.33)
       rubocop-capybara
     ruby-progressbar (1.11.0)
+    ruby-vips (2.1.4)
+      ffi (~> 1.12)
     ruby2_keywords (0.0.5)
     rubyzip (3.0.0.alpha)
     sentry-rails (5.7.0)
@@ -549,6 +555,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   httpx (~> 0.21)
+  image_processing (~> 1.2)
   listen (~> 3.3)
   lograge
   mailgun-ruby (~> 1.2.5)
