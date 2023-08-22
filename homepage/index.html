@@ -746,7 +746,6 @@
                   credentials: 'include'
               }).then(function(resp) {
                   resp.json().then(function(user) {
-                    console.log(user)
                       if (user.id) {
                           revealElements('start-using');
                       } else {
