@@ -12,7 +12,6 @@
       body {
         font-weight: normal;
         letter-spacing: normal;
-        line-height: normal;
         line-height: 2.5rem;
         background-color: #f1f1f1;
         color: #424242;
@@ -32,7 +31,7 @@
           var URLS = {
               SAMPLE_STUDY: 'https://riceuniversity.co1.qualtrics.com/jfe/form/SV_8vUOQo2nx2s79NI'
           };
-          if (window.location.host == 'openstax.org') {
+          if (window.location.host === 'openstax.org') {
               Object.assign(URLS, {
                   ACCOUNTS: 'https://openstax.org/accounts',
                   WHOAMI: 'https://openstax.org/accounts/api/user',
@@ -183,6 +182,9 @@
         transition: all 0.3s;
         text-decoration: none;
       }
+      #kinetic-homepage .text-decoration-none {
+        text-decoration: none;
+      }
       #kinetic-homepage .btn.primary {
         background-color: #6821ea;
         color: #fff;
@@ -263,7 +265,7 @@
           cursor: pointer;
           max-width: 350px;
           padding: 20px;
-          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.18);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18);
           border-radius: 20px;
           transition: all 0.5s ease;
           color: black;
@@ -375,6 +377,10 @@
           width: 100%;
           left: -500px;
       }
+      #kinetic-homepage .vertical-line {
+        border: 1px solid white;
+        transform: scaleX(0.5);
+      }
 
 
       @media screen  and (max-device-width: 568px) {
@@ -419,10 +425,20 @@
 
       <div class="hero-block full-width">
 
-        <img class="lines" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-wavy-lines.svg">
+        <img alt="kinetic-wavy-lines" class="lines" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-wavy-lines.svg">
 
         <div class="container">
           <div class="txt-block">
+            <span>Supported by*</span>
+            <div style='display: flex; gap: 1.5rem'>
+              <a class="text-decoration-none" target="_blank" href="https://ies.ed.gov/">
+                <img class="supporter-image" alt="Institute of Education Sciences logo" src="https://assets.openstax.org/oscms-prodcms/media/images/ies-logo.original.webp">
+              </a>
+              <span class="vertical-line"></span>
+              <a class="text-decoration-none" target="_blank" href="https://www.nsf.org/gb/en">
+                <img class="supporter-image" alt="National Science Foundation logo" src="https://assets.openstax.org/oscms-prodcms/media/images/nsf-logo.original.webp">
+              </a>
+            </div>
             <h2>
               We are all unique, so why should we study the same way?
             </h2>
@@ -457,21 +473,28 @@
             </div>
             <div class="actions-block start-using" style="display: none;">
               <div class="buttons">
-                <a class="start link" data-local="true" href="https://kinetic.openstax.org/">
+                <a class="start link btn primary"
+                   data-local="true"
+                   href="https://kinetic.openstax.org/"
+                >
                   View available studies
                 </a>
               </div>
             </div>
-
+            <div style="margin-top: 3rem">
+              <small>
+                *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
+              </small>
+            </div>
 
           </div>
           <div class="cards">
             <div class="col-1">
-              <img src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-card-career.svg">
+              <img alt="career-card" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-card-career.svg">
             </div>
             <div class="col-2">
-              <img src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-card-beliefs.svg">
-              <img src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-card-reader.svg">
+              <img alt="beliefs-card" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-card-beliefs.svg">
+              <img alt="reader-card" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-card-reader.svg">
             </div>
 
           </div>
@@ -500,9 +523,9 @@
               </div>
             </div>
             <div class="step-pics">
-              <img class="active" src="https://openstax.org/documents/1880/kinetic-step1.svg">
-              <img src="https://openstax.org/documents/1881/kinetic-step2.svg">
-              <img src="https://openstax.org/documents/1882/kinetic-step3.svg">
+              <img alt="step-1" class="active" src="https://openstax.org/documents/1880/kinetic-step1.svg">
+              <img alt="step-2" src="https://openstax.org/documents/1881/kinetic-step2.svg">
+              <img alt="step-3" src="https://openstax.org/documents/1882/kinetic-step3.svg">
             </div>
           </div>
         </div>
@@ -521,7 +544,7 @@
         </h5>
 
         <a class="link sample-study" href="">
-          <img src="https://assets.openstax.org/oscms-prodcms/media/images/kinetic-sample-study.original.webp">
+          <img alt="sample-study" src="https://assets.openstax.org/oscms-prodcms/media/images/kinetic-sample-study.original.webp">
         </a>
 
         <a class="link sample-study btn primary">Take the sample study</a>
@@ -594,7 +617,7 @@
       </div>
 
       <div class="participate">
-        <img class="lines" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-wavy-lines.svg">
+        <img alt="kinetic-wavy-lines" class="lines" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-wavy-lines.svg">
 
         <div class="container">
 
@@ -627,7 +650,10 @@
             </div>
             <div class="actions-block start-using" style="display: none;">
               <div class="buttons">
-                <a class="start link" data-local="true" href="https://kinetic.openstax.org/">
+                <a class="start link btn primary"
+                   data-local="true"
+                   href="https://kinetic.openstax.org/"
+                >
                   View available studies
                 </a>
               </div>
@@ -751,7 +777,7 @@
           var observer = new MutationObserver(function(mutations_list) {
               mutations_list.forEach(function(mutation) {
                   mutation.removedNodes.forEach(function(removed_node) {
-                      if(removed_node.className == 'general page') {
+                      if(removed_node.className === 'general page') {
                           onPageUnload();
                           observer.disconnect();
                       }
