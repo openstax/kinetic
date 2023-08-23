@@ -49,14 +49,22 @@ const legacyImageMap: Record<string, string> = {
 
 export const getImageUrl = (imageId: string | undefined) => {
     if (!imageId) {
-        // TODO In the future, placeholder?
-        return ''
+        return `${BaseUrl}/placeholder.svg`
     }
 
     if (legacyImageMap[imageId]) {
         return `${BaseUrl}/${legacyImageMap[imageId]}.svg`;
     }
     return `${BaseUrl}/${imageId}.svg`;
+}
+
+export const getAltText = (imageId: string | undefined) => {
+    const image = cardImages.find(cardImage => cardImage.imageId == imageId)
+    if (!image) {
+        return 'Placeholder'
+    }
+
+    return image.altText
 }
 
 export const cardImages: CardImage[] = [

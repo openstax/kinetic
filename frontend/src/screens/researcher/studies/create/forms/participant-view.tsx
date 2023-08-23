@@ -3,7 +3,7 @@ import { Box, React, useState, Yup } from '@common';
 import {
     Col,
     FieldErrorMessage,
-    FieldTitle,
+    FieldTitle, getAltText,
     getImageUrl,
     InputField,
     ResearcherButton,
@@ -263,10 +263,10 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
                         </Col>
 
                         <Col sm={6} direction='column' gap align='start' justify='center'>
-                            <ImagePreview imageId={getValues('imageId') as string} />
                             <ResearcherButton buttonType='secondary' testId='image-picker' onClick={() => setShowImagePicker(true)}>
                                 {getValues('imageId') ? 'Change Selected Image' : 'Select Study Card Image'}
                             </ResearcherButton>
+                            <ImagePreview imageId={getValues('imageId') as string} />
                             <ImageLibrary
                                 show={showImagePicker}
                                 onHide={() => setShowImagePicker(false)}
@@ -289,6 +289,8 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
 }
 
 const ImagePreview: FC<{imageId: string}> = ({ imageId }) => {
+    if (!imageId) return null
+
     return (
         <Col gap sm={12}>
             <img src={getImageUrl(imageId)}
@@ -299,7 +301,7 @@ const ImagePreview: FC<{imageId: string}> = ({ imageId }) => {
                     borderRadius: 8,
                 }}
             />
-            <small css={{ colors: colors.text }}>Selected image: {imageId}</small>
+            <small css={{ colors: colors.text }}>{getAltText(imageId)}</small>
         </Col>
     )
 }
