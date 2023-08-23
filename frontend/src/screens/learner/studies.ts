@@ -71,14 +71,16 @@ export const useLearnerStudies = () => {
 
         // If less than 3 are featured, grab and fill random studies until we have 3
         const randomlyFeatured = eligibleStudies
-            .filter(s => !s.isFeatured && !featuredStudies.includes(s))
+            .filter(s => !s.isFeatured)
             .slice(-1 * (FEATURED_COUNT - featuredStudies.length))
 
         const highlightedStudies = featuredStudies.concat(
             featuredStudies.length == FEATURED_COUNT ? [] : randomlyFeatured
         )
 
-        const studiesByTopic = groupBy(allStudies, (s) => s.topic) as any as StudyByTopics
+        const nonHighlightedStudies = allStudies.filter(s => !highlightedStudies.includes(s))
+
+        const studiesByTopic = groupBy(nonHighlightedStudies, (s) => s.topic) as StudyByTopics
 
         if (!studiesByTopic[filter]) {
             setFilter((Object.keys(studiesByTopic) as Array<StudyTopic>)[0])
