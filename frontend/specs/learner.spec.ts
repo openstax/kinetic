@@ -7,6 +7,8 @@ test('displays studies', async ({ page }) => {
 })
 
 test('filtering studies', async ({ page }) => {
+    // TODO Create multiple studies, now that highlighted studies don't repeat in "all studies" section
+    // try this: https://github.com/openstax/research/issues/465
     const studyId = await createStudy({ page })
     await loginAs({ page, login: 'user' })
     await goToPage({ page, path: '/studies' })
