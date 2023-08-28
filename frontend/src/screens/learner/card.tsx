@@ -108,7 +108,7 @@ const CornerRibbon = styled.div({
     color: colors.white,
 })
 
-const NewStudyFlag: FC<{study: Study}> = ({ study }) => {
+const NewStudyFlag: FC<{study: ParticipantStudy}> = ({ study }) => {
     if (!study.opensAt) return null
     const isNew = dayjs(study.opensAt).isAfter(dayjs().subtract(7, 'days'))
     if (!isNew) return null
