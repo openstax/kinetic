@@ -1,4 +1,4 @@
-import { expect, faker, loginAs, Page, TC, test, BrowserContext, logout } from './test'
+import { expect, faker, loginAs, Page, TC, test, BrowserContext, logout, dayjs } from './test'
 
 // https://reflect.run/articles/using-playwright-for-api-testing/ Reference
 
@@ -23,11 +23,12 @@ export const createStudyData = async ({ page, context, numStudies = 1 }: CreateS
                 status: 'active',
                 short_description: faker.commerce.productDescription(),
                 long_description: faker.commerce.productDescription(),
+                opens_at: dayjs().subtract(1, 'day'),
             },
         })
         expect(response.ok()).toBeTruthy();
         expect(response.status()).toBe(201);
-        console.log(await response.json())
+        const study = await response.json()
     }
     await logout({ page })
 }
