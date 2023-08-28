@@ -23,7 +23,7 @@ export const createStudyData = async ({ page, context, numStudies = 1 }: CreateS
                 status: 'active',
                 short_description: faker.commerce.productDescription(),
                 long_description: faker.commerce.productDescription(),
-                opens_at: dayjs().subtract(1, 'day'),
+                opens_at: dayjs().subtract(1, 'day').toISOString(),
             },
         })
         expect(response.ok()).toBeTruthy();
