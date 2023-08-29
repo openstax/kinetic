@@ -8,6 +8,7 @@ import {
     LoadingAnimation,
     Page,
     ResearcherProgressBar,
+    showResearcherNotification,
     Step,
     useFormContext,
     useFormState,
@@ -20,7 +21,6 @@ import { NewStudy, ResearcherRoleEnum, Study } from '@api';
 import { ActionFooter } from './action-footer';
 import { colors } from '@theme';
 import { ReviewStudy, SubmitStudyModal } from './forms/review-study';
-import { Toast } from '@nathanstitt/sundry/ui';
 import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
 
@@ -143,9 +143,7 @@ const FormContent: FC<{
 
             if (savedStudy) {
                 nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
-                Toast.show({
-                    message: `New copy of '${study.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`,
-                })
+                showResearcherNotification(`New copy of '${study.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`)
                 return setStudy(savedStudy)
             }
         }
@@ -161,10 +159,7 @@ const FormContent: FC<{
 
     const saveAsDraft = async () => {
         saveStudy().then(() => {
-            Toast.show({
-                title: 'Success',
-                message: `'${study.titleForResearchers}' has been saved as a draft.`,
-            })
+            showResearcherNotification(`New edits to the study “${study.titleForResearchers}” have successfully been saved.`)
         })
     }
 
@@ -197,9 +192,7 @@ const FormContent: FC<{
 
                     await saveStudy()
                     setStep(StudyStep.ParticipantView)
-                    Toast.show({
-                        message: `Invitations to collaborate on study '${study.titleForResearchers}' have successfully been sent.`,
-                    })
+                    showResearcherNotification(`Invitations to collaborate on study '${study.titleForResearchers}' have successfully been sent.`)
                 },
             },
             secondaryAction: {

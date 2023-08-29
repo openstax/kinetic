@@ -2,7 +2,7 @@ import { Study } from '@api'
 import { React, useEffect, useState } from '@common'
 import { useApi } from '@lib'
 import { useToggle } from 'rooks';
-import { ResearcherButton, Toast } from '@components';
+import { ResearcherButton, showResearcherNotification } from '@components';
 import { Main } from './grid'
 
 export function ApproveStudies() {
@@ -69,9 +69,7 @@ const StudyRow: FC<{study: Study, setStudies: (studies: Study[] | undefined) => 
                     onClick={() => {
                         api.adminApproveStudy({ id: study.id }).then(response => {
                             setStudies(response.data)
-                            Toast.show({
-                                message: `'${study.titleForResearchers}' was updated successfully`,
-                            })
+                            showResearcherNotification(`'${study.titleForResearchers}' was updated successfully`)
                         })
                     }}
                 >

@@ -9,7 +9,7 @@ import {
     FormSaveButton,
     InputField,
     PageNotFound,
-    Toast,
+    showResearcherNotification,
     useFormState,
 } from '@components'
 import { Analysis, Study } from '@api'
@@ -72,16 +72,12 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies }) => {
         try {
             if (analysis.id) {
                 const updatedAnalysis = await api.updateAnalysis({ id: analysis.id, updateAnalysis: { analysis } })
-                Toast.show({
-                    message: `Successfully updated analysis '${updatedAnalysis.title}'`,
-                })
+                showResearcherNotification(`Successfully updated analysis '${updatedAnalysis.title}'`)
                 await refetch()
                 nav(`/analysis/overview/${updatedAnalysis.id}`)
             } else {
                 const savedAnalysis = await api.addAnalysis({ addAnalysis: { analysis } })
-                Toast.show({
-                    message: `Successfully created analysis '${analysis.title}'`,
-                })
+                showResearcherNotification(`Successfully created analysis '${analysis.title}'`)
                 await refetch()
                 nav(`/analysis/overview/${savedAnalysis.id}`)
             }

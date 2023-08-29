@@ -1,7 +1,6 @@
 import { Box, React, useNavigate, useState } from '@common';
-import { Icon, Modal, ResearcherButton, useFormContext, useFormState } from '@components';
+import { Icon, Modal, ResearcherButton, showResearcherNotification, useFormContext, useFormState } from '@components';
 import { colors } from '@theme';
-import { Toast } from '@nathanstitt/sundry/ui';
 import { Study } from '@api';
 
 export const ExitStudyFormButton: FC<{study: Study, saveStudy: (study: Study) => void}> = ({ study, saveStudy }) => {
@@ -50,9 +49,7 @@ export const ExitStudyFormButton: FC<{study: Study, saveStudy: (study: Study) =>
                             <ResearcherButton
                                 onClick={() => {
                                     nav('/studies')
-                                    Toast.show({
-                                        message: `New edits to the study '${study.titleForResearchers}' have been discarded`,
-                                    })
+                                    showResearcherNotification(`New edits to the study '${study.titleForResearchers}' have been discarded`)
                                 }}
                                 buttonType='secondary'
                             >
@@ -62,10 +59,8 @@ export const ExitStudyFormButton: FC<{study: Study, saveStudy: (study: Study) =>
                             <ResearcherButton onClick={() => {
                                 saveStudy(getValues() as Study)
                                 nav('/studies')
-                                Toast.show({
-                                    message: `New edits to the study '${study.titleForResearchers}' have successfully been saved`,
-                                })}
-                            }>
+                                showResearcherNotification(`New edits to the study '${study.titleForResearchers}' have successfully been saved`)
+                            }}>
                                 Yes, save changes
                             </ResearcherButton>
                         </Box>
