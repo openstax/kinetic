@@ -73,8 +73,10 @@ $spacers: map-merge(
   $spacers
 );
 
-$toast-background-color: rgba(#f6f8fa, 1);
-$toast-header-background-color: rgba(#f6f8fa, 1);
+$toast-color: white;
+$toast-header-color: white;
+$toast-background-color: rgba(#2874F9, 1);
+$toast-header-background-color: rgba(#2874F9, 1);
 
 // scss-docs-start import-stack
 // Configuration

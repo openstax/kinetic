@@ -144,7 +144,7 @@ const FormContent: FC<{
             if (savedStudy) {
                 nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
                 Toast.show({
-                    message: `New copy of ${study.titleForResearchers} has been created and saved as a draft. It can now be found under ‘Draft’.`,
+                    message: `New copy of '${study.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`,
                 })
                 return setStudy(savedStudy)
             }
@@ -157,6 +157,15 @@ const FormContent: FC<{
         const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
         reset(getFormDefaults(savedStudy, currentStep), { keepIsValid: true, keepDirty: false })
         setStudy(savedStudy)
+    }
+
+    const saveAsDraft = async () => {
+        saveStudy().then(() => {
+            Toast.show({
+                title: 'Success',
+                message: `'${study.titleForResearchers}' has been saved as a draft.`,
+            })
+        })
     }
 
     const steps: Step[] = [
@@ -189,13 +198,13 @@ const FormContent: FC<{
                     await saveStudy()
                     setStep(StudyStep.ParticipantView)
                     Toast.show({
-                        message: `Invitations to collaborate on study ${study.titleForResearchers} have successfully been sent.`,
+                        message: `Invitations to collaborate on study '${study.titleForResearchers}' have successfully been sent.`,
                     })
                 },
             },
             secondaryAction: {
                 text: 'Save as draft',
-                action: saveStudy,
+                action: saveAsDraft,
                 disabled: !isDirty,
             },
         },
@@ -217,7 +226,7 @@ const FormContent: FC<{
             },
             secondaryAction: {
                 text: 'Save as draft',
-                action: saveStudy,
+                action: saveAsDraft,
                 disabled: !isDirty,
             },
         },
@@ -240,7 +249,7 @@ const FormContent: FC<{
             },
             secondaryAction: {
                 text: 'Save as draft',
-                action: saveStudy,
+                action: saveAsDraft,
                 disabled: !isDirty,
             },
         },

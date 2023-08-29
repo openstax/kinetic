@@ -51,7 +51,7 @@ export const ExitStudyFormButton: FC<{study: Study, saveStudy: (study: Study) =>
                                 onClick={() => {
                                     nav('/studies')
                                     Toast.show({
-                                        message: `New edits to the study ${study.titleForResearchers} have been discarded`,
+                                        message: `New edits to the study '${study.titleForResearchers}' have been discarded`,
                                     })
                                 }}
                                 buttonType='secondary'
@@ -63,7 +63,7 @@ export const ExitStudyFormButton: FC<{study: Study, saveStudy: (study: Study) =>
                                 saveStudy(getValues() as Study)
                                 nav('/studies')
                                 Toast.show({
-                                    message: `New edits to the study ${study.titleForResearchers} have successfully been saved`,
+                                    message: `New edits to the study '${study.titleForResearchers}' have successfully been saved`,
                                 })}
                             }>
                                 Yes, save changes

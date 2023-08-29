@@ -70,7 +70,7 @@ const StudyRow: FC<{study: Study, setStudies: (studies: Study[] | undefined) => 
                         api.adminApproveStudy({ id: study.id }).then(response => {
                             setStudies(response.data)
                             Toast.show({
-                                message: `${study.titleForResearchers} was updated successfully`,
+                                message: `'${study.titleForResearchers}' was updated successfully`,
                             })
                         })
                     }}

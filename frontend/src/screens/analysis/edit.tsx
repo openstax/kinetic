@@ -73,14 +73,14 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies }) => {
             if (analysis.id) {
                 const updatedAnalysis = await api.updateAnalysis({ id: analysis.id, updateAnalysis: { analysis } })
                 Toast.show({
-                    message: `Successfully updated analysis ${updatedAnalysis.title}`,
+                    message: `Successfully updated analysis '${updatedAnalysis.title}'`,
                 })
                 await refetch()
                 nav(`/analysis/overview/${updatedAnalysis.id}`)
             } else {
                 const savedAnalysis = await api.addAnalysis({ addAnalysis: { analysis } })
                 Toast.show({
-                    message: `Successfully created analysis ${analysis.title}`,
+                    message: `Successfully created analysis '${analysis.title}'`,
                 })
                 await refetch()
                 nav(`/analysis/overview/${savedAnalysis.id}`)
