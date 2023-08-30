@@ -266,7 +266,7 @@ const FormContent: FC<{
                         <span></span>
                     </Col>
                     <Col sm={9}>
-                        <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} />
+                        <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} setStep={setStep} />
                     </Col>
                     <Col sm={1}>
                         {currentStep !== StudyStep.InternalDetails && <ExitStudyFormButton study={getValues() as Study} saveStudy={saveStudy} />}
