@@ -1,6 +1,6 @@
-FROM ruby:3.0.5
+FROM ruby:3.2.2
 ARG OPENAPI_VERSION=6.6.0
-ARG bundler_version
+ARG bundler_version=2.4.19
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -12,7 +12,7 @@ RUN apt-get update && \
     wget \
     postgresql-client \
     # for openapi
-    openjdk-11-jre-headless \
+    openjdk-17-jre-headless \
     && rm -rf /var/lib/apt/lists/*
 
 # Install a quick colorized prompt and turn on ls coloring

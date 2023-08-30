@@ -6,5 +6,5 @@ if [ "$1" == "--ci" ]; then SUFFIX=".ci"; else SUFFIX=""; fi
 
 docker build -f $DIR/Dockerfile$SUFFIX \
              -t openstax/labs.backend$SUFFIX:latest \
-             --build-arg bundler_version=2.2.4 \
+             --build-arg bundler_version=2.4.19 \
              $DIR/..
