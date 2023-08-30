@@ -5,6 +5,7 @@ import CompletedStep from '@images/icons/completed-step.svg'
 import OptionalStep from '@images/icons/optional-step.svg'
 import DisabledStep from '@images/icons/disabled-step.svg'
 import { ReactNode } from 'react';
+import { useLocalstorageState } from 'rooks';
 
 export interface StepAction {
     text: string
@@ -38,9 +39,10 @@ export const ResearcherProgressBar: FC<{
     steps: Step[],
     currentStep: Step,
     setStep: (step: number) => void,
-}> = ({ steps, currentStep, setStep }) => {
+    maxStep: number,
+}> = ({ steps, currentStep, setStep, maxStep }) => {
     const navigateToStep = (step: Step) => {
-        if (currentStep.index > step.index) {
+        if (step.index <= maxStep) {
             setStep(step.index)
         }
     }
