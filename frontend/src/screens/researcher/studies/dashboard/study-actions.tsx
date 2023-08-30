@@ -1,5 +1,5 @@
 import { dayjs, React, styled, useNavigate } from '@common';
-import { Box, Button, Icon, Modal, Toast } from '@components';
+import { Box, Button, Icon, Modal, showResearcherNotification, showResearcherNotificationError } from '@components';
 import { StageStatusEnum, Study, UpdateStudyStatusStatusActionEnum } from '@api';
 import { colors } from '@theme';
 import { useApi } from '@lib';
@@ -47,12 +47,12 @@ const ActionModalContent: FC<{
                 statusAction,
                 stageIndex,
             }).then((study) => {
-                Toast.show({ message })
+                showResearcherNotification(message)
                 cell.table.options.meta?.updateData(study)
             })
         }
         catch (err) {
-            Toast.show({ error: err, message: String(err) })
+            showResearcherNotificationError(String(err))
             console.error(err) // eslint-disable-line no-console
         }
         onHide()
@@ -61,13 +61,13 @@ const ActionModalContent: FC<{
     const deleteStudy = (study: Study, message: string) => {
         try {
             api.deleteStudy({ studyId: study.id }).then(() => {
-                Toast.show({ message })
+                showResearcherNotification(message)
                 study.isHidden = true
                 cell.table.options.meta?.updateData(study)
             })
         } catch (err) {
             study.isHidden = false
-            Toast.show({ error: err, message: String(err) })
+            showResearcherNotificationError(String(err))
             console.error(err) // eslint-disable-line no-console
         }
         onHide()

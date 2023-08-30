@@ -27,6 +27,7 @@
     "@iconify-icons/mdi": "^1.2.47",
     "@mantine/core": "^6.0.18",
     "@mantine/hooks": "^6.0.18",
+    "@mantine/notifications": "^6.0.19",
     "@nathanstitt/sundry": "^1.7.1",
     "@sentry/react": "^7.11.1",
     "@sentry/tracing": "^7.11.1",
