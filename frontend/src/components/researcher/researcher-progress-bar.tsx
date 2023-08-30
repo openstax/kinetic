@@ -5,7 +5,6 @@ import CompletedStep from '@images/icons/completed-step.svg'
 import OptionalStep from '@images/icons/optional-step.svg'
 import DisabledStep from '@images/icons/disabled-step.svg'
 import { ReactNode } from 'react';
-import { useLocalstorageState } from 'rooks';
 
 export interface StepAction {
     text: string
