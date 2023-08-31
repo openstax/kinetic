@@ -181,7 +181,7 @@ export const studyCategoryDescriptions = {
     'Transfer of Learning': 'Interventions that assess learning or other outcomes across domains',
 }
 
-export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other'
+export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other' | string
 export const studyTopics: StudyTopic[] = [
     'Learning',
     'Memory',
