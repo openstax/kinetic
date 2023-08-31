@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-To get started make sure you have docker and docker-compose installed. You may also want to install yarn as well. Next try running these commands in the root directory:  
+To get started make sure you have yarn, docker, and docker-compose installed. Next try running these commands in the root directory:  
 
 ```bash
 $> docker compose build
