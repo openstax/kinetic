@@ -250,6 +250,7 @@ const FormContent: FC<{
             index: StudyStep.ReviewStudy,
             component: <ReviewStudy study={study} />,
             text: 'Review Study',
+            backAction: () => setStep(StudyStep.AdditionalSessions),
             primaryAction: {
                 text: 'Submit Study',
                 action: () => {
