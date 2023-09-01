@@ -93,6 +93,8 @@ export const participantViewValidation = (allOtherStudies: Study[]) => {
 
 export const ParticipantView: FC<{study: Study}> = ({ study }) => {
     const [showImagePicker, setShowImagePicker] = useState<boolean>(false)
+    const initialSubjects = study.subject ? [...new Set([...studySubjects, study.subject])] : studySubjects
+    const [allStudySubjects, setAllStudySubjects] = useState<string[]>(initialSubjects)
     const { setValue, watch, getValues, control } = useFormContext<Study>()
     const { update } = useFieldArray({
         control,
@@ -186,8 +188,13 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
                             <FieldErrorMessage name='topic' />
                             <SelectField
                                 name="subject"
+                                allowCreate
                                 placeholder="Study Content Area (optional)"
-                                options={studySubjects.map(s => ({ value: s, label: s }))}
+                                onCreateOption={(value) => {
+                                    setAllStudySubjects(prevState => [...new Set([...prevState, value])])
+                                    setValue('subject', value, { shouldDirty: true })
+                                }}
+                                options={allStudySubjects.map(s => ({ value: s, label: s }))}
                             />
                         </Col>
                     </Box>
