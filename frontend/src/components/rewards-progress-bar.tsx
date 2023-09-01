@@ -33,17 +33,16 @@ const SegmentLabel: React.FC<{ segment: RewardsSegment }> = ({ segment }) => {
 
 
 const popOverMessage = (segment: RewardsSegment) => {
-    let popover = ''
+    console.log(segment)
     if (segment.achieved) {
-        popover = `🎉 ${segment.isPast ? 'You were' : 'You’ve been'} entered in a giveaway for a ${segment.prize}`
+        return `🎉 ${segment.isPast ? 'You were' : 'You’ve been'} entered in a giveaway for a ${segment.prize}`
     } else {
         if (segment.isPast) {
-            popover = `Missed it? No worries, more prizes ahead`
+            return `Missed it? No worries, more prizes ahead`
         } else {
-            popover = `Reach ${segment.totalPoints} points by ${formatDate(segment.endAt, 'll')} to be entered in an ${segment.prize} giveaway`
+            return `${segment.prize}`
         }
     }
-    return popover
 }
 
 
@@ -127,10 +126,10 @@ const SegmentInfo: React.FC<{ schedule: RewardsSegment[] }> = ({ schedule }) => 
     const segment = schedule.find(s => s.recentlyAchieved) || schedule.find(s => s.isCurrent)
     if (!segment) return null
 
-    let msg = ''
+    let msg;
 
     if (segment.recentlyAchieved) {
-        msg = `🎉 Yay! You were entered into giveway`
+        msg = `🎉 Yay! You were entered into giveaway`
     } else {
         msg = `${segment.isFinal ? 'Grand ' : ''}Giveaway`
     }

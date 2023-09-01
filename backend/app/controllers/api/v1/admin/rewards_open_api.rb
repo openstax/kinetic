@@ -11,7 +11,7 @@ class Api::V1::Admin::RewardsOpenApi
       end
       property :prize do
         key :type, :string
-        key :description, 'The messsage to display.  Limited HTML is supported'
+        key :description, 'The message to display. Limited HTML is supported'
       end
       property :info_url do
         key :type, :string
