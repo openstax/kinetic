@@ -177,8 +177,8 @@ export const SubmitStudyModal: FC<{
     const api = useApi()
     const [submitted, setSubmitted] = useState(false)
     const [submitting, setSubmitting] = useState(false)
-    if (true) {
-        return <SubmitSuccess show={true} />
+    if (submitted) {
+        return <SubmitSuccess show={submitted} />
     }
 
     const submitStudy = () => {
