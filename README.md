@@ -24,18 +24,6 @@ and try running the docker compose commands again to see if that fixes it.
 
 When run correctly the front-end may be at http://localhost:4000/.
 
-## Frontend
-
-To run the front-end for development:
-
-`yarn run start`
-
-To build the front-end:
-
-`yarn run build`
-
-Building will generate files in the `dist` directory.  One of the files is a `manifest.json` file that contains references to all the assets that were built.
-
 ## Backend
 
 If you want your Git config and SSH keys available inside running docker containers,
