@@ -13,9 +13,11 @@ export const FinalizeStudy: FC<{study: Study, }> = ({ study }) => {
         <Box direction='column' gap='large'>
             <ReadyForLaunch study={study} setUserCheckedQualtrics={setUserCheckedQualtrics} />
 
-            <CollapsibleSection title='Finalize your study' collapsible={false}>
-                <EditSubmittedStudy study={study} formDisabled={!userCheckedQualtrics}/>
-            </CollapsibleSection>
+            {userCheckedQualtrics &&
+                <CollapsibleSection title='Finalize your study' collapsible={false}>
+                    <EditSubmittedStudy study={study} />
+                </CollapsibleSection>
+            }
 
             <StudyInformation study={study} />
         </Box>

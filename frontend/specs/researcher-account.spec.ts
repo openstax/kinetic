@@ -6,6 +6,7 @@ test('can update researcher account details', async({ page }) => {
     await goToPage({ page, path: `/researcher-account` })
 
     await page.fill('[name=firstName]', 'a'.repeat(60))
+    // TODO test cleanup https://playwright.dev/docs/best-practices#dont-use-manual-assertions
     expect(await page.$('[name=firstName].is-invalid')).toBeDefined()
 
     await page.fill('[name=firstName]', faker.name.firstName())

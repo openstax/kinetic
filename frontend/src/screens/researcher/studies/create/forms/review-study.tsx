@@ -8,6 +8,7 @@ import { Study } from '@api';
 import { useApi } from '@lib';
 import { capitalize } from 'lodash-es';
 import Waiting from '@images/study-creation/waiting.svg'
+import { useLocalstorageState } from 'rooks';
 
 export const ReviewStudy: FC<{ study: Study }> = ({ study }) => {
     return (
@@ -177,6 +178,8 @@ export const SubmitStudyModal: FC<{
     const api = useApi()
     const [submitted, setSubmitted] = useState(false)
     const [submitting, setSubmitting] = useState(false)
+    const [, , removeStudyProgressStep] = useLocalstorageState<StudyStep>(`study-progress-${study.id}`)
+    const [, , removeMaxStep] = useLocalstorageState<StudyStep>(`study-max-progress-${study.id}`)
     if (submitted) {
         return <SubmitSuccess show={submitted} />
     }
@@ -212,6 +215,8 @@ export const SubmitStudyModal: FC<{
                                 setSubmitted(true)
                                 setSubmitting(false)
                                 setShow(false)
+                                removeStudyProgressStep()
+                                removeMaxStep()
                             })
                         }}>
                             Yes, submit study

@@ -121,7 +121,7 @@ const FormContent: FC<{
     const nav = useNavigate()
     const api = useApi()
     const [, setStudyProgressStep] = useLocalstorageState<StudyStep>(`study-progress-${id}`)
-
+    const [maxStep, setMaxStep] = useLocalstorageState<StudyStep>(`study-max-progress-${id}`, 0)
     if (!isDraft(study) && !isNew) {
         nav(`/study/overview/${id}`)
     }
@@ -131,6 +131,9 @@ const FormContent: FC<{
         setValue('step', step, { shouldValidate: true, shouldTouch: true })
         if (!isNew) {
             setStudyProgressStep(step)
+        }
+        if (step > maxStep) {
+            setMaxStep(step)
         }
     }
 
@@ -269,7 +272,7 @@ const FormContent: FC<{
                         <span></span>
                     </Col>
                     <Col sm={9}>
-                        <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} />
+                        <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} setStep={setStep} maxStep={maxStep}/>
                     </Col>
                     <Col sm={1}>
                         {currentStep !== StudyStep.InternalDetails && <ExitStudyFormButton study={getValues() as Study} saveStudy={saveStudy} />}

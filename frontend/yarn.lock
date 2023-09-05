@@ -4491,11 +4491,6 @@ use-latest@^1.2.1:
   dependencies:
     use-isomorphic-layout-effect "^1.1.1"
 
-use-local-storage-state@^17.0.0:
-  version "17.3.0"
-  resolved "https://registry.yarnpkg.com/use-local-storage-state/-/use-local-storage-state-17.3.0.tgz#09853c138525822f1f8a2174cddbbc59affcfe33"
-  integrity sha512-PZruqtmMkYCgcC5t+0Mbka1rN2jjhC1SMA2UD8o6HbpblZf8E9aaXF0sEwlQAWlBpKGlNYvbqueB8dlbwX7n/g==
-
 use-sidecar@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/use-sidecar/-/use-sidecar-1.1.2.tgz#2f43126ba2d7d7e117aa5855e5d8f0276dfe73c2"

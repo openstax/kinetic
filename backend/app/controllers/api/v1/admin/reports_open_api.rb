@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::Researcher::ReportsOpenApi
+class Api::V1::Admin::ReportsOpenApi
   include OpenStax::OpenApi::Blocks
 
   openapi_path '/admin/reports/learner-activity' do
