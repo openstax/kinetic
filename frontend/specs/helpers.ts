@@ -13,6 +13,7 @@ export const TC = {
         researcher: '00000000-0000-0000-0000-000000000001',
         user: '00000000-0000-0000-0000-000000000002',
     },
+    API_URL: `${process.env.ORIGIN || 'http://localhost:4006'}/api/v1`,
 }
 
 type TestingLogin = keyof typeof TC.USERS
