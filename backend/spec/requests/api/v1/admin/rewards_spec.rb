@@ -59,7 +59,7 @@ RSpec.describe 'Reward', api: :v1 do
             points: 1,
             start_at: Time.now,
             end_at: 3.days.from_now,
-            description: "Test description"
+            description: 'Test description'
           }
         }
       }.to change { Reward.count }.by 1
