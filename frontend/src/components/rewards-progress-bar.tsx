@@ -1,7 +1,7 @@
 import { Box, cx, React } from '@common'
 import { Icon, Segment, segmentCircleStyle, SegmentedBar, Tooltip } from '@components'
 import { RewardsSegment, useRewardsSchedule } from '@models'
-import { formatDate, toDayJS, useIsMobileDevice } from '@lib'
+import { toDayJS, useIsMobileDevice } from '@lib'
 import { ParticipantStudy } from '@api'
 import { colors } from '@theme'
 import { CSSObject } from '@emotion/react'
@@ -25,7 +25,7 @@ const SegmentLabel: React.FC<{ segment: RewardsSegment }> = ({ segment }) => {
                 color: segment.isCurrent ? 'black' : colors.gray70,
                 textWrap: 'nowrap',
             }}>
-            <span>{segment.totalPoints}pts</span>
+            {segment.points == 0 ? <></> : <span>{segment.totalPoints}pts</span>}
             <span>{toDayJS(segment.endAt).format('DD MMM')}</span>
         </Box>
     )
@@ -33,14 +33,13 @@ const SegmentLabel: React.FC<{ segment: RewardsSegment }> = ({ segment }) => {
 
 
 const popOverMessage = (segment: RewardsSegment) => {
-    console.log(segment)
     if (segment.achieved) {
         return `🎉 ${segment.isPast ? 'You were' : 'You’ve been'} entered in a giveaway for a ${segment.prize}`
     } else {
         if (segment.isPast) {
             return `Missed it? No worries, more prizes ahead`
         } else {
-            return `${segment.prize}`
+            return `${segment.description}`
         }
     }
 }
@@ -70,7 +69,7 @@ const GrandPrize: React.FC<{ segment?: RewardsSegment }> = ({ segment }) => {
     if (!segment) return null
 
     if (segment.isPast && !segment.achieved) {
-        return <MissedGrandPrize css={{}} />
+        return <MissedGrandPrize />
     }
 
     return (

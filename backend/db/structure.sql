@@ -569,12 +569,12 @@ ALTER SEQUENCE public.response_exports_id_seq OWNED BY public.response_exports.i
 CREATE TABLE public.rewards (
     id bigint NOT NULL,
     prize text NOT NULL,
-    info_url text,
     points integer NOT NULL,
     start_at timestamp with time zone NOT NULL,
     end_at timestamp with time zone NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
+    updated_at timestamp(6) with time zone NOT NULL,
+    description character varying
 );
 
 
@@ -1492,6 +1492,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230626173336'),
 ('20230712163112'),
 ('20230726142755'),
-('20230808163159');
+('20230808163159'),
+('20230905121510');
 
 

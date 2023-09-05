@@ -13,9 +13,9 @@ class Api::V1::Admin::RewardsOpenApi
         key :type, :string
         key :description, 'The message to display. Limited HTML is supported'
       end
-      property :info_url do
+      property :description do
         key :type, :string
-        key :description, 'A link for more information about the reward'
+        key :description, 'A description of the reward'
       end
       property :points do
         key :type, :number
