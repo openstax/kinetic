@@ -8,6 +8,7 @@ import {
     LoadingAnimation,
     Page,
     ResearcherProgressBar,
+    showResearcherNotification,
     Step,
     useFormContext,
     useFormState,
@@ -20,7 +21,6 @@ import { NewStudy, ResearcherRoleEnum, Study } from '@api';
 import { ActionFooter } from './action-footer';
 import { colors } from '@theme';
 import { ReviewStudy, SubmitStudyModal } from './forms/review-study';
-import { Toast } from '@nathanstitt/sundry/ui';
 import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
 
@@ -121,7 +121,7 @@ const FormContent: FC<{
     const nav = useNavigate()
     const api = useApi()
     const [, setStudyProgressStep] = useLocalstorageState<StudyStep>(`study-progress-${id}`)
-
+    const [maxStep, setMaxStep] = useLocalstorageState<StudyStep>(`study-max-progress-${id}`, 0)
     if (!isDraft(study) && !isNew) {
         nav(`/study/overview/${id}`)
     }
@@ -131,6 +131,9 @@ const FormContent: FC<{
         setValue('step', step, { shouldValidate: true, shouldTouch: true })
         if (!isNew) {
             setStudyProgressStep(step)
+        }
+        if (step > maxStep) {
+            setMaxStep(step)
         }
     }
 
@@ -143,9 +146,7 @@ const FormContent: FC<{
 
             if (savedStudy) {
                 nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
-                Toast.show({
-                    message: `New copy of ${study.titleForResearchers} has been created and saved as a draft. It can now be found under ‘Draft’.`,
-                })
+                showResearcherNotification(`New copy of '${study.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`)
                 return setStudy(savedStudy)
             }
         }
@@ -157,6 +158,12 @@ const FormContent: FC<{
         const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
         reset(getFormDefaults(savedStudy, currentStep), { keepIsValid: true, keepDirty: false })
         setStudy(savedStudy)
+    }
+
+    const saveAsDraft = async () => {
+        saveStudy().then(() => {
+            showResearcherNotification(`New edits to the study “${study.titleForResearchers}” have successfully been saved.`)
+        })
     }
 
     const steps: Step[] = [
@@ -188,14 +195,12 @@ const FormContent: FC<{
 
                     await saveStudy()
                     setStep(StudyStep.ParticipantView)
-                    Toast.show({
-                        message: `Invitations to collaborate on study ${study.titleForResearchers} have successfully been sent.`,
-                    })
+                    showResearcherNotification(`Invitations to collaborate on study '${study.titleForResearchers}' have successfully been sent.`)
                 },
             },
             secondaryAction: {
                 text: 'Save as draft',
-                action: saveStudy,
+                action: saveAsDraft,
                 disabled: !isDirty,
             },
         },
@@ -217,7 +222,7 @@ const FormContent: FC<{
             },
             secondaryAction: {
                 text: 'Save as draft',
-                action: saveStudy,
+                action: saveAsDraft,
                 disabled: !isDirty,
             },
         },
@@ -240,7 +245,7 @@ const FormContent: FC<{
             },
             secondaryAction: {
                 text: 'Save as draft',
-                action: saveStudy,
+                action: saveAsDraft,
                 disabled: !isDirty,
             },
         },
@@ -266,7 +271,7 @@ const FormContent: FC<{
                         <span></span>
                     </Col>
                     <Col sm={9}>
-                        <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} />
+                        <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} setStep={setStep} maxStep={maxStep}/>
                     </Col>
                     <Col sm={1}>
                         {currentStep !== StudyStep.InternalDetails && <ExitStudyFormButton study={getValues() as Study} saveStudy={saveStudy} />}

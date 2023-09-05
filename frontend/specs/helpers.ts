@@ -13,6 +13,7 @@ export const TC = {
         researcher: '00000000-0000-0000-0000-000000000001',
         user: '00000000-0000-0000-0000-000000000002',
     },
+    API_URL: `${process.env.ORIGIN || 'http://localhost:4006'}/api/v1`,
 }
 
 type TestingLogin = keyof typeof TC.USERS
@@ -115,7 +116,6 @@ export const approveWaitingStudy = async(page: Page, studyId: number) => {
 
 export const launchApprovedStudy = async(page: Page, studyId: number, multiSession: boolean = false) => {
     await goToPage({ page, path: `/study/overview/${studyId}`, loginAs: 'researcher' })
-    await expect(page.locator('testId=launch-study-button')).toBeDisabled()
 
     if (multiSession) {
         await page.getByTestId('confirm-qualtrics-0').check();

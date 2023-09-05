@@ -2,8 +2,8 @@ import { DefaultApi, ParticipantStudy, ResearcherRoleEnum, Stage, Study, StudySt
 import { isNil, useApi } from '@lib'
 import { dayjs, useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
-import { Toast } from '@nathanstitt/sundry/ui';
 import { useQuery } from 'react-query';
+import { showResearcherNotificationError } from '@components';
 
 export enum StudyStatus {
     Launched = 'Launched',
@@ -156,11 +156,7 @@ export const useFetchStudy = (id: string) => {
             if (study) {
                 setStudy(study)
             } else {
-                Toast.show({
-                    error: true,
-                    title: 'Study not found',
-                    message: `Study with id ${id} not found`,
-                })
+                showResearcherNotificationError(`Study with id ${id} not found`)
             }
         })
     }, [id])
@@ -185,7 +181,7 @@ export const studyCategoryDescriptions = {
     'Transfer of Learning': 'Interventions that assess learning or other outcomes across domains',
 }
 
-export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other'
+export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other' | string
 export const studyTopics: StudyTopic[] = [
     'Learning',
     'Memory',

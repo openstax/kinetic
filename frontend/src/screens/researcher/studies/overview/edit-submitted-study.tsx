@@ -44,10 +44,7 @@ const studyValidation = Yup.object().shape({
     ),
 });
 
-export const EditSubmittedStudy: FC<{
-    study: Study,
-    formDisabled?: boolean
-}> = ({ study, formDisabled = false }) => {
+export const EditSubmittedStudy: FC<{ study: Study }> = ({ study }) => {
     const api = useApi()
     const reopening: boolean = useQueryParam('reopen') || false
 
@@ -57,7 +54,7 @@ export const EditSubmittedStudy: FC<{
         reset(savedStudy, { keepIsValid: true })
     }
 
-    const isDisabled = formDisabled || (!reopening && isCompleted(study))
+    const isDisabled = !reopening && isCompleted(study)
 
     return (
         <Form

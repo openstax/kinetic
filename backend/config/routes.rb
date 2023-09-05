@@ -58,6 +58,8 @@ Rails.application.routes.draw do
 
         get 'impersonate/researcher/:id', to: 'impersonate#impersonate_researcher'
         get 'impersonate/stop', to: 'impersonate#stop'
+
+        get 'reports/learner-activity', to: 'reports#learner_activity'
       end
 
       get :openapi, to: 'open_api#json', constraints: { format: :json }
@@ -97,8 +99,6 @@ Rails.application.routes.draw do
     # production serves the generated index.html file. other env will redirect to dev server
     get 'study/land/:study_id', as: :returning, via: :get, to: 'static#catchall'
   end
-
-  # mount ActiveStorage::Engine, at: '/files'
 
   match '/', via: :get, to: 'static#catchall'
   match '*path', via: :get, to: 'static#catchall', constraints: lambda { |req|

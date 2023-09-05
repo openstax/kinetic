@@ -144,15 +144,37 @@ const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher })
         <Part icon="person" title="About Researcher">
             <Box direction="column">
                 <Box gap>
+                    Name:
                     <span>{researcher.firstName} {researcher.lastName}</span>
+                </Box>
+                <Box gap>
+                    Institution:
                     <span>{researcher.institution}</span>
                 </Box>
-                <p>{researcher.bio}</p>
+                <Box gap>
+                    Bio:
+                    <p>{researcher.bio}</p>
+                </Box>
             </Box>
         </Part>
     )
 }
 
+const ResearcherSection: FC<StudyDetailsProps> = ({ study }) => {
+    const pi = getStudyPi(study)
+    const lead = getStudyLead(study)
+
+    if (pi && lead && pi.id === lead.id) {
+        return <Researcher researcher={pi} />;
+    }
+
+    return (
+        <>
+            {pi && <Researcher researcher={pi} />}
+            {lead && <Researcher researcher={lead} />}
+        </>
+    )
+}
 
 export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
     const { studyId: sid } = useParams<{ studyId: string }>()
@@ -184,8 +206,6 @@ export const StudyDetailsPreview: FC<{
     onHide: () => void,
     preview?: boolean
 }> = ({ study, show, onHide, preview = false }) => {
-    const pi = getStudyPi(study)
-    const lead = getStudyLead(study)
     return (
         <OffCanvas show={show} title="Study Detail" onHide={onHide}>
             <Box direction="column" flex>
@@ -208,9 +228,7 @@ export const StudyDetailsPreview: FC<{
                     <StudyPart property="feedbackDescription" title="Feedback Available" icon="feedback" study={study} />
                     <MultiSession study={study} />
                     <Box margin={{ bottom: 'large' }} css={{ color: colors.text }}>{study.longDescription}</Box>
-                    {pi && <Researcher researcher={pi} />}
-                    {lead && <Researcher researcher={lead} />}
-                    {/*<Researcher researcher={study.researchers?.[0]} />*/}
+                    <ResearcherSection study={study} />
                     <StudyPart property="benefits" title="What’s in it for you" icon="heart" study={study} />
                     <Part icon="warning" title="Notice">
                         Your responses to this study will be used to further learning science and

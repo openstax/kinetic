@@ -27,6 +27,7 @@
     "@iconify-icons/mdi": "^1.2.47",
     "@mantine/core": "^6.0.18",
     "@mantine/hooks": "^6.0.18",
+    "@mantine/notifications": "^6.0.19",
     "@nathanstitt/sundry": "^1.7.1",
     "@sentry/react": "^7.11.1",
     "@sentry/tracing": "^7.11.1",
@@ -58,7 +59,6 @@
     "swiper": "^8.4.4",
     "ts-node": "^10.7.0",
     "url-parse": "^1.5.10",
-    "use-local-storage-state": "^17.0.0",
     "wait-on": "^6.0.1",
     "whatwg-fetch": "^3.6.2",
     "zustand": "^4.3.7"

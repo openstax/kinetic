@@ -1,12 +1,16 @@
-import { addReward, createStudy, expect, goToPage, interceptStudyLaunch, loginAs, test } from './test'
+import { addReward, createStudy, expect, goToPage, interceptStudyLaunch, loginAs, TC, test } from './test'
+import { createStudyData } from './data-helpers';
 
-test('displays studies', async ({ page }) => {
+test('displays studies', async ({ page, context }) => {
+    await createStudyData({ page, context, numStudies: 5 })
     await loginAs({ page, login: 'user' })
     await goToPage({ page, path: '/studies' })
     await page.waitForSelector('testId=studies-listing')
 })
 
-test('filtering studies', async ({ page }) => {
+test('filtering studies', async ({ page, context }) => {
+    await createStudyData({ page, context, numStudies: 5 })
+
     const studyId = await createStudy({ page })
     await loginAs({ page, login: 'user' })
     await goToPage({ page, path: '/studies' })

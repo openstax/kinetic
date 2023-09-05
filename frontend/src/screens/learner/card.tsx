@@ -6,6 +6,7 @@ import { ParticipantStudy, Study } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
 import { StudyDetailsPreview } from './details';
+import dayjs from 'dayjs';
 
 interface StudyCardProps {
     study: ParticipantStudy
@@ -25,6 +26,7 @@ const Card = styled(Box)({
     minHeight: 475,
     maxHeight: 475,
     borderRadius: 8,
+    overflow: 'hidden',
     '&:hover': {
         boxShadow: '0px 8px 10px rgba(0, 0, 0, 0.4)',
     },
@@ -92,6 +94,28 @@ const MultiSession: React.FC<StudyCardProps> = ({ study }) => {
             />
             <span>Multi-Session</span>
         </Box>
+    )
+}
+
+const CornerRibbon = styled.div({
+    position: 'absolute',
+    inset: '0 auto auto 0',
+    background: colors.purple,
+    transformOrigin: '100% 0',
+    transform: 'translate(-29.3%) rotate(-45deg)',
+    boxShadow: `0 0 0 999px ${colors.purple}`,
+    clipPath: 'inset(0 -100%)',
+    color: colors.white,
+})
+
+const NewStudyFlag: FC<{study: ParticipantStudy}> = ({ study }) => {
+    if (!study.opensAt) return null
+    const isNew = dayjs(study.opensAt).isAfter(dayjs().subtract(7, 'days'))
+    if (!isNew) return null
+    return (
+        <CornerRibbon>
+            <small>New Study</small>
+        </CornerRibbon>
     )
 }
 
@@ -220,6 +244,7 @@ const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
                     borderRadius: 8,
                 }}
             />
+            <NewStudyFlag study={study} />
             <CompleteFlag study={study} />
             <MultiSessionFlag study={study} />
             <FeedbackMultiSessionContainer study={study} />

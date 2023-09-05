@@ -2,12 +2,12 @@ import { cardImages, Category, Col, getImageUrl, imageCategories, Modal, Researc
 import { Box, React, styled, useEffect, useState } from '@common';
 import { colors } from '@theme';
 
-const CategoryLink = styled.small({
+const CategoryLink = styled.small<{active: boolean}>(({ active }) => ({
     cursor: 'pointer',
-    color: colors.blue,
-    textDecoration: 'underline',
+    color: active ? colors.blue : colors.text,
+    textDecoration: active ? 'underline' : 'none',
     textUnderlineOffset: '.4rem',
-})
+}))
 
 const UncheckedCircle = styled.div({
     position: 'absolute',
@@ -45,8 +45,9 @@ const CheckedCircle = () => (
 const ImageCard: FC<{
     imageId: string,
     selectedImage: string,
-    onSelect: (imageId?: string) => void
-}> = ({ imageId, selectedImage, onSelect }) => {
+    onSelect: (imageId?: string) => void,
+    altText: string
+}> = ({ imageId, selectedImage, onSelect, altText }) => {
     return (
         <div
             css={{ position: 'relative', cursor: 'pointer' }}
@@ -58,9 +59,8 @@ const ImageCard: FC<{
                 }
             }}
         >
-            <img src={getImageUrl(imageId)} data-testid='card-image' alt={imageId} width={250} height={140} css={{
+            <img src={getImageUrl(imageId)} data-testid='card-image' alt={altText} width={250} height={140} css={{
                 border: `1px solid ${colors.gray50}`,
-                // padding: `0 25px`,
             }}/>
             {selectedImage === imageId ? <CheckedCircle/> : <UncheckedCircle/>}
         </div>
@@ -80,13 +80,13 @@ export const ImageLibrary: FC<{
     onSelect: (imageId: string) => void,
     currentImage?: string
 }> = ({ show, onHide, onSelect, currentImage }) => {
-    const currentCategory = cardImages.find(image => image.imageId == currentImage)?.category[0] || 'Learning'
+    const initialCategory = cardImages.find(image => image.imageId == currentImage)?.category[0] || 'Learning'
 
-    const [category, setCategory] = useState<Category>(currentCategory)
+    const [currentCategory, setCurrentCategory] = useState<Category>(initialCategory)
     const [selectedImage, setSelectedImage] = useState<string>(currentImage || 'Schoolfuturecareer_1')
 
     useEffect(() => () => {
-        setCategory(currentCategory)
+        setCurrentCategory(initialCategory)
         setSelectedImage(currentImage || 'Schoolfuturecareer_1')
     }, [show])
 
@@ -111,20 +111,21 @@ export const ImageLibrary: FC<{
                     >
                         <h6>Category</h6>
                         {imageCategories.map(c =>
-                            <CategoryLink key={c} onClick={() => setCategory(c)}>
+                            <CategoryLink active={currentCategory == c} key={c} onClick={() => setCurrentCategory(c)}>
                                 {c}
                             </CategoryLink>
                         )}
                     </Col>
                     <Col sm={10} direction='column'>
                         <Box css={{ padding: 20, height: '100%' }} direction='column'>
-                            <h4>{category}</h4>
+                            <h4>{currentCategory}</h4>
                             <ImageCardContainer wrap gap='xlarge' justify='evenly'>
-                                {cardImages.filter(i => i.category.includes(category)).map(cardImage => (
+                                {cardImages.filter(i => i.category.includes(currentCategory)).map(cardImage => (
                                     <ImageCard
                                         key={cardImage.imageId}
                                         imageId={cardImage.imageId}
                                         selectedImage={selectedImage}
+                                        altText={cardImage.altText}
                                         onSelect={(imageId?: string) => setSelectedImage(imageId || '')}
                                     />
                                 ))}
