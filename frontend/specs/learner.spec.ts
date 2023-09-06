@@ -1,42 +1,42 @@
-import { addReward, createStudy, expect, goToPage, interceptStudyLaunch, loginAs, TC, test } from './test'
-import { createStudyData } from './data-helpers';
+import { addReward, createStudy, expect, goToPage, interceptStudyLaunch, loginAs, test, useUsersContext } from './test'
+import { createStudiesData } from './data-helpers';
 
-test('displays studies', async ({ page, context }) => {
-    await createStudyData({ page, context, numStudies: 5 })
-    await loginAs({ page, login: 'user' })
-    await goToPage({ page, path: '/studies' })
-    await page.waitForSelector('testId=studies-listing')
+test('displays studies', async ({ browser }) => {
+    const { userPage, researcherContext } = await useUsersContext(browser)
+
+    await createStudiesData({ context: researcherContext, numStudies: 5 })
+    await goToPage({ page: userPage, path: '/studies' })
+    await userPage.waitForSelector('testId=studies-listing')
 })
 
-test('filtering studies', async ({ page, context }) => {
-    await createStudyData({ page, context, numStudies: 5 })
+test('filtering studies', async ({ browser }) => {
+    const { userPage, researcherContext } = await useUsersContext(browser)
+    const studyIds = await createStudiesData({ context: researcherContext, numStudies: 5 })
 
-    const studyId = await createStudy({ page })
-    await loginAs({ page, login: 'user' })
-    await goToPage({ page, path: '/studies' })
-    await page.click('testId=Learning')
-    await expect(page).toHaveSelector(`[data-study-id="${studyId}"]`)
+    await goToPage({ page: userPage, path: '/studies' })
+    await userPage.click('testId=Learning')
+    await expect(userPage).toHaveSelector(`[data-study-id="${studyIds[0]}"]`)
 })
 
-test('launching study and testing completion', async ({ page }) => {
-    await addReward({ page, points: 5, prize: 'Pony' })
-    await interceptStudyLaunch({ page })
+test('launching study and testing completion', async ({ page, browser }) => {
+    const { adminPage, researcherPage, userPage, researcherContext } = await useUsersContext(browser)
+    await addReward({ page: adminPage, points: 5, prize: 'Pony' })
+    const studyIds = await createStudiesData({ context: researcherContext })
+    const studyId = await createStudy({ page: researcherPage, browser })
 
-    const studyId = await createStudy({ page })
-    await goToPage({ page, path: '/studies' })
-    await loginAs({ page, login: 'user' })
-    await goToPage({ page, path: `/studies/details/${studyId}` })
+    await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
+    await interceptStudyLaunch({ page: userPage })
     await page.click('testId=launch-study')
 
     // qualtrics will redirect here once complete
-    await goToPage({ page, path: `/study/land/${studyId}` })
+    await goToPage({ page: userPage, path: `/study/land/${studyId}` })
     await page.click('testId=view-studies')
     // Our study is under "Learning"
     await page.click('testId=Learning')
 
-    await expect(page).toHaveSelector(`[data-study-id="${studyId}"][data-is-completed="true"]`)
+    await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"][data-is-completed="true"]`)
     await page.click(`[data-study-id="${studyId}"]`)
-    await expect(page).not.toHaveSelector('testId=launch-study', { timeout: 200 })
+    await expect(userPage).not.toHaveSelector('testId=launch-study', { timeout: 200 })
 })
 
 test('launching study and aborting it', async ({ page }) => {
@@ -71,10 +71,10 @@ test('launching study and aborting it', async ({ page }) => {
     await expect(page).not.toHaveSelector('testId=launch-study', { timeout: 200 })
 })
 
-test('launching study and completing with no consent', async ({ page }) => {
+test('launching study and completing with no consent', async ({ page, browser }) => {
     await interceptStudyLaunch({ page })
 
-    const studyId = await createStudy({ page })
+    const studyId = await createStudy({ browser })
     await loginAs({ page, login: 'user' })
     await goToPage({ page, path: `/studies/details/${studyId}` })
     // should have navigated
