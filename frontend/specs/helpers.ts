@@ -180,9 +180,10 @@ export const createStudy = async ({
     await expect(researcherPage.locator('testId=image-library-modal')).toBeVisible()
     await researcherPage.locator('testId=card-image').first().click()
     await researcherPage.click('testId=select-card-image')
-    await expect(researcherPage.locator('testId=image-library-modal')).not.toBeVisible()
+    await expect(researcherPage.locator('testId=image-library-modal')).toBeHidden()
+    await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
+    await researcherPage.waitForTimeout(100)
 
-    await expect(researcherPage.locator('testId=study-primary-action')).not.toBeDisabled()
     await researcherPage.click('testId=study-primary-action')
     await researcherPage.waitForLoadState('networkidle')
 

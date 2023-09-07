@@ -21,6 +21,7 @@ test('filtering studies', async ({ browser }) => {
 test('launching study and testing completion', async ({ browser }) => {
     const { adminPage, researcherPage, userPage } = await useUsersContext(browser)
     await addReward({ page: adminPage, points: 5, prize: 'Pony' })
+
     const studyId = await createStudy({ researcherPage, adminPage })
 
     await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
