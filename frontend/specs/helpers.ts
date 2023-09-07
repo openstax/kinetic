@@ -137,19 +137,20 @@ export const createStudy = async ({
     adminPage,
     researcherPage,
 }: createStudyArgs) => {
-    const name = faker.commerce.productName()
+    const name = faker.commerce.productName() + ' ' + faker.hacker.abbreviation()
     // Step 1 - Internal Details
     await goToPage({ page: researcherPage, path: '/study/edit/new' })
+
     await researcherPage.fill('[name=titleForResearchers]', name)
     await researcherPage.fill('[name=internalDescription]', description)
     await researcherPage.click("input[value='Learner Characteristics']")
-    await researcherPage.waitForTimeout(200)
+    await researcherPage.waitForTimeout(100)
 
     await expect(researcherPage.locator('testId=study-primary-action')).not.toBeDisabled()
     await researcherPage.click('testId=study-primary-action')
 
     // Step 2 - Research Team
-    await researcherPage.waitForTimeout(1000)
+    await researcherPage.waitForLoadState('networkidle')
 
     await researcherPage.locator('.select', { has: researcherPage.locator(`input[name=researcherPi]`) }).click()
     await researcherPage.waitForTimeout(100)

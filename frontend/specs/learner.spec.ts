@@ -44,10 +44,11 @@ test('launching study and testing completion', async ({ browser }) => {
 test('launching study and aborting it', async ({ browser }) => {
     const { userPage, researcherPage, adminPage } = await useUsersContext(browser)
 
-    await interceptStudyLaunch({ page: userPage })
 
     const studyId = await createStudy({ researcherPage, adminPage })
     await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
+    await interceptStudyLaunch({ page: userPage })
+
     await userPage.click('testId=launch-study')
 
     await goToPage({ page: userPage, path: `/study/land/${studyId}?abort=true` })

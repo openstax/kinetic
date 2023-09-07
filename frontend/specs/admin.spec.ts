@@ -22,7 +22,7 @@ test('can add/update/delete banners', async ({ browser }) => {
     const message = faker.commerce.productDescription()
     await goToPage({ page: adminPage, path: '/admin/banners' })
     await adminPage.click('data-testid=add-banner')
-    await adminPage.waitForSelector('[data-banner-id="new"]')
+    await adminPage.waitForSelector('[data-banner-id=new]')
 
     await setDateField({
         page: adminPage, fieldName: 'dates', date: [dayjs().add(1, 'day'), dayjs().add(1, 'month')],
@@ -31,7 +31,7 @@ test('can add/update/delete banners', async ({ browser }) => {
     await adminPage.fill('[name="message"]', message)
     await adminPage.click('testId=form-save-btn')
 
-    const banner = adminPage.locator(`[data-banner-id]:not([data-banner-id="new"]):has-text("${message}")`)
+    const banner = adminPage.locator(`[data-banner-id]:not([data-banner-id=new]):has-text("${message}")`)
     const bannerId = await banner.getAttribute('data-banner-id')
 
     await adminPage.fill(`[data-banner-id="${bannerId}"] >> [name="message"]`, message + ' UPDATED')
@@ -49,7 +49,7 @@ test('can add/update/delete rewards', async ({ browser }) => {
 
     await addReward({ page: adminPage, prize, points: 10 })
 
-    const reward = adminPage.locator(`[data-reward-id]:not([data-reward-id="new"]):has([value="${prize}"])`)
+    const reward = adminPage.locator(`[data-reward-id]:not([data-reward-id=new]):has([value="${prize}"])`)
     const rewardId = await reward.getAttribute('data-reward-id')
 
     await adminPage.fill(`[data-reward-id="${rewardId}"] >> [name="prize"]`, prize + ' UPDATED')
