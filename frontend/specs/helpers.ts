@@ -29,18 +29,19 @@ interface goToPageArgs {
 
 export const goToPage = async ({ page, path }: goToPageArgs) => {
     const url = TC.ORIGIN + path
-    let attempts = 0
-    do {
-        try {
-            await page.goto(url)
-            return
-        } catch (e) {
-            console.log(e) // eslint-disable-line no-console
-            if (attempts++ >= 3) {
-                throw (e)
-            }
-        }
-    } while (true) // eslint-disable-line no-constant-condition
+    await page.goto(url)
+    // let attempts = 0
+    // do {
+    //     try {
+    //         await page.goto(url)
+    //         return
+    //     } catch (e) {
+    //         console.log(e) // eslint-disable-line no-console
+    //         if (attempts++ >= 3) {
+    //             throw (e)
+    //         }
+    //     }
+    // } while (true) // eslint-disable-line no-constant-condition
 }
 
 export const interceptStudyLaunch = async ({ page }: { page: Page }) => {
