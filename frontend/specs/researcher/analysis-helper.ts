@@ -1,5 +1,5 @@
 import { BrowserContext, expect, Page } from '@playwright/test';
-import { getIdFromUrl, goToPage } from '../helpers';
+import { goToPage } from '../helpers';
 import { faker } from '../test';
 import { createStudyData } from '../data-helpers';
 
@@ -29,7 +29,6 @@ export const createAnalysis = async({ researcherPage, researcherContext, withStu
     await expect(researcherPage.locator('testId=save-analysis-button')).toBeEnabled()
     await researcherPage.click('testId=save-analysis-button')
     await researcherPage.waitForLoadState('networkidle')
-    const analysisId = await getIdFromUrl(researcherPage)
-    console.log(analysisId)
-    await researcherPage.waitForFunction(() => document.location.pathname == `/analysis/overview/${analysisId}`)
+    await researcherPage.waitForTimeout(500)
+    await researcherPage.waitForURL('**/analysis/overview/**')
 }

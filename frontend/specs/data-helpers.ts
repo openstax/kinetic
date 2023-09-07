@@ -1,5 +1,5 @@
-import { dayjs, expect, faker, TC, useUsersContext } from './test'
-import { Browser, BrowserContext } from '@playwright/test';
+import { dayjs, expect, faker, TC } from './test'
+import { BrowserContext } from '@playwright/test';
 
 // https://reflect.run/articles/using-playwright-for-api-testing/ Reference
 
@@ -49,6 +49,19 @@ const createStudyRequest = ({ context, name, description }: CreateStudyDataProps
             long_description: description || faker.commerce.productDescription(),
             opens_at: dayjs().subtract(1, 'day').toISOString(),
             image_id: 'Personality_3',
+            stages: [
+                {
+                    points: 10,
+                    duration_minutes: 5,
+                    feedback_types: ['Debrief, Personalized'],
+                    status: 'active',
+                    config: {
+                        type: 'qualtrics',
+                        survey_id: 'SV_12QHR3BE',
+                        secret_key: '1234567890123456',
+                    },
+                },
+            ],
         },
     })
 }

@@ -1,7 +1,7 @@
-import { goToPage, loginAs, test } from './test';
+import { goToPage, test, useUsersContext } from './test';
 
-test('can access studies table as a researcher', async({ page }) => {
-    await loginAs({ page, login: 'researcher' })
-    await goToPage({ page, path: `/studies` })
-    await page.isVisible('testId=studies-table')
+test('can access studies table as a researcher', async({ browser }) => {
+    const { researcherPage } = await useUsersContext(browser)
+    await goToPage({ page: researcherPage, path: `/studies` })
+    await researcherPage.isVisible('testId=studies-table')
 })

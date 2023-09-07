@@ -12,7 +12,6 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
     inbound_binding.stages&.each do |s|
       created_study.stages << Stage.new(s.to_hash.merge({ config: {} }))
     end
-
     response_binding = Api::V1::Bindings::Study.create_from_model(created_study)
     render json: response_binding, status: :created
   end

@@ -142,10 +142,11 @@ const Sessions: FC<{study: Study}> = ({ study }) => {
 }
 
 const FormActions: FC<{study: Study}> = ({ study }) => {
-    const { isValid, isDirty } = useFormState()
+    const { isValid, isDirty, errors } = useFormState()
     const api = useApi()
     const [show, setShow] = useState(false)
     const { getValues } = useFormContext()
+    console.log(isValid, errors)
 
     if (isReadyForLaunch(study)) {
         return (

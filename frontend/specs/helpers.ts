@@ -33,12 +33,6 @@ export const goToPage = async ({ page, path }: goToPageArgs) => {
     do {
         try {
             await page.goto(url)
-            // await page.waitForTimeout(500) // wait for user fetch to complete
-            await page.waitForLoadState('networkidle')
-            // if (await page.$('testId=incorrect-user-panel')) {
-            //     await loginAs({ page, login: login || 'researcher' })
-            //     await page.goto(url)
-            // }
             return
         } catch (e) {
             console.log(e) // eslint-disable-line no-console
@@ -84,17 +78,16 @@ export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin
 
 // TODO Can't delete active studies now. We can repurpose this to delete a draft in the future
 export const rmStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
-    await loginAs({ page, login: 'researcher' })
     await goToPage({ page, path: `/studies` })
     // await page.click(`testId=${studyId}-action-menu`)
     // await page.click(`testId=delete-study`)
 }
 
 export const getIdFromUrl = async (page: Page): Promise<number | undefined> => {
-    const id = await page.evaluate(() => {
-        return window.location.href.match(/(\/\d+)/)[1].replace('/', '')
-    })
-    console.log(id)
+    const id = page.url().match(/(\/\d+)/)[1].replace('/', '')
+    // const id = await page.evaluate(() => {
+    //     return window.location.href.match(/(\/\d+)/)[1].replace('/', '')
+    // })
     if (id) {
         return Number(id)
     }
@@ -105,46 +98,45 @@ interface createStudyArgs {
     approveAndLaunchStudy?: boolean
     multiSession?: boolean
     description?: string
-    browser: Browser
+    adminPage: Page
+    researcherPage: Page
 }
 
-export const approveWaitingStudy = async(page: Page, studyId: number) => {
-    await loginAs({ page, login: 'admin' })
-    await goToPage({ page, path: '/admin/approve-studies' })
-    await page.click(`testId=${studyId}-checkbox`)
-    await page.click(`testId=${studyId}-approve`)
-    await logout({ page })
+export const approveWaitingStudy = async(adminPage: Page, studyId: number) => {
+    await goToPage({ page: adminPage, path: '/admin/approve-studies' })
+    await adminPage.click(`testId=${studyId}-checkbox`)
+    await adminPage.click(`testId=${studyId}-approve`)
 }
 
-export const launchApprovedStudy = async(page: Page, studyId: number, multiSession: boolean = false) => {
-    await loginAs({ page, login: 'researcher' })
-    await goToPage({ page, path: `/study/overview/${studyId}` })
+export const launchApprovedStudy = async(researcherPage: Page, studyId: number, multiSession: boolean = false) => {
+    await goToPage({ page: researcherPage, path: `/study/overview/${studyId}` })
 
     if (multiSession) {
-        await page.getByTestId('confirm-qualtrics-0').check();
-        await page.getByTestId('confirm-qualtrics-1').check();
+        await researcherPage.getByTestId('confirm-qualtrics-0').check();
+        await researcherPage.getByTestId('confirm-qualtrics-1').check();
     } else {
-        await page.getByTestId('confirm-qualtrics').check();
+        await researcherPage.getByTestId('confirm-qualtrics').check();
     }
 
-    await setDateField({ page, fieldName: 'opensAt', date: dayjs() })
+    await setDateField({ page: researcherPage, fieldName: 'opensAt', date: dayjs().add(1, 'hour') })
 
-    await page.locator('input[name=hasSampleSize]').check()
-    await page.fill('[name=targetSampleSize]', '50')
+    await researcherPage.locator('input[name=hasSampleSize]').check()
+    await researcherPage.fill('[name=targetSampleSize]', '50')
+    await researcherPage.locator('[name=targetSampleSize]').blur()
 
-    await expect(page.locator('testId=launch-study-button')).not.toBeDisabled()
-    await page.click('testId=launch-study-button')
-    await page.waitForLoadState('networkidle')
-    await page.click('testId=primary-action')
+    await expect(researcherPage.locator('testId=launch-study-button')).not.toBeDisabled()
+    await researcherPage.click('testId=launch-study-button')
+    await researcherPage.waitForLoadState('networkidle')
+    await researcherPage.click('testId=primary-action')
 }
 
 export const createStudy = async ({
     approveAndLaunchStudy = true,
     multiSession = false,
     description = faker.commerce.color(),
-    browser,
+    adminPage,
+    researcherPage,
 }: createStudyArgs) => {
-    const { researcherPage, adminPage } = await useUsersContext(browser)
     const name = faker.commerce.productName()
     // Step 1 - Internal Details
     await goToPage({ page: researcherPage, path: '/study/edit/new' })
@@ -155,14 +147,10 @@ export const createStudy = async ({
 
     await expect(researcherPage.locator('testId=study-primary-action')).not.toBeDisabled()
     await researcherPage.click('testId=study-primary-action')
-    await researcherPage.waitForLoadState('networkidle')
-    await researcherPage.waitForTimeout(200)
-
-    // Study should reroute to study/edit/:id
-    const studyId = await getIdFromUrl(researcherPage)
-    console.log(studyId)
 
     // Step 2 - Research Team
+    await researcherPage.waitForTimeout(1000)
+
     await researcherPage.locator('.select', { has: researcherPage.locator(`input[name=researcherPi]`) }).click()
     await researcherPage.waitForTimeout(100)
     await researcherPage.keyboard.press('Enter')
@@ -208,6 +196,9 @@ export const createStudy = async ({
     await researcherPage.waitForLoadState('networkidle')
     await researcherPage.waitForTimeout(100)
 
+    // Study should have rerouted to study/edit/:id
+    const studyId = await getIdFromUrl(researcherPage)
+
     // Submit study
     await expect(researcherPage.locator('testId=study-primary-action')).toMatchText('Submit Study')
     await expect(researcherPage.locator('testId=study-primary-action')).not.toBeDisabled()
@@ -218,6 +209,7 @@ export const createStudy = async ({
     await researcherPage.waitForTimeout(100)
     await researcherPage.click('testId=submit-study-success-button')
     await researcherPage.waitForTimeout(100)
+
 
     // Test draft statuses before approve and launch when dashboard is finalized
     if (approveAndLaunchStudy) {

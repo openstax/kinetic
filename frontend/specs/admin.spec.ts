@@ -4,20 +4,23 @@ import { dayjs, faker, goToPage, setDateField, test } from './test'
 test('displays panel only when allowed', async ({ browser }) => {
     const { adminPage, researcherPage } = await useUsersContext(browser)
 
-    await loginAs({ page: adminPage, login: 'admin' })
     await goToPage({ page: adminPage, path: '/admin' })
-    await adminPage.waitForFunction(() => document.location.pathname == '/admin/banners/')
+    // await adminPage.waitForLoadState('networkidle')
+    // await adminPage.waitForURL('**/admin/banners')
+    await adminPage.waitForFunction(() => document.location.pathname == '/admin/banners')
 
-    await loginAs({ page: researcherPage, login: 'researcher' })
     await goToPage({ page: researcherPage, path: '/admin' })
+    // await researcherPage.waitForLoadState('networkidle')
+    // await researcherPage.waitForURL('**/studies/**')
     await researcherPage.waitForFunction(() => document.location.pathname === '/studies')
 })
 
 
 test('can add/update/delete banners', async ({ browser }) => {
     const { adminPage } = await useUsersContext(browser)
+
     const message = faker.commerce.productDescription()
-    await goToPage({ page: adminPage, path: '/admin/banners/' })
+    await goToPage({ page: adminPage, path: '/admin/banners' })
     await adminPage.click('data-testid=add-banner')
     await adminPage.waitForSelector('[data-banner-id="new"]')
 
@@ -45,10 +48,8 @@ test('can add/update/delete rewards', async ({ browser }) => {
     const prize = faker.commerce.productName()
 
     await addReward({ page: adminPage, prize, points: 10 })
-    await goToPage({ page: adminPage, path: '/admin/rewards' })
 
     const reward = adminPage.locator(`[data-reward-id]:not([data-reward-id="new"]):has([value="${prize}"])`)
-    await reward.waitFor()
     const rewardId = await reward.getAttribute('data-reward-id')
 
     await adminPage.fill(`[data-reward-id="${rewardId}"] >> [name="prize"]`, prize + ' UPDATED')
