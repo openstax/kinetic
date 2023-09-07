@@ -70,7 +70,6 @@ export const logout = async ({ page }: { page: Page }) => {
 }
 
 export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin }) => {
-    await logout({ page })
     await page.goto('http://localhost:4000/dev/user')
     await page.waitForSelector('.dev-console');
     await page.click(`[data-user-id="${TC.USERS[login]}"]`)

@@ -81,16 +81,15 @@ test('launching study and completing with no consent', async ({ browser }) => {
 
     const studyId = await createStudy({ researcherPage, adminPage })
     await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
+
     // should have navigated
     await userPage.waitForURL(`**/studies/details/${studyId}`)
-    // expect(
-    //     await userPage.evaluate(() => document.location.pathname)
-    // ).toMatch(RegExp(`/studies/details/${studyId}`))
+
     await userPage.click('testId=launch-study')
 
     await goToPage({ page: userPage, path: `/study/land/${studyId}?consent=false` })
     await expect(userPage).not.toMatchText(/Points/)
-    await expect(userPage).toMatchText(/Success!/)
+    await expect(userPage).toMatchText(/Success!/g)
     // Our study is under "Learning"
     await userPage.click('testId=view-studies')
     await userPage.click('testId=Learning')
