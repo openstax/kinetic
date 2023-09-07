@@ -65,3 +65,13 @@ const createStudyRequest = ({ context, name, description }: CreateStudyDataProps
         },
     })
 }
+
+export const completeAnalysisTutorial = async (context: BrowserContext) => {
+    return context.request.post(`${TC.API_URL}/preferences`, {
+        data: {
+            preferences: {
+                has_viewed_analysis_tutorial: true,
+            },
+        },
+    })
+}
