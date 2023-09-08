@@ -279,7 +279,7 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
     if (!firstStage) {
         return null
     }
-    const { watch, setValue, getValues, trigger, isReadOnly } = useFormContext()
+    const { watch, setValue, getValues, trigger } = useFormContext()
 
     return (
         <Box gap='xlarge'>
@@ -342,7 +342,7 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                     <Col sm={5}>
                         <DateTimeField
                             name='closesAt'
-                            readOnly={isReadOnly || !watch('hasClosingDate')}
+                            readOnly={!watch('hasClosingDate')}
                             label='Select date'
                             format={DateTimeFormats.shortDateTime}
                             options={{

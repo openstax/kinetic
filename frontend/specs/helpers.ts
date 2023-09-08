@@ -29,7 +29,7 @@ interface goToPageArgs {
 
 export const goToPage = async ({ page, path }: goToPageArgs) => {
     const url = TC.ORIGIN + path
-    await page.goto(url)
+    return await page.goto(url)
     // let attempts = 0
     // do {
     //     try {
@@ -73,7 +73,7 @@ export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin
     await page.goto('http://localhost:4000/dev/user', { waitUntil: 'networkidle' })
     await page.waitForSelector('.dev-console');
     await page.click(`[data-user-id="${TC.USERS[login]}"]`)
-    await page.waitForSelector('.studies')
+    return await page.waitForSelector('.studies')
 }
 
 // TODO Can't delete active studies now. We can repurpose this to delete a draft in the future
