@@ -47,7 +47,11 @@ jobs:
           exit 1
       - name: Run specs
         working-directory: frontend
-        run: yarn run test:ci
+        #        run: yarn run test:ci
+        run: |
+          yarn
+          yarn playwright install --with-deps
+          yarn run test
       - name: Save test-results of failures
         uses: actions/upload-artifact@v3
         if: failure()
