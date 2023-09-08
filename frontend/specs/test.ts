@@ -30,11 +30,12 @@ test.beforeAll(async () => {
 })
 
 test.beforeEach(async ({ context, page }) => {
+    await removeOsanoFooter(page)
+
     context.setDefaultTimeout(DEFAULT_TIMEOUT)
     page.setDefaultTimeout(DEFAULT_TIMEOUT)
     context.setDefaultNavigationTimeout(DEFAULT_NAVIGATION_TIMEOUT)
     page.setDefaultNavigationTimeout(DEFAULT_NAVIGATION_TIMEOUT)
-    await removeOsanoFooter(page)
 })
 
 export * from '@playwright/test'

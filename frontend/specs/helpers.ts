@@ -124,7 +124,7 @@ export const launchApprovedStudy = async(researcherPage: Page, studyId: number, 
     await researcherPage.fill('[name=targetSampleSize]', '50')
     await researcherPage.locator('[name=targetSampleSize]').blur()
 
-    await expect(researcherPage.locator('testId=launch-study-button')).not.toBeDisabled()
+    await expect(researcherPage.locator('testId=launch-study-button')).toBeEnabled()
     await researcherPage.click('testId=launch-study-button')
     await researcherPage.waitForLoadState('networkidle')
     await researcherPage.click('testId=primary-action')
@@ -146,7 +146,7 @@ export const createStudy = async ({
     await researcherPage.click("input[value='Learner Characteristics']")
     await researcherPage.waitForTimeout(100)
 
-    await expect(researcherPage.locator('testId=study-primary-action')).not.toBeDisabled()
+    await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
     await researcherPage.click('testId=study-primary-action')
 
     // Step 2 - Research Team
@@ -160,7 +160,7 @@ export const createStudy = async ({
     await researcherPage.waitForTimeout(100)
     await researcherPage.keyboard.press('Enter')
 
-    await expect(researcherPage.locator('testId=study-primary-action')).not.toBeDisabled()
+    await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
     await researcherPage.click('testId=study-primary-action')
     await researcherPage.waitForLoadState('networkidle')
 
@@ -193,7 +193,7 @@ export const createStudy = async ({
         await researcherPage.click("input[value='25']")
         await researcherPage.click("input[value='personalized']")
     }
-    await expect(researcherPage.locator('testId=study-primary-action')).not.toBeDisabled()
+    await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
     await researcherPage.click('testId=study-primary-action')
     await researcherPage.waitForLoadState('networkidle')
     await researcherPage.waitForTimeout(100)
@@ -203,7 +203,7 @@ export const createStudy = async ({
 
     // Submit study
     await expect(researcherPage.locator('testId=study-primary-action')).toMatchText('Submit Study')
-    await expect(researcherPage.locator('testId=study-primary-action')).not.toBeDisabled()
+    await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
     await researcherPage.click('testId=study-primary-action')
     await researcherPage.waitForTimeout(200)
     await researcherPage.click('testId=submit-study-button')
