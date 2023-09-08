@@ -8,8 +8,8 @@ on:
 
 jobs:
   playwright:
-    timeout-minutes: 30
-    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: bahmutov/npm-install@v1
@@ -50,8 +50,8 @@ jobs:
         #        run: yarn run test:ci
         run: |
           yarn
-          yarn playwright install --with-deps
-          yarn run test
+          npx playwright install --with-deps
+          npx playwright test
       - name: Save test-results of failures
         uses: actions/upload-artifact@v3
         if: failure()
