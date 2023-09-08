@@ -118,6 +118,7 @@ export const launchApprovedStudy = async(researcherPage: Page, studyId: number, 
         await researcherPage.getByTestId('confirm-qualtrics').check();
     }
 
+    await researcherPage.waitForTimeout(500)
     await setDateField({ page: researcherPage, fieldName: 'opensAt', date: dayjs().add(1, 'hour') })
 
     await researcherPage.locator('input[name=hasSampleSize]').check()
