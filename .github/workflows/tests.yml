@@ -10,8 +10,6 @@ jobs:
   playwright:
     timeout-minutes: 60
     runs-on: ubuntu-22.04
-    container:
-      image: mcr.microsoft.com/playwright:v1.37.0-jammy
     steps:
       - uses: actions/checkout@v4
       - uses: bahmutov/npm-install@v1
