@@ -29,7 +29,7 @@ interface goToPageArgs {
 
 export const goToPage = async ({ page, path }: goToPageArgs) => {
     const url = TC.ORIGIN + path
-    return await page.goto(url)
+    return await page.goto(url, { waitUntil: 'domcontentloaded' })
     // let attempts = 0
     // do {
     //     try {
@@ -95,7 +95,6 @@ export const getIdFromUrl = async (page: Page): Promise<number | undefined> => {
 
 interface createStudyArgs {
     studyName?: string
-    approveAndLaunchStudy?: boolean
     multiSession?: boolean
     description?: string
     adminPage: Page
@@ -131,7 +130,6 @@ export const launchApprovedStudy = async(researcherPage: Page, studyId: number, 
 }
 
 export const createStudy = async ({
-    approveAndLaunchStudy = true,
     multiSession = false,
     description = faker.commerce.color(),
     adminPage,
@@ -214,10 +212,8 @@ export const createStudy = async ({
 
 
     // Test draft statuses before approve and launch when dashboard is finalized
-    if (approveAndLaunchStudy) {
-        await approveWaitingStudy(adminPage, studyId)
-        await launchApprovedStudy(researcherPage, studyId, multiSession)
-    }
+    await approveWaitingStudy(adminPage, studyId)
+    await launchApprovedStudy(researcherPage, studyId, multiSession)
 
     return studyId
 }

@@ -77,7 +77,7 @@ test('launching study and aborting it', async ({ browser }) => {
 
     // now mark complete with consent granted
     await goToPage({ page: userPage, path: `/study/land/${studyId}?consent=true` })
-    // await page.waitForTimeout(100)
+
     await userPage.click('testId=view-studies')
     await userPage.click('testId=Learning')
     await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"][data-is-completed="true"]`)
