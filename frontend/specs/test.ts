@@ -1,7 +1,7 @@
 import base, { expect, Locator, selectors } from '@playwright/test'
 import { matchers } from 'expect-playwright'
 import { faker } from '@faker-js/faker'
-import { TC, TestConfig } from './helpers'
+import { removeOsanoFooter, TC, TestConfig } from './helpers'
 
 export const DEFAULT_TIMEOUT = process.env.CI ? 90000 :
     process.env.DEBUG ? 0 : 10_000
@@ -34,6 +34,7 @@ test.beforeEach(async ({ context, page }) => {
     page.setDefaultTimeout(DEFAULT_TIMEOUT)
     context.setDefaultNavigationTimeout(DEFAULT_NAVIGATION_TIMEOUT)
     page.setDefaultNavigationTimeout(DEFAULT_NAVIGATION_TIMEOUT)
+    await removeOsanoFooter(page)
 })
 
 // test.afterEach(async ({ context, browser }) => {

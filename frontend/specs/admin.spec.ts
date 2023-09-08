@@ -1,5 +1,5 @@
 import { addReward, loginAs, useUsersContext } from './helpers'
-import { dayjs, faker, goToPage, setDateField, test } from './test'
+import { dayjs, expect, faker, goToPage, setDateField, test } from './test'
 
 test('displays panel only when allowed', async ({ browser }) => {
     const { adminPage, researcherPage } = await useUsersContext(browser)
@@ -21,8 +21,10 @@ test('can add/update/delete banners', async ({ browser }) => {
 
     const message = faker.commerce.productDescription()
     await goToPage({ page: adminPage, path: '/admin/banners' })
-    await adminPage.click('data-testid=add-banner')
-    await adminPage.waitForSelector('[data-banner-id=new]')
+    await adminPage.click('testId=add-banner')
+    await expect(adminPage.locator('[data-banner-id=new]')).toBeVisible()
+    // await adminPage.isVisible('[data-banner-id]=analyses-table')
+    // await adminPage.waitForSelector('[data-banner-id=new]')
 
     await setDateField({
         page: adminPage, fieldName: 'dates', date: [dayjs().add(1, 'day'), dayjs().add(1, 'month')],
