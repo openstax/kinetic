@@ -1,4 +1,13 @@
-import { addReward, createStudy, expect, goToPage, interceptStudyLaunch, test, useUsersContext } from './test'
+import {
+    addReward,
+    createStudy,
+    expect,
+    goToPage,
+    interceptStudyLand,
+    interceptStudyLaunch,
+    test,
+    useUsersContext,
+} from './test'
 import { createStudiesData } from './data-helpers';
 
 test('displays studies', async ({ browser }) => {
@@ -20,16 +29,17 @@ test('filtering studies', async ({ browser }) => {
 
 test('launching study and testing completion', async ({ browser }) => {
     const { adminPage, researcherPage, userPage } = await useUsersContext(browser)
+    await interceptStudyLaunch(userPage)
+    await interceptStudyLand(userPage)
+
     await addReward({ page: adminPage, points: 5, prize: 'Pony' })
 
     const studyId = await createStudy({ researcherPage, adminPage })
 
     await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
-    await interceptStudyLaunch(userPage)
     await userPage.click('testId=launch-study')
 
 
-    await interceptStudyLaunch(userPage)
     // qualtrics will redirect here once complete
     await goToPage({ page: userPage, path: `/study/land/${studyId}` })
     await userPage.click('testId=view-studies')
@@ -44,14 +54,14 @@ test('launching study and testing completion', async ({ browser }) => {
 
 test('launching study and aborting it', async ({ browser }) => {
     const { userPage, researcherPage, adminPage } = await useUsersContext(browser)
+    await interceptStudyLaunch(userPage)
+    await interceptStudyLand(userPage)
 
     const studyId = await createStudy({ researcherPage, adminPage })
     await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
 
-    await interceptStudyLaunch(userPage)
     await userPage.click('testId=launch-study')
 
-    await interceptStudyLaunch(userPage)
     await goToPage({ page: userPage, path: `/study/land/${studyId}?abort=true` })
     await userPage.waitForSelector('testId=aborted-msg')
     await expect(userPage).not.toMatchText(/marked as complete/)
@@ -65,7 +75,6 @@ test('launching study and aborting it', async ({ browser }) => {
     // should have navigated
     await userPage.waitForURL(`**/studies/details/${studyId}`)
 
-    await interceptStudyLaunch(userPage)
     // now mark complete with consent granted
     await goToPage({ page: userPage, path: `/study/land/${studyId}?consent=true` })
     // await page.waitForTimeout(100)
@@ -80,6 +89,7 @@ test('launching study and completing with no consent', async ({ browser }) => {
     const { userPage, researcherPage, adminPage } = await useUsersContext(browser)
 
     await interceptStudyLaunch(userPage)
+    await interceptStudyLand(userPage)
 
     const studyId = await createStudy({ researcherPage, adminPage })
     await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
@@ -88,7 +98,6 @@ test('launching study and completing with no consent', async ({ browser }) => {
     await userPage.waitForURL(`**/studies/details/${studyId}`)
 
     await userPage.click('testId=launch-study')
-    await interceptStudyLaunch(userPage)
     await goToPage({ page: userPage, path: `/study/land/${studyId}?consent=false` })
     await expect(userPage).not.toMatchText(/Points/)
     await expect(userPage).toMatchText(/Success!/g)
