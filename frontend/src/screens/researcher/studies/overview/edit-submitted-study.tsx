@@ -208,7 +208,6 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
 }
 
 const OpensAt: FC = () => {
-    const { isReadOnly } = useFormContext()
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
@@ -220,7 +219,6 @@ const OpensAt: FC = () => {
                 <DateTimeField
                     name='opensAt'
                     label='Select date'
-                    readOnly={isReadOnly}
                     withTime
                     format={DateTimeFormats.shortDateTime}
                     options={{

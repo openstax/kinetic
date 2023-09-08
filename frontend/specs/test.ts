@@ -38,10 +38,10 @@ test.beforeEach(async ({ context, page }) => {
     page.setDefaultNavigationTimeout(DEFAULT_NAVIGATION_TIMEOUT)
 })
 
-test.afterEach(async ({ context, browser }) => {
-    await context.close()
-    await browser.close()
-})
+// test.afterEach(async ({ context, browser }) => {
+//     await context.close()
+//     await browser.close()
+// })
 
 export * from '@playwright/test'
 

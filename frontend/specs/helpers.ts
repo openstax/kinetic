@@ -44,7 +44,7 @@ export const goToPage = async ({ page, path }: goToPageArgs) => {
     // } while (true) // eslint-disable-line no-constant-condition
 }
 
-export const interceptStudyLaunch = async ({ page }: { page: Page }) => {
+export const interceptStudyLaunch = async (page: Page) => {
     await page.route(/studies\/\d+\/launch/, async route => {
         const response = await page.request.fetch(route.request())
         const body = await response.json()
@@ -53,7 +53,7 @@ export const interceptStudyLaunch = async ({ page }: { page: Page }) => {
     });
 }
 
-export const interceptStudyLand = async ({ page }: { page: Page }) => {
+export const interceptStudyLand = async (page: Page) => {
     await page.route(/study\/land\/d+/, async route => {
         return route.fulfill({ status: 200, body: '{}' })
     });
