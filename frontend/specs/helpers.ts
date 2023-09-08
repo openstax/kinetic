@@ -70,7 +70,7 @@ export const logout = async ({ page }: { page: Page }) => {
 }
 
 export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin }) => {
-    await page.goto('http://localhost:4000/dev/user')
+    await page.goto('http://localhost:4000/dev/user', { waitUntil: 'networkidle' })
     await page.waitForSelector('.dev-console');
     await page.click(`[data-user-id="${TC.USERS[login]}"]`)
     await page.waitForSelector('.studies')
@@ -150,7 +150,7 @@ export const createStudy = async ({
     await researcherPage.click('testId=study-primary-action')
 
     // Step 2 - Research Team
-    await researcherPage.waitForLoadState('networkidle')
+    await researcherPage.waitForLoadState('networkidle', { timeout: 1000 })
 
     await researcherPage.locator('.select', { has: researcherPage.locator(`input[name=researcherPi]`) }).click()
     await researcherPage.waitForTimeout(100)

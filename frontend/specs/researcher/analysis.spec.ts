@@ -1,4 +1,4 @@
-import { goToPage, Page, test, useUsersContext } from '../test';
+import { goToPage, test, useUsersContext } from '../test';
 import { createAnalysis } from './analysis-helper';
 import { completeAnalysisTutorial } from '../data-helpers';
 
