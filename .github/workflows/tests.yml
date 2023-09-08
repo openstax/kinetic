@@ -9,7 +9,7 @@ on:
 jobs:
   playwright:
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container:
       image: mcr.microsoft.com/playwright:v1.37.0-jammy
     steps:
@@ -66,7 +66,7 @@ jobs:
 
   rspec:
     timeout-minutes: 10
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v3
