@@ -2,11 +2,6 @@ import { goToPage, test, useUsersContext } from '../test';
 import { createAnalysis } from './analysis-helper';
 import { completeAnalysisTutorial } from '../data-helpers';
 
-test.beforeEach(async ({ browser }) => {
-    const { researcherContext } = await useUsersContext(browser)
-    await completeAnalysisTutorial(researcherContext)
-})
-
 test('completes the analysis tutorial', async ({ browser }) => {
     const { researcherPage } = await useUsersContext(browser)
     await goToPage({ page: researcherPage, path: `/analysis` })
@@ -19,16 +14,19 @@ test('completes the analysis tutorial', async ({ browser }) => {
 
 test('can create an analysis from a study', async ({ browser }) => {
     const { researcherPage, researcherContext } = await useUsersContext(browser)
+    await completeAnalysisTutorial(researcherContext)
     await createAnalysis({ researcherPage, researcherContext, withStudy: true })
 })
 
 test('can create an analysis without a study', async ({ browser }) => {
     const { researcherPage, researcherContext } = await useUsersContext(browser)
+    await completeAnalysisTutorial(researcherContext)
     await createAnalysis({ researcherPage, researcherContext, withStudy: false })
 })
 
 test('can access analyses table as a researcher', async({ browser }) => {
-    const { researcherPage } = await useUsersContext(browser)
+    const { researcherPage, researcherContext } = await useUsersContext(browser)
     await goToPage({ page: researcherPage, path: `/analysis` })
+    await completeAnalysisTutorial(researcherContext)
     await researcherPage.isVisible('testId=analyses-table')
 })
