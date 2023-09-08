@@ -36,7 +36,7 @@ test('launching study and testing completion', async ({ browser }) => {
     await userPage.click('testId=Learning')
 
     await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"][data-is-completed="true"]`)
-    await userPage.click(`[data-study-id="${studyId}"]`)
+    await userPage.click(`[data-study-id=${studyId}]`)
     await expect(userPage).not.toHaveSelector('testId=launch-study', { timeout: 200 })
 })
 
@@ -45,32 +45,29 @@ test('launching study and aborting it', async ({ browser }) => {
 
     const studyId = await createStudy({ researcherPage, adminPage })
     await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
-    await interceptStudyLaunch({ page: userPage })
 
+    await interceptStudyLaunch({ page: userPage })
     await userPage.click('testId=launch-study')
 
     await goToPage({ page: userPage, path: `/study/land/${studyId}?abort=true` })
     await userPage.waitForSelector('testId=aborted-msg')
     await expect(userPage).not.toMatchText(/marked as complete/)
-    // Our study is under "Learning"
+
     await userPage.click('testId=view-studies')
+    // Our study is under "Learning"
     await userPage.click('testId=Learning')
 
-    await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"][data-is-completed="false"]`)
-    await userPage.click(`[data-study-id="${studyId}"]`)
+    await expect(userPage).toHaveSelector(`[data-study-id=${studyId}][data-is-completed=false]`)
+    await userPage.click(`[data-study-id=${studyId}]`)
     // should have navigated
     await userPage.waitForURL(`**/studies/details/${studyId}`)
-    // expect(
-    //     await userPage.evaluate(() => document.location.pathname)
-    // ).toMatch(RegExp(`/studies/details/${studyId}$`))
 
     // now mark complete with consent granted
     await goToPage({ page: userPage, path: `/study/land/${studyId}?consent=true` })
-    // await page.waitForTimeout(100)
     await userPage.click('testId=view-studies')
     await userPage.click('testId=Learning')
-    await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"][data-is-completed="true"]`)
-    await userPage.click(`[data-study-id="${studyId}"]`)
+    await expect(userPage).toHaveSelector(`[data-study-id=${studyId}][data-is-completed=true]`)
+    await userPage.click(`[data-study-id=${studyId}]`)
     await expect(userPage).not.toHaveSelector('testId=launch-study', { timeout: 200 })
 })
 
