@@ -59,15 +59,15 @@ export const interceptStudyLand = async (page: Page) => {
     });
 }
 
-export const logout = async ({ page }: { page: Page }) => {
-    await page.goto(TC.ORIGIN)
-    await page.waitForFunction(() => (window as any)._TEST_METHODS)
-    await page.evaluate(() => {
-        return (window as any)._TEST_METHODS?.logout() || Promise.resolve()
-    })
-    await page.goto(TC.ORIGIN)
-    await page.waitForSelector('testId=login-link')
-}
+// export const logout = async ({ page }: { page: Page }) => {
+//     await page.goto(TC.ORIGIN)
+//     await page.waitForFunction(() => (window as any)._TEST_METHODS)
+//     await page.evaluate(() => {
+//         return (window as any)._TEST_METHODS?.logout() || Promise.resolve()
+//     })
+//     await page.goto(TC.ORIGIN)
+//     await page.waitForSelector('testId=login-link')
+// }
 
 export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin }) => {
     await page.goto('http://localhost:4000/dev/user', { waitUntil: 'networkidle' })
@@ -282,14 +282,17 @@ export const useUsersContext = async (browser: Browser) => {
     const adminContext = await browser.newContext()
     const adminPage = await adminContext.newPage()
     await loginAs({ page: adminPage, login: 'admin' })
+    await removeOsanoFooter(adminPage)
 
     const researcherContext = await browser.newContext()
     const researcherPage = await researcherContext.newPage()
     await loginAs({ page: researcherPage, login: 'researcher' })
+    await removeOsanoFooter(researcherPage)
 
     const userContext = await browser.newContext()
     const userPage = await userContext.newPage()
     await loginAs({ page: userPage, login: 'user' })
+    await removeOsanoFooter(userPage)
 
     return { adminPage, researcherPage, userPage, researcherContext, userContext, adminContext }
 }

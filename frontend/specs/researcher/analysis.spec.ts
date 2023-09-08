@@ -3,18 +3,18 @@ import { createAnalysis } from './analysis-helper';
 import { completeAnalysisTutorial } from '../data-helpers';
 
 test.beforeEach(async ({ browser }) => {
-    const { researcherPage, researcherContext } = await useUsersContext(browser)
+    const { researcherContext } = await useUsersContext(browser)
     await completeAnalysisTutorial(researcherContext)
-    if (await researcherPage.isVisible('testId=analysis-tutorial-modal')) {
-        await researcherPage.click('testId=analysis-tutorial-continue')
-        await researcherPage.click('testId=analysis-tutorial-continue')
-        await researcherPage.click('testId=analysis-tutorial-finish')
-    }
 })
 
 test('completes the analysis tutorial', async ({ browser }) => {
     const { researcherPage } = await useUsersContext(browser)
     await goToPage({ page: researcherPage, path: `/analysis` })
+    if (await researcherPage.isVisible('testId=analysis-tutorial-modal')) {
+        await researcherPage.click('testId=analysis-tutorial-continue')
+        await researcherPage.click('testId=analysis-tutorial-continue')
+        await researcherPage.click('testId=analysis-tutorial-finish')
+    }
 })
 
 test('can create an analysis from a study', async ({ browser }) => {
