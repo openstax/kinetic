@@ -220,7 +220,6 @@ const OpensAt: FC = () => {
                     name='opensAt'
                     label='Select date'
                     withTime
-                    format={DateTimeFormats.shortDateTime}
                     options={{
                         defaultHour: 9,
                         minDate: 'today',

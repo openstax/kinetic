@@ -122,7 +122,6 @@ export const launchApprovedStudy = async(researcherPage: Page, studyId: number, 
 
     await researcherPage.locator('input[name=hasSampleSize]').check()
     await researcherPage.fill('[name=targetSampleSize]', '50')
-    await researcherPage.locator('[name=targetSampleSize]').blur()
 
     await expect(researcherPage.locator('testId=launch-study-button')).toBeEnabled()
     await researcherPage.click('testId=launch-study-button')
@@ -150,7 +149,7 @@ export const createStudy = async ({
     await researcherPage.click('testId=study-primary-action')
 
     // Step 2 - Research Team
-    await researcherPage.waitForLoadState('networkidle', { timeout: 1000 })
+    await researcherPage.waitForLoadState('networkidle')
 
     await researcherPage.locator('.select', { has: researcherPage.locator(`input[name=researcherPi]`) }).click()
     await researcherPage.waitForTimeout(100)
