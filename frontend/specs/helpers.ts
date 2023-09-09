@@ -29,7 +29,7 @@ interface goToPageArgs {
 
 export const goToPage = async ({ page, path }: goToPageArgs) => {
     const url = TC.ORIGIN + path
-    return await page.goto(url, { waitUntil: 'domcontentloaded' })
+    return await page.goto(url)
     // let attempts = 0
     // do {
     //     try {
@@ -45,7 +45,7 @@ export const goToPage = async ({ page, path }: goToPageArgs) => {
 }
 
 export const interceptStudyLaunch = async (page: Page) => {
-    await page.route(/studies\/\d+\/launch/, async route => {
+    return await page.route(/studies\/\d+\/launch/, async route => {
         const response = await page.request.fetch(route.request())
         const body = await response.json()
         body.url = '/'
@@ -54,7 +54,7 @@ export const interceptStudyLaunch = async (page: Page) => {
 }
 
 export const interceptStudyLand = async (page: Page) => {
-    await page.route(/study\/land\/d+/, async route => {
+    return await page.route(/study\/land\/d+/, async route => {
         return route.fulfill({ status: 200, body: '{}' })
     });
 }
@@ -70,9 +70,10 @@ export const interceptStudyLand = async (page: Page) => {
 // }
 
 export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin }) => {
-    await page.goto('http://localhost:4000/dev/user', { waitUntil: 'networkidle' })
+    await page.goto('http://localhost:4000/dev/user')
     await page.waitForSelector('.dev-console');
     await page.click(`[data-user-id="${TC.USERS[login]}"]`)
+    await removeOsanoFooter(page)
     return await page.waitForSelector('.studies')
 }
 
@@ -266,6 +267,10 @@ export const addReward = async ({
 }
 
 export const removeOsanoFooter  = async (page:Page) => {
+    if (await page.getByRole('button', { name: /Accept/i }).isVisible({ timeout: 500 })) {
+        await page.getByRole('button', { name: /Accept/i }).click();
+    }
+
     await page.evaluate(async () => {
         document.querySelector('.osano-cm-dialog')?.remove()
     });
@@ -277,18 +282,27 @@ export const removeOsanoFooter  = async (page:Page) => {
 export const useUsersContext = async (browser: Browser) => {
     const adminContext = await browser.newContext()
     const adminPage = await adminContext.newPage()
-    await loginAs({ page: adminPage, login: 'admin' })
-    await removeOsanoFooter(adminPage)
 
     const researcherContext = await browser.newContext()
     const researcherPage = await researcherContext.newPage()
-    await loginAs({ page: researcherPage, login: 'researcher' })
-    await removeOsanoFooter(researcherPage)
 
     const userContext = await browser.newContext()
     const userPage = await userContext.newPage()
+
+    await loginAs({ page: adminPage, login: 'admin' })
+    await removeOsanoFooter(adminPage)
+
+    await loginAs({ page: researcherPage, login: 'researcher' })
+    await removeOsanoFooter(researcherPage)
+
     await loginAs({ page: userPage, login: 'user' })
     await removeOsanoFooter(userPage)
 
-    return { adminPage, researcherPage, userPage, researcherContext, userContext, adminContext }
+    const closeContexts = async () => {
+        await adminContext.close()
+        await researcherContext.close()
+        return await userContext.close()
+    }
+
+    return { adminPage, researcherPage, userPage, researcherContext, userContext, adminContext, closeContexts }
 }

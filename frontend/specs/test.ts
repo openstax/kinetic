@@ -34,13 +34,16 @@ test.beforeEach(async ({ context, page }) => {
     page.setDefaultTimeout(DEFAULT_TIMEOUT)
     context.setDefaultNavigationTimeout(DEFAULT_NAVIGATION_TIMEOUT)
     page.setDefaultNavigationTimeout(DEFAULT_NAVIGATION_TIMEOUT)
-    await removeOsanoFooter(page)
+    // await removeOsanoFooter(page)
 })
 
-// test.afterEach(async ({ context, browser }) => {
-//     await context.close()
-//     await browser.close()
-// })
+test.afterEach(async ({ browser }) => {
+    for (const context of browser.contexts()) {
+        await context.close();
+    }
+    // await context.close()
+    // await browser.close()
+})
 
 export * from '@playwright/test'
 
