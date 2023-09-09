@@ -49,13 +49,13 @@ export const interceptStudyLaunch = async (page: Page) => {
         const response = await page.request.fetch(route.request())
         const body = await response.json()
         body.url = '/'
-        return route.fulfill({ response, body: JSON.stringify(body) });
+        return await route.fulfill({ response, body: JSON.stringify(body) });
     });
 }
 
 export const interceptStudyLand = async (page: Page) => {
     return await page.route(/study\/land\/d+/, async route => {
-        return route.fulfill({ status: 200, body: '{}' })
+        return await route.fulfill({ status: 200, body: '{}' })
     });
 }
 
