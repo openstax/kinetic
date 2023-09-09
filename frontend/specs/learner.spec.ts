@@ -30,8 +30,8 @@ test('filtering studies', async ({ browser }) => {
 test('launching study and testing completion', async ({ browser }) => {
     const { adminPage, researcherPage, userPage } = await useUsersContext(browser)
     await interceptStudyLaunch(userPage)
-    // await interceptStudyLand(userPage)
-
+    await interceptStudyLand(userPage)
+    
     await addReward({ page: adminPage, points: 5, prize: 'Pony' })
 
     const studyId = await createStudy({ researcherPage, adminPage })
@@ -90,7 +90,7 @@ test('launching study and completing with no consent', async ({ browser }) => {
     const { userPage, researcherPage, adminPage } = await useUsersContext(browser)
 
     await interceptStudyLaunch(userPage)
-    // await interceptStudyLand(userPage)
+    await interceptStudyLand(userPage)
 
     const studyId = await createStudy({ researcherPage, adminPage })
     await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
