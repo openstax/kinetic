@@ -9,7 +9,7 @@ on:
 jobs:
   playwright:
     timeout-minutes: 60
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: bahmutov/npm-install@v1
@@ -50,8 +50,7 @@ jobs:
         #        run: yarn run test:ci
         run: |
           yarn
-          npx playwright install --with-deps
-          npx playwright test
+          yarn run test
       - name: Save test-results of failures
         uses: actions/upload-artifact@v3
         if: failure()
@@ -64,7 +63,7 @@ jobs:
 
   rspec:
     timeout-minutes: 10
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v3
