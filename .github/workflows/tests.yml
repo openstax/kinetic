@@ -50,7 +50,8 @@ jobs:
         #        run: yarn run test:ci
         run: |
           yarn
-          yarn run test
+          npx playwright install chromium --with-deps
+          npx playwright test
       - name: Save test-results of failures
         uses: actions/upload-artifact@v3
         if: failure()
