@@ -45,11 +45,11 @@ export const goToPage = async ({ page, path }: goToPageArgs) => {
 }
 
 export const interceptStudyLaunch = async (page: Page) => {
-    return await page.route(/studies\/\d+\/launch/, async route => {
+    await page.route(/studies\/\d+\/launch/, async route => {
         const response = await page.request.fetch(route.request())
         const body = await response.json()
         body.url = '/'
-        return await route.fulfill({ response, body: JSON.stringify(body) });
+        await route.fulfill({ response, body: JSON.stringify(body) });
     });
 }
 
