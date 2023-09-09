@@ -29,7 +29,7 @@ interface goToPageArgs {
 
 export const goToPage = async ({ page, path }: goToPageArgs) => {
     const url = TC.ORIGIN + path
-    return await page.goto(url)
+    await page.goto(url)
     // let attempts = 0
     // do {
     //     try {
