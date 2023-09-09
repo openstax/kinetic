@@ -55,7 +55,7 @@ test('launching study and testing completion', async ({ browser }) => {
 test('launching study and aborting it', async ({ browser }) => {
     const { userPage, researcherPage, adminPage } = await useUsersContext(browser)
     await interceptStudyLaunch(userPage)
-    // await interceptStudyLand(userPage)
+    await interceptStudyLand(userPage)
 
     const studyId = await createStudy({ researcherPage, adminPage })
     await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
@@ -64,9 +64,10 @@ test('launching study and aborting it', async ({ browser }) => {
 
     await goToPage({ page: userPage, path: `/study/land/${studyId}?abort=true` })
     await userPage.waitForSelector('testId=aborted-msg')
-    await expect(userPage).not.toMatchText(/marked as complete/)
+    await expect(userPage).toMatchText(/Try again later/)
 
-    await userPage.click('testId=view-studies')
+    await userPage.getByRole('button', { name: /Go back to dashboard/i }).click();
+    // await userPage.click('testId=view-studies')
     // Our study is under "Learning"
     await userPage.click('testId=Learning')
 
