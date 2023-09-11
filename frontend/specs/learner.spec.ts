@@ -3,24 +3,27 @@ import {
     createStudy,
     expect,
     goToPage,
-    interceptStudyLand,
     interceptStudyLaunch,
     test,
-    useUsersContext,
+    useAdminPage,
+    useResearcherPage,
+    useUserPage,
 } from './test'
 import { createStudiesData } from './data-helpers';
 
 test('displays studies', async ({ browser }) => {
-    const { userPage, researcherContext } = await useUsersContext(browser)
+    const userPage = await useUserPage(browser)
+    const researcherPage = await useResearcherPage(browser)
 
-    await createStudiesData({ context: researcherContext, numStudies: 5 })
+    await createStudiesData({ context: researcherPage.context(), numStudies: 5 })
     await goToPage({ page: userPage, path: '/studies' })
     await userPage.waitForSelector('testId=studies-listing')
 })
 
 test('filtering studies', async ({ browser }) => {
-    const { userPage, researcherContext } = await useUsersContext(browser)
-    const studyIds = await createStudiesData({ context: researcherContext, numStudies: 5 })
+    const userPage = await useUserPage(browser)
+    const researcherPage = await useResearcherPage(browser)
+    const studyIds = await createStudiesData({ context: researcherPage.context(), numStudies: 5 })
 
     await goToPage({ page: userPage, path: '/studies' })
     await userPage.click('testId=Learning')
@@ -28,9 +31,11 @@ test('filtering studies', async ({ browser }) => {
 })
 
 test('launching study and testing completion', async ({ browser }) => {
-    const { adminPage, researcherPage, userPage } = await useUsersContext(browser)
+    const adminPage = await useAdminPage(browser)
+    const userPage = await useUserPage(browser)
+    const researcherPage = await useResearcherPage(browser)
+
     await interceptStudyLaunch(userPage)
-    // await interceptStudyLand(userPage)
 
     await addReward({ page: adminPage, points: 5, prize: 'Pony' })
 
@@ -53,9 +58,11 @@ test('launching study and testing completion', async ({ browser }) => {
 })
 
 test('launching study and aborting it', async ({ browser }) => {
-    const { userPage, researcherPage, adminPage } = await useUsersContext(browser)
+    const adminPage = await useAdminPage(browser)
+    const userPage = await useUserPage(browser)
+    const researcherPage = await useResearcherPage(browser)
+
     await interceptStudyLaunch(userPage)
-    // await interceptStudyLand(userPage)
 
     const studyId = await createStudy({ researcherPage, adminPage })
     await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
@@ -89,10 +96,11 @@ test('launching study and aborting it', async ({ browser }) => {
 })
 
 test('launching study and completing with no consent', async ({ browser }) => {
-    const { userPage, researcherPage, adminPage } = await useUsersContext(browser)
+    const adminPage = await useAdminPage(browser)
+    const userPage = await useUserPage(browser)
+    const researcherPage = await useResearcherPage(browser)
 
     await interceptStudyLaunch(userPage)
-    // await interceptStudyLand(userPage)
 
     const studyId = await createStudy({ researcherPage, adminPage })
     await goToPage({ page: userPage, path: `/studies/details/${studyId}` })

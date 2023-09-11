@@ -1,8 +1,8 @@
-import { faker, goToPage, test, useUsersContext } from './test';
+import { faker, goToPage, test, useResearcherPage } from './test';
 import { expect } from '@playwright/test';
 
 test('can update researcher account details', async({ browser }) => {
-    const { researcherPage } = await useUsersContext(browser)
+    const researcherPage = await useResearcherPage(browser)
     await goToPage({ page: researcherPage, path: `/researcher-account` })
 
     await researcherPage.fill('[name=firstName]', 'a'.repeat(60))

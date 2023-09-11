@@ -1,7 +1,8 @@
-import { createStudy, test, useUsersContext } from './test'
+import { createStudy, test, useAdminPage, useResearcherPage } from './test'
 
 test('can create a study', async ({ browser }) => {
-    const { adminPage, researcherPage } = await useUsersContext(browser)
+    const adminPage = await useAdminPage(browser)
+    const researcherPage = await useResearcherPage(browser)
 
     await createStudy({ researcherPage, adminPage })
 })

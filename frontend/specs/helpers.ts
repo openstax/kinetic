@@ -1,4 +1,4 @@
-import { Browser, BrowserContext, expect, Page } from '@playwright/test'
+import { Browser, expect, Page } from '@playwright/test'
 import { dayjs } from '../src/lib/date'
 import { faker } from './test';
 
@@ -30,18 +30,6 @@ interface goToPageArgs {
 export const goToPage = async ({ page, path }: goToPageArgs) => {
     const url = TC.ORIGIN + path
     await page.goto(url)
-    // let attempts = 0
-    // do {
-    //     try {
-    //         await page.goto(url)
-    //         return
-    //     } catch (e) {
-    //         console.log(e) // eslint-disable-line no-console
-    //         if (attempts++ >= 3) {
-    //             throw (e)
-    //         }
-    //     }
-    // } while (true) // eslint-disable-line no-constant-condition
 }
 
 export const interceptStudyLaunch = async (page: Page) => {
@@ -59,15 +47,15 @@ export const interceptStudyLand = async (page: Page) => {
     });
 }
 
-// export const logout = async ({ page }: { page: Page }) => {
-//     await page.goto(TC.ORIGIN)
-//     await page.waitForFunction(() => (window as any)._TEST_METHODS)
-//     await page.evaluate(() => {
-//         return (window as any)._TEST_METHODS?.logout() || Promise.resolve()
-//     })
-//     await page.goto(TC.ORIGIN)
-//     await page.waitForSelector('testId=login-link')
-// }
+export const logout = async ({ page }: { page: Page }) => {
+    await page.goto(TC.ORIGIN)
+    await page.waitForFunction(() => (window as any)._TEST_METHODS)
+    await page.evaluate(() => {
+        return (window as any)._TEST_METHODS?.logout() || Promise.resolve()
+    })
+    await page.goto(TC.ORIGIN)
+    await page.waitForSelector('testId=login-link')
+}
 
 export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin }) => {
     await page.goto('http://localhost:4000/dev/user')
@@ -84,11 +72,9 @@ export const rmStudy = async ({ page, studyId }: { page: Page, studyId: string |
     // await page.click(`testId=delete-study`)
 }
 
-export const getIdFromUrl = async (page: Page): Promise<number | undefined> => {
+export const getIdFromUrl = (page: Page): number | undefined => {
     const id = page.url().match(/(\/\d+)/)[1].replace('/', '')
-    // const id = await page.evaluate(() => {
-    //     return window.location.href.match(/(\/\d+)/)[1].replace('/', '')
-    // })
+
     if (id) {
         return Number(id)
     }
@@ -119,7 +105,7 @@ export const launchApprovedStudy = async(researcherPage: Page, studyId: number, 
     }
 
     await researcherPage.waitForTimeout(500)
-    await setDateField({ page: researcherPage, fieldName: 'opensAt', date: dayjs().add(1, 'hour') })
+    await setDateField({ page: researcherPage, fieldName: 'opensAt', date: dayjs() })
 
     await researcherPage.locator('input[name=hasSampleSize]').check()
     await researcherPage.fill('[name=targetSampleSize]', '50')
@@ -198,7 +184,7 @@ export const createStudy = async ({
     await researcherPage.waitForTimeout(100)
 
     // Study should have rerouted to study/edit/:id
-    const studyId = await getIdFromUrl(researcherPage)
+    const studyId = getIdFromUrl(researcherPage)
 
     // Submit study
     await expect(researcherPage.locator('testId=study-primary-action')).toMatchText('Submit Study')
@@ -210,7 +196,6 @@ export const createStudy = async ({
     await researcherPage.waitForTimeout(100)
     await researcherPage.click('testId=submit-study-success-button')
     await researcherPage.waitForTimeout(100)
-
 
     // Test draft statuses before approve and launch when dashboard is finalized
     await approveWaitingStudy(adminPage, studyId)
@@ -258,8 +243,9 @@ export const addReward = async ({
     endAt?: dayjs.Dayjs,
 }) => {
     await goToPage({ page, path: '/admin/rewards' })
-    await page.click('testId=add-reward')
-    await page.waitForSelector('[data-reward-id="new"]')
+    await page.click('testId=add-reward', { force: true })
+    await page.waitForLoadState('networkidle')
+    await expect(page.locator('[data-reward-id="new"]')).toBeVisible()
     await setDateField({ page, fieldName: 'dates', date: [startAt, endAt] })
     await page.fill('[name="points"]', String(points))
     await page.fill('[name="prize"]', prize)
@@ -278,32 +264,28 @@ export const removeOsanoFooter  = async (page:Page) => {
     await page.waitForSelector('.osano-cm-dialog', { state: 'detached' })
 }
 
-// Useful for multi-context tests
+// Helper methods for multi-context tests
 // https://playwright.dev/docs/browser-contexts#multiple-contexts-in-a-single-test
-export const useUsersContext = async (browser: Browser) => {
+export const useAdminPage = async (browser: Browser) => {
     const adminContext = await browser.newContext()
     const adminPage = await adminContext.newPage()
-
-    const researcherContext = await browser.newContext()
-    const researcherPage = await researcherContext.newPage()
-
-    const userContext = await browser.newContext()
-    const userPage = await userContext.newPage()
-
     await loginAs({ page: adminPage, login: 'admin' })
     await removeOsanoFooter(adminPage)
+    return adminPage
+}
 
+export const useResearcherPage = async (browser: Browser) => {
+    const researcherContext = await browser.newContext()
+    const researcherPage = await researcherContext.newPage()
     await loginAs({ page: researcherPage, login: 'researcher' })
     await removeOsanoFooter(researcherPage)
+    return researcherPage
+}
 
+export const useUserPage = async (browser: Browser) => {
+    const userContext = await browser.newContext()
+    const userPage = await userContext.newPage()
     await loginAs({ page: userPage, login: 'user' })
     await removeOsanoFooter(userPage)
-
-    const closeContexts = async () => {
-        await adminContext.close()
-        await researcherContext.close()
-        return await userContext.close()
-    }
-
-    return { adminPage, researcherPage, userPage, researcherContext, userContext, adminContext, closeContexts }
+    return userPage
 }

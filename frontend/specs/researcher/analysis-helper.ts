@@ -1,20 +1,19 @@
-import { BrowserContext, expect, Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import { goToPage } from '../helpers';
 import { faker } from '../test';
 import { createStudyData } from '../data-helpers';
 
 interface createAnalysisProps {
     researcherPage: Page
-    researcherContext: BrowserContext
     withStudy?: boolean
 }
 
-export const createAnalysis = async({ researcherPage, researcherContext, withStudy = false }: createAnalysisProps) => {
+export const createAnalysis = async({ researcherPage, withStudy = false }: createAnalysisProps) => {
     const name = faker.commerce.productName()
     const description = faker.commerce.productName()
 
     if (withStudy) {
-        const studyId = await createStudyData({ context: researcherContext, name, description })
+        const studyId = await createStudyData({ context: researcherPage.context(), name, description })
         await goToPage({ page: researcherPage, path: `/analysis/edit/new?studyId=${studyId}` })
         await expect(researcherPage.locator('[name=title]')).toMatchText(name)
         await expect(researcherPage.locator('[name=description]')).toMatchText(description)

@@ -1,34 +1,25 @@
-import { addReward, useUsersContext } from './helpers'
+import { addReward, useAdminPage, useResearcherPage } from './helpers'
 import { dayjs, expect, faker, goToPage, setDateField, test } from './test'
 
 test('displays panel only when allowed', async ({ browser }) => {
-    const { adminContext, researcherContext, closeContexts } = await useUsersContext(browser)
-    const adminPage = await adminContext.newPage()
-    const researcherPage = await researcherContext.newPage()
+    const adminPage = await useAdminPage(browser)
+    const researcherPage = await useResearcherPage(browser)
 
     await goToPage({ page: adminPage, path: '/admin' })
-    // await adminPage.waitForLoadState('networkidle')
-    // await adminPage.waitForURL('**/admin/banners')
     await adminPage.waitForFunction(() => document.location.pathname == '/admin/banners')
 
     await goToPage({ page: researcherPage, path: '/admin' })
-    // await researcherPage.waitForLoadState('networkidle')
-    // await researcherPage.waitForURL('**/studies/**')
     await researcherPage.waitForFunction(() => document.location.pathname === '/studies')
-
-    await closeContexts()
 })
 
 
 test('can add/update/delete banners', async ({ browser }) => {
-    const { adminPage } = await useUsersContext(browser)
+    const adminPage = await useAdminPage(browser)
 
     const message = faker.commerce.productDescription()
     await goToPage({ page: adminPage, path: '/admin/banners' })
     await adminPage.click('testId=add-banner', { force: true })
     await expect(adminPage.locator('[data-banner-id=new]')).toBeVisible()
-    // await adminPage.isVisible('[data-banner-id]=analyses-table')
-    // await adminPage.waitForSelector('[data-banner-id=new]')
 
     await setDateField({
         page: adminPage, fieldName: 'dates', date: [dayjs().add(1, 'day'), dayjs().add(1, 'month')],
@@ -50,7 +41,8 @@ test('can add/update/delete banners', async ({ browser }) => {
 })
 
 test('can add/update/delete rewards', async ({ browser }) => {
-    const { adminPage, close } = await useUsersContext(browser)
+    const adminPage = await useAdminPage(browser)
+
     const prize = faker.commerce.productName()
 
     await addReward({ page: adminPage, prize, points: 10 })
