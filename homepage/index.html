@@ -500,9 +500,9 @@
               </div>
             </div>
             <div class="step-pics">
-              <img class="active" src="https://openstax.org/documents/1880/kinetic-step1.svg">
-              <img src="https://openstax.org/documents/1881/kinetic-step2.svg">
-              <img src="https://openstax.org/documents/1882/kinetic-step3.svg">
+              <img alt="step1" class="active" src="https://openstax.org/documents/1880/kinetic-step1.svg">
+              <img alt="step2" src="https://openstax.org/documents/1881/kinetic-step2.svg">
+              <img alt="step3" src="https://openstax.org/documents/1882/kinetic-step3.svg">
             </div>
           </div>
         </div>
@@ -600,14 +600,22 @@
 
 
           <div class="txt-block">
-            <h3>
-              Want to participate in Kinetic research?
-            </h3>
-            <p>
-              Already have an OpenStax account? Use your email and password to log into kinetic
-            </p>
+            <div class="eligible">
+              <h3>
+                Want to participate in Kinetic research?
+              </h3>
+              <p>
+                Already have an OpenStax account? Use your email and password to log into kinetic
+              </p>
+            </div>
 
-            <div class="actions-block login-signup" style="display: none;">
+            <div class="ineligible" style="display: none">
+              <p>
+                While we do continue to grow, Kinetic is currently designed exclusively for participants residing in the United States mainland, territories, and minor outlying islands. We do look forward to expanding Kinetic services to your home country and others.
+              </p>
+            </div>
+
+            <div class="actions-block login-signup" style="display: none">
               <div class="buttons">
                 <a
                   class="signup btn primary link"
@@ -653,6 +661,13 @@
               for (var i = 0; i < links.length; i++) {
                   links[i].style.display = "block";
               }
+          }
+
+          function hideElements(klass) {
+            var links = document.querySelectorAll('.' + klass);
+            for (var i = 0; i < links.length; i++) {
+              links[i].style.display = "none";
+            }
           }
 
           function focusStep(index) {
@@ -707,12 +722,27 @@
               observer.observe(document.querySelector('#kinetic-homepage .step-cards'));
           }
 
+          function checkEligibility() {
+            return fetch('https://kinetic.openstax.org/api/v1/eligibility')
+                    .then((response) => response.json())
+                    .then((response) => {
+                      if (response.eligible) {
+                        hideElements('login-signup')
+                        hideElements('start-using')
+                        hideElements('eligible')
+                        revealElements('ineligible')
+                      }
+                      return !response.eligible
+                    }
+            );
+          }
+
           function setUserState() {
               if (!window.fetch) {
                   revealElements('login-signup');
                   return;
               }
-              window.fetch(URLS.WHOAMI, {
+              return window.fetch(URLS.WHOAMI, {
                   method: 'GET',
                   credentials: 'include'
               }).then(function(resp) {
@@ -739,7 +769,7 @@
           rewriteLinks('login', URLS.ACCOUNTS + '/i/login?r=' + URLS.KINETIC);
           rewriteLinks('signup', URLS.ACCOUNTS + '/i/signup?r=' + URLS.KINETIC);
           rewriteLinks('start', URLS.KINETIC);
-          setUserState();
+          checkEligibility().then(eligible => eligible && setUserState())
 
           function onPageUnload() {
               if (previousFavIcon) {
