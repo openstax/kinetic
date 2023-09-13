@@ -262,7 +262,6 @@ const useStudyTable = (studies: Study[]) => {
     ], [])
 
     const table: Table<Study> = useReactTable({
-        debugTable: true,
         data: studies,
         columns,
         state: { rowSelection, sorting, pagination },

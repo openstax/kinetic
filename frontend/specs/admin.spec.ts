@@ -1,64 +1,61 @@
-import { addReward, loginAs } from './helpers'
-import {
-    test, goToPage, setDateField, dayjs, faker, logout,
-} from './test'
+import { addReward, useAdminPage, useResearcherPage } from './helpers'
+import { dayjs, expect, faker, goToPage, setDateField, test } from './test'
 
-test('displays panel only when allowed', async ({ page }) => {
-    await loginAs({ page, login: 'admin' })
-    await goToPage({ page, path: '/admin' })
-    await page.waitForFunction(() => document.location.pathname == '/admin/banners/')
+test('displays panel only when allowed', async ({ browser }) => {
+    const adminPage = await useAdminPage(browser)
+    const researcherPage = await useResearcherPage(browser)
 
-    await logout({ page })
-    await goToPage({ page, path: '/admin', loginAs: 'researcher' })
-    await page.waitForFunction(() => document.location.pathname === '/studies')
+    await goToPage({ page: adminPage, path: '/admin' })
+    await adminPage.waitForURL('**/admin/banners')
+
+
+    await goToPage({ page: researcherPage, path: '/admin' })
+    await researcherPage.waitForURL('**/studies')
 })
 
 
-test('can add/update/delete banners', async ({ page }) => {
+test('can add/update/delete banners', async ({ browser }) => {
+    const adminPage = await useAdminPage(browser)
+
     const message = faker.commerce.productDescription()
-    await loginAs({ page, login: 'admin' })
-    await goToPage({ page, path: '/admin/banners/' })
-    await page.waitForSelector('data-testid=add-banner')
-    await page.waitForTimeout(200)
-    await page.click('data-testid=add-banner')
-    await page.waitForSelector('[data-banner-id="new"]')
-    await page.waitForTimeout(100)
+    await goToPage({ page: adminPage, path: '/admin/banners' })
+    await adminPage.click('testId=add-banner', { force: true })
+    await expect(adminPage.locator('[data-banner-id=new]')).toBeVisible()
 
     await setDateField({
-        page, fieldName: 'dates', date: [dayjs().add(1, 'day'), dayjs().add(1, 'month')],
+        page: adminPage, fieldName: 'dates', date: [dayjs().add(1, 'day'), dayjs().add(1, 'month')],
     })
 
-    await page.fill('[name="message"]', message)
-    await page.click('testId=form-save-btn')
+    await adminPage.fill('[name="message"]', message)
+    await adminPage.click('testId=form-save-btn')
 
-    const banner = page.locator(`[data-banner-id]:not([data-banner-id="new"]):has-text("${message}")`)
-    await banner.waitFor()
+    const banner = adminPage.locator(`[data-banner-id]:not([data-banner-id=new]):has-text("${message}")`)
     const bannerId = await banner.getAttribute('data-banner-id')
 
-    await page.fill(`[data-banner-id="${bannerId}"] >> [name="message"]`, message + ' UPDATED')
-    await page.click('testId=form-save-btn')
+    await adminPage.fill(`[data-banner-id="${bannerId}"] >> [name="message"]`, message + ' UPDATED')
+    await adminPage.click('testId=form-save-btn')
 
-    await page.waitForSelector(`[data-banner-id="${bannerId}"]:has-text("UPDATED")`)
+    await adminPage.waitForSelector(`[data-banner-id="${bannerId}"]:has-text("UPDATED")`)
 
-    await page.click(`[data-banner-id="${bannerId}"] >> testId="delete-banner"`)
-    await page.waitForSelector(`[data-banner-id="${bannerId}"]`, { state: 'detached' })
+    await adminPage.click(`[data-banner-id="${bannerId}"] >> testId="delete-banner"`)
+    await adminPage.waitForSelector(`[data-banner-id="${bannerId}"]`, { state: 'detached' })
 })
 
-test('can add/update/delete rewards', async ({ page }) => {
+test('can add/update/delete rewards', async ({ browser }) => {
+    const adminPage = await useAdminPage(browser)
+
     const prize = faker.commerce.productName()
 
-    await addReward({ page, prize, points: 10 })
-    await goToPage({ page, path: '/admin/rewards', loginAs: 'admin' })
+    await addReward({ page: adminPage, prize, points: 10 })
 
-    const reward = page.locator(`[data-reward-id]:not([data-reward-id="new"]):has([value="${prize}"])`)
-    await reward.waitFor()
+    const reward = adminPage.locator(`[data-reward-id]:not([data-reward-id=new]):has([value="${prize}"])`)
     const rewardId = await reward.getAttribute('data-reward-id')
 
-    await page.fill(`[data-reward-id="${rewardId}"] >> [name="prize"]`, prize + ' UPDATED')
-    await page.click('testId=form-save-btn')
+    await adminPage.fill(`[data-reward-id="${rewardId}"] >> [name="prize"]`, prize + ' UPDATED')
+    await adminPage.click('testId=form-save-btn')
 
-    await page.waitForSelector(`[data-reward-id="${rewardId}"] >> [value="${prize} UPDATED"]`)
+    await adminPage.waitForSelector(`[data-reward-id="${rewardId}"] >> [value="${prize} UPDATED"]`)
 
-    await page.click(`[data-reward-id="${rewardId}"] >> testId="delete-reward"`)
-    await page.waitForSelector(`[data-reward-id="${rewardId}"]`, { state: 'detached' })
+    await adminPage.click(`[data-reward-id="${rewardId}"] >> testId="delete-reward"`)
+    await adminPage.waitForSelector(`[data-reward-id="${rewardId}"]`, { state: 'detached' })
 })
