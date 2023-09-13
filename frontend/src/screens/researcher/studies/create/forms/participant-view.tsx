@@ -4,6 +4,8 @@ import {
     Col,
     FieldErrorMessage,
     FieldTitle,
+    getAltText,
+    getImageUrl,
     InputField,
     ResearcherButton,
     ResearcherDetailedCheckbox,
@@ -16,6 +18,7 @@ import { StudyCardPreview } from '../../../../learner/card';
 import { first } from 'lodash-es';
 import { Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
+import { colors } from '@theme';
 
 export const participantViewValidation = (allOtherStudies: Study[]) => {
     return {
@@ -271,6 +274,7 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
                             <ResearcherButton buttonType='secondary' testId='image-picker' onClick={() => setShowImagePicker(true)}>
                                 {getValues('imageId') ? 'Change Selected Image' : 'Select Study Card Image'}
                             </ResearcherButton>
+                            <ImagePreview imageId={getValues('imageId') as string} />
                             <ImageLibrary
                                 show={showImagePicker}
                                 onHide={() => setShowImagePicker(false)}
@@ -289,6 +293,24 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
                 <StudyCardPreview study={watch() as Study} />
             </Col>
         </Box>
+    )
+}
+
+const ImagePreview: FC<{imageId: string}> = ({ imageId }) => {
+    if (!imageId) return null
+
+    return (
+        <Col gap sm={12}>
+            <img src={getImageUrl(imageId)}
+                alt={imageId}
+                className='study-card-image'
+                css={{
+                    border: `1px solid ${colors.gray50}`,
+                    borderRadius: 8,
+                }}
+            />
+            <small css={{ colors: colors.text }}>{getAltText(imageId)}</small>
+        </Col>
     )
 }
 

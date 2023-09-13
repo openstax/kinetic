@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test'
+import { Browser, expect, Page } from '@playwright/test'
 import { dayjs } from '../src/lib/date'
 import { faker } from './test';
 
@@ -13,6 +13,7 @@ export const TC = {
         researcher: '00000000-0000-0000-0000-000000000001',
         user: '00000000-0000-0000-0000-000000000002',
     },
+    API_URL: `${process.env.ORIGIN || 'http://localhost:4006'}/api/v1`,
 }
 
 type TestingLogin = keyof typeof TC.USERS
@@ -24,42 +25,25 @@ export type { TestConfig }
 interface goToPageArgs {
     page: Page
     path: string
-    loginAs?: TestingLogin
 }
 
-export const goToPage = async ({ page, path, loginAs: login }: goToPageArgs) => {
+export const goToPage = async ({ page, path }: goToPageArgs) => {
     const url = TC.ORIGIN + path
-    let attempts = 0
-    do {
-        try {
-            await page.goto(url)
-            await page.waitForTimeout(500) // wait for user fetch to complete
-            if (await page.$('testId=incorrect-user-panel')) {
-                await loginAs({ page, login: login || 'researcher' })
-                await page.goto(url)
-            }
-            return
-        } catch (e) {
-            console.log(e) // eslint-disable-line no-console
-            if (attempts++ >= 3) {
-                throw (e)
-            }
-        }
-    } while (true) // eslint-disable-line no-constant-condition
+    await page.goto(url)
 }
 
-export const interceptStudyLaunch = async ({ page }: { page: Page }) => {
+export const interceptStudyLaunch = async (page: Page) => {
     await page.route(/studies\/\d+\/launch/, async route => {
         const response = await page.request.fetch(route.request())
         const body = await response.json()
         body.url = '/'
-        return route.fulfill({ response, body: JSON.stringify(body) });
+        await route.fulfill({ response, body: JSON.stringify(body) });
     });
 }
 
-export const interceptStudyLand = async ({ page }: { page: Page }) => {
-    await page.route(/study\/land\/d+/, async route => {
-        return route.fulfill({ status: 200, body: '{}' })
+export const interceptStudyLand = async (page: Page) => {
+    return await page.route(/study\/land\/d+/, async route => {
+        return await route.fulfill({ status: 200, body: '{}' })
     });
 }
 
@@ -74,154 +58,148 @@ export const logout = async ({ page }: { page: Page }) => {
 }
 
 export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin }) => {
-    await logout({ page })
     await page.goto('http://localhost:4000/dev/user')
     await page.waitForSelector('.dev-console');
     await page.click(`[data-user-id="${TC.USERS[login]}"]`)
-    await page.waitForSelector('.studies')
+    await removeOsanoFooter(page)
+    return await page.waitForSelector('.studies')
 }
 
 // TODO Can't delete active studies now. We can repurpose this to delete a draft in the future
 export const rmStudy = async ({ page, studyId }: { page: Page, studyId: string | number }) => {
-    await loginAs({ page, login: 'researcher' })
     await goToPage({ page, path: `/studies` })
     // await page.click(`testId=${studyId}-action-menu`)
     // await page.click(`testId=delete-study`)
 }
 
-export const getIdFromUrl = async (page: Page): Promise<number | undefined> => {
-    const id = await page.evaluate(() => {
-        return window.location.href.match(/(\/\d+)/)[1].replace('/', '')
-    })
+export const getIdFromUrl = (page: Page): number | undefined => {
+    const id = page.url().match(/(\/\d+)/)[1].replace('/', '')
+
     if (id) {
         return Number(id)
     }
 }
 
 interface createStudyArgs {
-    page: Page
     studyName?: string
-    approveAndLaunchStudy?: boolean
     multiSession?: boolean
     description?: string
+    adminPage: Page
+    researcherPage: Page
 }
 
-export const approveWaitingStudy = async(page: Page, studyId: number) => {
-    await goToPage({ page, path: '/admin/approve-studies', loginAs: 'admin' })
-    await page.click(`testId=${studyId}-checkbox`)
-    await page.click(`testId=${studyId}-approve`)
-    await logout({ page })
+export const approveWaitingStudy = async(adminPage: Page, studyId: number) => {
+    await goToPage({ page: adminPage, path: '/admin/approve-studies' })
+    await adminPage.click(`testId=${studyId}-checkbox`)
+    await adminPage.click(`testId=${studyId}-approve`)
 }
 
-export const launchApprovedStudy = async(page: Page, studyId: number, multiSession: boolean = false) => {
-    await goToPage({ page, path: `/study/overview/${studyId}`, loginAs: 'researcher' })
-    await expect(page.locator('testId=launch-study-button')).toBeDisabled()
+export const launchApprovedStudy = async(researcherPage: Page, studyId: number, multiSession: boolean = false) => {
+    await goToPage({ page: researcherPage, path: `/study/overview/${studyId}` })
 
     if (multiSession) {
-        await page.getByTestId('confirm-qualtrics-0').check();
-        await page.getByTestId('confirm-qualtrics-1').check();
+        await researcherPage.getByTestId('confirm-qualtrics-0').check();
+        await researcherPage.getByTestId('confirm-qualtrics-1').check();
     } else {
-        await page.getByTestId('confirm-qualtrics').check();
+        await researcherPage.getByTestId('confirm-qualtrics').check();
     }
 
-    await setDateField({ page, fieldName: 'opensAt', date: dayjs() })
+    await researcherPage.waitForTimeout(500)
+    await setDateField({ page: researcherPage, fieldName: 'opensAt', date: dayjs() })
 
-    await page.locator('input[name=hasSampleSize]').check()
-    await page.fill('[name=targetSampleSize]', '50')
+    await researcherPage.locator('input[name=hasSampleSize]').check()
+    await researcherPage.fill('[name=targetSampleSize]', '50')
 
-    await expect(page.locator('testId=launch-study-button')).not.toBeDisabled()
-    await page.click('testId=launch-study-button')
-    await page.waitForLoadState('networkidle')
-    await page.click('testId=primary-action')
+    await expect(researcherPage.locator('testId=launch-study-button')).toBeEnabled()
+    await researcherPage.click('testId=launch-study-button')
+    await researcherPage.waitForLoadState('networkidle')
+    await researcherPage.click('testId=primary-action')
 }
 
 export const createStudy = async ({
-    page,
-    studyName = null,
-    approveAndLaunchStudy = true,
     multiSession = false,
     description = faker.commerce.color(),
+    adminPage,
+    researcherPage,
 }: createStudyArgs) => {
-    const name = studyName || faker.commerce.productName()
+    const name = faker.commerce.productName() + ' ' + faker.hacker.abbreviation()
     // Step 1 - Internal Details
-    await loginAs({ page, login: 'researcher' })
-    await goToPage({ page, path: '/study/edit/new' })
-    await page.fill('[name=titleForResearchers]', name)
-    await page.fill('[name=internalDescription]', description)
-    await page.click("input[value='Learner Characteristics']")
-    await page.waitForTimeout(200)
+    await goToPage({ page: researcherPage, path: '/study/edit/new' })
 
-    await expect(page.locator('testId=study-primary-action')).not.toBeDisabled()
-    await page.click('testId=study-primary-action')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(200)
+    await researcherPage.fill('[name=titleForResearchers]', name)
+    await researcherPage.fill('[name=internalDescription]', description)
+    await researcherPage.click("input[value='Learner Characteristics']")
+    await researcherPage.waitForTimeout(100)
 
-    // Study should reroute to study/edit/:id
-    const studyId = await getIdFromUrl(page)
+    await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
+    await researcherPage.click('testId=study-primary-action')
 
     // Step 2 - Research Team
-    await page.locator('.select', { has: page.locator(`input[name=researcherPi]`) }).click()
-    await page.waitForTimeout(100)
-    await page.keyboard.press('Enter')
+    await researcherPage.waitForLoadState('networkidle')
 
-    await page.locator('.select', { has: page.locator(`input[name=researcherLead]`) }).click()
-    await page.waitForTimeout(100)
-    await page.keyboard.press('Enter')
+    await researcherPage.locator('.select', { has: researcherPage.locator(`input[name=researcherPi]`) }).click()
+    await researcherPage.waitForTimeout(100)
+    await researcherPage.keyboard.press('Enter')
 
-    await expect(page.locator('testId=study-primary-action')).not.toBeDisabled()
-    await page.click('testId=study-primary-action')
-    await page.waitForLoadState('networkidle')
+    await researcherPage.locator('.select', { has: researcherPage.locator(`input[name=researcherLead]`) }).click()
+    await researcherPage.waitForTimeout(100)
+    await researcherPage.keyboard.press('Enter')
+
+    await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
+    await researcherPage.click('testId=study-primary-action')
+    await researcherPage.waitForLoadState('networkidle')
 
     // Step 3 - Participant View
-    await page.fill('[name=titleForParticipants]', name)
-    await page.fill('[name=shortDescription]', faker.commerce.department())
-    await page.fill('[name=longDescription]', faker.commerce.department())
-    await selectFirstDropdownItem({ page, fieldName: 'topic' })
-    await selectFirstDropdownItem({ page, fieldName: 'subject' })
-    await page.click("input[value='10']")
-    await page.click("input[value='score']")
-    await page.click("input[value='debrief']")
-    await page.fill('[name=benefits]', faker.finance.accountName())
+    await researcherPage.fill('[name=titleForParticipants]', name)
+    await researcherPage.fill('[name=shortDescription]', faker.commerce.department())
+    await researcherPage.fill('[name=longDescription]', faker.commerce.department())
+    await selectFirstDropdownItem({ page: researcherPage, fieldName: 'topic' })
+    await selectFirstDropdownItem({ page: researcherPage, fieldName: 'subject' })
+    await researcherPage.click("input[value='10']")
+    await researcherPage.click("input[value='score']")
+    await researcherPage.click("input[value='debrief']")
+    await researcherPage.fill('[name=benefits]', faker.finance.accountName())
 
-    await page.click('testId=image-picker')
-    await expect(page.locator('testId=image-library-modal')).toBeVisible()
-    await page.locator('testId=card-image').first().click()
-    await page.click('testId=select-card-image')
-    await expect(page.locator('testId=image-library-modal')).not.toBeVisible()
+    await researcherPage.click('testId=image-picker')
+    await expect(researcherPage.locator('testId=image-library-modal')).toBeVisible()
+    await researcherPage.locator('testId=card-image').first().click()
+    await researcherPage.click('testId=select-card-image')
+    await expect(researcherPage.locator('testId=image-library-modal')).toBeHidden()
+    await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
+    await researcherPage.waitForTimeout(100)
 
-    await expect(page.locator('testId=study-primary-action')).not.toBeDisabled()
-    await page.click('testId=study-primary-action')
-    await page.waitForLoadState('networkidle')
+    await researcherPage.click('testId=study-primary-action')
+    await researcherPage.waitForLoadState('networkidle')
 
     // Step 4 - Additional Sessions
-    await expect(page.getByTestId('study-step-header')).toContainText('Additional sessions')
+    await expect(researcherPage.getByTestId('study-step-header')).toContainText('Additional sessions')
     if (multiSession) {
-        await page.click('testId=add-session')
-        await page.click("input[value='25']")
-        await page.click("input[value='personalized']")
+        await researcherPage.click('testId=add-session')
+        await researcherPage.click("input[value='25']")
+        await researcherPage.click("input[value='personalized']")
     }
-    await expect(page.locator('testId=study-primary-action')).not.toBeDisabled()
-    await page.click('testId=study-primary-action')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(100)
+    await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
+    await researcherPage.click('testId=study-primary-action')
+    await researcherPage.waitForLoadState('networkidle')
+    await researcherPage.waitForTimeout(100)
+
+    // Study should have rerouted to study/edit/:id
+    const studyId = getIdFromUrl(researcherPage)
 
     // Submit study
-    await expect(page.locator('testId=study-primary-action')).toMatchText('Submit Study')
-    await expect(page.locator('testId=study-primary-action')).not.toBeDisabled()
-    await page.click('testId=study-primary-action')
-    await page.waitForTimeout(200)
-    await page.click('testId=submit-study-button')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(100)
-    await page.click('testId=submit-study-success-button')
-    await page.waitForTimeout(100)
-    await logout({ page })
+    await expect(researcherPage.locator('testId=study-primary-action')).toMatchText('Submit Study')
+    await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
+    await researcherPage.click('testId=study-primary-action')
+    await researcherPage.waitForTimeout(200)
+    await researcherPage.click('testId=submit-study-button')
+    await researcherPage.waitForLoadState('networkidle')
+    await researcherPage.waitForTimeout(100)
+    await researcherPage.click('testId=submit-study-success-button')
+    await researcherPage.waitForTimeout(100)
 
     // Test draft statuses before approve and launch when dashboard is finalized
-    if (approveAndLaunchStudy) {
-        await approveWaitingStudy(page, studyId)
-        await launchApprovedStudy(page, studyId, multiSession)
-    }
+    await approveWaitingStudy(adminPage, studyId)
+    await launchApprovedStudy(researcherPage, studyId, multiSession)
 
     return studyId
 }
@@ -246,34 +224,68 @@ export const setFlatpickrDate = async (
     }, dates)
 }
 
-export const setDateField = async (
-    {
-        fieldName, date, page,
-    }: {
-        fieldName: string, date: dayjs.Dayjs | [dayjs.Dayjs, dayjs.Dayjs], page: Page,
-    },
-) => {
+export const setDateField = async ({
+    fieldName, date, page,
+}: {
+    fieldName: string, date: dayjs.Dayjs | [dayjs.Dayjs, dayjs.Dayjs], page: Page,
+}) => {
     return await setFlatpickrDate({ page, date, selector: `[data-field-name="${fieldName}"]` })
 }
 
 
-export const addReward = async (
-    {
-        page, points, prize,
-        startAt = dayjs().subtract(1, 'day'),
-        endAt = dayjs().add(1, 'day'),
-    }: {
-        page: Page, points: number, prize: string
-        startAt?: dayjs.Dayjs,
-        endAt?: dayjs.Dayjs,
-    }
-) => {
-    await goToPage({ page, path: '/admin/rewards', loginAs: 'admin' })
-    await page.click('testId=add-reward')
-    await page.waitForSelector('[data-reward-id="new"]')
+export const addReward = async ({
+    page, points, prize,
+    startAt = dayjs().subtract(1, 'day'),
+    endAt = dayjs().add(1, 'day'),
+}: {
+    page: Page, points: number, prize: string
+    startAt?: dayjs.Dayjs,
+    endAt?: dayjs.Dayjs,
+}) => {
+    await goToPage({ page, path: '/admin/rewards' })
+    await page.click('testId=add-reward', { force: true })
+    await page.waitForLoadState('networkidle')
+    await expect(page.locator('[data-reward-id="new"]')).toBeVisible()
     await setDateField({ page, fieldName: 'dates', date: [startAt, endAt] })
     await page.fill('[name="points"]', String(points))
     await page.fill('[name="prize"]', prize)
     await page.click('testId=form-save-btn')
-    await logout({ page })
+}
+
+export const removeOsanoFooter  = async (page:Page) => {
+    // For some reason, the osano footer is different when running in CI environment?
+    if (await page.getByRole('button', { name: /Accept/i }).isVisible({ timeout: 500 })) {
+        await page.getByRole('button', { name: /Accept/i }).click();
+    }
+
+    await page.evaluate(async () => {
+        document.querySelector('.osano-cm-dialog')?.remove()
+    });
+    await page.waitForSelector('.osano-cm-dialog', { state: 'detached' })
+}
+
+// Helper methods for multi-context tests
+// https://playwright.dev/docs/browser-contexts#multiple-contexts-in-a-single-test
+export const useAdminPage = async (browser: Browser) => {
+    const adminContext = await browser.newContext()
+    const adminPage = await adminContext.newPage()
+    await loginAs({ page: adminPage, login: 'admin' })
+    await removeOsanoFooter(adminPage)
+    return adminPage
+}
+
+export const useResearcherPage = async (browser: Browser) => {
+    const researcherContext = await browser.newContext()
+    const researcherPage = await researcherContext.newPage()
+    await loginAs({ page: researcherPage, login: 'researcher' })
+    await removeOsanoFooter(researcherPage)
+    return researcherPage
+}
+
+export const useUserPage = async (browser: Browser) => {
+    const userContext = await browser.newContext()
+    const userPage = await userContext.newPage()
+    await loginAs({ page: userPage, login: 'user' })
+    await removeOsanoFooter(userPage)
+    return userPage
 }

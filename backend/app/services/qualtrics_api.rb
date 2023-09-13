@@ -57,6 +57,19 @@ class QualtricsApi
     end
   end
 
+  def delete_survey(survey_id)
+    request('DELETE', "surveys/#{survey_id}")
+  end
+
+  def list_surveys(url='surveys')
+    result = request('GET', url)['result']
+    if result['nextPage'].present?
+      result['elements'] + list_surveys(result['nextPage'].sub(/.*surveys/, 'surveys'))
+    else
+      result['elements']
+    end
+  end
+
   # https://api.qualtrics.com/9d0928392673d-get-survey
   def get_survey_definition(survey_id, format: nil)
     Rails.cache.fetch(
@@ -83,6 +96,10 @@ class QualtricsApi
       path_to(path),
       json: json
     )
+
+    # timeout, host not found errors won't have a body
+    resp.raise_for_status if resp.is_a? HTTPX::ErrorResponse
+
     body = resp.body.read
     unless resp.status == 200
       body = JSON.pretty_generate(JSON.parse(body.force_encoding('UTF-8'))) # sometimes qualtrics seems to returns invalid UTF

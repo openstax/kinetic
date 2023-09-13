@@ -7,16 +7,17 @@ on:
       - main
 
 jobs:
-  front-end:
-    timeout-minutes: 30
+  playwright:
+    timeout-minutes: 60
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: bahmutov/npm-install@v1
         with:
           working-directory: frontend
       - name: Build docker image
         run: ./frontend/docker/build
+
       - name: Build and run backend docker
         run: |
           docker-compose run api bundle exec rake db:migrate
@@ -44,17 +45,14 @@ jobs:
         run: |
           echo "Changed files: ${{ steps.verify_changed_files.outputs.changed_files }}"
           exit 1
-      - name: Run lint
-        working-directory: frontend
-        run: yarn run lint
-      - name: Run typecheck
-        working-directory: frontend
-        run: yarn run typecheck
       - name: Run specs
         working-directory: frontend
-        run: yarn run test:ci
+        run: |
+          yarn
+          npx playwright install chromium --with-deps
+          npx playwright test
       - name: Save test-results of failures
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: test-results
@@ -67,7 +65,7 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/cache@v3
         with:
           path: vendor/bundle

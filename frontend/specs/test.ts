@@ -1,4 +1,4 @@
-import base, { selectors, expect, Locator } from '@playwright/test'
+import base, { expect, Locator, selectors } from '@playwright/test'
 import { matchers } from 'expect-playwright'
 import { faker } from '@faker-js/faker'
 import { TC, TestConfig } from './helpers'
@@ -29,11 +29,18 @@ test.beforeAll(async () => {
     await selectors.register('testId', createTestIdEngine)
 })
 
-test.beforeEach(({ context, page }) => {
+test.beforeEach(async ({ context, page }) => {
     context.setDefaultTimeout(DEFAULT_TIMEOUT)
     page.setDefaultTimeout(DEFAULT_TIMEOUT)
     context.setDefaultNavigationTimeout(DEFAULT_NAVIGATION_TIMEOUT)
     page.setDefaultNavigationTimeout(DEFAULT_NAVIGATION_TIMEOUT)
+})
+
+test.afterEach(async ({ browser }) => {
+    // Close all contexts
+    for (const context of browser.contexts()) {
+        await context.close();
+    }
 })
 
 export * from '@playwright/test'
