@@ -4,6 +4,8 @@ import {
     Col,
     FieldErrorMessage,
     FieldTitle,
+    getAltText,
+    getImageUrl,
     InputField,
     ResearcherButton,
     ResearcherDetailedCheckbox,
@@ -16,6 +18,7 @@ import { StudyCardPreview } from '../../../../learner/card';
 import { first } from 'lodash-es';
 import { Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
+import { colors } from '@theme';
 
 export const participantViewValidation = (allOtherStudies: Study[]) => {
     return {
@@ -93,6 +96,8 @@ export const participantViewValidation = (allOtherStudies: Study[]) => {
 
 export const ParticipantView: FC<{study: Study}> = ({ study }) => {
     const [showImagePicker, setShowImagePicker] = useState<boolean>(false)
+    const initialSubjects = study.subject ? [...new Set([...studySubjects, study.subject])] : studySubjects
+    const [allStudySubjects, setAllStudySubjects] = useState<string[]>(initialSubjects)
     const { setValue, watch, getValues, control } = useFormContext<Study>()
     const { update } = useFieldArray({
         control,
@@ -186,8 +191,13 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
                             <FieldErrorMessage name='topic' />
                             <SelectField
                                 name="subject"
+                                allowCreate
                                 placeholder="Study Content Area (optional)"
-                                options={studySubjects.map(s => ({ value: s, label: s }))}
+                                onCreateOption={(value) => {
+                                    setAllStudySubjects(prevState => [...new Set([...prevState, value])])
+                                    setValue('subject', value, { shouldDirty: true })
+                                }}
+                                options={allStudySubjects.map(s => ({ value: s, label: s }))}
                             />
                         </Col>
                     </Box>
@@ -264,6 +274,7 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
                             <ResearcherButton buttonType='secondary' testId='image-picker' onClick={() => setShowImagePicker(true)}>
                                 {getValues('imageId') ? 'Change Selected Image' : 'Select Study Card Image'}
                             </ResearcherButton>
+                            <ImagePreview imageId={getValues('imageId') as string} />
                             <ImageLibrary
                                 show={showImagePicker}
                                 onHide={() => setShowImagePicker(false)}
@@ -282,6 +293,24 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
                 <StudyCardPreview study={watch() as Study} />
             </Col>
         </Box>
+    )
+}
+
+const ImagePreview: FC<{imageId: string}> = ({ imageId }) => {
+    if (!imageId) return null
+
+    return (
+        <Col gap sm={12}>
+            <img src={getImageUrl(imageId)}
+                alt={imageId}
+                className='study-card-image'
+                css={{
+                    border: `1px solid ${colors.gray50}`,
+                    borderRadius: 8,
+                }}
+            />
+            <small css={{ colors: colors.text }}>{getAltText(imageId)}</small>
+        </Col>
     )
 }
 

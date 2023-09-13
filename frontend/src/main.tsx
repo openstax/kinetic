@@ -9,6 +9,7 @@ import './styles/main.scss'
 import { mantineTheme } from '@theme'
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -24,6 +25,7 @@ const App = () => (
             <QueryClientProvider client={queryClient}>
                 <EnvironmentProvider>
                     <MantineProvider withGlobalStyles withNormalizeCSS theme={mantineTheme}>
+                        <Notifications position='top-right' />
                         <AppRoutes />
                     </MantineProvider>
                 </EnvironmentProvider>

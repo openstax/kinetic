@@ -44,10 +44,7 @@ const studyValidation = Yup.object().shape({
     ),
 });
 
-export const EditSubmittedStudy: FC<{
-    study: Study,
-    formDisabled?: boolean
-}> = ({ study, formDisabled = false }) => {
+export const EditSubmittedStudy: FC<{ study: Study }> = ({ study }) => {
     const api = useApi()
     const reopening: boolean = useQueryParam('reopen') || false
 
@@ -57,7 +54,7 @@ export const EditSubmittedStudy: FC<{
         reset(savedStudy, { keepIsValid: true })
     }
 
-    const isDisabled = formDisabled || (!reopening && isCompleted(study))
+    const isDisabled = !reopening && isCompleted(study)
 
     return (
         <Form
@@ -211,7 +208,6 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
 }
 
 const OpensAt: FC = () => {
-    const { isReadOnly } = useFormContext()
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
@@ -223,9 +219,7 @@ const OpensAt: FC = () => {
                 <DateTimeField
                     name='opensAt'
                     label='Select date'
-                    readOnly={isReadOnly}
                     withTime
-                    format={DateTimeFormats.shortDateTime}
                     options={{
                         defaultHour: 9,
                         minDate: 'today',
@@ -284,7 +278,7 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
     if (!firstStage) {
         return null
     }
-    const { watch, setValue, getValues, trigger, isReadOnly } = useFormContext()
+    const { watch, setValue, getValues, trigger } = useFormContext()
 
     return (
         <Box gap='xlarge'>
@@ -347,7 +341,7 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                     <Col sm={5}>
                         <DateTimeField
                             name='closesAt'
-                            readOnly={isReadOnly || !watch('hasClosingDate')}
+                            readOnly={!watch('hasClosingDate')}
                             label='Select date'
                             format={DateTimeFormats.shortDateTime}
                             options={{

@@ -37,12 +37,19 @@ const getLineColor = (step: Step, currentStep: Step) => {
 export const ResearcherProgressBar: FC<{
     steps: Step[],
     currentStep: Step,
-}> = ({ steps, currentStep }) => {
+    setStep: (step: number) => void,
+    maxStep: number,
+}> = ({ steps, currentStep, setStep, maxStep }) => {
+    const navigateToStep = (step: Step) => {
+        if (step.index <= maxStep) {
+            setStep(step.index)
+        }
+    }
     return (
         <Box width='100%'>
             {steps.map((step) => {
                 return (
-                    <Box key={step.index} direction='column' flex={{ grow: 1 }} gap='large'>
+                    <Box key={step.index} direction='column' flex={{ grow: 1 }} gap='large' onClick={() => navigateToStep(step)}>
                         <Box
                             height='7px'
                             width='105%'

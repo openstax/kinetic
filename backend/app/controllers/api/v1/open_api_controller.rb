@@ -58,6 +58,7 @@ class Api::V1::OpenApiController < ApplicationController
     Api::V1::Admin::RewardsOpenApi,
     Api::V1::Admin::ResponsesOpenApi,
     Api::V1::Admin::StudiesOpenApi,
+    Api::V1::Admin::ReportsOpenApi,
     Api::V1::Researcher::AnalysisOpenApi,
     Api::V1::Researcher::ResponsesOpenApi,
     Api::V1::Researcher::AnalysisRunOpenApi,

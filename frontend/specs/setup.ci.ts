@@ -9,7 +9,7 @@ async function globalSetup() {
     await server.listen()
     return async () => {
         await baseTearDown()
-        server.close()
+        await server.close()
     }
 }
 
