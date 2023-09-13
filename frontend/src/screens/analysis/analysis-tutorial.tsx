@@ -8,7 +8,7 @@ import Tutorial3 from '@images/analysis/tutorial3.svg'
 import { colors } from '@theme';
 
 const StyledModal = styled(Modal)({
-    '[data-test-id="modal-close-btn"]': {
+    '[data-testid="modal-close-btn"]': {
         color: 'white',
     },
 })

@@ -18,13 +18,13 @@ export default function AdminHome() {
         <Grid className="admin">
             <TopNavBar css={{ gridArea: 'header', gridColumnStart: 'span 2' }} />
             <Routes>
-                <Route path="/" element={<Navigate to="/admin/banners/" />} />
-                <Route path="/banners/" element={<AdminBanners />} />
-                <Route path="/approve-studies/" element={<ApproveStudies />} />
-                <Route path="/rewards/" element={<AdminRewards />} />
+                <Route path="/" element={<Navigate to="/admin/banners" />} />
+                <Route path="/banners" element={<AdminBanners />} />
+                <Route path="/approve-studies" element={<ApproveStudies />} />
+                <Route path="/rewards" element={<AdminRewards />} />
                 <Route path="/workspaces/:studyId?" element={<AdminWorkspaces />} />
-                <Route path="/impersonate/" element={<Impersonation />} />
-                <Route path="/reports/" element={<AdminReports />} />
+                <Route path="/impersonate" element={<Impersonation />} />
+                <Route path="/reports" element={<AdminReports />} />
             </Routes>
         </Grid>
     )

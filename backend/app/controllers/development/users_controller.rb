@@ -113,7 +113,7 @@ class Development::UsersController < ApplicationController
   end
 
   def find_user
-    u = nil?
+    u = nil
     mock_user = MOCK_USERS.find { |user| user[:user_id] == current_user_uuid }
     researcher = researchers.find { |r| r[:user_id] == current_user_uuid }
     admin = admins.find { |a| a[:user_id] == current_user_uuid }

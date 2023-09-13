@@ -1,6 +1,8 @@
-import { createStudy, faker, test } from './test'
+import { createStudy, test, useAdminPage, useResearcherPage } from './test'
 
-test('can create and edit a study', async ({ page }) => {
-    const name = faker.commerce.productName()
-    await createStudy({ page, studyName: name })
+test('can create a study', async ({ browser }) => {
+    const adminPage = await useAdminPage(browser)
+    const researcherPage = await useResearcherPage(browser)
+
+    await createStudy({ researcherPage, adminPage })
 })
