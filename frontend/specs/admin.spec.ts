@@ -6,10 +6,11 @@ test('displays panel only when allowed', async ({ browser }) => {
     const researcherPage = await useResearcherPage(browser)
 
     await goToPage({ page: adminPage, path: '/admin' })
-    await adminPage.waitForFunction(() => document.location.pathname == '/admin/banners')
+    await adminPage.waitForURL('**/admin/banners')
+
 
     await goToPage({ page: researcherPage, path: '/admin' })
-    await researcherPage.waitForFunction(() => document.location.pathname === '/studies')
+    await researcherPage.waitForURL('**/studies')
 })
 
 
