@@ -12,7 +12,6 @@
       body {
         font-weight: normal;
         letter-spacing: normal;
-        line-height: normal;
         line-height: 2.5rem;
         background-color: #f1f1f1;
         color: #424242;
@@ -32,7 +31,7 @@
           var URLS = {
               SAMPLE_STUDY: 'https://riceuniversity.co1.qualtrics.com/jfe/form/SV_8vUOQo2nx2s79NI'
           };
-          if (window.location.host == 'openstax.org') {
+          if (window.location.host === 'openstax.org') {
               Object.assign(URLS, {
                   ACCOUNTS: 'https://openstax.org/accounts',
                   WHOAMI: 'https://openstax.org/accounts/api/user',
@@ -123,6 +122,9 @@
 	  #kinetic-homepage p.small {
 		  font-size: 12px;
 	  }
+      #kinetic-homepage .x-small {
+        font-size: 10px;
+      }
       #kinetic-homepage .container {
           padding-left: 20px;
           padding-right: 20px;
@@ -181,6 +183,9 @@
       }
       #kinetic-homepage .link {
         transition: all 0.3s;
+        text-decoration: none;
+      }
+      #kinetic-homepage .text-decoration-none {
         text-decoration: none;
       }
       #kinetic-homepage .btn.primary {
@@ -263,7 +268,7 @@
           cursor: pointer;
           max-width: 350px;
           padding: 20px;
-          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.18);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18);
           border-radius: 20px;
           transition: all 0.5s ease;
           color: black;
@@ -366,7 +371,10 @@
           margin-left: 30%;
       }
       #kinetic-homepage .login-signup {
-          margin-top: 80px;
+          margin-top: 8rem;
+      }
+      #kinetic-homepage .start-using {
+        margin-top: 8rem;
       }
       #kinetic-homepage .participate .lines {
           position: absolute;
@@ -375,7 +383,10 @@
           width: 100%;
           left: -500px;
       }
-
+      #kinetic-homepage .vertical-line {
+        border: 1px solid white;
+        transform: scaleX(0.5);
+      }
 
       @media screen  and (max-device-width: 568px) {
           #kinetic-homepage .hero-block .container {
@@ -419,10 +430,25 @@
 
       <div class="hero-block full-width">
 
-        <img class="lines" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-wavy-lines.svg">
+        <img alt="kinetic-wavy-lines" class="lines" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-wavy-lines.svg">
 
         <div class="container">
           <div class="txt-block">
+            <span>Supported by</span>
+            <div style='display: flex; gap: 1.5rem'>
+              <a class="text-decoration-none" target="_blank" href="https://ies.ed.gov/">
+                <img class="supporter-image" alt="Institute of Education Sciences logo" src="https://assets.openstax.org/oscms-prodcms/media/images/ies-logo.original.webp">
+              </a>
+              <span>*</span>
+
+              <span class="vertical-line"></span>
+              <a class="text-decoration-none" target="_blank" href="https://www.nsf.org/gb/en">
+                <img class="supporter-image" alt="National Science Foundation logo" src="https://assets.openstax.org/oscms-prodcms/media/images/nsf-logo.original.webp">
+              </a>
+            </div>
+            <p class="light x-small">
+              *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
+            </p>
             <h2>
               We are all unique, so why should we study the same way?
             </h2>
@@ -437,41 +463,51 @@
               a better student.
             </p>
 
-            <div class="actions-block login-signup" style="display: none;">
-              <div class="buttons">
-                <a
-                  class="signup btn primary link"
-                  data-local="true"
-                  href="https://accounts.openstax.org/signup/?r=https%3A%2F%2Fkinetic.openstax.org%2F"
-                  >
-                  Sign up
-                </a>
-                <a
-                  class="login link"
-                  data-local="true"
-                  href="https://accounts.openstax.org/i/login/?r=https%3A%2F%2Fkinetic.openstax.org%2F"
-                  >
-                  Log in
-                </a>
-              </div>
-            </div>
-            <div class="actions-block start-using" style="display: none;">
-              <div class="buttons">
-                <a class="start link" data-local="true" href="https://kinetic.openstax.org/">
-                  View available studies
-                </a>
-              </div>
+            <div class="ineligible" style="display: none;">
+              <p style="display: flex; gap: 2rem; color: rgba(117, 148, 245, 1);">
+                <span>* For participants in US only. </span>
+                <a href="https://help.openstax.org/s/article/kinetic" target="_blank" style="color: rgba(117, 148, 245, 1)">Learn More ></a>
+              </p>
             </div>
 
-
+            <div class="eligible">
+              <div class="actions-block login-signup" style="display: none;">
+                <div class="buttons">
+                  <a
+                    class="signup btn primary link"
+                    data-local="true"
+                    href="https://accounts.openstax.org/signup/?r=https%3A%2F%2Fkinetic.openstax.org%2F"
+                    >
+                    Sign up
+                  </a>
+                  <a
+                    class="login link"
+                    data-local="true"
+                    href="https://accounts.openstax.org/i/login/?r=https%3A%2F%2Fkinetic.openstax.org%2F"
+                    >
+                    Log in
+                  </a>
+                </div>
+              </div>
+              <div class="actions-block start-using" style="display: none;">
+                <div class="buttons">
+                  <a class="start link btn primary"
+                     data-local="true"
+                     href="https://kinetic.openstax.org/"
+                  >
+                    View available studies
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="cards">
             <div class="col-1">
-              <img src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-card-career.svg">
+              <img alt="career-card" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-card-career.svg">
             </div>
             <div class="col-2">
-              <img src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-card-beliefs.svg">
-              <img src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-card-reader.svg">
+              <img alt="beliefs-card" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-card-beliefs.svg">
+              <img alt="reader-card" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-card-reader.svg">
             </div>
 
           </div>
@@ -521,7 +557,7 @@
         </h5>
 
         <a class="link sample-study" href="">
-          <img src="https://assets.openstax.org/oscms-prodcms/media/images/kinetic-sample-study.original.webp">
+          <img alt="sample-study" src="https://assets.openstax.org/oscms-prodcms/media/images/kinetic-sample-study.original.webp">
         </a>
 
         <a class="link sample-study btn primary">Take the sample study</a>
@@ -593,27 +629,17 @@
         </div>
       </div>
 
-      <div class="participate">
-        <img class="lines" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-wavy-lines.svg">
+      <div class="participate eligible">
+        <img alt="kinetic-wavy-lines" class="lines" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-wavy-lines.svg">
 
-        <div class="container">
-
-
+        <div class="container eligible">
           <div class="txt-block">
-            <div class="eligible">
-              <h3>
-                Want to participate in Kinetic research?
-              </h3>
-              <p>
-                Already have an OpenStax account? Use your email and password to log into kinetic
-              </p>
-            </div>
-
-            <div class="ineligible" style="display: none">
-              <p>
-                While we do continue to grow, Kinetic is currently designed exclusively for participants residing in the United States mainland, territories, and minor outlying islands. We do look forward to expanding Kinetic services to your home country and others.
-              </p>
-            </div>
+            <h3>
+              Want to participate in Kinetic research?
+            </h3>
+            <p>
+              Already have an OpenStax account? Use your email and password to log into kinetic
+            </p>
 
             <div class="actions-block login-signup" style="display: none">
               <div class="buttons">
@@ -635,17 +661,16 @@
             </div>
             <div class="actions-block start-using" style="display: none;">
               <div class="buttons">
-                <a class="start link" data-local="true" href="https://kinetic.openstax.org/">
+                <a class="start link btn primary"
+                   data-local="true"
+                   href="https://kinetic.openstax.org/"
+                >
                   View available studies
                 </a>
               </div>
             </div>
-
           </div>
-
-
         </div>
-
       </div>
     </div>
 
@@ -726,13 +751,11 @@
             return fetch('https://kinetic.openstax.org/api/v1/eligibility')
                     .then((response) => response.json())
                     .then((response) => {
-                      if (response.eligible) {
-                        hideElements('login-signup')
-                        hideElements('start-using')
+                      if (!response.eligible) {
                         hideElements('eligible')
                         revealElements('ineligible')
                       }
-                      return !response.eligible
+                      return response.eligible
                     }
             );
           }
@@ -781,7 +804,7 @@
           var observer = new MutationObserver(function(mutations_list) {
               mutations_list.forEach(function(mutation) {
                   mutation.removedNodes.forEach(function(removed_node) {
-                      if(removed_node.className == 'general page') {
+                      if(removed_node.className === 'general page') {
                           onPageUnload();
                           observer.disconnect();
                       }
