@@ -116,14 +116,10 @@
           line-height: 25px;
           color: #424242;
       }
-      #kinetic-homepage p.light {
-          color: #848484;
-      }
-	  #kinetic-homepage p.small {
-		  font-size: 12px;
-	  }
+
       #kinetic-homepage .x-small {
-        font-size: 10px;
+        font-size: 9px;
+        line-height: 12px;
       }
       #kinetic-homepage .container {
           padding-left: 20px;
@@ -172,6 +168,9 @@
       }
       #kinetic-homepage .txt-block p {
           color: #dbdbdb;
+      }
+      #kinetic-homepage p.light {
+        color: #848484;
       }
       #kinetic-homepage .actions-block {
         margin-top: 20px;
@@ -374,7 +373,7 @@
           margin-top: 8rem;
       }
       #kinetic-homepage .start-using {
-        margin-top: 8rem;
+          margin-top: 8rem;
       }
       #kinetic-homepage .participate .lines {
           position: absolute;
@@ -389,6 +388,9 @@
       }
 
       @media screen  and (max-device-width: 568px) {
+          #kinetic-homepage .hero-block {
+            padding-top: 2rem;
+          }
           #kinetic-homepage .hero-block .container {
               flex-direction: column;
           }
@@ -422,8 +424,6 @@
               width: 100%;
           }
       }
-
-
     </style>
 
     <div id="kinetic-homepage" class="full-width">
@@ -433,39 +433,46 @@
         <img alt="kinetic-wavy-lines" class="lines" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-wavy-lines.svg">
 
         <div class="container">
-          <div class="txt-block">
-            <span>Supported by</span>
-            <div style='display: flex; gap: 1.5rem'>
-              <a class="text-decoration-none" target="_blank" href="https://ies.ed.gov/">
-                <img class="supporter-image" alt="Institute of Education Sciences logo" src="https://assets.openstax.org/oscms-prodcms/media/images/ies-logo.original.webp">
-              </a>
-              <span>*</span>
+          <div class="txt-block mt-1" style="display: flex; flex-direction: column; gap: 2rem">
+            <!-- Supporters -->
+            <div >
+              <span>Supported by</span>
+              <div style='display: flex; gap: 1.5rem'>
+                <a class="text-decoration-none" target="_blank" href="https://ies.ed.gov/">
+                  <img class="supporter-image" alt="Institute of Education Sciences logo" src="https://assets.openstax.org/oscms-prodcms/media/images/ies-logo.original.webp">
+                </a>
+                <span>*</span>
 
-              <span class="vertical-line"></span>
-              <a class="text-decoration-none" target="_blank" href="https://www.nsf.org/gb/en">
-                <img class="supporter-image" alt="National Science Foundation logo" src="https://assets.openstax.org/oscms-prodcms/media/images/nsf-logo.original.webp">
-              </a>
+                <span class="vertical-line"></span>
+                <a class="text-decoration-none" target="_blank" href="https://www.nsf.org/gb/en">
+                  <img class="supporter-image" alt="National Science Foundation logo" src="https://assets.openstax.org/oscms-prodcms/media/images/nsf-logo.original.webp">
+                </a>
+              </div>
+              <p class="light x-small">
+                *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
+              </p>
             </div>
-            <p class="light x-small">
-              *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
-            </p>
-            <h2>
-              We are all unique, so why should we study the same way?
-            </h2>
-            <p>
-              Kinetic brings together real students and learning researchers,
-              with a vision to promote a more inclusive and personalized learning experience for all.
-            </p>
 
-            <p>
-              Take part in studies to learn more about yourself, earn amazing
-              prizes (like Apple or Nike vouchers) and discover tips that could help you become
-              a better student.
-            </p>
+            <!-- header & body text -->
+            <div>
+              <h2>
+                We are all unique, so why should we study the same way?
+              </h2>
+              <p>
+                Kinetic brings together real students and learning researchers,
+                with a vision to promote a more inclusive and personalized learning experience for all.
+              </p>
+
+              <p>
+                Take part in studies to learn more about yourself, earn amazing
+                prizes (like Apple or Nike vouchers) and discover tips that could help you become
+                a better student.
+              </p>
+            </div>
 
             <div class="ineligible" style="display: none;">
-              <p style="display: flex; gap: 2rem; color: rgba(117, 148, 245, 1);">
-                <span>* For participants in US only. </span>
+              <p style="display: flex; flex-wrap: wrap; gap: 2rem; color: rgba(117, 148, 245, 1); font-size: 14px">
+                <span>Exclusive to US based participants over 18yo. </span>
                 <a href="https://help.openstax.org/s/article/kinetic" target="_blank" style="color: rgba(117, 148, 245, 1)">Learn More ></a>
               </p>
             </div>
@@ -623,7 +630,7 @@
           </div>
 		  <a class="other-supporters" href="https://openstax.org/foundation">View Other Philanthropic Supporters</a>
 
-		  <p class="light small">
+		  <p class="light x-small">
 			*The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
 		  </p>
         </div>
@@ -751,11 +758,11 @@
             return fetch('https://kinetic.openstax.org/api/v1/eligibility')
                     .then((response) => response.json())
                     .then((response) => {
-                      if (!response.eligible) {
+                      if (response.eligible) {
                         hideElements('eligible')
                         revealElements('ineligible')
                       }
-                      return response.eligible
+                      return !response.eligible
                     }
             );
           }
