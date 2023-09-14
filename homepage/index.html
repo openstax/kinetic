@@ -370,10 +370,10 @@
           margin-left: 30%;
       }
       #kinetic-homepage .login-signup {
-          margin-top: 8rem;
+          margin-top: 4rem;
       }
       #kinetic-homepage .start-using {
-          margin-top: 8rem;
+          margin-top: 4rem;
       }
       #kinetic-homepage .participate .lines {
           position: absolute;
@@ -433,9 +433,9 @@
         <img alt="kinetic-wavy-lines" class="lines" src="https://assets.openstax.org/oscms-prodcms/media/documents/kinetic-wavy-lines.svg">
 
         <div class="container">
-          <div class="txt-block mt-1" style="display: flex; flex-direction: column; gap: 2rem">
+          <div class="txt-block mt-1" style="display: flex; flex-direction: column; gap: 1rem">
             <!-- Supporters -->
-            <div >
+            <div>
               <span>Supported by</span>
               <div style='display: flex; gap: 1.5rem'>
                 <a class="text-decoration-none" target="_blank" href="https://ies.ed.gov/">
@@ -799,7 +799,7 @@
           rewriteLinks('login', URLS.ACCOUNTS + '/i/login?r=' + URLS.KINETIC);
           rewriteLinks('signup', URLS.ACCOUNTS + '/i/signup?r=' + URLS.KINETIC);
           rewriteLinks('start', URLS.KINETIC);
-          checkEligibility().then(eligible => eligible && setUserState())
+          checkEligibility().then(isEligible => isEligible && setUserState())
 
           function onPageUnload() {
               if (previousFavIcon) {
