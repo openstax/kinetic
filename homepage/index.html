@@ -758,11 +758,11 @@
             return fetch('https://kinetic.openstax.org/api/v1/eligibility')
                     .then((response) => response.json())
                     .then((response) => {
-                      if (response.eligible) {
+                      if (!response.eligible) {
                         hideElements('eligible')
                         revealElements('ineligible')
                       }
-                      return !response.eligible
+                      return response.eligible
                     }
             );
           }
