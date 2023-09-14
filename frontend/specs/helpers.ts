@@ -249,6 +249,7 @@ export const addReward = async ({
     await setDateField({ page, fieldName: 'dates', date: [startAt, endAt] })
     await page.fill('[name="points"]', String(points))
     await page.fill('[name="prize"]', prize)
+    await page.fill('[name="description"]', faker.vehicle.type())
     await page.click('testId=form-save-btn')
 }
 

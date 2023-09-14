@@ -6,5 +6,6 @@ FactoryBot.define do
     points { (rand * 20).to_i }
     start_at { (rand * 10).to_i.days.ago }
     end_at { (rand * 10).to_i.days.from_now }
+    description { Faker::Hobby.activity }
   end
 end
