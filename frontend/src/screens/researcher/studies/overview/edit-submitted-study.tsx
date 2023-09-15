@@ -339,8 +339,6 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                     <Col sm={5}>
                         <DateTime
                             name='closesAt'
-                            readOnly={!watch('hasClosingDate')}
-                            // label='Select date'
                             format={DateTimeFormats.shortDateTime}
                             options={{
                                 defaultHour: 9,
