@@ -8,6 +8,7 @@ import { FinalizeStudy } from './finalize-study';
 import Waiting from '@images/study-creation/waiting.svg'
 import { EditSubmittedStudy } from './edit-submitted-study';
 import { useQueryParam } from '@lib';
+import { Link } from 'react-router-dom';
 
 export default function StudyOverview() {
     const nav = useNavigate()
@@ -58,7 +59,19 @@ const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
         <Box direction='column' gap='xxlarge'>
             <Box align='center' justify='between'>
                 <h3>{study?.titleForResearchers}</h3>
-                <ExitButton navTo='/studies'/>
+
+                <Link
+                    to={'/studies'}
+                    css={{
+                        textDecoration: 'underline',
+                        textUnderlineOffset: '.5rem',
+                        color: colors.text,
+                        cursor: 'pointer',
+                        alignSelf: 'end',
+                    }}
+                >
+                    Back to Dashboard
+                </Link>
             </Box>
 
             <StudyInformation study={study} />
