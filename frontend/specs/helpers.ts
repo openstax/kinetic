@@ -105,10 +105,9 @@ export const launchApprovedStudy = async(researcherPage: Page, studyId: number, 
     }
 
     await researcherPage.waitForTimeout(500)
-    await setDateField({ page: researcherPage, fieldName: 'opensAt', date: dayjs() })
-
-    await researcherPage.locator('input[name=hasSampleSize]').check()
-    await researcherPage.fill('[name=targetSampleSize]', '50')
+    await researcherPage.getByPlaceholder('Select a date').click()
+    await researcherPage.locator('.open >> .today').click()
+    await researcherPage.locator('.open >> .today').blur()
 
     await expect(researcherPage.locator('testId=launch-study-button')).toBeEnabled()
     await researcherPage.click('testId=launch-study-button')
