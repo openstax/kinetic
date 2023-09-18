@@ -16,7 +16,7 @@ export const FinalizeStudy: FC<{study: Study, }> = ({ study }) => {
             {userCheckedQualtrics &&
                 <CollapsibleSection title='Finalize your study' collapsible={false}>
                     <EditSubmittedStudy study={study} />
-                </CollapsibleSection>
+                </CollapsibleSection> 
             }
 
             <StudyInformation study={study} />
