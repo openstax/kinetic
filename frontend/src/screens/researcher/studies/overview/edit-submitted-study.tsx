@@ -118,7 +118,7 @@ const Sessions: FC<{study: Study}> = ({ study }) => {
                         <h4>Session {i + 1}</h4>
                         <Box className='mt-2' gap='xlarge'>
                             <Col sm={3} direction='column' gap>
-                                <h6>Set an Interval*</h6>
+                                <h6> <span style={{ color: 'red' }}>Set an Interval*</span></h6>
                                 <small>Set a time interval between your previous and next study sessions</small>
                             </Col>
 
@@ -193,13 +193,13 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
             <Modal.Body>
                 <Box padding='4rem' align='center' justify='center' direction='column' gap='xlarge'>
                     <Box align='center' className='text-center' direction='column'>
-                        <span>Congratulations! Your study has been successfully launched. Feel free to use our dashboard to check any progress of this study. </span>
+                        <span>Congratulations! Your study has been successfully launched on Kinetic, and can now be found under 'Studies'. Please note, it will only become available to participants at your set opening date </span>
                     </Box>
                     <ResearcherButton onClick={() => {
                         setShow(false)
                         nav('/studies')
                     }}>
-                        Return to Dashboard
+                        Return to Studies
                     </ResearcherButton>
                 </Box>
             </Modal.Body>
@@ -208,12 +208,18 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
 }
 
 const OpensAt: FC = () => {
-    const { isReadOnly } = useFormContext()
+    const { isReadOnly } = useFormContext();
+    const minTime = new Date();
+    minTime.setHours(0, 0, 0); // Set the minimum time to 12:00 AM
+
+    const maxTime = new Date();
+    maxTime.setHours(23, 59, 59); // Set the maximum time to 11:59 PM
+
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
-                <h6>Opens on*</h6>
-                <small>Date and Time when study is made visible to participants. Set date/time to your local timezone.</small>
+                <h6> <span style={{ color: 'red' }}>Opens on*</span></h6>
+                <small>Date and Time when the study is made visible to participants. Set date/time to your local timezone.</small>
             </Col>
 
             <Col sm={6} direction='column' gap>
@@ -226,14 +232,16 @@ const OpensAt: FC = () => {
                     options={{
                         defaultHour: 9,
                         minDate: 'today',
-                        minTime: Date.now(),
+                        minTime: minTime,
+                        maxTime: maxTime, // Set the maximum time
                     }}
                     hint='Your Local Timezone'
                 />
             </Col>
         </Box>
-    )
+    );
 }
+
 
 const ShareStudy: FC<{study: Study}> = () => {
     const { watch, setValue, getValues, trigger } = useFormContext()

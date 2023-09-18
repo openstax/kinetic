@@ -1,5 +1,5 @@
-import { Box, React, styled, useEffect, useState, Yup } from '@common';
-import { CollapsibleSection, ExitButton, Form, ResearcherCheckbox, useFormState } from '@components';
+import { Box, React, styled, useEffect, useNavigate, useState, Yup } from '@common';
+import { CollapsibleSection, Modal,ResearcherButton, Icon, ExitButton, Form, ResearcherCheckbox, useFormState } from '@components';
 import { Study } from '@api';
 import QualtricsReady from '@images/study-creation/qualtricsready.svg'
 import { colors } from '@theme';
@@ -32,7 +32,7 @@ const ReadyForLaunch: FC<{
         <Box direction='column' gap='xxlarge'>
             <Box align='center' justify='between'>
                 <h3>{study?.titleForResearchers}</h3>
-                <ExitButton navTo='/studies'/>
+                <ExitWithConfirmation navTo='/studies'/>
             </Box>
             <Box direction='column' align='center' className='text-center' gap='large' alignSelf='center' padding={{ left: '3em', right: '3em' }}>
                 <img src={QualtricsReady} alt='qualtrics-ready' height={200}/>
@@ -82,21 +82,104 @@ const QualtricsConfirmationContainer: FC<{
 
     if (study.stages?.length === 1) {
         return (
-            <QualtricsConfirmation gap align='center'>
-                <ResearcherCheckbox type='checkbox' name='userHasCheckedQualtrics.0' data-testid='confirm-qualtrics' id='confirm-qualtrics'/>
-                <label htmlFor='confirm-qualtrics'>Yes, I have set up my study in Qualtrics</label>
-            </QualtricsConfirmation>
+            <div>
+                <QualtricsConfirmation gap align='center'>
+                    <ResearcherCheckbox type='checkbox' name='userHasCheckedQualtrics.0' data-testid='confirm-qualtrics' id='confirm-qualtrics'/>
+                    <label htmlFor='confirm-qualtrics'>Yes, I have set up my study in Qualtrics</label>
+                </QualtricsConfirmation>
+
+                <div style={{ height: '50px' }}></div>
+            </div>
         )
     }
 
     return (
         <div>
             {study.stages?.map((stage, index) => (
-                <QualtricsConfirmation gap align='center' key={stage.order} className='mt-1'>
-                    <ResearcherCheckbox type='checkbox' name={`userHasCheckedQualtrics.${index}`} data-testid={`confirm-qualtrics-${index}`} id={`confirm-qualtrics-${index}`} />
-                    <label htmlFor={`confirm-qualtrics-${index}`}>Yes, I have set up Session {index + 1} in Qualtrics</label>
-                </QualtricsConfirmation>
+                <div key={stage.order} className='mt-1'>
+                    <QualtricsConfirmation gap align='center'>
+                        <ResearcherCheckbox type='checkbox' name={`userHasCheckedQualtrics.${index}`} data-testid={`confirm-qualtrics-${index}`} id={`confirm-qualtrics-${index}`} />
+                        <label htmlFor={`confirm-qualtrics-${index}`}>Yes, I have set up Session {index + 1} in Qualtrics</label>
+                    </QualtricsConfirmation>
+
+                    {index === study.stages?.length - 1 && (
+                        <div style={{ height: '50px' }}></div>
+                    )}
+                </div>
             ))}
         </div>
     )
 }
+
+export const ExitWithConfirmation: FC<{navTo: string}> = ({ navTo }) => {
+    const [showWarning, setShowWarning] = useState(false);
+    const nav = useNavigate();
+
+    const handleExit = () => {
+        if (window.confirm("You're about to leave this study creation process.")) {
+            // Perform the save operation here
+            // Example: saveStudy(getValues() as Study);
+        } else {
+            nav(navTo); // Use nav to navigate to the specified page
+        }
+    };
+
+    return (
+        <div>
+            <h6
+                style={{
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '.5rem',
+                    cursor: 'pointer',
+                }}
+                onClick={() => {
+                    if (showWarning) {
+                        setShowWarning(false);
+                    } else {
+                        setShowWarning(true);
+                    }
+                }}
+            >
+                Exit
+            </h6>
+            {showWarning && (
+                <Modal
+                    center
+                    show={showWarning}
+                    large
+                    onHide={() => setShowWarning(false)}
+                >
+                    <Modal.Body>
+                        <Box padding='4rem' align='center' justify='center' direction='column' gap='large'>
+                            <Box gap='large' align='center'>
+                                <Icon height={20} icon="warning" color={colors.red} />
+                                <span className='fs-4 fw-bold'>Exit Page</span>
+                            </Box>
+                            <Box align='center' direction='column'>
+                                <span>You're about to leave this study creation process.</span>
+                                <span>Would you like leave?</span>
+                            </Box>
+                            <Box gap='large'>
+                                <ResearcherButton
+                                    onClick={() => {
+                                        nav(navTo);
+                                    }}
+                                    buttonType='secondary'
+                                >
+                                    No, continue editing
+                                </ResearcherButton>
+
+                                <ResearcherButton onClick={() => {
+                                    // Perform the save operation here if needed
+                                    nav(navTo);
+                                }}>
+                                    Yes, return to dashboard
+                                </ResearcherButton>
+                            </Box>
+                        </Box>
+                    </Modal.Body>
+                </Modal>
+            )}
+        </div>
+    );
+};
