@@ -14,7 +14,8 @@ export const FinalizeStudy: FC<{study: Study, }> = ({ study }) => {
             <ReadyForLaunch study={study} setUserCheckedQualtrics={setUserCheckedQualtrics} />
 
             {userCheckedQualtrics &&
-                <CollapsibleSection title='Finalize your study' collapsible={false}>
+                <CollapsibleSection title= '' collapsible={false}>
+                     <h3>Finalize your study</h3>
                     <EditSubmittedStudy study={study} />
                 </CollapsibleSection> 
             }
@@ -101,8 +102,7 @@ const QualtricsConfirmationContainer: FC<{
                         <ResearcherCheckbox type='checkbox' name={`userHasCheckedQualtrics.${index}`} data-testid={`confirm-qualtrics-${index}`} id={`confirm-qualtrics-${index}`} />
                         <label htmlFor={`confirm-qualtrics-${index}`}>Yes, I have set up Session {index + 1} in Qualtrics</label>
                     </QualtricsConfirmation>
-
-                    {index === study.stages?.length - 1 && (
+                    {index === (study.stages?.length ?? -1) - 1 && (
                         <div style={{ height: '50px' }}></div>
                     )}
                 </div>
@@ -173,7 +173,7 @@ export const ExitWithConfirmation: FC<{navTo: string}> = ({ navTo }) => {
                                     // Perform the save operation here if needed
                                     nav(navTo);
                                 }}>
-                                    Yes, return to dashboard
+                                    Yes, return to Studies
                                 </ResearcherButton>
                             </Box>
                         </Box>

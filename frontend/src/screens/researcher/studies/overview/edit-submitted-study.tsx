@@ -15,6 +15,7 @@ import {
     ResearcherCheckbox,
     useFormContext,
     useFormState,
+    FieldTitle,
 } from '@components';
 import { Box, React, useNavigate, useState, Yup } from '@common';
 import { getFirstStage, isCompleted, isReadyForLaunch } from '@models';
@@ -118,7 +119,7 @@ const Sessions: FC<{study: Study}> = ({ study }) => {
                         <h4>Session {i + 1}</h4>
                         <Box className='mt-2' gap='xlarge'>
                             <Col sm={3} direction='column' gap>
-                                <h6> <span style={{ color: 'red' }}>Set an Interval*</span></h6>
+                                <FieldTitle required>Set an Interval</FieldTitle>
                                 <small>Set a time interval between your previous and next study sessions</small>
                             </Col>
 
@@ -188,6 +189,7 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
             center
             show={show}
             large
+            closeBtn={false}
             onHide={() => setShow(false)}
         >
             <Modal.Body>
@@ -218,7 +220,7 @@ const OpensAt: FC = () => {
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
-                <h6> <span style={{ color: 'red' }}>Opens on*</span></h6>
+            <FieldTitle required>Opens on</FieldTitle>
                 <small>Date and Time when the study is made visible to participants. Set date/time to your local timezone.</small>
             </Col>
 
