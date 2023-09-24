@@ -15,9 +15,9 @@ export const FinalizeStudy: FC<{study: Study, }> = ({ study }) => {
 
             {userCheckedQualtrics &&
                 <CollapsibleSection title= '' collapsible={false}>
-                     <h3>Finalize your study</h3>
+                    <h3>Finalize your study</h3>
                     <EditSubmittedStudy study={study} />
-                </CollapsibleSection> 
+                </CollapsibleSection>
             }
 
             <StudyInformation study={study} />
@@ -114,15 +114,6 @@ const QualtricsConfirmationContainer: FC<{
 export const ExitWithConfirmation: FC<{navTo: string}> = ({ navTo }) => {
     const [showWarning, setShowWarning] = useState(false);
     const nav = useNavigate();
-
-    const handleExit = () => {
-        if (window.confirm("You're about to leave this study creation process.")) {
-            // Perform the save operation here
-            // Example: saveStudy(getValues() as Study);
-        } else {
-            nav(navTo); // Use nav to navigate to the specified page
-        }
-    };
 
     return (
         <div>
