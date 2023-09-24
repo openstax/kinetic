@@ -63,7 +63,9 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
 
     if (study.completedAt) {
         return (
-            <Button primary disabled>Completed on {dayjs(study.completedAt).format('LL')}</Button>
+            <Button primary disabled align='center'>
+                Completed on {dayjs(study.completedAt).format('LL')}
+            </Button>
         )
     }
     const action = (study.stages?.length && !study.stages[0].isCompleted) ? 'Begin' : 'Continue'

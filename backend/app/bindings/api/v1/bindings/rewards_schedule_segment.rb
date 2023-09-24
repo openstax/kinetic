@@ -27,8 +27,8 @@ module Api::V1::Bindings
     # When the segment ends
     attr_accessor :end_at
 
-    # A link to more information about the reward
-    attr_accessor :info_url
+    # A description of the reward
+    attr_accessor :description
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -37,7 +37,7 @@ module Api::V1::Bindings
         :'points' => :'points',
         :'start_at' => :'start_at',
         :'end_at' => :'end_at',
-        :'info_url' => :'info_url'
+        :'description' => :'description'
       }
     end
 
@@ -53,7 +53,7 @@ module Api::V1::Bindings
         :'points' => :'Float',
         :'start_at' => :'Time',
         :'end_at' => :'Time',
-        :'info_url' => :'String'
+        :'description' => :'String'
       }
     end
 
@@ -94,8 +94,8 @@ module Api::V1::Bindings
         self.end_at = attributes[:'end_at']
       end
 
-      if attributes.key?(:'info_url')
-        self.info_url = attributes[:'info_url']
+      if attributes.key?(:'description')
+        self.description = attributes[:'description']
       end
     end
 
@@ -141,7 +141,7 @@ module Api::V1::Bindings
           points == o.points &&
           start_at == o.start_at &&
           end_at == o.end_at &&
-          info_url == o.info_url
+          description == o.description
     end
 
     # @see the `==` method
@@ -153,7 +153,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [prize, points, start_at, end_at, info_url].hash
+      [prize, points, start_at, end_at, description].hash
     end
 
     # Builds the object from hash

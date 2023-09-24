@@ -3,7 +3,7 @@ import { useApi, useQueryParam } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import {
     Col,
-    DateTimeField,
+    DateTime,
     DateTimeFormats,
     FieldErrorMessage,
     Form,
@@ -210,7 +210,6 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
 }
 
 const OpensAt: FC = () => {
-    const { isReadOnly } = useFormContext();
     const minTime = new Date();
     minTime.setHours(0, 0, 0); // Set the minimum time to 12:00 AM
 
@@ -220,24 +219,21 @@ const OpensAt: FC = () => {
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
-            <FieldTitle required>Opens on</FieldTitle>
+                <FieldTitle required>Opens on</FieldTitle>
                 <small>Date and Time when the study is made visible to participants. Set date/time to your local timezone.</small>
             </Col>
 
-            <Col sm={6} direction='column' gap>
-                <DateTimeField
+            <Col sm={5} direction='column' gap>
+                <DateTime
                     name='opensAt'
-                    label='Select date'
-                    readOnly={isReadOnly}
+                    placeholder='Select a date'
                     withTime
-                    format={DateTimeFormats.shortDateTime}
                     options={{
                         defaultHour: 9,
                         minDate: 'today',
                         minTime: minTime,
                         maxTime: maxTime, // Set the maximum time
                     }}
-                    hint='Your Local Timezone'
                 />
             </Col>
         </Box>
@@ -255,8 +251,8 @@ const ShareStudy: FC<{study: Study}> = () => {
                 <small>Opting in to share your study data on Kinetic will support replication and extension of your work by other researchers</small>
             </Col>
 
-            <Col direction='column' gap>
-                <Box gap align='center'>
+            <Col sm={5} direction='column' gap>
+                <Box gap align='center' >
                     <ResearcherCheckbox name='shareStudy' type='checkbox' id='share-study' onChange={() => {
                         trigger('publicOn').then(() => {
                             const checked = getValues('shareStudy')
@@ -265,20 +261,19 @@ const ShareStudy: FC<{study: Study}> = () => {
                             }
                         })
                     }} />
-                    <label htmlFor="share-study">
+                    <label htmlFor="share-study" className='small'>
                         I would like to share my study data with other researchers on Kinetic for the purpose of replication, extension, etc.
                     </label>
                 </Box>
                 {watch('shareStudy') &&
-                    <Box align='center' gap>
-                        <DateTimeField
-                            sm={6}
+                    <Col direction='row' align='center' gap>
+                        <DateTime
                             name='publicOn'
-                            label='Share study on [select date]'
+                            placeholder='Share study on [select date]'
                             format={DateTimeFormats.shortDate}
                         />
                         <Icon css={{ color: colors.blue }} icon='helpCircle' tooltip="We recommend picking a date set at least 3 months after your study's opening date to allow enough time for data collection."/>
-                    </Box>
+                    </Col>
                 }
                 <FieldErrorMessage name='publicOn'/>
             </Col>
@@ -291,7 +286,7 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
     if (!firstStage) {
         return null
     }
-    const { watch, setValue, getValues, trigger, isReadOnly } = useFormContext()
+    const { watch, setValue, getValues, trigger } = useFormContext()
 
     return (
         <Box gap='xlarge'>
@@ -352,10 +347,8 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                         <label htmlFor='closing-date'>By due date</label>
                     </Col>
                     <Col sm={5}>
-                        <DateTimeField
+                        <DateTime
                             name='closesAt'
-                            readOnly={isReadOnly || !watch('hasClosingDate')}
-                            label='Select date'
                             format={DateTimeFormats.shortDateTime}
                             options={{
                                 defaultHour: 9,

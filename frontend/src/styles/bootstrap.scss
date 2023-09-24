@@ -12,6 +12,9 @@ $small-font-size: $font-size-base * .875 !default;
 $x-small-font-size: $font-size-base * .75 !default;
 $xx-small-font-size: $font-size-base * .6875 !default;
 $body-color: #424242;
+$input-bg: #FFFFFF;
+$input-disabled-bg: #E3E3E3;
+$input-disabled-border-color: #DBDBDB;
 
 .small {
     font-size: $small-font-size;

@@ -18,11 +18,11 @@ module Api::V1::Bindings
     # The Reward ID
     attr_accessor :id
 
-    # The messsage to display.  Limited HTML is supported
+    # The message to display. Limited HTML is supported
     attr_accessor :prize
 
-    # A link for more information about the reward
-    attr_accessor :info_url
+    # A description of the reward
+    attr_accessor :description
 
     # How many points are required to be eligible for the reward
     attr_accessor :points
@@ -38,7 +38,7 @@ module Api::V1::Bindings
       {
         :'id' => :'id',
         :'prize' => :'prize',
-        :'info_url' => :'info_url',
+        :'description' => :'description',
         :'points' => :'points',
         :'start_at' => :'start_at',
         :'end_at' => :'end_at'
@@ -55,7 +55,7 @@ module Api::V1::Bindings
       {
         :'id' => :'Float',
         :'prize' => :'String',
-        :'info_url' => :'String',
+        :'description' => :'String',
         :'points' => :'Float',
         :'start_at' => :'String',
         :'end_at' => :'String'
@@ -91,8 +91,8 @@ module Api::V1::Bindings
         self.prize = attributes[:'prize']
       end
 
-      if attributes.key?(:'info_url')
-        self.info_url = attributes[:'info_url']
+      if attributes.key?(:'description')
+        self.description = attributes[:'description']
       end
 
       if attributes.key?(:'points')
@@ -128,7 +128,7 @@ module Api::V1::Bindings
       self.class == o.class &&
           id == o.id &&
           prize == o.prize &&
-          info_url == o.info_url &&
+          description == o.description &&
           points == o.points &&
           start_at == o.start_at &&
           end_at == o.end_at
@@ -143,7 +143,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, prize, info_url, points, start_at, end_at].hash
+      [id, prize, description, points, start_at, end_at].hash
     end
 
     # Builds the object from hash

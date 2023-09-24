@@ -1,11 +1,10 @@
 import * as Yup from 'yup'
 import { Reward, RewardFromJSON } from '@api'
 import { React, useState } from '@common'
-import {
-    Box, Icon, Col, EditingForm as Form, Alert, DateTimeField, InputField,
-} from '@components'
+import { Alert, Box, Col, DateTimeField, EditingForm as Form, Icon, InputField } from '@components'
 import { useApi, useFetchState } from '@lib'
 import { Main } from './grid'
+import { colors } from '@theme';
 
 const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, onUpdate }) => {
     const [error, setError] = useState('')
@@ -33,7 +32,7 @@ const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, on
             sm={12} align="stretch" direction="column" className="mb-2 border"
         >
             <Box className="card-header" justify="end">
-                <Icon icon="trash" data-testid="delete-reward" onClick={onDelete} />
+                <Icon height={24} color={colors.red} icon="trash" data-testid="delete-reward" onClick={onDelete} />
             </Box>
             <Box className="card-body" direction="column">
                 <Form
@@ -45,12 +44,11 @@ const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, on
                         prize: Yup.string().required(),
                         startAt: Yup.string().required(),
                         endAt: Yup.string().required(),
-                        infoUrl: Yup.string().url(),
+                        description: Yup.string(),
                     })}
                     defaultValues={reward}
                 >
                     <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
-
                     <InputField name="points" id="points" label="Points" type="number" md={2} />
                     <DateTimeField
                         rangeNames={['startAt', 'endAt']}
@@ -60,7 +58,7 @@ const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, on
                         sm={10}
                     />
                     <InputField name="prize" id="prize" label="Prize" type="text" />
-                    <InputField name="infoUrl" id="info_url" label="Information URL" type="url" />
+                    <InputField name="description" id="description" label="Reward Description" type="text" />
                 </Form>
             </Box>
         </Col>

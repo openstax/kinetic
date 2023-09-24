@@ -85,10 +85,9 @@ class Api::V1::EnvironmentOpenApi
       key :format, 'date-time'
       key :description, 'When the segment ends'
     end
-    property :info_url do
+    property :description do
       key :type, :string
-      key :format, 'url'
-      key :description, 'A link to more information about the reward'
+      key :description, 'A description of the reward'
     end
   end
   add_properties(:BannerMessage) do

@@ -64,15 +64,22 @@ RSpec.describe 'Studies', api: :v1 do
       it 'successfully creates a new study' do
         api_post 'researcher/studies', params: { study: valid_new_study_attributes }
         expect(response).to have_http_status(:created)
-        expect(response_hash).to match(a_hash_including(
-                                         title_for_participants: 'Participant study title',
-                                         return_url: kind_of(String),
-                                         researchers: a_collection_including(
-                                           a_hash_including(
-                                             user_id: researcher1.user_id
-                                           )
-                                         )
-        ))
+        expect(response_hash).to match(
+          a_hash_including(
+            title_for_participants: 'Participant study title',
+            return_url: kind_of(String),
+            researchers: a_collection_including(
+              a_hash_including(
+                user_id: researcher1.user_id
+              )
+            ),
+            stages: a_collection_including(
+              a_hash_including(
+                points: 10
+              )
+            )
+          )
+        )
       end
 
       it 'submits the study for review' do

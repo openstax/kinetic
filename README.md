@@ -1,16 +1,28 @@
 # OpenStax Kinetic  - a Research Platform for Education
 
-## Frontend
+## Getting Started
 
-To run the front-end for development:
+To get started make sure you have yarn, docker, and docker-compose installed. Next try running these commands in the root directory:  
 
-`yarn run start`
+```bash
+$> docker compose build
+$> docker compose up
+```
+You may run into migration issues at first. To fix that go into the back-end terminal with:
 
-To build the front-end:
+```bash
+$> docker compose exec api /bin/bash
+```
 
-`yarn run build`
+Then in that terminal run:
 
-Building will generate files in the `dist` directory.  One of the files is a `manifest.json` file that contains references to all the assets that were built.
+```bash
+$> bin/rails db:migrate RAILS_ENV=development
+```
+
+and try running the docker compose commands again to see if that fixes it.
+
+When run correctly the front-end may be at http://localhost:4000/.
 
 ## Backend
 
