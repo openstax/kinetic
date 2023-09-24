@@ -1,5 +1,5 @@
 import { Box, React, styled, useEffect, useNavigate, useState, Yup } from '@common';
-import { CollapsibleSection, Modal,ResearcherButton, Icon, ExitButton, Form, ResearcherCheckbox, useFormState } from '@components';
+import { CollapsibleSection, Form, Icon, Modal, ResearcherButton, ResearcherCheckbox, useFormState } from '@components';
 import { Study } from '@api';
 import QualtricsReady from '@images/study-creation/qualtricsready.svg'
 import { colors } from '@theme';
