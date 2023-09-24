@@ -6,6 +6,7 @@ import {
     DateTime,
     DateTimeFormats,
     FieldErrorMessage,
+    FieldTitle,
     Form,
     FormSaveButton,
     Icon,
@@ -15,7 +16,6 @@ import {
     ResearcherCheckbox,
     useFormContext,
     useFormState,
-    FieldTitle,
 } from '@components';
 import { Box, React, useNavigate, useState, Yup } from '@common';
 import { getFirstStage, isCompleted, isReadyForLaunch } from '@models';
