@@ -210,12 +210,6 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
 }
 
 const OpensAt: FC = () => {
-    const minTime = new Date();
-    minTime.setHours(0, 0, 0); // Set the minimum time to 12:00 AM
-
-    const maxTime = new Date();
-    maxTime.setHours(23, 59, 59); // Set the maximum time to 11:59 PM
-
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
@@ -231,8 +225,6 @@ const OpensAt: FC = () => {
                     options={{
                         defaultHour: 9,
                         minDate: 'today',
-                        minTime: minTime,
-                        maxTime: maxTime, // Set the maximum time
                     }}
                 />
             </Col>
