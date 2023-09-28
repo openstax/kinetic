@@ -1,7 +1,7 @@
 import { React } from '@common'
 import { UserInfo } from '@models'
 import { ErrorPage, IncorrectUser, LoadingAnimation } from '@components'
-import { useLocation } from 'react-router-dom'
+
 import { ENV } from './env'
 import { useApi } from './api-config'
 import { useQuery } from 'react-query';
@@ -20,7 +20,6 @@ export const useFetchEnvironment = () => {
 
 export const EnvironmentProvider: FCWC = ({ children }) => {
     const { data: env, error, isLoading } = useFetchEnvironment()
-    const location = useLocation()
 
     if (error) {
         return <ErrorPage error={error} />
@@ -30,7 +29,7 @@ export const EnvironmentProvider: FCWC = ({ children }) => {
         return <LoadingAnimation />
     }
 
-    if (!env.user.userId && (ENV.IS_PROD_MODE || !location.pathname.startsWith('/dev/user'))) {
+    if (!env.user.userId && (ENV.IS_PROD_MODE || !window.location.pathname.startsWith('/dev/user'))) {
         return (
             <EnvironmentContext.Provider value={env}>
                 <IncorrectUser />

@@ -1,10 +1,8 @@
 import { React, useEffect } from '@common'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation, createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { PageNotFound } from '@components'
 import { loadAsync } from './components/async'
 import { useCurrentUser } from '@lib'
-import { analytics } from './lib/analytics'
-import { ImpersonatingBanner } from './components/impersonating-banner';
 
 const Home = loadAsync('Homepage', () => import('./screens/homepage'))
 const Dev = loadAsync('Dev', () => import('./screens/dev'))
@@ -24,30 +22,33 @@ const StudiesHomepage = () => {
     return user.isResearcher ? <ResearcherStudies /> : <LearnerDashboard />
 }
 
+const router = createBrowserRouter([
+    {
+        path: '/', element: <Home />,
+        children: [
+            { path: 'dev/user', element: <Dev /> },
+            { path: 'study/land/:studyId', element: <StudyLanding /> },
+            { path: 'study/create', element: <ResearcherStudyLanding /> },
+            { path: 'study/overview/:id', element: <StudyOverview /> },
+            { path: 'study/edit/:id', element: <EditStudy /> },
+            { path: 'account', element: <AccountDetails /> },
+            { path: 'researcher-account', element: <ResearcherAccountPage /> },
+            { path: 'studies/*', element: <StudiesHomepage /> },
+            { path: 'analysis/*', element: <AnalysisHomepage /> },
+            { path: 'admin/*', element: <AdminHomepage /> },
+            { path: '*', element: <PageNotFound /> },
+        ]
+    },
+
+])
+
+
 export const AppRoutes = () => {
     const user = useCurrentUser()
-    const location = useLocation()
-    useEffect(() => {
-        analytics.page()
-    }, [location.pathname])
 
     return (
         <div className="openstax-kinetic" data-user-id={user.userId}>
-            <ImpersonatingBanner />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/dev/*" element={<Dev />} />
-                <Route path="/study/land/:studyId" element={<StudyLanding />} />
-                <Route path="/study/create" element={<ResearcherStudyLanding />} />
-                <Route path="/study/overview/:id" element={<StudyOverview />} />
-                <Route path="/study/edit/:id" element={<EditStudy />} />
-                <Route path="/account" element={<AccountDetails />} />
-                <Route path="/researcher-account" element={<ResearcherAccountPage />} />
-                <Route path="/studies/*" element={<StudiesHomepage />} />
-                <Route path="/analysis/*" element={<AnalysisHomepage />} />
-                <Route path="/admin/*" element={<AdminHomepage />} />
-                <Route path="*" element={<PageNotFound />} />
-            </Routes>
+            <RouterProvider router={router} />
         </div>
     )
 }

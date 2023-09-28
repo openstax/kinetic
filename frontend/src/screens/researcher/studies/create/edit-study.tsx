@@ -13,6 +13,7 @@ import {
     useFormContext,
     useFormState,
 } from '@components';
+import { BlockNavigationWhileFormDirty } from '@components/block-nav'
 import { researcherValidation, ResearchTeam } from './forms/research-team';
 import { InternalDetails, internalDetailsValidation } from './forms/internal-details';
 import { ParticipantView, participantViewValidation } from './forms/participant-view';
@@ -264,6 +265,7 @@ const FormContent: FC<{
 
     return (
         <Box direction='column' justify='between' className='edit-study-form'>
+            <BlockNavigationWhileFormDirty />
             <SubmitStudyModal study={study as Study} show={showSubmitStudy} setShow={setShowSubmitStudy} />
             <div className="py-2">
                 <Box justify='between' gap='xxlarge'>
