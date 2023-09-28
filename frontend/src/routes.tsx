@@ -1,5 +1,5 @@
-import { React, useEffect } from '@common'
-import { Route, Routes, useLocation, createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { React } from '@common'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { PageNotFound } from '@components'
 import { loadAsync } from './components/async'
 import { useCurrentUser } from '@lib'
@@ -37,7 +37,7 @@ const router = createBrowserRouter([
             { path: 'analysis/*', element: <AnalysisHomepage /> },
             { path: 'admin/*', element: <AdminHomepage /> },
             { path: '*', element: <PageNotFound /> },
-        ]
+        ],
     },
 
 ])
