@@ -5,7 +5,7 @@ import {
     Col,
     DateTime,
     DateTimeFormats,
-    FieldErrorMessage,
+    FieldErrorMessage, FieldTitle,
     Form,
     FormSaveButton,
     Icon,
@@ -118,7 +118,7 @@ const Sessions: FC<{study: Study}> = ({ study }) => {
                         <h4>Session {i + 1}</h4>
                         <Box className='mt-2' gap='xlarge'>
                             <Col sm={3} direction='column' gap>
-                                <h6>Set an Interval*</h6>
+                                <FieldTitle required>Set an Interval</FieldTitle>
                                 <small>Set a time interval between your previous and next study sessions</small>
                             </Col>
 
@@ -326,12 +326,12 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                             name='hasClosingDate'
                             type='checkbox'
                             id='closing-date'
-                            onChange={() => {
+                            onChange={async () => {
                                 const checked = getValues('hasClosingDate')
                                 if (!checked) {
                                     setValue('closesAt', null, { shouldValidate: true })
                                 }
-                                trigger('closesAt')
+                                await trigger('closesAt')
                             }}
                         />
                         <label htmlFor='closing-date'>By due date</label>
