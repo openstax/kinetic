@@ -141,13 +141,16 @@ const FormContent: FC<{
     const saveStudy = async () => {
         const study = getValues() as Study
         if (isNew) {
+            // Need to reset the dirty state before navigating to edit/{id}
+            reset(undefined, { keepValues: true, keepDirty: false });
+
             const savedStudy = await api.addStudy({
                 addStudy: { study: study as NewStudy },
             }).catch((err) => setFormError(err))
 
             if (savedStudy) {
-                nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
                 showResearcherNotification(`New copy of '${study.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`)
+                nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
                 return setStudy(savedStudy)
             }
         }
