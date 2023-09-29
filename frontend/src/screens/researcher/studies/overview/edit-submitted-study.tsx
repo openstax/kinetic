@@ -79,6 +79,7 @@ export const EditSubmittedStudy: FC<{ study: Study }> = ({ study }) => {
             onSubmit={(values, context) => saveStudy(values, context)}
             onCancel={() => {}}
         >
+            <ConfirmNavigationIfDirty />
             <Box direction='column' gap='xlarge'>
                 <Sessions study={study} />
                 <ShareStudy study={study} />

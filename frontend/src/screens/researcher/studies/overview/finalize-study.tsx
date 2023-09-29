@@ -1,5 +1,5 @@
-import { Box, React, styled, useEffect, useNavigate, useState, Yup } from '@common';
-import { CollapsibleSection, Form, Icon, Modal, ResearcherButton, ResearcherCheckbox, useFormState } from '@components';
+import { Box, React, styled, useEffect, useState, Yup } from '@common';
+import { CollapsibleSection, ExitButton, Form, ResearcherCheckbox, useFormState } from '@components';
 import { Study } from '@api';
 import QualtricsReady from '@images/study-creation/qualtricsready.svg'
 import { colors } from '@theme';
@@ -33,7 +33,7 @@ const ReadyForLaunch: FC<{
         <Box direction='column' gap='xxlarge'>
             <Box align='center' justify='between'>
                 <h3>{study?.titleForResearchers}</h3>
-                <ExitWithConfirmation navTo='/studies'/>
+                <ExitButton navTo='/studies' />
             </Box>
             <Box direction='column' align='center' className='text-center' gap='large' alignSelf='center' padding={{ left: '3em', right: '3em' }}>
                 <img src={QualtricsReady} alt='qualtrics-ready' height={200}/>
@@ -110,67 +110,3 @@ const QualtricsConfirmationContainer: FC<{
         </div>
     )
 }
-
-export const ExitWithConfirmation: FC<{navTo: string}> = ({ navTo }) => {
-    const [showWarning, setShowWarning] = useState(false);
-    const nav = useNavigate();
-
-    return (
-        <div>
-            <h6
-                style={{
-                    textDecoration: 'underline',
-                    textUnderlineOffset: '.5rem',
-                    cursor: 'pointer',
-                }}
-                onClick={() => {
-                    if (showWarning) {
-                        setShowWarning(false);
-                    } else {
-                        setShowWarning(true);
-                    }
-                }}
-            >
-                Exit
-            </h6>
-            {showWarning && (
-                <Modal
-                    center
-                    show={showWarning}
-                    large
-                    onHide={() => setShowWarning(false)}
-                >
-                    <Modal.Body>
-                        <Box padding='4rem' align='center' justify='center' direction='column' gap='large'>
-                            <Box gap='large' align='center'>
-                                <Icon height={20} icon="warning" color={colors.red} />
-                                <span className='fs-4 fw-bold'>Exit Page</span>
-                            </Box>
-                            <Box align='center' direction='column'>
-                                <span>You're about to leave this study creation process.</span>
-                                <span>Would you like leave?</span>
-                            </Box>
-                            <Box gap='large'>
-                                <ResearcherButton
-                                    onClick={() => {
-                                        nav(navTo);
-                                    }}
-                                    buttonType='secondary'
-                                >
-                                    No, continue editing
-                                </ResearcherButton>
-
-                                <ResearcherButton onClick={() => {
-                                    // Perform the save operation here if needed
-                                    nav(navTo);
-                                }}>
-                                    Yes, return to Studies
-                                </ResearcherButton>
-                            </Box>
-                        </Box>
-                    </Modal.Body>
-                </Modal>
-            )}
-        </div>
-    );
-};
