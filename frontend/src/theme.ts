@@ -33,6 +33,7 @@ export const colors = {
     gray70: '#848484', // Secondary text color
     gray50: '#DBDBDB', // Example: disabled link, CTA, border
     gray30: '#E3E3E3', // Example: disabled dropdown field, button
+    gray10: '#F4F4F4',
     blanket: 'rgba(21, 27, 44, 0.4)', // Use this color covering the content below the modal.
 
     // OpenStax Colors

@@ -74,7 +74,7 @@ const NavMenu = () => {
         <Icon icon="menu" height={30} color="white" />
     ) : (
         <Box gap alignSelf='center' align='center' css={{
-            fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap', userSelect: 'none', color: opened ? 'white' : '#b8bbbf',
+            fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap', userSelect: 'none', color: colors.white,
         }}>
             <span>Hi {userInfo?.first_name}</span>
             <Icon icon={opened ? 'chevronUp' : 'chevronDown'} />

@@ -69,7 +69,7 @@ const StudyRow: FC<{study: Study, setStudies: (studies: Study[] | undefined) => 
                     onClick={() => {
                         api.adminApproveStudy({ id: study.id }).then(response => {
                             setStudies(response.data)
-                            showResearcherNotification(`'${study.titleForResearchers}' was updated successfully`)
+                            showResearcherNotification(`'${study.titleForResearchers}' was successfully approved!`)
                         })
                     }}
                 >
