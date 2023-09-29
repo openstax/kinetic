@@ -3,7 +3,8 @@ import { useApi, useQueryParam } from '@lib';
 import { isDraft, useFetchStudy } from '@models';
 import {
     Col,
-    ExitStudyFormButton,
+    ConfirmNavigationIfDirty,
+    ExitButton,
     Form,
     LoadingAnimation,
     Page,
@@ -12,7 +13,6 @@ import {
     Step,
     useFormContext,
     useFormState,
-    ConfirmNavigationIfDirty,
 } from '@components';
 import { researcherValidation, ResearchTeam } from './forms/research-team';
 import { InternalDetails, internalDetailsValidation } from './forms/internal-details';
@@ -279,7 +279,8 @@ const FormContent: FC<{
                         <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} setStep={setStep} maxStep={maxStep}/>
                     </Col>
                     <Col sm={1}>
-                        {currentStep !== StudyStep.InternalDetails && <ExitStudyFormButton study={getValues() as Study} saveStudy={saveStudy} />}
+                        <ExitButton navTo='/studies'/>
+                        {/*<ExitStudyFormButton study={getValues() as Study} />*/}
                     </Col>
                 </Box>
                 {steps[currentStep].component}
