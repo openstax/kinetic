@@ -86,6 +86,7 @@ const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
     )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
 const AnalysisSection: FC <{study: Study}> = ({ study }) => {
     const nav = useNavigate()
 
