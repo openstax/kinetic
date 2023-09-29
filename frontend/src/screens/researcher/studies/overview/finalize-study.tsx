@@ -83,28 +83,23 @@ const QualtricsConfirmationContainer: FC<{
 
     if (study.stages?.length === 1) {
         return (
-            <div>
+            <div css={{ marginBottom: '3rem' }}>
                 <QualtricsConfirmation gap align='center'>
                     <ResearcherCheckbox type='checkbox' name='userHasCheckedQualtrics.0' data-testid='confirm-qualtrics' id='confirm-qualtrics'/>
                     <label htmlFor='confirm-qualtrics'>Yes, I have set up my study in Qualtrics</label>
                 </QualtricsConfirmation>
-
-                <div style={{ height: '50px' }}></div>
             </div>
         )
     }
 
     return (
-        <div>
+        <div css={{ marginBottom: '3rem' }}>
             {study.stages?.map((stage, index) => (
                 <div key={stage.order} className='mt-1'>
                     <QualtricsConfirmation gap align='center'>
                         <ResearcherCheckbox type='checkbox' name={`userHasCheckedQualtrics.${index}`} data-testid={`confirm-qualtrics-${index}`} id={`confirm-qualtrics-${index}`} />
                         <label htmlFor={`confirm-qualtrics-${index}`}>Yes, I have set up Session {index + 1} in Qualtrics</label>
                     </QualtricsConfirmation>
-                    {index === (study.stages?.length ?? -1) - 1 && (
-                        <div style={{ height: '50px' }}></div>
-                    )}
                 </div>
             ))}
         </div>
