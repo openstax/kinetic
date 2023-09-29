@@ -12,13 +12,19 @@ export function AdminReports() {
 }
 
 const LearnerActivity = () => {
-    const [monthsAgo, setMonthsAgo] = useState<number | ''>(1)
+    const [monthsAgo, setMonthsAgo] = useState<string | number>(1)
     return (
         <Center p='lg'>
             <Stack>
                 <Title order={6}>Learner Activity Report</Title>
                 <Group align='end'>
-                    <NumberInput label='Last N months for report' hideControls required defaultValue={1} value={monthsAgo} onChange={setMonthsAgo}/>
+                    <NumberInput label='Last N months for report'
+                        hideControls
+                        required
+                        defaultValue={1}
+                        value={monthsAgo}
+                        onChange={setMonthsAgo}
+                    />
                     <Button component='a' target='_blank' href={`${ENV.API_ADDRESS}/api/v1/admin/reports/learner-activity?months_ago=${monthsAgo}`}>
                         Generate Report
                     </Button>

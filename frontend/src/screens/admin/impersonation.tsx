@@ -26,7 +26,7 @@ const ResearcherImpersonation = () => {
                 <Select
                     label='Select a researcher to impersonate'
                     searchable
-                    nothingFound='No results'
+                    nothingFoundMessage='No results'
                     onChange={(value) => {
                         if (!value) return setSelectedResearcher(null)
                         const researcher = researchers.find(r => r.id == +value)
