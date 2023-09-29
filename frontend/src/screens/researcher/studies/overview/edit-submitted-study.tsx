@@ -2,10 +2,11 @@ import { Study } from '@api';
 import { useApi, useQueryParam } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import {
-    Col,
+    Col, ConfirmNavigationIfDirty,
     DateTime,
     DateTimeFormats,
-    FieldErrorMessage, FieldTitle,
+    FieldErrorMessage,
+    FieldTitle,
     Form,
     FormSaveButton,
     Icon,
@@ -78,6 +79,7 @@ export const EditSubmittedStudy: FC<{ study: Study }> = ({ study }) => {
             onSubmit={(values, context) => saveStudy(values, context)}
             onCancel={() => {}}
         >
+            <ConfirmNavigationIfDirty />
             <Box direction='column' gap='xlarge'>
                 <Sessions study={study} />
                 <ShareStudy study={study} />
@@ -188,12 +190,13 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
             center
             show={show}
             large
+            closeBtn={false}
             onHide={() => setShow(false)}
         >
             <Modal.Body>
                 <Box padding='4rem' align='center' justify='center' direction='column' gap='xlarge'>
                     <Box align='center' className='text-center' direction='column'>
-                        <span>Congratulations! Your study has been successfully launched. Feel free to use our dashboard to check any progress of this study. </span>
+                        <span>Congratulations! Your study has been successfully launched on Kinetic, and can now be found under 'Studies'. Please note, it will only become available to participants at your set opening date </span>
                     </Box>
                     <ResearcherButton onClick={() => {
                         setShow(false)
@@ -211,8 +214,8 @@ const OpensAt: FC = () => {
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
-                <h6>Opens on*</h6>
-                <small>Date and Time when study is made visible to participants. Set date/time to your local timezone.</small>
+                <FieldTitle required>Opens on</FieldTitle>
+                <small>Date and Time when the study is made visible to participants. Set date/time to your local timezone.</small>
             </Col>
 
             <Col sm={5} direction='column' gap>
@@ -223,13 +226,13 @@ const OpensAt: FC = () => {
                     options={{
                         defaultHour: 9,
                         minDate: 'today',
-                        minTime: Date.now(),
                     }}
                 />
             </Col>
         </Box>
-    )
+    );
 }
+
 
 const ShareStudy: FC<{study: Study}> = () => {
     const { watch, setValue, getValues, trigger } = useFormContext()
