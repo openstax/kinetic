@@ -280,7 +280,6 @@ const FormContent: FC<{
                     </Col>
                     <Col sm={1}>
                         <ExitButton navTo='/studies'/>
-                        {/*<ExitStudyFormButton study={getValues() as Study} />*/}
                     </Col>
                 </Box>
                 {steps[currentStep].component}
