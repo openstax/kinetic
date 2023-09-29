@@ -1,4 +1,4 @@
-import { createTheme, DefaultMantineColor, MantineColorsTuple, Tuple } from '@mantine/core';
+import { createTheme, DefaultMantineColor, MantineColorsTuple } from '@mantine/core';
 
 // Color definitions in figma here:
 // https://www.figma.com/file/aoc0hf7t3uI7wu7ghxi625/LD-library--Desktop?type=design&node-id=1010-307&mode=design&t=vmlqtKSi8F2d0xrb-0
