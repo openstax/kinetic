@@ -34,11 +34,11 @@ export * from './researcher/researcher-progress-bar'
 export * from './researcher/researcher-button'
 export * from './researcher/collapsible-section'
 export * from './researcher/form-components'
-export * from './researcher/exit-study-form-button'
 export * from './researcher/exit-button'
 export * from './notifications/researcher-notification'
 
 export * from './table/table-components'
+export * from './confirm-navigation-if-dirty'
 
 import { Footer } from './footer'
 import { Icon, IconProps, IconKey } from './icon'

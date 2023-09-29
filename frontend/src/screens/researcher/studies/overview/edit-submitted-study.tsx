@@ -2,7 +2,7 @@ import { Study } from '@api';
 import { useApi, useQueryParam } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import {
-    Col,
+    Col, ConfirmNavigationIfDirty,
     DateTime,
     DateTimeFormats,
     FieldErrorMessage,
@@ -328,12 +328,12 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                             name='hasClosingDate'
                             type='checkbox'
                             id='closing-date'
-                            onChange={() => {
+                            onChange={async () => {
                                 const checked = getValues('hasClosingDate')
                                 if (!checked) {
                                     setValue('closesAt', null, { shouldValidate: true })
                                 }
-                                trigger('closesAt')
+                                await trigger('closesAt')
                             }}
                         />
                         <label htmlFor='closing-date'>By due date</label>

@@ -113,25 +113,18 @@ export function getStudyDuration(study: ParticipantStudy): number {
 
 export const useFetchPublicStudies = () => {
     const api = useApi()
-    return useQuery('fetchPublicStudies', () => {
-        return api.getPublicStudies().then(res => res.data || [])
+    return useQuery('fetchPublicStudies', async () => {
+        const res = await api.getPublicStudies();
+        return res.data || [];
     })
 }
 
 export const useFetchStudies = () => {
     const api = useApi()
-    const [studies, setStudies] = useState<Study[]>([])
-    const fetchStudies = () => {
-        useEffect(() => {
-            api.getStudies().then(res => {
-                setStudies((res.data || []).filter(study => !study.isHidden))
-            })
-        }, [])
-    }
-
-    fetchStudies()
-
-    return { studies, setStudies, fetchStudies }
+    return useQuery('fetchStudies', async () => {
+        const res = await api.getStudies();
+        return res.data?.filter(study => !study.isHidden) || [];
+    })
 }
 
 export const useFetchStudy = (id: string) => {

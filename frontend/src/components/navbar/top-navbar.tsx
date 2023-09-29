@@ -55,9 +55,11 @@ const DesktopResearcherLinks = () => {
             <Link to="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
                 Studies
             </Link>
-            <Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
-                Analysis
-            </Link>
+
+            {/* TODO Put this back in one day when enclaves are ready */}
+            {/*<Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>*/}
+            {/*    Analysis*/}
+            {/*</Link>*/}
         </>
     )
 }
@@ -72,7 +74,7 @@ const NavMenu = () => {
         <Icon icon="menu" height={30} color="white" />
     ) : (
         <Box gap alignSelf='center' align='center' css={{
-            fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap', userSelect: 'none', color: opened ? 'white' : '#b8bbbf',
+            fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap', userSelect: 'none', color: colors.white,
         }}>
             <span>Hi {userInfo?.first_name}</span>
             <Icon icon={opened ? 'chevronUp' : 'chevronDown'} />

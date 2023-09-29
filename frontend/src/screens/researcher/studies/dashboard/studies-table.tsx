@@ -30,7 +30,7 @@ declare module '@tanstack/table-core' {
     }
     // eslint-disable-next-line no-unused-vars
     interface TableMeta<TData extends RowData> { // eslint-disable-line @typescript-eslint/no-unused-vars
-        updateData: (updatedStudy: Study) => void
+        refreshData: () => void
     }
 }
 
@@ -40,11 +40,11 @@ const StyledRow = styled.tr(({ hasChildren }: { hasChildren?: boolean }) => ({
     'td': {
         padding: '1rem .5rem',
     },
-    backgroundColor: hasChildren ? colors.gray30 : 'inherit',
+    backgroundColor: hasChildren ? colors.gray10 : 'inherit',
 }))
 
 const NestedRow = styled(StyledRow)({
-    backgroundColor: colors.gray30,
+    backgroundColor: colors.gray10,
 })
 
 const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
@@ -54,12 +54,12 @@ const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
                 {row.getVisibleCells().map((cell) => {
                     return (
                         <td key={cell.id} css={{
-                            maxWidth: 250,
+                            maxWidth: cell.column.getSize(),
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap',
                         }}>
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            <div>{flexRender(cell.column.columnDef.cell, cell.getContext())}</div>
                         </td>
                     );
                 })}
@@ -71,12 +71,12 @@ const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
             {row.getVisibleCells().map((cell) => {
                 return (
                     <td key={cell.id} css={{
-                        maxWidth: 250,
+                        maxWidth: cell.column.getSize(),
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
                     }}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        <div>{flexRender(cell.column.columnDef.cell, cell.getContext())}</div>
                     </td>
                 );
             })}
@@ -182,20 +182,18 @@ const StatusLabel: React.FC<{status: string}> = ({ status }) => {
     }
 }
 
-const NoData: React.FC<{
-    allStudies: Study[],
-    filteredStudiesLength: number
-}> = ({ allStudies, filteredStudiesLength }) => {
-    if (filteredStudiesLength) return null
+const NoData: React.FC<{ filteredStudiesLength: number }> = ({ filteredStudiesLength }) => {
+    const { data: studies, isLoading } = useFetchStudies()
+    if (filteredStudiesLength || isLoading || !studies) return null
     return (
         <Box direction='column' align='center' justify='center' className='mt-10' gap='large'>
             <h3 css={{ color: colors.gray50 }}>
                 No data
             </h3>
-            {!allStudies.length && <span>
+            {!studies.length && <span>
                 <Link
                     to='/study/create'
-                    css={{ color: colors.purple }}
+                    css={{ color: colors.blue }}
                     className='fw-bold'
                 >
                     + Create your first research study on Kinetic
@@ -214,7 +212,7 @@ export const StudiesTable: React.FC<{
     setFilters,
     currentStatus,
 }) => {
-    const { studies, setStudies } = useFetchStudies()
+    const { data: studies, refetch } = useFetchStudies()
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: 'opensAt',
         desc: false,
@@ -226,16 +224,21 @@ export const StudiesTable: React.FC<{
             accessorKey: 'titleForResearchers',
             header: () => <span>Title</span>,
             size: 350,
+            maxSize: 350,
             meta: {
                 type: 'text',
             },
             cell: (info) => {
                 return (
-                    <Box css={{ paddingLeft: info.row.depth ? '2rem' : 'default' }}>
+                    <Box css={{ paddingLeft: info.row.depth ? '2rem' : '' }}>
                         <Link
                             to={getStudyEditUrl(info.row.original)}
-                            css={{ color: colors.purple }}
-                        >
+                            css={{
+                                color: colors.blue,
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                            }}>
                             {info.getValue()}
                         </Link>
                     </Box>
@@ -270,7 +273,7 @@ export const StudiesTable: React.FC<{
         },
         {
             accessorKey: 'opensAt',
-            header: () => <span>Opens on</span>,
+            header: () => <span>{currentStatus === StudyStatus.Completed ? 'Opened on' : 'Opens on'}</span>,
             sortingFn: 'datetime',
             cell: (info) => {
                 if (info.row.subRows.length || !info.row.original.opensAt) {
@@ -366,7 +369,7 @@ export const StudiesTable: React.FC<{
 
     const table: Table<Study> = useReactTable({
         filterFromLeafRows: true,
-        data: studies,
+        data: studies || [],
         columns,
         state: {
             columnFilters: filters,
@@ -401,16 +404,8 @@ export const StudiesTable: React.FC<{
         getFilteredRowModel: getFilteredRowModel(),
         getExpandedRowModel: getExpandedRowModel(),
         meta: {
-            updateData: (updatedStudy: Study) => {
-                setStudies(oldStudies =>
-                    oldStudies?.filter(study => !study.isHidden).map((study) => {
-                        if (study.id === updatedStudy.id) {
-                            return updatedStudy
-                        }
-
-                        return study
-                    })
-                )
+            refreshData: async () => {
+                await refetch()
             },
         },
     })
@@ -434,7 +429,7 @@ export const StudiesTable: React.FC<{
                     })}
                 </tbody>
             </table>
-            <NoData filteredStudiesLength={table.getRowModel().rows.length} allStudies={studies}/>
+            <NoData filteredStudiesLength={table.getRowModel().rows.length} />
         </Box>
     )
 }
