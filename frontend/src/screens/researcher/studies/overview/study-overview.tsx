@@ -80,11 +80,13 @@ const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
                 <EditSubmittedStudy study={study} />
             </CollapsibleSection>
 
-            <AnalysisSection study={study} />
+            {/* TODO Put this back in one day when enclaves are ready */}
+            {/*<AnalysisSection study={study} />*/}
         </Box>
     )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
 const AnalysisSection: FC <{study: Study}> = ({ study }) => {
     const nav = useNavigate()
 

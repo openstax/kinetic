@@ -55,9 +55,11 @@ const DesktopResearcherLinks = () => {
             <Link to="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
                 Studies
             </Link>
-            <Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
-                Analysis
-            </Link>
+
+            {/* TODO Put this back in one day when enclaves are ready */}
+            {/*<Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>*/}
+            {/*    Analysis*/}
+            {/*</Link>*/}
         </>
     )
 }
