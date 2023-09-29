@@ -202,7 +202,7 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
                         setShow(false)
                         nav('/studies')
                     }}>
-                        Return to Studies
+                        Return to Dashboard
                     </ResearcherButton>
                 </Box>
             </Modal.Body>
