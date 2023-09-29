@@ -14,7 +14,8 @@ export const FinalizeStudy: FC<{study: Study, }> = ({ study }) => {
             <ReadyForLaunch study={study} setUserCheckedQualtrics={setUserCheckedQualtrics} />
 
             {userCheckedQualtrics &&
-                <CollapsibleSection title='Finalize your study' collapsible={false}>
+                <CollapsibleSection title= '' collapsible={false}>
+                    <h3>Finalize your study</h3>
                     <EditSubmittedStudy study={study} />
                 </CollapsibleSection>
             }
@@ -32,7 +33,7 @@ const ReadyForLaunch: FC<{
         <Box direction='column' gap='xxlarge'>
             <Box align='center' justify='between'>
                 <h3>{study?.titleForResearchers}</h3>
-                <ExitButton navTo='/studies'/>
+                <ExitButton navTo='/studies' />
             </Box>
             <Box direction='column' align='center' className='text-center' gap='large' alignSelf='center' padding={{ left: '3em', right: '3em' }}>
                 <img src={QualtricsReady} alt='qualtrics-ready' height={200}/>
@@ -82,20 +83,24 @@ const QualtricsConfirmationContainer: FC<{
 
     if (study.stages?.length === 1) {
         return (
-            <QualtricsConfirmation gap align='center'>
-                <ResearcherCheckbox type='checkbox' name='userHasCheckedQualtrics.0' data-testid='confirm-qualtrics' id='confirm-qualtrics'/>
-                <label htmlFor='confirm-qualtrics'>Yes, I have set up my study in Qualtrics</label>
-            </QualtricsConfirmation>
+            <div css={{ marginBottom: '3rem' }}>
+                <QualtricsConfirmation gap align='center'>
+                    <ResearcherCheckbox type='checkbox' name='userHasCheckedQualtrics.0' data-testid='confirm-qualtrics' id='confirm-qualtrics'/>
+                    <label htmlFor='confirm-qualtrics'>Yes, I have set up my study in Qualtrics</label>
+                </QualtricsConfirmation>
+            </div>
         )
     }
 
     return (
-        <div>
+        <div css={{ marginBottom: '3rem' }}>
             {study.stages?.map((stage, index) => (
-                <QualtricsConfirmation gap align='center' key={stage.order} className='mt-1'>
-                    <ResearcherCheckbox type='checkbox' name={`userHasCheckedQualtrics.${index}`} data-testid={`confirm-qualtrics-${index}`} id={`confirm-qualtrics-${index}`} />
-                    <label htmlFor={`confirm-qualtrics-${index}`}>Yes, I have set up Session {index + 1} in Qualtrics</label>
-                </QualtricsConfirmation>
+                <div key={stage.order} className='mt-1'>
+                    <QualtricsConfirmation gap align='center'>
+                        <ResearcherCheckbox type='checkbox' name={`userHasCheckedQualtrics.${index}`} data-testid={`confirm-qualtrics-${index}`} id={`confirm-qualtrics-${index}`} />
+                        <label htmlFor={`confirm-qualtrics-${index}`}>Yes, I have set up Session {index + 1} in Qualtrics</label>
+                    </QualtricsConfirmation>
+                </div>
             ))}
         </div>
     )
