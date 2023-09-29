@@ -80,7 +80,8 @@ const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
                 <EditSubmittedStudy study={study} />
             </CollapsibleSection>
 
-            <AnalysisSection study={study} />
+            {/* TODO Put this back in one day when enclaves are ready */}
+            {/*<AnalysisSection study={study} />*/}
         </Box>
     )
 }
