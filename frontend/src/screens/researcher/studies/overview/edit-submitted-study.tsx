@@ -2,7 +2,8 @@ import { Study } from '@api';
 import { useApi, useQueryParam } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import {
-    Col, ConfirmNavigationIfDirty,
+    Col,
+    ConfirmNavigationIfDirty,
     DateTime,
     DateTimeFormats,
     FieldErrorMessage,
@@ -17,7 +18,7 @@ import {
     useFormContext,
     useFormState,
 } from '@components';
-import { Box, dayjs, React, useNavigate, useState, Yup } from '@common';
+import { Box, React, useNavigate, useState, Yup } from '@common';
 import { getFirstStage, isCompleted, isReadyForLaunch } from '@models';
 import { colors } from '@theme';
 
