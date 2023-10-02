@@ -75,7 +75,7 @@ export default function ResearcherStudies() {
                     color='blue'
                     data-testid="add-study"
                     onClick={() => nav('/study/create')}
-                    leftIcon={<IconPlus />}
+                    leftSection={<IconPlus />}
                 >
                     Create New Study
                 </Button>

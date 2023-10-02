@@ -2,7 +2,8 @@ import { Study } from '@api';
 import { useApi, useQueryParam } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import {
-    Col, ConfirmNavigationIfDirty,
+    Col,
+    ConfirmNavigationIfDirty,
     DateTime,
     DateTimeFormats,
     FieldErrorMessage,
@@ -147,7 +148,7 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
     const { isValid, isDirty } = useFormState()
     const api = useApi()
     const [show, setShow] = useState(false)
-    const { getValues } = useFormContext()
+    const { getValues, reset } = useFormContext()
 
     if (isReadyForLaunch(study)) {
         return (
@@ -162,6 +163,7 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
                                 study: getValues() as Study,
                                 statusAction: 'launch',
                             }).then(() => {
+                                reset(undefined, { keepValues: true, keepDirty: false });
                                 setShow(true)
                             })
                         }}

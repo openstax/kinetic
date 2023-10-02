@@ -1,4 +1,4 @@
-import { DefaultMantineColor, MantineThemeOverride, Tuple } from '@mantine/core';
+import { createTheme, DefaultMantineColor, MantineColorsTuple } from '@mantine/core';
 
 // Color definitions in figma here:
 // https://www.figma.com/file/aoc0hf7t3uI7wu7ghxi625/LD-library--Desktop?type=design&node-id=1010-307&mode=design&t=vmlqtKSi8F2d0xrb-0
@@ -67,26 +67,25 @@ type ThemeT = typeof theme
 export type { ThemeT }
 
 type ExtendedCustomColors =
-    DefaultMantineColor |
     'osOrange' |
     'blue' |
     'purple' |
     'navy' |
     'white' |
-    'ash'
+    'ash' |
+    DefaultMantineColor
 
 declare module '@mantine/core' {
     export interface MantineThemeColorsOverride {
-        colors: Record<ExtendedCustomColors, Tuple<string, 10>>;
+        colors: Record<ExtendedCustomColors, MantineColorsTuple>;
     }
 }
-
 
 // https://10015.io/tools/color-shades-generator
 // use darken/lighten step 8%, step count 5+-
 // link to colors in figma:
 // https://www.figma.com/file/aoc0hf7t3uI7wu7ghxi625/LD-library--Desktop?type=design&node-id=1012-363&mode=design&t=vmlqtKSi8F2d0xrb-0
-export const mantineTheme: MantineThemeOverride = {
+export const mantineTheme = createTheme({
     colors: {
         'osOrange': ['#ffffff', '#fde5db', '#fbc9b5', '#f8ad8e', '#f47541', '#f2591a', '#d7470c', '#b03a0a', '#8a2e08', '#632106'],
         'blue': ['#cedbf6', '#abc2f0', '#88a8ea', '#668fe4', '#255ed3', '#1f4fb0', '#193f8e', '#13306b', '#0d2048', '#071125'],
@@ -108,4 +107,4 @@ export const mantineTheme: MantineThemeOverride = {
             h6: { fontSize: '1rem' },
         },
     },
-}
+})

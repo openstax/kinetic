@@ -108,6 +108,7 @@ export const launchApprovedStudy = async(researcherPage: Page, studyId: number, 
     await researcherPage.getByPlaceholder('Select a date').click()
     await researcherPage.locator('.open >> .today').click()
     await researcherPage.locator('.open >> .today').blur()
+    await researcherPage.fill('.flatpickr-hour', '12')
 
     await expect(researcherPage.locator('testId=launch-study-button')).toBeEnabled()
     await researcherPage.click('testId=launch-study-button')

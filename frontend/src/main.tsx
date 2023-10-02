@@ -5,6 +5,7 @@ import { AppRoutes } from './routes'
 import './lib/sentry'
 import './index.css'
 import './styles/main.scss'
+import '@mantine/core/styles.css';
 import { mantineTheme } from '@theme'
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { MantineProvider } from '@mantine/core';
@@ -23,7 +24,7 @@ const App = () => (
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <EnvironmentProvider>
-                <MantineProvider withGlobalStyles withNormalizeCSS theme={mantineTheme}>
+                <MantineProvider theme={mantineTheme}>
                     <Notifications position='top-right' />
                     <ImpersonatingBanner />
                     <AppRoutes />

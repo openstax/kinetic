@@ -19,7 +19,7 @@ export const ConfirmNavigationIfDirty = () => {
         <ReactRouterPrompt when={isDirty}>
             {({ isActive, onConfirm, onCancel }) => (
                 <Modal size='lg' centered zIndex={1040} opened={isActive} onClose={onCancel}>
-                    <Stack p='4rem' align='center' spacing='xl'>
+                    <Stack p='4rem' align='center' gap='xl'>
                         <Title order={6}>
                             Changes you made may not be saved.
                         </Title>
