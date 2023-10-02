@@ -114,6 +114,8 @@ test('launching study and completing with no consent', async ({ browser }) => {
     await userPage.waitForLoadState('networkidle')
 
     await goToPage({ page: userPage, path: `/study/land/${studyId}?consent=false` })
+    await userPage.waitForLoadState('networkidle')
+
     await expect(userPage).not.toMatchText(/Points/)
     await expect(userPage).toMatchText(/Success!/g)
     // Our study is under "Learning"
