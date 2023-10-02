@@ -17,7 +17,7 @@ import {
     useFormContext,
     useFormState,
 } from '@components';
-import { Box, React, useNavigate, useState, Yup } from '@common';
+import { Box, dayjs, React, useNavigate, useState, Yup } from '@common';
 import { getFirstStage, isCompleted, isReadyForLaunch } from '@models';
 import { colors } from '@theme';
 
@@ -147,7 +147,7 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
     const { isValid, isDirty } = useFormState()
     const api = useApi()
     const [show, setShow] = useState(false)
-    const { getValues } = useFormContext()
+    const { getValues, reset } = useFormContext()
 
     if (isReadyForLaunch(study)) {
         return (
@@ -162,6 +162,7 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
                                 study: getValues() as Study,
                                 statusAction: 'launch',
                             }).then(() => {
+                                reset(undefined, { keepValues: true, keepDirty: false });
                                 setShow(true)
                             })
                         }}
