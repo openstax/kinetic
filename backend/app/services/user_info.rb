@@ -15,10 +15,8 @@ class UserInfo
   def self.for_uuids(uuids)
     user_uuids = {}
     uuids.in_groups_of(10) do |uuid_group|
-
-      search = uuid_group.map { |uuid| "uuid:#{uuid}" }
+      search = uuid_group.filter(&:present?).map { |uuid| "uuid:#{uuid}" }
       body = query_accounts(search.join(' '))
-
       JSON.parse(body)['items'].each do |account|
         account['email_address'] = email_for_account(account)
         user_uuids[account['uuid']] = OpenStruct.new(account)
@@ -29,8 +27,6 @@ class UserInfo
   end
 
   def self.query_accounts(query)
-    return JSON.generate({ 'items' => [] }) unless Rails.env.production?
-
     OpenStax::Accounts::Api.search_accounts(query).response.body
   end
 end
