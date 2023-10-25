@@ -6,7 +6,7 @@ require 'set'
 
 class ChatbotActivityReport
   META_KEYS = Set.new(%w[gs1 sk pk _type]).freeze
-  HIDDEN_COLUMNS = ['msg_chatId', 'chat_userId'].freeze
+  HIDDEN_COLUMNS = %w[msg_chatId chat_userId].freeze
 
   def initialize(start_date:, end_date:)
     @start_date = start_date
@@ -26,7 +26,7 @@ class ChatbotActivityReport
         exclusive_start_key: last_key,
         expression_attribute_names: {
           '#CR' => 'created',
-          '#TY' => '_type',
+          '#TY' => '_type'
         },
         expression_attribute_values: {
           ':startdate' => @start_date.iso8601,
@@ -35,7 +35,7 @@ class ChatbotActivityReport
           ':chat' => 'Chat',
           ':user' => 'User'
         },
-        filter_expression: '(#TY = :type AND #CR > :startdate AND #CR < :enddate) OR (#TY = :chat) OR (#TY = :user)',
+        filter_expression: '(#TY = :type AND #CR > :startdate AND #CR < :enddate) OR (#TY = :chat) OR (#TY = :user)'
       )
       resp.items.each(&block)
       last_key = resp.last_evaluated_key
@@ -81,7 +81,6 @@ class ChatbotActivityReport
   end
 
   def as_csv_string
-
     CSV.generate do |csv|
       columns = columns_for_rows
       csv << columns.map(&:titleize)
