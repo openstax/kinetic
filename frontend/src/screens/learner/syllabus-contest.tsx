@@ -7,16 +7,17 @@ import { useLearnerStudies } from './studies';
 import { useCallback, useNavigate } from '@common';
 import { ParticipantStudy } from '@api';
 
-export const SyllabusContest: FC = () => {
+export const SyllabusContest: FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
+    const completedCount = studies.filter(s => !!s.completedAt).length
     return (
         <BackgroundImage src={SyllabusContestBackground}>
             <Container size='xl' py='5rem' >
-                <Grid  gutter='xl'>
-                    <Grid.Col span={4}>
-                        <ContestInfo />
+                <Grid gutter='xl'>
+                    <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
+                        <ContestInfo studies={studies} />
                     </Grid.Col>
-                    <Grid.Col span={8}>
-                        <ContestCards />
+                    <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
+                        <ContestCards studies={studies} />
                     </Grid.Col>
                 </Grid>
             </Container>
@@ -24,14 +25,16 @@ export const SyllabusContest: FC = () => {
     )
 }
 
-export const ContestInfo: FC = () => {
+export const ContestInfo: FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
+    const completedCount = studies.filter(s => !!s.completedAt).length
+
     return (
         <Stack c='white'>
             <Title order={6}>November Contest</Title>
             <Title order={2}>Join Our Syllabus Contest for a Chance to Win AirPods Pro!</Title>
             <Group gap='sm'>
                 <Text>You have</Text>
-                <Badge c={colors.text} size='lg' color={colors.gray50}>0/2 Completed</Badge>
+                <Badge c={colors.text} size='lg' color={colors.gray50}>{completedCount}/{studies.length} Completed</Badge>
             </Group>
             <Text c={colors.gray70}>Steps:</Text>
             <List c={colors.gray50}>
@@ -44,20 +47,18 @@ export const ContestInfo: FC = () => {
     )
 }
 
-export const ContestCards: FC = () => {
-    const { syllabusContestStudies } = useLearnerStudies()
+export const ContestCards: FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
     const nav = useNavigate()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
 
-    if (!syllabusContestStudies.length) return null
+    if (!studies.length) return null
     return (
         <Group>
-            {syllabusContestStudies.map((study) => {
+            {studies.map((study) => {
                 return (
-                    <StudyCard onSelect={onStudySelect} study={study} />
+                    <StudyCard key={study.id} onSelect={onStudySelect} study={study} />
                 )
             })}
-
         </Group>
     )
 }

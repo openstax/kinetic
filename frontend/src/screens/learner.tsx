@@ -203,7 +203,14 @@ const LearnerDashboard = () => {
     const nav = useNavigate()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
     const {
-        highlightedStudies, mandatoryStudy, allStudies, filter, onMandatoryClose, setFilter, studiesByTopic,
+        highlightedStudies,
+        mandatoryStudy,
+        allStudies,
+        filter,
+        onMandatoryClose,
+        setFilter,
+        studiesByTopic,
+        syllabusContestStudies,
     } = useLearnerStudies()
 
     return (
@@ -215,28 +222,7 @@ const LearnerDashboard = () => {
             <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 
-            {/* TODO Syllabus Contest */}
-            <SyllabusContest />
-
-            {/*<Splash direction='column' justify='center' className="splash">*/}
-            {/*    <SplashImage*/}
-            {/*        preserveAspectRatio='xMidYMid slice'*/}
-            {/*        css={{*/}
-            {/*            position: 'absolute',*/}
-            {/*            top: 0,*/}
-            {/*            left: 0,*/}
-            {/*            width: '100%',*/}
-            {/*            height: '100%',*/}
-            {/*            zIndex: -1,*/}
-            {/*        }}*/}
-            {/*    />*/}
-            {/*    <Box className="container-lg h-100" direction='column' gap='xxlarge' justify={{ desktop: 'center' }}>*/}
-            {/*        <SplashHeader>Level up to new ways of learning, and earn prizes!</SplashHeader>*/}
-            {/*        <SplashText>*/}
-            {/*            With Kinetic, participate in scientific research and learn tips and tricks to help you become a better learner. All while winning prizes!*/}
-            {/*        </SplashText>*/}
-            {/*    </Box>*/}
-            {/*</Splash >*/}
+            <SyllabusContest studies={syllabusContestStudies} />
 
             <HighlightedStudies studies={highlightedStudies} title="Highlighted Studies on Kinetic" className="highlighted" onSelect={onStudySelect}/>
 
