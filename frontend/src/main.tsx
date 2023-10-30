@@ -6,6 +6,7 @@ import './lib/sentry'
 import './index.css'
 import './styles/main.scss'
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import { mantineTheme } from '@theme'
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { MantineProvider } from '@mantine/core';
