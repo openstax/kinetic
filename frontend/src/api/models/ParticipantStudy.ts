@@ -45,11 +45,17 @@ export interface ParticipantStudy {
      */
     popularityRating?: number;
     /**
-     * Should this study be feautured more prominently?
+     * Should this study be featured more prominently?
      * @type {boolean}
      * @memberof ParticipantStudy
      */
     readonly isFeatured?: boolean;
+    /**
+     * Is this study a part of the syllabus contest?
+     * @type {boolean}
+     * @memberof ParticipantStudy
+     */
+    readonly isSyllabusContestStudy?: boolean;
     /**
      * When the study was completed; null means not completed.
      * @type {Date}
@@ -262,6 +268,7 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'id': json['id'],
         'popularityRating': !exists(json, 'popularity_rating') ? undefined : json['popularity_rating'],
         'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
+        'isSyllabusContestStudy': !exists(json, 'is_syllabus_contest_study') ? undefined : json['is_syllabus_contest_study'],
         'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
         'optedOutAt': !exists(json, 'opted_out_at') ? undefined : (new Date(json['opted_out_at'])),
         'totalPoints': json['total_points'],

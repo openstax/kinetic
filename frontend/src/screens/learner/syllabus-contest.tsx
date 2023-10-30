@@ -1,17 +1,17 @@
 import React from 'react'
-import { BackgroundImage, Badge, Box, Container, Grid, Group, List, Stack, Text, Title } from '@mantine/core';
-import { Tag } from './card';
-import SyllabusContestBackground from './syllabus-contest-background.svg'
-import { styled } from '@common';
+import { BackgroundImage, Badge, Container, Grid, Group, List, Stack, Text, Title } from '@mantine/core';
 import { colors } from '@theme';
+import SyllabusContestBackground from './syllabus-contest-background.svg'
+import { StudyCard } from './card';
+import { useLearnerStudies } from './studies';
+import { useCallback, useNavigate } from '@common';
+import { ParticipantStudy } from '@api';
 
-export const SyllabusContest: FC<{}> = () => {
+export const SyllabusContest: FC = () => {
     return (
         <BackgroundImage src={SyllabusContestBackground}>
-
-            {/* TODO SVG background */}
-            <Container size='xl' c='white' py='4rem' >
-                <Grid grow>
+            <Container size='xl' py='5rem' >
+                <Grid  gutter='xl'>
                     <Grid.Col span={4}>
                         <ContestInfo />
                     </Grid.Col>
@@ -24,9 +24,9 @@ export const SyllabusContest: FC<{}> = () => {
     )
 }
 
-export const ContestInfo: FC<{}> = () => {
+export const ContestInfo: FC = () => {
     return (
-        <Stack>
+        <Stack c='white'>
             <Title order={6}>November Contest</Title>
             <Title order={2}>Join Our Syllabus Contest for a Chance to Win AirPods Pro!</Title>
             <Group gap='sm'>
@@ -44,10 +44,20 @@ export const ContestInfo: FC<{}> = () => {
     )
 }
 
-export const ContestCards: FC<{}> = () => {
+export const ContestCards: FC = () => {
+    const { syllabusContestStudies } = useLearnerStudies()
+    const nav = useNavigate()
+    const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
+
+    if (!syllabusContestStudies.length) return null
     return (
         <Group>
-            {/* Card images */}
+            {syllabusContestStudies.map((study) => {
+                return (
+                    <StudyCard onSelect={onStudySelect} study={study} />
+                )
+            })}
+
         </Group>
     )
 }

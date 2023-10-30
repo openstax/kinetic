@@ -125,7 +125,12 @@ class Api::V1::Participant::StudiesOpenApi
     end
     property :is_featured do
       key :type, :boolean
-      key :description, 'Should this study be feautured more prominently?'
+      key :description, 'Should this study be featured more prominently?'
+      key :readOnly, true
+    end
+    property :is_syllabus_contest_study do
+      key :type, :boolean
+      key :description, 'Is this study a part of the syllabus contest?'
       key :readOnly, true
     end
     property :completed_at do
