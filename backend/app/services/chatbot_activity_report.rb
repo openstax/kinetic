@@ -69,7 +69,7 @@ class ChatbotActivityReport
   end
 
   def columns_for_rows
-    columns = Set.new
+    columns = Set.new(['research_id'])
     each_message do |msg, chat, user|
       user.each { |key, _| columns.add("user_#{key}") }
       chat.each { |key, _| columns.add("chat_#{key}") }
@@ -86,9 +86,8 @@ class ChatbotActivityReport
       csv << columns.map(&:titleize)
       each_message do |msg, chat, user|
 
-        user['id'] = ResearchId.for_user_id(user['id']).id if user['id']
+        row = [(user['id'].present? ? ResearchId.for_user_id(user['id']).id : '')]
 
-        row = []
         columns.each do |column|
           prefix, key = column.split('_')
           case prefix
