@@ -25,6 +25,9 @@ module Api::V1::Bindings
 
     attr_accessor :homepage_url
 
+    # An array of UUIDs for the winners of the syllabus contest
+    attr_accessor :syllabus_contest_winners
+
     # The tags of the study object, used for grouping and filtering.
     attr_accessor :rewards_schedule
 
@@ -39,6 +42,7 @@ module Api::V1::Bindings
         :'is_impersonating' => :'is_impersonating',
         :'accounts_env_name' => :'accounts_env_name',
         :'homepage_url' => :'homepage_url',
+        :'syllabus_contest_winners' => :'syllabus_contest_winners',
         :'rewards_schedule' => :'rewards_schedule',
         :'banners_schedule' => :'banners_schedule'
       }
@@ -57,6 +61,7 @@ module Api::V1::Bindings
         :'is_impersonating' => :'Boolean',
         :'accounts_env_name' => :'String',
         :'homepage_url' => :'String',
+        :'syllabus_contest_winners' => :'Array<String>',
         :'rewards_schedule' => :'Array<RewardsScheduleSegment>',
         :'banners_schedule' => :'Array<BannerMessage>'
       }
@@ -101,6 +106,12 @@ module Api::V1::Bindings
 
       if attributes.key?(:'homepage_url')
         self.homepage_url = attributes[:'homepage_url']
+      end
+
+      if attributes.key?(:'syllabus_contest_winners')
+        if (value = attributes[:'syllabus_contest_winners']).is_a?(Array)
+          self.syllabus_contest_winners = value
+        end
       end
 
       if attributes.key?(:'rewards_schedule')
@@ -184,6 +195,7 @@ module Api::V1::Bindings
           is_impersonating == o.is_impersonating &&
           accounts_env_name == o.accounts_env_name &&
           homepage_url == o.homepage_url &&
+          syllabus_contest_winners == o.syllabus_contest_winners &&
           rewards_schedule == o.rewards_schedule &&
           banners_schedule == o.banners_schedule
     end
@@ -197,7 +209,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [user, researcher, is_impersonating, accounts_env_name, homepage_url, rewards_schedule, banners_schedule].hash
+      [user, researcher, is_impersonating, accounts_env_name, homepage_url, syllabus_contest_winners, rewards_schedule, banners_schedule].hash
     end
 
     # Builds the object from hash

@@ -75,6 +75,12 @@ export interface Environment {
      */
     readonly homepageUrl: string;
     /**
+     * An array of UUIDs for the winners of the syllabus contest
+     * @type {Array<string>}
+     * @memberof Environment
+     */
+    syllabusContestWinners?: Array<string>;
+    /**
      * The tags of the study object, used for grouping and filtering.
      * @type {Array<RewardsScheduleSegment>}
      * @memberof Environment
@@ -117,6 +123,7 @@ export function EnvironmentFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'isImpersonating': !exists(json, 'is_impersonating') ? undefined : json['is_impersonating'],
         'accountsEnvName': json['accounts_env_name'],
         'homepageUrl': json['homepage_url'],
+        'syllabusContestWinners': !exists(json, 'syllabus_contest_winners') ? undefined : json['syllabus_contest_winners'],
         'rewardsSchedule': ((json['rewards_schedule'] as Array<any>).map(RewardsScheduleSegmentFromJSON)),
         'bannersSchedule': ((json['banners_schedule'] as Array<any>).map(BannerMessageFromJSON)),
     };
@@ -133,6 +140,7 @@ export function EnvironmentToJSON(value?: Environment | null): any {
         
         'user': EnvironmentUserToJSON(value.user),
         'researcher': ResearcherToJSON(value.researcher),
+        'syllabus_contest_winners': value.syllabusContestWinners,
         'rewards_schedule': ((value.rewardsSchedule as Array<any>).map(RewardsScheduleSegmentToJSON)),
         'banners_schedule': ((value.bannersSchedule as Array<any>).map(BannerMessageToJSON)),
     };
