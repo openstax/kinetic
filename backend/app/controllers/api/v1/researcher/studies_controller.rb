@@ -51,7 +51,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
     @study.update!(inbound_binding.to_hash.except(:researchers, :stages))
 
-    unless inbound_binding.stages.nil?
+    unless inbound_binding.stages.nil? || @study.launched_stages.any?
       @study.stages.clear
       inbound_binding.stages.each do |stage|
         s = Stage.where(id: stage.id).find_or_create_by(stage.to_hash.merge({ config: {} }))
