@@ -88,8 +88,11 @@ export const ContestInfo: FC<{ studies: ParticipantStudy[] }> = ({ studies }) =>
             </List>
             <Group gap='sm'>
                 <Text>You have</Text>
-                <Badge c={colors.text} size='lg' color={colors.gray50}>{completedCount}/{studies.length} Completed</Badge>
+                <Badge c={colors.text} size='lg' color={colors.gray50}>
+                    {completedCount}/{studies.length} Completed
+                </Badge>
             </Group>
+            {completedCount == 2 && <Text>You've entered the draw!</Text>}
         </Stack>
     )
 }
