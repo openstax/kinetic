@@ -7,7 +7,7 @@ class Api::V1::ResearchersController < Api::V1::Researcher::BaseController
   def index
     @researchers = Researcher.all
     response_binding = Api::V1::Bindings::ResearchersList.new(
-      data: @researchers.map do |researcher|
+      data: @researchers.order(:last_name).map do |researcher|
         Api::V1::Bindings::Researcher.create_from_model(researcher)
       end
     )

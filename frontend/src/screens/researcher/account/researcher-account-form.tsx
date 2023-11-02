@@ -1,5 +1,5 @@
 import { cx, React, styled, useState, Yup } from '@common';
-import { useApi, useCurrentResearcher, useUserInfo } from '@lib';
+import { useApi, useCurrentResearcher, useFetchEnvironment, useUserInfo } from '@lib';
 import { colors } from '@theme';
 import { Researcher } from '@api';
 import {
@@ -53,11 +53,11 @@ const StyledForm = styled(Form<Researcher>)(({ readOnly }) => ({
 export const ResearcherAccountForm: React.FC<{className?: string}> = ({ className }) => {
     const api = useApi()
     const [researcher, setResearcher] = useState(useCurrentResearcher())
-    const { refetch: refetchUser } = useUserInfo()
+    const { refetch: refetchEnv } = useFetchEnvironment()
+    const { data: userInfo, refetch: refetchUser } = useUserInfo()
     if (!researcher) {
         return null
     }
-    const { data: userInfo } = useUserInfo()
     // Default to OpenStax accounts first/last name if blank
     researcher.firstName = researcher.firstName || userInfo?.first_name
     researcher.lastName = researcher.lastName || userInfo?.last_name
@@ -75,6 +75,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
             })
             setResearcher(r)
             refetchUser()
+            refetchEnv()
         }
         catch (err) {
             console.error(err) // eslint-disable-line no-console
