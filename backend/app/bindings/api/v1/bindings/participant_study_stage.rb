@@ -45,9 +45,6 @@ module Api::V1::Bindings
     # Feedback types for this stage
     attr_accessor :feedback_types
 
-    # Desired sample size set by researcher
-    attr_accessor :target_sample_size
-
     # Status of the study
     attr_accessor :status
 
@@ -86,7 +83,6 @@ module Api::V1::Bindings
         :'points' => :'points',
         :'closes_at' => :'closes_at',
         :'feedback_types' => :'feedback_types',
-        :'target_sample_size' => :'target_sample_size',
         :'status' => :'status'
       }
     end
@@ -109,7 +105,6 @@ module Api::V1::Bindings
         :'points' => :'Integer',
         :'closes_at' => :'Time',
         :'feedback_types' => :'Array<String>',
-        :'target_sample_size' => :'Float',
         :'status' => :'String'
       }
     end
@@ -178,10 +173,6 @@ module Api::V1::Bindings
         end
       end
 
-      if attributes.key?(:'target_sample_size')
-        self.target_sample_size = attributes[:'target_sample_size']
-      end
-
       if attributes.key?(:'status')
         self.status = attributes[:'status']
       end
@@ -233,7 +224,6 @@ module Api::V1::Bindings
           points == o.points &&
           closes_at == o.closes_at &&
           feedback_types == o.feedback_types &&
-          target_sample_size == o.target_sample_size &&
           status == o.status
     end
 
@@ -246,7 +236,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [order, title, description, available_after_days, is_completed, is_launchable, duration_minutes, points, closes_at, feedback_types, target_sample_size, status].hash
+      [order, title, description, available_after_days, is_completed, is_launchable, duration_minutes, points, closes_at, feedback_types, status].hash
     end
 
     # Builds the object from hash

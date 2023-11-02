@@ -93,10 +93,6 @@ class Api::V1::Participant::StudiesOpenApi
         key :items, { 'type' => 'string' }
         key :description, 'Feedback types for this stage'
       end
-      property :target_sample_size do
-        key :type, :number
-        key :description, 'Desired sample size set by researcher'
-      end
       property :status do
         key :type, :string
         key :description, 'Status of the study'
