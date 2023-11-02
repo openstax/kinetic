@@ -51,13 +51,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
     @study.update!(inbound_binding.to_hash.except(:researchers, :stages))
 
-    unless inbound_binding.stages.nil?
-      @study.stages.clear
-      inbound_binding.stages.each do |stage|
-        s = Stage.where(id: stage.id).find_or_create_by(stage.to_hash.merge({ config: {} }))
-        @study.stages << s
-      end
-    end
+    @study.update_stages(inbound_binding.stages)
 
     @study.reopen_if_possible
     response_binding = Api::V1::Bindings::Study.create_from_model(@study)
