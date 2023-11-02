@@ -14,8 +14,7 @@ class Api::V1::EnvironmentController < Api::V1::BaseController
       homepage_url: Rails.application.secrets.homepage_url,
       banners_schedule: Banner.active.to_a || [],
       rewards_schedule: Reward.all.to_a,
-      is_impersonating: session[:impersonating].present?,
-      syllabus_contest_winners: Rails.application.secrets.fetch(:syllabus_contest_winners, [])
+      is_impersonating: session[:impersonating].present?
     )
   end
 end

@@ -22,7 +22,6 @@ import dayjs from 'dayjs';
 import { IconInfoCircleFilled } from '@tabler/icons-react';
 import EmailSent from '@images/email-sent.svg'
 import { useLocalStorage } from '@mantine/hooks';
-import { useFetchEnvironment } from '@lib';
 
 export const useSyllabusContestDates = () => {
     const isContestActive = dayjs().isBetween(
@@ -45,9 +44,6 @@ export const useSyllabusContestDates = () => {
 
 export const SyllabusContest: FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
     const { isContestActive } = useSyllabusContestDates()
-    const { data: env } = useFetchEnvironment()
-    const winners = env?.syllabusContestWinners || []
-    console.log(winners)
     // if (!isContestActive) return null
 
     return (
@@ -116,8 +112,7 @@ export const ContestCards: FC<{ studies: ParticipantStudy[] }> = ({ studies }) =
 }
 
 export const PrizeCycleEnded: FC = () => {
-    const { nextPrizeDate } = useSyllabusContestDates()
-    const [viewed, setViewed] = useLocalStorage({ key: `viewedSyllabusContestResults${nextPrizeDate.month()}`, defaultValue: false })
+    const [viewed, setViewed] = useLocalStorage({ key: 'viewedSyllabusContestResults', defaultValue: false })
     const [open, setOpen] = useState(!!viewed)
 
     const onClose = () => {
@@ -126,13 +121,13 @@ export const PrizeCycleEnded: FC = () => {
     }
 
     return (
-        <Modal size='75%' centered opened={open} onClose={onClose}>
+        <Modal size='75%' centered opened={open} onClose={() => setOpen(false)}>
             <Stack gap='xl' my='2rem' mx='4rem' align='center'>
                 <Image w='30rem' h='10rem' src={EmailSent} alt='email-sent'/>
                 <Text ta='center'>
                     This month’s contest prize winner has been selected! We’ll reach out via email - so be sure to keep an eye out. Good luck!
                 </Text>
-                <Button w='15rem' color='purple' c='white' onClick={onClose}>
+                <Button w='15rem' color='purple' c='white' onClick={() => setOpen(false)}>
                     Return to Dashboard
                 </Button>
             </Stack>

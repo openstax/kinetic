@@ -45,13 +45,6 @@ class Api::V1::EnvironmentOpenApi
         key :type, :string
         key :readOnly, true
       end
-      property :syllabus_contest_winners do
-        key :type, :array
-        key :description, 'An array of UUIDs for the winners of the syllabus contest'
-        items do
-          key :type, :string
-        end
-      end
       property :rewards_schedule do
         key :type, :array
         key :minLength, 1
