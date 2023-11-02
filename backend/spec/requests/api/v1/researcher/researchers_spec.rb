@@ -72,6 +72,11 @@ RSpec.describe 'Researchers', api: :v1 do
 
       let(:file_upload) { fixture_file_upload(file_fixture('tela.jpg'), 'image/jpg') }
 
+      it 'uploads a researcher avatar' do
+        api_post "researchers/#{researcher2.id}/avatar_upload", params: { avatar: file_upload }
+        expect(response).to have_http_status(:success)
+      end
+
       it 'updates a researcher' do
         api_put "researchers/#{researcher2.id}", params: { researcher: valid_researcher_attributes }
 
@@ -83,7 +88,7 @@ RSpec.describe 'Researchers', api: :v1 do
       end
 
       it 'updates a researchers avatar' do
-        api_put "researchers/#{researcher2.id}", params: { researcher: valid_researcher_attributes, avatar: file_upload }
+        api_put "researchers/#{researcher2.id}", params: { researcher: valid_researcher_attributes }
         expect(response).to have_http_status(:success)
       end
     end

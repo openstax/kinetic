@@ -194,6 +194,10 @@ export interface GetAnalysisRequest {
     id: number;
 }
 
+export interface GetLearnerActivityReportRequest {
+    monthsAgo?: number;
+}
+
 export interface GetParticipantStudyRequest {
     id: number;
 }
@@ -942,6 +946,40 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getEnvironment(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Environment> {
         const response = await this.getEnvironmentRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get learner activity report
+     */
+    async getLearnerActivityReportRaw(requestParameters: GetLearnerActivityReportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.monthsAgo !== undefined) {
+            queryParameters['months_ago'] = requestParameters.monthsAgo;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/reports/learner-activity`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<string>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
+    }
+
+    /**
+     * Get learner activity report
+     */
+    async getLearnerActivityReport(requestParameters: GetLearnerActivityReportRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.getLearnerActivityReportRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

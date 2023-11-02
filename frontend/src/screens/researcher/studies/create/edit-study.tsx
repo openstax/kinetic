@@ -3,7 +3,8 @@ import { useApi, useQueryParam } from '@lib';
 import { isDraft, useFetchStudy } from '@models';
 import {
     Col,
-    ExitStudyFormButton,
+    ConfirmNavigationIfDirty,
+    ExitButton,
     Form,
     LoadingAnimation,
     Page,
@@ -140,13 +141,16 @@ const FormContent: FC<{
     const saveStudy = async () => {
         const study = getValues() as Study
         if (isNew) {
+            // Need to reset the dirty state before navigating to edit/{id}
+            reset(undefined, { keepValues: true, keepDirty: false });
+
             const savedStudy = await api.addStudy({
                 addStudy: { study: study as NewStudy },
             }).catch((err) => setFormError(err))
 
             if (savedStudy) {
-                nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
                 showResearcherNotification(`New copy of '${study.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`)
+                nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
                 return setStudy(savedStudy)
             }
         }
@@ -253,6 +257,7 @@ const FormContent: FC<{
             index: StudyStep.ReviewStudy,
             component: <ReviewStudy study={study} />,
             text: 'Review Study',
+            backAction: () => setStep(StudyStep.AdditionalSessions),
             primaryAction: {
                 text: 'Submit Study',
                 action: () => {
@@ -264,6 +269,7 @@ const FormContent: FC<{
 
     return (
         <Box direction='column' justify='between' className='edit-study-form'>
+            <ConfirmNavigationIfDirty />
             <SubmitStudyModal study={study as Study} show={showSubmitStudy} setShow={setShowSubmitStudy} />
             <div className="py-2">
                 <Box justify='between' gap='xxlarge'>
@@ -274,7 +280,7 @@ const FormContent: FC<{
                         <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} setStep={setStep} maxStep={maxStep}/>
                     </Col>
                     <Col sm={1}>
-                        {currentStep !== StudyStep.InternalDetails && <ExitStudyFormButton study={getValues() as Study} saveStudy={saveStudy} />}
+                        <ExitButton navTo='/studies'/>
                     </Col>
                 </Box>
                 {steps[currentStep].component}

@@ -19,6 +19,7 @@ interface StudyState {
     mandatoryStudy?: ParticipantStudy
     allStudies: ParticipantStudy[]
     highlightedStudies: ParticipantStudy[]
+    syllabusContestStudies: ParticipantStudy[]
     studiesByTopic: StudyByTopics
 }
 
@@ -43,6 +44,7 @@ export const useLearnerStudies = () => {
     const [studies, setStudyState] = useState<StudyState>({
         allStudies: [],
         highlightedStudies: [],
+        syllabusContestStudies: [],
         studiesByTopic: {} as StudyByTopics,
     })
 
@@ -69,6 +71,10 @@ export const useLearnerStudies = () => {
         // select 3 that are marked as featured
         const featuredStudies = eligibleStudies.filter(s => s.isFeatured).slice(-1 * FEATURED_COUNT)
 
+        // Get the syllabus contest studies
+        // const syllabusContestStudies = allStudies.filter(s => s.isSyllabusContestStudy)
+        const syllabusContestStudies = allStudies.slice(0, 2)
+
         // If less than 3 are featured, grab and fill random studies until we have 3
         const randomlyFeatured = eligibleStudies
             .filter(s => !s.isFeatured)
@@ -87,7 +93,7 @@ export const useLearnerStudies = () => {
         }
 
         setStudyState({
-            mandatoryStudy, allStudies, highlightedStudies, studiesByTopic,
+            mandatoryStudy, allStudies, highlightedStudies, syllabusContestStudies, studiesByTopic,
         })
     }, [setStudyState])
 

@@ -71,6 +71,8 @@ gem 'rubyzip', '3.0.0.alpha'
 
 gem 'sssecrets' # for generating api keys
 
+gem 'image_processing', '~> 1.2'
+
 group :test do
   # Code Climate integration
   gem 'codecov', require: false

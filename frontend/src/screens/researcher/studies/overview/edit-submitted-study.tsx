@@ -3,9 +3,11 @@ import { useApi, useQueryParam } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import {
     Col,
-    DateTimeField,
+    ConfirmNavigationIfDirty,
+    DateTime,
     DateTimeFormats,
     FieldErrorMessage,
+    FieldTitle,
     Form,
     FormSaveButton,
     Icon,
@@ -78,6 +80,7 @@ export const EditSubmittedStudy: FC<{ study: Study }> = ({ study }) => {
             onSubmit={(values, context) => saveStudy(values, context)}
             onCancel={() => {}}
         >
+            <ConfirmNavigationIfDirty />
             <Box direction='column' gap='xlarge'>
                 <Sessions study={study} />
                 <ShareStudy study={study} />
@@ -118,7 +121,7 @@ const Sessions: FC<{study: Study}> = ({ study }) => {
                         <h4>Session {i + 1}</h4>
                         <Box className='mt-2' gap='xlarge'>
                             <Col sm={3} direction='column' gap>
-                                <h6>Set an Interval*</h6>
+                                <FieldTitle required>Set an Interval</FieldTitle>
                                 <small>Set a time interval between your previous and next study sessions</small>
                             </Col>
 
@@ -145,7 +148,7 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
     const { isValid, isDirty } = useFormState()
     const api = useApi()
     const [show, setShow] = useState(false)
-    const { getValues } = useFormContext()
+    const { getValues, reset } = useFormContext()
 
     if (isReadyForLaunch(study)) {
         return (
@@ -160,6 +163,7 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
                                 study: getValues() as Study,
                                 statusAction: 'launch',
                             }).then(() => {
+                                reset(undefined, { keepValues: true, keepDirty: false });
                                 setShow(true)
                             })
                         }}
@@ -188,12 +192,13 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
             center
             show={show}
             large
+            closeBtn={false}
             onHide={() => setShow(false)}
         >
             <Modal.Body>
                 <Box padding='4rem' align='center' justify='center' direction='column' gap='xlarge'>
                     <Box align='center' className='text-center' direction='column'>
-                        <span>Congratulations! Your study has been successfully launched. Feel free to use our dashboard to check any progress of this study. </span>
+                        <span>Congratulations! Your study has been successfully launched on Kinetic, and can now be found under 'Studies'. Please note, it will only become available to participants at your set opening date </span>
                     </Box>
                     <ResearcherButton onClick={() => {
                         setShow(false)
@@ -211,26 +216,25 @@ const OpensAt: FC = () => {
     return (
         <Box gap='xlarge'>
             <Col sm={3} direction='column' gap>
-                <h6>Opens on*</h6>
-                <small>Date and Time when study is made visible to participants. Set date/time to your local timezone.</small>
+                <FieldTitle required>Opens on</FieldTitle>
+                <small>Date and Time when the study is made visible to participants. Set date/time to your local timezone.</small>
             </Col>
 
-            <Col sm={6} direction='column' gap>
-                <DateTimeField
+            <Col sm={5} direction='column' gap>
+                <DateTime
                     name='opensAt'
-                    label='Select date'
+                    placeholder='Select a date'
                     withTime
                     options={{
                         defaultHour: 9,
                         minDate: 'today',
-                        minTime: Date.now(),
                     }}
-                    hint='Your Local Timezone'
                 />
             </Col>
         </Box>
-    )
+    );
 }
+
 
 const ShareStudy: FC<{study: Study}> = () => {
     const { watch, setValue, getValues, trigger } = useFormContext()
@@ -242,8 +246,8 @@ const ShareStudy: FC<{study: Study}> = () => {
                 <small>Opting in to share your study data on Kinetic will support replication and extension of your work by other researchers</small>
             </Col>
 
-            <Col direction='column' gap>
-                <Box gap align='center'>
+            <Col sm={5} direction='column' gap>
+                <Box gap align='center' >
                     <ResearcherCheckbox name='shareStudy' type='checkbox' id='share-study' onChange={() => {
                         trigger('publicOn').then(() => {
                             const checked = getValues('shareStudy')
@@ -252,20 +256,19 @@ const ShareStudy: FC<{study: Study}> = () => {
                             }
                         })
                     }} />
-                    <label htmlFor="share-study">
+                    <label htmlFor="share-study" className='small'>
                         I would like to share my study data with other researchers on Kinetic for the purpose of replication, extension, etc.
                     </label>
                 </Box>
                 {watch('shareStudy') &&
-                    <Box align='center' gap>
-                        <DateTimeField
-                            sm={6}
+                    <Col direction='row' align='center' gap>
+                        <DateTime
                             name='publicOn'
-                            label='Share study on [select date]'
+                            placeholder='Share study on [select date]'
                             format={DateTimeFormats.shortDate}
                         />
                         <Icon css={{ color: colors.blue }} icon='helpCircle' tooltip="We recommend picking a date set at least 3 months after your study's opening date to allow enough time for data collection."/>
-                    </Box>
+                    </Col>
                 }
                 <FieldErrorMessage name='publicOn'/>
             </Col>
@@ -328,21 +331,19 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                             name='hasClosingDate'
                             type='checkbox'
                             id='closing-date'
-                            onChange={() => {
+                            onChange={async () => {
                                 const checked = getValues('hasClosingDate')
                                 if (!checked) {
                                     setValue('closesAt', null, { shouldValidate: true })
                                 }
-                                trigger('closesAt')
+                                await trigger('closesAt')
                             }}
                         />
                         <label htmlFor='closing-date'>By due date</label>
                     </Col>
                     <Col sm={5}>
-                        <DateTimeField
+                        <DateTime
                             name='closesAt'
-                            readOnly={!watch('hasClosingDate')}
-                            label='Select date'
                             format={DateTimeFormats.shortDateTime}
                             options={{
                                 defaultHour: 9,

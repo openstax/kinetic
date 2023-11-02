@@ -1,5 +1,5 @@
 import { cx, React, styled, useEffect, useNavigate, useState } from '@common'
-import { Box, Button, Icon, Page } from '@components'
+import { Box, Page } from '@components'
 import { StudyStatus } from '@models'
 import { colors } from '@theme';
 import 'bootstrap/js/dist/dropdown'
@@ -7,6 +7,8 @@ import { StudiesTable } from './studies-table';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { StudyStatusEnum } from '@api';
 import { useSearchParams } from 'react-router-dom';
+import { Button } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 
 const NavTabs = styled.ul({
     padding: '1rem 0',
@@ -21,9 +23,9 @@ const NavTabs = styled.ul({
         fontWeight: 'bolder',
     },
     '.active > h4': {
-        color: colors.purple,
+        color: colors.blue,
         paddingBottom: '.5rem',
-        borderBottom: `4px solid ${colors.purple}`,
+        borderBottom: `4px solid ${colors.blue}`,
     },
 })
 
@@ -70,12 +72,11 @@ export default function ResearcherStudies() {
                     Studies
                 </h3>
                 <Button
-                    primary
+                    color='blue'
                     data-testid="add-study"
                     onClick={() => nav('/study/create')}
-                    className='fw-bold'
+                    leftSection={<IconPlus />}
                 >
-                    <Icon icon="plus" height={28}></Icon>
                     Create New Study
                 </Button>
             </Box>

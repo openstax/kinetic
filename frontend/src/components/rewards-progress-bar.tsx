@@ -1,7 +1,7 @@
 import { Box, cx, React } from '@common'
 import { Icon, Segment, segmentCircleStyle, SegmentedBar, Tooltip } from '@components'
 import { RewardsSegment, useRewardsSchedule } from '@models'
-import { formatDate, toDayJS, useIsMobileDevice } from '@lib'
+import { toDayJS, useIsMobileDevice } from '@lib'
 import { ParticipantStudy } from '@api'
 import { colors } from '@theme'
 import { CSSObject } from '@emotion/react'
@@ -25,7 +25,7 @@ const SegmentLabel: React.FC<{ segment: RewardsSegment }> = ({ segment }) => {
                 color: segment.isCurrent ? 'black' : colors.gray70,
                 textWrap: 'nowrap',
             }}>
-            <span>{segment.totalPoints}pts</span>
+            {segment.points == 0 ? <></> : <span>{segment.totalPoints}pts</span>}
             <span>{toDayJS(segment.endAt).format('DD MMM')}</span>
         </Box>
     )
@@ -33,17 +33,15 @@ const SegmentLabel: React.FC<{ segment: RewardsSegment }> = ({ segment }) => {
 
 
 const popOverMessage = (segment: RewardsSegment) => {
-    let popover = ''
     if (segment.achieved) {
-        popover = `🎉 ${segment.isPast ? 'You were' : 'You’ve been'} entered in a giveaway for a ${segment.prize}`
+        return `🎉 ${segment.isPast ? 'You were' : 'You’ve been'} entered in a giveaway for a ${segment.prize}`
     } else {
         if (segment.isPast) {
-            popover = `Missed it? No worries, more prizes ahead`
+            return `Missed it? No worries, more prizes ahead`
         } else {
-            popover = `Reach ${segment.totalPoints} points by ${formatDate(segment.endAt, 'll')} to be entered in an ${segment.prize} giveaway`
+            return `${segment.description}`
         }
     }
-    return popover
 }
 
 
@@ -71,7 +69,7 @@ const GrandPrize: React.FC<{ segment?: RewardsSegment }> = ({ segment }) => {
     if (!segment) return null
 
     if (segment.isPast && !segment.achieved) {
-        return <MissedGrandPrize css={{}} />
+        return <MissedGrandPrize />
     }
 
     return (
@@ -127,10 +125,10 @@ const SegmentInfo: React.FC<{ schedule: RewardsSegment[] }> = ({ schedule }) => 
     const segment = schedule.find(s => s.recentlyAchieved) || schedule.find(s => s.isCurrent)
     if (!segment) return null
 
-    let msg = ''
+    let msg;
 
     if (segment.recentlyAchieved) {
-        msg = `🎉 Yay! You were entered into giveway`
+        msg = `🎉 Yay! You were entered into giveaway`
     } else {
         msg = `${segment.isFinal ? 'Grand ' : ''}Giveaway`
     }

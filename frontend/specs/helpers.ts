@@ -105,10 +105,10 @@ export const launchApprovedStudy = async(researcherPage: Page, studyId: number, 
     }
 
     await researcherPage.waitForTimeout(500)
-    await setDateField({ page: researcherPage, fieldName: 'opensAt', date: dayjs() })
-
-    await researcherPage.locator('input[name=hasSampleSize]').check()
-    await researcherPage.fill('[name=targetSampleSize]', '50')
+    await researcherPage.getByPlaceholder('Select a date').click()
+    await researcherPage.locator('.open >> .today').click()
+    await researcherPage.locator('.open >> .today').blur()
+    await researcherPage.fill('.flatpickr-hour', '12')
 
     await expect(researcherPage.locator('testId=launch-study-button')).toBeEnabled()
     await researcherPage.click('testId=launch-study-button')
@@ -249,6 +249,7 @@ export const addReward = async ({
     await setDateField({ page, fieldName: 'dates', date: [startAt, endAt] })
     await page.fill('[name="points"]', String(points))
     await page.fill('[name="prize"]', prize)
+    await page.fill('[name="description"]', faker.vehicle.type())
     await page.click('testId=form-save-btn')
 }
 

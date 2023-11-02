@@ -15,6 +15,7 @@ class Researcher < ApplicationRecord
   def avatar_url
     return unless avatar.attached?
 
-    Rails.application.routes.url_helpers.url_for(avatar)
+    resized_avatar = avatar.variant(resize_to_fill: [125, 125]).processed
+    Rails.application.routes.url_helpers.url_for(resized_avatar)
   end
 end

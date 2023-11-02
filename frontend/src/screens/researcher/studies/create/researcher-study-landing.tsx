@@ -1,7 +1,6 @@
 import { Box, React, styled, useNavigate, useState } from '@common'
 import { ExitButton, Page, ResearcherButton } from '@components';
 import { colors } from '@theme';
-import { Link } from 'react-router-dom';
 import StartProcess from '@images/study-creation/start-process.svg'
 
 export default function ResearcherStudyLanding() {
@@ -115,10 +114,11 @@ const Introduction: FC<{onClickStart: () => void}> = ({ onClickStart }) => {
                 <h2 className='fw-bold mt-2'>Create a study to collect new data</h2>
                 <img className='mt-2' height={240} width={300} src={StartProcess} alt='get-started'/>
                 <h5 className='lh-lg mt-2'>The following steps will guide you through some fundamental questions that will help you determine your study needs. This process can take about 10-20 minutes.</h5>
-                <h6 className='mt-2' css={{ color: colors.text }}>
-                    <span>If you’re rather looking to access existing Kinetic data, please visit the </span>
-                    <Link to='/analysis'>analysis center.</Link>
-                </h6>
+                {/* TODO Add back when analysis feature is ready */}
+                {/*<h6 className='mt-2' css={{ color: colors.text }}>*/}
+                {/*    <span>If you’re rather looking to access existing Kinetic data, please visit the </span>*/}
+                {/*    <Link to='/analysis'>analysis center.</Link>*/}
+                {/*</h6>*/}
                 <ResearcherButton className='mt-4' onClick={() => onClickStart()}>
                     Start process
                 </ResearcherButton>

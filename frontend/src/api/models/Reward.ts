@@ -26,17 +26,17 @@ export interface Reward {
      */
     id?: number;
     /**
-     * The messsage to display.  Limited HTML is supported
+     * The message to display. Limited HTML is supported
      * @type {string}
      * @memberof Reward
      */
     prize?: string;
     /**
-     * A link for more information about the reward
+     * A description of the reward
      * @type {string}
      * @memberof Reward
      */
-    infoUrl?: string;
+    description?: string;
     /**
      * How many points are required to be eligible for the reward
      * @type {number}
@@ -78,7 +78,7 @@ export function RewardFromJSONTyped(json: any, ignoreDiscriminator: boolean): Re
         
         'id': !exists(json, 'id') ? undefined : json['id'],
         'prize': !exists(json, 'prize') ? undefined : json['prize'],
-        'infoUrl': !exists(json, 'info_url') ? undefined : json['info_url'],
+        'description': !exists(json, 'description') ? undefined : json['description'],
         'points': !exists(json, 'points') ? undefined : json['points'],
         'startAt': !exists(json, 'start_at') ? undefined : json['start_at'],
         'endAt': !exists(json, 'end_at') ? undefined : json['end_at'],
@@ -96,7 +96,7 @@ export function RewardToJSON(value?: Reward | null): any {
         
         'id': value.id,
         'prize': value.prize,
-        'info_url': value.infoUrl,
+        'description': value.description,
         'points': value.points,
         'start_at': value.startAt,
         'end_at': value.endAt,

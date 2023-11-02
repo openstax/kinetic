@@ -80,9 +80,24 @@ class Study < ApplicationRecord
     launched_studies.size
   end
 
+  def update_stages(updated_stages)
+    return if updated_stages.nil? || launched_stages.any?
+
+    stages.clear
+    updated_stages.each do |stage|
+      s = Stage.where(id: stage.id).find_or_create_by(stage.to_hash.merge({ config: {} }))
+      stages << s
+    end
+  end
+
   def is_featured?
     featured_ids = Rails.application.secrets.fetch(:featured_studies, [])
     featured_ids.any? && stages.any? { |st| featured_ids.include?(st.config['survey_id']) }
+  end
+
+  def is_syllabus_contest_study?
+    contest_ids = Rails.application.secrets.fetch(:syllabus_contest_studies, [])
+    contest_ids.any? && stages.any? { |st| contest_ids.include?(st.config['survey_id']) }
   end
 
   def next_launchable_stage(user)

@@ -15,6 +15,8 @@ import {
     isScheduled,
     isWaiting,
 } from '@models';
+import { Menu } from '@mantine/core';
+import { IconDotsVertical } from '@tabler/icons-react';
 
 const ModalType = {
     Pause: 'pauseStudy',
@@ -46,9 +48,9 @@ const ActionModalContent: FC<{
                 id: study.id,
                 statusAction,
                 stageIndex,
-            }).then((study) => {
+            }).then(() => {
                 showResearcherNotification(message)
-                cell.table.options.meta?.updateData(study)
+                cell.table.options.meta?.refreshData()
             })
         }
         catch (err) {
@@ -63,7 +65,7 @@ const ActionModalContent: FC<{
             api.deleteStudy({ studyId: study.id }).then(() => {
                 showResearcherNotification(message)
                 study.isHidden = true
-                cell.table.options.meta?.updateData(study)
+                cell.table.options.meta?.refreshData()
             })
         } catch (err) {
             study.isHidden = false
@@ -205,7 +207,7 @@ const StudyActionContainer: FC<{
 }
 
 const ActionIcon = styled(Icon)(({ disabled }) => ({
-    color: disabled ? colors.gray50 : colors.purple,
+    color: disabled ? colors.gray50 : colors.blue,
     cursor: disabled ? 'default' : 'pointer',
 }))
 
@@ -293,50 +295,29 @@ export const ActionColumn: React.FC<{
                 }
             </div>
             <div>
-                <Icon
-                    icon="dotsVertical"
-                    height={20}
-                    color={colors.purple}
-                    id="action-menu-button"
-                    data-testid={`${cell.row.original.id}-action-menu`}
-                    className='dropdown-toggle'
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    css={{ cursor: 'pointer' }}
-                />
-                <ul className="dropdown-menu" aria-labelledby="action-menu-button">
-                    {showEndStudy &&
-                        <li>
-                            <span
-                                className="dropdown-item cursor-pointer"
-                                onClick={() => setAndShowModal(ModalType.End)}
-                            >
-                                End Study
-                            </span>
-                        </li>
-                    }
-                    {showReopen &&
-                        <li>
-                            <span
-                                className="dropdown-item cursor-pointer"
-                                onClick={() => setAndShowModal(ModalType.Reopen)}
-                            >
-                                Reopen Study
-                            </span>
-                        </li>
-                    }
-                    {showDelete &&
-                        <li>
-                            <span
-                                className="dropdown-item cursor-pointer"
-                                css={{ color: colors.red }}
-                                onClick={() => setAndShowModal(ModalType.Delete)}
-                            >
+                <Menu>
+                    <Menu.Target>
+                        <IconDotsVertical
+                            height={20}
+                            color={colors.blue}
+                            id="action-menu-button"
+                            data-testid={`${cell.row.original.id}-action-menu`}
+                            css={{ cursor: 'pointer' }}
+                        />
+                    </Menu.Target>
+
+                    <Menu.Dropdown>
+                        {showEndStudy && <Menu.Item onClick={() => setAndShowModal(ModalType.End)}>
+                            End Study
+                        </Menu.Item>}
+                        {showReopen &&<Menu.Item onClick={() => setAndShowModal(ModalType.Reopen)}>
+                            Reopen Study
+                        </Menu.Item>}
+                        {showDelete && <Menu.Item color={colors.red} onClick={() => setAndShowModal(ModalType.Delete)}>
                             Delete
-                            </span>
-                        </li>
-                    }
-                </ul>
+                        </Menu.Item>}
+                    </Menu.Dropdown>
+                </Menu>
             </div>
             <Modal center show={showModal} large onHide={onHide}>
                 <Modal.Body>

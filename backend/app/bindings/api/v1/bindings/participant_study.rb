@@ -21,8 +21,11 @@ module Api::V1::Bindings
     # How popular the study is on a fractional scale of 0.0 to 1.0
     attr_accessor :popularity_rating
 
-    # Should this study be feautured more prominently?
+    # Should this study be featured more prominently?
     attr_accessor :is_featured
+
+    # Is this study a part of the syllabus contest?
+    attr_accessor :is_syllabus_contest_study
 
     # When the study was completed; null means not completed.
     attr_accessor :completed_at
@@ -136,6 +139,7 @@ module Api::V1::Bindings
         :'id' => :'id',
         :'popularity_rating' => :'popularity_rating',
         :'is_featured' => :'is_featured',
+        :'is_syllabus_contest_study' => :'is_syllabus_contest_study',
         :'completed_at' => :'completed_at',
         :'opted_out_at' => :'opted_out_at',
         :'total_points' => :'total_points',
@@ -178,6 +182,7 @@ module Api::V1::Bindings
         :'id' => :'Integer',
         :'popularity_rating' => :'Float',
         :'is_featured' => :'Boolean',
+        :'is_syllabus_contest_study' => :'Boolean',
         :'completed_at' => :'Time',
         :'opted_out_at' => :'Time',
         :'total_points' => :'Integer',
@@ -251,6 +256,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'is_featured')
         self.is_featured = attributes[:'is_featured']
+      end
+
+      if attributes.key?(:'is_syllabus_contest_study')
+        self.is_syllabus_contest_study = attributes[:'is_syllabus_contest_study']
       end
 
       if attributes.key?(:'completed_at')
@@ -453,6 +462,7 @@ module Api::V1::Bindings
           id == o.id &&
           popularity_rating == o.popularity_rating &&
           is_featured == o.is_featured &&
+          is_syllabus_contest_study == o.is_syllabus_contest_study &&
           completed_at == o.completed_at &&
           opted_out_at == o.opted_out_at &&
           total_points == o.total_points &&
@@ -492,7 +502,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, popularity_rating, is_featured, completed_at, opted_out_at, total_points, total_duration, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, is_mandatory, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
+      [id, popularity_rating, is_featured, is_syllabus_contest_study, completed_at, opted_out_at, total_points, total_duration, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, is_mandatory, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

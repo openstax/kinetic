@@ -34,6 +34,8 @@ export const ResearcherCheckbox = styled(InputField)({
     '.form-check-input, &.form-check-input': {
         height: 16,
         width: 16,
+        minWidth: 16,
+        minHeight: 16,
         '&:checked': {
             backgroundColor: colors.blue,
             borderColor: colors.blue,
