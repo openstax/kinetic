@@ -65,7 +65,6 @@ export const SyllabusContest: FC<{ studies: ParticipantStudy[] }> = ({ studies }
 }
 
 export const ContestInfo: FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
-    const completedCount = studies.filter(s => !!s.completedAt).length
     const { nextPrizeDate } = useSyllabusContestDates()
 
     return (
@@ -87,14 +86,31 @@ export const ContestInfo: FC<{ studies: ParticipantStudy[] }> = ({ studies }) =>
                 </List.Item>
                 <List.Item>Come back next month for another chance to win!</List.Item>
             </List>
+            <CompletedCountBadge studies={studies} />
+        </Stack>
+    )
+}
+
+const CompletedCountBadge: FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
+    const completedCount = studies.filter(s => !!s.completedAt).length
+
+    if (completedCount == 2) {
+        return (
             <Group gap='sm'>
-                <Text>You have</Text>
-                <Badge c={colors.text} size='lg' color={colors.gray50}>
+                <Text>You've entered the draw</Text>
+                <Badge c='white' size='lg' color='purple'>
                     {completedCount}/{studies.length} Completed
                 </Badge>
             </Group>
-            {completedCount == 2 && <Text>You've entered the draw!</Text>}
-        </Stack>
+        )
+    }
+    return (
+        <Group gap='sm'>
+            <Text>You have</Text>
+            <Badge c={colors.text} size='lg' color={colors.gray50}>
+                {completedCount}/{studies.length} Completed
+            </Badge>
+        </Group>
     )
 }
 
