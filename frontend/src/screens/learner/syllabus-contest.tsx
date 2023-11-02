@@ -1,21 +1,23 @@
 import React, { useState } from 'react'
 import {
-    ActionIcon,
     BackgroundImage,
-    Badge, Button,
+    Badge,
+    Button,
     Container,
     Grid,
-    Group, Image,
-    List, Modal,
+    Group,
+    Image,
+    List,
+    Modal,
     Stack,
     Text,
     ThemeIcon,
-    Title, Tooltip,
+    Title,
+    Tooltip,
 } from '@mantine/core';
 import { colors } from '@theme';
 import SyllabusContestBackground from './syllabus-contest-background.svg'
 import { StudyCard } from './card';
-import { useLearnerStudies } from './studies';
 import { useCallback, useNavigate } from '@common';
 import { ParticipantStudy } from '@api';
 import dayjs from 'dayjs';
@@ -38,13 +40,12 @@ export const useSyllabusContestDates = () => {
 
     const nextPrizeDate = dayjs().add(1, 'month').set('date', 1)
 
-    console.log(nextPrizeDate.format())
     return { isContestActive, nextPrizeDate }
 }
 
 export const SyllabusContest: FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
     const { isContestActive } = useSyllabusContestDates()
-    // if (!isContestActive) return null
+    if (!isContestActive) return null
 
     return (
         <BackgroundImage src={SyllabusContestBackground}>
@@ -121,13 +122,13 @@ export const PrizeCycleEnded: FC = () => {
     }
 
     return (
-        <Modal size='75%' centered opened={open} onClose={() => setOpen(false)}>
+        <Modal size='75%' centered opened={open} onClose={onClose} data-testid='syllabus-contest-winners-modal'>
             <Stack gap='xl' my='2rem' mx='4rem' align='center'>
                 <Image w='30rem' h='10rem' src={EmailSent} alt='email-sent'/>
                 <Text ta='center'>
                     This month’s contest prize winner has been selected! We’ll reach out via email - so be sure to keep an eye out. Good luck!
                 </Text>
-                <Button w='15rem' color='purple' c='white' onClick={() => setOpen(false)}>
+                <Button w='15rem' color='purple' c='white' onClick={onClose} data-testid='return-to-dashboard'>
                     Return to Dashboard
                 </Button>
             </Stack>

@@ -7,42 +7,13 @@ import { useIsMobileDevice } from '@lib'
 import { StudyTopic, studyTopics } from '@models'
 import { StudyByTopics, useLearnerStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
-import { SplashImage } from './learner/splash-image'
 import { StudyModal } from './studies/modal'
 import { StudyDetails } from './learner/details'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { chunk } from 'lodash-es'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Pagination } from 'swiper';
-import { Title } from '@mantine/core';
 import { SyllabusContest } from './learner/syllabus-contest';
-
-const Splash = styled(Box)({
-    width: '100%',
-    overflow: 'hidden',
-    position: 'relative',
-    height: 600,
-    [media.mobile]: {
-        height: 400,
-    },
-})
-
-const SplashHeader = styled(Title)({
-    maxWidth: '55%',
-    fontWeight: 700,
-    [media.mobile]: {
-        fontSize: 24,
-        maxWidth: '80%',
-        marginTop: '2rem',
-    },
-})
-
-const SplashText = styled.h4({
-    maxWidth: '55%',
-    [media.mobile]: {
-        fontSize: 15,
-    },
-})
 
 interface StudyListProps {
     studies: ParticipantStudy[],
