@@ -66,10 +66,10 @@ export const SyllabusContest: FC<{ studies: ParticipantStudy[] }> = ({ studies }
 
 export const ContestInfo: FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
     const { nextPrizeDate } = useSyllabusContestDates()
-
+    const showComeBackMessage = nextPrizeDate.month() == 2 || nextPrizeDate.month() == 3
     return (
         <Stack c='white'>
-            <Title order={6}>{nextPrizeDate.format('MMMM')} Contest</Title>
+            <Title order={6}>{dayjs().format('MMMM')} Contest</Title>
             <Title order={2}>Join Our Syllabus Contest for a Chance to Win AirPods Pro!</Title>
             <Text c={colors.gray70}>Steps:</Text>
             <List c={colors.gray50}>
@@ -84,7 +84,7 @@ export const ContestInfo: FC<{ studies: ParticipantStudy[] }> = ({ studies }) =>
                         </ThemeIcon>
                     </Tooltip>
                 </List.Item>
-                <List.Item>Come back next month for another chance to win!</List.Item>
+                {showComeBackMessage && <List.Item>Come back next month for another chance to win!</List.Item>}
             </List>
             <CompletedCountBadge studies={studies} />
         </Stack>
