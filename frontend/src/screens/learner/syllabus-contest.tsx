@@ -59,7 +59,7 @@ export const SyllabusContest: FC<{ studies: ParticipantStudy[] }> = ({ studies }
 }
 
 const getContestTooltipMessage = () => {
-    const month = dayjs('2024-05-01').month()
+    const month = dayjs().month()
     // November
     if (month == 10) {
         return 'Contest ends on November 30, 2023 and restarts on February 1, 2024'
@@ -79,12 +79,12 @@ export const ContestInfo: FC<{ studies: ParticipantStudy[] }> = ({ studies }) =>
     const showComeBackMessage = nextPrizeDate.month() == 2 || nextPrizeDate.month() == 3
     return (
         <Stack c='white'>
-            <Title order={6}>{dayjs('2024-05-01').format('MMMM')} Contest</Title>
+            <Title order={6}>{dayjs().format('MMMM')} Contest</Title>
             <Title order={2}>Join Our Syllabus Contest for a Chance to Win AirPods Pro!</Title>
             <Text c={colors.gray70}>Steps:</Text>
             <List c={colors.gray50} withPadding>
                 <List.Item>Complete both surveys</List.Item>
-                <List.Item>Automatically entered into prize giveaway</List.Item>
+                <List.Item>Automatically entered into prize draw</List.Item>
                 <List.Item>
                     Next winner announced on: {nextPrizeDate.format('LL')}
 
