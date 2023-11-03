@@ -73,7 +73,7 @@ export const useLearnerStudies = () => {
 
         // Get the syllabus contest studies
         const syllabusContestStudies = allStudies.filter(s => s.isSyllabusContestStudy)
-        
+
         // If less than 3 are featured, grab and fill random studies until we have 3
         const randomlyFeatured = eligibleStudies
             .filter(s => !s.isFeatured)
