@@ -44,7 +44,7 @@ export const SyllabusContest: FC<{ studies: ParticipantStudy[] }> = ({ studies }
 
     return (
         <BackgroundImage src={SyllabusContestBackground}>
-            <Container size='xl' py='5rem' >
+            <Container size='xl' py='4rem' >
                 <Grid gutter='xl'>
                     <Grid.Col span={{ base: 12, sm: 12, md: 12, lg: 6, xl: 4 }}>
                         <ContestInfo studies={studies} />
@@ -78,15 +78,15 @@ export const ContestInfo: FC<{ studies: ParticipantStudy[] }> = ({ studies }) =>
     const { nextPrizeDate } = useSyllabusContestDates()
     const showComeBackMessage = nextPrizeDate.month() == 2 || nextPrizeDate.month() == 3
     return (
-        <Stack c='white'>
+        <Stack c='white' gap='lg'>
             <Title order={6}>{dayjs().format('MMMM')} Contest</Title>
             <Title order={2}>Join Our Syllabus Contest for a Chance to Win AirPods Pro!</Title>
-            <Text c={colors.gray70}>Steps:</Text>
-            <List c={colors.gray50} withPadding>
+            <Text>Steps:</Text>
+            <List withPadding>
                 <List.Item>Complete both surveys</List.Item>
                 <List.Item>Automatically entered into prize draw</List.Item>
                 <List.Item>
-                    Next winner announced on: {nextPrizeDate.format('LL')}
+                    Winner announced on {nextPrizeDate.format('LL')}
 
                     <Tooltip visibleFrom='xs' withArrow label={getContestTooltipMessage()}>
                         <ThemeIcon bg='transparent'>
