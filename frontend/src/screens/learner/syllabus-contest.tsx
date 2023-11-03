@@ -127,8 +127,6 @@ export const ContestCards: FC<{ studies: ParticipantStudy[] }> = ({ studies }) =
     const nav = useNavigate()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
 
-    if (!studies.length) return null
-
     return (
         <Group>
             {studies.map((study) => (
