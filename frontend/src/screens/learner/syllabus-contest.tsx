@@ -20,19 +20,19 @@ import { ParticipantStudy } from '@api';
 import dayjs from 'dayjs';
 import { IconInfoCircleFilled } from '@tabler/icons-react';
 
-export const useSyllabusContestDates = () => {
-    const isContestActive = dayjs().isBetween(
-        dayjs(),
-        '2023-12-01',
-        'day',
-        '[)'
-    ) || dayjs().isBetween(
-        '2024-02-01',
-        '2024-05-01',
-        'day',
-        '[)'
-    )
+const isContestActive = dayjs().isBetween(
+    dayjs(),
+    '2023-12-01',
+    'day',
+    '[)'
+) || dayjs().isBetween(
+    '2024-02-01',
+    '2024-05-01',
+    'day',
+    '[)'
+)
 
+export const useSyllabusContestDates = () => {
     const nextPrizeDate = dayjs().add(1, 'month').set('date', 1)
 
     return { isContestActive, nextPrizeDate }
