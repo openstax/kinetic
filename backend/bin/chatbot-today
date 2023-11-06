@@ -1,0 +1,11 @@
+#!/bin/bash
+
+today=$(date '+%Y-%m-%d')
+yesterday=$(date -v-1d '+%Y-%m-%d')
+echo "runing for $yesterday - $today"
+
+
+echo bundle exec rake \'report:chatbot[\"$yesterday\", \"$today\"]\' \> /tmp/chatbot-activity-$today.csv
+
+
+bundle exec rake 'report:chatbot["'$yesterday'", "'$today'"]' > /tmp/chatbot-activity-$today.csv
