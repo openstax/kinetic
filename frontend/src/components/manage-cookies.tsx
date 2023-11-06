@@ -1,12 +1,8 @@
 import React from 'react';
-import { Global, css } from '@emotion/react'
-
-type ManageCookiesLinkProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  wrapper?: (button: React.ReactElement) => React.ReactElement
-}
+import { css, Global } from '@emotion/react'
 
 // documentation for this at https://docs.osano.com/hiding-the-cookie-widget
-export const ManageCookiesLink = (props: ManageCookiesLinkProps) => {
+export const ManageCookiesLink = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const osano = typeof window === 'undefined' ? undefined : (window as any).Osano
 
