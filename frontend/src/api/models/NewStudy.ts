@@ -81,6 +81,12 @@ export interface NewStudy {
      */
     isHidden?: boolean;
     /**
+     * Did the participant consent
+     * @type {boolean}
+     * @memberof NewStudy
+     */
+    consented?: boolean;
+    /**
      * When the study was launched; null means not launched
      * @type {Date}
      * @memberof NewStudy
@@ -223,6 +229,7 @@ export function NewStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
         'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
+        'consented': !exists(json, 'consented') ? undefined : json['consented'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
         'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
@@ -259,6 +266,7 @@ export function NewStudyToJSON(value?: NewStudy | null): any {
         'image_id': value.imageId,
         'benefits': value.benefits,
         'is_hidden': value.isHidden,
+        'consented': value.consented,
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'target_sample_size': value.targetSampleSize,

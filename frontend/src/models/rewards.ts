@@ -37,6 +37,7 @@ const calculatePoints = (segment: RewardsScheduleSegment, cycleStart: Date, stud
     return studies.reduce((points, study) => {
         if (study.completedAt &&
             study.totalPoints &&
+            study.consented &&
             study.completedAt <= segment.endAt &&
             study.completedAt >= cycleStart
         ) {

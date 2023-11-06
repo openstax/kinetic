@@ -39,6 +39,10 @@ class Api::V1::BaseStudiesOpenApi
         key :type, :boolean
         key :description, 'Is the study hidden from participants'
       end
+      property :consented do
+        key :type, :boolean
+        key :description, 'Did the participant consent'
+      end
       property :first_launched_at do
         key :type, :string
         key :format, 'date-time'
