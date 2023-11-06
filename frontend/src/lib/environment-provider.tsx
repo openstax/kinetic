@@ -57,9 +57,7 @@ export const useCurrentResearcher = () => {
 }
 
 export const useUserInfo = () => {
-    return useQuery('fetchUserInfo', () => {
-        return fetchUserInfo()
-    })
+    return useQuery('fetchUserInfo', fetchUserInfo)
 }
 
 export const useUserPreferences = () => {
@@ -103,5 +101,5 @@ export const accountsApiUrl = (): string => {
 
 export const fetchUserInfo = async (): Promise<UserInfo> => {
     const resp = await fetch(`${accountsApiUrl()}`, { credentials: 'include' })
-    return resp.json()
+    return await resp.json()
 }

@@ -74,10 +74,12 @@ const Sidebar = () => {
 
 export default function AccountDetails() {
     const api = useApi()
-    const { data: userInfo } = useUserInfo()
     const isMobile = useIsMobileDevice()
-
+    console.log(useUserInfo)
+    const { data: userInfo } = useUserInfo()
+    console.log(userInfo)
     const { data: prefs } = useUserPreferences()
+
     if (!userInfo || !prefs) return <LoadingAnimation message="Loading account…" />;
 
     const email = userInfo.contact_infos.find(e => e.type == 'EmailAddress')
