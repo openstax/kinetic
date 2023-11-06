@@ -4,9 +4,11 @@ require 'csv'
 
 namespace :report do
   desc 'generate CSV dump of study activity'
-  task :chatbot, [:start, :end] => :environment do |_, args|
-    cbar = ChatbotActivityReport.new(start_date: Date.parse(args[:start]),
-                                     end_date: Date.parse(args[:end]))
+  task :chatbot, [:months_ago] => :environment do |_, args|
+    cbar = ChatbotActivityReport.new(
+      start_date: Date.today.beginning_of_month - (args[:months_ago] || 0).to_i.months,
+      end_date: Date.today
+    )
     print(cbar.as_csv_string)
   end
 end
