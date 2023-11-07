@@ -57,7 +57,11 @@ export const useCurrentResearcher = () => {
 }
 
 export const useUserInfo = () => {
-    return useQuery('fetchUserInfo', fetchUserInfo)
+    console.log('inside useUserInfo')
+    return useQuery('fetchUserInfo', () => {
+        console.log('inside use query')
+        return fetchUserInfo()
+    })
 }
 
 export const useUserPreferences = () => {
@@ -70,6 +74,7 @@ export const useUserPreferences = () => {
 
 export const locationOrigin = () => {
     const env = useEnvironment()
+    console.log(env)
     if (env.accountsEnvName === 'production') {
         return `https://openstax.org`;
     }
@@ -100,6 +105,7 @@ export const accountsApiUrl = (): string => {
 }
 
 export const fetchUserInfo = async (): Promise<UserInfo> => {
+    console.log('fetching user info')
     const resp = await fetch(`${accountsApiUrl()}`, { credentials: 'include' })
     return await resp.json()
 }
