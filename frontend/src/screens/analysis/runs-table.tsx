@@ -131,6 +131,8 @@ const StatusIcon = styled(Icon)({
 })
 
 const useRunsTable = (analysis: Analysis) => {
+    const api = useApi()
+
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: 'startedAt',
         desc: true,
@@ -181,7 +183,6 @@ const useRunsTable = (analysis: Analysis) => {
             size: 375,
             enableSorting: false,
             cell: ({ row: { original: run } }: { row: { original: AnalysisRun } }) => {
-                const api = useApi()
                 const canDownload = hasRunSucceeded(run)
                 const cancelRun = () => {
                     api.updateAnalysisRun({

@@ -66,9 +66,10 @@ const AdditionalSession: FC<{
     onDelete: (index: number) => void,
     session: Stage | NewStage
 }> = ({ index, onDelete, session }) => {
+    const { register, getValues } = useFormContext()
+
     // don't show the first session
     if (index === 0) return null
-    const { register, getValues } = useFormContext()
     const prevStagePoints = getValues(`stages.${index - 1}.points`)
 
     return (

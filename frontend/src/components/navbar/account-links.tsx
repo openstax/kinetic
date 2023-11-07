@@ -19,7 +19,7 @@ export default function AccountLinks() {
                 </Menu.Item>
             </StyledLink>
             {!env.isImpersonating &&
-                <StyledLink to={logoutURL()} onClick={() => {
+                <StyledLink to={logoutURL(env)} onClick={() => {
                     logout().then(() => refetch())
                 }}>
                     <Menu.Item>
