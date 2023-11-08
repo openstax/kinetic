@@ -21,7 +21,7 @@ export const ManageCookiesLink = () => {
             <Global
                 styles={css({ '.osano-cm-widget': { display: 'none' } })}
             />
-            <a href='#' onClick={showOsano}>Manage Cookies</a>
+            <span onClick={showOsano}>Manage Cookies</span>
         </>
     )
 };

@@ -6,7 +6,7 @@ class Study < ApplicationRecord
   # need the double quotes, order is a postgresql semi-reserved word
   has_many :stages, -> { order('"order"') }, inverse_of: :study, dependent: :destroy
   has_many :launched_stages, through: :stages
-  has_many :launched_studies, counter_cache: true
+  has_many :launched_studies
 
   has_many :response_exports, through: :stages
   has_many :study_analysis

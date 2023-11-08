@@ -113,18 +113,20 @@ const FormContent: FC<{
         setFormError,
     } = useFormContext()
     const [showSubmitStudy, setShowSubmitStudy] = useState(false)
-    const currentStep = watch('step')
+    const currentStep = watch('step') as number
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
     const nav = useNavigate()
     const api = useApi()
     const [, setStudyProgressStep] = useLocalstorageState<StudyStep>(`study-progress-${id}`)
     const [maxStep, setMaxStep] = useLocalstorageState<StudyStep>(`study-max-progress-${id}`, 0)
+    const { isValid, isDirty } = useFormState()
+
     if (!isDraft(study) && !isNew) {
-        nav(`/study/overview/${id}`)
+        return <Navigate to={`/study/overview/${id}`} />
     }
 
-    const { isValid, isDirty } = useFormState()
+
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true, shouldTouch: true })
         if (!isNew) {
@@ -135,7 +137,7 @@ const FormContent: FC<{
         }
     }
 
-    const saveStudy = async () => {
+    const saveStudy = async (goToStep: number) => {
         const study = getValues() as Study
         if (isNew) {
             // Need to reset the dirty state before navigating to edit/{id}
@@ -147,7 +149,7 @@ const FormContent: FC<{
 
             if (savedStudy) {
                 showResearcherNotification(`New copy of '${study.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`)
-                nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
+                nav(`/study/edit/${savedStudy.id}?step=${goToStep + 1}`)
                 return setStudy(savedStudy)
             }
         }
@@ -157,12 +159,12 @@ const FormContent: FC<{
         }
 
         const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
-        reset(getFormDefaults(savedStudy, currentStep), { keepIsValid: true, keepDirty: false })
+        reset(getFormDefaults(savedStudy, goToStep), { keepIsValid: true, keepDirty: false })
         setStudy(savedStudy)
     }
 
     const saveAsDraft = async () => {
-        saveStudy().then(() => {
+        saveStudy(currentStep).then(() => {
             showResearcherNotification(`New edits to the study “${study.titleForResearchers}” have successfully been saved.`)
         })
     }
@@ -176,7 +178,7 @@ const FormContent: FC<{
                 text: 'Save & Continue',
                 disabled: !isValid,
                 action: async () => {
-                    await saveStudy()
+                    await saveStudy(currentStep)
                     setStep(StudyStep.ResearchTeam)
                 },
             },
@@ -185,7 +187,12 @@ const FormContent: FC<{
             index: StudyStep.ResearchTeam,
             component: <ResearchTeam study={study} />,
             text: 'Research Team',
-            backAction: () => setStep(StudyStep.InternalDetails),
+            backAction: () => {
+                if (!isDirty) {
+                    return setStep(StudyStep.InternalDetails)
+                }
+                saveStudy(StudyStep.InternalDetails)
+            },
             primaryAction: {
                 text: 'Continue',
                 disabled: !isValid,
@@ -194,7 +201,7 @@ const FormContent: FC<{
                         return setStep(StudyStep.ParticipantView)
                     }
 
-                    await saveStudy()
+                    await saveStudy(currentStep)
                     setStep(StudyStep.ParticipantView)
                     showResearcherNotification(`Invitations to collaborate on study '${study.titleForResearchers}' have successfully been sent.`)
                 },
@@ -209,7 +216,12 @@ const FormContent: FC<{
             index: StudyStep.ParticipantView,
             component: <ParticipantView study={study} />,
             text: 'Participant View',
-            backAction: () => setStep(StudyStep.ResearchTeam),
+            backAction: () => {
+                if (!isDirty) {
+                    return setStep(StudyStep.ResearchTeam)
+                }
+                saveStudy(StudyStep.ResearchTeam)
+            },
             primaryAction: {
                 text: 'Continue',
                 disabled: !isValid,
@@ -217,7 +229,7 @@ const FormContent: FC<{
                     if (!isDirty) {
                         return setStep(StudyStep.AdditionalSessions)
                     }
-                    await saveStudy()
+                    await saveStudy(currentStep)
                     setStep(StudyStep.AdditionalSessions)
                 },
             },
@@ -231,7 +243,12 @@ const FormContent: FC<{
             index: StudyStep.AdditionalSessions,
             component: <AdditionalSessions study={study} />,
             text: 'Additional Sessions (optional)',
-            backAction: () => setStep(StudyStep.ParticipantView),
+            backAction: () => {
+                if (!isDirty) {
+                    return setStep(StudyStep.ParticipantView)
+                }
+                saveStudy(StudyStep.ParticipantView)
+            },
             optional: true,
             primaryAction: {
                 text: 'Continue',
@@ -240,7 +257,7 @@ const FormContent: FC<{
                     if (!isDirty) {
                         return setStep(StudyStep.ReviewStudy)
                     }
-                    await saveStudy()
+                    await saveStudy(currentStep)
                     setStep(StudyStep.ReviewStudy)
                 },
             },
@@ -254,7 +271,12 @@ const FormContent: FC<{
             index: StudyStep.ReviewStudy,
             component: <ReviewStudy study={study} />,
             text: 'Review Study',
-            backAction: () => setStep(StudyStep.AdditionalSessions),
+            backAction: () => {
+                if (!isDirty) {
+                    return setStep(StudyStep.AdditionalSessions)
+                }
+                saveStudy(StudyStep.AdditionalSessions)
+            },
             primaryAction: {
                 text: 'Submit Study',
                 action: () => {

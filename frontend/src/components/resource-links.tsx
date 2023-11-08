@@ -8,7 +8,6 @@ export const ResourceLinks = () => {
             <h4>Resources</h4>
             <a target="_blank" href="https://help.openstax.org/s/article/Kinetic-Learner-Student-FAQs">FAQs</a>
             <a target="_blank" href="https://openstax.org/privacy-policy">Privacy Policy</a>
-            <ManageCookiesLink />
         </>
     )
 }

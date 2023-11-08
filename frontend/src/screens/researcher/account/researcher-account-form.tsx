@@ -4,7 +4,7 @@ import { colors } from '@theme';
 import { Researcher } from '@api';
 import {
     Box,
-    CharacterCount,
+    CharacterCount, FieldErrorMessage,
     Form,
     FormSaveButton,
     Icon,
@@ -21,8 +21,12 @@ export const ResearcherValidationSchema = Yup.object().shape({
     researchInterest1: Yup.string().max(25),
     researchInterest2: Yup.string().max(25),
     researchInterest3: Yup.string().max(25),
-    labPage: Yup.string().matches(urlRegex, 'Enter a valid URL'),
-    bio: Yup.string().max(250),
+    institution: Yup.mixed().required('Required'),
+    labPage: Yup.string().matches(urlRegex, {
+        message: 'Please enter a valid URL',
+        excludeEmptyString: true,
+    }),
+    bio: Yup.string().max(250).required('Required'),
 })
 
 const institutionList = [
@@ -53,7 +57,7 @@ const StyledForm = styled(Form<Researcher>)(({ readOnly }) => ({
 export const ResearcherAccountForm: React.FC<{className?: string}> = ({ className }) => {
     const api = useApi()
     const [researcher, setResearcher] = useState(useCurrentResearcher())
-    const [institution, setInstitution] = useState(researcher?.institution)
+    const [institution, setInstitution] = useState(researcher?.institution || '')
     const { refetch: refetchEnv } = useFetchEnvironment()
     const { data: userInfo, refetch: refetchUser } = useUserInfo()
 
@@ -108,11 +112,12 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
                     name="institution"
                     isClearable={true}
                     placeholder={'Select Option'}
-                    onChange={(value) => (typeof value == 'string' && setInstitution(value))}
+                    onChange={(value) => (setInstitution(value))}
                     value={institution}
                     defaultValue={institution}
                     options={institutionList}
                 />
+                <FieldErrorMessage name='institution' />
             </div>
 
             <Box align='baseline' gap className='mt-1'>
@@ -139,17 +144,18 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
             <div className='mt-1'>
                 <h6>Lab Page Link</h6>
                 <InputField placeholder='https://' name="labPage" />
-                <div className="invalid-feedback">
-                    <Icon icon="warning" color='red' height={18}></Icon>
-                    &nbsp;
-                    Please enter a valid URL
-                </div>
+                <FieldErrorMessage name='labPage' />
+                {/*<div className="invalid-feedback">*/}
+                {/*    <Icon icon="warning" color='red' height={18}></Icon>*/}
+                {/*    &nbsp;*/}
+                {/*    Please enter a valid URL*/}
+                {/*</div>*/}
             </div>
 
             <div className='mb-1 mt-1'>
                 <Box align='baseline' gap>
                     <h6 className='field-title'>Bio</h6>
-                    <Tooltip tooltip='Simplify your research description for mass appeal'>
+                    <Tooltip tooltip='This bio will be visible to learners, as a chance for them to know more about the researcher conducting the study'>
                         <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={16}/>
                     </Tooltip>
                 </Box>
@@ -160,6 +166,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
                     placeholder='Please add a brief bio to share with learners'
                 />
                 <CharacterCount max={250} name={'bio'} />
+                <FieldErrorMessage name='bio' />
             </div>
 
             <FormSave />

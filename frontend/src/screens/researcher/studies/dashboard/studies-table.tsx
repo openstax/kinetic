@@ -248,6 +248,7 @@ export const StudiesTable: React.FC<{
         {
             accessorKey: 'status',
             header: () => <span>Status</span>,
+            size: 175,
             meta: {
                 type: 'text',
             },
