@@ -1,4 +1,4 @@
-import { Box, React, useEffect, useNavigate, useParams } from '@common';
+import { Box, React, useNavigate, useParams } from '@common';
 import { Study } from '@api';
 import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page, ResearcherButton } from '@components';
 import { getStudyLead, getStudyPi, isReadyForLaunch, isWaiting, useFetchStudy } from '@models';
@@ -8,32 +8,23 @@ import { FinalizeStudy } from './finalize-study';
 import Waiting from '@images/study-creation/waiting.svg'
 import { EditSubmittedStudy } from './edit-submitted-study';
 import { useQueryParam } from '@lib';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 export default function StudyOverview() {
-    const nav = useNavigate()
     const id = useParams<{ id: string }>().id
+    const { loading, study } = useFetchStudy(id!)
 
     if (!id) {
-        useEffect(() => {
-            nav('/studies')
-        }, [])
-        return <></>
+        return <Navigate to='/studies' />
     }
-
-    const { loading, study } = useFetchStudy(id)
 
     if (loading) {
         return <LoadingAnimation />
     }
 
     if (!study) {
-        useEffect(() => {
-            nav('/studies')
-        }, [])
-        return <></>
+        return <Navigate to='/studies' />
     }
-
 
     return (
         <Page hideFooter backgroundColor={colors.white}>

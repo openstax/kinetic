@@ -1,6 +1,6 @@
 import { Box, Col, Footer, Form, HelpLink, Icon, Modal, ResourceLinks, Tooltip, TopNavBar } from '@components';
 import { React, styled, useState } from '@common';
-import { accountsUrl, useApi, useCurrentResearcher } from '@lib';
+import { useAccountsURL, useApi, useCurrentResearcher } from '@lib';
 import { colors } from '@theme';
 import { Researcher } from '@api';
 import CustomerSupportImage from '../../../components/customer-support-image';
@@ -11,6 +11,7 @@ import { ResearcherAccountForm } from './researcher-account-form';
 
 export default function ResearcherAccountPage() {
     const researcher = useCurrentResearcher()
+    const accountsUrl = useAccountsURL()
 
     if (!researcher) {
         return null
@@ -23,7 +24,7 @@ export default function ResearcherAccountPage() {
                 <Col sm={9} css={{ paddingRight: '2rem' }} direction='column'>
                     <Box justify='between' height='40px'>
                         <h3>My Account</h3>
-                        <a href={`${accountsUrl()}`} target='_blank'>
+                        <a href={`${accountsUrl}`} target='_blank'>
                             <span>Update Email & Password</span>
                             <Icon icon="chevronRight" />
                         </a>
@@ -122,6 +123,9 @@ export const IRB = () => {
 const Avatar: React.FC = () => {
     const api = useApi()
     const [researcher, setResearcher] = useState(useCurrentResearcher())
+    const [avatar, setAvatar] = useState<Blob>()
+    const [isShowingModal, setShowingModal] = useState(false)
+
     if (!researcher) {
         return null
     }
@@ -133,8 +137,7 @@ const Avatar: React.FC = () => {
         height: 125,
         width: 125,
     })
-    const [avatar, setAvatar] = useState<Blob>()
-    const [isShowingModal, setShowingModal] = useState(false)
+
     const onHide = () => setShowingModal(false)
 
     const saveResearcher = async (researcher: Researcher) => {
@@ -148,7 +151,6 @@ const Avatar: React.FC = () => {
         setResearcher(r)
         onHide()
     }
-
 
     return (
         <Box className='col-2' justify='start' direction='column'>

@@ -1,4 +1,4 @@
-import { Box, React, useEffect, useMemo, useNavigate, useParams, useState, Yup } from '@common'
+import { Box, React, useMemo, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
 import { isDraft, useFetchStudy } from '@models';
 import {
@@ -24,6 +24,7 @@ import { colors } from '@theme';
 import { ReviewStudy, SubmitStudyModal } from './forms/review-study';
 import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
+import { Navigate } from 'react-router-dom';
 
 const buildValidationSchema = (allOtherStudies: Study[]) => {
     return Yup.object().shape({
@@ -46,7 +47,6 @@ const getFormDefaults = (study: Study, step: StudyStep) => {
 }
 
 export default function EditStudy() {
-    const nav = useNavigate()
     const id = useParams<{ id: string }>().id
     const { loading, study, setStudy, allStudies } = useFetchStudy(id || 'new')
 
@@ -55,10 +55,7 @@ export default function EditStudy() {
     }
 
     if (!study) {
-        useEffect(() => {
-            nav('/studies')
-        }, [])
-        return <></>
+        return <Navigate to={'/studies'} />
     }
 
     return (

@@ -1,4 +1,4 @@
-import { logoutURL, useCurrentUser, useEnvironment, useFetchEnvironment } from '@lib';
+import { useLogoutURL, useCurrentUser, useEnvironment, useFetchEnvironment } from '@lib';
 import { Menu } from '@mantine/core';
 import { logout } from '@models';
 import { React } from '@common';
@@ -9,6 +9,7 @@ export default function AccountLinks() {
     const env = useEnvironment()
     const { refetch } = useFetchEnvironment()
     const isAdminOrResearcher = user.isAdministrator || user.isResearcher
+    const logoutURL = useLogoutURL()
 
     return (
         <>
@@ -19,7 +20,7 @@ export default function AccountLinks() {
                 </Menu.Item>
             </StyledLink>
             {!env.isImpersonating &&
-                <StyledLink to={logoutURL()} onClick={() => {
+                <StyledLink to={logoutURL} onClick={() => {
                     logout().then(() => refetch())
                 }}>
                     <Menu.Item>

@@ -53,16 +53,17 @@ const StyledForm = styled(Form<Researcher>)(({ readOnly }) => ({
 export const ResearcherAccountForm: React.FC<{className?: string}> = ({ className }) => {
     const api = useApi()
     const [researcher, setResearcher] = useState(useCurrentResearcher())
+    const [institution, setInstitution] = useState(researcher?.institution)
     const { refetch: refetchEnv } = useFetchEnvironment()
     const { data: userInfo, refetch: refetchUser } = useUserInfo()
+
     if (!researcher) {
         return null
     }
+
     // Default to OpenStax accounts first/last name if blank
     researcher.firstName = researcher.firstName || userInfo?.first_name
     researcher.lastName = researcher.lastName || userInfo?.last_name
-
-    const [institution, setInstitution] = useState(researcher.institution)
 
     const saveResearcher = async (researcher: Researcher) => {
         try {

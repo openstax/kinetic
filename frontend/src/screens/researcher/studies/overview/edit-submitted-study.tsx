@@ -277,11 +277,12 @@ const ShareStudy: FC<{study: Study}> = () => {
 }
 
 const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
+    const { watch, setValue, getValues, trigger } = useFormContext()
+
     const firstStage = getFirstStage(study)
     if (!firstStage) {
         return null
     }
-    const { watch, setValue, getValues, trigger } = useFormContext()
 
     return (
         <Box gap='xlarge'>
