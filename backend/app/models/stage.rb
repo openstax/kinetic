@@ -15,7 +15,7 @@ class Stage < ApplicationRecord
     end
   end
 
-  has_many :siblings, ->(stage) {
+  has_many :siblings, -> (stage) {
     query = where(study_id: stage.study_id)
     query.where.not(id: stage.id) if stage.persisted?
     query
@@ -52,12 +52,8 @@ class Stage < ApplicationRecord
       return true
     end
 
-    if study.stages.count > 1
-      days_after_closing = previous_stages.count * available_after_days
-      return !study.closes_at.nil? && (study.closes_at.next_day(days_after_closing)) < DateTime.now
-    end
-
-    !study.closes_at.nil? && study.closes_at < DateTime.now
+    days_until_close = previous_stages.count * available_after_days
+    !study.closes_at.nil? && (study.closes_at.next_day(days_until_close)) < DateTime.now
   end
 
   def scheduled?

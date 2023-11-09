@@ -40,11 +40,11 @@ const StyledRow = styled.tr(({ hasChildren }: { hasChildren?: boolean }) => ({
     'td': {
         padding: '1rem .5rem',
     },
-    backgroundColor: hasChildren ? colors.gray10 : 'inherit',
+    backgroundColor: hasChildren ? colors.gray30 : 'inherit',
 }))
 
 const NestedRow = styled(StyledRow)({
-    backgroundColor: colors.gray10,
+    backgroundColor: colors.gray30,
 })
 
 const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
