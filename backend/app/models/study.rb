@@ -141,8 +141,10 @@ class Study < ApplicationRecord
     end
   end
 
-  def pause
-    stages.where.not(status: 'paused').first&.update!(status: 'paused')
+  def pause(stage_index = 0)
+    stages.first(stage_index.to_i + 1).each do |stage|
+      stage.update!(status: 'paused')
+    end
   end
 
   def resume(stage_index=0)
@@ -171,9 +173,9 @@ class Study < ApplicationRecord
 
   # called from studies controller to update status using action and stage_index from params
   def update_status!(action, stage_index)
-    if %w[pause end launch].include?(action)
+    if %w[end launch].include?(action)
       send(action)
-    elsif %w[resume reopen].include?(action)
+    elsif %w[resume pause reopen].include?(action)
       send(action, stage_index)
     elsif action == 'submit'
       submit

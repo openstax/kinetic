@@ -87,7 +87,8 @@ const ActionModalContent: FC<{
                     updateStudyStatus(
                         study,
                         'pause',
-                        `Study ${study.titleForResearchers} has been paused.`
+                        `Study ${study.titleForResearchers} has been paused.`,
+                        cell.row.depth ? cell.row.index : 0
                     )
                 }}
                 onCancel={onHide}
@@ -231,8 +232,7 @@ const isPausable = (cell: CellContext<Study, any>): boolean => {
         return true
     }
 
-
-    return isPaused(previousSession) && isActive(study)
+    return isActive(study)
 }
 
 export const ActionColumn: React.FC<{
