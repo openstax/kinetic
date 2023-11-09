@@ -4,14 +4,16 @@ import { colors } from '@theme';
 import { Researcher } from '@api';
 import {
     Box,
-    CharacterCount, FieldErrorMessage,
+    CharacterCount,
+    FieldErrorMessage,
     Form,
     FormSaveButton,
     Icon,
     InputField,
-    SelectField,
     Tooltip,
+    useFormContext,
     useFormState,
+    SelectField,
 } from '@components';
 
 const urlRegex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
@@ -57,7 +59,6 @@ const StyledForm = styled(Form<Researcher>)(({ readOnly }) => ({
 export const ResearcherAccountForm: React.FC<{className?: string}> = ({ className }) => {
     const api = useApi()
     const [researcher, setResearcher] = useState(useCurrentResearcher())
-    const [institution, setInstitution] = useState(researcher?.institution || '')
     const { refetch: refetchEnv } = useFetchEnvironment()
     const { data: userInfo, refetch: refetchUser } = useUserInfo()
 
@@ -108,18 +109,16 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
 
             <div className='col-12 mt-1'>
                 <h6>Institution</h6>
+
                 <SelectField
                     name="institution"
                     isClearable={true}
                     placeholder={'Select Option'}
-                    onChange={(value) => (setInstitution(value))}
-                    value={institution}
-                    defaultValue={institution}
+                    defaultValue={researcher.institution}
                     options={institutionList}
                 />
                 <FieldErrorMessage name='institution' />
             </div>
-
             <Box align='baseline' gap className='mt-1'>
                 <h6>Research Interests</h6>
                 <Tooltip tooltip='Examples: Multimedia Learning; AI in Education; Adaptive Tutoring Systems'>
@@ -145,11 +144,6 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
                 <h6>Lab Page Link</h6>
                 <InputField placeholder='https://' name="labPage" />
                 <FieldErrorMessage name='labPage' />
-                {/*<div className="invalid-feedback">*/}
-                {/*    <Icon icon="warning" color='red' height={18}></Icon>*/}
-                {/*    &nbsp;*/}
-                {/*    Please enter a valid URL*/}
-                {/*</div>*/}
             </div>
 
             <div className='mb-1 mt-1'>

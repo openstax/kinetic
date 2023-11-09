@@ -52,6 +52,11 @@ class Stage < ApplicationRecord
       return true
     end
 
+    if study.stages.count > 1
+      days_after_closing = previous_stages.count * available_after_days
+      return !study.closes_at.nil? && (study.closes_at.next_day(days_after_closing)) < DateTime.now
+    end
+
     !study.closes_at.nil? && study.closes_at < DateTime.now
   end
 
@@ -61,6 +66,10 @@ class Stage < ApplicationRecord
 
   def active?
     study.opens_at.present? && study.opens_at < DateTime.now
+  end
+
+  def previous_stages
+    siblings.where(Stage.arel_table[:order].lt(order)).order(:order)
   end
 
   def previous_stage

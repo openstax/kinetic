@@ -1,6 +1,5 @@
 import { React } from '@common'
 import { useCurrentUser } from '@lib';
-import { ManageCookiesLink } from './manage-cookies'
 
 export const ResourceLinks = () => {
     return (
