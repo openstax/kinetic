@@ -141,7 +141,7 @@ class Study < ApplicationRecord
     end
   end
 
-  def pause(stage_index = 0)
+  def pause(stage_index=0)
     stages.first(stage_index.to_i + 1).each do |stage|
       stage.update!(status: 'paused')
     end
