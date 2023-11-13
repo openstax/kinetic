@@ -115,7 +115,7 @@ const ActionModalContent: FC<{
                     warning={false}
                     body="The study you wish to resume has passed the original closing date. Please choose one of the options below."
                     actionText='Adjust Closing Date'
-                    onSubmit={() => nav(`/study/overview/${study.id}`)}
+                    onSubmit={() => nav(`/study/overview/${study.id}?reopen=true`)}
                     cancelText='End Study'
                     onCancel={() => {
                         updateStudyStatus(

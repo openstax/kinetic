@@ -64,8 +64,10 @@ export const EditSubmittedStudy: FC<{ study: Study }> = ({ study }) => {
             validationSchema={studyValidation}
             defaultValues={{
                 ...study,
-                hasSampleSize: !!study.targetSampleSize,
-                hasClosingDate: !!study.closesAt,
+                hasSampleSize: reopening ? false : !!study.targetSampleSize,
+                hasClosingDate: reopening ? false : !!study.closesAt,
+                closesAt: reopening ? null : study.closesAt,
+                targetSampleSize: reopening ? null : study.targetSampleSize,
                 shareStudy: !!study.publicOn,
                 stages: isReadyForLaunch(study) ? study.stages?.map((stage, index) => {
                     if (index == 0) {
@@ -345,6 +347,7 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                     <Col sm={5}>
                         <DateTime
                             name='closesAt'
+                            readOnly={!watch('hasClosingDate')}
                             format={DateTimeFormats.shortDateTime}
                             options={{
                                 defaultHour: 9,

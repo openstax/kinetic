@@ -113,7 +113,7 @@ const FormContent: FC<{
         setFormError,
     } = useFormContext()
     const [showSubmitStudy, setShowSubmitStudy] = useState(false)
-    const currentStep = watch('step') as number
+    const currentStep: number = watch('step')
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
     const nav = useNavigate()
