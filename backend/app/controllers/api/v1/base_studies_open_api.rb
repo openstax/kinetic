@@ -42,6 +42,7 @@ class Api::V1::BaseStudiesOpenApi
       property :consented do
         key :type, :boolean
         key :description, 'Did the participant consent'
+        key :readOnly, true
       end
       property :first_launched_at do
         key :type, :string

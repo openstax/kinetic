@@ -91,7 +91,7 @@ export interface Study {
      * @type {boolean}
      * @memberof Study
      */
-    consented?: boolean;
+    readonly consented?: boolean;
     /**
      * When the study was launched; null means not launched
      * @type {Date}
@@ -274,7 +274,6 @@ export function StudyToJSON(value?: Study | null): any {
         'image_id': value.imageId,
         'benefits': value.benefits,
         'is_hidden': value.isHidden,
-        'consented': value.consented,
         'opens_at': value.opensAt === undefined ? undefined : (value.opensAt === null ? null : value.opensAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'target_sample_size': value.targetSampleSize,
