@@ -102,7 +102,7 @@ RSpec.describe Study, api: :v1 do
     it 'pauses first session of a study' do
       study.launch
       # Pause first session
-      study.pause
+      study.pause(0)
       expect(study.status).to eq 'active'
       expect(study.stages.first.status).to eq 'paused'
       expect(study.stages.second.status).to eq 'active'
@@ -112,8 +112,7 @@ RSpec.describe Study, api: :v1 do
     it 'pauses second session of a study' do
       study.launch
       # Pause first two sessions
-      study.pause
-      study.pause
+      study.pause(1)
       expect(study.status).to eq 'active'
       expect(study.stages.first.status).to eq 'paused'
       expect(study.stages.second.status).to eq 'paused'
@@ -123,9 +122,7 @@ RSpec.describe Study, api: :v1 do
     it 'pauses third session of a study' do
       study.launch
       # Pause all three sessions
-      study.pause
-      study.pause
-      study.pause
+      study.pause(2)
       expect(study.status).to eq 'paused'
       expect(study.stages.first.status).to eq 'paused'
       expect(study.stages.second.status).to eq 'paused'
@@ -145,9 +142,7 @@ RSpec.describe Study, api: :v1 do
 
     it 'resumes subsequent studies' do
       study.launch
-      study.pause
-      study.pause
-      study.pause
+      study.pause(2)
       expect(study.status).to eq 'paused'
 
       # Resume first session, should resume all subsequent paused sessions

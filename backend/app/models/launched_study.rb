@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class LaunchedStudy < ApplicationRecord
-  belongs_to :study, counter_cache: true
+  belongs_to :study
   has_many :stages, through: :study
 
   before_create { self.first_launched_at ||= Time.now }
