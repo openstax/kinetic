@@ -14,8 +14,8 @@ interface StudyMessagingProps {
 
 }
 
-const Points: React.FC<StudyMessagingProps> = ({ study }) => {
-    if (!study.completedAt) return null
+const Points: React.FC<StudyMessagingProps> = ({ consented, study }) => {
+    if (!study.completedAt || !consented) return null
     return (
         <div
             css={{

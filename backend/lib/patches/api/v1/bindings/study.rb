@@ -10,6 +10,7 @@ Rails.application.config.to_prepare do
     def self.create_from_model(model)
       attributes = model.attributes_for_binding(self)
       attributes[:first_launched_at] = model.first_launched_study&.first_launched_at || nil
+      attributes[:consented] = model.first_launched_study&.consent_granted || false
       attributes[:return_url] = frontend_returning_url(model.id)
 
       attributes[:researchers] = model.study_researchers.map do |study_researcher|

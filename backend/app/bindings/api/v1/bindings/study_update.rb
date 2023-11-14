@@ -42,6 +42,9 @@ module Api::V1::Bindings
     # Is the study hidden from participants
     attr_accessor :is_hidden
 
+    # Did the participant consent
+    attr_accessor :consented
+
     # When the study was launched; null means not launched
     attr_accessor :first_launched_at
 
@@ -124,6 +127,7 @@ module Api::V1::Bindings
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
         :'is_hidden' => :'is_hidden',
+        :'consented' => :'consented',
         :'first_launched_at' => :'first_launched_at',
         :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
@@ -160,6 +164,7 @@ module Api::V1::Bindings
         :'image_id' => :'String',
         :'benefits' => :'String',
         :'is_hidden' => :'Boolean',
+        :'consented' => :'Boolean',
         :'first_launched_at' => :'Time',
         :'opens_at' => :'Time',
         :'closes_at' => :'Time',
@@ -245,6 +250,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'is_hidden')
         self.is_hidden = attributes[:'is_hidden']
+      end
+
+      if attributes.key?(:'consented')
+        self.consented = attributes[:'consented']
       end
 
       if attributes.key?(:'first_launched_at')
@@ -385,6 +394,7 @@ module Api::V1::Bindings
           image_id == o.image_id &&
           benefits == o.benefits &&
           is_hidden == o.is_hidden &&
+          consented == o.consented &&
           first_launched_at == o.first_launched_at &&
           opens_at == o.opens_at &&
           closes_at == o.closes_at &&
@@ -412,7 +422,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, is_mandatory, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, is_mandatory, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash
