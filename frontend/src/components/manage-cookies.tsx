@@ -1,5 +1,4 @@
 import React from 'react';
-import { css, Global } from '@emotion/react'
 
 // documentation for this at https://docs.osano.com/hiding-the-cookie-widget
 export const ManageCookiesLink = () => {
@@ -15,13 +14,7 @@ export const ManageCookiesLink = () => {
         osano.cm.showDrawer('osano-cm-dom-info-dialog-open')
     }
 
-
     return (
-        <>
-            <Global
-                styles={css({ '.osano-cm-widget': { display: 'none' } })}
-            />
-            <a href='#' onClick={showOsano}>Manage Cookies</a>
-        </>
+        <span onClick={showOsano}>Manage Cookies</span>
     )
 };

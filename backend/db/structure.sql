@@ -655,7 +655,8 @@ CREATE TABLE public.studies (
     subject character varying,
     internal_description character varying,
     target_sample_size integer,
-    public_on timestamp with time zone
+    public_on timestamp with time zone,
+    launched_studies_count integer
 );
 
 
@@ -1479,6 +1480,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230712163112'),
 ('20230726142755'),
 ('20230808163159'),
-('20230905121510');
+('20230905121510'),
+('20231113162430');
 
 

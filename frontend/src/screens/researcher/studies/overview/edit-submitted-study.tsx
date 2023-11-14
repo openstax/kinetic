@@ -46,6 +46,26 @@ const studyValidation = Yup.object().shape({
     ),
 });
 
+const getDefaultValues = (study: Study, reopening = false) => {
+    return {
+        ...study,
+        hasSampleSize: reopening ? false : !!study.targetSampleSize,
+        hasClosingDate: reopening ? false : !!study.closesAt,
+        closesAt: reopening ? null : study.closesAt,
+        targetSampleSize: reopening ? null : study.targetSampleSize,
+        shareStudy: !!study.publicOn,
+        stages: isReadyForLaunch(study) ? study.stages?.map((stage, index) => {
+            if (index == 0) {
+                return stage
+            }
+            return ({
+                ...stage,
+                availableAfterDays: undefined,
+            })
+        }) : study.stages,
+    }
+}
+
 export const EditSubmittedStudy: FC<{ study: Study }> = ({ study }) => {
     const api = useApi()
     const reopening: boolean = useQueryParam('reopen') || false
@@ -53,7 +73,7 @@ export const EditSubmittedStudy: FC<{ study: Study }> = ({ study }) => {
     const saveStudy = async (study: Study, context: FormContext<any>) => {
         const { reset } = context
         const savedStudy = await api.updateStudy({ id: Number(study.id), updateStudy: { study: study } })
-        reset(savedStudy, { keepIsValid: true })
+        reset(getDefaultValues(savedStudy), { keepIsValid: true })
     }
 
     const isDisabled = !reopening && isCompleted(study)
@@ -62,21 +82,7 @@ export const EditSubmittedStudy: FC<{ study: Study }> = ({ study }) => {
         <Form
             readOnly={isDisabled}
             validationSchema={studyValidation}
-            defaultValues={{
-                ...study,
-                hasSampleSize: !!study.targetSampleSize,
-                hasClosingDate: !!study.closesAt,
-                shareStudy: !!study.publicOn,
-                stages: isReadyForLaunch(study) ? study.stages?.map((stage, index) => {
-                    if (index == 0) {
-                        return stage
-                    }
-                    return ({
-                        ...stage,
-                        availableAfterDays: undefined,
-                    })
-                }) : study.stages,
-            }}
+            defaultValues={getDefaultValues(study, reopening)}
             onSubmit={(values, context) => saveStudy(values, context)}
             onCancel={() => {}}
         >
@@ -345,6 +351,7 @@ const ClosingCriteria: FC<{study: Study}> = ({ study }) => {
                     <Col sm={5}>
                         <DateTime
                             name='closesAt'
+                            readOnly={!watch('hasClosingDate')}
                             format={DateTimeFormats.shortDateTime}
                             options={{
                                 defaultHour: 9,
