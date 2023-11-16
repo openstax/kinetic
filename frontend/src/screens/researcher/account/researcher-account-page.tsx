@@ -1,6 +1,6 @@
 import { HelpLink, Icon, Page, ResourceLinks, Tooltip } from '@components';
 import { React, styled, useState } from '@common';
-import { useAccountsURL, useApi, useCurrentResearcher } from '@lib';
+import { useAccountsURL, useApi, useCurrentResearcher, useFetchEnvironment } from '@lib';
 import { colors } from '@theme';
 import CustomerSupportImage from '../../../components/customer-support-image';
 import RiceLogoURL from '../../../images/rice-logo-darktext.png';
@@ -135,6 +135,7 @@ export const IRB = () => {
 const Avatar: React.FC = () => {
     const api = useApi()
     const [researcher, setResearcher] = useState(useCurrentResearcher())
+    const { refetch: refetchEnv } = useFetchEnvironment()
     const [showAvatarModal, setShowAvatarModal] = useState(false)
     const [files, setFiles] = useState<FileWithPath[]>([]);
 
@@ -143,9 +144,9 @@ const Avatar: React.FC = () => {
     }
 
     const previews = files.map((file) => {
-        const imageUrl = URL.createObjectURL(file);
+        const url = URL.createObjectURL(file);
         return (
-            <Image key={file.path} alt='Avatar preview' h={200} w={200} src={imageUrl} onLoad={() => URL.revokeObjectURL(imageUrl)} style={{
+            <Image key={file.path} alt='Avatar preview' h={200} w={200} src={url} style={{
                 border: `1px solid ${colors.gray50}`,
                 borderRadius: '50%',
                 objectFit: 'cover',
@@ -155,7 +156,6 @@ const Avatar: React.FC = () => {
     });
 
     const imageURL = researcher.avatarUrl || DefaultAvatar;
-
     const onHide = () => {
         setShowAvatarModal(false)
         setFiles([])
@@ -170,6 +170,7 @@ const Avatar: React.FC = () => {
             id: researcher.id,
             avatar: file,
         })
+        await refetchEnv()
         setResearcher(r)
         onHide()
     }
@@ -205,7 +206,7 @@ const Avatar: React.FC = () => {
                         }
                     </Dropzone>
                     <Stack align='center'>
-                        {!!previews.length && <Button color='purple' onClick={() => updateAvatar()} style={{ pointerEvents: 'all' }}>
+                        {!!previews.length && <Button color='purple' onClick={updateAvatar}>
                             Save Changes
                         </Button> }
                     </Stack>
