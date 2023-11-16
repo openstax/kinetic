@@ -18,7 +18,7 @@ export default function ResearcherAccountPage() {
     }
 
     return (
-        <Page>
+        <Page hideFooter>
             <Container size='xl' py='xl'>
                 <Grid gutter='xl'>
                     <Grid.Col span={9}>
