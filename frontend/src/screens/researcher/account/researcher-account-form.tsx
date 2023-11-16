@@ -5,7 +5,7 @@ import { Researcher } from '@api';
 import {
     Box,
     CharacterCount,
-    FieldErrorMessage,
+    FieldErrorMessage, FieldTitle,
     Form,
     FormSaveButton,
     Icon,
@@ -107,8 +107,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
             </div>
 
             <div className='col-12 mt-1'>
-                <h6>Institution</h6>
-
+                <FieldTitle required>Institution</FieldTitle>
                 <SelectField
                     name="institution"
                     isClearable={true}
@@ -147,7 +146,7 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
 
             <div className='mb-1 mt-1'>
                 <Box align='baseline' gap>
-                    <h6 className='field-title'>Bio</h6>
+                    <FieldTitle required>Bio</FieldTitle>
                     <Tooltip tooltip='This bio will be visible to learners, as a chance for them to know more about the researcher conducting the study'>
                         <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={16}/>
                     </Tooltip>
