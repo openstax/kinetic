@@ -206,7 +206,7 @@ const Avatar: React.FC = () => {
                     </Dropzone>
                     <Stack align='center'>
                         {!!previews.length && <Button color='purple' onClick={() => updateAvatar()} style={{ pointerEvents: 'all' }}>
-                            Save Avatar
+                            Save Changes
                         </Button> }
                     </Stack>
                 </Stack>
