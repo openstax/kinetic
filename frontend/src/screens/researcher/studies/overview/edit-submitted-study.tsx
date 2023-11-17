@@ -233,7 +233,6 @@ const OpensAt: FC = () => {
                     withTime
                     options={{
                         defaultHour: 9,
-                        minDate: 'today',
                     }}
                 />
             </Col>
