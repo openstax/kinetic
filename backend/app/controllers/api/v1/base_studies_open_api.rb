@@ -80,10 +80,6 @@ class Api::V1::BaseStudiesOpenApi
           key :$ref, :Researcher
         end
       end
-      property :is_mandatory do
-        key :type, :boolean
-        key :description, 'Mandatory studies must be completed by all users'
-      end
       property :view_count do
         key :type, :number
         key :description, 'How many times the study has been viewed'

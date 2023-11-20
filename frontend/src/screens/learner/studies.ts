@@ -16,7 +16,6 @@ interface StudySort {
 }
 
 interface StudyState {
-    mandatoryStudy?: ParticipantStudy
     allStudies: ParticipantStudy[]
     highlightedStudies: ParticipantStudy[]
     syllabusContestStudies: ParticipantStudy[]
@@ -51,8 +50,6 @@ export const useLearnerStudies = () => {
     const fetchStudies = useCallback(async () => {
         const fetchedStudies = await api.getParticipantStudies()
 
-        const mandatoryStudy = fetchedStudies.data?.find(s => isStudyLaunchable(s) && s.isMandatory)
-
         if (studySort.lastCalculated < Date.now() - MS_IN_MONTH) {
             studySort.lastCalculated = Date.now()
             studySort.sort = {} // clear values
@@ -66,7 +63,7 @@ export const useLearnerStudies = () => {
         setStudySort({ ...studySort })
 
         // find all studies that are eligible to be featured
-        const eligibleStudies = allStudies.filter(s => !s.isMandatory && !s.completedAt)
+        const eligibleStudies = allStudies.filter(s => !s.completedAt)
 
         // select 3 that are marked as featured
         const featuredStudies = eligibleStudies.filter(s => s.isFeatured).slice(-1 * FEATURED_COUNT)
@@ -92,7 +89,10 @@ export const useLearnerStudies = () => {
         }
 
         setStudyState({
-            mandatoryStudy, allStudies, highlightedStudies, syllabusContestStudies, studiesByTopic,
+            allStudies,
+            highlightedStudies,
+            syllabusContestStudies,
+            studiesByTopic,
         })
     }, [setStudyState])
 
@@ -101,16 +101,10 @@ export const useLearnerStudies = () => {
         fetchStudies()
     }, [])
 
-    const onMandatoryClose = useCallback(() => {
-        setStudyState({ ...studies, mandatoryStudy: undefined })
-        fetchStudies()
-    }, [fetchStudies])
-
     return useMemo(() => ({
         ...studies,
         filter,
         setFilter,
-        onMandatoryClose,
-    }), [studies, onMandatoryClose, filter, setFilter])
+    }), [studies, filter, setFilter])
 
 }

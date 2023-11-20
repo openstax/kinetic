@@ -7,7 +7,6 @@ import { useIsMobileDevice } from '@lib'
 import { StudyTopic, studyTopics } from '@models'
 import { StudyByTopics, useLearnerStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
-import { StudyModal } from './studies/modal'
 import { StudyDetails } from './learner/details'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { chunk } from 'lodash-es'
@@ -175,10 +174,8 @@ const LearnerDashboard = () => {
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
     const {
         highlightedStudies,
-        mandatoryStudy,
         allStudies,
         filter,
-        onMandatoryClose,
         setFilter,
         studiesByTopic,
         syllabusContestStudies,
@@ -189,7 +186,6 @@ const LearnerDashboard = () => {
             <Routes>
                 <Route path={'details/:studyId'} element={<StudyDetails studies={allStudies} />} />
             </Routes>
-            <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
             <TopNavBar />
             <RewardsProgressBar studies={allStudies} />
 

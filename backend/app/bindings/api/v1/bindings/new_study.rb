@@ -60,9 +60,6 @@ module Api::V1::Bindings
     # The study's researchers.
     attr_accessor :researchers
 
-    # Mandatory studies must be completed by all users
-    attr_accessor :is_mandatory
-
     # How many times the study has been viewed
     attr_accessor :view_count
 
@@ -130,7 +127,6 @@ module Api::V1::Bindings
         :'target_sample_size' => :'target_sample_size',
         :'status' => :'status',
         :'researchers' => :'researchers',
-        :'is_mandatory' => :'is_mandatory',
         :'view_count' => :'view_count',
         :'public_on' => :'public_on',
         :'completed_count' => :'completed_count',
@@ -166,7 +162,6 @@ module Api::V1::Bindings
         :'target_sample_size' => :'Float',
         :'status' => :'String',
         :'researchers' => :'Array<Researcher>',
-        :'is_mandatory' => :'Boolean',
         :'view_count' => :'Float',
         :'public_on' => :'Time',
         :'completed_count' => :'Float',
@@ -271,10 +266,6 @@ module Api::V1::Bindings
         if (value = attributes[:'researchers']).is_a?(Array)
           self.researchers = value
         end
-      end
-
-      if attributes.key?(:'is_mandatory')
-        self.is_mandatory = attributes[:'is_mandatory']
       end
 
       if attributes.key?(:'view_count')
@@ -409,7 +400,6 @@ module Api::V1::Bindings
           target_sample_size == o.target_sample_size &&
           status == o.status &&
           researchers == o.researchers &&
-          is_mandatory == o.is_mandatory &&
           view_count == o.view_count &&
           public_on == o.public_on &&
           completed_count == o.completed_count &&
@@ -430,7 +420,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, is_mandatory, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
+      [title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

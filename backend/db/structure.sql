@@ -642,7 +642,6 @@ CREATE TABLE public.studies (
     long_description character varying DEFAULT ''::character varying,
     opens_at timestamp with time zone,
     closes_at timestamp with time zone,
-    is_mandatory boolean DEFAULT false NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL,
     benefits character varying,
@@ -1481,6 +1480,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230726142755'),
 ('20230808163159'),
 ('20230905121510'),
-('20231113162430');
+('20231113162430'),
+('20231120172017');
 
 

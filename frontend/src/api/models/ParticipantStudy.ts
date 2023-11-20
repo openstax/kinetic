@@ -171,12 +171,6 @@ export interface ParticipantStudy {
      */
     researchers?: Array<Researcher>;
     /**
-     * Mandatory studies must be completed by all users
-     * @type {boolean}
-     * @memberof ParticipantStudy
-     */
-    isMandatory?: boolean;
-    /**
      * How many times the study has been viewed
      * @type {number}
      * @memberof ParticipantStudy
@@ -294,7 +288,6 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
         'status': !exists(json, 'status') ? undefined : json['status'],
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
-        'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
         'publicOn': !exists(json, 'public_on') ? undefined : (json['public_on'] === null ? null : new Date(json['public_on'])),
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
@@ -334,7 +327,6 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'target_sample_size': value.targetSampleSize,
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(ResearcherToJSON)),
-        'is_mandatory': value.isMandatory,
         'view_count': value.viewCount,
         'public_on': value.publicOn === undefined ? undefined : (value.publicOn === null ? null : value.publicOn.toISOString()),
         'category': value.category,

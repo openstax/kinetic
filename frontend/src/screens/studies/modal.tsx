@@ -1,8 +1,6 @@
-import { React, useEffect, useState } from '@common'
+import { React, useEffect } from '@common'
 import { ParticipantStudy, Study } from '@api'
-import { useApi, isNil } from '@lib'
-import { Modal, LoadingAnimation } from '@components'
-import { isParticipantStudy } from '@models'
+import { isNil } from '@lib'
 
 
 interface StudyModalProps {
@@ -29,37 +27,4 @@ const Iframe:React.FC<{ url?: string, onClose: StudyModalProps['onHide'] }> = ({
     if (isNil(url)) return null
 
     return <iframe id="study" css={{ minHeight: 'calc(100vh - 130px)', width: '100%', overflow: 'scroll' }} src={url} />
-}
-
-export const StudyModal: React.FC<StudyModalProps> = ({ onHide, study }) => {
-    const api = useApi()
-    const [studyUrl, setStudyUrl] = useState('')
-    const isPreview = !isParticipantStudy(study)
-    useEffect(() => {
-        if (!study) return
-
-        api.launchStudy({
-            id: study.id,
-            preview: isPreview,
-        }).then((launch) => {
-            setStudyUrl(launch.url!)
-        })
-    }, [study?.id])
-    if (!study) { return null }
-
-    return (
-        <Modal
-            xlarge
-            show={true}
-            onHide={isPreview ? () => onHide?.() : undefined}
-            closeBtn={isPreview}
-            title={study.titleForParticipants}
-            data-is-study-preview-modal={isPreview}
-        >
-            <Modal.Body css={{ padding: 0 }}>
-                {isNil(studyUrl) && <LoadingAnimation />}
-                <Iframe url={studyUrl} onClose={onHide} />
-            </Modal.Body>
-        </Modal>
-    )
 }
