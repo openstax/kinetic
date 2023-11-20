@@ -754,7 +754,8 @@ CREATE TABLE public.user_preferences (
     session_available_email boolean DEFAULT true NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL,
-    has_viewed_analysis_tutorial boolean DEFAULT false
+    has_viewed_analysis_tutorial boolean DEFAULT false,
+    has_viewed_welcome_message boolean DEFAULT false
 );
 
 

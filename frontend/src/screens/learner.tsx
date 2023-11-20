@@ -13,6 +13,7 @@ import { chunk } from 'lodash-es'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Pagination } from 'swiper';
 import { SyllabusContest } from './learner/syllabus-contest';
+import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 
 interface StudyListProps {
     studies: ParticipantStudy[],
@@ -187,6 +188,7 @@ const LearnerDashboard = () => {
                 <Route path={'details/:studyId'} element={<StudyDetails studies={allStudies} />} />
             </Routes>
             <TopNavBar />
+            <LearnerWelcomeModal />
             <RewardsProgressBar studies={allStudies} />
 
             <SyllabusContest studies={syllabusContestStudies} />
