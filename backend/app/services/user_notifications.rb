@@ -15,9 +15,9 @@ class UserNotifications
     # WHEN completing the demographic study
     def deliver_welcomes
       uuids = LaunchedStudy.joins(:study)
-                           .where(completed_at: yesterday)
-                           .group(:user_id) # just to make sure we don't send dupe emails
-                           .pluck(:user_id)
+                .where(completed_at: yesterday)
+                .group(:user_id) # just to make sure we don't send dupe emails
+                .pluck(:user_id)
 
       UserInfo.for_uuids(uuids).each do |_, user|
         UserMailer.with(user: user).welcome.deliver
