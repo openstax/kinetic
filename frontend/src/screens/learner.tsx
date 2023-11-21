@@ -180,6 +180,7 @@ const LearnerDashboard = () => {
         setFilter,
         studiesByTopic,
         syllabusContestStudies,
+        demographicSurvey,
     } = useLearnerStudies()
 
     return (
@@ -188,7 +189,7 @@ const LearnerDashboard = () => {
                 <Route path={'details/:studyId'} element={<StudyDetails studies={allStudies} />} />
             </Routes>
             <TopNavBar />
-            <LearnerWelcomeModal />
+            <LearnerWelcomeModal demographicSurvey={demographicSurvey} />
             <RewardsProgressBar studies={allStudies} />
 
             <SyllabusContest studies={syllabusContestStudies} />

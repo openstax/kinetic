@@ -45,6 +45,12 @@ export interface ParticipantStudy {
      */
     popularityRating?: number;
     /**
+     * Is this study the demographic survey?
+     * @type {boolean}
+     * @memberof ParticipantStudy
+     */
+    readonly isDemographicSurvey?: boolean;
+    /**
      * Should this study be featured more prominently?
      * @type {boolean}
      * @memberof ParticipantStudy
@@ -267,6 +273,7 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         
         'id': json['id'],
         'popularityRating': !exists(json, 'popularity_rating') ? undefined : json['popularity_rating'],
+        'isDemographicSurvey': !exists(json, 'is_demographic_survey') ? undefined : json['is_demographic_survey'],
         'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
         'isSyllabusContestStudy': !exists(json, 'is_syllabus_contest_study') ? undefined : json['is_syllabus_contest_study'],
         'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),

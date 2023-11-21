@@ -19,13 +19,14 @@ interface StudyState {
     allStudies: ParticipantStudy[]
     highlightedStudies: ParticipantStudy[]
     syllabusContestStudies: ParticipantStudy[]
-    studiesByTopic: StudyByTopics
+    studiesByTopic: StudyByTopics,
+    demographicSurvey: ParticipantStudy | null
 }
 
 
 // The rules for featured studies are:
-//   * select all the non-completed and not required (demographic survey) studies
-//   * Sort the list.  See if we've sorted the  above list in the last 30 days.
+//   * select all the non-completed studies
+//   * Sort the list.  See if we've sorted the above list in the last 30 days.
 //      * If we have, re-apply the sort
 //      * If not, sort it and remember how and when it was sorted
 //      * List is sorted randomly, but always moves completed studies to the end of the list
@@ -45,6 +46,7 @@ export const useLearnerStudies = () => {
         highlightedStudies: [],
         syllabusContestStudies: [],
         studiesByTopic: {} as StudyByTopics,
+        demographicSurvey: null,
     })
 
     const fetchStudies = useCallback(async () => {
@@ -61,6 +63,8 @@ export const useLearnerStudies = () => {
         })
 
         setStudySort({ ...studySort })
+
+        const demographicSurvey = allStudies.find(s => s.isDemographicSurvey) || null
 
         // find all studies that are eligible to be featured
         const eligibleStudies = allStudies.filter(s => !s.completedAt)
@@ -93,6 +97,7 @@ export const useLearnerStudies = () => {
             highlightedStudies,
             syllabusContestStudies,
             studiesByTopic,
+            demographicSurvey,
         })
     }, [setStudyState])
 

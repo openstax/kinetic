@@ -9,7 +9,12 @@ import {
     useResearcherPage,
     useUserPage,
 } from './test'
-import { createStudiesData } from './data-helpers';
+import { completeWelcomeMessage, createStudiesData } from './data-helpers';
+
+test.beforeEach(async ({ browser }) => {
+    const userPage = await useUserPage(browser)
+    await completeWelcomeMessage(userPage.context())
+})
 
 test('displays studies', async ({ browser }) => {
     const userPage = await useUserPage(browser)
