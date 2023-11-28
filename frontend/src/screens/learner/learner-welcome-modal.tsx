@@ -5,18 +5,22 @@ import { useNavigate } from 'react-router-dom';
 import { noop } from 'lodash-es';
 import { useApi, useUserPreferences } from '@lib';
 import { ParticipantStudy } from '@api';
+import Waves from './waves.svg';
 
-export const LearnerWelcomeModal: FC<{demographicSurvey: ParticipantStudy | null}> = ({ demographicSurvey }) => {
+export const LearnerWelcomeModal: FC<{
+    demographicSurvey: ParticipantStudy | null,
+    completedCount: number
+}> = ({ demographicSurvey, completedCount }) => {
     const [open, setOpen] = useState(true)
     const nav = useNavigate()
     const api = useApi()
-    const { refetch } = useUserPreferences()
-
-    if (!demographicSurvey) return null
+    const { data: preferences, refetch } = useUserPreferences()
+    // api.updatePreferences({ updatePreferences: { preferences: { hasViewedWelcomeMessage: false } } })
+    if (!demographicSurvey || preferences?.hasViewedWelcomeMessage || completedCount > 0) return null
 
     const onContinue = async () => {
         setOpen(false)
-        await api.updatePreferences({ updatePreferences: { preferences: { hasViewedAnalysisTutorial: true } } }).then(() => {
+        await api.updatePreferences({ updatePreferences: { preferences: { hasViewedWelcomeMessage: true } } }).then(() => {
             refetch().then(() => {
                 setOpen(false)
                 nav(`/studies/details/${demographicSurvey.id}`)
@@ -26,8 +30,10 @@ export const LearnerWelcomeModal: FC<{demographicSurvey: ParticipantStudy | null
 
     return (
         <Modal centered opened={open} onClose={noop} closeOnEscape={false} closeOnClickOutside={false} withCloseButton={false} size='75%' styles={{
-            body: { backgroundColor: 'var(--mantine-color-purple-filled)' },
-            header: { backgroundColor: 'var(--mantine-color-purple-filled)' },
+            content: {
+                backgroundImage: `url(${Waves})`,
+                backgroundSize: 'cover',
+            },
         }}>
             <Modal.Body p='xl'>
                 <Stack justify='center' align='center' gap='xl' c='white'>

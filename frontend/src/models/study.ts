@@ -84,10 +84,6 @@ export function getStudyLead(study: Study | ParticipantStudy) {
     return study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)
 }
 
-export function isParticipantStudy(study?: any): study is ParticipantStudy {
-    return study && !isNil((study).id) && !isNil((study).titleForParticipants)
-}
-
 export function studyIsMultipart(study: ParticipantStudy | Study): boolean {
     return Boolean(study.stages && study.stages.length > 1)
 }
