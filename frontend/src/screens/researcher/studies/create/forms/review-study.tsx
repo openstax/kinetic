@@ -3,12 +3,13 @@ import { Box, React, useNavigate, useState } from '@common';
 import { colors } from '@theme';
 import { StudyCardPreview, Tag } from '../../../../learner/card';
 import { StudyStep } from '../edit-study';
-import { Col, Modal, ResearcherButton, useFormContext } from '@components';
+import { Col, Modal, useFormContext } from '@components';
 import { Study } from '@api';
 import { useApi } from '@lib';
 import { capitalize } from 'lodash-es';
 import Waiting from '@images/study-creation/waiting.svg'
 import { useLocalstorageState } from 'rooks';
+import { Button } from '@mantine/core';
 
 export const ReviewStudy: FC<{ study: Study }> = ({ study }) => {
     return (
@@ -38,9 +39,9 @@ const EditingStudyInformation: FC<{ study: Study }> = ({ study }) => {
                 <Box justify='between' direction='column' gap>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Internal Details</h6>
-                        <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.InternalDetails)}>
+                        <Button variant='outline' onClick={() => setStep(StudyStep.InternalDetails)}>
                             Edit
-                        </ResearcherButton>
+                        </Button>
                     </Col>
                     <Col sm={8} direction='column'>
                         <ul>
@@ -66,9 +67,9 @@ const EditingStudyInformation: FC<{ study: Study }> = ({ study }) => {
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Research Team</h6>
-                        <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.ResearchTeam)}>
+                        <Button color='blue' variant='outline' onClick={() => setStep(StudyStep.ResearchTeam)}>
                             Edit
-                        </ResearcherButton>
+                        </Button>
                     </Col>
                     <Col sm={8} direction='column'>
                         <ul>
@@ -100,9 +101,9 @@ const EditingStudyInformation: FC<{ study: Study }> = ({ study }) => {
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Participant View</h6>
-                        <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.ParticipantView)}>
+                        <Button variant='outline' color='blue' onClick={() => setStep(StudyStep.ParticipantView)}>
                             Edit
-                        </ResearcherButton>
+                        </Button>
                     </Col>
                     <Col sm={8} direction='column'>
                         <small>Interact with the study card on the right-hand side to review how participants view your study</small>
@@ -139,12 +140,12 @@ const AdditionalSessionsOverview: FC<{ study: Study }> = ({ study }) => {
                 <Col justify='between' direction='row'>
                     <h6 className='fw-bold'>Additional Sessions (optional)</h6>
 
-                    <ResearcherButton
-                        buttonType={stageCount == 1 ? 'primary' : 'secondary'}
+                    <Button
+                        variant={stageCount == 1 ? 'filled' : 'outline'}
                         onClick={() => setStep(StudyStep.AdditionalSessions)}
                     >
                         {stageCount == 1 ? 'Start' : 'Edit'}
-                    </ResearcherButton>
+                    </Button>
                 </Col>
 
                 <Col sm={8} direction='column'>
@@ -206,10 +207,10 @@ export const SubmitStudyModal: FC<{
                         <p>Are you ready to proceed?</p>
                     </Box>
                     <Box gap='large'>
-                        <ResearcherButton buttonType='secondary' onClick={() => setShow(false)}>
+                        <Button variant='outline' onClick={() => setShow(false)}>
                             Not yet, edit study
-                        </ResearcherButton>
-                        <ResearcherButton data-testid='submit-study-button' busyMessage='Submitting' busy={submitting} onClick={() => {
+                        </Button>
+                        <Button data-testid='submit-study-button' loading={submitting} onClick={() => {
                             setSubmitting(true)
                             submitStudy().then(() => {
                                 setSubmitted(true)
@@ -220,7 +221,7 @@ export const SubmitStudyModal: FC<{
                             })
                         }}>
                             Yes, submit study
-                        </ResearcherButton>
+                        </Button>
                     </Box>
                 </Box>
             </Modal.Body>
@@ -241,11 +242,11 @@ const SubmitSuccess: FC<{ show: boolean }> = ({ show }) => {
                         <p>Follow the instructions to build your task and come back here to proceed with finalizing your study and launching it on Kinetic.</p>
                     </Box>
 
-                    <ResearcherButton data-testid='submit-study-success-button' onClick={() => {
+                    <Button data-testid='submit-study-success-button' onClick={() => {
                         nav('/studies')
                     }}>
                         Return to Studies Dashboard
-                    </ResearcherButton>
+                    </Button>
                 </Box>
             </Modal.Body>
         </Modal>

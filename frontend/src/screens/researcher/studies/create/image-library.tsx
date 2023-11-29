@@ -79,7 +79,7 @@ export const ImageLibrary: FC<{
             opened={show}
             size='85%'
             data-testid="image-library-modal"
-            title='Image Library'
+            title='Select an image for your study'
             styles={{
                 body: {
                     padding: 0,
@@ -88,8 +88,8 @@ export const ImageLibrary: FC<{
         >
             <Modal.Body>
                 <Flex direction='column'>
-                    <Tabs defaultValue={initialCategory} style={{ flex: 1 }}>
-                        <Tabs.List>
+                    <Tabs variant='pills' defaultValue={initialCategory} >
+                        <Tabs.List px='md'>
                             {imageCategories.map(c =>
                                 <Tabs.Tab value={c} key={c}>
                                     {c}
@@ -97,7 +97,7 @@ export const ImageLibrary: FC<{
                             )}
                         </Tabs.List>
                         {imageCategories.map(c =>
-                            <Tabs.Panel value={c}>
+                            <Tabs.Panel value={c} mt='lg'>
                                 <ScrollArea>
                                     <SimpleGrid spacing='lg' verticalSpacing='lg' cols={4} p='lg' h={600}>
                                         {cardImages.filter(i => i.category.includes(c)).map(cardImage => (
@@ -114,7 +114,7 @@ export const ImageLibrary: FC<{
                             </Tabs.Panel>
                         )}
                     </Tabs>
-                    <Group style={{ alignSelf: 'end', flex: 1 }} p='xl'>
+                    <Group style={{ alignSelf: 'end' }} p='xl'>
                         <Button variant='outline' onClick={() => onHide()}>
                             Cancel
                         </Button>

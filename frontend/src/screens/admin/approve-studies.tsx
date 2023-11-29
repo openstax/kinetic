@@ -2,7 +2,7 @@ import { Study } from '@api'
 import { React, useEffect, useState } from '@common'
 import { useApi } from '@lib'
 import { useToggle } from 'rooks';
-import { ResearcherButton, showResearcherNotification } from '@components';
+import { showResearcherNotification } from '@components';
 import { Main } from './grid'
 import { Button } from '@mantine/core';
 

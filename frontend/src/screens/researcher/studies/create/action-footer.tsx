@@ -1,5 +1,5 @@
 import { Box, React, styled, useCallback, useState } from '@common';
-import { Icon, ResearcherButton, Step } from '@components';
+import { Icon, Step } from '@components';
 import { Button } from '@mantine/core';
 
 const FakeLink = styled.span({

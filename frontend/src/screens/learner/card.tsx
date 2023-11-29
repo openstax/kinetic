@@ -1,5 +1,5 @@
 import { cx, React, useCallback, useState } from '@common'
-import { Box, getImageUrl, Icon, MultiSessionBar, ResearcherButton } from '@components'
+import { Box, getImageUrl, Icon, MultiSessionBar } from '@components'
 import { useIsMobileDevice } from '@lib'
 import { getStudyDuration, getStudyPoints, studyHasFeedback, studyIsMultipart } from '@models'
 import { ParticipantStudy, Study } from '@api'
@@ -7,6 +7,7 @@ import styled from '@emotion/styled'
 import { colors, media } from '@theme'
 import { StudyDetailsPreview } from './details';
 import dayjs from 'dayjs';
+import { Button } from '@mantine/core';
 
 interface StudyCardProps {
     study: ParticipantStudy
@@ -266,13 +267,13 @@ export const StudyCardPreview: FC<{study: Study}> = ({ study }) => {
     return (
         <Card className="col study" direction='column'>
             <CardContent study={study as ParticipantStudy} />
-            <ResearcherButton
-                buttonType='secondary'
-                className='justify-content-center mt-3'
+            <Button
+                variant='outline'
+                mt='auto'
                 onClick={() => {setShowDetails(true)}}
             >
                 Preview Study Details
-            </ResearcherButton>
+            </Button>
             <StudyDetailsPreview
                 study={study as ParticipantStudy}
                 show={showDetails}

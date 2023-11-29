@@ -13,7 +13,6 @@ import {
     Icon,
     InputField,
     Modal,
-    ResearcherButton,
     ResearcherCheckbox,
     useFormContext,
     useFormState,
@@ -21,6 +20,7 @@ import {
 import { Box, React, useNavigate, useState, Yup } from '@common';
 import { getFirstStage, isCompleted, isReadyForLaunch } from '@models';
 import { colors } from '@theme';
+import { Button } from '@mantine/core';
 
 const studyValidation = Yup.object().shape({
     opensAt: Yup.mixed().required(),
@@ -160,8 +160,9 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
         return (
             <Box className='fixed-bottom bg-white' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
                 <Box className='container-lg' align='center' justify='end'>
-                    <ResearcherButton
+                    <Button
                         disabled={!isValid}
+                        color='blue'
                         data-testid='launch-study-button'
                         onClick={() => {
                             api.updateStudyStatus({
@@ -175,7 +176,7 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
                         }}
                     >
                         Launch Study
-                    </ResearcherButton>
+                    </Button>
                     <LaunchStudyModal show={show} setShow={setShow} />
                 </Box>
             </Box>
@@ -206,12 +207,12 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
                     <Box align='center' className='text-center' direction='column'>
                         <span>Congratulations! Your study has been successfully launched on Kinetic, and can now be found under 'Studies'. Please note, it will only become available to participants at your set opening date </span>
                     </Box>
-                    <ResearcherButton onClick={() => {
+                    <Button color='blue' onClick={() => {
                         setShow(false)
                         nav('/studies')
                     }}>
                         Return to Dashboard
-                    </ResearcherButton>
+                    </Button>
                 </Box>
             </Modal.Body>
         </Modal>
