@@ -19,7 +19,7 @@ export const ActionFooter: FC<{ step: Step, }> = ({ step }) => {
     }, [setBusy]);
 
     return (
-        <Box className='fixed-bottom bg-white mt-auto' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
+        <Box className='fixed-bottom bg-white mt-auto' css={{ zIndex: 200, minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
             <Box className='container-lg' align='center' justify='between'>
                 {step.backAction ? <FakeLink>
                     <Box align='center' gap='small' onClick={() => step.backAction?.()}>
@@ -32,6 +32,7 @@ export const ActionFooter: FC<{ step: Step, }> = ({ step }) => {
                     {step.secondaryAction ?
                         <Button
                             color='blue'
+                            variant='outline'
                             data-testid='secondary-action'
                             loading={busy}
                             disabled={step.secondaryAction.disabled}

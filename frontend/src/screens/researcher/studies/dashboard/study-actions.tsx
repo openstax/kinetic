@@ -14,7 +14,6 @@ import {
     isReadyForLaunch,
     isScheduled,
     isWaiting,
-    useFetchStudies,
 } from '@models';
 import { Button, Group, Menu, Modal, Stack } from '@mantine/core';
 import { IconDotsVertical } from '@tabler/icons-react';
