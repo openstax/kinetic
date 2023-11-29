@@ -29,6 +29,10 @@ declare module '@tanstack/table-core' {
     interface ColumnMeta<TData extends RowData, TValue> {
         type: string
     }
+    // eslint-disable-next-line no-unused-vars
+    interface TableMeta<TData extends RowData> { // eslint-disable-line @typescript-eslint/no-unused-vars
+        refreshData: () => void
+    }
 }
 
 const StyledRow = styled.tr(({ hasChildren }: { hasChildren?: boolean }) => ({
@@ -173,7 +177,7 @@ const getColumnVisibility = (status: StudyStatus) => {
         return {
             'titleForResearchers': true,
             'status': true,
-            'opensAt': true,
+            'opensAt': false,
             'closesAt': false,
             'completedCount': false,
             'takeRate': false,
@@ -199,7 +203,7 @@ export const StudiesTable: React.FC<{
     initialFilters,
     currentStatus,
 }) => {
-    const { data: studies } = useFetchStudies()
+    const { data: studies, refetch } = useFetchStudies()
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: 'opensAt',
         desc: false,
@@ -238,9 +242,7 @@ export const StudiesTable: React.FC<{
         {
             accessorKey: 'status',
             header: () => <span>Status</span>,
-            meta: {
-                type: 'text',
-            },
+            enableSorting: false,
             filterFn: (row, columnId, filterValue) => {
                 return filterValue.includes(row.getValue(columnId))
             },
@@ -350,7 +352,6 @@ export const StudiesTable: React.FC<{
             header: () => <span>Action</span>,
             enableSorting: false,
             cell: info => {
-
                 return <ActionColumn study={info.row.original} cell={info} />
             },
         },
@@ -394,6 +395,11 @@ export const StudiesTable: React.FC<{
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getExpandedRowModel: getExpandedRowModel(),
+        meta: {
+            refreshData: async () => {
+                await refetch()
+            },
+        },
     })
 
     return (

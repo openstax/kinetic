@@ -1,8 +1,7 @@
-import { Box, React, useMemo, useNavigate, useParams, useState, Yup } from '@common'
+import { React, useMemo, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
 import { isDraft, useFetchStudy } from '@models';
 import {
-    Col,
     ConfirmNavigationIfDirty,
     ExitButton,
     Form,
@@ -25,7 +24,7 @@ import { ReviewStudy, SubmitStudyModal } from './forms/review-study';
 import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
 import { Navigate } from 'react-router-dom';
-import { Grid, Group } from '@mantine/core';
+import { Grid, Stack } from '@mantine/core';
 
 const buildValidationSchema = (allOtherStudies: Study[]) => {
     return Yup.object().shape({
@@ -287,7 +286,7 @@ const FormContent: FC<{
     ]
 
     return (
-        <Box direction='column' justify='between' className='edit-study-form'>
+        <Stack justify='space-between' className='edit-study-form'>
             <ConfirmNavigationIfDirty />
             <SubmitStudyModal study={study as Study} show={showSubmitStudy} setShow={setShowSubmitStudy} />
             <Grid gutter='xl' py='lg' justify='space-between'>
@@ -303,6 +302,6 @@ const FormContent: FC<{
                 {steps[currentStep].component}
             </>
             <ActionFooter step={steps[currentStep]} />
-        </Box>
+        </Stack>
     )
 }

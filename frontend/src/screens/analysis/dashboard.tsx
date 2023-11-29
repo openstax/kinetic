@@ -1,6 +1,6 @@
 import { Analysis } from '@api';
 import { Box, React, useNavigate } from '@common';
-import { PaginationContainer, ResearcherButton, StyledRow, TableHeader } from '@components';
+import { PaginationContainer, StyledRow, TableHeader } from '@components';
 import {
     ColumnDef,
     flexRender,
@@ -20,6 +20,8 @@ import { colors } from '@theme';
 import { getLastRun } from '@models';
 import { RunStatus } from './runs-table';
 import { ResearcherFAQ } from './researcher-faq';
+import { Button } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 
 export const AnalysisDashboard: FC<{analyses: Analysis[]}> = ({ analyses }) => {
     const nav = useNavigate()
@@ -27,9 +29,9 @@ export const AnalysisDashboard: FC<{analyses: Analysis[]}> = ({ analyses }) => {
         <Box className='analysis-overview' direction='column' width='100%' gap='large'>
             <Box align='center' justify='between'>
                 <h3>Analysis</h3>
-                <ResearcherButton onClick={() => nav(`/analysis/edit/new`)}>
-                    + Create New Analysis
-                </ResearcherButton>
+                <Button leftSection={<IconPlus />} onClick={() => nav(`/analysis/edit/new`)}>
+                    Create New Analysis
+                </Button>
             </Box>
             <AnalysisTable analyses={analyses} />
             <Box align='end' justify='end'>

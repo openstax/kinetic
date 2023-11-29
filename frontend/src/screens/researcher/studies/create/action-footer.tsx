@@ -1,5 +1,6 @@
 import { Box, React, styled, useCallback, useState } from '@common';
 import { Icon, ResearcherButton, Step } from '@components';
+import { Button } from '@mantine/core';
 
 const FakeLink = styled.span({
     cursor: 'pointer',
@@ -29,11 +30,10 @@ export const ActionFooter: FC<{ step: Step, }> = ({ step }) => {
 
                 <Box align='center' gap='large'>
                     {step.secondaryAction ?
-                        <ResearcherButton
-                            buttonType='secondary'
-                            fixedWidth
-                            busy={busy}
-                            busyMessage='Saving'
+                        <Button
+                            color='blue'
+                            data-testid='secondary-action'
+                            loading={busy}
                             disabled={step.secondaryAction.disabled}
                             onClick={() => {
                                 step.secondaryAction?.action?.()
@@ -41,20 +41,20 @@ export const ActionFooter: FC<{ step: Step, }> = ({ step }) => {
                             }}
                         >
                             {step.secondaryAction?.text}
-                        </ResearcherButton>
-                        : <></>
+                        </Button>
+                        : null
                     }
 
                     {step.primaryAction ?
-                        <ResearcherButton
-                            fixedWidth
+                        <Button
+                            color='blue'
                             data-testid='study-primary-action'
                             disabled={step.primaryAction.disabled}
                             onClick={() => step.primaryAction?.action?.()}
                         >
                             {step.primaryAction?.text}
-                        </ResearcherButton>
-                        : <></>
+                        </Button>
+                        : null
                     }
                 </Box>
             </Box>

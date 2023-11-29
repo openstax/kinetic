@@ -2,7 +2,7 @@ import { DefaultApi, ParticipantStudy, ResearcherRoleEnum, Stage, Study, StudySt
 import { isNil, useApi } from '@lib'
 import { dayjs, useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { showResearcherNotificationError } from '@components';
 
 export enum StudyStatus {
@@ -124,8 +124,6 @@ export const useFetchStudies = () => {
     return useQuery('fetchStudies', async () => {
         const res = await api.getStudies();
         return res.data?.filter(study => !study.isHidden) || [];
-    }, {
-        staleTime: Infinity,
     })
 }
 

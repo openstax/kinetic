@@ -41,7 +41,6 @@ export const ResearcherProgressBar: FC<{
     setStep: (step: number) => void,
     maxStep: number,
 }> = ({ steps, currentStep, setStep, maxStep }) => {
-    console.log(maxStep)
     const navigateToStep = (step: Step) => {
         if (step.index <= maxStep) {
             setStep(step.index)

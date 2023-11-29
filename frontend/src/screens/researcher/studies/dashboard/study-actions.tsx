@@ -37,7 +37,6 @@ const ActionModalContent: FC<{
 }> = ({ study , modalType, onHide, cell }) => {
     const api = useApi()
     const nav = useNavigate()
-    const { refetch } = useFetchStudies()
 
     const updateStudyStatus = (
         study: Study,
@@ -52,7 +51,7 @@ const ActionModalContent: FC<{
                 stageIndex,
             }).then(() => {
                 showResearcherNotification(message)
-                refetch()
+                cell.table.options.meta?.refreshData()
             })
         }
         catch (err) {
@@ -67,7 +66,7 @@ const ActionModalContent: FC<{
             api.deleteStudy({ studyId: study.id }).then(() => {
                 showResearcherNotification(message)
                 study.isHidden = true
-                refetch()
+                cell.table.options.meta?.refreshData()
             })
         } catch (err) {
             study.isHidden = false
@@ -266,7 +265,7 @@ export const ActionColumn: React.FC<{
     const showResumeButton = study.status === StageStatusEnum.Paused
 
     return (
-        <Group gap='lg' justify='center' align='center'>
+        <Group gap='lg' align='center'>
             <div>
                 <ActionIcon
                     icon="pencil"
