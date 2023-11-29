@@ -3,14 +3,7 @@ import { colors } from '@theme';
 import { TopNavBar } from '@components';
 import { Footer } from '../footer';
 import { Global } from '@emotion/react';
-
-export const PageContent: FCWC<{className?: string}> = ({ className, children }) => {
-    return (
-        <div className={cx('container-lg', 'py-4', className)}>
-            {children}
-        </div>
-    )
-}
+import { Container } from '@mantine/core';
 
 const PageWrapper = styled.div<{backgroundColor: string}>`
     background-color: ${(props) => props.backgroundColor}
@@ -32,11 +25,11 @@ export const Page: FCWC<{
                 body: { background: `${backgroundColor} !important` },
             }} />
             <TopNavBar />
-            <PageContent className='pb-12' css={{
+            <Container py='2rem' pb='120px' style={{
                 minHeight: `calc(100vh - 81px - ${(hideFooter ? 0 : 120)}px)`,
             }}>
                 {children}
-            </PageContent>
+            </Container>
             {!hideFooter && <Footer />}
         </PageWrapper>
     )

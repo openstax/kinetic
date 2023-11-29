@@ -3,7 +3,7 @@ import { capitalize, useCurrentUser, useFetchEnvironment } from '@lib'
 import { AvailableUsers } from './users'
 import { LinkButton } from '@components'
 import { loginAsUser } from '@models';
-import { Stack } from '@mantine/core';
+import { Container, Stack } from '@mantine/core';
 
 interface UserCardProps {
     users: AvailableUsers
@@ -58,13 +58,13 @@ export default function Dev() {
     return (
         <div className="dev-console">
             <LoggedInUser />
-            <div className="container mt-8">
+            <Container mt='xl'>
                 <div className="row">
                     <UserCard users={users} type="admins" becomeUser={becomeUser} />
                     <UserCard users={users} type="researchers" becomeUser={becomeUser} />
                     <UserCard users={users} type="users" becomeUser={becomeUser} />
                 </div>
-            </div>
+            </Container>
         </div>
     )
 }
@@ -76,11 +76,11 @@ const LoggedInUser = () => {
     return (
         <Stack>
             <nav className="navbar fixed-top navbar-light py-1 bg-light">
-                <div className="container">
+                <Container>
                     <LinkButton secondary to="/">
                         Home
                     </LinkButton>
-                </div>
+                </Container>
             </nav>
             <h3>Logged in as: {currentUser.userId}</h3>
         </Stack>
