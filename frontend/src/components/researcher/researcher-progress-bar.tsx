@@ -1,10 +1,11 @@
-import { Box, React } from '@common';
+import { React } from '@common';
 import { colors } from '@theme';
 import ActiveStep from '@images/icons/active-step.svg'
 import CompletedStep from '@images/icons/completed-step.svg'
 import OptionalStep from '@images/icons/optional-step.svg'
 import DisabledStep from '@images/icons/disabled-step.svg'
 import { ReactNode } from 'react';
+import { Group, Stack, Text } from '@mantine/core';
 
 export interface StepAction {
     text: string
@@ -40,36 +41,33 @@ export const ResearcherProgressBar: FC<{
     setStep: (step: number) => void,
     maxStep: number,
 }> = ({ steps, currentStep, setStep, maxStep }) => {
+    console.log(maxStep)
     const navigateToStep = (step: Step) => {
         if (step.index <= maxStep) {
             setStep(step.index)
         }
     }
     return (
-        <Box width='100%'>
+        <Group gap='0'>
             {steps.map((step) => {
                 return (
-                    <Box key={step.index} direction='column' flex={{ grow: 1 }} gap='large' onClick={() => navigateToStep(step)}>
-                        <Box
-                            height='7px'
-                            width='105%'
+                    <Stack key={step.index} onClick={() => navigateToStep(step)} style={{ flexGrow: 1 }}>
+                        <Stack
+                            h='7px'
+                            w='105%'
                             css={{
                                 background: getLineColor(step, currentStep),
                                 borderRadius: 5,
                             }}
-                            gap='0'
                             justify='center'
-                            align='center'
                         >
                             <StepIcon step={step} currentStep={currentStep} />
-                        </Box>
-                        <small className='x-small' css={{ alignSelf: 'center' }}>
-                            {step.text}
-                        </small>
-                    </Box>
+                        </Stack>
+                        <Text size='xs' ta='center'>{step.text}</Text>
+                    </Stack>
                 )
             })}
-        </Box>
+        </Group>
     )
 }
 

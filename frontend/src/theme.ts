@@ -94,7 +94,7 @@ export const mantineTheme = createTheme({
         'white': ['#FFF', '#FFF', '#FFF', '#FFF', '#FFF', '#FFF', '#FFF', '#FFF', '#FFF', '#FFF'],
         'ash': ['#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA'],
     },
-    primaryColor: 'navy',
+    primaryColor: 'blue',
     primaryShade: 4,
     fontFamily: 'Helvetica Neue',
     headings: {

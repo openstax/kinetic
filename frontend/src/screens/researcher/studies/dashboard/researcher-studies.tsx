@@ -1,69 +1,36 @@
-import { cx, React, styled, useEffect, useNavigate, useState } from '@common'
+import { React, useNavigate } from '@common'
 import { Box, Page } from '@components'
 import { StudyStatus } from '@models'
 import { colors } from '@theme';
 import 'bootstrap/js/dist/dropdown'
 import { StudiesTable } from './studies-table';
-import { ColumnFiltersState } from '@tanstack/react-table';
 import { StudyStatusEnum } from '@api';
-import { useSearchParams } from 'react-router-dom';
-import { Button } from '@mantine/core';
+import { useParams } from 'react-router-dom';
+import { Button, Tabs, Title } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 
-const NavTabs = styled.ul({
-    padding: '1rem 0',
-    border: 'none',
-    '.nav-link': {
-        border: 'none',
-        padding: '0',
-        paddingRight: '2.5rem',
-    },
-    'h4': {
-        color: colors.text,
-        fontWeight: 'bolder',
-    },
-    '.active > h4': {
-        color: colors.blue,
-        paddingBottom: '.5rem',
-        borderBottom: `4px solid ${colors.blue}`,
-    },
-})
+const FilterTabText: FC<{text: string, active: boolean}> = ({ text, active }) => {
+    if (active) {
+        return (
+            <Title order={4} c='blue' style={{
+                textDecoration: 'underline',
+                textUnderlineOffset: '.5rem',
+            }}>
+                {text}
+            </Title>
+        )
+    }
+
+    return (
+        <Title order={4} c={colors.text}>
+            {text}
+        </Title>
+    )
+}
 
 export default function ResearcherStudies() {
     const nav = useNavigate()
-    let [searchParams, setSearchParams] = useSearchParams();
-    const [currentStatus, setCurrentStatus] = useState<StudyStatus>(StudyStatus.Launched)
-    const [filters, setFilters] = useState<ColumnFiltersState>([
-        { id: 'status', value: ['active', 'paused', 'scheduled'] },
-    ])
-
-    const setStatus = (status: StudyStatus) => {
-        setCurrentStatus(status)
-        setSearchParams({ status: status })
-        switch (status) {
-            case StudyStatus.Completed:
-                setFilters([{ id: 'status', value: [StudyStatusEnum.Completed] }])
-                break
-            case StudyStatus.Draft:
-                setFilters([{ id: 'status', value: [StudyStatusEnum.Draft, StudyStatusEnum.WaitingPeriod, StudyStatusEnum.ReadyForLaunch] }])
-                break
-            case StudyStatus.Launched:
-                setFilters([{ id: 'status', value: [StudyStatusEnum.Active, StudyStatusEnum.Paused, StudyStatusEnum.Scheduled] }])
-                break
-        }
-    }
-
-    const onStatusChange = (ev: React.MouseEvent<HTMLAnchorElement>) => {
-        const status = ev.currentTarget.dataset.status! as StudyStatus
-        setStatus(status)
-    }
-
-    useEffect(() => {
-        let initialStatus = searchParams.get('status') as StudyStatus || StudyStatus.Launched
-        if (initialStatus in StudyStatus) {
-            setStatus(initialStatus)
-        }
-    }, [searchParams])
+    const { studyStatus = 'launched' } = useParams();
 
     return (
         <Page className='studies-dashboard' hideFooter>
@@ -80,29 +47,44 @@ export default function ResearcherStudies() {
                     Create New Study
                 </Button>
             </Box>
-            <NavTabs className="nav nav-tabs">
-                <li className="nav-item">
-                    <a data-target='#' onClick={onStatusChange} data-status="Launched" className={cx('nav-link cursor-pointer', { active: currentStatus == StudyStatus.Launched })}>
-                        <h4>Launched</h4>
-                    </a>
-                </li>
-                <li className="nav-item">
-                    <a data-target='#' onClick={onStatusChange} data-status="Draft" className={cx('nav-link cursor-pointer', { active: currentStatus == StudyStatus.Draft })}>
-                        <h4>Draft</h4>
-                    </a>
-                </li>
-                <li className="nav-item">
-                    <a data-target='#' onClick={onStatusChange} data-status="Completed" className={cx('nav-link cursor-pointer', { active: currentStatus == StudyStatus.Completed })}>
-                        <h4>Completed</h4>
-                    </a>
-                </li>
-            </NavTabs>
-            <StudiesTable
-                filters={filters}
-                setFilters={setFilters}
-                currentStatus={currentStatus}
-            />
+            <Tabs variant='unstyled' value={studyStatus} onChange={(value) => nav(`/studies/${value}`)} styles={{
+                tab: {
+                    padding: '1rem 2rem 1rem 0',
+                },
+            }}>
+                <Tabs.List>
+                    <Tabs.Tab value="launched">
+                        <FilterTabText text='Launched' active={studyStatus == 'launched'} />
+                    </Tabs.Tab>
+                    <Tabs.Tab value="draft">
+                        <FilterTabText text='Draft' active={studyStatus == 'draft'} />
+                    </Tabs.Tab>
+                    <Tabs.Tab value="completed">
+                        <FilterTabText text='Completed' active={studyStatus == 'completed'} />
+                    </Tabs.Tab>
+                </Tabs.List>
 
+                <Tabs.Panel value='launched'>
+                    <StudiesTable
+                        initialFilters={[StudyStatusEnum.Active, StudyStatusEnum.Paused, StudyStatusEnum.Scheduled]}
+                        currentStatus={StudyStatus.Launched}
+                    />
+                </Tabs.Panel>
+
+                <Tabs.Panel value='draft'>
+                    <StudiesTable
+                        initialFilters={[StudyStatusEnum.Draft, StudyStatusEnum.WaitingPeriod, StudyStatusEnum.ReadyForLaunch]}
+                        currentStatus={StudyStatus.Draft}
+                    />
+                </Tabs.Panel>
+
+                <Tabs.Panel value='completed'>
+                    <StudiesTable
+                        initialFilters={[StudyStatusEnum.Completed]}
+                        currentStatus={StudyStatus.Completed}
+                    />
+                </Tabs.Panel>
+            </Tabs>
         </Page>
     )
 }

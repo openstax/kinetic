@@ -124,6 +124,8 @@ export const useFetchStudies = () => {
     return useQuery('fetchStudies', async () => {
         const res = await api.getStudies();
         return res.data?.filter(study => !study.isHidden) || [];
+    }, {
+        staleTime: Infinity,
     })
 }
 

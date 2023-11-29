@@ -34,12 +34,12 @@ const router = createBrowserRouter([
             { path: 'account', element: <AccountDetails /> },
             { path: 'researcher-account', element: <ResearcherAccountPage /> },
             { path: 'studies/*', element: <StudiesHomepage /> },
+            { path: 'studies/:studyStatus', element: <ResearcherStudies /> },
             { path: 'analysis/*', element: <AnalysisHomepage /> },
             { path: 'admin/*', element: <AdminHomepage /> },
             { path: '*', element: <PageNotFound /> },
         ],
     },
-
 ])
 
 

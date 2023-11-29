@@ -1,5 +1,5 @@
 import { dayjs, React, styled, useNavigate } from '@common';
-import { Box, Button, Icon, Modal, showResearcherNotification, showResearcherNotificationError } from '@components';
+import { Icon, showResearcherNotification, showResearcherNotificationError } from '@components';
 import { StageStatusEnum, Study, UpdateStudyStatusStatusActionEnum } from '@api';
 import { colors } from '@theme';
 import { useApi } from '@lib';
@@ -14,8 +14,9 @@ import {
     isReadyForLaunch,
     isScheduled,
     isWaiting,
+    useFetchStudies,
 } from '@models';
-import { Menu } from '@mantine/core';
+import { Button, Group, Menu, Modal, Stack } from '@mantine/core';
 import { IconDotsVertical } from '@tabler/icons-react';
 
 const ModalType = {
@@ -36,6 +37,7 @@ const ActionModalContent: FC<{
 }> = ({ study , modalType, onHide, cell }) => {
     const api = useApi()
     const nav = useNavigate()
+    const { refetch } = useFetchStudies()
 
     const updateStudyStatus = (
         study: Study,
@@ -50,7 +52,7 @@ const ActionModalContent: FC<{
                 stageIndex,
             }).then(() => {
                 showResearcherNotification(message)
-                cell.table.options.meta?.refreshData()
+                refetch()
             })
         }
         catch (err) {
@@ -65,7 +67,7 @@ const ActionModalContent: FC<{
             api.deleteStudy({ studyId: study.id }).then(() => {
                 showResearcherNotification(message)
                 study.isHidden = true
-                cell.table.options.meta?.refreshData()
+                refetch()
             })
         } catch (err) {
             study.isHidden = false
@@ -187,23 +189,23 @@ const StudyActionContainer: FC<{
     warning, header, body, cancelText, actionText, onSubmit, onCancel,
 }) => {
     return (
-        <Box direction='column' className='py-4 px-8' gap='large' align='center'>
-            <Box gap='large' align='center'>
+        <Stack align='center'>
+            <Group gap='sm' align='center'>
                 {warning && <Icon icon="warning" css={{ color: colors.red }} height={20}/>}
                 <span className='fs-4 fw-bold'>{header}</span>
-            </Box>
+            </Group>
             <div className='text-center'>
                 {body}
             </div>
-            <Box gap='xlarge'>
-                <Button css={{ width: 180, justifyContent: 'center' }} outline primary onClick={onCancel}>
+            <Group>
+                <Button variant='outline' color='purple' onClick={onCancel}>
                     {cancelText}
                 </Button>
-                <Button css={{ width: 180, justifyContent: 'center' }} primary onClick={onSubmit}>
+                <Button variant='filled' color='purple' onClick={onSubmit}>
                     {actionText}
                 </Button>
-            </Box>
-        </Box>
+            </Group>
+        </Stack>
     )
 }
 
@@ -264,7 +266,7 @@ export const ActionColumn: React.FC<{
     const showResumeButton = study.status === StageStatusEnum.Paused
 
     return (
-        <Box gap='xlarge' justify='center' align='center'>
+        <Group gap='lg' justify='center' align='center'>
             <div>
                 <ActionIcon
                     icon="pencil"
@@ -319,7 +321,7 @@ export const ActionColumn: React.FC<{
                     </Menu.Dropdown>
                 </Menu>
             </div>
-            <Modal center show={showModal} large onHide={onHide}>
+            <Modal centered opened={showModal} size='lg' onClose={onHide}>
                 <Modal.Body>
                     <ActionModalContent
                         modalType={modalType}
@@ -329,6 +331,6 @@ export const ActionColumn: React.FC<{
                     />
                 </Modal.Body>
             </Modal>
-        </Box>
+        </Group>
     )
 }

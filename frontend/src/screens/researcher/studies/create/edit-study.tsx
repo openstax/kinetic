@@ -25,6 +25,7 @@ import { ReviewStudy, SubmitStudyModal } from './forms/review-study';
 import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
 import { Navigate } from 'react-router-dom';
+import { Grid, Group } from '@mantine/core';
 
 const buildValidationSchema = (allOtherStudies: Study[]) => {
     return Yup.object().shape({
@@ -125,7 +126,6 @@ const FormContent: FC<{
     if (!isDraft(study) && !isNew) {
         return <Navigate to={`/study/overview/${id}`} />
     }
-
 
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true, shouldTouch: true })
@@ -290,20 +290,18 @@ const FormContent: FC<{
         <Box direction='column' justify='between' className='edit-study-form'>
             <ConfirmNavigationIfDirty />
             <SubmitStudyModal study={study as Study} show={showSubmitStudy} setShow={setShowSubmitStudy} />
-            <div className="py-2">
-                <Box justify='between' gap='xxlarge'>
-                    <Col sm={1}>
-                        <span></span>
-                    </Col>
-                    <Col sm={9}>
-                        <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} setStep={setStep} maxStep={maxStep}/>
-                    </Col>
-                    <Col sm={1}>
-                        <ExitButton navTo='/studies'/>
-                    </Col>
-                </Box>
+            <Grid gutter='xl' py='lg' justify='space-between'>
+                <Grid.Col span={1}></Grid.Col>
+                <Grid.Col span={9}>
+                    <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} setStep={setStep} maxStep={maxStep}/>
+                </Grid.Col>
+                <Grid.Col span={1}>
+                    <ExitButton navTo='/studies'/>
+                </Grid.Col>
+            </Grid>
+            <>
                 {steps[currentStep].component}
-            </div>
+            </>
             <ActionFooter step={steps[currentStep]} />
         </Box>
     )
