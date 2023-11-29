@@ -78,7 +78,6 @@ export const ImageLibrary: FC<{
             centered
             opened={show}
             size='85%'
-            data-testid="image-library-modal"
             title='Select an image for your study'
             styles={{
                 body: {
@@ -86,7 +85,7 @@ export const ImageLibrary: FC<{
                 },
             }}
         >
-            <Modal.Body>
+            <Modal.Body data-testid="image-library-modal">
                 <Flex direction='column'>
                     <Tabs variant='pills' defaultValue={initialCategory} >
                         <Tabs.List px='md'>
