@@ -19,7 +19,7 @@ export default function ResearcherAccountPage() {
 
     return (
         <Page hideFooter>
-            <Container size='xl' py='xl'>
+            <Container py='xl'>
                 <Grid gutter='xl'>
                     <Grid.Col span={{ lg: 9 }}>
                         <Group justify='space-between' h='40px'>

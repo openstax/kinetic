@@ -207,7 +207,7 @@ const LaunchStudyModal: FC<{show: boolean, setShow: (show: boolean) => void}> = 
                     <Box align='center' className='text-center' direction='column'>
                         <span>Congratulations! Your study has been successfully launched on Kinetic, and can now be found under 'Studies'. Please note, it will only become available to participants at your set opening date </span>
                     </Box>
-                    <Button color='blue' onClick={() => {
+                    <Button data-testid='launched-return-to-dashboard' color='blue' onClick={() => {
                         setShow(false)
                         nav('/studies')
                     }}>
