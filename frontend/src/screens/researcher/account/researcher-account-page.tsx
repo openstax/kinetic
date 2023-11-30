@@ -19,67 +19,64 @@ export default function ResearcherAccountPage() {
 
     return (
         <Page>
-            <Container py='xl'>
-                <Grid gutter='xl'>
-                    <Grid.Col span={{ lg: 9 }}>
-                        <Group justify='space-between' h='40px'>
-                            <h3>My Account</h3>
-                            <a href={`${accountsUrl}`} target='_blank'>
-                                <span>Update Email & Password</span>
-                                <Icon icon="chevronRight" />
-                            </a>
+            <Grid gutter='xl'>
+                <Grid.Col span={{ lg: 9 }}>
+                    <Group justify='space-between' h='40px'>
+                        <h3>My Account</h3>
+                        <a href={`${accountsUrl}`} target='_blank'>
+                            <span>Update Email & Password</span>
+                            <Icon icon="chevronRight" />
+                        </a>
+                    </Group>
+
+                    <Stack gap='xl'>
+                        <ProfileSection>
+                            <Stack>
+                                <h5 className='fw-bolder pb-2'>Researcher Profile</h5>
+                                <Grid gutter='lg'>
+                                    <Grid.Col span={2}>
+                                        <Avatar />
+                                    </Grid.Col>
+                                    <Grid.Col span={10}>
+                                        <ResearcherAccountForm />
+                                    </Grid.Col>
+                                </Grid>
+                            </Stack>
+                        </ProfileSection>
+                    </Stack>
+                </Grid.Col>
+
+                <Grid.Col span={{ lg: 3 }}>
+                    <Resources gap='md'>
+                        <ResourceLinks />
+                        <Group mt='lg'>
+                            <CustomerSupportImage height={100} />
+                            <HelpLink/>
                         </Group>
+                    </Resources>
+                </Grid.Col>
 
-                        <Stack gap='xl'>
-                            <ProfileSection>
-                                <Stack>
-                                    <h5 className='fw-bolder pb-2'>Researcher Profile</h5>
-                                    <Grid gutter='lg'>
-                                        <Grid.Col span={2}>
-                                            <Avatar />
-                                        </Grid.Col>
-                                        <Grid.Col span={10}>
-                                            <ResearcherAccountForm />
-                                        </Grid.Col>
-                                    </Grid>
-                                </Stack>
-                            </ProfileSection>
-                        </Stack>
-                    </Grid.Col>
-
-                    <Grid.Col span={{ lg: 3 }}>
-                        <Resources gap='md'>
-                            <ResourceLinks />
-                            <Group mt='lg'>
-                                <CustomerSupportImage height={100} />
-                                <HelpLink/>
-                            </Group>
-                        </Resources>
-                    </Grid.Col>
-
-                    <Grid.Col span={{ lg: 9 }}>
-                        <IRBSection gap='large'>
-                            <h5 className='fw-bolder'>Research Agreements</h5>
-                            <Grid gutter='lg' align='flex-start' justify='space-between'>
-                                <Grid.Col span={2}>
-                                    <h6>IRB Detail</h6>
-                                </Grid.Col>
-                                <Grid.Col span={6}>
-                                    <IRB/>
-                                </Grid.Col>
-                                <Grid.Col span={2}>
-                                    <a href='https://drive.google.com/file/d/1x1M8EcrOOu5U1ZQAtVmhvH3DkTlhtc8I/view' target='_blank'>
-                                        <span>Check Details</span>
-                                        <Icon icon="chevronRight" />
-                                    </a>
-                                </Grid.Col>
-                            </Grid>
-                            {/*<TermsOfUse/>*/}
-                        </IRBSection>
-                    </Grid.Col>
-
-                </Grid>
-            </Container>
+                <Grid.Col span={{ lg: 9 }}>
+                    <IRBSection gap='large'>
+                        <h5 className='fw-bolder'>Research Agreements</h5>
+                        <Grid gutter='lg' align='flex-start' justify='space-between'>
+                            <Grid.Col span={2}>
+                                <h6>IRB Detail</h6>
+                            </Grid.Col>
+                            <Grid.Col span={6}>
+                                <IRB/>
+                            </Grid.Col>
+                            <Grid.Col span={2}>
+                                <a href='https://drive.google.com/file/d/1x1M8EcrOOu5U1ZQAtVmhvH3DkTlhtc8I/view' target='_blank'>
+                                    <span>Check Details</span>
+                                    <Icon icon="chevronRight" />
+                                </a>
+                            </Grid.Col>
+                        </Grid>
+                        {/*<TermsOfUse/>*/}
+                    </IRBSection>
+                </Grid.Col>
+            </Grid>
         </Page>
     )
 }
