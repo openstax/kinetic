@@ -185,9 +185,9 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
 
     return (
         <Box className='container-lg' align='center' justify='end'>
-            <FormSaveButton className='btn-researcher-primary mt-2' disabled={!isValid || !isDirty}>
+            <Button type='submit' color='blue' disabled={!isValid || !isDirty}>
                 Publish Changes
-            </FormSaveButton>
+            </Button>
         </Box>
     )
 }

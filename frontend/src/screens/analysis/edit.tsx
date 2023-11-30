@@ -17,6 +17,7 @@ import { getAnalysisValidationSchema, useFetchAnalyses } from '@models'
 import { errorToString, useApi, useQueryParam } from '@lib'
 import { SelectedStudies } from './selected-studies'
 import { ResearcherFAQ } from './researcher-faq';
+import { Button } from '@mantine/core';
 
 interface EditAnalysisProps {
     analyses: Analysis[]
@@ -161,13 +162,14 @@ const BottomBar = () => {
     return (
         <Box className='fixed-bottom bg-white mt-auto' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
             <Box className='container-lg' align='center' justify='end'>
-                <FormSaveButton
+                <Button
+                    type='submit'
+                    color='blue'
                     data-testid='save-analysis-button'
-                    className='btn-researcher-primary'
                     disabled={!isValid}
                 >
                     Save & Continue
-                </FormSaveButton>
+                </Button>
             </Box>
         </Box>
     )

@@ -1,9 +1,9 @@
 import { React, useEffect, useNavigate, useState } from '@common'
 import { capitalize, useCurrentUser, useFetchEnvironment } from '@lib'
 import { AvailableUsers } from './users'
-import { LinkButton } from '@components'
 import { loginAsUser } from '@models';
 import { Container, Stack } from '@mantine/core';
+import { NavLink } from 'react-router-dom';
 
 interface UserCardProps {
     users: AvailableUsers
@@ -12,8 +12,8 @@ interface UserCardProps {
 }
 
 const UserCard:React.FC<UserCardProps> = ({ users, type, becomeUser }) => {
-
     if (!users[type]?.length) return null
+
     return (
         <div className="col-6">
             <div className="card">
@@ -73,13 +73,14 @@ const LoggedInUser = () => {
     const currentUser = useCurrentUser()
 
     if (!currentUser.userId) return null
+
     return (
         <Stack>
             <nav className="navbar fixed-top navbar-light py-1 bg-light">
                 <Container>
-                    <LinkButton secondary to="/">
+                    <NavLink to="/">
                         Home
-                    </LinkButton>
+                    </NavLink>
                 </Container>
             </nav>
             <h3>Logged in as: {currentUser.userId}</h3>

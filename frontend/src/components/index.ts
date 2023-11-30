@@ -3,8 +3,6 @@ export * from '@nathanstitt/sundry/form'
 export * from '@nathanstitt/sundry/menu'
 export * from '@nathanstitt/sundry/modal'
 
-export * from './styled-buttons'
-
 export * from './ox-colored-stripe'
 export * from './loading-animation'
 export * from './ui-states'
