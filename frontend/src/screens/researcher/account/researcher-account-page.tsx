@@ -18,7 +18,7 @@ export default function ResearcherAccountPage() {
     }
 
     return (
-        <Page hideFooter>
+        <Page>
             <Container py='xl'>
                 <Grid gutter='xl'>
                     <Grid.Col span={{ lg: 9 }}>
@@ -44,8 +44,6 @@ export default function ResearcherAccountPage() {
                                     </Grid>
                                 </Stack>
                             </ProfileSection>
-
-
                         </Stack>
                     </Grid.Col>
 

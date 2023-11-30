@@ -90,8 +90,8 @@ export default function AccountDetails() {
         <Wrapper direction='column' className="account">
             <TopNavBar />
 
-            <Box className="container-lg py-4" justify='between'>
-                <div >
+            <Box className="container-lg py-4 mb-auto" justify='between'>
+                <div>
                     <h2 className="mb-3">My Account</h2>
                     <Box justify='between' align="center">
                         <h5 className="mb-0 p-0">General</h5>
@@ -153,9 +153,9 @@ export default function AccountDetails() {
                     </Form >
                 </div>
                 {!isMobile && <Sidebar />}
-            </Box >
+            </Box>
 
-            <Footer className='mt-auto'/>
+            <Footer />
         </Wrapper>
     )
 }

@@ -25,7 +25,7 @@ export const Page: FCWC<{
                 body: { background: `${backgroundColor} !important` },
             }} />
             <TopNavBar />
-            <Container py='2rem' pb='120px' style={{
+            <Container py='2rem' mb='auto' style={{
                 minHeight: `calc(100vh - 81px - ${(hideFooter ? 0 : 120)}px)`,
             }}>
                 {children}

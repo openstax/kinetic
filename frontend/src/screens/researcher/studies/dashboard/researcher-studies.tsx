@@ -47,7 +47,7 @@ export default function ResearcherStudies() {
                     Create New Study
                 </Button>
             </Box>
-            <Tabs variant='unstyled' value={studyStatus} onChange={(value) => nav(`/studies/${value}`)} styles={{
+            <Tabs variant='unstyled' value={studyStatus} onChange={(value) => nav(`/studies/status/${value}`)} styles={{
                 tab: {
                     padding: '1rem 2rem 1rem 0',
                 },
