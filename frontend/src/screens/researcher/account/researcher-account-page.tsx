@@ -6,7 +6,7 @@ import CustomerSupportImage from '../../../components/customer-support-image';
 import RiceLogoURL from '../../../images/rice-logo-darktext.png';
 import DefaultAvatar from '../../../images/default-avatar.png';
 import { ResearcherAccountForm } from './researcher-account-form';
-import { Button, Container, Grid, Group, Image, Modal, Stack, Text } from '@mantine/core';
+import { Button, Grid, Group, Image, Modal, Stack, Text } from '@mantine/core';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 
 export default function ResearcherAccountPage() {
@@ -18,7 +18,7 @@ export default function ResearcherAccountPage() {
     }
 
     return (
-        <Page>
+        <Page hideFooter>
             <Grid gutter='xl'>
                 <Grid.Col span={{ lg: 9 }}>
                     <Group justify='space-between' h='40px'>
