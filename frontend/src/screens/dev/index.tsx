@@ -2,8 +2,9 @@ import { React, useEffect, useNavigate, useState } from '@common'
 import { capitalize, useCurrentUser, useFetchEnvironment } from '@lib'
 import { AvailableUsers } from './users'
 import { loginAsUser } from '@models';
-import { Container, Stack } from '@mantine/core';
+import { Anchor, Card, Container, Group, SimpleGrid, Stack, Title } from '@mantine/core';
 import { NavLink } from 'react-router-dom';
+import { colors } from '@theme';
 
 interface UserCardProps {
     users: AvailableUsers
@@ -15,24 +16,22 @@ const UserCard:React.FC<UserCardProps> = ({ users, type, becomeUser }) => {
     if (!users[type]?.length) return null
 
     return (
-        <div className="col-6">
-            <div className="card">
-                <h5 className="card-header">{capitalize(type)}</h5>
-                <div className="list-group list-group-flush">
-                    {users[type].map(u => (
-                        <a
-                            key={u.id}
-                            href='#'
-                            data-user-id={u.id}
-                            onClick={becomeUser}
-                            className="list-group-item"
-                        >
-                            <b>{u.name}</b> ({u.id})
-                        </a>
-                    ))}
-                </div>
-            </div>
-        </div>
+        <Card shadow='md' bg='ash' withBorder>
+            <Title order={5}>{capitalize(type)}</Title>
+            <Stack p='md' gap='md'>
+                {users[type].map(u => (
+                    <Anchor
+                        key={u.id}
+                        c={colors.text}
+                        href='#'
+                        data-user-id={u.id}
+                        onClick={becomeUser}
+                    >
+                        <b>{u.name}</b> ({u.id})
+                    </Anchor>
+                ))}
+            </Stack>
+        </Card>
     )
 }
 
@@ -56,16 +55,16 @@ export default function Dev() {
     }
 
     return (
-        <div className="dev-console">
+        <Container className="dev-console">
             <LoggedInUser />
             <Container mt='xl'>
-                <div className="row">
+                <SimpleGrid cols={2}>
                     <UserCard users={users} type="admins" becomeUser={becomeUser} />
                     <UserCard users={users} type="researchers" becomeUser={becomeUser} />
                     <UserCard users={users} type="users" becomeUser={becomeUser} />
-                </div>
+                </SimpleGrid>
             </Container>
-        </div>
+        </Container>
     )
 }
 
@@ -76,14 +75,14 @@ const LoggedInUser = () => {
 
     return (
         <Stack>
-            <nav className="navbar fixed-top navbar-light py-1 bg-light">
-                <Container>
+            <Container>
+                <Group justify='space-around' gap='xl'>
                     <NavLink to="/">
                         Home
                     </NavLink>
-                </Container>
-            </nav>
-            <h3>Logged in as: {currentUser.userId}</h3>
+                    <Title order={3}>Logged in as: {currentUser.userId}</Title>
+                </Group>
+            </Container>
         </Stack>
     )
 }
