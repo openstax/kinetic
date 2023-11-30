@@ -24,7 +24,7 @@ import { ReviewStudy, SubmitStudyModal } from './forms/review-study';
 import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
 import { Navigate } from 'react-router-dom';
-import { Grid, Stack } from '@mantine/core';
+import { Box, Grid, Stack } from '@mantine/core';
 
 const buildValidationSchema = (allOtherStudies: Study[]) => {
     return Yup.object().shape({
@@ -298,9 +298,9 @@ const FormContent: FC<{
                     <ExitButton navTo='/studies'/>
                 </Grid.Col>
             </Grid>
-            <>
+            <Box pb='120px'>
                 {steps[currentStep].component}
-            </>
+            </Box>
             <ActionFooter step={steps[currentStep]} />
         </Stack>
     )

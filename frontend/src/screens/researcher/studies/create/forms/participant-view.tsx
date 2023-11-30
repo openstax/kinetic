@@ -95,7 +95,7 @@ export const participantViewValidation = (allOtherStudies: Study[]) => {
 }
 
 export const ParticipantView: FC<{study: Study}> = ({ study }) => {
-    const [showImagePicker, setShowImagePicker] = useState<boolean>(false)
+    const [showImagePicker, setShowImagePicker] = useState(false)
     const initialSubjects = study.subject ? [...new Set([...studySubjects, study.subject])] : studySubjects
     const [allStudySubjects, setAllStudySubjects] = useState<string[]>(initialSubjects)
     const { setValue, watch, getValues, control } = useFormContext<Study>()
