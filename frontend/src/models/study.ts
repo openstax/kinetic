@@ -111,12 +111,6 @@ export function getStudyDuration(study: ParticipantStudy): number {
     return sumBy(study.stages, (s) => +(s.durationMinutes || 0))
 }
 
-export const useContestStudies = () => {
-    const { data: studies } = useFetchStudies()
-    console.log(studies);
-    return studies
-}
-
 export const useFetchPublicStudies = () => {
     const api = useApi()
     return useQuery('fetchPublicStudies', async () => {

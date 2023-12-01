@@ -87,7 +87,8 @@ const ActionModalContent: FC<{
                     updateStudyStatus(
                         study,
                         'pause',
-                        `Study ${study.titleForResearchers} has been paused.`
+                        `Study ${study.titleForResearchers} has been paused.`,
+                        cell.row.depth ? cell.row.index : 0
                     )
                 }}
                 onCancel={onHide}
@@ -114,7 +115,7 @@ const ActionModalContent: FC<{
                     warning={false}
                     body="The study you wish to resume has passed the original closing date. Please choose one of the options below."
                     actionText='Adjust Closing Date'
-                    onSubmit={() => nav(`/study/overview/${study.id}`)}
+                    onSubmit={() => nav(`/study/overview/${study.id}?reopen=true`)}
                     cancelText='End Study'
                     onCancel={() => {
                         updateStudyStatus(
@@ -231,8 +232,7 @@ const isPausable = (cell: CellContext<Study, any>): boolean => {
         return true
     }
 
-
-    return isPaused(previousSession) && isActive(study)
+    return isActive(study)
 }
 
 export const ActionColumn: React.FC<{

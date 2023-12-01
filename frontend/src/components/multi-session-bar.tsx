@@ -12,6 +12,9 @@ export const MultiSessionBar: FC<{ study: ParticipantStudy }> = ({ study }) => {
 
     const [first, last] = study.stages
     const perc = (filter(study.stages, 'isCompleted').length / study.stages.length) * 100
+
+    // TODO Come back to this
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const duration = useMemo(() => {
         const d = last.availableAfterDays || 0
         if (d === 0) return 'immediately'

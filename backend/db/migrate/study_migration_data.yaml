@@ -17,7 +17,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'debrief' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -63,7 +63,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'general' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -86,7 +86,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -132,7 +132,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'score' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -155,7 +155,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -178,7 +178,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -201,7 +201,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -251,7 +251,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'debrief' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -370,7 +370,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -393,7 +393,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -416,7 +416,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'score', 'personalized' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -439,12 +439,12 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
-  public_on: now
+  public_on: null
 
 
 
 - id: 20
-  status: 'active'
+  status: 'completed'
   title_for_researchers: 'Financial Literacy Pilot'
   description_for_researchers: Captures general information about participants' financial lives as well as assesses their basic financial literacy knowledge.
   study_type: 'Cognitive Task & Assessment'
@@ -484,7 +484,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'general' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -530,7 +530,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -694,7 +694,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -717,7 +717,7 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'score', 'personalized' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -832,7 +832,7 @@
     - points: 20
       duration_minutes: 15
       feedback_types: [ 'score', 'personalized' ]
-  public_on: now
+  public_on: null
 
 
 
@@ -927,7 +927,7 @@
   public_on: null
 
 
-- id: '78'
+- id: 78
   status: 'active'
   title_for_researchers: 'Elaborative Learning Strategies'
   description_for_researchers: 'This is intended to understand the impact of elaborative learning strategies on student performance.'
@@ -1077,7 +1077,7 @@
   title_for_participants: "Are you online ready for studying?"
   short_description_for_participants: "Are you ready for taking an online course/studying in an online context?"
   long_description_for_participants: "Before enrolling in an online course, you should first assess your readiness for becoming an online learner. This survey will assess your online readiness, and if you need to improve upon it."
-  study_topic: "Others"
+  study_topic: "Other"
   study_subject: null
   benefits: "You will receive feedback based on your answers to the following questions that will help you think about yourself as a learner and determine what you need to do to be successful in an online learning environment."
   opens_at: 2023-06-22 09:00:00
@@ -1086,5 +1086,51 @@
     - points: 10
       duration_minutes: 5
       feedback_types: [ 'debrief' ]
+  public_on: null
+
+
+
+- id: 117
+  status: "active"
+  title_for_researchers: "Financial Literacy-Student Loans"
+  description_for_researchers: "This is our financial literacy intervention No.2, which is a text-only student loan & financial aid lesson with pre and post tests and a writing task intervention."
+  study_type: "Learning Research"
+  study_pi_uuid: "a79bcf1a-eddd-444d-a705-74d910f7e711"
+  study_lead_uuid: "2df6731f-5999-4216-942d-eaa71888d816"
+  title_for_participants: "So what is financial aid, anyway?"
+  short_description_for_participants: "Student loans, anyone? Whether you're considering, own, or just want to know more, you can master financial aid by taking this mini course."
+  long_description_for_participants: "Try out this fun new lesson on student loans! You'll take a quiz so we can see what you already know, read a brief lesson on what financial aid is and how students can manage it, and then reflect on what you learned with a short writing prompt."
+  study_topic: "School & Career"
+  study_subject: null
+  benefits: "You'll learn how financial aid in the US works and how you can take advantage of student loans. Your responses will also help us understand how learners act on knowledge."
+  opens_at: 2023-10-23 09:00:00
+  closes_at: null
+  stages:
+    - points: 30
+      duration_minutes: 25
+      feedback_types: [ 'Score' ]
+  public_on: null
+
+
+
+- id: 118
+  status: "active"
+  title_for_researchers: "Syllabus contest"
+  description_for_researchers: "Syllabus contest for learners to share their syllabus containing OpenStax textbooks."
+  study_type: "Product & Organizational Research"
+  study_pi_uuid: "a79bcf1a-eddd-444d-a705-74d910f7e711"
+  study_lead_uuid: "6a6c8564-7fb0-4d85-a2ec-2dd899c3bb3b"
+  title_for_participants: "OpenStax Syllabus Contest"
+  short_description_for_participants: "Is your course using an OpenStax textbook? Share your syllabus for a chance to win a pair of AirPods Pro!"
+  long_description_for_participants: "The more people who report using OpenStax, the greater our ability to secure future philanthropic support. Share your OpenStax syllabus to help us provide even more free educational resources to students and instructors everywhere."
+  study_topic: "Other"
+  study_subject: null
+  benefits: "The more people who report using OpenStax, the greater our ability to secure future philanthropic support to provide even more free educational resources for students and instructors everywhere."
+  opens_at: 2023-11-06 09:00:00
+  closes_at: null
+  stages:
+    - points: 10
+      duration_minutes: 5
+      feedback_types: [ 'Debrief' ]
   public_on: null
 

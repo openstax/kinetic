@@ -24,7 +24,7 @@ const AccountLinks = loadAsync('Account Links', () => import('./account-links'))
 
 export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, className }) => {
     const user = useCurrentUser()
-    const hideBanner = user.isResearcher || user.isAdministrator
+    const hideBanner = user.isResearcher
 
     return (
         <nav className={cx('navbar', 'navbar-light', className)}>

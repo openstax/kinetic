@@ -2,7 +2,7 @@ import { React } from '@common'
 import styled from '@emotion/styled'
 import { colors } from '@theme'
 
-import { accountsUrl, useApi, useIsMobileDevice, useUserInfo, useUserPreferences } from '@lib'
+import { useAccountsURL, useApi, useIsMobileDevice, useUserInfo, useUserPreferences } from '@lib'
 import {
     Box,
     Footer,
@@ -74,10 +74,11 @@ const Sidebar = () => {
 
 export default function AccountDetails() {
     const api = useApi()
-    const { data: userInfo } = useUserInfo()
     const isMobile = useIsMobileDevice()
-
+    const { data: userInfo } = useUserInfo()
     const { data: prefs } = useUserPreferences()
+    const accountsURL = useAccountsURL()
+
     if (!userInfo || !prefs) return <LoadingAnimation message="Loading account…" />;
 
     const email = userInfo.contact_infos.find(e => e.type == 'EmailAddress')
@@ -94,7 +95,7 @@ export default function AccountDetails() {
                     <h2 className="mb-3">My Account</h2>
                     <Box justify='between' align="center">
                         <h5 className="mb-0 p-0">General</h5>
-                        <a href={`${accountsUrl()}`}>
+                        <a href={`${accountsURL}`}>
                             <span>Update Account</span>
                             <Icon icon="chevronRight" />
                         </a>

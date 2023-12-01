@@ -17,9 +17,6 @@ test('displays studies', async ({ browser }) => {
 
     await createStudiesData({ context: researcherPage.context(), numStudies: 5 })
     await goToPage({ page: userPage, path: '/studies' })
-    if (await userPage.isVisible('testId=syllabus-contest-winners-modal')) {
-        await userPage.click('testId=return-to-dashboard')
-    }
     await userPage.waitForSelector('testId=studies-listing')
 })
 

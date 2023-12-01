@@ -3,8 +3,9 @@ import { useApi, useCurrentResearcher, useFetchEnvironment, useUserInfo } from '
 import { colors } from '@theme';
 import { Researcher } from '@api';
 import {
-    Box,
     CharacterCount,
+    FieldErrorMessage,
+    FieldTitle,
     Form,
     FormSaveButton,
     Icon,
@@ -13,6 +14,7 @@ import {
     Tooltip,
     useFormState,
 } from '@components';
+import { Grid, Group, Stack } from '@mantine/core';
 
 const urlRegex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm
 export const ResearcherValidationSchema = Yup.object().shape({
@@ -21,8 +23,12 @@ export const ResearcherValidationSchema = Yup.object().shape({
     researchInterest1: Yup.string().max(25),
     researchInterest2: Yup.string().max(25),
     researchInterest3: Yup.string().max(25),
-    labPage: Yup.string().matches(urlRegex, 'Enter a valid URL'),
-    bio: Yup.string().max(250),
+    institution: Yup.mixed().required('Required'),
+    labPage: Yup.string().matches(urlRegex, {
+        message: 'Please enter a valid URL',
+        excludeEmptyString: true,
+    }),
+    bio: Yup.string().max(250).required('Required'),
 })
 
 const institutionList = [
@@ -55,14 +61,14 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
     const [researcher, setResearcher] = useState(useCurrentResearcher())
     const { refetch: refetchEnv } = useFetchEnvironment()
     const { data: userInfo, refetch: refetchUser } = useUserInfo()
+
     if (!researcher) {
         return null
     }
+
     // Default to OpenStax accounts first/last name if blank
     researcher.firstName = researcher.firstName || userInfo?.first_name
     researcher.lastName = researcher.lastName || userInfo?.last_name
-
-    const [institution, setInstitution] = useState(researcher.institution)
 
     const saveResearcher = async (researcher: Researcher) => {
         try {
@@ -89,79 +95,81 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
             defaultValues={researcher}
             validationSchema={ResearcherValidationSchema}
         >
-            <div className='col-6'>
-                <h6>First Name</h6>
-                <InputField name="firstName"/>
-                <CharacterCount max={50} name={'firstName'} />
-            </div>
+            <Grid>
+                <Grid.Col span={6}>
+                    <h6>First Name</h6>
+                    <InputField name="firstName"/>
+                    <CharacterCount max={50} name={'firstName'} />
+                </Grid.Col>
+                <Grid.Col span={6}>
+                    <h6>Last Name</h6>
+                    <InputField name="lastName"/>
+                    <CharacterCount max={50} name='lastName' />
+                </Grid.Col>
 
-            <div className='col-6'>
-                <h6>Last Name</h6>
-                <InputField name="lastName"/>
-                <CharacterCount max={50} name='lastName' />
-            </div>
+                <Grid.Col span={12}>
+                    <FieldTitle required>Institution</FieldTitle>
+                    <SelectField
+                        name="institution"
+                        isClearable={true}
+                        placeholder={'Select Option'}
+                        defaultValue={researcher.institution}
+                        options={institutionList}
+                    />
+                    <FieldErrorMessage name='institution' />
+                </Grid.Col>
 
-            <div className='col-12 mt-1'>
-                <h6>Institution</h6>
-                <SelectField
-                    name="institution"
-                    isClearable={true}
-                    placeholder={'Select Option'}
-                    onChange={(value) => (typeof value == 'string' && setInstitution(value))}
-                    value={institution}
-                    defaultValue={institution}
-                    options={institutionList}
-                />
-            </div>
+                <Grid.Col>
+                    <Group gap='xs'>
+                        <h6>Research Interests</h6>
+                        <Tooltip tooltip='Examples: Multimedia Learning; AI in Education; Adaptive Tutoring Systems'>
+                            <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={16}/>
+                        </Tooltip>
+                    </Group>
+                    <Grid>
+                        <Grid.Col span={4}>
+                            <InputField name="researchInterest1" />
+                            <CharacterCount max={25} name='researchInterest1' />
+                        </Grid.Col>
+                        <Grid.Col span={4}>
+                            <InputField name="researchInterest2" />
+                            <CharacterCount max={25} name='researchInterest2' />
+                        </Grid.Col>
+                        <Grid.Col span={4}>
+                            <InputField name="researchInterest3" />
+                            <CharacterCount max={25} name='researchInterest3' />
+                        </Grid.Col>
+                    </Grid>
+                </Grid.Col>
 
-            <Box align='baseline' gap className='mt-1'>
-                <h6>Research Interests</h6>
-                <Tooltip tooltip='Examples: Multimedia Learning; AI in Education; Adaptive Tutoring Systems'>
-                    <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={16}/>
-                </Tooltip>
-            </Box>
-            <div className='col-4'>
-                <InputField name="researchInterest1" />
-                <CharacterCount max={25} name='researchInterest1' />
-            </div>
+                <Grid.Col>
+                    <h6>Lab Page Link</h6>
+                    <InputField placeholder='https://' name="labPage" />
+                    <FieldErrorMessage name='labPage' />
+                </Grid.Col>
 
-            <div className='col-4'>
-                <InputField name="researchInterest2" />
-                <CharacterCount max={25} name='researchInterest2' />
-            </div>
+                <Grid.Col span={12}>
+                    <Group gap='xs'>
+                        <FieldTitle required>Bio</FieldTitle>
+                        <Tooltip tooltip='This bio will be visible to learners, as a chance for them to know more about the researcher conducting the study'>
+                            <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={16}/>
+                        </Tooltip>
+                    </Group>
+                    <Stack gap='0'>
+                        <InputField
+                            name="bio"
+                            type="textarea"
+                            placeholder='Please add a brief bio to share with learners'
+                        />
+                        <CharacterCount max={250} name={'bio'} />
+                        <FieldErrorMessage name='bio' />
+                    </Stack>
+                </Grid.Col>
 
-            <div className='col-4'>
-                <InputField name="researchInterest3" />
-                <CharacterCount max={25} name='researchInterest3' />
-            </div>
-
-            <div className='mt-1'>
-                <h6>Lab Page Link</h6>
-                <InputField placeholder='https://' name="labPage" />
-                <div className="invalid-feedback">
-                    <Icon icon="warning" color='red' height={18}></Icon>
-                    &nbsp;
-                    Please enter a valid URL
-                </div>
-            </div>
-
-            <div className='mb-1 mt-1'>
-                <Box align='baseline' gap>
-                    <h6 className='field-title'>Bio</h6>
-                    <Tooltip tooltip='Simplify your research description for mass appeal'>
-                        <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={16}/>
-                    </Tooltip>
-                </Box>
-
-                <InputField
-                    name="bio"
-                    type="textarea"
-                    placeholder='Please add a brief bio to share with learners'
-                />
-                <CharacterCount max={250} name={'bio'} />
-            </div>
-
-            <FormSave />
+                <Grid.Col>
+                    <FormSave />
+                </Grid.Col>
+            </Grid>
         </StyledForm>
     );
 }
@@ -170,10 +178,10 @@ const FormSave: FC = () => {
     const { isDirty, isValid } = useFormState()
 
     return (
-        <Box gap justify='end' className='mt-4'>
+        <Group justify='flex-end'>
             <FormSaveButton primary disabled={!isValid || !isDirty}>
                 Save
             </FormSaveButton>
-        </Box>
+        </Group>
     )
 }

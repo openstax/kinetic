@@ -1,11 +1,10 @@
 import { React } from '@common'
-import { UserInfo } from '@models'
 import { ErrorPage, IncorrectUser, LoadingAnimation } from '@components'
-
 import { ENV } from './env'
 import { useApi } from './api-config'
 import { useQuery } from 'react-query';
 import { Environment } from '@api'
+import { UserInfo } from '@models';
 
 export const EnvironmentContext = React.createContext<Environment | null>(null)
 
@@ -57,8 +56,11 @@ export const useCurrentResearcher = () => {
 }
 
 export const useUserInfo = () => {
-    return useQuery('fetchUserInfo', () => {
-        return fetchUserInfo()
+    const accountsApiURL = useAccountsApiURL()
+
+    return useQuery('fetchUserInfo', async (): Promise<UserInfo> => {
+        const resp = await fetch(`${accountsApiURL}`, { credentials: 'include' })
+        return await resp.json()
     })
 }
 
@@ -70,7 +72,7 @@ export const useUserPreferences = () => {
     })
 }
 
-export const locationOrigin = () => {
+export const useLocationOrigin = () => {
     const env = useEnvironment()
     if (env.accountsEnvName === 'production') {
         return `https://openstax.org`;
@@ -78,30 +80,31 @@ export const locationOrigin = () => {
     return `https://${env.accountsEnvName}.openstax.org`;
 }
 
-export const loginURL = () => {
-    const url = accountsUrl()
+export const useLoginURL = () => {
+    const url = useAccountsURL()
     if (ENV.IS_DEV_MODE) return url
 
     return `${url}/login/?r=${encodeURIComponent(window.location.href)}`
 }
 
-export const logoutURL = () => {
+export const useLogoutURL = () => {
+    const locationOrigin = useLocationOrigin()
+    const accountsURL = useAccountsURL()
     if (ENV.IS_DEV_MODE) return '/dev/user';
-    const homepage = encodeURIComponent(`${locationOrigin()}/kinetic`);
-    return `${accountsUrl()}/signout?r=${homepage}`;
+    const homepage = encodeURIComponent(`${locationOrigin}/kinetic`);
+    return `${accountsURL}/signout?r=${homepage}`;
 }
 
-export const accountsUrl = (): string => {
+export const useAccountsURL = (): string => {
+    const locationOrigin = useLocationOrigin()
+
     if (ENV.IS_DEV_MODE) return '/dev/user'
-    return `${locationOrigin()}/accounts`;
+    return `${locationOrigin}/accounts`;
 }
 
-export const accountsApiUrl = (): string => {
+export const useAccountsApiURL = (): string => {
+    const accountsURL = useAccountsURL()
+
     if (ENV.IS_DEV_MODE) return `${ENV.API_ADDRESS}/development/user/api/user`
-    return `${accountsUrl()}/api/user`
-}
-
-export const fetchUserInfo = async (): Promise<UserInfo> => {
-    const resp = await fetch(`${accountsApiUrl()}`, { credentials: 'include' })
-    return resp.json()
+    return `${accountsURL}/api/user`
 }

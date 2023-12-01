@@ -1,6 +1,11 @@
-import { Box, React, useCallback, useState } from '@common';
-import { Link } from 'react-router-dom';
+import { Box, React, styled, useCallback, useState } from '@common';
 import { Icon, ResearcherButton, Step } from '@components';
+
+const FakeLink = styled.span({
+    cursor: 'pointer',
+    color: 'blue',
+    textDecoration: 'underline',
+})
 
 export const ActionFooter: FC<{ step: Step, }> = ({ step }) => {
     const [busy, setBusy] = useState(false)
@@ -15,12 +20,12 @@ export const ActionFooter: FC<{ step: Step, }> = ({ step }) => {
     return (
         <Box className='fixed-bottom bg-white mt-auto' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
             <Box className='container-lg' align='center' justify='between'>
-                {step.backAction ? <Link to=''>
+                {step.backAction ? <FakeLink>
                     <Box align='center' gap='small' onClick={() => step.backAction?.()}>
                         <Icon icon='chevronLeft'></Icon>
                         <span>Back</span>
                     </Box>
-                </Link> : <span></span>}
+                </FakeLink> : <span></span>}
 
                 <Box align='center' gap='large'>
                     {step.secondaryAction ?

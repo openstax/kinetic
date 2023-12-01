@@ -23,8 +23,8 @@ const Card = styled(Box)({
     color: 'inherit',
     textDecoration: 'none',
     cursor: 'pointer',
-    minHeight: 475,
-    maxHeight: 475,
+    minHeight: 500,
+    maxHeight: 500,
     borderRadius: 8,
     overflow: 'hidden',
     '&:hover': {

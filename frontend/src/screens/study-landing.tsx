@@ -14,8 +14,8 @@ interface StudyMessagingProps {
 
 }
 
-const Points: React.FC<StudyMessagingProps> = ({ study }) => {
-    if (!study.completedAt) return null
+const Points: React.FC<StudyMessagingProps> = ({ consented, study }) => {
+    if (!study.completedAt || !consented) return null
     return (
         <div
             css={{
@@ -109,17 +109,7 @@ export default function UsersStudies() {
     const abort = useQueryParam('abort') == 'true'
 
     const md = useQueryParam('md') || {}
-    if (!user) {
-        return <IncorrectUser />
-    }
 
-    const onNav = () => {
-        if (isIframed()) {
-            sendMessageToParent({ closeStudyModal: true })
-        } else {
-            nav('/studies')
-        }
-    }
     useEffect(() => {
         let isPreview = false
         try {
@@ -140,6 +130,19 @@ export default function UsersStudies() {
             .then(setLanded)
             .catch(setError)
     }, [])
+
+    if (!user) {
+        return <IncorrectUser />
+    }
+
+    const onNav = () => {
+        if (isIframed()) {
+            sendMessageToParent({ closeStudyModal: true })
+        } else {
+            nav('/studies')
+        }
+    }
+
 
     if (error) {
         return <ErrorPage error={error} />
