@@ -57,7 +57,7 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
 
     const onLaunch = useCallback(async () => {
         setBusy(true)
-        await LaunchStudy(api, study)
+        await LaunchStudy(api, study.id)
         setBusy(false)
     }, [api, study, LaunchStudy, setBusy])
 

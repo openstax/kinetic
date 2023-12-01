@@ -190,7 +190,7 @@ const LearnerDashboard = () => {
                 <Route path={'details/:studyId'} element={<StudyDetails studies={allStudies} />} />
             </Routes>
             <TopNavBar />
-            <LearnerWelcomeModal demographicSurvey={demographicSurvey} completedCount={completedCount} />
+            <LearnerWelcomeModal demographicSurvey={allStudies[0]} completedCount={completedCount} />
             <RewardsProgressBar studies={allStudies} />
 
             <SyllabusContest studies={syllabusContestStudies} />

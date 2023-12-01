@@ -11,8 +11,8 @@ export enum StudyStatus {
     Completed = 'Completed',
 }
 
-export const LaunchStudy = async (api: DefaultApi, study: { id: number }, options: { preview?: boolean } = {}) => {
-    const launch = await api.launchStudy({ id: study.id, preview: options.preview || false })
+export const LaunchStudy = async (api: DefaultApi, studyId: number, options: { preview?: boolean } = {}) => {
+    const launch = await api.launchStudy({ id: studyId, preview: options.preview || false })
     window.location.assign(launch.url!)
     return launch
 }
