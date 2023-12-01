@@ -14,8 +14,8 @@ FactoryBot.define do
     config do
       {
         type: 'qualtrics',
-        survey_id: 'SV_12QHR3BE',
-        secret_key: '1234567890123456'
+        survey_id: 'SV_cA5YICrqMwDcNXU',
+        secret_key: 'NLygf4wBFh1xIpm0'
       }
     end
     study
