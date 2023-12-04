@@ -7,7 +7,6 @@ import {
     getAltText,
     getImageUrl,
     InputField,
-    ResearcherButton,
     ResearcherDetailedCheckbox,
     SelectField,
     StepHeader,
@@ -19,6 +18,7 @@ import { first } from 'lodash-es';
 import { Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
 import { colors } from '@theme';
+import { Button } from '@mantine/core';
 
 export const participantViewValidation = (allOtherStudies: Study[]) => {
     return {
@@ -95,7 +95,7 @@ export const participantViewValidation = (allOtherStudies: Study[]) => {
 }
 
 export const ParticipantView: FC<{study: Study}> = ({ study }) => {
-    const [showImagePicker, setShowImagePicker] = useState<boolean>(false)
+    const [showImagePicker, setShowImagePicker] = useState(false)
     const initialSubjects = study.subject ? [...new Set([...studySubjects, study.subject])] : studySubjects
     const [allStudySubjects, setAllStudySubjects] = useState<string[]>(initialSubjects)
     const { setValue, watch, getValues, control } = useFormContext<Study>()
@@ -271,9 +271,9 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
                         </Col>
 
                         <Col sm={6} direction='column' gap align='start' justify='center'>
-                            <ResearcherButton buttonType='secondary' testId='image-picker' onClick={() => setShowImagePicker(true)}>
+                            <Button variant='outline' data-testid='image-picker' onClick={() => setShowImagePicker(true)}>
                                 {getValues('imageId') ? 'Change Selected Image' : 'Select Study Card Image'}
-                            </ResearcherButton>
+                            </Button>
                             <ImagePreview imageId={getValues('imageId') as string} />
                             <ImageLibrary
                                 show={showImagePicker}

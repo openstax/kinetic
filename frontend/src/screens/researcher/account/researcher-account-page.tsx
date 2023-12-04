@@ -6,7 +6,7 @@ import CustomerSupportImage from '../../../components/customer-support-image';
 import RiceLogoURL from '../../../images/rice-logo-darktext.png';
 import DefaultAvatar from '../../../images/default-avatar.png';
 import { ResearcherAccountForm } from './researcher-account-form';
-import { Button, Container, Grid, Group, Image, Modal, Stack, Text } from '@mantine/core';
+import { Button, Grid, Group, Image, Modal, Stack, Text } from '@mantine/core';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 
 export default function ResearcherAccountPage() {
@@ -19,64 +19,64 @@ export default function ResearcherAccountPage() {
 
     return (
         <Page hideFooter>
-            <Container size='xl' py='xl'>
-                <Grid gutter='xl'>
-                    <Grid.Col span={9}>
-                        <Group justify='space-between' h='40px'>
-                            <h3>My Account</h3>
-                            <a href={`${accountsUrl}`} target='_blank'>
-                                <span>Update Email & Password</span>
-                                <Icon icon="chevronRight" />
-                            </a>
-                        </Group>
+            <Grid gutter='xl'>
+                <Grid.Col span={{ lg: 9 }}>
+                    <Group justify='space-between' h='40px'>
+                        <h3>My Account</h3>
+                        <a href={`${accountsUrl}`} target='_blank'>
+                            <span>Update Email & Password</span>
+                            <Icon icon="chevronRight" />
+                        </a>
+                    </Group>
 
-                        <Stack gap='xl'>
-                            <ProfileSection>
-                                <Stack>
-                                    <h5 className='fw-bolder pb-2'>Researcher Profile</h5>
-                                    <Grid gutter='lg'>
-                                        <Grid.Col span={2}>
-                                            <Avatar />
-                                        </Grid.Col>
-                                        <Grid.Col span={10}>
-                                            <ResearcherAccountForm />
-                                        </Grid.Col>
-                                    </Grid>
-                                </Stack>
-                            </ProfileSection>
-
-                            <IRBSection gap='large'>
-                                <h5 className='fw-bolder'>Research Agreements</h5>
-                                <Grid gutter='lg' align='flex-start' justify='space-between'>
+                    <Stack gap='xl'>
+                        <ProfileSection>
+                            <Stack>
+                                <h5 className='fw-bolder pb-2'>Researcher Profile</h5>
+                                <Grid gutter='lg'>
                                     <Grid.Col span={2}>
-                                        <h6>IRB Detail</h6>
+                                        <Avatar />
                                     </Grid.Col>
-                                    <Grid.Col span={6}>
-                                        <IRB/>
-                                    </Grid.Col>
-                                    <Grid.Col span={2}>
-                                        <a href='https://drive.google.com/file/d/1x1M8EcrOOu5U1ZQAtVmhvH3DkTlhtc8I/view' target='_blank'>
-                                            <span>Check Details</span>
-                                            <Icon icon="chevronRight" />
-                                        </a>
+                                    <Grid.Col span={10}>
+                                        <ResearcherAccountForm />
                                     </Grid.Col>
                                 </Grid>
-                                {/*<TermsOfUse/>*/}
-                            </IRBSection>
-                        </Stack>
-                    </Grid.Col>
+                            </Stack>
+                        </ProfileSection>
+                    </Stack>
+                </Grid.Col>
 
-                    <Grid.Col span={3}>
-                        <Resources gap='md'>
-                            <ResourceLinks />
-                            <Group mt='lg'>
-                                <CustomerSupportImage height={100} />
-                                <HelpLink/>
-                            </Group>
-                        </Resources>
-                    </Grid.Col>
-                </Grid>
-            </Container>
+                <Grid.Col span={{ lg: 3 }}>
+                    <Resources gap='md'>
+                        <ResourceLinks />
+                        <Group mt='lg'>
+                            <CustomerSupportImage height={100} />
+                            <HelpLink/>
+                        </Group>
+                    </Resources>
+                </Grid.Col>
+
+                <Grid.Col span={{ lg: 9 }}>
+                    <IRBSection gap='large'>
+                        <h5 className='fw-bolder'>Research Agreements</h5>
+                        <Grid gutter='lg' align='flex-start' justify='space-between'>
+                            <Grid.Col span={2}>
+                                <h6>IRB Detail</h6>
+                            </Grid.Col>
+                            <Grid.Col span={6}>
+                                <IRB/>
+                            </Grid.Col>
+                            <Grid.Col span={2}>
+                                <a href='https://drive.google.com/file/d/1x1M8EcrOOu5U1ZQAtVmhvH3DkTlhtc8I/view' target='_blank'>
+                                    <span>Check Details</span>
+                                    <Icon icon="chevronRight" />
+                                </a>
+                            </Grid.Col>
+                        </Grid>
+                        {/*<TermsOfUse/>*/}
+                    </IRBSection>
+                </Grid.Col>
+            </Grid>
         </Page>
     )
 }

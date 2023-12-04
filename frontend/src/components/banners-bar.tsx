@@ -4,6 +4,7 @@ import { cx, React } from '@common'
 import { useBanners } from '@models'
 import { colors } from '@theme'
 import { useIsMobileDevice } from '@lib';
+import { Container } from '@mantine/core';
 
 const Banner: React.FC<{
     onRemove: (b: BannerMessage) => void,
@@ -38,9 +39,9 @@ export const BannersBar: React.FC = () => {
                 boxShadow: '0px 10px 20px -5px rgba(0, 0, 0, 0.08)',
             }}
         >
-            <div className="container">
+            <Container>
                 {banners.map(b => <Banner key={b.id} banner={b} onRemove={removeBanner} />)}
-            </div>
+            </Container>
         </div>
     )
 }

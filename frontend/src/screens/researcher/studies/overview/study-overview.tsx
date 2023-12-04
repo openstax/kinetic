@@ -1,6 +1,6 @@
 import { Box, React, useNavigate, useParams } from '@common';
 import { Study } from '@api';
-import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page, ResearcherButton } from '@components';
+import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page } from '@components';
 import { getStudyLead, getStudyPi, isReadyForLaunch, isWaiting, useFetchStudy } from '@models';
 import { StudyCardPreview, Tag } from '../../../learner/card';
 import { colors } from '@theme';
@@ -9,6 +9,8 @@ import Waiting from '@images/study-creation/waiting.svg'
 import { EditSubmittedStudy } from './edit-submitted-study';
 import { useQueryParam } from '@lib';
 import { Link, Navigate } from 'react-router-dom';
+import { Button } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 
 export default function StudyOverview() {
     const id = useParams<{ id: string }>().id
@@ -90,9 +92,9 @@ const AnalysisSection: FC <{study: Study}> = ({ study }) => {
                 </small>
             </Box>
 
-            <ResearcherButton onClick={() => nav(`/analysis/edit/new?studyId=${study.id}`)}>
-                + Create New Analysis
-            </ResearcherButton>
+            <Button leftSection={<IconPlus />} onClick={() => nav(`/analysis/edit/new?studyId=${study.id}`)}>
+                Create New Analysis
+            </Button>
         </Box>
     )
 }

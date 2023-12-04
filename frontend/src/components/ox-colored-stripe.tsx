@@ -1,8 +1,9 @@
-import { Box, React } from '../common'
+import { React } from '../common'
 import { colors } from '@theme'
+import { Flex } from '@mantine/core';
 
 export const OXColoredStripe = () => (
-    <Box height="10" className="ox-colored-stripe">
+    <Flex h="10px" className="ox-colored-stripe">
         <span css={{
             backgroundColor: colors.osOrange,
             flex: 3.5,
@@ -23,5 +24,5 @@ export const OXColoredStripe = () => (
             backgroundColor: colors.osTeal,
             flex: 1.5,
         }}></span>
-    </Box>
+    </Flex>
 )

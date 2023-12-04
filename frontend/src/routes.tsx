@@ -33,6 +33,7 @@ const router = createBrowserRouter([
             { path: 'study/edit/:id', element: <EditStudy /> },
             { path: 'account', element: <AccountDetails /> },
             { path: 'researcher-account', element: <ResearcherAccountPage /> },
+            { path: 'studies/status/:studyStatus', element: <StudiesHomepage /> },
             { path: 'studies/*', element: <StudiesHomepage /> },
             { path: 'analysis/*', element: <AnalysisHomepage /> },
             { path: 'admin/*', element: <AdminHomepage /> },

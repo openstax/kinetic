@@ -1,4 +1,4 @@
-import { cx, React, styled } from '@common';
+import { React, styled, useState } from '@common';
 import { StageStatusEnum, Study, StudyStatusEnum } from '@api';
 import {
     ColumnDef,
@@ -14,14 +14,15 @@ import {
     SortingState,
     Table,
     useReactTable,
+    VisibilityState,
 } from '@tanstack/react-table';
 import { Link } from 'react-router-dom';
 import { colors } from '@theme';
 import { toDayJS } from '@lib';
-import { Box, Icon, TableHeader, Tooltip } from '@components';
+import { Icon, TableHeader, Tooltip } from '@components';
 import { getStudyEditUrl, isDraftLike, StudyStatus, useFetchStudies } from '@models';
-import { Dispatch, SetStateAction } from 'react';
 import { ActionColumn } from './study-actions';
+import { Checkbox, Group, Stack } from '@mantine/core';
 
 declare module '@tanstack/table-core' {
     // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
@@ -84,71 +85,43 @@ const StudyRow: React.FC<{row: Row<Study> }> = ({ row }) => {
     )
 }
 
-const FilterContainer = styled(Box)({
-    color: colors.text,
-    "input[type='checkbox']": {
-        accentColor: colors.blue,
-        width: 16,
-        height: 16,
-    },
-})
-
 const StatusFilters: React.FC<{
-    status: String,
+    currentStatus: String,
     table: Table<Study>,
-    className?: string,
-}> = ({ status, table, className }) => {
-    const isLaunched = status === StudyStatus.Launched
-    const isDraft = status === StudyStatus.Draft
+}> = ({ currentStatus, table }) => {
+    const isLaunched = currentStatus === StudyStatus.Launched
+    const isDraft = currentStatus === StudyStatus.Draft
 
     const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const status = e.target.name;
+        const newStatus = e.target.name;
         const checked = e.target.checked;
         table.getColumn('status')?.setFilterValue((old: string[]) => {
-            return checked ? [...old, status] : old.filter(v => v !== status)
+            return checked ? [...old, newStatus] : old.filter(v => v !== newStatus)
         })
     }
 
-    const isChecked = (name: string) => {
+    const isChecked = (name: StudyStatusEnum) => {
         const values: string[] = table.getColumn('status')?.getFilterValue() as string[] || []
         return values.includes(name)
     }
 
     if (isLaunched) {
         return (
-            <FilterContainer className={cx(className)} gap='medium'>
-                <Box gap align='center'>
-                    <input id='active-filter' type="checkbox" name="active" checked={isChecked(`${StudyStatusEnum.Active}`)} onChange={handleFilter}/>
-                    <label className='small' htmlFor='active-filter'>Active</label>
-                </Box>
-                <Box gap align='center'>
-                    <input id='paused-filter' type='checkbox' name='paused' checked={isChecked(`${StudyStatusEnum.Paused}`)} onChange={handleFilter}/>
-                    <label className='small' htmlFor='paused-filter'>Paused</label>
-                </Box>
-                <Box gap align='center'>
-                    <input id='scheduled-filter' type='checkbox' name='scheduled' checked={isChecked(`${StudyStatusEnum.Scheduled}`)} onChange={handleFilter}/>
-                    <label className='small' htmlFor='scheduled-filter'>Scheduled</label>
-                </Box>
-            </FilterContainer>
+            <Group>
+                <Checkbox label='Active' name='active' color='blue' checked={isChecked(StudyStatusEnum.Active)} onChange={handleFilter} size='xs' />
+                <Checkbox label='Paused' name='paused' color='blue' checked={isChecked(StudyStatusEnum.Paused)} onChange={handleFilter} size='xs' />
+                <Checkbox label='Scheduled' name='scheduled' color='blue' checked={isChecked(StudyStatusEnum.Scheduled)} onChange={handleFilter} size='xs' />
+            </Group>
         )
     }
 
     if (isDraft) {
         return (
-            <FilterContainer className={cx(className)} gap='medium'>
-                <Box gap align='center'>
-                    <input id='draft-filter' type="checkbox" name="draft" checked={isChecked(`${StudyStatusEnum.Draft}`)} onChange={handleFilter}/>
-                    <label className='small' htmlFor='draft-filter'>Draft</label>
-                </Box>
-                <Box gap align='center'>
-                    <input id='waiting-period-filter' type='checkbox' name='waiting_period' checked={isChecked(`${StudyStatusEnum.WaitingPeriod}`)} onChange={handleFilter}/>
-                    <label className='small' htmlFor='waiting-period-filter'>Waiting Period</label>
-                </Box>
-                <Box gap align='center'>
-                    <input id='ready-for-launch-filter' type='checkbox' name='ready_for_launch' checked={isChecked(`${StudyStatusEnum.ReadyForLaunch}`)} onChange={handleFilter}/>
-                    <label className='small' htmlFor='ready-for-launch-filter'>Ready For Launch</label>
-                </Box>
-            </FilterContainer>
+            <Group>
+                <Checkbox label='Draft' name='draft' color='blue' checked={isChecked(StudyStatusEnum.Draft)} onChange={handleFilter} size='xs' />
+                <Checkbox label='Waiting Period' name='waiting_period' color='blue' checked={isChecked(StudyStatusEnum.WaitingPeriod)} onChange={handleFilter} size='xs' />
+                <Checkbox label='Ready For Launch' name='ready_for_launch' color='blue' checked={isChecked(StudyStatusEnum.ReadyForLaunch)} onChange={handleFilter} size='xs' />
+            </Group>
         )
     }
 
@@ -186,30 +159,48 @@ const NoData: React.FC<{ filteredStudiesLength: number }> = ({ filteredStudiesLe
     const { data: studies, isLoading } = useFetchStudies()
     if (filteredStudiesLength || isLoading || !studies) return null
     return (
-        <Box direction='column' align='center' justify='center' className='mt-10' gap='large'>
+        <Stack align='center' justify='center' mt='xl' gap='large'>
             <h3 css={{ color: colors.gray50 }}>
                 No data
             </h3>
-            {!studies.length && <span>
-                <Link
-                    to='/study/create'
-                    css={{ color: colors.blue }}
-                    className='fw-bold'
-                >
+            {!studies.length &&
+                <Link to='/study/create' className='fw-bold'>
                     + Create your first research study on Kinetic
                 </Link>
-            </span>}
-        </Box>
+            }
+        </Stack>
     )
 }
 
+const getColumnVisibility = (status: StudyStatus) => {
+    if (status === StudyStatus.Draft) {
+        return {
+            'titleForResearchers': true,
+            'status': true,
+            'opensAt': false,
+            'closesAt': false,
+            'completedCount': false,
+            'takeRate': false,
+            'action': true,
+        }
+    }
+
+    return {
+        'titleForResearchers': true,
+        'status': true,
+        'opensAt': true,
+        'closesAt': true,
+        'completedCount': true,
+        'takeRate': true,
+        'action': true,
+    }
+}
+
 export const StudiesTable: React.FC<{
-    filters: ColumnFiltersState,
-    setFilters: Dispatch<SetStateAction<ColumnFiltersState>>,
+    initialFilters: StudyStatusEnum[]
     currentStatus: StudyStatus
 }> = ({
-    filters,
-    setFilters,
+    initialFilters,
     currentStatus,
 }) => {
     const { data: studies, refetch } = useFetchStudies()
@@ -218,6 +209,10 @@ export const StudiesTable: React.FC<{
         desc: false,
     }])
     const [expanded, setExpanded] = React.useState<ExpandedState>(true);
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>(getColumnVisibility(currentStatus))
+    const [filters, setFilters] = useState<ColumnFiltersState>([
+        { id: 'status', value: initialFilters },
+    ])
 
     const columns: ColumnDef<Study, any>[] = [
         {
@@ -230,28 +225,24 @@ export const StudiesTable: React.FC<{
             },
             cell: (info) => {
                 return (
-                    <Box css={{ paddingLeft: info.row.depth ? '2rem' : '' }}>
-                        <Link
-                            to={getStudyEditUrl(info.row.original)}
-                            css={{
-                                color: colors.blue,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                            }}>
-                            {info.getValue()}
-                        </Link>
-                    </Box>
+                    <Link
+                        to={getStudyEditUrl(info.row.original)}
+                        style={{
+                            color: colors.blue,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            paddingLeft: info.row.depth ? '2rem' : 0,
+                        }}>
+                        {info.getValue()}
+                    </Link>
                 )
             },
         },
         {
             accessorKey: 'status',
             header: () => <span>Status</span>,
-            size: 175,
-            meta: {
-                type: 'text',
-            },
+            enableSorting: false,
             filterFn: (row, columnId, filterValue) => {
                 return filterValue.includes(row.getValue(columnId))
             },
@@ -307,12 +298,12 @@ export const StudiesTable: React.FC<{
                     'Total # of study completions' :
                     'Total number of study completions / desired sample size'
                 return (
-                    <Box gap>
+                    <Group gap='xs'>
                         <span># Participants</span>
                         <Tooltip tooltip={tooltipText} css={{ display: 'flex' }}>
                             <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={12}/>
                         </Tooltip>
-                    </Box>
+                    </Group>
                 )
             },
             cell: (info) => {
@@ -337,14 +328,12 @@ export const StudiesTable: React.FC<{
             accessorKey: 'takeRate',
             header: () => {
                 return (
-                    <Box gap>
+                    <Group gap='xs'>
                         <span>Take Rate</span>
-                        <Box>
-                            <Tooltip tooltip='Rate of Participants who clicked ‘Begin Study’ against Total number of study previews' css={{ display: 'flex' }}>
-                                <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={12}/>
-                            </Tooltip>
-                        </Box>
-                    </Box>
+                        <Tooltip tooltip='Rate of Participants who clicked ‘Begin Study’ against Total number of study previews' css={{ display: 'flex' }}>
+                            <Icon css={{ color: colors.blue50 }} icon='helpCircle' height={12}/>
+                        </Tooltip>
+                    </Group>
                 )
             },
             cell: (info) => {
@@ -373,6 +362,7 @@ export const StudiesTable: React.FC<{
         data: studies || [],
         columns,
         state: {
+            columnVisibility,
             columnFilters: filters,
             sorting,
             expanded,
@@ -400,6 +390,7 @@ export const StudiesTable: React.FC<{
         onSortingChange: setSorting,
         onColumnFiltersChange: setFilters,
         onExpandedChange: setExpanded,
+        onColumnVisibilityChange: setColumnVisibility,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -411,11 +402,9 @@ export const StudiesTable: React.FC<{
         },
     })
 
-    table.reset
-
     return (
-        <Box direction='column' className='studies mt-2'>
-            <StatusFilters status={currentStatus} table={table}/>
+        <Stack className='studies' mt='lg'>
+            <StatusFilters currentStatus={currentStatus} table={table}/>
             <table data-testid="studies-table" className='w-100 mt-2'>
                 <thead css={{ height: 40 }}>
                     <tr>
@@ -431,6 +420,6 @@ export const StudiesTable: React.FC<{
                 </tbody>
             </table>
             <NoData filteredStudiesLength={table.getRowModel().rows.length} />
-        </Box>
+        </Stack>
     )
 }
