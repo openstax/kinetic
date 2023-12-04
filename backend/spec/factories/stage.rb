@@ -15,7 +15,7 @@ FactoryBot.define do
       {
         type: 'qualtrics',
         survey_id: Rails.application.secrets.qualtrics_template_survey_id,
-        secret_key: Rails.application.secrets.qualtrics_template_survey_secret_key,
+        secret_key: Rails.application.secrets.qualtrics_template_survey_secret_key
       }
     end
     study
