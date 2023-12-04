@@ -11,8 +11,10 @@ class CloneSurvey
 
   def clone(new_name)
     unless Rails.env.production?
-      return [@survey_id,
-              Rails.application.secrets.qualtrics_template_survey_secret_key]
+      return [
+        @survey_id,
+        Rails.application.secrets.qualtrics_template_survey_secret_key
+      ]
     end
 
     @source = api.get_survey_definition(@survey_id, format: 'qsf')
