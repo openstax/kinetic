@@ -44,7 +44,7 @@ export const SyllabusContest: FC<{ studies: ParticipantStudy[] }> = ({ studies }
 
     return (
         <BackgroundImage src={SyllabusContestBackground}>
-            <Container size='xl' py='4rem' >
+            <Container py='4rem' >
                 <Grid gutter='xl'>
                     <Grid.Col span={{ base: 12, sm: 12, md: 12, lg: 6, xl: 4 }}>
                         <ContestInfo studies={studies} />

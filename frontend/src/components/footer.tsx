@@ -1,8 +1,9 @@
-import { cx, React } from '@common'
-import styled from '@emotion/styled'
+import { React } from '@common'
 import { HelpLink, ResourceLinks } from './resource-links'
 import { colors } from '@theme'
-import { Box, Col, Icon, Row } from '@components'
+import { useIsMobileDevice } from '@lib';
+import { Anchor, Box, Container, Flex, Group, Image, Stack, Text, Title } from '@mantine/core';
+import { IconBrandFacebookFilled, IconBrandInstagram, IconBrandTwitterFilled } from '@tabler/icons-react';
 
 // @ts-ignore
 import NSFLogoURL from '../images/nsf-logo.webp'
@@ -13,128 +14,102 @@ import RiceLogoURL from '../images/rice-logo.png'
 // @ts-ignore
 import OpenStaxURL from '../images/openstax-logo.png'
 
-import { useIsMobileDevice } from '@lib';
-
-const Supporter = styled.a({
-    display: 'flex',
-    alignItems: 'center',
-})
-
-const SupporterImage = styled.img({
-    width: '100%',
-    height: 'auto',
-})
-
 const Funders = () => {
     return (
-        <div css={{ backgroundColor: colors.white }}>
-            <Box direction="column" className='p-2 container-lg'>
-                <h4 className="fw-bold">Support from Scientific Agencies</h4>
-                <div css={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    maxWidth: '600px',
-                    margin: 'auto',
-                    alignItems: 'center',
-                }}>
-                    <Box justify='evenly'>
-                        <Supporter target="_blank" href="https://ies.ed.gov/">
-                            <SupporterImage alt="Institute of Education Sciences logo" src={IESLogoURL} />
-                        </Supporter>
-                        <Supporter target="_blank" href="https://www.nsf.org/gb/en">
-                            <SupporterImage alt="National Science Foundation logo" src={NSFLogoURL} />
-                        </Supporter>
-                    </Box>
+        <Container bg='white'>
+            <Stack>
+                <Title order={4} className="fw-bold">Support from Scientific Agencies</Title>
+                <Flex justify='center' align='center' mx='auto'>
+                    <Anchor target="_blank" href="https://ies.ed.gov/">
+                        <Image alt="Institute of Education Sciences logo" src={IESLogoURL}/>
+                    </Anchor>
+                    <Anchor target="_blank" href="https://www.nsf.org/gb/en">
+                        <Image alt="National Science Foundation logo" src={NSFLogoURL} />
+                    </Anchor>
+                </Flex>
 
-
-                </div>
-                <div>
-                    <a href="https://openstax.org/foundation" className="mb-2">
+                <Stack gap='md' mb='md'>
+                    <Anchor href="https://openstax.org/foundation">
                         View Other Philanthropic Supporters
-                    </a>
+                    </Anchor>
 
-                    <p className="x-small" css={{ color: colors.text }}>
+                    <Text size='xs' c={colors.text}>
                         *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
-                    </p>
-                </div>
-            </Box>
-        </div>
+                    </Text>
+                </Stack>
+            </Stack>
+        </Container>
     )
 }
 
-export const MobileFooter: React.FC<{ className?: string, includeFunders?: boolean }> = () => {
+export const DesktopFooter: React.FC = () => {
     return (
-        <div css={{ backgroundColor: colors.navy, color: 'white', a: { color: 'white' } }}>
-            <div className='container-lg'>
-                <Row className="py-1">
-                    <Row className="py-1">
-                        <HelpLink />
-                    </Row>
-
-                    <Row className="py-1">
-                        <ResourceLinks />
-                    </Row>
-
-                    <Row className="py-1">
-                        <h4>Follow us</h4>
-                        <Box gap>
-                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org">
-                                <Icon icon='facebook' height={30}/>
-                            </a>
-                            <a target="_blank" href="https://www.instagram.com/openstax/">
-                                <Icon icon='instagram' height={30}/>
-                            </a>
-                            <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org">
-                                <Icon icon='twitter' height={30}/>
-                            </a>
-                        </Box>
-                    </Row>
-                    <Col className="py-1">
-                        <a href="https://www.rice.edu/" target="_blank">
-                            <img alt="Rice University logo" height="30" src={RiceLogoURL}/>
-                        </a>
-                        <a href="https://openstax.org/" target="_blank" css={{ marginLeft: '60px' }}>
-                            <img alt="Open Stax logo" height="30" src={OpenStaxURL}/>
-                        </a>
-                    </Col>
-                </Row>
-            </div>
-        </div>
+        <Box bg='navy' c='white'>
+            <Container bg='navy'>
+                <Group py='xl' align='start' justify='space-between'>
+                    <HelpLink />
+                    <ResourceLinks />
+                    <SocialLinks />
+                    <Logos />
+                </Group>
+            </Container>
+        </Box>
     )
 }
 
-export const DesktopFooter: React.FC<{ className?: string, includeFunders?: boolean }> = () => {
+export const MobileFooter: React.FC = () => {
     return (
-        <div css={{ backgroundColor: colors.navy, color: 'white', a: { color: 'white' } }}>
-            <div className='container-lg'>
-                <Row css={{ padding: '20px 0' }}>
-                    <Col auto direction="column">
-                        <HelpLink />
-                    </Col>
-                    <Col auto direction="column">
-                        <ResourceLinks />
-                    </Col>
-                    <Col auto direction="column">
-                        <b>Follow us</b>
-                        <Box gap>
-                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://kinetic.openstax.org"><Icon icon='facebook' /></a>
-                            <a target="_blank" href="https://www.instagram.com/openstax/"><Icon icon='instagram' /></a>
-                            <a target="_blank" href="https://twitter.com/intent/tweet?text=https://kinetic.openstax.org"><Icon icon='twitter' /></a>
-                        </Box>
-                    </Col>
-                    <Col auto direction="column" gap>
-                        <div><img alt="Rice University logo" height="30" src={RiceLogoURL} /></div>
-                        <div><img alt="Open Stax logo" height="30" src={OpenStaxURL} /></div>
-                    </Col>
-                </Row>
-            </div>
-        </div>
+        <Container bg='navy' c='white' style={{
+            'a': {
+                color: colors.white,
+            },
+        }}>
+            <Stack py='lg'>
+                <HelpLink />
+                <ResourceLinks />
+                <SocialLinks />
+                <Logos />
+            </Stack>
+        </Container>
     )
 }
 
-export const Footer: React.FC<{ className?: string, includeFunders?: boolean }> = ({ className, includeFunders }) => {
+export const SocialLinks = () => {
     return (
-        <div className={cx('footer', className)}>
+        <Stack>
+            <Title order={4}>Follow us</Title>
+            <Group>
+                <Anchor c='white' target="_blank" href="https://www.facebook.com/openstax">
+                    <IconBrandFacebookFilled />
+                </Anchor>
+                <Anchor c='white' target="_blank" href="https://www.instagram.com/openstax/">
+                    <IconBrandInstagram />
+                </Anchor>
+                <Anchor c='white' target="_blank" href="https://twitter.com/OpenStax">
+                    <IconBrandTwitterFilled />
+                </Anchor>
+            </Group>
+        </Stack>
+    )
+}
+
+export const Logos = () => {
+    return (
+        <Flex direction={{ sm: 'column' }} gap='xl'>
+            <Anchor target='_blank' href='https://www.rice.edu'>
+                <Image alt="Rice University logo" h="30" w='auto' src={RiceLogoURL} />
+            </Anchor>
+            <Anchor target='_blank' href='https://www.openstax.org'>
+                <Image alt="Open Stax logo" h="30" src={OpenStaxURL} />
+            </Anchor>
+        </Flex>
+    )
+}
+
+
+export const Footer: React.FC<{ includeFunders?: boolean }> = ({ includeFunders }) => {
+    return (
+        <div>
             {includeFunders && < Funders />}
             {useIsMobileDevice() ? <MobileFooter/> : <DesktopFooter/>}
         </div>

@@ -113,7 +113,7 @@ export const launchApprovedStudy = async(researcherPage: Page, studyId: number, 
     await expect(researcherPage.locator('testId=launch-study-button')).toBeEnabled()
     await researcherPage.click('testId=launch-study-button')
     await researcherPage.waitForLoadState('networkidle')
-    await researcherPage.click('testId=primary-action')
+    await researcherPage.click('testId=launched-return-to-dashboard')
 }
 
 export const createStudy = async ({

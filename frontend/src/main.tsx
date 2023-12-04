@@ -25,13 +25,13 @@ const queryClient = new QueryClient({
 const App = () => (
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
-            <EnvironmentProvider>
-                <MantineProvider theme={mantineTheme}>
+            <MantineProvider theme={mantineTheme}>
+                <EnvironmentProvider>
                     <Notifications position='top-right' />
                     <ImpersonatingBanner />
                     <AppRoutes />
-                </MantineProvider>
-            </EnvironmentProvider>
+                </EnvironmentProvider>
+            </MantineProvider>
         </QueryClientProvider>
     </React.StrictMode>
 )

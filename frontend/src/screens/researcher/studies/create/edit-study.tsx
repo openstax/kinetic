@@ -1,8 +1,7 @@
-import { Box, React, useMemo, useNavigate, useParams, useState, Yup } from '@common'
+import { React, useMemo, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
 import { isDraft, useFetchStudy } from '@models';
 import {
-    Col,
     ConfirmNavigationIfDirty,
     ExitButton,
     Form,
@@ -25,6 +24,7 @@ import { ReviewStudy, SubmitStudyModal } from './forms/review-study';
 import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
 import { Navigate } from 'react-router-dom';
+import { Box, Grid, Stack } from '@mantine/core';
 
 const buildValidationSchema = (allOtherStudies: Study[]) => {
     return Yup.object().shape({
@@ -125,7 +125,6 @@ const FormContent: FC<{
     if (!isDraft(study) && !isNew) {
         return <Navigate to={`/study/overview/${id}`} />
     }
-
 
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true, shouldTouch: true })
@@ -287,24 +286,22 @@ const FormContent: FC<{
     ]
 
     return (
-        <Box direction='column' justify='between' className='edit-study-form'>
+        <Stack justify='space-between' className='edit-study-form'>
             <ConfirmNavigationIfDirty />
             <SubmitStudyModal study={study as Study} show={showSubmitStudy} setShow={setShowSubmitStudy} />
-            <div className="py-2">
-                <Box justify='between' gap='xxlarge'>
-                    <Col sm={1}>
-                        <span></span>
-                    </Col>
-                    <Col sm={9}>
-                        <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} setStep={setStep} maxStep={maxStep}/>
-                    </Col>
-                    <Col sm={1}>
-                        <ExitButton navTo='/studies'/>
-                    </Col>
-                </Box>
+            <Grid gutter='xl' py='lg' justify='space-between'>
+                <Grid.Col span={1}></Grid.Col>
+                <Grid.Col span={9}>
+                    <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} setStep={setStep} maxStep={maxStep}/>
+                </Grid.Col>
+                <Grid.Col span={1}>
+                    <ExitButton navTo='/studies'/>
+                </Grid.Col>
+            </Grid>
+            <Box pb='120px'>
                 {steps[currentStep].component}
-            </div>
+            </Box>
             <ActionFooter step={steps[currentStep]} />
-        </Box>
+        </Stack>
     )
 }

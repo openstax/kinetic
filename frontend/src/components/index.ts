@@ -3,8 +3,6 @@ export * from '@nathanstitt/sundry/form'
 export * from '@nathanstitt/sundry/menu'
 export * from '@nathanstitt/sundry/modal'
 
-export * from './styled-buttons'
-
 export * from './ox-colored-stripe'
 export * from './loading-animation'
 export * from './ui-states'
@@ -31,7 +29,6 @@ export * from './form/field-error-message'
 export * from './layout/page-content'
 
 export * from './researcher/researcher-progress-bar'
-export * from './researcher/researcher-button'
 export * from './researcher/collapsible-section'
 export * from './researcher/form-components'
 export * from './researcher/exit-button'
