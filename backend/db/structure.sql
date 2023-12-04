@@ -158,8 +158,8 @@ CREATE TABLE public.activesupport_cache_entries (
 CREATE TABLE public.admins (
     id bigint NOT NULL,
     user_id uuid NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -320,8 +320,8 @@ ALTER SEQUENCE public.analysis_runs_id_seq OWNED BY public.analysis_runs.id;
 CREATE TABLE public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -366,10 +366,10 @@ CREATE TABLE public.launched_stages (
     id bigint NOT NULL,
     stage_id bigint NOT NULL,
     user_id uuid,
-    first_launched_at timestamp without time zone,
-    completed_at timestamp without time zone,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    first_launched_at timestamp with time zone,
+    completed_at timestamp with time zone,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -400,12 +400,12 @@ CREATE TABLE public.launched_studies (
     id bigint NOT NULL,
     study_id bigint NOT NULL,
     user_id uuid NOT NULL,
-    first_launched_at timestamp without time zone,
-    completed_at timestamp without time zone,
-    opted_out_at timestamp without time zone,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    aborted_at timestamp without time zone,
+    first_launched_at timestamp with time zone,
+    completed_at timestamp with time zone,
+    opted_out_at timestamp with time zone,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
+    aborted_at timestamp with time zone,
     consent_granted boolean
 );
 
@@ -438,7 +438,7 @@ CREATE TABLE public.participant_metadata (
     user_id uuid NOT NULL,
     study_id bigint NOT NULL,
     metadata jsonb,
-    created_at timestamp without time zone
+    created_at timestamp with time zone
 );
 
 
@@ -468,8 +468,8 @@ ALTER SEQUENCE public.participant_metadata_id_seq OWNED BY public.participant_me
 CREATE TABLE public.research_ids (
     id text NOT NULL,
     user_id uuid NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -482,8 +482,8 @@ CREATE TABLE public.researchers (
     user_id uuid NOT NULL,
     institution character varying,
     bio text,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     lab_page character varying,
     first_name character varying,
     last_name character varying,
@@ -601,8 +601,8 @@ CREATE TABLE public.stages (
     study_id bigint NOT NULL,
     "order" integer NOT NULL,
     config jsonb NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     available_after_days double precision DEFAULT 1.0 NOT NULL,
     duration_minutes integer DEFAULT 0 NOT NULL,
     points integer DEFAULT 0 NOT NULL,
@@ -640,10 +640,10 @@ CREATE TABLE public.studies (
     title_for_participants character varying DEFAULT ''::character varying,
     short_description character varying DEFAULT ''::character varying,
     long_description character varying DEFAULT ''::character varying,
-    opens_at timestamp without time zone,
-    closes_at timestamp without time zone,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    opens_at timestamp with time zone,
+    closes_at timestamp with time zone,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     benefits character varying,
     image_id character varying,
     completed_count integer DEFAULT 0 NOT NULL,
@@ -716,8 +716,8 @@ CREATE TABLE public.study_researchers (
     id bigint NOT NULL,
     study_id bigint NOT NULL,
     researcher_id bigint NOT NULL,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     role integer DEFAULT 0
 );
 
@@ -1479,7 +1479,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230626173336'),
 ('20230712163112'),
 ('20230726142755'),
-('20230802165629'),
 ('20230808163159'),
 ('20230905121510'),
 ('20231113162430'),

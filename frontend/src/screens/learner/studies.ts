@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from '@common'
 import { useLocalstorageState } from 'rooks'
-import { isStudyLaunchable, StudyTopic } from '@models'
+import { StudyTopic } from '@models'
 import { ParticipantStudy } from '@api'
 import { groupBy, sortBy } from 'lodash'
 import { useApi } from '@lib'
@@ -68,7 +68,7 @@ export const useLearnerStudies = () => {
 
         const completedCount = allStudies.filter(s => !!s.completedAt).length
 
-        const demographicSurvey = allStudies.find(s => s.isDemographicSurvey && !s.completedAt) || null
+        const demographicSurvey = allStudies.find(s => s.isDemographicSurvey) || null
 
         // find all studies that are eligible to be featured
         const eligibleStudies = allStudies.filter(s => !s.completedAt)

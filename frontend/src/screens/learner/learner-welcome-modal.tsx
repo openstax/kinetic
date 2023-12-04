@@ -14,7 +14,7 @@ export const LearnerWelcomeModal: FC<{
     const api = useApi()
     const { data: preferences, refetch } = useUserPreferences()
 
-    if (!demographicSurvey || preferences?.hasViewedWelcomeMessage || completedCount < 0) return null
+    if (!demographicSurvey || demographicSurvey.completedAt || preferences?.hasViewedWelcomeMessage || completedCount < 0) return null
 
     const onClose = async () => {
         await api.updatePreferences({ updatePreferences: { preferences: { hasViewedWelcomeMessage: true } } }).then(() => {
