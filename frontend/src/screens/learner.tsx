@@ -188,7 +188,6 @@ const LearnerDashboard = () => {
         <div className="studies learner">
             <Routes>
                 <Route path={'details/:studyId'} element={<StudyDetails studies={allStudies} />} />
-                <Route path={'land/:studyId'} element={<StudyDetails studies={allStudies} />} />
             </Routes>
             <TopNavBar />
             <LearnerWelcomeModal demographicSurvey={demographicSurvey} completedCount={completedCount} />
