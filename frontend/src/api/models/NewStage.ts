@@ -26,12 +26,6 @@ export interface NewStage {
      */
     readonly order?: number;
     /**
-     * The name of the stage
-     * @type {string}
-     * @memberof NewStage
-     */
-    title?: string;
-    /**
      * The longer description shown to participants
      * @type {string}
      * @memberof NewStage
@@ -124,7 +118,6 @@ export function NewStageFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     return {
         
         'order': !exists(json, 'order') ? undefined : json['order'],
-        'title': !exists(json, 'title') ? undefined : json['title'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
         'isCompleted': !exists(json, 'is_completed') ? undefined : json['is_completed'],
@@ -146,7 +139,6 @@ export function NewStageToJSON(value?: NewStage | null): any {
     }
     return {
         
-        'title': value.title,
         'description': value.description,
         'available_after_days': value.availableAfterDays,
         'config': value.config,

@@ -96,7 +96,7 @@ export const ImageLibrary: FC<{
                             )}
                         </Tabs.List>
                         {imageCategories.map(c =>
-                            <Tabs.Panel value={c} mt='lg'>
+                            <Tabs.Panel value={c} mt='lg' key={c}>
                                 <ScrollArea>
                                     <SimpleGrid spacing='lg' verticalSpacing='lg' cols={4} p='lg' h={600}>
                                         {cardImages.filter(i => i.category.includes(c)).map(cardImage => (

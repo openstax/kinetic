@@ -18,9 +18,6 @@ module Api::V1::Bindings
     # An integer that describes the sort order for this stage
     attr_accessor :order
 
-    # The name of the stage
-    attr_accessor :title
-
     # The longer description shown to participants
     attr_accessor :description
 
@@ -74,7 +71,6 @@ module Api::V1::Bindings
     def self.attribute_map
       {
         :'order' => :'order',
-        :'title' => :'title',
         :'description' => :'description',
         :'available_after_days' => :'available_after_days',
         :'is_completed' => :'is_completed',
@@ -96,7 +92,6 @@ module Api::V1::Bindings
     def self.openapi_types
       {
         :'order' => :'Integer',
-        :'title' => :'String',
         :'description' => :'String',
         :'available_after_days' => :'Float',
         :'is_completed' => :'Boolean',
@@ -132,10 +127,6 @@ module Api::V1::Bindings
 
       if attributes.key?(:'order')
         self.order = attributes[:'order']
-      end
-
-      if attributes.key?(:'title')
-        self.title = attributes[:'title']
       end
 
       if attributes.key?(:'description')
@@ -219,7 +210,6 @@ module Api::V1::Bindings
       return true if self.equal?(o)
       self.class == o.class &&
           order == o.order &&
-          title == o.title &&
           description == o.description &&
           available_after_days == o.available_after_days &&
           is_completed == o.is_completed &&
@@ -240,7 +230,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [order, title, description, available_after_days, is_completed, is_launchable, config, duration_minutes, points, feedback_types, status].hash
+      [order, description, available_after_days, is_completed, is_launchable, config, duration_minutes, points, feedback_types, status].hash
     end
 
     # Builds the object from hash
