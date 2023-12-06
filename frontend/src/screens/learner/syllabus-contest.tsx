@@ -21,11 +21,6 @@ import dayjs from 'dayjs';
 import { IconInfoCircleFilled } from '@tabler/icons-react';
 
 const isContestActive = dayjs().isBetween(
-    dayjs(),
-    '2023-12-01',
-    'day',
-    '[)'
-) || dayjs().isBetween(
     '2024-02-01',
     '2024-05-01',
     'day',
