@@ -3,9 +3,7 @@
 class Api::V1::Participant::StudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
-  COMMON_REQUIRED_STUDY_FIELDS = [
-                                   :short_description, :total_points, :total_duration
-  ].freeze
+  COMMON_REQUIRED_STUDY_FIELDS = [:short_description, :total_points, :total_duration].freeze
 
   add_components do
     schema :ParticipantStudy do
@@ -44,6 +42,11 @@ class Api::V1::Participant::StudiesOpenApi
       property :order do
         key :type, :integer
         key :description, 'An integer that describes the sort order for this stage'
+        key :readOnly, true
+      end
+      property :title do
+        key :type, :string
+        key :description, 'The name of the stage'
         key :readOnly, true
       end
       property :description do

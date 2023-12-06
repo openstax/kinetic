@@ -96,7 +96,9 @@ class Study < ApplicationRecord
   end
 
   def is_demographic_survey?
-    stages.any? { |stage| stage.config['survey_id'] == Rails.application.secrets.demographic_survey_id }
+    stages.any? do |stage|
+      stage.config['survey_id'] == Rails.application.secrets.demographic_survey_id
+    end
   end
 
   def is_syllabus_contest_study?

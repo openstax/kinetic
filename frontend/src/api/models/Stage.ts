@@ -32,6 +32,12 @@ export interface Stage {
      */
     readonly order?: number;
     /**
+     * The name of the stage
+     * @type {string}
+     * @memberof Stage
+     */
+    readonly title?: string;
+    /**
      * The longer description shown to participants
      * @type {string}
      * @memberof Stage
@@ -126,6 +132,7 @@ export function StageFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
         
         'id': json['id'],
         'order': !exists(json, 'order') ? undefined : json['order'],
+        'title': !exists(json, 'title') ? undefined : json['title'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
         'isCompleted': !exists(json, 'is_completed') ? undefined : json['is_completed'],

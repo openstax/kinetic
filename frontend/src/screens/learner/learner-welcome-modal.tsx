@@ -7,9 +7,8 @@ import Waves from '@images/waves.svg';
 import { LaunchStudy } from '@models';
 
 export const LearnerWelcomeModal: FC<{
-    demographicSurvey: ParticipantStudy | null,
-    completedCount: number
-}> = ({ demographicSurvey, completedCount }) => {
+    demographicSurvey: ParticipantStudy | null
+}> = ({ demographicSurvey }) => {
     const [open, setOpen] = useState(true)
     const api = useApi()
     const { data: preferences, refetch } = useUserPreferences()

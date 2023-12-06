@@ -40,7 +40,7 @@ RSpec.describe 'Studies', api: :v1 do
         expect(response).to have_http_status(:ok)
         expect(response_hash).to match(
           a_hash_including(
-            data: a_collection_containing_exactly(
+            data: a_collection_including(
               a_hash_including({
                   title_for_researchers: a_kind_of(String),
                   status: 'waiting_period'

@@ -50,6 +50,11 @@ class Api::V1::Researcher::StagesOpenApi
       key :description, 'An integer that describes the sort order for this stage'
       key :readOnly, true
     end
+    property :title do
+      key :type, :string
+      key :description, 'The name of the stage'
+      key :readOnly, true
+    end
     property :description do
       key :type, :string
       key :description, 'The longer description shown to participants'

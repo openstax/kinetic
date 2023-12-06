@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :study do
     transient do
       researchers { [] }
-      num_stages { 1 }
+      num_stages { 0 }
       title { nil }
     end
 
@@ -26,10 +26,8 @@ FactoryBot.define do
       researchers = [evaluator.researchers].flatten.compact
       researchers = [create(:researcher)] if researchers.empty?
       study.researchers << researchers
-      create_list :stage, num_stages, study: study
-      evaluator.num_stages.times do
-        study.stages << create(:stage)
-      end
+
+      FactoryBot.create_list(:stage, evaluator.num_stages, study: study)
     end
   end
 end
