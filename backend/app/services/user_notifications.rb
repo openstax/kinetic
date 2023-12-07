@@ -16,7 +16,9 @@ class UserNotifications
     def deliver_welcomes
       uuids = LaunchedStage
                 .joins(:stages)
-                .where(stages: { config: { survey_id: 'SV_6xGQzj4OBJnxGuy' } })
+                .where(stages: {
+                         config: { survey_id: Rails.application.secrets.demographic_survey_id }
+                       })
                 .group(:user_id)
                 .pluck(:user_id)
 

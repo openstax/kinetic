@@ -21,7 +21,6 @@ interface StudyState {
     syllabusContestStudies: ParticipantStudy[]
     studiesByTopic: StudyByTopics
     demographicSurvey: ParticipantStudy | null
-    completedCount: number
 }
 
 
@@ -48,7 +47,6 @@ export const useLearnerStudies = () => {
         syllabusContestStudies: [],
         studiesByTopic: {} as StudyByTopics,
         demographicSurvey: null,
-        completedCount: 0,
     })
 
     const fetchStudies = useCallback(async () => {
@@ -65,8 +63,6 @@ export const useLearnerStudies = () => {
         })
 
         setStudySort({ ...studySort })
-
-        const completedCount = allStudies.filter(s => !!s.completedAt).length
 
         const demographicSurvey = allStudies.find(s => s.isDemographicSurvey) || null
 
@@ -102,7 +98,6 @@ export const useLearnerStudies = () => {
             syllabusContestStudies,
             studiesByTopic,
             demographicSurvey,
-            completedCount,
         })
     }, [setStudyState])
 
