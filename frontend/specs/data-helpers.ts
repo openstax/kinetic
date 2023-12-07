@@ -57,8 +57,8 @@ const createStudyRequest = ({ context, name, description }: CreateStudyDataProps
                     status: 'active',
                     config: {
                         type: 'qualtrics',
-                        survey_id: 'SV_12QHR3BE',
-                        secret_key: '1234567890123456',
+                        survey_id: 'SV_6xGQzj4OBJnxGuy',
+                        secret_key: 'NLygf4wBFh1xIpm0',
                     },
                 },
             ],

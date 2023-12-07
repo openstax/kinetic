@@ -8,7 +8,7 @@ const config: PlaywrightTestConfig = {
         screenshot: 'only-on-failure',
         trace: 'retain-on-failure',
     },
-    workers: process.env.CI ? 5 : undefined,
+    workers: process.env.CI ? 10 : undefined,
     maxFailures: process.env.CI ? 3 : undefined,
 }
 
