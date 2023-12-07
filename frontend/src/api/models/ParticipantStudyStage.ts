@@ -30,7 +30,7 @@ export interface ParticipantStudyStage {
      * @type {string}
      * @memberof ParticipantStudyStage
      */
-    readonly title?: string;
+    title?: string;
     /**
      * The longer description shown to participants
      * @type {string}
@@ -145,6 +145,7 @@ export function ParticipantStudyStageToJSON(value?: ParticipantStudyStage | null
     }
     return {
         
+        'title': value.title,
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'feedback_types': value.feedbackTypes,
         'status': value.status,

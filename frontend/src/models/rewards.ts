@@ -1,7 +1,8 @@
 import { useMemo } from '@common'
 import { RewardsScheduleSegment, ParticipantStudy } from '@api'
-import { useEnvironment, dayjs } from '@lib'
+import { useEnvironment, dayjs, useApi } from '@lib'
 import { sortBy } from 'lodash-es'
+import { useQuery } from 'react-query';
 
 export interface RewardsSegment extends RewardsScheduleSegment {
     totalPoints: number
@@ -98,4 +99,20 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
         totalPoints,
         isCompleted: pointsEarned >= totalPoints,
     }
+}
+
+export const useFetchRewards = () => {
+    const api = useApi()
+    return useQuery('fetchRewards', () => {
+        return api.getRewards()
+    })
+}
+
+export const useNextReward = () => {
+    const env = useEnvironment()
+    const rewardSchedule = env.rewardsSchedule
+    const today = dayjs()
+    return rewardSchedule.find(reward => {
+        return today.isBefore(dayjs(reward.endAt))
+    })
 }

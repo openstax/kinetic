@@ -11,8 +11,8 @@ export enum StudyStatus {
     Completed = 'Completed',
 }
 
-export const LaunchStudy = async (api: DefaultApi, study: { id: number }, options: { preview?: boolean } = {}) => {
-    const launch = await api.launchStudy({ id: study.id, preview: options.preview || false })
+export const LaunchStudy = async (api: DefaultApi, studyId: number, options: { preview?: boolean } = {}) => {
+    const launch = await api.launchStudy({ id: studyId, preview: options.preview || false })
     window.location.assign(launch.url!)
     return launch
 }
@@ -82,10 +82,6 @@ export function getStudyPi(study: Study | ParticipantStudy) {
 
 export function getStudyLead(study: Study | ParticipantStudy) {
     return study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)
-}
-
-export function isParticipantStudy(study?: any): study is ParticipantStudy {
-    return study && !isNil((study).id) && !isNil((study).titleForParticipants)
 }
 
 export function studyIsMultipart(study: ParticipantStudy | Study): boolean {

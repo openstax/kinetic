@@ -14,12 +14,12 @@ class UserNotifications
     # GIVEN user is a registered Kinetic user
     # WHEN completing the demographic study
     def deliver_welcomes
-      uuids = LaunchedStudy.joins(:study)
-                .where(
-                  study: { is_mandatory: true },
-                  completed_at: yesterday
-        )
-                .group(:user_id) # just to make sure we don't send dupe emails
+      uuids = LaunchedStage
+                .joins(:stages)
+                .where(stages: {
+                         config: { survey_id: Rails.application.secrets.demographic_survey_id }
+                       })
+                .group(:user_id)
                 .pluck(:user_id)
 
       UserInfo.for_uuids(uuids).each do |_, user|

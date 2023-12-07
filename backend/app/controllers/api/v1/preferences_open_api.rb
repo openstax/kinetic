@@ -24,7 +24,12 @@ class Api::V1::PreferencesOpenApi
       end
       property :has_viewed_analysis_tutorial do
         key :type, :boolean
-        key :description, 'User has viewed the analysis tutorial overview on the frontend'
+        key :description,
+            'Researcher has viewed the analysis tutorial overview on the researcher analysis page'
+      end
+      property :has_viewed_welcome_message do
+        key :type, :boolean
+        key :description, 'Learner has viewed the initial welcome message on the learner dashboard'
       end
     end
   end

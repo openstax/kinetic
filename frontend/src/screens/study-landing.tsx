@@ -1,101 +1,36 @@
-import { useNavigate, useParams } from 'react-router-dom'
+import { Navigate, NavLink, useParams } from 'react-router-dom'
 import { React, useEffect, useState } from '@common'
 import { colors } from '@theme'
 import { DefaultApi, LandStudyAbortedEnum, LandStudyRequest, ParticipantStudy } from '@api'
-import { Box, Button, ErrorPage, IncorrectUser, KineticWaves, LoadingAnimation } from '@components'
-import { isIframed, sendMessageToParent, useApi, useCurrentUser, useQueryParam } from '@lib'
+import { ErrorPage, LoadingAnimation } from '@components'
+import { useApi, useQueryParam } from '@lib'
+import { BackgroundImage, Button, Container, Flex, Modal, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import Waves from '@images/waves.svg'
+import { LaunchStudy, RewardsSegment, useRewardsSchedule } from '@models';
+import { useLearnerStudies } from './learner/studies';
+import dayjs from 'dayjs';
+import { noop } from 'lodash-es';
 
 type LandedStudy = ParticipantStudy & { completedAt?: Date, abortedAt?: Date }
 
-interface StudyMessagingProps {
-    consented: boolean,
-    aborted: boolean
-    study: LandedStudy,
+const Points: React.FC<{ study: LandedStudy }> = ({ study }) => {
+    const completedStage = study.stages?.find(stage => stage.isCompleted)
+    if (!completedStage) return null
 
-}
-
-const Points: React.FC<StudyMessagingProps> = ({ consented, study }) => {
-    if (!study.completedAt || !consented) return null
     return (
-        <div
-            css={{
-                fontSize: '28px',
-                fontWeight: 300,
-                color: colors.purple,
-            }}
-
-        >
-            +{study.totalPoints}pts
-        </div>
+        <Title order={2} c='white'>
+            You just earned {study.totalPoints} points!
+        </Title>
     )
 }
 
-
-const NonAbortedMessage: React.FC<StudyMessagingProps> = ({ study }) => {
-    if (study.abortedAt) return null
-    return (
-        <div data-testid="completed-msg">
-            <h3>Success!</h3>
-            <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
-                You've completed {!study.completedAt && 'a stage of '} a Kinetic activity.
-                {study.completedAt && ' This task will be marked as complete on your dashboard.'}
-            </h5>
-        </div>
-    )
-}
-
-const AbortedMessage: React.FC<StudyMessagingProps> = ({ study }) => {
-    if (!study.abortedAt) return null
-    return (
-        <div data-testid="aborted-msg">
-            <h3>Try again later!</h3>
-            <h5 css={{ lineHeight: '150%', marginBottom: '3rem' }}>
-                You can re-attempt the study later by selecting it from your dashboard.
-            </h5>
-        </div>
-    )
-}
-
-const StudyMessaging: React.FC<StudyMessagingProps & { onReturnClick(): void }> = ({ onReturnClick, ...props }) => {
-    return (
-        <Box justify="center">
-            <Box
-                css={{
-                    background: 'white',
-                    border: `2px solid ${colors.gray50}`,
-                    maxWidth: '100%',
-                }}
-            >
-                <Box
-                    direction="column" padding="large"
-                    margin={{ right: '-100px' }} align="start"
-                    css={{
-                        maxWidth: '400px',
-                    }}
-                >
-                    <Points {...props} />
-                    <AbortedMessage {...props} />
-                    <NonAbortedMessage {...props} />
-                    <Button primary data-testid="view-studies" onClick={onReturnClick}>
-                        Go back to dashboard
-                    </Button>
-                </Box>
-                <KineticWaves flipped />
-            </Box>
-        </Box>
-    )
-}
-
-const landStudy = async (api: DefaultApi, params: LandStudyRequest, isPreview: boolean): Promise<LandedStudy> => {
+const landStudy = async (api: DefaultApi, params: LandStudyRequest): Promise<LandedStudy> => {
     const study = await api.getParticipantStudy({ id: params.id })
-    if (isPreview) {
-        return { ...study, completedAt: new Date() }
-    }
     const landing = await api.landStudy(params)
     return { ...study, ...landing }
 }
 
-export default function UsersStudies() {
+export default function StudyLanding() {
     const { studyId } = useParams<string>();
 
     // this is somewhat inaccurate but we do not want to say something like "recording status"
@@ -103,56 +38,96 @@ export default function UsersStudies() {
     const [study, setLanded] = useState<LandedStudy | null>(null)
     const [error, setError] = useState<any>(null)
     const api = useApi()
-    const nav = useNavigate()
-    const user = useCurrentUser()
-    const noConsent = useQueryParam('consent') == 'false'
+    const consent = useQueryParam('consent') != 'false'
     const abort = useQueryParam('abort') == 'true'
-
     const md = useQueryParam('md') || {}
+    const { allStudies, demographicSurvey } = useLearnerStudies()
+    const { schedule } = useRewardsSchedule(allStudies)
+    const nextReward = schedule.find(rewardSegment => !rewardSegment.achieved)
 
     useEffect(() => {
-        let isPreview = false
-        try {
-            isPreview = Boolean(
-                window.parent.document.querySelector('[data-is-study-preview-modal="true"]')
-            )
-        } catch { } // accessing window.parent my throw exception due to SOP
         const params: LandStudyRequest = {
             id: Number(studyId),
             md,
-            consent: !noConsent,
+            consent: consent,
         }
         if (abort) {
             params['aborted'] = LandStudyAbortedEnum.Refusedconsent
         }
 
-        landStudy(api, params, isPreview)
+        landStudy(api, params)
             .then(setLanded)
             .catch(setError)
     }, [])
 
-    if (!user) {
-        return <IncorrectUser />
+    // Learners who don't consent won't earn points, so we'll just redirect them home
+    if (!consent) {
+        return <Navigate to='/studies' />
     }
 
-    const onNav = () => {
-        if (isIframed()) {
-            sendMessageToParent({ closeStudyModal: true })
-        } else {
-            nav('/studies')
-        }
+    if (!study) {
+        return  <LoadingAnimation message="Loading study" />
     }
-
 
     if (error) {
         return <ErrorPage error={error} />
     }
 
     return (
-        <div className="container studies mt-8">
-            {!study && <LoadingAnimation message="Loading study" />}
-            {study && <StudyMessaging aborted={abort} consented={!noConsent} onReturnClick={onNav} study={study} />}
-        </div>
+        <Container>
+            <Modal opened={true} onClose={noop} centered size='xl' closeOnClickOutside={false} closeOnEscape={false} withCloseButton={false} styles={{
+                body: {
+                    padding: 0,
+                },
+            }}>
+                <BackgroundImage src={Waves}>
+                    <Stack gap='xl' p='xl' c='white'>
+                        <NavLink to={'/studies'} style={{ alignSelf: 'end', color: 'white', fontWeight: 'bolder' }} data-testid='view-studies'>
+                            Return to Dashboard
+                        </NavLink>
+                        <Points study={study} />
+                        <Text>
+                            You’re one step closer - don’t miss out on the chance to qualify for the next reward cycle!
+                        </Text>
+                        <NextPrizeCycle nextReward={nextReward} />
+                        <CompleteProfilePrompt demographicSurvey={demographicSurvey} />
+                    </Stack>
+                </BackgroundImage>
+            </Modal>
+        </Container>
     )
+}
 
+const NextPrizeCycle: FC<{ nextReward: RewardsSegment | undefined } > = ({ nextReward }) => {
+    if (!nextReward) return null
+
+    return (
+        <Flex direction='column'>
+            <Text fw='bolder'>Next Prize Cycle:</Text>
+            <Text>Reach {nextReward?.points} points by {dayjs(nextReward.endAt).format('MMM D')} and be one of the lucky winners to earn {nextReward.prize}</Text>
+        </Flex>
+    )
+}
+
+const CompleteProfilePrompt: FC<{demographicSurvey: ParticipantStudy | null}> = ({ demographicSurvey }) => {
+    const api = useApi()
+    if (!demographicSurvey) return null
+
+    const onClick = async () => {
+        await LaunchStudy(api, demographicSurvey.id)
+    }
+
+    return (
+        <SimpleGrid cols={2} bg={`${colors.gray10}10`} p='lg'>
+            <Stack>
+                <Text>
+                    <strong>Bonus: </strong>
+                    <span>Get {demographicSurvey?.totalPoints} points now by simply taking {demographicSurvey?.totalDuration} minutes to complete your Kinetic Profile!</span>
+                </Text>
+            </Stack>
+            <Button color='blue' c='white' onClick={onClick}>
+                Finish Profile for 10 points
+            </Button>
+        </SimpleGrid>
+    )
 }

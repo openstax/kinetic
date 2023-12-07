@@ -95,6 +95,12 @@ class Study < ApplicationRecord
     featured_ids.any? && stages.any? { |st| featured_ids.include?(st.config['survey_id']) }
   end
 
+  def is_demographic_survey?
+    stages.any? do |stage|
+      stage.config['survey_id'] == Rails.application.secrets.demographic_survey_id
+    end
+  end
+
   def is_syllabus_contest_study?
     contest_ids = Rails.application.secrets.fetch(:syllabus_contest_studies, [])
     contest_ids.any? && stages.any? { |st| contest_ids.include?(st.config['survey_id']) }

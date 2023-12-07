@@ -7,13 +7,13 @@ import { useIsMobileDevice } from '@lib'
 import { StudyTopic, studyTopics } from '@models'
 import { StudyByTopics, useLearnerStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
-import { StudyModal } from './studies/modal'
 import { StudyDetails } from './learner/details'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { chunk } from 'lodash-es'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Pagination } from 'swiper';
 import { SyllabusContest } from './learner/syllabus-contest';
+import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 
 interface StudyListProps {
     studies: ParticipantStudy[],
@@ -175,13 +175,12 @@ const LearnerDashboard = () => {
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
     const {
         highlightedStudies,
-        mandatoryStudy,
         allStudies,
         filter,
-        onMandatoryClose,
         setFilter,
         studiesByTopic,
         syllabusContestStudies,
+        demographicSurvey,
     } = useLearnerStudies()
 
     return (
@@ -189,8 +188,8 @@ const LearnerDashboard = () => {
             <Routes>
                 <Route path={'details/:studyId'} element={<StudyDetails studies={allStudies} />} />
             </Routes>
-            <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
             <TopNavBar />
+            <LearnerWelcomeModal demographicSurvey={demographicSurvey} />
             <RewardsProgressBar studies={allStudies} />
 
             <SyllabusContest studies={syllabusContestStudies} />

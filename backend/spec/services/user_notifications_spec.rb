@@ -23,8 +23,6 @@ RSpec.describe UserNotifications, type: :mailer do
   end
 
   it 'delivers welcome email' do
-    study1.update!(is_mandatory: true)
-
     Timecop.freeze(1.day.ago) do
       user1_study1_launch_pad.launch
       user1_study1_launch_pad.land

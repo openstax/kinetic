@@ -36,7 +36,7 @@ export interface Stage {
      * @type {string}
      * @memberof Stage
      */
-    title?: string;
+    readonly title?: string;
     /**
      * The longer description shown to participants
      * @type {string}
@@ -154,7 +154,6 @@ export function StageToJSON(value?: Stage | null): any {
     }
     return {
         
-        'title': value.title,
         'description': value.description,
         'available_after_days': value.availableAfterDays,
         'config': value.config,

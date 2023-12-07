@@ -3,9 +3,7 @@
 class Api::V1::Participant::StudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
-  COMMON_REQUIRED_STUDY_FIELDS = [
-    :title, :short_description, :total_points, :total_duration
-  ].freeze
+  COMMON_REQUIRED_STUDY_FIELDS = [:short_description, :total_points, :total_duration].freeze
 
   add_components do
     schema :ParticipantStudy do
@@ -49,7 +47,6 @@ class Api::V1::Participant::StudiesOpenApi
       property :title do
         key :type, :string
         key :description, 'The name of the stage'
-        key :readOnly, true
       end
       property :description do
         key :type, :string
@@ -118,6 +115,11 @@ class Api::V1::Participant::StudiesOpenApi
     property :popularity_rating do
       key :type, :number
       key :description, 'How popular the study is on a fractional scale of 0.0 to 1.0'
+    end
+    property :is_demographic_survey do
+      key :type, :boolean
+      key :description, 'Is this study the demographic survey?'
+      key :readOnly, true
     end
     property :is_featured do
       key :type, :boolean

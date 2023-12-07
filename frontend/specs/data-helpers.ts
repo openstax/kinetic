@@ -75,3 +75,13 @@ export const completeAnalysisTutorial = async (context: BrowserContext) => {
         },
     })
 }
+
+export const completeWelcomeMessage = async (context: BrowserContext) => {
+    return context.request.post(`${TC.API_URL}/preferences`, {
+        data: {
+            preferences: {
+                has_viewed_welcome_message: true,
+            },
+        },
+    })
+}

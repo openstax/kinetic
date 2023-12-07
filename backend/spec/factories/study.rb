@@ -26,12 +26,10 @@ FactoryBot.define do
       researchers = [evaluator.researchers].flatten.compact
       researchers = [create(:researcher)] if researchers.empty?
       study.researchers << researchers
-    end
 
-    after(:create) do |study, evaluator|
-      evaluator.num_stages.times do
-        study.stages.create! attributes_for :stage
-      end
+      FactoryBot.create_list(:stage, evaluator.num_stages, study: study)
     end
   end
 end
+
+Rails.application.secrets.demographic_survey_id
