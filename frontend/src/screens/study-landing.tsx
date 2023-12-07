@@ -24,11 +24,8 @@ const Points: React.FC<{ study: LandedStudy }> = ({ study }) => {
     )
 }
 
-const landStudy = async (api: DefaultApi, params: LandStudyRequest, isPreview: boolean): Promise<LandedStudy> => {
+const landStudy = async (api: DefaultApi, params: LandStudyRequest): Promise<LandedStudy> => {
     const study = await api.getParticipantStudy({ id: params.id })
-    if (isPreview) {
-        return { ...study, completedAt: new Date() }
-    }
     const landing = await api.landStudy(params)
     return { ...study, ...landing }
 }
@@ -49,12 +46,6 @@ export default function StudyLanding() {
     const nextReward = schedule.find(rewardSegment => !rewardSegment.achieved)
 
     useEffect(() => {
-        let isPreview = false
-        try {
-            isPreview = Boolean(
-                window.parent.document.querySelector('[data-is-study-preview-modal="true"]')
-            )
-        } catch { } // accessing window.parent my throw exception due to SOP
         const params: LandStudyRequest = {
             id: Number(studyId),
             md,
@@ -64,7 +55,7 @@ export default function StudyLanding() {
             params['aborted'] = LandStudyAbortedEnum.Refusedconsent
         }
 
-        landStudy(api, params, isPreview)
+        landStudy(api, params)
             .then(setLanded)
             .catch(setError)
     }, [])
@@ -109,10 +100,7 @@ export default function StudyLanding() {
 
 const NextPrizeCycle: FC<{ nextReward: RewardsSegment | undefined } > = ({ nextReward }) => {
     if (!nextReward) return null
-    // TODO Questions:
-    // 1. Should we show total points? - Show stages' individual points, don't show points if no consent
-    // 2. If user has already reached next prize cycle's points, what do we want to show?
-    // 4. Aborted: Confirm its not being used / not possible to reach the state?
+
     return (
         <Flex direction='column'>
             <Text fw='bolder'>Next Prize Cycle:</Text>
