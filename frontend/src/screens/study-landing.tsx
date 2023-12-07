@@ -91,7 +91,7 @@ export default function StudyLanding() {
             }}>
                 <BackgroundImage src={Waves}>
                     <Stack gap='xl' p='xl' c='white'>
-                        <NavLink to={'/studies'} style={{ alignSelf: 'end', color: 'white' }} data-testid='view-studies'>
+                        <NavLink to={'/studies'} style={{ alignSelf: 'end', color: 'white', fontWeight: 'bolder' }} data-testid='view-studies'>
                             Return to Dashboard
                         </NavLink>
                         <Points study={study} />
