@@ -3,7 +3,7 @@ import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
 import { Box, Footer, RewardsProgressBar, TopNavBar } from '@components'
-import { useIsMobileDevice } from '@lib'
+import { useEnvironment, useIsMobileDevice } from '@lib'
 import { StudyTopic, studyTopics } from '@models'
 import { StudyByTopics, useLearnerStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
@@ -14,6 +14,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Pagination } from 'swiper';
 import { SyllabusContest } from './learner/syllabus-contest';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
+import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
 
 interface StudyListProps {
     studies: ParticipantStudy[],
@@ -172,6 +173,7 @@ const HighlightedStudies: FCWOC<StudyListProps> = ({ onSelect, studies, title, c
 
 const LearnerDashboard = () => {
     const nav = useNavigate()
+    const env = useEnvironment()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
     const {
         highlightedStudies,
@@ -183,12 +185,17 @@ const LearnerDashboard = () => {
         demographicSurvey,
     } = useLearnerStudies()
 
+    if (env.isCountryEligible) {
+        return <UnsupportedCountryModal />
+    }
+
     return (
         <div className="studies learner">
             <Routes>
                 <Route path={'details/:studyId'} element={<StudyDetails studies={allStudies} />} />
             </Routes>
             <TopNavBar />
+
             <LearnerWelcomeModal demographicSurvey={demographicSurvey} />
             <RewardsProgressBar studies={allStudies} />
 

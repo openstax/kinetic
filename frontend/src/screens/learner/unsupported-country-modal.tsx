@@ -3,23 +3,15 @@ import { Button, Modal, Stack, Text, Title } from '@mantine/core';
 import { colors } from '@theme';
 import { useEnvironment } from '@lib';
 import Waves from '@images/waves.svg';
-import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { noop } from 'lodash-es';
 
 export const UnsupportedCountryModal: FC = () => {
     const [open] = useState(true)
     const env = useEnvironment()
-    const nav = useNavigate()
-
-    if (!env.isCountryEligible) {
-        return null
-    }
-
-    const onClose = async () => {
-        nav(env.homepageUrl)
-    }
 
     return (
-        <Modal.Root opened={open} onClose={onClose} size='70%' centered closeOnEscape={false} closeOnClickOutside={false}>
+        <Modal.Root opened={open} onClose={noop} size='70%' centered closeOnEscape={false} closeOnClickOutside={false}>
             <Modal.Overlay />
             <Modal.Content >
                 <Modal.Body style={{ backgroundImage: `url(${Waves}`, backgroundSize: 'cover' }} p='xl'>
@@ -28,9 +20,11 @@ export const UnsupportedCountryModal: FC = () => {
                         <Text ta='center'>
                             Thank you for your interest in Kinetic! Kinetic is currently designed exclusively for participants residing in the United States mainland, territories, and minor outlying islands. We do however look forward to expanding Kinetic services to your home country and others in the future.
                         </Text>
-                        <Button c={colors.purple} color={colors.white} onClick={onClose}>
-                            Take me back
-                        </Button>
+                        <NavLink to={env.homepageUrl}>
+                            <Button c={colors.purple} color={colors.white}>
+                                Take me back
+                            </Button>
+                        </NavLink>
                     </Stack>
                 </Modal.Body>
             </Modal.Content>

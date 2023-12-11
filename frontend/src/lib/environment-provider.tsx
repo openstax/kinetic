@@ -29,9 +29,9 @@ export const EnvironmentProvider: FCWC = ({ children }) => {
         return <LoadingAnimation />
     }
 
-    if (env.isCountryEligible) {
-        return <UnsupportedCountryModal />
-    }
+    // if (env.isCountryEligible) {
+    //     return <UnsupportedCountryModal env={env} />
+    // }
 
     if (!env.user.userId && (ENV.IS_PROD_MODE || !window.location.pathname.startsWith('/dev/user'))) {
         return (
