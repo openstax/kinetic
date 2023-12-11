@@ -5,6 +5,7 @@ import { useApi } from './api-config'
 import { useQuery } from 'react-query';
 import { Environment } from '@api'
 import { UserInfo } from '@models';
+import { UnsupportedCountryModal } from '../screens/learner/unsupported-country-modal';
 
 export const EnvironmentContext = React.createContext<Environment | null>(null)
 
@@ -26,6 +27,10 @@ export const EnvironmentProvider: FCWC = ({ children }) => {
 
     if (isLoading || !env) {
         return <LoadingAnimation />
+    }
+
+    if (env.isCountryEligible) {
+        return <UnsupportedCountryModal />
     }
 
     if (!env.user.userId && (ENV.IS_PROD_MODE || !window.location.pathname.startsWith('/dev/user'))) {
