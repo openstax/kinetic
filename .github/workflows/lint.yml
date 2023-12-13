@@ -16,6 +16,7 @@ jobs:
         with:
           ruby-version: '3.0'
           bundler-cache: true
+          working-directory: backend
 
       - name: Run Rubocop
         working-directory: backend
