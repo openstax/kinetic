@@ -8,7 +8,7 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: actions/cache@v3
@@ -17,17 +17,23 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
-      - name: Build docker image and run rubocop within it
-        # See https://docs.codecov.io/docs/testing-with-docker
-        run: |
-          ./backend/docker/build --ci
-          ./backend/docker/rubocop ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+
+      - name: Run Rubocop
+        run: bundle exec rubocop
+        with:
+          working-directory: backend
+
   typescript:
     timeout-minutes: 10
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: bahmutov/npm-install@v1
+      - uses: actions/checkout@v4
+      - uses: bahmutov/npm-install@HEAD
         with:
           working-directory: frontend
       - name: Run lint
