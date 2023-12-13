@@ -23,9 +23,8 @@ jobs:
           bundler-cache: true
 
       - name: Run Rubocop
+        working-directory: backend
         run: bundle exec rubocop
-        with:
-          working-directory: backend
 
   typescript:
     timeout-minutes: 10
