@@ -31,5 +31,3 @@ FactoryBot.define do
     end
   end
 end
-
-Rails.application.secrets.demographic_survey_id
