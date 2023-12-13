@@ -11,6 +11,7 @@ class Stage < ApplicationRecord
 
   has_many :launched_stages do
     def for_user(user)
+      puts(user)
       where(user_id: user.id).first
     end
   end
