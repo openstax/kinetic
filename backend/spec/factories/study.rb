@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :study do
     transient do
       researchers { [] }
-      num_stages { 0 }
+      num_stages { 1 }
       title { nil }
     end
 

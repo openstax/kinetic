@@ -1,5 +1,5 @@
 import { DefaultApi, ParticipantStudy, ResearcherRoleEnum, Stage, Study, StudyStatusEnum } from '@api'
-import { isNil, useApi } from '@lib'
+import { useApi } from '@lib'
 import { dayjs, useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
 import { useQuery } from 'react-query';
@@ -11,7 +11,7 @@ export enum StudyStatus {
     Completed = 'Completed',
 }
 
-export const LaunchStudy = async (api: DefaultApi, studyId: number, options: { preview?: boolean } = {}) => {
+export const launchStudy = async (api: DefaultApi, studyId: number, options: { preview?: boolean } = {}) => {
     const launch = await api.launchStudy({ id: studyId, preview: options.preview || false })
     window.location.assign(launch.url!)
     return launch

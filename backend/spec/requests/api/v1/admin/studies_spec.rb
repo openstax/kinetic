@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Studies', api: :v1 do
   let(:path) { 'admin/studies' }
   let(:admin) { create(:admin) }
-  let!(:study) { create(:study, stages: [create(:stage, status: :waiting_period)]) }
+  let!(:study) { create(:study) }
   let(:response_export) { create(:response_export, stage: study.stages.first) }
 
   describe 'GET' do
@@ -36,6 +36,7 @@ RSpec.describe 'Studies', api: :v1 do
       end
 
       it 'returns studies awaiting approval' do
+        study.submit
         api_get "#{path}/waiting_period"
         expect(response).to have_http_status(:ok)
         expect(response_hash).to match(
