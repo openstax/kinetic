@@ -15,6 +15,34 @@ RSpec.describe Study, api: :v1 do
     end
   end
 
+  describe '#update_stages' do
+    let(:study) { create(:study, num_stages: 2) }
+    let(:attrs) { study.stages.map(&:as_json) }
+
+    it 'does nothing if no changes' do
+      study.update_stages(attrs)
+      expect(study.stages.length).to eq attrs.length
+      study.stages.each_with_index do |st, i|
+        expect(st.as_json).to eq attrs[i]
+      end
+    end
+
+    it 'adds a stage' do
+      update = { points: 100, duration_minutes: 120, config: {} }
+      attrs << update
+      study.update_stages(attrs)
+      expect(study.stages.length).to eq attrs.length
+      expect(study.stages.last.as_json).to match(a_hash_including((update.stringify_keys)))
+    end
+
+    it 'removes stages' do
+      update = [attrs[0]]
+      study.update_stages(update)
+      expect(study.stages.length).to eq 1
+      expect(study.stages[0].as_json).to eq update[0].as_json
+    end
+  end
+
   describe '#available?' do
     it 'has all available attributes' do
       expect(opens_and_closes_study).to be_available

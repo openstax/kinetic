@@ -83,10 +83,16 @@ class Study < ApplicationRecord
   def update_stages(updated_stages)
     return if updated_stages.nil? || launched_stages.any?
 
-    stages.clear
-    updated_stages.each do |stage|
-      s = Stage.where(id: stage.id).find_or_create_by(stage.to_hash.merge({ config: {} }))
-      stages << s
+    # remove any extra stages that were removed
+    stages.delete(stages.last) while stages.count > updated_stages.count
+
+    updated_stages.each_with_index do |stage, i|
+      s = stages[i]
+      if s.present?
+        s.update!(stage.to_hash)
+      else
+        stages.create!(stage.to_hash)
+      end
     end
   end
 
