@@ -85,7 +85,7 @@ class Study < ApplicationRecord
 
     stages.clear
     updated_stages.each do |stage|
-      s = Stage.where(id: stage.id).find_or_create_by(stage.to_hash.merge({ config: {} }))
+      s = Stage.where(id: stage.id).find_or_create_by({ config: {} }.merge(stage.to_hash))
       stages << s
     end
   end
