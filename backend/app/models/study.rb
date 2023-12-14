@@ -91,7 +91,7 @@ class Study < ApplicationRecord
       if s.present?
         s.update!(stage.to_hash)
       else
-        stages.create!(stage.to_hash)
+        stages.create!(stage.to_hash.merge({ config: {} }))
       end
     end
   end
