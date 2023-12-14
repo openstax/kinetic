@@ -21,16 +21,6 @@ Things you may want to cover:
 
 * Deployment instructions
 
-* Linting
-
-The [lefthook](https://github.com/Arkweid/lefthook) is included in the Docker build.  When you push your code to GitHub, lefthook runs Rubocop on all the files you have changed.  It won't let you push if you have Rubocop errors.  You'll have to fix the errors or make changes to the `.rubocop.yml` files to bypass the errors.  You can also run lefthook directly with
-
-```bash
-$ /code> lefthook run pre-push
-```
-
-* ...
-
 **Connecting to remote databases**
 ```heroku pg:psql --remote={remote-name}```
 

@@ -11,12 +11,11 @@ class Stage < ApplicationRecord
 
   has_many :launched_stages do
     def for_user(user)
-      puts(user)
       where(user_id: user.id).first
     end
   end
 
-  has_many :siblings, ->(stage) {
+  has_many :siblings, -> (stage) {
     query = where(study_id: stage.study_id)
     query.where.not(id: stage.id) if stage.persisted?
     query
