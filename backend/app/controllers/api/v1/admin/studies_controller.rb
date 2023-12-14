@@ -13,8 +13,8 @@ class Api::V1::Admin::StudiesController < Api::V1::Admin::BaseController
     render status: :ok, json: query_studies('waiting_period')
   end
 
-  def responses
-    render status: :ok, json: responses_for_study(Study.find(params[:id]))
+  def files
+    render status: :ok, json: files_for_study(Study.find(params[:id]))
   end
 
   def add_response
@@ -30,22 +30,47 @@ class Api::V1::Admin::StudiesController < Api::V1::Admin::BaseController
       exp.files.attach(params[:file])
       exp.save!
     end
-    render status: :ok, json: responses_for_study(stage.study)
+    render status: :ok, json: files_for_study(stage.study)
+  end
+
+  def add_info
+    stage = Stage.find(params[:stage_id])
+    if params[:file]
+      stage.analysis_infos.attach(params[:file])
+      stage.save!
+    end
+    render status: :ok, json: files_for_study(stage.study)
+  end
+
+  def destroy_info
+    info = ActiveStorage::Attachment.find(params[:id])
+    info.destroy!
+    render status: :ok, json: files_for_study(info.record.study)
   end
 
   def destroy_response
     exp = ResponseExport.find(params[:id])
     exp.destroy!
-    render status: :ok, json: responses_for_study(exp.stage.study)
+    render status: :ok, json: files_for_study(exp.stage.study)
   end
 
   protected
 
-  def responses_for_study(study)
-    Api::V1::Bindings::ResponsesListing.new(
-      data: study.response_exports.map do |resp|
+  def files_for_study(study)
+    Api::V1::Bindings::AdminStudyFilesListing.new(
+      responses: study.response_exports.map do |resp|
         resp.attributes_for_binding(Api::V1::Bindings::ResponseExport).tap do |json|
           json['urls'] = resp.files.map { |f| url_for(f) }
+        end
+      end,
+      infos: study.stages.flat_map do |stage|
+        stage.analysis_infos.map do |info|
+          {
+            id: info.id,
+            stage_id: stage.id,
+            created_at: info.created_at,
+            url: url_for(info)
+          }
         end
       end
     )

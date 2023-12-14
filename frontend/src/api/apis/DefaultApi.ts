@@ -20,6 +20,7 @@ import type {
   AddReward,
   AddStage,
   AddStudy,
+  AdminStudyFilesListing,
   Analysis,
   AnalysisListing,
   BannerNotice,
@@ -32,7 +33,6 @@ import type {
   Researcher,
   ResearchersList,
   Responses,
-  ResponsesListing,
   Reward,
   RewardsListing,
   ServerError,
@@ -60,6 +60,8 @@ import {
     AddStageToJSON,
     AddStudyFromJSON,
     AddStudyToJSON,
+    AdminStudyFilesListingFromJSON,
+    AdminStudyFilesListingToJSON,
     AnalysisFromJSON,
     AnalysisToJSON,
     AnalysisListingFromJSON,
@@ -84,8 +86,6 @@ import {
     ResearchersListToJSON,
     ResponsesFromJSON,
     ResponsesToJSON,
-    ResponsesListingFromJSON,
-    ResponsesListingToJSON,
     RewardFromJSON,
     RewardToJSON,
     RewardsListingFromJSON,
@@ -136,6 +136,16 @@ export interface AddStudyRequest {
     addStudy?: AddStudy;
 }
 
+export interface AdminAddAnalysisInfoRequest {
+    stageId: number;
+    file?: Blob;
+}
+
+export interface AdminAddInfoRequest {
+    stageId: number;
+    file?: Blob;
+}
+
 export interface AdminAddResponsesRequest {
     stageId: number;
     isTesting?: boolean;
@@ -146,16 +156,20 @@ export interface AdminApproveStudyRequest {
     id: number;
 }
 
+export interface AdminDestroyInfoRequest {
+    id: number;
+}
+
 export interface AdminDestroyResponseRequest {
+    id: number;
+}
+
+export interface AdminFilesForStudyRequest {
     id: number;
 }
 
 export interface AdminQueryStudiesRequest {
     status: string;
-}
-
-export interface AdminResponsesForStudyRequest {
-    id: number;
 }
 
 export interface CreateBannerRequest {
@@ -437,9 +451,111 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * add an analysis info file
+     */
+    async adminAddAnalysisInfoRaw(requestParameters: AdminAddAnalysisInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminStudyFilesListing>> {
+        if (requestParameters.stageId === null || requestParameters.stageId === undefined) {
+            throw new runtime.RequiredError('stageId','Required parameter requestParameters.stageId was null or undefined when calling adminAddAnalysisInfo.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const consumes: runtime.Consume[] = [
+            { contentType: 'multipart/form-data' },
+        ];
+        // @ts-ignore: canConsumeForm may be unused
+        const canConsumeForm = runtime.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): any };
+        let useForm = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new URLSearchParams();
+        }
+
+        if (requestParameters.file !== undefined) {
+            formParams.append('file', requestParameters.file as any);
+        }
+
+        const response = await this.request({
+            path: `/admin/stage/{stage_id}/analysis_info`.replace(`{${"stage_id"}}`, encodeURIComponent(String(requestParameters.stageId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: formParams,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AdminStudyFilesListingFromJSON(jsonValue));
+    }
+
+    /**
+     * add an analysis info file
+     */
+    async adminAddAnalysisInfo(requestParameters: AdminAddAnalysisInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminStudyFilesListing> {
+        const response = await this.adminAddAnalysisInfoRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * add a info file
+     */
+    async adminAddInfoRaw(requestParameters: AdminAddInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminStudyFilesListing>> {
+        if (requestParameters.stageId === null || requestParameters.stageId === undefined) {
+            throw new runtime.RequiredError('stageId','Required parameter requestParameters.stageId was null or undefined when calling adminAddInfo.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const consumes: runtime.Consume[] = [
+            { contentType: 'multipart/form-data' },
+        ];
+        // @ts-ignore: canConsumeForm may be unused
+        const canConsumeForm = runtime.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): any };
+        let useForm = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new URLSearchParams();
+        }
+
+        if (requestParameters.file !== undefined) {
+            formParams.append('file', requestParameters.file as any);
+        }
+
+        const response = await this.request({
+            path: `/admin/stage/{stage_id}/infos`.replace(`{${"stage_id"}}`, encodeURIComponent(String(requestParameters.stageId))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: formParams,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AdminStudyFilesListingFromJSON(jsonValue));
+    }
+
+    /**
+     * add a info file
+     */
+    async adminAddInfo(requestParameters: AdminAddInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminStudyFilesListing> {
+        const response = await this.adminAddInfoRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * add a response file
      */
-    async adminAddResponsesRaw(requestParameters: AdminAddResponsesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponsesListing>> {
+    async adminAddResponsesRaw(requestParameters: AdminAddResponsesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminStudyFilesListing>> {
         if (requestParameters.stageId === null || requestParameters.stageId === undefined) {
             throw new runtime.RequiredError('stageId','Required parameter requestParameters.stageId was null or undefined when calling adminAddResponses.');
         }
@@ -480,13 +596,13 @@ export class DefaultApi extends runtime.BaseAPI {
             body: formParams,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResponsesListingFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AdminStudyFilesListingFromJSON(jsonValue));
     }
 
     /**
      * add a response file
      */
-    async adminAddResponses(requestParameters: AdminAddResponsesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponsesListing> {
+    async adminAddResponses(requestParameters: AdminAddResponsesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminStudyFilesListing> {
         const response = await this.adminAddResponsesRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -522,9 +638,39 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * remove a info file
+     */
+    async adminDestroyInfoRaw(requestParameters: AdminDestroyInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminStudyFilesListing>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling adminDestroyInfo.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/info/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AdminStudyFilesListingFromJSON(jsonValue));
+    }
+
+    /**
+     * remove a info file
+     */
+    async adminDestroyInfo(requestParameters: AdminDestroyInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminStudyFilesListing> {
+        const response = await this.adminDestroyInfoRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * remove a response file
      */
-    async adminDestroyResponseRaw(requestParameters: AdminDestroyResponseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponsesListing>> {
+    async adminDestroyResponseRaw(requestParameters: AdminDestroyResponseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminStudyFilesListing>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling adminDestroyResponse.');
         }
@@ -534,20 +680,52 @@ export class DefaultApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/admin/responses/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/admin/response/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResponsesListingFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AdminStudyFilesListingFromJSON(jsonValue));
     }
 
     /**
      * remove a response file
      */
-    async adminDestroyResponse(requestParameters: AdminDestroyResponseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponsesListing> {
+    async adminDestroyResponse(requestParameters: AdminDestroyResponseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminStudyFilesListing> {
         const response = await this.adminDestroyResponseRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns listing of all responses and info files for a study 
+     * Retrieve all responses for study
+     */
+    async adminFilesForStudyRaw(requestParameters: AdminFilesForStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdminStudyFilesListing>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling adminFilesForStudy.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/study/{id}/files`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AdminStudyFilesListingFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns listing of all responses and info files for a study 
+     * Retrieve all responses for study
+     */
+    async adminFilesForStudy(requestParameters: AdminFilesForStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminStudyFilesListing> {
+        const response = await this.adminFilesForStudyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -580,38 +758,6 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async adminQueryStudies(requestParameters: AdminQueryStudiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Studies> {
         const response = await this.adminQueryStudiesRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Returns listing of all responses for a study 
-     * Retrieve all responses for study
-     */
-    async adminResponsesForStudyRaw(requestParameters: AdminResponsesForStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ResponsesListing>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling adminResponsesForStudy.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/admin/study/{id}/responses`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResponsesListingFromJSON(jsonValue));
-    }
-
-    /**
-     * Returns listing of all responses for a study 
-     * Retrieve all responses for study
-     */
-    async adminResponsesForStudy(requestParameters: AdminResponsesForStudyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResponsesListing> {
-        const response = await this.adminResponsesForStudyRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

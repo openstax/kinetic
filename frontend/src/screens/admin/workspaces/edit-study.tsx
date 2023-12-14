@@ -1,6 +1,6 @@
 import { formatDate, React, useCallback, useEffect, useId, useState } from '@common'
 import { Col, ColProps, EditingForm, FormSubmitHandler, Icon, InputField, Section, useFormContext } from '@components'
-import { ResponseExport, Stage, Study } from '@api'
+import { AdminStudyFilesListing, AnalysisInfo, ResponseExport, Stage, Study } from '@api'
 import { useApi } from '@lib'
 
 
@@ -27,7 +27,7 @@ const FileInput:FC<FileInputProps> = ({ id: providedId, name, label, ...props })
     )
 }
 
-type SetResponses = (responses: ResponseExport[]) => void
+type SetFiles = (files: AdminStudyFilesListing) => void
 
 const Boolean:FC<{val?: boolean}> = ({ val }) => {
     if (val) {
@@ -37,20 +37,64 @@ const Boolean:FC<{val?: boolean}> = ({ val }) => {
 
 }
 
-type ResponsesProps = {
-    responses: ResponseExport[]
-    setResponses: SetResponses
+type InfosProps = {
+    infos: AnalysisInfo[]
+    setFiles: SetFiles
+    stages: Stage[]
 }
 
-const Responses:FC<ResponsesProps> = ({ responses, setResponses }) => {
+const Infos:FC<InfosProps> = ({ infos, setFiles, stages }) => {
     const api = useApi()
     const onDelete = (id: number) => {
-        api.adminDestroyResponse({ id }).then(resp => setResponses(resp.data || []))
+        api.adminDestroyInfo({ id }).then(resp => setFiles(resp))
     }
+
+    if (!infos.length) return null
+
     return (
         <table className="table table-striped table-hover">
             <thead>
                 <tr>
+                    <th scope="col">Stage #</th>
+                    <th scope="col">Uploaded</th>
+                    <th scope="col">Download</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {infos.map(info => (
+                    <tr key={info.id}>
+                        <th>{(stages.find(s => s.id == info.stageId)?.order || 0)+ 1}</th>
+                        <th scope="row">{formatDate(info.createdAt)}</th>
+                        <td>
+                            <a href={info.url} target="_blank"><Icon icon="cloudDownload" /></a>
+                        </td>
+                        <td><Icon icon="trash" onClick={() => onDelete(info.id)} /></td>
+                    </tr>))}
+            </tbody>
+        </table>
+    )
+}
+
+type ResponsesProps = {
+    responses: ResponseExport[]
+    setFiles: SetFiles
+    stages: Stage[]
+}
+
+const Responses:FC<ResponsesProps> = ({ responses, stages, setFiles }) => {
+    const api = useApi()
+    const onDelete = (id: number) => {
+        api.adminDestroyResponse({ id }).then(resp => setFiles(resp))
+    }
+
+    if (!responses.length) return null
+
+    return (
+        <table className="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Stage #</th>
                     <th scope="col">Date</th>
                     <th scope="col">Complete?</th>
                     <th scope="col">Testing?</th>
@@ -61,6 +105,7 @@ const Responses:FC<ResponsesProps> = ({ responses, setResponses }) => {
             <tbody>
                 {responses.map(r => (
                     <tr key={r.id}>
+                        <th>{(stages.find(s => s.id == r.stageId)?.order || 0)+ 1}</th>
                         <th scope="row">{formatDate(r.cutoffAt)}</th>
                         <td><Boolean val={r.isComplete} /></td>
                         <td><Boolean val={r.isTesting} /></td>
@@ -73,10 +118,11 @@ const Responses:FC<ResponsesProps> = ({ responses, setResponses }) => {
         </table>
     )
 }
+
 type StageProps = {
     index: number
     stage: Stage
-    setResponses: SetResponses
+    setFiles: SetFiles
 }
 
 type StageFormValues = Stage & {
@@ -85,7 +131,7 @@ type StageFormValues = Stage & {
 }
 
 
-const EditStage: FC<StageProps> = ({ stage, setResponses }) => {
+const EditStageResponses: FC<StageProps> = ({ stage, setFiles }) => {
     const api = useApi()
 
     const onSubmit: FormSubmitHandler<StageFormValues> = useCallback((v, fc) => {
@@ -95,7 +141,7 @@ const EditStage: FC<StageProps> = ({ stage, setResponses }) => {
             file,
             isTesting: v.isTest,
         })
-            .then(resp => setResponses(resp.data || []))
+            .then(resp => setFiles(resp))
             .catch((err) => fc.setFormError(err))
     }, [api])
 
@@ -106,9 +152,39 @@ const EditStage: FC<StageProps> = ({ stage, setResponses }) => {
             defaultValues={{ ...stage, isTest: true }}
             onSubmit={onSubmit}
         >
-            <b>Add response file</b>
+            <b>Add response file for stage #{(stage.order||0) + 1}</b>
             <FileInput size={6} name="newResponse" className="mb-1" />
             <InputField size={6} name="isTest" label="Is Testing Data?" type="checkbox" />
+        </EditingForm>
+
+    )
+}
+
+const EditStageInfo: FC<StageProps> = ({ stage, setFiles }) => {
+    const api = useApi()
+
+    const onSubmit: FormSubmitHandler<StageFormValues> = useCallback((v, fc) => {
+        const file = v.newResponse?.item(0) || undefined
+        api.adminAddInfo({
+            stageId: v.id,
+            file,
+        })
+            .then((resp) => {
+                setFiles(resp)
+                fc.reset()
+            })
+            .catch((err) => fc.setFormError(err))
+    }, [api])
+
+    return (
+        <EditingForm
+            className="row"
+            name="info"
+            defaultValues={{ ...stage, isTest: true }}
+            onSubmit={onSubmit}
+        >
+            <b>Add help file for stage #{(stage.order||0) + 1}</b>
+            <FileInput size={6} name="newResponse" className="mb-1" />
         </EditingForm>
 
     )
@@ -118,20 +194,25 @@ const EditStage: FC<StageProps> = ({ stage, setResponses }) => {
 export function EditStudy({ study }: EditProps) {
     const api = useApi()
 
-    const [responses, setResponses] = useState<Array<ResponseExport>>([])
+    const [files, setFiles] = useState<AdminStudyFilesListing>({ infos: [], responses: [] })
 
     useEffect(() => {
-        api.adminResponsesForStudy({ id: study.id }).then((res) => {
-            setResponses(res.data || [])
+        api.adminFilesForStudy({ id: study.id }).then((res) => {
+            console.log(res)
+            setFiles(res)
         })
     }, [])
 
     return (
         <div className="container">
             <h3>Data for {study.titleForResearchers}</h3>
-            <Section heading="Responses" id="">
-                <Responses responses={responses} setResponses={setResponses} />
-                {study.stages?.map((stage,i ) => <EditStage index={i} key={stage.id} setResponses={setResponses}  stage={stage}  />)}
+            <Section heading="Responses" id="resp">
+                <Responses responses={files.responses} setFiles={setFiles} stages={study?.stages || []} />
+                {study.stages?.map((stage,i ) => <EditStageResponses index={i} key={stage.id} setFiles={setFiles} stage={stage}  />)}
+            </Section>
+            <Section heading="Info Files" id="help">
+                <Infos infos={files.infos} setFiles={setFiles} stages={study?.stages || []} />
+                {study.stages?.map((stage,i ) => <EditStageInfo index={i} key={stage.id} setFiles={setFiles} stage={stage}  />)}
             </Section>
         </div>
     )
