@@ -26,8 +26,8 @@ Rails.application.routes.draw do
               as: :run_download
         end
 
-        get 'responses/:api_key', to: 'responses#fetch'
-
+        get 'responses/:api_key', to: 'responses#fetch_responses'
+        get 'responses/:api_key/info', to: 'responses#fetch_info'
       end
 
       namespace :participant do

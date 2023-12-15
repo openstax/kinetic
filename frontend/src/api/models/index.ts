@@ -21,6 +21,7 @@ export * from './BaseResearcher';
 export * from './BaseStudy';
 export * from './Environment';
 export * from './EnvironmentUser';
+export * from './GetResponseInfo200Response';
 export * from './Launch';
 export * from './NewStage';
 export * from './NewStudy';

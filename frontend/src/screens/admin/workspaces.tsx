@@ -53,7 +53,7 @@ export function AdminWorkspaces() {
                     ))}
                 </ul>
             </Sidebar>
-            <Main centered>
+            <Main style={{ marginTop: '2rem' }}>
                 {study ? <EditStudy study={study} /> : <WelcomeMsg />}
             </Main>
         </>

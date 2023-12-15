@@ -26,6 +26,7 @@ import type {
   BannerNotice,
   BannersListing,
   Environment,
+  GetResponseInfo200Response,
   Launch,
   ParticipantStudies,
   ParticipantStudy,
@@ -72,6 +73,8 @@ import {
     BannersListingToJSON,
     EnvironmentFromJSON,
     EnvironmentToJSON,
+    GetResponseInfo200ResponseFromJSON,
+    GetResponseInfo200ResponseToJSON,
     LaunchFromJSON,
     LaunchToJSON,
     ParticipantStudiesFromJSON,
@@ -223,6 +226,10 @@ export interface GetResearcherRequest {
 export interface GetResponseDownloadRequest {
     apiKey: string;
     cutoff?: Date;
+}
+
+export interface GetResponseInfoRequest {
+    apiKey: string;
 }
 
 export interface GetStageRequest {
@@ -1336,6 +1343,36 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getResponseDownload(requestParameters: GetResponseDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Responses> {
         const response = await this.getResponseDownloadRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * and fetch response info
+     */
+    async getResponseInfoRaw(requestParameters: GetResponseInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetResponseInfo200Response>> {
+        if (requestParameters.apiKey === null || requestParameters.apiKey === undefined) {
+            throw new runtime.RequiredError('apiKey','Required parameter requestParameters.apiKey was null or undefined when calling getResponseInfo.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/researcher/responses/{api_key}/info`.replace(`{${"api_key"}}`, encodeURIComponent(String(requestParameters.apiKey))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetResponseInfo200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * and fetch response info
+     */
+    async getResponseInfo(requestParameters: GetResponseInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetResponseInfo200Response> {
+        const response = await this.getResponseInfoRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
