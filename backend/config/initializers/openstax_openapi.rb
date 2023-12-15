@@ -39,7 +39,7 @@ OpenStax::OpenApi.configure do |config| # rubocop:disable Metrics/BlockLength
     end,
     'r' => lambda do |opts|
       Dir.chdir opts[:output_dir] do
-        puts `patch -p2 < #{Rails.root.join('clients/r.patch')}`
+        puts `patch -p2 < #{Rails.root.join('clients/r.patch')}` unless ENV['UNPATCHED'].present?
       end
     end
   }.symbolize_keys
