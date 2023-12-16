@@ -10,8 +10,15 @@ RSpec.describe Study, api: :v1 do
   let!(:no_times_study) { create(:study, opens_at: nil, closes_at: nil, title: 'e') }
 
   describe '#open?' do
+    let(:study) { create(:study, num_stages: 1) }
+
     it 'returns open studies' do
-      expect_query_results(described_class.available_to_participants, [opens_and_closes_study, opens_only_study])
+      study.stages.first.update!(status: 'active')
+      expect_query_results(described_class.available_to_participants, [study])
+    end
+    it 'doesnt show studies without active stages' do
+      study.stages.each{ |st| st.update(status: 'completed')}
+      expect(described_class.available_to_participants).to be_empty
     end
   end
 
