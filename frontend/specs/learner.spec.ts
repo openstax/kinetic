@@ -19,8 +19,14 @@ test.beforeEach(async ({ browser }) => {
 test('displays studies', async ({ browser }) => {
     const userPage = await useUserPage(browser)
     const researcherPage = await useResearcherPage(browser)
+    const adminPage = await useAdminPage(browser)
 
-    await createStudiesData({ context: researcherPage.context(), numStudies: 5 })
+    await createStudy({ researcherPage, adminPage })
+    await createStudy({ researcherPage, adminPage })
+    await createStudy({ researcherPage, adminPage })
+    await createStudy({ researcherPage, adminPage })
+    await createStudy({ researcherPage, adminPage })
+
     await goToPage({ page: userPage, path: '/studies' })
     await userPage.waitForSelector('testId=studies-listing')
 })
@@ -28,11 +34,17 @@ test('displays studies', async ({ browser }) => {
 test('filtering studies', async ({ browser }) => {
     const userPage = await useUserPage(browser)
     const researcherPage = await useResearcherPage(browser)
-    const studyIds = await createStudiesData({ context: researcherPage.context(), numStudies: 5 })
+    const adminPage = await useAdminPage(browser)
+
+    const studyId = await createStudy({ researcherPage, adminPage })
+    await createStudy({ researcherPage, adminPage })
+    await createStudy({ researcherPage, adminPage })
+    await createStudy({ researcherPage, adminPage })
+    await createStudy({ researcherPage, adminPage })
 
     await goToPage({ page: userPage, path: '/studies' })
     await userPage.click('testId=Learning')
-    await expect(userPage).toHaveSelector(`[data-study-id="${studyIds[0]}"]`)
+    await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"]`)
 })
 
 test('launching study and testing completion', async ({ browser }) => {
