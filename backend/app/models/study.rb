@@ -42,7 +42,9 @@ class Study < ApplicationRecord
   scope :multi_stage, -> { joins(:stages).group('studies.id').having('count(study_id) > 1') }
 
   scope :available_to_participants, -> {
-    where
+    joins(:stages)
+      .where(stages: { status: 'active' })
+      .where
       .not(opens_at: nil)
       .where(is_hidden: false)
       .where(arel[:opens_at].lteq(Time.now))
