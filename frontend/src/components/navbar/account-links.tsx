@@ -9,13 +9,12 @@ export default function AccountLinks() {
     const user = useCurrentUser()
     const env = useEnvironment()
     const { refetch } = useFetchEnvironment()
-    const isAdminOrResearcher = user.isAdministrator || user.isResearcher
     const logoutURL = useLogoutURL()
 
     return (
         <>
             <Menu.Label>Account</Menu.Label>
-            <StyledLink to={isAdminOrResearcher ? '/researcher-account' : '/account'}>
+            <StyledLink to={user.isResearcher ? '/researcher-account' : '/account'}>
                 <Menu.Item>
                     My Account
                 </Menu.Item>
