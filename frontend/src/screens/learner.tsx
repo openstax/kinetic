@@ -185,7 +185,7 @@ const LearnerDashboard = () => {
         demographicSurvey,
     } = useLearnerStudies()
 
-    if (!env.isCountryEligible) {
+    if (!env.isEligible) {
         return <UnsupportedCountryModal />
     }
 

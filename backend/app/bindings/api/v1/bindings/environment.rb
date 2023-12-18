@@ -21,7 +21,7 @@ module Api::V1::Bindings
 
     attr_accessor :is_impersonating
 
-    attr_accessor :is_country_eligible
+    attr_accessor :is_eligible
 
     attr_accessor :accounts_env_name
 
@@ -39,7 +39,7 @@ module Api::V1::Bindings
         :'user' => :'user',
         :'researcher' => :'researcher',
         :'is_impersonating' => :'is_impersonating',
-        :'is_country_eligible' => :'is_country_eligible',
+        :'is_eligible' => :'is_eligible',
         :'accounts_env_name' => :'accounts_env_name',
         :'homepage_url' => :'homepage_url',
         :'rewards_schedule' => :'rewards_schedule',
@@ -58,7 +58,7 @@ module Api::V1::Bindings
         :'user' => :'EnvironmentUser',
         :'researcher' => :'Researcher',
         :'is_impersonating' => :'Boolean',
-        :'is_country_eligible' => :'Boolean',
+        :'is_eligible' => :'Boolean',
         :'accounts_env_name' => :'String',
         :'homepage_url' => :'String',
         :'rewards_schedule' => :'Array<RewardsScheduleSegment>',
@@ -99,8 +99,8 @@ module Api::V1::Bindings
         self.is_impersonating = attributes[:'is_impersonating']
       end
 
-      if attributes.key?(:'is_country_eligible')
-        self.is_country_eligible = attributes[:'is_country_eligible']
+      if attributes.key?(:'is_eligible')
+        self.is_eligible = attributes[:'is_eligible']
       end
 
       if attributes.key?(:'accounts_env_name')
@@ -190,7 +190,7 @@ module Api::V1::Bindings
           user == o.user &&
           researcher == o.researcher &&
           is_impersonating == o.is_impersonating &&
-          is_country_eligible == o.is_country_eligible &&
+          is_eligible == o.is_eligible &&
           accounts_env_name == o.accounts_env_name &&
           homepage_url == o.homepage_url &&
           rewards_schedule == o.rewards_schedule &&
@@ -206,7 +206,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [user, researcher, is_impersonating, is_country_eligible, accounts_env_name, homepage_url, rewards_schedule, banners_schedule].hash
+      [user, researcher, is_impersonating, is_eligible, accounts_env_name, homepage_url, rewards_schedule, banners_schedule].hash
     end
 
     # Builds the object from hash

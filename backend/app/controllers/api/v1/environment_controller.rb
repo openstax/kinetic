@@ -16,7 +16,7 @@ class Api::V1::EnvironmentController < Api::V1::BaseController
       banners_schedule: Banner.active.to_a || [],
       rewards_schedule: Reward.all.to_a,
       is_impersonating: session[:impersonating].present?,
-      is_country_eligible: country.blank? || Kinetic::ELIGIBLE_COUNTRY_CODES.include?(country)
+      is_eligible: country.blank? || Kinetic::ELIGIBLE_COUNTRY_CODES.include?(country)
     )
   end
 end

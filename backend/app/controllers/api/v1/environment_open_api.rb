@@ -37,7 +37,7 @@ class Api::V1::EnvironmentOpenApi
         key :type, :boolean
         key :readOnly, true
       end
-      property :is_country_eligible do
+      property :is_eligible do
         key :type, :boolean
         key :readOnly, true
       end
