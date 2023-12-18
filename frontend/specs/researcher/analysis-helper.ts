@@ -13,7 +13,7 @@ export const createAnalysis = async({ researcherPage, adminPage, withStudy = fal
     const description = faker.commerce.productName()
 
     if (withStudy) {
-        const studyId = await createStudy({ researcherPage, adminPage, name })
+        const studyId = await createStudy({ researcherPage, adminPage, name, description })
         await goToPage({ page: researcherPage, path: `/analysis/edit/new?studyId=${studyId}` })
         await expect(researcherPage.locator('[name=title]')).toMatchText(name)
         await expect(researcherPage.locator('[name=description]')).toMatchText(description)
