@@ -6,7 +6,7 @@ import { ErrorPage, LoadingAnimation } from '@components'
 import { useApi, useQueryParam } from '@lib'
 import { BackgroundImage, Button, Container, Flex, Modal, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import Waves from '@images/waves.svg'
-import { LaunchStudy, RewardsSegment, useRewardsSchedule } from '@models';
+import { launchStudy, RewardsSegment, useRewardsSchedule } from '@models';
 import { useLearnerStudies } from './learner/studies';
 import dayjs from 'dayjs';
 import { noop } from 'lodash-es';
@@ -14,8 +14,8 @@ import { noop } from 'lodash-es';
 type LandedStudy = ParticipantStudy & { completedAt?: Date, abortedAt?: Date }
 
 const Points: React.FC<{ study: LandedStudy }> = ({ study }) => {
-    const completedStage = study.stages?.find(stage => stage.isCompleted)
-    if (!completedStage) return null
+    const completed = study.stages?.find(stage => stage.isCompleted) || study.completedAt
+    if (!completed) return null
 
     return (
         <Title order={2} c='white'>
@@ -114,7 +114,7 @@ const CompleteProfilePrompt: FC<{demographicSurvey: ParticipantStudy | null}> = 
     if (!demographicSurvey) return null
 
     const onClick = async () => {
-        await LaunchStudy(api, demographicSurvey.id)
+        await launchStudy(api, demographicSurvey.id)
     }
 
     return (

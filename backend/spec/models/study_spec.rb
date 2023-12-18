@@ -10,8 +10,43 @@ RSpec.describe Study, api: :v1 do
   let!(:no_times_study) { create(:study, opens_at: nil, closes_at: nil, title: 'e') }
 
   describe '#open?' do
+    let(:study) { create(:study, num_stages: 1) }
+
     it 'returns open studies' do
-      expect_query_results(described_class.available_to_participants, [opens_and_closes_study, opens_only_study])
+      study.stages.first.update!(status: 'active')
+      expect_query_results(described_class.available_to_participants, [study])
+    end
+    it 'doesnt show studies without active stages' do
+      study.stages.each{ |st| st.update(status: 'completed')}
+      expect(described_class.available_to_participants).to be_empty
+    end
+  end
+
+  describe '#update_stages' do
+    let(:study) { create(:study, num_stages: 2) }
+    let(:attrs) { study.stages.map(&:as_json) }
+
+    it 'does nothing if no changes' do
+      study.update_stages(attrs)
+      expect(study.stages.length).to eq attrs.length
+      study.stages.each_with_index do |st, i|
+        expect(st.as_json).to eq attrs[i]
+      end
+    end
+
+    it 'adds a stage' do
+      update = { points: 100, duration_minutes: 120, config: {} }
+      attrs << update
+      study.update_stages(attrs)
+      expect(study.stages.length).to eq attrs.length
+      expect(study.stages.last.as_json).to match(a_hash_including((update.stringify_keys)))
+    end
+
+    it 'removes stages' do
+      update = [attrs[0]]
+      study.update_stages(update)
+      expect(study.stages.length).to eq 1
+      expect(study.stages[0].as_json).to eq update[0].as_json
     end
   end
 

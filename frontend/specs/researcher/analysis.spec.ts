@@ -1,4 +1,4 @@
-import { goToPage, test, useResearcherPage } from '../test';
+import { goToPage, test, useAdminPage, useResearcherPage } from '../test';
 import { createAnalysis } from './analysis-helper';
 import { completeAnalysisTutorial } from '../data-helpers';
 
@@ -15,16 +15,18 @@ test('completes the analysis tutorial', async ({ browser }) => {
 
 test('can create an analysis from a study', async ({ browser }) => {
     const researcherPage = await useResearcherPage(browser)
+    const adminPage = await useAdminPage(browser)
 
     await completeAnalysisTutorial(researcherPage.context())
-    await createAnalysis({ researcherPage, withStudy: true })
+    await createAnalysis({ researcherPage, adminPage, withStudy: true })
 })
 
 test('can create an analysis without a study', async ({ browser }) => {
     const researcherPage = await useResearcherPage(browser)
+    const adminPage = await useAdminPage(browser)
 
     await completeAnalysisTutorial(researcherPage.context())
-    await createAnalysis({ researcherPage, withStudy: false })
+    await createAnalysis({ researcherPage, adminPage, withStudy: false })
 })
 
 test('can access analyses table as a researcher', async({ browser }) => {
