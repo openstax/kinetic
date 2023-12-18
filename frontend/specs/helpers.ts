@@ -84,6 +84,7 @@ interface createStudyArgs {
     studyName?: string
     multiSession?: boolean
     description?: string
+    name?: string
     adminPage: Page
     researcherPage: Page
 }
@@ -118,11 +119,11 @@ export const launchApprovedStudy = async(researcherPage: Page, studyId: number, 
 
 export const createStudy = async ({
     multiSession = false,
+    name = faker.commerce.productName() + ' ' + faker.hacker.abbreviation(),
     description = faker.commerce.color(),
     adminPage,
     researcherPage,
 }: createStudyArgs) => {
-    const name = faker.commerce.productName() + ' ' + faker.hacker.abbreviation()
     // Step 1 - Internal Details
     await goToPage({ page: researcherPage, path: '/study/edit/new' })
 
