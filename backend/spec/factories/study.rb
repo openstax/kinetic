@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :study do
     transient do
       researchers { [] }
-      num_stages { 0 }
+      num_stages { 1 }
       title { nil }
     end
 
@@ -31,5 +31,3 @@ FactoryBot.define do
     end
   end
 end
-
-Rails.application.secrets.demographic_survey_id

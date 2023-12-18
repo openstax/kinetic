@@ -4,7 +4,7 @@ import { colors } from '@theme';
 import { useApi, useUserPreferences } from '@lib';
 import { ParticipantStudy } from '@api';
 import Waves from '@images/waves.svg';
-import { LaunchStudy } from '@models';
+import { launchStudy } from '@models';
 
 export const LearnerWelcomeModal: FC<{
     demographicSurvey: ParticipantStudy | null
@@ -27,7 +27,7 @@ export const LearnerWelcomeModal: FC<{
 
     const onFinishProfile = async () => {
         await onClose()
-        await LaunchStudy(api, demographicSurvey.id)
+        await launchStudy(api, demographicSurvey.id)
     }
 
     return (
