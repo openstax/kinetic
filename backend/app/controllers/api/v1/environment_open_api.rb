@@ -37,6 +37,10 @@ class Api::V1::EnvironmentOpenApi
         key :type, :boolean
         key :readOnly, true
       end
+      property :is_eligible do
+        key :type, :boolean
+        key :readOnly, true
+      end
       property :accounts_env_name do
         key :type, :string
         key :readOnly, true
