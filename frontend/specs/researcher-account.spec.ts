@@ -20,7 +20,6 @@ test('can update researcher account details', async({ browser }) => {
     await researcherPage.locator('.select', {
         has: researcherPage.locator(`input[name=institution]`),
     }).click()
-    await researcherPage.waitForTimeout(100)
     await researcherPage.keyboard.press('Enter')
 
     await researcherPage.click('testId=form-save-btn')
