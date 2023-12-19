@@ -43,6 +43,7 @@ const StudyPart: FC<StudyDetailsProps & { title: string, icon: IconKey, property
     property,
 }) => {
     const s = study as any
+    console.log(s)
     if (!s[property]) return null
 
     return (
