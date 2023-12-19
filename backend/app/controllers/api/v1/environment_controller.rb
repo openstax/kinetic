@@ -14,7 +14,8 @@ class Api::V1::EnvironmentController < Api::V1::BaseController
       homepage_url: Rails.application.secrets.homepage_url,
       banners_schedule: Banner.active.to_a || [],
       rewards_schedule: Reward.all.to_a,
-      is_impersonating: session[:impersonating].present?
+      is_impersonating: session[:impersonating].present?,
+      is_eligible: Eligibility.is_country_eligible?(request.headers['CloudFront-Viewer-Country'])
     )
   end
 end

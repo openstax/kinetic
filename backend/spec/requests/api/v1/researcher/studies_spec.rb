@@ -59,7 +59,7 @@ RSpec.describe 'Studies', api: :v1 do
         stub_qualtrics_clone_survey!
       end
 
-      let!(:study_with_stages) { create(:study, researchers: researcher1, stages: [create(:stage)]) }
+      let!(:study_with_stages) { create(:study, researchers: researcher1) }
 
       it 'successfully creates a new study' do
         api_post 'researcher/studies', params: { study: valid_new_study_attributes }
