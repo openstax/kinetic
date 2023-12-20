@@ -81,7 +81,6 @@ export const getIdFromUrl = (page: Page): number | undefined => {
 }
 
 interface createStudyArgs {
-    studyName?: string
     multiSession?: boolean
     description?: string
     name?: string
