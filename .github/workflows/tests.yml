@@ -49,7 +49,7 @@ jobs:
         working-directory: frontend
         run: |
           yarn
-          npx playwright install --with-deps
+          npx playwright install chromium --with-deps
           npx playwright test
       - name: Save test-results of failures
         uses: actions/upload-artifact@v3
