@@ -1,7 +1,8 @@
-import { baseConfig } from './playwright.config'
-import { defineConfig } from '@playwright/test';
+import BaseConfig from './playwright.config'
 
-defineConfig({
-    ...baseConfig,
-    globalSetup: require.resolve('./specs/setup.ci.ts'),
-})
+// stop silly devs from checking in code with a test focused
+BaseConfig.forbidOnly = true
+
+BaseConfig.globalSetup = require.resolve('./specs/setup.ci.ts')
+
+export default BaseConfig

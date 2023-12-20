@@ -1,6 +1,6 @@
-import { devices, PlaywrightTestConfig } from '@playwright/test';
+import { PlaywrightTestConfig, devices } from '@playwright/test';
 
-export const baseConfig: PlaywrightTestConfig = {
+const config: PlaywrightTestConfig = {
     globalSetup: require.resolve('./specs/setup.ts'),
     timeout: 5 * 60 * 1000,
     forbidOnly: !!process.env.CI,
@@ -8,7 +8,7 @@ export const baseConfig: PlaywrightTestConfig = {
         screenshot: 'only-on-failure',
         trace: 'retain-on-failure',
     },
-    // workers: process.env.CI ? 1 : undefined,
+    workers: process.env.CI ? 5 : undefined,
     projects: [
         {
             name: 'chromium',
@@ -24,3 +24,5 @@ export const baseConfig: PlaywrightTestConfig = {
         },
     ],
 }
+
+export default config;
