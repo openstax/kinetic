@@ -1,4 +1,4 @@
-import { React, useCallback, useEffect, useNavigate, useParams, useState } from '@common'
+import { React, useCallback, useEffect, useNavigate, useParams } from '@common'
 import { ParticipantStudy, PublicResearcher } from '@api'
 import {
     getFirstStage,
@@ -54,10 +54,8 @@ const StudyPart: FC<StudyDetailsProps & { title: string, icon: IconKey, property
 
 const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
     const api = useApi()
-    const [isBusy, setBusy] = useState(false)
 
     const onLaunch = async () => {
-        setBusy(true)
         await launchStudy(api, study.id)
     }
 
@@ -72,7 +70,6 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
     return (
         <Button
             color='purple'
-            loading={isBusy}
             disabled={!isStudyLaunchable(study)}
             data-testid="launch-study"
             onClick={onLaunch}
