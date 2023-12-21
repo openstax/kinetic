@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 4000
 
-CMD [ "yarn" "run" "docker:dev" ]
+CMD yarn run docker:dev
