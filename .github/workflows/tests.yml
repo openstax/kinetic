@@ -15,9 +15,8 @@ jobs:
       - uses: bahmutov/npm-install@HEAD
         with:
           working-directory: frontend
-      - name: Build and run backend docker
+      - name: Build and run docker
         run: |
-          API_DOCKERFILE_EXT=.ci docker-compose build
           docker compose run api bundle exec rake db:migrate
           docker compose up -d
       - name: Wait for api to boot
