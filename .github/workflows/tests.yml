@@ -16,12 +16,13 @@ jobs:
         with:
           working-directory: frontend
 
-      - name: Build docker image
-        #        run: ./frontend/docker/build
-        run: docker compose build
+      #      - name: Build docker image
+      #        #        run: ./frontend/docker/build
+      #        run: docker compose build
 
       - name: Build and run backend docker
         run: |
+          docker compose build
           docker compose run api bundle exec rake db:migrate
           docker compose up -d
       - name: log docker status
