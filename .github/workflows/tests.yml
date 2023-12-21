@@ -39,7 +39,6 @@ jobs:
       - name: Run specs
         working-directory: frontend
         run: |
-          #          yarn
           npx playwright install chromium --with-deps
           npx playwright test
       - name: Save test-results of failures
