@@ -22,19 +22,19 @@ jobs:
 
       - name: Build and run backend docker
         run: |
-          docker compose build
+          API_DOCKERFILE_EXT=.ci docker-compose build
           docker compose run api bundle exec rake db:migrate
           docker compose up -d
       - name: log docker status
         run: |
           sleep 30
           docker ps -a
-          docker logs kinetic_api_1
+          docker logs kinetic-api-1
           curl -i http://localhost:4006/api/v1/openapi.json
-          docker logs kinetic_api_1
-      - name: Wait for api to boot
-        working-directory: frontend
-        run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
+          docker logs kinetic-api-1
+      #      - name: Wait for api to boot
+      #        working-directory: frontend
+      #        run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
       - name: Generate bindings
         run: docker compose exec api bundle exec rake openstax_openapi:generate_model_bindings[1]
       - name: Check for changes in bindings
