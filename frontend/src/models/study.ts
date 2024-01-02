@@ -11,10 +11,31 @@ export enum StudyStatus {
     Completed = 'Completed',
 }
 
+export const useLaunchStudyUrl = (studyId: number | undefined) => {
+    const api = useApi();
+    const [launchUrl, setLaunchUrl] = useState<string | null>(null)
+
+    useEffect(() => {
+        if (!studyId) return
+
+        launchStudy(api, studyId).then(launch => {
+            setLaunchUrl(launch.url)
+        })
+        // refresh every 1 hour for new token in case user is inactive
+        const interval = setInterval(() => {
+            launchStudy(api, studyId).then(launch => {
+                setLaunchUrl(launch.url)
+            })
+        }, 60000 * 60);
+
+        return () => clearInterval(interval);
+    }, [api, studyId])
+
+    return launchUrl
+}
+
 export const launchStudy = async (api: DefaultApi, studyId: number, options: { preview?: boolean } = {}) => {
-    const launch = await api.launchStudy({ id: studyId, preview: options.preview || false })
-    window.location.assign(launch.url!)
-    return launch
+    return await api.launchStudy({ id: studyId, preview: options.preview || false })
 }
 
 const areStudyStagesLaunchable = (study: ParticipantStudy) => {

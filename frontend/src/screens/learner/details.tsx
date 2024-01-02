@@ -1,4 +1,4 @@
-import { React, useCallback, useEffect, useNavigate, useParams, useState } from '@common'
+import { React, useCallback, useEffect, useNavigate, useParams } from '@common'
 import { ParticipantStudy, PublicResearcher } from '@api'
 import {
     getFirstStage,
@@ -7,13 +7,13 @@ import {
     getStudyPi,
     getStudyPoints,
     isStudyLaunchable,
-    launchStudy,
     studyIsMultipart,
+    useLaunchStudyUrl,
 } from '@models'
 import { dayjs, useApi } from '@lib'
 import { Box, Icon, IconKey, MultiSessionBar, OffCanvas } from '@components'
 import { colors } from '@theme'
-import { Button } from '@mantine/core'
+import { Anchor, Button } from '@mantine/core'
 
 interface StudyDetailsProps {
     study: ParticipantStudy
@@ -53,13 +53,9 @@ const StudyPart: FC<StudyDetailsProps & { title: string, icon: IconKey, property
 }
 
 const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
-    const api = useApi()
-    const [isBusy, setBusy] = useState(false)
+    const launchUrl = useLaunchStudyUrl(study.id)
 
-    const onLaunch = async () => {
-        setBusy(true)
-        await launchStudy(api, study.id)
-    }
+    if (!launchUrl) return null
 
     if (study.completedAt) {
         return (
@@ -69,16 +65,18 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
         )
     }
     const action = (study.stages?.length && !study.stages[0].isCompleted) ? 'Begin' : 'Continue'
+
     return (
-        <Button
-            color='purple'
-            loading={isBusy}
-            disabled={!isStudyLaunchable(study)}
-            data-testid="launch-study"
-            onClick={onLaunch}
-        >
-            {action} study
-        </Button>
+        <Anchor href={launchUrl} target='_blank'>
+            <Button
+                color='purple'
+                w='100%'
+                disabled={!isStudyLaunchable(study)}
+                data-testid="launch-study"
+            >
+                {action} study
+            </Button>
+        </Anchor>
     )
 }
 
