@@ -147,8 +147,8 @@ const FormContent: FC<{
             }).catch((err) => setFormError(err))
 
             if (savedStudy) {
-                showResearcherNotification(`New copy of '${study.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`)
                 nav(`/study/edit/${savedStudy.id}?step=${goToStep + 1}`)
+                showResearcherNotification(`New copy of '${study.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`)
                 return setStudy(savedStudy)
             }
         }
@@ -186,11 +186,11 @@ const FormContent: FC<{
             index: StudyStep.ResearchTeam,
             component: <ResearchTeam study={study} />,
             text: 'Research Team',
-            backAction: () => {
+            backAction: async () => {
                 if (!isDirty) {
                     return setStep(StudyStep.InternalDetails)
                 }
-                saveStudy(StudyStep.InternalDetails)
+                await saveStudy(StudyStep.InternalDetails)
             },
             primaryAction: {
                 text: 'Continue',
@@ -215,11 +215,11 @@ const FormContent: FC<{
             index: StudyStep.ParticipantView,
             component: <ParticipantView study={study} />,
             text: 'Participant View',
-            backAction: () => {
+            backAction: async () => {
                 if (!isDirty) {
                     return setStep(StudyStep.ResearchTeam)
                 }
-                saveStudy(StudyStep.ResearchTeam)
+                await saveStudy(StudyStep.ResearchTeam)
             },
             primaryAction: {
                 text: 'Continue',
