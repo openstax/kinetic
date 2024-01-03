@@ -36,6 +36,8 @@ export * from './notifications/researcher-notification'
 export * from './table/table-components'
 export * from './confirm-navigation-if-dirty'
 
+export * from './learner/qualtrics-study-drawer'
+
 import { Footer } from './footer'
 import { Icon, IconProps, IconKey } from './icon'
 

@@ -11,9 +11,9 @@ import {
     studyIsMultipart,
 } from '@models'
 import { dayjs, useApi } from '@lib'
-import { Box, Icon, IconKey, MultiSessionBar, OffCanvas } from '@components'
+import { Box, Icon, IconKey, MultiSessionBar, OffCanvas, QualtricsStudyDrawer } from '@components'
 import { colors } from '@theme'
-import { Button } from '@mantine/core'
+import { Button, Drawer, Transition } from '@mantine/core'
 
 interface StudyDetailsProps {
     study: ParticipantStudy
@@ -55,10 +55,15 @@ const StudyPart: FC<StudyDetailsProps & { title: string, icon: IconKey, property
 const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
     const api = useApi()
     const [isBusy, setBusy] = useState(false)
+    const [openStudy, setOpenStudy] = useState(false)
+    const [qualtricsUrl, setQualtricsUrl] = useState<string | undefined>(undefined)
 
     const onLaunch = async () => {
         setBusy(true)
-        await launchStudy(api, study.id)
+        const { url } = await launchStudy(api, study.id)
+        setOpenStudy(true)
+        setQualtricsUrl(url)
+        setBusy(false)
     }
 
     if (study.completedAt) {
@@ -70,15 +75,18 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
     }
     const action = (study.stages?.length && !study.stages[0].isCompleted) ? 'Begin' : 'Continue'
     return (
-        <Button
-            color='purple'
-            loading={isBusy}
-            disabled={!isStudyLaunchable(study)}
-            data-testid="launch-study"
-            onClick={onLaunch}
-        >
-            {action} study
-        </Button>
+        <>
+            <QualtricsStudyDrawer isOpen={true} url={qualtricsUrl} />
+            <Button
+                color='purple'
+                loading={isBusy}
+                disabled={!isStudyLaunchable(study)}
+                data-testid="launch-study"
+                onClick={onLaunch}
+            >
+                {action} study
+            </Button>
+        </>
     )
 }
 
@@ -191,7 +199,7 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
                 view: true,
             })
         }
-    }, [study])
+    }, [api, study])
 
     if (!study) return null
 
@@ -207,7 +215,12 @@ export const StudyDetailsPreview: FC<{
     preview?: boolean
 }> = ({ study, show, onHide, preview = false }) => {
     return (
-        <OffCanvas show={show} title="Study Detail" onHide={onHide}>
+        <Drawer opened={show}
+            position='right'
+            title="Study Detail"
+            onClose={onHide}
+            transitionProps={{ transition: 'rotate-left', duration: 150, timingFunction: 'linear' }}
+        >
             <Box direction="column" flex>
                 <div css={{ overflowY: 'auto', flex: 1 }}>
                     <h3>{study.titleForParticipants}</h3>
@@ -237,6 +250,6 @@ export const StudyDetailsPreview: FC<{
                 </div>
                 {!preview && <LaunchStudyButton study={study} />}
             </Box>
-        </OffCanvas>
+        </Drawer>
     )
 }
