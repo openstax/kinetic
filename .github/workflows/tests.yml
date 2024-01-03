@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: bahmutov/npm-install@HEAD
+      - uses: bahmutov/npm-install@1
         with:
           working-directory: frontend
       - name: Build and run docker

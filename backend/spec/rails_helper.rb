@@ -49,7 +49,7 @@ rescue ActiveRecord::PendingMigrationError => e
   exit 1
 end
 
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f unless f.ends_with?('_spec.rb') }
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f unless f.ends_with?('_spec.rb') }
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
