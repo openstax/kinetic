@@ -4,7 +4,7 @@ import { colors } from '@theme'
 import { DefaultApi, LandStudyAbortedEnum, LandStudyRequest, ParticipantStudy } from '@api'
 import { ErrorPage, LoadingAnimation } from '@components'
 import { useApi, useQueryParam } from '@lib'
-import { BackgroundImage, Button, Container, Flex, Modal, SimpleGrid, Space, Stack, Text, Title } from '@mantine/core';
+import { BackgroundImage, Box, Button, Container, Flex, Group, Modal, Space, Stack, Text, Title } from '@mantine/core';
 import Waves from '@images/waves.svg'
 import { launchStudy, RewardsSegment, useRewardsSchedule } from '@models';
 import { useLearnerStudies } from './learner/studies';
@@ -43,7 +43,7 @@ export default function StudyLanding() {
     const md = useQueryParam('md') || {}
     const { allStudies, demographicSurvey } = useLearnerStudies()
     const { schedule } = useRewardsSchedule(allStudies)
-    const nextReward = schedule.find(rewardSegment => !rewardSegment.achieved && rewardSegment.isCurrent)
+    const nextReward = schedule.find(rewardSegment => !rewardSegment.achieved && rewardSegment.isFuture)
 
     useEffect(() => {
         const params: LandStudyRequest = {
@@ -85,14 +85,15 @@ export default function StudyLanding() {
                         <NavLink to={'/studies'} style={{ alignSelf: 'end', color: 'white', fontWeight: 'bolder' }} data-testid='view-studies'>
                             Return to Dashboard
                         </NavLink>
-                        <Points study={study} />
-                        <Text size='xl' pt='xl'>
-                            You’re one step closer - don’t miss out on the chance to qualify for the next reward cycle!
-                        </Text>
-                        <NextPrizeCycle nextReward={nextReward} />
-                        <CompleteProfilePrompt demographicSurvey={demographicSurvey} />
-                        <Space h='xl' />
-                        <Space h='xl' />
+                        <Stack gap='xl' w='75%'>
+                            <Points study={study} />
+                            <Text size='xl' pt='xl'>
+                                You’re one step closer - don’t miss out on the chance to qualify for the next reward cycle!
+                            </Text>
+                            <NextPrizeCycle nextReward={nextReward} />
+                            <CompleteProfilePrompt demographicSurvey={demographicSurvey} />
+                            <Space h='xl' />
+                        </Stack>
                     </Stack>
                 </BackgroundImage>
             </Modal>
@@ -113,6 +114,7 @@ const NextPrizeCycle: FC<{ nextReward: RewardsSegment | undefined } > = ({ nextR
 
 const CompleteProfilePrompt: FC<{demographicSurvey: ParticipantStudy | null}> = ({ demographicSurvey }) => {
     const api = useApi()
+
     if (!demographicSurvey || !!demographicSurvey.completedAt) return null
 
     const onClick = async () => {
@@ -120,16 +122,17 @@ const CompleteProfilePrompt: FC<{demographicSurvey: ParticipantStudy | null}> = 
     }
 
     return (
-        <SimpleGrid cols={2} bg={`${colors.gray10}10`} p='lg'>
-            <Stack>
-                <Text>
-                    <strong>Bonus: </strong>
-                    <span>Get {demographicSurvey?.totalPoints} points now by simply taking {demographicSurvey?.totalDuration} minutes to complete your Kinetic Profile!</span>
-                </Text>
-            </Stack>
-            <Button color='blue' c='white' onClick={onClick}>
-                Finish Profile for 10 points
-            </Button>
-        </SimpleGrid>
+        <Group bg={`${colors.gray10}10`} p='lg'>
+            <Text flex={1}>
+                <strong>Bonus: </strong>
+                <span>Get {demographicSurvey?.totalPoints} points now by simply taking {demographicSurvey?.totalDuration} minutes to complete your Kinetic Profile!</span>
+            </Text>
+            <Box>
+                <Button color='blue' c='white' onClick={onClick}>
+                    Finish Profile for 10 points
+                </Button>
+            </Box>
+
+        </Group>
     )
 }
