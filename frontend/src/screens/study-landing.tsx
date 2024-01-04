@@ -115,7 +115,7 @@ const NextPrizeCycle: FC<{ nextReward: RewardsSegment | undefined } > = ({ nextR
 const CompleteProfilePrompt: FC<{demographicSurvey: ParticipantStudy | null}> = ({ demographicSurvey }) => {
     const api = useApi()
 
-    if (!demographicSurvey || !!demographicSurvey.completedAt) return null
+    // if (!demographicSurvey || !!demographicSurvey.completedAt) return null
 
     const onClick = async () => {
         await launchStudy(api, demographicSurvey.id)
@@ -123,10 +123,12 @@ const CompleteProfilePrompt: FC<{demographicSurvey: ParticipantStudy | null}> = 
 
     return (
         <Group bg={`${colors.gray10}10`} p='lg'>
-            <Text flex={1}>
-                <strong>Bonus: </strong>
-                <span>Get {demographicSurvey?.totalPoints} points now by simply taking {demographicSurvey?.totalDuration} minutes to complete your Kinetic Profile!</span>
-            </Text>
+            <Box flex={1}>
+                <Text>
+                    <strong>Bonus: </strong>
+                    <span>Get {demographicSurvey?.totalPoints} points now by simply taking {demographicSurvey?.totalDuration} minutes to complete your Kinetic Profile!</span>
+                </Text>
+            </Box>
             <Box>
                 <Button color='blue' c='white' onClick={onClick}>
                     Finish Profile for 10 points
