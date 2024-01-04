@@ -20,7 +20,7 @@ jobs:
 
       - name: Run Rubocop
         working-directory: backend
-        run: git fetch && git diff-tree -r --no-commit-id --name-only main@\{u\} head | xargs ls -1 2>/dev/null | xargs bundle exec rubocop --force-exclusion
+        run: git fetch && git diff-tree -r --no-commit-id --name-only main@\{u\} HEAD | xargs ls -1 2>/dev/null | grep '\.rb$' | xargs bundle exec rubocop
   #       run: bundle exec rubocop
 
   typescript:
