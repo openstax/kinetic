@@ -53,6 +53,7 @@ Rails.application.routes.draw do
         get 'studies/:status', to: 'studies#index'
         post 'studies/:id/approve', to: 'studies#approve'
         get 'study/:id/files', to: 'studies#files'
+        get 'study/:id/responses', to: 'studies#responses'
         post 'stage/:stage_id/responses', to: 'studies#add_response'
         post 'stage/:stage_id/infos', to: 'studies#add_info'
         delete 'response/:id', to: 'studies#destroy_response'

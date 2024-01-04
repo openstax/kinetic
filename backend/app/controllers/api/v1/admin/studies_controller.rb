@@ -54,6 +54,18 @@ class Api::V1::Admin::StudiesController < Api::V1::Admin::BaseController
     render status: :ok, json: files_for_study(exp.stage.study)
   end
 
+  def responses
+    study = Study.find(params[:id])
+    listing = Api::V1::Bindings::ResponsesListing.new(
+      data: study.response_exports.map do |resp|
+        resp.attributes_for_binding(Api::V1::Bindings::ResponseExport).tap do |json|
+          json['urls'] = resp.files.map { |f| url_for(f) }
+        end
+      end
+    )
+    render status: :ok, json: listing
+  end
+
   protected
 
   def files_for_study(study)
