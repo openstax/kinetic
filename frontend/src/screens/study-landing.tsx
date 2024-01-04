@@ -43,7 +43,7 @@ export default function StudyLanding() {
     const md = useQueryParam('md') || {}
     const { allStudies, demographicSurvey } = useLearnerStudies()
     const { schedule } = useRewardsSchedule(allStudies)
-    const nextReward = schedule.find(rewardSegment => !rewardSegment.achieved)
+    const nextReward = schedule.find(rewardSegment => !rewardSegment.achieved && !rewardSegment.isPast)
 
     useEffect(() => {
         const params: LandStudyRequest = {
