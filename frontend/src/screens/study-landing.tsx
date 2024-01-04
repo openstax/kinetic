@@ -4,7 +4,7 @@ import { colors } from '@theme'
 import { DefaultApi, LandStudyAbortedEnum, LandStudyRequest, ParticipantStudy } from '@api'
 import { ErrorPage, LoadingAnimation } from '@components'
 import { useApi, useQueryParam } from '@lib'
-import { BackgroundImage, Button, Container, Flex, Modal, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import { BackgroundImage, Button, Container, Flex, Modal, SimpleGrid, Space, Stack, Text, Title } from '@mantine/core';
 import Waves from '@images/waves.svg'
 import { launchStudy, RewardsSegment, useRewardsSchedule } from '@models';
 import { useLearnerStudies } from './learner/studies';
@@ -75,7 +75,7 @@ export default function StudyLanding() {
 
     return (
         <Container>
-            <Modal opened={true} onClose={noop} centered size='xl' closeOnClickOutside={false} closeOnEscape={false} withCloseButton={false} styles={{
+            <Modal opened={true} onClose={noop} centered size='75%' closeOnClickOutside={false} closeOnEscape={false} withCloseButton={false} styles={{
                 body: {
                     padding: 0,
                 },
@@ -86,11 +86,13 @@ export default function StudyLanding() {
                             Return to Dashboard
                         </NavLink>
                         <Points study={study} />
-                        <Text>
+                        <Text size='xl' pt='xl'>
                             You’re one step closer - don’t miss out on the chance to qualify for the next reward cycle!
                         </Text>
                         <NextPrizeCycle nextReward={nextReward} />
                         <CompleteProfilePrompt demographicSurvey={demographicSurvey} />
+                        <Space h='xl' />
+                        <Space h='xl' />
                     </Stack>
                 </BackgroundImage>
             </Modal>
@@ -103,8 +105,8 @@ const NextPrizeCycle: FC<{ nextReward: RewardsSegment | undefined } > = ({ nextR
 
     return (
         <Flex direction='column'>
-            <Text fw='bolder'>Next Prize Cycle:</Text>
-            <Text>Reach {nextReward?.points} points by {dayjs(nextReward.endAt).format('MMM D')} and be one of the lucky winners to earn {nextReward.prize}</Text>
+            <Text size='xl' fw='bolder'>Next Prize Cycle:</Text>
+            <Text size='xl'>Reach {nextReward?.points} points by {dayjs(nextReward.endAt).format('MMM D')} and be one of the lucky winners to earn {nextReward.prize}</Text>
         </Flex>
     )
 }
