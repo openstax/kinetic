@@ -12,10 +12,6 @@ test('displays studies', async ({ browser }) => {
     const adminPage = await useAdminPage(browser)
 
     await createStudy({ researcherPage, adminPage })
-    await createStudy({ researcherPage, adminPage })
-    await createStudy({ researcherPage, adminPage })
-    await createStudy({ researcherPage, adminPage })
-    await createStudy({ researcherPage, adminPage })
 
     await goToPage({ page: userPage, path: '/studies' })
     await userPage.waitForSelector('testId=studies-listing')

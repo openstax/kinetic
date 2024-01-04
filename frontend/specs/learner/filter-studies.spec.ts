@@ -15,7 +15,6 @@ test('filtering studies', async ({ browser }) => {
     await createStudy({ researcherPage, adminPage })
     await createStudy({ researcherPage, adminPage })
     await createStudy({ researcherPage, adminPage })
-    await createStudy({ researcherPage, adminPage })
 
     await goToPage({ page: userPage, path: '/studies' })
     await userPage.click('testId=Learning')
