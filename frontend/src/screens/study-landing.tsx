@@ -123,12 +123,12 @@ const CompleteProfilePrompt: FC<{demographicSurvey: ParticipantStudy | null}> = 
 
     return (
         <Group bg={`${colors.gray10}10`} p='lg'>
-            <Box flex={1}>
+            <Flex flex={1}>
                 <Text>
                     <strong>Bonus: </strong>
                     <span>Get {demographicSurvey?.totalPoints} points now by simply taking {demographicSurvey?.totalDuration} minutes to complete your Kinetic Profile!</span>
                 </Text>
-            </Box>
+            </Flex>
             <Box>
                 <Button color='blue' c='white' onClick={onClick}>
                     Finish Profile for 10 points
