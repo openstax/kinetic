@@ -14,14 +14,19 @@ export const UnsupportedCountryModal: FC = () => {
         <Modal.Root opened={open} onClose={noop} size='70%' centered closeOnEscape={false} closeOnClickOutside={false}>
             <Modal.Overlay />
             <Modal.Content >
-                <Modal.Body style={{ backgroundImage: `url(${Waves}`, backgroundSize: 'cover' }} p='xl'>
-                    <Stack justify='center' align='center' gap='4rem' c='white'>
+                <Modal.Body style={{ backgroundImage: `url(${Waves}`, backgroundSize: 'cover' }} p='4rem'>
+                    <Stack justify='center' align='center' gap='3rem' c='white'>
                         <Title order={2}>We’re sorry Kinetic isn’t yet in your country!</Title>
-                        <Text ta='center'>
-                            Thank you for your interest in Kinetic! Kinetic is currently designed exclusively for participants residing in the United States mainland, territories, and minor outlying islands. We do however look forward to expanding Kinetic services to your home country and others in the future.
-                        </Text>
+                        <Stack>
+                            <Text ta='center'>
+                                Thank you for your interest in Kinetic!
+                            </Text>
+                            <Text ta='center'>
+                                Kinetic is currently designed exclusively for participants residing in the United States mainland, territories, and minor outlying islands. We do however look forward to expanding Kinetic services to your home country and others in the future.
+                            </Text>
+                        </Stack>
                         <NavLink to={env.homepageUrl}>
-                            <Button c={colors.purple} color={colors.white}>
+                            <Button c={colors.purple} color={colors.white} size='md'>
                                 Take me back
                             </Button>
                         </NavLink>
