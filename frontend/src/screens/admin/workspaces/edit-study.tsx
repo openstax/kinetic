@@ -110,7 +110,7 @@ const Responses:FC<ResponsesProps> = ({ responses, stages, setFiles }) => {
                         <td><Boolean val={r.isComplete} /></td>
                         <td><Boolean val={r.isTesting} /></td>
                         <td>
-                            {r.urls.map(u => <a key={u} href={u} target="_blank"><Icon icon="cloudDownload" /></a>)}
+                            {r.urls.map(u => <a key={u} href={u} download><Icon icon="cloudDownload" /></a>)}
                         </td>
                         <td><Icon icon="trash" onClick={() => onDelete(r.id)} /></td>
                     </tr>))}
