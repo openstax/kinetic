@@ -14,7 +14,7 @@ RSpec.describe 'Researcher::Responses', api: :v1 do
     end
   end
 
-  describe 'GET researcher/analysis' do
+  describe 'GET researcher/responses/<key>' do
 
     it 'returns empty array when no stages exists' do
       api_get "researcher/responses/#{analysis.api_key}"
@@ -33,4 +33,21 @@ RSpec.describe 'Researcher::Responses', api: :v1 do
     end
 
   end
+
+  describe 'GET researcher/responses/<key>/info' do
+    it 'returns empty array when no stages exists' do
+      api_get "researcher/responses/#{analysis.api_key}/info"
+      expect(response).to have_http_status(:ok)
+      expect(response_hash[:info_urls]).to be_empty
+    end
+
+    it 'returns url for each analysis upload' do
+      analysis.studies << response_export.stage.study
+      analysis.save!
+      analysis.stages.first.analysis_infos.attach(io: File.open(__FILE__), filename: 'spec.rb', content_type: 'text/plain')
+      api_get "researcher/responses/#{analysis.api_key}/info"
+      expect(response_hash[:info_urls].size).to eq 1
+    end
+  end
+
 end

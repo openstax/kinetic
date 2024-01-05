@@ -15,14 +15,11 @@ namespace :report do
     pn = Pathname.new(args[:file])
 
     CSV.open("#{pn.dirname}/#{pn.basename(pn.extname)}-with-users#{pn.extname}", 'w') do |csv|
-      csv << table.headers.push('email_address', 'first_name', 'last_name')
+      csv << table.headers.push('first_name', 'last_name', 'email_address')
 
       table.each do |row|
-        updated = row.push({
-                             'first_name' => userinfo[row['user_uuid']].try(:first_name),
-                             'last_name' => userinfo[row['user_uuid']].try(:last_name),
-                             'email_address' => userinfo[row['user_uuid']].try(:email_address)
-                           })
+        info = userinfo[row['user_uuid']]
+        updated = row.push(info&.first_name, info&.last_name, info&.email_address)
         csv << updated
       end
     end
