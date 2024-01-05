@@ -198,7 +198,6 @@ export function EditStudy({ study }: EditProps) {
 
     useEffect(() => {
         api.adminFilesForStudy({ id: study.id }).then((res) => {
-            console.log(res)
             setFiles(res)
         })
     }, [])
