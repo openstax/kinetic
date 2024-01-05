@@ -21,11 +21,16 @@ if [ -d $PATCHDIR ]; then
   exit 1
 fi
 
-bundle exec rake openstax_openapi:generate_client[1,$LANG]
+UNPATCHED=t bundle exec rake openstax_openapi:generate_client[1,$LANG]
 
 cp -r $SOURCE $PATCHDIR
+
+if [ -e clients/$LANG.patch ]; then
+  cd $PATCHDIR
+  cat ../../clients/$LANG.patch | patch -p2
+fi
 
 echo Files are ready for modification.  steps:
 echo "   * Edit files in directory: tmp/$LANG.new"
 echo "   * to install and test locally: R -e \"devtools::install('tmp/r.new')\""
-echo "   * to update patch file for future runs: diff -Naru $SOURCE $PATCHDIR > clients/$LANG.patch"
+echo "   * to update patch file for future runs: diff -Naru -x '.*' $SOURCE $PATCHDIR > clients/$LANG.patch"

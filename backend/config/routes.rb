@@ -26,8 +26,8 @@ Rails.application.routes.draw do
               as: :run_download
         end
 
-        get 'responses/:api_key', to: 'responses#fetch'
-
+        get 'responses/:api_key', to: 'responses#fetch_responses'
+        get 'responses/:api_key/info', to: 'responses#fetch_info'
       end
 
       namespace :participant do
@@ -52,9 +52,12 @@ Rails.application.routes.draw do
         resources :banners
         get 'studies/:status', to: 'studies#index'
         post 'studies/:id/approve', to: 'studies#approve'
+        get 'study/:id/files', to: 'studies#files'
         get 'study/:id/responses', to: 'studies#responses'
         post 'stage/:stage_id/responses', to: 'studies#add_response'
-        delete 'responses/:id', to: 'studies#destroy_response'
+        post 'stage/:stage_id/infos', to: 'studies#add_info'
+        delete 'response/:id', to: 'studies#destroy_response'
+        delete 'info/:id', to: 'studies#destroy_info'
 
         get 'impersonate/researcher/:id', to: 'impersonate#impersonate_researcher'
         get 'impersonate/stop', to: 'impersonate#stop'

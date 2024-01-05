@@ -5,6 +5,8 @@ class Stage < ApplicationRecord
 
   has_many :response_exports, inverse_of: :stage
 
+  has_many_attached :analysis_infos
+
   has_many :launches, class_name: 'LaunchedStage', foreign_key: :stage_id
 
   self.implicit_order_column = 'order'
