@@ -122,19 +122,16 @@ const CompleteProfilePrompt: FC<{demographicSurvey: ParticipantStudy | null}> = 
     }
 
     return (
-        <Group bg={`${colors.gray10}10`} p='lg'>
-            <Flex flex={1}>
-                <Text>
-                    <strong>Bonus: </strong>
-                    <span>Get {demographicSurvey?.totalPoints} points now by simply taking {demographicSurvey?.totalDuration} minutes to complete your Kinetic Profile!</span>
-                </Text>
-            </Flex>
+        <Group bg={`${colors.gray10}10`} p='lg' justify='space-between' wrap='nowrap'>
+            <Text>
+                <strong>Bonus: </strong>
+                <span>Get {demographicSurvey?.totalPoints} points now by simply taking {demographicSurvey?.totalDuration} minutes to complete your Kinetic Profile!</span>
+            </Text>
             <Box>
                 <Button color='blue' c='white' onClick={onClick}>
-                    Finish Profile for 10 points
+                Finish Profile for 10 points
                 </Button>
             </Box>
-
         </Group>
     )
 }
