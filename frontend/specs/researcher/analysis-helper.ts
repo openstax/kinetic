@@ -28,6 +28,5 @@ export const createAnalysis = async({ researcherPage, adminPage, withStudy = fal
     await expect(researcherPage.locator('testId=save-analysis-button')).toBeEnabled()
     await researcherPage.click('testId=save-analysis-button')
     await researcherPage.waitForLoadState('networkidle')
-    await researcherPage.waitForTimeout(500)
     await researcherPage.waitForURL('**/analysis/overview/**')
 }

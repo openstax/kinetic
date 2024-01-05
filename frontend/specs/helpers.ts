@@ -105,7 +105,6 @@ export const launchApprovedStudy = async(researcherPage: Page, studyId: number, 
         await researcherPage.getByTestId('confirm-qualtrics').check();
     }
 
-    await researcherPage.waitForTimeout(500)
     await researcherPage.getByPlaceholder('Select a date').click()
     await researcherPage.locator('.open >> .today').click()
     await researcherPage.locator('.open >> .today').blur()
@@ -130,7 +129,6 @@ export const createStudy = async ({
     await researcherPage.fill('[name=titleForResearchers]', name)
     await researcherPage.fill('[name=internalDescription]', description)
     await researcherPage.click("input[value='Learner Characteristics']")
-    await researcherPage.waitForTimeout(100)
 
     await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
     await researcherPage.click('testId=study-primary-action')
@@ -139,11 +137,9 @@ export const createStudy = async ({
     await researcherPage.waitForLoadState('networkidle')
 
     await researcherPage.locator('.select', { has: researcherPage.locator(`input[name=researcherPi]`) }).click()
-    await researcherPage.waitForTimeout(100)
     await researcherPage.keyboard.press('Enter')
 
     await researcherPage.locator('.select', { has: researcherPage.locator(`input[name=researcherLead]`) }).click()
-    await researcherPage.waitForTimeout(100)
     await researcherPage.keyboard.press('Enter')
 
     await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
@@ -167,7 +163,6 @@ export const createStudy = async ({
     await researcherPage.click('testId=select-card-image')
     await expect(researcherPage.locator('testId=image-library-modal')).toBeHidden()
     await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
-    await researcherPage.waitForTimeout(100)
 
     await researcherPage.click('testId=study-primary-action')
     await researcherPage.waitForLoadState('networkidle')
@@ -182,7 +177,6 @@ export const createStudy = async ({
     await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
     await researcherPage.click('testId=study-primary-action')
     await researcherPage.waitForLoadState('networkidle')
-    await researcherPage.waitForTimeout(100)
 
     // Study should have rerouted to study/edit/:id
     const studyId = getIdFromUrl(researcherPage)
@@ -191,12 +185,9 @@ export const createStudy = async ({
     await expect(researcherPage.locator('testId=study-primary-action')).toMatchText('Submit Study')
     await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()
     await researcherPage.click('testId=study-primary-action')
-    await researcherPage.waitForTimeout(200)
     await researcherPage.click('testId=submit-study-button')
     await researcherPage.waitForLoadState('networkidle')
-    await researcherPage.waitForTimeout(100)
     await researcherPage.click('testId=submit-study-success-button')
-    await researcherPage.waitForTimeout(100)
 
     // Test draft statuses before approve and launch when dashboard is finalized
     await approveWaitingStudy(adminPage, studyId)
