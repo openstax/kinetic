@@ -129,7 +129,7 @@ const CompleteProfilePrompt: FC<{demographicSurvey: ParticipantStudy | null}> = 
             </Text>
             <Box>
                 <Button color='blue' c='white' onClick={onClick}>
-                Finish Profile for 10 points
+                    Finish Profile for 10 points
                 </Button>
             </Box>
         </Group>
