@@ -115,7 +115,7 @@ const NextPrizeCycle: FC<{ nextReward: RewardsSegment | undefined } > = ({ nextR
 const CompleteProfilePrompt: FC<{demographicSurvey: ParticipantStudy | null}> = ({ demographicSurvey }) => {
     const api = useApi()
 
-    // if (!demographicSurvey || !!demographicSurvey.completedAt) return null
+    if (!demographicSurvey || !!demographicSurvey.completedAt) return null
 
     const onClick = async () => {
         await launchStudy(api, demographicSurvey.id)
