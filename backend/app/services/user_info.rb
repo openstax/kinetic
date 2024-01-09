@@ -55,14 +55,7 @@ class UserInfo
     OpenStax::Accounts::Api.search_accounts(query).response.body
   end
 
-  def self.real_users
-    users = []
-    users.push(researchers)
-    users.push(admins)
-    users
-  end
-
-  def self.researchers
+  def self.dev_researchers
     Researcher.all.map do |researcher|
       {
         user_id: researcher.user_id,
@@ -75,7 +68,7 @@ class UserInfo
     end
   end
 
-  def self.admins
+  def self.dev_admins
     Admin.all.map do |admin|
       {
         user_id: admin.user_id,
@@ -91,8 +84,8 @@ class UserInfo
   def self.find_user(uuid)
     u = nil
     mock_user = UserInfo.mock_users.find { |user| user[:user_id] == uuid }
-    researcher = researchers.find { |r| r[:user_id] == uuid }
-    admin = admins.find { |a| a[:user_id] == uuid }
+    researcher = dev_researchers.find { |r| r[:user_id] == uuid }
+    admin = dev_admins.find { |a| a[:user_id] == uuid }
 
     if mock_user
       u = mock_user

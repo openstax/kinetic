@@ -31,8 +31,8 @@ class Development::UsersController < ApplicationController
 
   def index
     users = {}
-    users[:researchers] ||= UserInfo.researchers
-    users[:admins] ||= UserInfo.admins
+    users[:researchers] ||= UserInfo.dev_researchers
+    users[:admins] ||= UserInfo.dev_admins
     users[:users] = UserInfo.mock_users.filter { |u| u[:role] == 'user' }
     render json: users, status: :ok
   end
