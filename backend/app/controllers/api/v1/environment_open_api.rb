@@ -29,7 +29,7 @@ class Api::V1::EnvironmentOpenApi
     end
 
     schema :EnvironmentUser do
-      key :required, %w[user_id is_researcher is_administrator]
+      key :required, %w[is_researcher is_administrator]
       property :user_id do
         key :type, :string
         key :format, 'uuid'

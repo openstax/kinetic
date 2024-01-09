@@ -31,7 +31,7 @@ export interface EnvironmentUser {
      * @type {string}
      * @memberof EnvironmentUser
      */
-    readonly userId: string;
+    readonly userId?: string;
     /**
      * If true, the user is an administrator
      * @type {boolean}
@@ -165,7 +165,6 @@ export interface EnvironmentUser {
  */
 export function instanceOfEnvironmentUser(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "userId" in value;
     isInstance = isInstance && "isAdministrator" in value;
     isInstance = isInstance && "isResearcher" in value;
 
@@ -182,7 +181,7 @@ export function EnvironmentUserFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'userId': json['user_id'],
+        'userId': !exists(json, 'user_id') ? undefined : json['user_id'],
         'isAdministrator': json['is_administrator'],
         'isResearcher': json['is_researcher'],
         'uuid': !exists(json, 'uuid') ? undefined : json['uuid'],
