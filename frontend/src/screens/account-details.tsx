@@ -2,7 +2,7 @@ import { React } from '@common'
 import styled from '@emotion/styled'
 import { colors } from '@theme'
 
-import { useAccountsURL, useApi, useIsMobileDevice, useUserInfo, useUserPreferences } from '@lib'
+import { useAccountsURL, useApi, useCurrentUser, useIsMobileDevice, useUserPreferences } from '@lib'
 import {
     Box,
     Footer,
@@ -75,13 +75,13 @@ const Sidebar = () => {
 export default function AccountDetails() {
     const api = useApi()
     const isMobile = useIsMobileDevice()
-    const { data: userInfo } = useUserInfo()
     const { data: prefs } = useUserPreferences()
     const accountsURL = useAccountsURL()
+    const user = useCurrentUser()
 
-    if (!userInfo || !prefs) return <LoadingAnimation message="Loading account…" />;
+    if (!user || !prefs) return <LoadingAnimation message="Loading account…" />;
 
-    const email = userInfo.contact_infos.find(e => e.type == 'EmailAddress')
+    const email = user.contactInfos?.find(e => e.type == 'EmailAddress')
     const savePrefs = async (update: UserPreferences) => {
         await api.updatePreferences({ updatePreferences: { preferences: update } })
     }
@@ -103,7 +103,7 @@ export default function AccountDetails() {
 
                     <label className="text">
                         <span>Name</span>
-                        <input disabled value={userInfo.full_name} />
+                        <input disabled value={user.name} />
                     </label>
 
                     {email && (<label className="text">

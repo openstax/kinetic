@@ -5,8 +5,31 @@ class Api::V1::EnvironmentOpenApi
 
   openapi_component do
 
+    schema :ContactInfo do
+      property :id do
+        key :type, :integer
+        key :description, 'The contact info ID.'
+      end
+      property :type do
+        key :type, :string
+        key :readOnly, true
+      end
+      property :value do
+        key :type, :string
+        key :readOnly, true
+      end
+      property :is_verified do
+        key :type, :boolean
+        key :readOnly, true
+      end
+      property :is_guessed_preferred do
+        key :type, :boolean
+        key :readOnly, true
+      end
+    end
+
     schema :EnvironmentUser do
-      key :required, %w[is_researcher is_administrator]
+      key :required, %w[user_id is_researcher is_administrator]
       property :user_id do
         key :type, :string
         key :format, 'uuid'
@@ -23,6 +46,90 @@ class Api::V1::EnvironmentOpenApi
         key :description, 'If true, the user is a researcher'
         key :readOnly, true
       end
+      property :uuid do
+        key :type, :string
+        key :readOnly, true
+      end
+      property :name do
+        key :type, :string
+        key :readOnly, true
+        key :description, 'Full name'
+      end
+      property :full_name do
+        key :type, :string
+        key :readOnly, true
+        key :description, 'Full name'
+      end
+      property :first_name do
+        key :type, :string
+        key :readOnly, true
+      end
+      property :last_name do
+        key :type, :string
+        key :readOnly, true
+      end
+      property :support_identifier do
+        key :type, :string
+        key :readOnly, true
+      end
+      property :applications do
+        key :type, :array
+        key :readOnly, true
+        key :items, { 'type' => 'string' }
+      end
+      property :signed_contract_names do
+        key :type, :array
+        key :readOnly, true
+        key :items, { 'type' => 'string' }
+      end
+      property :external_ids do
+        key :type, :array
+        key :readOnly, true
+        key :items, { 'type' => 'string' }
+      end
+      property :contact_infos do
+        key :type, :array
+        items do
+          key :$ref, :ContactInfo
+        end
+        key :description, 'Users contact information'
+      end
+      property :is_not_gdpr_location do
+        key :type, :boolean
+        key :readOnly, true
+      end
+      property :is_test do
+        key :type, :boolean
+        key :readOnly, true
+      end
+      property :opt_out_of_cookies do
+        key :type, :boolean
+        key :readOnly, true
+      end
+      property :using_openstax do
+        key :type, :boolean
+        key :readOnly, true
+      end
+      property :needs_complete_edu_profile do
+        key :type, :boolean
+        key :readOnly, true
+      end
+      property :faculty_status do
+        key :type, :string
+        key :readOnly, true
+      end
+      property :self_reported_role do
+        key :type, :string
+        key :readOnly, true
+      end
+      property :school_type do
+        key :type, :string
+        key :readOnly, true
+      end
+      property :school_location do
+        key :type, :string
+        key :readOnly, true
+      end
     end
 
     schema :Environment do
@@ -36,6 +143,9 @@ class Api::V1::EnvironmentOpenApi
       property :is_impersonating do
         key :type, :boolean
         key :readOnly, true
+      end
+      property :impersonating_researcher do
+        key :$ref, :Researcher
       end
       property :is_eligible do
         key :type, :boolean
@@ -94,6 +204,7 @@ class Api::V1::EnvironmentOpenApi
       key :description, 'A description of the reward'
     end
   end
+
   add_properties(:BannerMessage) do
     key :required, %w[id message start_at end_at]
     property :id do

@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ContactInfo } from './ContactInfo';
+import {
+    ContactInfoFromJSON,
+    ContactInfoFromJSONTyped,
+    ContactInfoToJSON,
+} from './ContactInfo';
+
 /**
  * 
  * @export
@@ -24,7 +31,7 @@ export interface EnvironmentUser {
      * @type {string}
      * @memberof EnvironmentUser
      */
-    readonly userId?: string;
+    readonly userId: string;
     /**
      * If true, the user is an administrator
      * @type {boolean}
@@ -37,6 +44,120 @@ export interface EnvironmentUser {
      * @memberof EnvironmentUser
      */
     readonly isResearcher: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof EnvironmentUser
+     */
+    readonly uuid?: string;
+    /**
+     * Full name
+     * @type {string}
+     * @memberof EnvironmentUser
+     */
+    readonly name?: string;
+    /**
+     * Full name
+     * @type {string}
+     * @memberof EnvironmentUser
+     */
+    readonly fullName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EnvironmentUser
+     */
+    readonly firstName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EnvironmentUser
+     */
+    readonly lastName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EnvironmentUser
+     */
+    readonly supportIdentifier?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof EnvironmentUser
+     */
+    readonly applications?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof EnvironmentUser
+     */
+    readonly signedContractNames?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof EnvironmentUser
+     */
+    readonly externalIds?: Array<string>;
+    /**
+     * Users contact information
+     * @type {Array<ContactInfo>}
+     * @memberof EnvironmentUser
+     */
+    contactInfos?: Array<ContactInfo>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof EnvironmentUser
+     */
+    readonly isNotGdprLocation?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof EnvironmentUser
+     */
+    readonly isTest?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof EnvironmentUser
+     */
+    readonly optOutOfCookies?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof EnvironmentUser
+     */
+    readonly usingOpenstax?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof EnvironmentUser
+     */
+    readonly needsCompleteEduProfile?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof EnvironmentUser
+     */
+    readonly facultyStatus?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EnvironmentUser
+     */
+    readonly selfReportedRole?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EnvironmentUser
+     */
+    readonly schoolType?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EnvironmentUser
+     */
+    readonly schoolLocation?: string;
 }
 
 /**
@@ -44,6 +165,7 @@ export interface EnvironmentUser {
  */
 export function instanceOfEnvironmentUser(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "userId" in value;
     isInstance = isInstance && "isAdministrator" in value;
     isInstance = isInstance && "isResearcher" in value;
 
@@ -60,9 +182,28 @@ export function EnvironmentUserFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'userId': !exists(json, 'user_id') ? undefined : json['user_id'],
+        'userId': json['user_id'],
         'isAdministrator': json['is_administrator'],
         'isResearcher': json['is_researcher'],
+        'uuid': !exists(json, 'uuid') ? undefined : json['uuid'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'fullName': !exists(json, 'full_name') ? undefined : json['full_name'],
+        'firstName': !exists(json, 'first_name') ? undefined : json['first_name'],
+        'lastName': !exists(json, 'last_name') ? undefined : json['last_name'],
+        'supportIdentifier': !exists(json, 'support_identifier') ? undefined : json['support_identifier'],
+        'applications': !exists(json, 'applications') ? undefined : json['applications'],
+        'signedContractNames': !exists(json, 'signed_contract_names') ? undefined : json['signed_contract_names'],
+        'externalIds': !exists(json, 'external_ids') ? undefined : json['external_ids'],
+        'contactInfos': !exists(json, 'contact_infos') ? undefined : ((json['contact_infos'] as Array<any>).map(ContactInfoFromJSON)),
+        'isNotGdprLocation': !exists(json, 'is_not_gdpr_location') ? undefined : json['is_not_gdpr_location'],
+        'isTest': !exists(json, 'is_test') ? undefined : json['is_test'],
+        'optOutOfCookies': !exists(json, 'opt_out_of_cookies') ? undefined : json['opt_out_of_cookies'],
+        'usingOpenstax': !exists(json, 'using_openstax') ? undefined : json['using_openstax'],
+        'needsCompleteEduProfile': !exists(json, 'needs_complete_edu_profile') ? undefined : json['needs_complete_edu_profile'],
+        'facultyStatus': !exists(json, 'faculty_status') ? undefined : json['faculty_status'],
+        'selfReportedRole': !exists(json, 'self_reported_role') ? undefined : json['self_reported_role'],
+        'schoolType': !exists(json, 'school_type') ? undefined : json['school_type'],
+        'schoolLocation': !exists(json, 'school_location') ? undefined : json['school_location'],
     };
 }
 
@@ -75,6 +216,7 @@ export function EnvironmentUserToJSON(value?: EnvironmentUser | null): any {
     }
     return {
         
+        'contact_infos': value.contactInfos === undefined ? undefined : ((value.contactInfos as Array<any>).map(ContactInfoToJSON)),
     };
 }
 

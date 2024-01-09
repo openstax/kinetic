@@ -77,23 +77,24 @@ window._TEST_METHODS.logout = logout
 window._MODELS = window._MODELS || {}
 window._MODELS.user = ANON_USER
 
-export interface UserInfo {
-    id: string
-    full_name: string
-    first_name: string
-    last_name: string
-    contact_infos: Array<{ type: string, value: string }>
-    faculty_status: string
-    is_administrator: boolean
-    is_not_gdpr_location: boolean
-    is_test: boolean
-    name: string
-    needs_complete_edu_profile: boolean
-    opt_out_of_cookies: boolean
-    school_location: string
-    school_type: string
-    self_reported_role: string
-    support_identifier: string
-    using_openstax: boolean
-    uuid: string
-}
+// TODO delete? on EnvironmentUser now
+// export interface UserInfo {
+//     id: string
+//     full_name: string
+//     first_name: string
+//     last_name: string
+//     contact_infos: Array<{ type: string, value: string }>
+//     faculty_status: string
+//     is_administrator: boolean
+//     is_not_gdpr_location: boolean
+//     is_test: boolean
+//     name: string
+//     needs_complete_edu_profile: boolean
+//     opt_out_of_cookies: boolean
+//     school_location: string
+//     school_type: string
+//     self_reported_role: string
+//     support_identifier: string
+//     using_openstax: boolean
+//     uuid: string
+// }

@@ -4,7 +4,6 @@ import { ENV } from './env'
 import { useApi } from './api-config'
 import { useQuery } from 'react-query';
 import { Environment } from '@api'
-import { UserInfo } from '@models';
 
 export const EnvironmentContext = React.createContext<Environment | null>(null)
 
@@ -55,15 +54,6 @@ export const useCurrentResearcher = () => {
     return env.researcher
 }
 
-export const useUserInfo = () => {
-    const accountsApiURL = useAccountsApiURL()
-
-    return useQuery('fetchUserInfo', async (): Promise<UserInfo> => {
-        const resp = await fetch(`${accountsApiURL}`, { credentials: 'include' })
-        return await resp.json()
-    })
-}
-
 export const useUserPreferences = () => {
     const api = useApi()
 
@@ -100,11 +90,4 @@ export const useAccountsURL = (): string => {
 
     if (ENV.IS_DEV_MODE) return '/dev/user'
     return `${locationOrigin}/accounts`;
-}
-
-export const useAccountsApiURL = (): string => {
-    const accountsURL = useAccountsURL()
-
-    if (ENV.IS_DEV_MODE) return `${ENV.API_ADDRESS}/development/user/api/user`
-    return `${accountsURL}/api/user`
 }
