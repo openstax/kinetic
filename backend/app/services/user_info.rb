@@ -9,16 +9,16 @@ class UserInfo
     [
       { user_id: '00000000-0000-0000-0000-000000000000', role: 'admin', first_name: 'Admin',
         last_name: 'Uno', name: 'Admin Uno', full_name: 'Admin Uno' },
-      { user_id: '00000000-0000-0000-0000-000000000001', role: 'researcher', name: 'Researcher Uno', full_name: 'Researcher Uno',
-        first_name: 'Researcher', last_name: 'Uno' },
-      { user_id: '00000000-0000-0000-0000-000000000002', role: 'user', name: 'User Uno', full_name: 'User Uno',
-        first_name: 'User', last_name: 'Uno' },
-      { user_id: '00000000-0000-0000-0000-000000000003', role: 'user', name: 'User Dos', full_name: 'User Dos',
-        first_name: 'User', last_name: 'Dos' },
-      { user_id: '00000000-0000-0000-0000-000000000004', role: 'user', name: 'User Tres', full_name: 'User Tres',
-        first_name: 'User', last_name: 'Tres' },
-      { user_id: '00000000-0000-0000-0000-000000000005', role: 'user', name: 'User Cuatro', full_name: 'User Cuatro',
-        first_name: 'User', last_name: 'Cuatro' }
+      { user_id: '00000000-0000-0000-0000-000000000001', role: 'researcher', name: 'Researcher Uno',
+        full_name: 'Researcher Uno', first_name: 'Researcher', last_name: 'Uno' },
+      { user_id: '00000000-0000-0000-0000-000000000002', role: 'user', name: 'User Uno',
+        full_name: 'User Uno', first_name: 'User', last_name: 'Uno' },
+      { user_id: '00000000-0000-0000-0000-000000000003', role: 'user', name: 'User Dos',
+        full_name: 'User Dos', first_name: 'User', last_name: 'Dos' },
+      { user_id: '00000000-0000-0000-0000-000000000004', role: 'user', name: 'User Tres',
+        full_name: 'User Tres', first_name: 'User', last_name: 'Tres' },
+      { user_id: '00000000-0000-0000-0000-000000000005', role: 'user', name: 'User Cuatro',
+        full_name: 'User Cuatro', first_name: 'User', last_name: 'Cuatro' }
     ].freeze
   end
 
@@ -44,9 +44,7 @@ class UserInfo
   end
 
   def self.for_uuid(uuid)
-    unless Rails.env.production?
-      return dev_user_info(uuid)
-    end
+    return dev_user_info(uuid) unless Rails.env.production?
 
     for_uuids([uuid]).values[0]&.table || {}
   end
@@ -101,9 +99,7 @@ class UserInfo
   def self.dev_user_info(uuid)
     u = UserInfo.find_user(uuid)
 
-    if u.nil?
-      return {}
-    end
+    return {} if u.nil?
 
     {
       id: u[:user_id],
