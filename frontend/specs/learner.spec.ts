@@ -121,6 +121,9 @@ test('launching study and completing with no consent', async ({ browser }) => {
     await interceptStudyLaunch(userPage)
 
     const studyId = await createStudy({ researcherPage, adminPage })
+    await createStudy({ researcherPage, adminPage })
+    await createStudy({ researcherPage, adminPage })
+    await createStudy({ researcherPage, adminPage })
     await researcherPage.waitForURL(`**/studies`)
 
     await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
