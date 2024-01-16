@@ -16,8 +16,9 @@ RSpec.describe Study, api: :v1 do
       study.stages.first.update!(status: 'active')
       expect_query_results(described_class.available_to_participants, [study])
     end
+
     it 'doesnt show studies without active stages' do
-      study.stages.each{ |st| st.update(status: 'completed')}
+      study.stages.each { |st| st.update(status: 'completed') }
       expect(described_class.available_to_participants).to be_empty
     end
   end
