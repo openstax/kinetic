@@ -170,6 +170,7 @@ class Study < ApplicationRecord
   end
 
   def end
+    self.closes_at = DateTime.now
     stages.where.not(status: 'completed').first&.update!(status: 'completed')
   end
 

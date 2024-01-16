@@ -192,6 +192,7 @@ RSpec.describe Study, api: :v1 do
       study.launch
 
       study.end
+      expect(study.closes_at.to_date).to eq Date.today
       expect(study.status).to eq 'active'
       expect(study.stages.first.status).to eq 'completed'
       expect(study.stages.second.status).to eq 'active'
@@ -225,12 +226,15 @@ RSpec.describe Study, api: :v1 do
       study.launch
       study.end
       study.reopen
+      study.update(
+        opens_at: Date.today.prev_day(1),
+        closes_at: Date.today.next_day(1)
+      )
       expect(study.status).to eq 'active'
-      # TODO: with stage index
+
       study.stages.each do |stage|
         expect(stage.status).to eq 'active'
       end
-
     end
 
     it 'reopens subsequent studies' do
@@ -242,6 +246,10 @@ RSpec.describe Study, api: :v1 do
       # Reopen first session, should resume all subsequent completed sessions
       expect(study.status).to eq 'completed'
       study.reopen(0)
+      study.update(
+        opens_at: Date.today.prev_day(1),
+        closes_at: Date.today.next_day(1)
+      )
       expect(study.status).to eq 'active'
       study.stages.each do |stage|
         expect(stage.status).to eq 'active'
