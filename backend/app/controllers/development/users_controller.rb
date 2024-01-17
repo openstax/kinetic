@@ -33,7 +33,7 @@ class Development::UsersController < ApplicationController
     users = {}
     users[:researchers] ||= UserInfo.dev_researchers
     users[:admins] ||= UserInfo.dev_admins
-    users[:users] = UserInfo.mock_users.filter { |u| u[:role] == 'user' }
+    users[:users] = UserInfo::MOCK_USERS.values.filter { |u| u[:role] == 'user' }
     render json: users, status: :ok
   end
 

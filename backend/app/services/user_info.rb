@@ -5,22 +5,7 @@
 
 class UserInfo
 
-  def self.mock_users
-    [
-      { user_id: '00000000-0000-0000-0000-000000000000', role: 'admin', first_name: 'Admin',
-        last_name: 'Uno', name: 'Admin Uno', full_name: 'Admin Uno' },
-      { user_id: '00000000-0000-0000-0000-000000000001', role: 'researcher', name: 'Researcher Uno',
-        full_name: 'Researcher Uno', first_name: 'Researcher', last_name: 'Uno' },
-      { user_id: '00000000-0000-0000-0000-000000000002', role: 'user', name: 'User Uno',
-        full_name: 'User Uno', first_name: 'User', last_name: 'Uno' },
-      { user_id: '00000000-0000-0000-0000-000000000003', role: 'user', name: 'User Dos',
-        full_name: 'User Dos', first_name: 'User', last_name: 'Dos' },
-      { user_id: '00000000-0000-0000-0000-000000000004', role: 'user', name: 'User Tres',
-        full_name: 'User Tres', first_name: 'User', last_name: 'Tres' },
-      { user_id: '00000000-0000-0000-0000-000000000005', role: 'user', name: 'User Cuatro',
-        full_name: 'User Cuatro', first_name: 'User', last_name: 'Cuatro' }
-    ].freeze
-  end
+  MOCK_USERS = YAML.load_file(Rails.root.join("config/data/mock-users.yaml"))
 
   def self.email_for_account(account)
     email = account['contact_infos'].find do |ci|
@@ -46,7 +31,14 @@ class UserInfo
   def self.for_uuid(uuid)
     return dev_user_info(uuid) unless Rails.env.production?
 
-    for_uuids([uuid]).values[0]&.table || {}
+    u = for_uuids([uuid]).values[0]&.table || {}
+    u.merge(
+      {
+        user_id: uuid,
+        is_administrator: Admin.where(user_id: uuid).any?,
+        is_researcher: Researcher.where(user_id: uuid).any?,
+      }
+    )
   end
 
   def self.query_accounts(query)
@@ -60,8 +52,8 @@ class UserInfo
         first_name: researcher.first_name,
         last_name: researcher.last_name,
         name: "#{researcher.first_name} #{researcher.last_name}",
-        isResearcher: true,
-        isAdmin: false
+        is_researcher: true,
+        is_administrator: false
       }
     end
   end
@@ -73,44 +65,29 @@ class UserInfo
         first_name: 'Admin',
         last_name: 'McAdminFace',
         name: 'Admin McAdminFace',
-        isAdmin: true,
-        isResearcher: false
+        is_administrator: true,
+        is_researcher: false
       }
     end
   end
 
-  def self.find_user(uuid)
-    u = nil
-    mock_user = UserInfo.mock_users.find { |user| user[:user_id] == uuid }
-    researcher = dev_researchers.find { |r| r[:user_id] == uuid }
-    admin = dev_admins.find { |a| a[:user_id] == uuid }
-
-    if mock_user
-      u = mock_user
-    elsif researcher
-      u = researcher
-    elsif admin
-      u = admin
-    end
-
-    u
-  end
-
   def self.dev_user_info(uuid)
-    u = UserInfo.find_user(uuid)
+    u = UserInfo::MOCK_USERS[uuid] ||
+      dev_researchers.find { |r| r[:user_id] == uuid } ||
+      dev_admins.find { |a| a[:user_id] == uuid }
 
     return {} if u.nil?
 
-    {
-      id: u[:user_id],
+    u.merge({
+      user_id: u[:user_id],
       name: u[:name],
       full_name: u[:name],
       first_name: u[:first_name],
       last_name: u[:last_name],
       contact_infos: [{
-        type: 'EmailAddress', value: "#{u[:name].parameterize}@test.openstax.org"
+        type: 'EmailAddress', value: "#{u[:first_name]}-#{u[:last_name]}@test.openstax.org"
       }]
-    }
+    })
   end
 
 end
