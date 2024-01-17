@@ -103,7 +103,7 @@ export default function AccountDetails() {
 
                     <label className="text">
                         <span>Name</span>
-                        <input disabled value={user.name} />
+                        <input disabled value={user.fullName} />
                     </label>
 
                     {email && (<label className="text">

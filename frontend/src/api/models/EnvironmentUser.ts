@@ -55,12 +55,6 @@ export interface EnvironmentUser {
      * @type {string}
      * @memberof EnvironmentUser
      */
-    readonly name?: string;
-    /**
-     * Full name
-     * @type {string}
-     * @memberof EnvironmentUser
-     */
     readonly fullName?: string;
     /**
      * 
@@ -185,7 +179,6 @@ export function EnvironmentUserFromJSONTyped(json: any, ignoreDiscriminator: boo
         'isAdministrator': json['is_administrator'],
         'isResearcher': json['is_researcher'],
         'uuid': !exists(json, 'uuid') ? undefined : json['uuid'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
         'fullName': !exists(json, 'full_name') ? undefined : json['full_name'],
         'firstName': !exists(json, 'first_name') ? undefined : json['first_name'],
         'lastName': !exists(json, 'last_name') ? undefined : json['last_name'],

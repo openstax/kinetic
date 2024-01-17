@@ -51,7 +51,7 @@ class UserInfo
         user_id: researcher.user_id,
         first_name: researcher.first_name,
         last_name: researcher.last_name,
-        name: "#{researcher.first_name} #{researcher.last_name}",
+        full_name: "#{researcher.first_name} #{researcher.last_name}",
         is_researcher: true,
         is_administrator: false
       }
@@ -64,7 +64,7 @@ class UserInfo
         user_id: admin.user_id,
         first_name: 'Admin',
         last_name: 'McAdminFace',
-        name: 'Admin McAdminFace',
+        full_name: 'Admin McAdminFace',
         is_administrator: true,
         is_researcher: false
       }
@@ -80,7 +80,6 @@ class UserInfo
 
     u.merge({
               user_id: u[:user_id],
-              name: u[:name],
               full_name: u[:name],
               first_name: u[:first_name],
               last_name: u[:last_name],

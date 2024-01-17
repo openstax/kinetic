@@ -50,11 +50,6 @@ class Api::V1::EnvironmentOpenApi
         key :type, :string
         key :readOnly, true
       end
-      property :name do
-        key :type, :string
-        key :readOnly, true
-        key :description, 'Full name'
-      end
       property :full_name do
         key :type, :string
         key :readOnly, true

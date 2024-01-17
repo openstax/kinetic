@@ -27,9 +27,6 @@ module Api::V1::Bindings
     attr_accessor :uuid
 
     # Full name
-    attr_accessor :name
-
-    # Full name
     attr_accessor :full_name
 
     attr_accessor :first_name
@@ -72,7 +69,6 @@ module Api::V1::Bindings
         :'is_administrator' => :'is_administrator',
         :'is_researcher' => :'is_researcher',
         :'uuid' => :'uuid',
-        :'name' => :'name',
         :'full_name' => :'full_name',
         :'first_name' => :'first_name',
         :'last_name' => :'last_name',
@@ -105,7 +101,6 @@ module Api::V1::Bindings
         :'is_administrator' => :'Boolean',
         :'is_researcher' => :'Boolean',
         :'uuid' => :'String',
-        :'name' => :'String',
         :'full_name' => :'String',
         :'first_name' => :'String',
         :'last_name' => :'String',
@@ -161,10 +156,6 @@ module Api::V1::Bindings
 
       if attributes.key?(:'uuid')
         self.uuid = attributes[:'uuid']
-      end
-
-      if attributes.key?(:'name')
-        self.name = attributes[:'name']
       end
 
       if attributes.key?(:'full_name')
@@ -276,7 +267,6 @@ module Api::V1::Bindings
           is_administrator == o.is_administrator &&
           is_researcher == o.is_researcher &&
           uuid == o.uuid &&
-          name == o.name &&
           full_name == o.full_name &&
           first_name == o.first_name &&
           last_name == o.last_name &&
@@ -305,7 +295,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [user_id, is_administrator, is_researcher, uuid, name, full_name, first_name, last_name, support_identifier, applications, signed_contract_names, external_ids, contact_infos, is_not_gdpr_location, is_test, opt_out_of_cookies, using_openstax, needs_complete_edu_profile, faculty_status, self_reported_role, school_type, school_location].hash
+      [user_id, is_administrator, is_researcher, uuid, full_name, first_name, last_name, support_identifier, applications, signed_contract_names, external_ids, contact_infos, is_not_gdpr_location, is_test, opt_out_of_cookies, using_openstax, needs_complete_edu_profile, faculty_status, self_reported_role, school_type, school_location].hash
     end
 
     # Builds the object from hash
