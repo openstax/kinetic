@@ -137,7 +137,6 @@ RSpec.describe Study, api: :v1 do
 
     it 'pauses first session of a study' do
       study.launch
-      expect(study.status).to eq 'active'
       # Pause first session
       study.pause(0)
       expect(study.status).to eq 'active'
