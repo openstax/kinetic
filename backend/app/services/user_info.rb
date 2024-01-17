@@ -5,7 +5,7 @@
 
 class UserInfo
 
-  MOCK_USERS = YAML.load_file(Rails.root.join("config/data/mock-users.yaml"))
+  MOCK_USERS = YAML.load_file(Rails.root.join('config/data/mock-users.yaml'))
 
   def self.email_for_account(account)
     email = account['contact_infos'].find do |ci|
@@ -36,7 +36,7 @@ class UserInfo
       {
         user_id: uuid,
         is_administrator: Admin.where(user_id: uuid).any?,
-        is_researcher: Researcher.where(user_id: uuid).any?,
+        is_researcher: Researcher.where(user_id: uuid).any?
       }
     )
   end
@@ -73,21 +73,21 @@ class UserInfo
 
   def self.dev_user_info(uuid)
     u = UserInfo::MOCK_USERS[uuid] ||
-      dev_researchers.find { |r| r[:user_id] == uuid } ||
-      dev_admins.find { |a| a[:user_id] == uuid }
+        dev_researchers.find { |r| r[:user_id] == uuid } ||
+        dev_admins.find { |a| a[:user_id] == uuid }
 
     return {} if u.nil?
 
     u.merge({
-      user_id: u[:user_id],
-      name: u[:name],
-      full_name: u[:name],
-      first_name: u[:first_name],
-      last_name: u[:last_name],
-      contact_infos: [{
-        type: 'EmailAddress', value: "#{u[:first_name]}-#{u[:last_name]}@test.openstax.org"
-      }]
-    })
+              user_id: u[:user_id],
+              name: u[:name],
+              full_name: u[:name],
+              first_name: u[:first_name],
+              last_name: u[:last_name],
+              contact_infos: [{
+                type: 'EmailAddress', value: "#{u[:first_name]}-#{u[:last_name]}@test.openstax.org"
+              }]
+            })
   end
 
 end
