@@ -93,7 +93,6 @@ Rails.application.routes.draw do
         put :ensure_users_exist, on: :collection
         get :whoami, on: :collection
       end
-      get 'user/api/user', to: 'users#user_info'
     end
   end
 
