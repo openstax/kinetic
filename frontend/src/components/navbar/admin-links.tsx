@@ -32,7 +32,7 @@ export default function AdminLinks() {
             </StyledLink>
             <StyledLink to="/admin/impersonate">
                 <Menu.Item>
-                    Impersonate
+                    View as
                 </Menu.Item>
             </StyledLink>
             <StyledLink to="/admin/reports">

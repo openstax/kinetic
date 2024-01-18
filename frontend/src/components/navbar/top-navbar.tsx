@@ -1,7 +1,7 @@
 import { cx, React, styled, useState } from '@common'
 import { Box } from 'boxible'
 import { Link, NavLink } from 'react-router-dom';
-import { useCurrentUser, useIsMobileDevice, useUserInfo } from '@lib'
+import { useCurrentUser, useIsMobileDevice } from '@lib'
 import { Menu } from '@mantine/core';
 import { colors } from '@theme';
 import { BannersBar, Icon, NavbarLogoLink } from '@components';
@@ -66,7 +66,6 @@ const DesktopResearcherLinks = () => {
 
 const NavMenu = () => {
     const [opened, setOpened] = useState(false);
-    const { data: userInfo } = useUserInfo()
     const user = useCurrentUser()
     const isMobile = useIsMobileDevice()
 
@@ -76,7 +75,7 @@ const NavMenu = () => {
         <Box gap alignSelf='center' align='center' css={{
             fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap', userSelect: 'none', color: colors.white,
         }}>
-            <span>Hi {userInfo?.first_name}</span>
+            <span>Hi {user.firstName}</span>
             <Icon icon={opened ? 'chevronUp' : 'chevronDown'} />
         </Box>
     )

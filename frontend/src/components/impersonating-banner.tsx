@@ -1,9 +1,9 @@
 import { React } from '@common'
 import { Box, Button, Center, Container, Group, Title } from '@mantine/core';
-import { ENV, useEnvironment, useUserInfo } from '@lib';
+import { ENV, useCurrentUser, useEnvironment } from '@lib';
 
 export const ImpersonatingBanner = () => {
-    const { data: userInfo } = useUserInfo()
+    const user = useCurrentUser()
     const env = useEnvironment()
 
     if (!env.isImpersonating) return null
@@ -14,7 +14,7 @@ export const ImpersonatingBanner = () => {
                 <Center>
                     <Group>
                         <Title order={6}>
-                            Currently impersonating as {userInfo?.first_name} {userInfo?.last_name}
+                            Currently viewing as {user.firstName} {user.lastName}
                         </Title>
                         <Button component='a' href={`${ENV.API_ADDRESS}/api/v1/admin/impersonate/stop`}>
                             Stop impersonating

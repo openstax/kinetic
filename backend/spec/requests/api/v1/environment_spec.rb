@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Environment', api: :v1 do
 
-  let(:user_id) { SecureRandom.uuid }
+  let(:user_id) { '00000000-0000-0000-0000-000000000002' }
   let(:researcher) { create(:researcher) }
   let(:admin) { create(:admin) }
 
@@ -12,7 +12,7 @@ RSpec.describe 'Environment', api: :v1 do
     context 'when no user is logged in' do
       it 'gives the ID and false for roles' do
         get '/api/v1/environment'
-        expect(response_hash[:user]).to include(is_administrator: false, is_researcher: false)
+        expect(response_hash[:user]).to be_empty
       end
     end
 
@@ -21,7 +21,7 @@ RSpec.describe 'Environment', api: :v1 do
 
       it 'gives the ID and false for roles' do
         get '/api/v1/environment'
-        expect(response_hash[:user]).to match(user_id: user_id, is_administrator: false, is_researcher: false)
+        expect(response_hash[:user]).to include(user_id: user_id, is_administrator: false, is_researcher: false)
       end
     end
 
@@ -30,7 +30,7 @@ RSpec.describe 'Environment', api: :v1 do
 
       it 'gives the ID and false for roles' do
         get '/api/v1/environment'
-        expect(response_hash[:user]).to match(user_id: admin.user_id, is_administrator: true, is_researcher: false)
+        expect(response_hash[:user]).to include(user_id: admin.user_id, is_administrator: true, is_researcher: false)
       end
     end
 
@@ -39,7 +39,7 @@ RSpec.describe 'Environment', api: :v1 do
 
       it 'gives the ID and false for roles' do
         get '/api/v1/environment'
-        expect(response_hash[:user]).to match(user_id: researcher.user_id, is_administrator: false, is_researcher: true)
+        expect(response_hash[:user]).to include(user_id: researcher.user_id, is_administrator: false, is_researcher: true)
       end
     end
 

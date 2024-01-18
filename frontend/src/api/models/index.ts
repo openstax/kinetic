@@ -19,6 +19,7 @@ export * from './BannerNotice';
 export * from './BannersListing';
 export * from './BaseResearcher';
 export * from './BaseStudy';
+export * from './ContactInfo';
 export * from './Environment';
 export * from './EnvironmentUser';
 export * from './GetResponseInfo200Response';

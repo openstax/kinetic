@@ -1,5 +1,5 @@
 import { cx, React, styled, useState, Yup } from '@common';
-import { useApi, useCurrentResearcher, useFetchEnvironment, useUserInfo } from '@lib';
+import { useApi, useCurrentResearcher, useCurrentUser, useFetchEnvironment } from '@lib';
 import { colors } from '@theme';
 import { Researcher } from '@api';
 import {
@@ -60,15 +60,15 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
     const api = useApi()
     const [researcher, setResearcher] = useState(useCurrentResearcher())
     const { refetch: refetchEnv } = useFetchEnvironment()
-    const { data: userInfo, refetch: refetchUser } = useUserInfo()
+    const user = useCurrentUser()
 
     if (!researcher) {
         return null
     }
 
     // Default to OpenStax accounts first/last name if blank
-    researcher.firstName = researcher.firstName || userInfo?.first_name
-    researcher.lastName = researcher.lastName || userInfo?.last_name
+    researcher.firstName = researcher.firstName || user.firstName
+    researcher.lastName = researcher.lastName || user.lastName
 
     const saveResearcher = async (researcher: Researcher) => {
         try {
@@ -80,7 +80,6 @@ export const ResearcherAccountForm: React.FC<{className?: string}> = ({ classNam
                 updateResearcher: { researcher },
             })
             setResearcher(r)
-            refetchUser()
             refetchEnv()
         }
         catch (err) {

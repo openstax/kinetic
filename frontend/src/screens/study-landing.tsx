@@ -4,7 +4,7 @@ import { colors } from '@theme'
 import { DefaultApi, LandStudyAbortedEnum, LandStudyRequest, ParticipantStudy } from '@api'
 import { ErrorPage, LoadingAnimation } from '@components'
 import { useApi, useQueryParam } from '@lib'
-import { BackgroundImage, Button, Container, Flex, Modal, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import { BackgroundImage, Box, Button, Container, Flex, Group, Modal, Space, Stack, Text, Title } from '@mantine/core';
 import Waves from '@images/waves.svg'
 import { launchStudy, RewardsSegment, useRewardsSchedule } from '@models';
 import { useLearnerStudies } from './learner/studies';
@@ -43,7 +43,7 @@ export default function StudyLanding() {
     const md = useQueryParam('md') || {}
     const { allStudies, demographicSurvey } = useLearnerStudies()
     const { schedule } = useRewardsSchedule(allStudies)
-    const nextReward = schedule.find(rewardSegment => !rewardSegment.achieved)
+    const nextReward = schedule.find(rewardSegment => !rewardSegment.achieved && rewardSegment.isFuture)
 
     useEffect(() => {
         const params: LandStudyRequest = {
@@ -75,7 +75,7 @@ export default function StudyLanding() {
 
     return (
         <Container>
-            <Modal opened={true} onClose={noop} centered size='xl' closeOnClickOutside={false} closeOnEscape={false} withCloseButton={false} styles={{
+            <Modal opened={true} onClose={noop} centered size='75%' closeOnClickOutside={false} closeOnEscape={false} withCloseButton={false} styles={{
                 body: {
                     padding: 0,
                 },
@@ -85,12 +85,15 @@ export default function StudyLanding() {
                         <NavLink to={'/studies'} style={{ alignSelf: 'end', color: 'white', fontWeight: 'bolder' }} data-testid='view-studies'>
                             Return to Dashboard
                         </NavLink>
-                        <Points study={study} />
-                        <Text>
-                            You’re one step closer - don’t miss out on the chance to qualify for the next reward cycle!
-                        </Text>
-                        <NextPrizeCycle nextReward={nextReward} />
-                        <CompleteProfilePrompt demographicSurvey={demographicSurvey} />
+                        <Stack gap='xl' w='75%'>
+                            <Points study={study} />
+                            <Text size='xl' pt='xl'>
+                                You’re one step closer - don’t miss out on the chance to qualify for the next reward cycle!
+                            </Text>
+                            <NextPrizeCycle nextReward={nextReward} />
+                            <CompleteProfilePrompt demographicSurvey={demographicSurvey} />
+                            <Space h='xl' />
+                        </Stack>
                     </Stack>
                 </BackgroundImage>
             </Modal>
@@ -103,14 +106,15 @@ const NextPrizeCycle: FC<{ nextReward: RewardsSegment | undefined } > = ({ nextR
 
     return (
         <Flex direction='column'>
-            <Text fw='bolder'>Next Prize Cycle:</Text>
-            <Text>Reach {nextReward?.points} points by {dayjs(nextReward.endAt).format('MMM D')} and be one of the lucky winners to earn {nextReward.prize}</Text>
+            <Text size='xl' fw='bolder'>Next Prize Cycle:</Text>
+            <Text size='xl'>Reach {nextReward?.points} points by {dayjs(nextReward.endAt).format('MMM D')} and be one of the lucky winners to earn {nextReward.prize}</Text>
         </Flex>
     )
 }
 
 const CompleteProfilePrompt: FC<{demographicSurvey: ParticipantStudy | null}> = ({ demographicSurvey }) => {
     const api = useApi()
+
     if (!demographicSurvey || !!demographicSurvey.completedAt) return null
 
     const onClick = async () => {
@@ -118,16 +122,16 @@ const CompleteProfilePrompt: FC<{demographicSurvey: ParticipantStudy | null}> = 
     }
 
     return (
-        <SimpleGrid cols={2} bg={`${colors.gray10}10`} p='lg'>
-            <Stack>
-                <Text>
-                    <strong>Bonus: </strong>
-                    <span>Get {demographicSurvey?.totalPoints} points now by simply taking {demographicSurvey?.totalDuration} minutes to complete your Kinetic Profile!</span>
-                </Text>
-            </Stack>
-            <Button color='blue' c='white' onClick={onClick}>
-                Finish Profile for 10 points
-            </Button>
-        </SimpleGrid>
+        <Group bg={`${colors.gray10}10`} p='lg' justify='space-between' wrap='nowrap'>
+            <Text>
+                <strong>Bonus: </strong>
+                <span>Get {demographicSurvey?.totalPoints} points now by simply taking {demographicSurvey?.totalDuration} minutes to complete your Kinetic Profile!</span>
+            </Text>
+            <Box>
+                <Button color='blue' c='white' onClick={onClick}>
+                    Finish Profile for 10 points
+                </Button>
+            </Box>
+        </Group>
     )
 }
