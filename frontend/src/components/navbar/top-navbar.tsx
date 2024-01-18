@@ -1,7 +1,7 @@
 import { cx, React, styled, useState } from '@common'
 import { Box } from 'boxible'
 import { Link, NavLink } from 'react-router-dom';
-import { useCurrentUser, useIsMobileDevice, useUserInfo } from '@lib'
+import { useCurrentUser, useIsMobileDevice } from '@lib'
 import { Menu } from '@mantine/core';
 import { colors } from '@theme';
 import { BannersBar, Icon, NavbarLogoLink } from '@components';
@@ -24,7 +24,7 @@ const AccountLinks = loadAsync('Account Links', () => import('./account-links'))
 
 export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, className }) => {
     const user = useCurrentUser()
-    const hideBanner = user.isResearcher || user.isAdministrator
+    const hideBanner = user.isResearcher
 
     return (
         <nav className={cx('navbar', 'navbar-light', className)}>
@@ -55,16 +55,17 @@ const DesktopResearcherLinks = () => {
             <Link to="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
                 Studies
             </Link>
-            <Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
-                Analysis
-            </Link>
+
+            {/* TODO Put this back in one day when enclaves are ready */}
+            {/*<Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>*/}
+            {/*    Analysis*/}
+            {/*</Link>*/}
         </>
     )
 }
 
 const NavMenu = () => {
     const [opened, setOpened] = useState(false);
-    const { data: userInfo } = useUserInfo()
     const user = useCurrentUser()
     const isMobile = useIsMobileDevice()
 
@@ -72,9 +73,9 @@ const NavMenu = () => {
         <Icon icon="menu" height={30} color="white" />
     ) : (
         <Box gap alignSelf='center' align='center' css={{
-            fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap', userSelect: 'none', color: opened ? 'white' : '#b8bbbf',
+            fontWeight: 'bold', cursor: 'pointer', whiteSpace: 'nowrap', userSelect: 'none', color: colors.white,
         }}>
-            <span>Hi {userInfo?.first_name}</span>
+            <span>Hi {user.firstName}</span>
             <Icon icon={opened ? 'chevronUp' : 'chevronDown'} />
         </Box>
     )

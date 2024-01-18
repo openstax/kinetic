@@ -1,5 +1,5 @@
 import { dayjs, React, styled, useNavigate } from '@common';
-import { Box, Button, Icon, Modal, Toast } from '@components';
+import { Icon, showResearcherNotification, showResearcherNotificationError } from '@components';
 import { StageStatusEnum, Study, UpdateStudyStatusStatusActionEnum } from '@api';
 import { colors } from '@theme';
 import { useApi } from '@lib';
@@ -15,6 +15,8 @@ import {
     isScheduled,
     isWaiting,
 } from '@models';
+import { Button, Group, Menu, Modal, Stack } from '@mantine/core';
+import { IconDotsVertical } from '@tabler/icons-react';
 
 const ModalType = {
     Pause: 'pauseStudy',
@@ -46,13 +48,13 @@ const ActionModalContent: FC<{
                 id: study.id,
                 statusAction,
                 stageIndex,
-            }).then((study) => {
-                Toast.show({ message })
-                cell.table.options.meta?.updateData(study)
+            }).then(() => {
+                showResearcherNotification(message)
+                cell.table.options.meta?.refreshData()
             })
         }
         catch (err) {
-            Toast.show({ error: err, message: String(err) })
+            showResearcherNotificationError(String(err))
             console.error(err) // eslint-disable-line no-console
         }
         onHide()
@@ -61,13 +63,13 @@ const ActionModalContent: FC<{
     const deleteStudy = (study: Study, message: string) => {
         try {
             api.deleteStudy({ studyId: study.id }).then(() => {
-                Toast.show({ message })
+                showResearcherNotification(message)
                 study.isHidden = true
-                cell.table.options.meta?.updateData(study)
+                cell.table.options.meta?.refreshData()
             })
         } catch (err) {
             study.isHidden = false
-            Toast.show({ error: err, message: String(err) })
+            showResearcherNotificationError(String(err))
             console.error(err) // eslint-disable-line no-console
         }
         onHide()
@@ -85,7 +87,8 @@ const ActionModalContent: FC<{
                     updateStudyStatus(
                         study,
                         'pause',
-                        `Study ${study.titleForResearchers} has been paused.`
+                        `Study ${study.titleForResearchers} has been paused.`,
+                        cell.row.depth ? cell.row.index : 0
                     )
                 }}
                 onCancel={onHide}
@@ -112,7 +115,7 @@ const ActionModalContent: FC<{
                     warning={false}
                     body="The study you wish to resume has passed the original closing date. Please choose one of the options below."
                     actionText='Adjust Closing Date'
-                    onSubmit={() => nav(`/study/overview/${study.id}`)}
+                    onSubmit={() => nav(`/study/overview/${study.id}?reopen=true`)}
                     cancelText='End Study'
                     onCancel={() => {
                         updateStudyStatus(
@@ -184,28 +187,28 @@ const StudyActionContainer: FC<{
     warning, header, body, cancelText, actionText, onSubmit, onCancel,
 }) => {
     return (
-        <Box direction='column' className='py-4 px-8' gap='large' align='center'>
-            <Box gap='large' align='center'>
+        <Stack align='center'>
+            <Group gap='sm' align='center'>
                 {warning && <Icon icon="warning" css={{ color: colors.red }} height={20}/>}
                 <span className='fs-4 fw-bold'>{header}</span>
-            </Box>
+            </Group>
             <div className='text-center'>
                 {body}
             </div>
-            <Box gap='xlarge'>
-                <Button css={{ width: 180, justifyContent: 'center' }} outline primary onClick={onCancel}>
+            <Group>
+                <Button variant='outline' color='purple' onClick={onCancel}>
                     {cancelText}
                 </Button>
-                <Button css={{ width: 180, justifyContent: 'center' }} primary onClick={onSubmit}>
+                <Button variant='filled' color='purple' onClick={onSubmit}>
                     {actionText}
                 </Button>
-            </Box>
-        </Box>
+            </Group>
+        </Stack>
     )
 }
 
 const ActionIcon = styled(Icon)(({ disabled }) => ({
-    color: disabled ? colors.gray50 : colors.purple,
+    color: disabled ? colors.gray50 : colors.blue,
     cursor: disabled ? 'default' : 'pointer',
 }))
 
@@ -229,8 +232,7 @@ const isPausable = (cell: CellContext<Study, any>): boolean => {
         return true
     }
 
-
-    return isPaused(previousSession) && isActive(study)
+    return isActive(study)
 }
 
 export const ActionColumn: React.FC<{
@@ -262,7 +264,7 @@ export const ActionColumn: React.FC<{
     const showResumeButton = study.status === StageStatusEnum.Paused
 
     return (
-        <Box gap='xlarge' justify='center' align='center'>
+        <Group gap='lg' align='center'>
             <div>
                 <ActionIcon
                     icon="pencil"
@@ -293,52 +295,31 @@ export const ActionColumn: React.FC<{
                 }
             </div>
             <div>
-                <Icon
-                    icon="dotsVertical"
-                    height={20}
-                    color={colors.purple}
-                    id="action-menu-button"
-                    data-testid={`${cell.row.original.id}-action-menu`}
-                    className='dropdown-toggle'
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    css={{ cursor: 'pointer' }}
-                />
-                <ul className="dropdown-menu" aria-labelledby="action-menu-button">
-                    {showEndStudy &&
-                        <li>
-                            <span
-                                className="dropdown-item cursor-pointer"
-                                onClick={() => setAndShowModal(ModalType.End)}
-                            >
-                                End Study
-                            </span>
-                        </li>
-                    }
-                    {showReopen &&
-                        <li>
-                            <span
-                                className="dropdown-item cursor-pointer"
-                                onClick={() => setAndShowModal(ModalType.Reopen)}
-                            >
-                                Reopen Study
-                            </span>
-                        </li>
-                    }
-                    {showDelete &&
-                        <li>
-                            <span
-                                className="dropdown-item cursor-pointer"
-                                css={{ color: colors.red }}
-                                onClick={() => setAndShowModal(ModalType.Delete)}
-                            >
+                <Menu>
+                    <Menu.Target>
+                        <IconDotsVertical
+                            height={20}
+                            color={colors.blue}
+                            id="action-menu-button"
+                            data-testid={`${cell.row.original.id}-action-menu`}
+                            css={{ cursor: 'pointer' }}
+                        />
+                    </Menu.Target>
+
+                    <Menu.Dropdown>
+                        {showEndStudy && <Menu.Item onClick={() => setAndShowModal(ModalType.End)}>
+                            End Study
+                        </Menu.Item>}
+                        {showReopen &&<Menu.Item onClick={() => setAndShowModal(ModalType.Reopen)}>
+                            Reopen Study
+                        </Menu.Item>}
+                        {showDelete && <Menu.Item color={colors.red} onClick={() => setAndShowModal(ModalType.Delete)}>
                             Delete
-                            </span>
-                        </li>
-                    }
-                </ul>
+                        </Menu.Item>}
+                    </Menu.Dropdown>
+                </Menu>
             </div>
-            <Modal center show={showModal} large onHide={onHide}>
+            <Modal centered opened={showModal} size='lg' onClose={onHide}>
                 <Modal.Body>
                     <ActionModalContent
                         modalType={modalType}
@@ -348,6 +329,6 @@ export const ActionColumn: React.FC<{
                     />
                 </Modal.Body>
             </Modal>
-        </Box>
+        </Group>
     )
 }

@@ -1,6 +1,6 @@
-import { Box, React, useEffect, useNavigate, useParams } from '@common';
+import { Box, React, useNavigate, useParams } from '@common';
 import { Study } from '@api';
-import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page, ResearcherButton } from '@components';
+import { Col, CollapsibleSection, ExitButton, LoadingAnimation, Page } from '@components';
 import { getStudyLead, getStudyPi, isReadyForLaunch, isWaiting, useFetchStudy } from '@models';
 import { StudyCardPreview, Tag } from '../../../learner/card';
 import { colors } from '@theme';
@@ -8,31 +8,25 @@ import { FinalizeStudy } from './finalize-study';
 import Waiting from '@images/study-creation/waiting.svg'
 import { EditSubmittedStudy } from './edit-submitted-study';
 import { useQueryParam } from '@lib';
+import { Link, Navigate } from 'react-router-dom';
+import { Button } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 
 export default function StudyOverview() {
-    const nav = useNavigate()
     const id = useParams<{ id: string }>().id
+    const { loading, study } = useFetchStudy(id!)
 
     if (!id) {
-        useEffect(() => {
-            nav('/studies')
-        }, [])
-        return <></>
+        return <Navigate to='/studies' />
     }
-
-    const { loading, study } = useFetchStudy(id)
 
     if (loading) {
         return <LoadingAnimation />
     }
 
     if (!study) {
-        useEffect(() => {
-            nav('/studies')
-        }, [])
-        return <></>
+        return <Navigate to='/studies' />
     }
-
 
     return (
         <Page hideFooter backgroundColor={colors.white}>
@@ -58,7 +52,19 @@ const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
         <Box direction='column' gap='xxlarge'>
             <Box align='center' justify='between'>
                 <h3>{study?.titleForResearchers}</h3>
-                <ExitButton navTo='/studies'/>
+
+                <Link
+                    to={'/studies'}
+                    css={{
+                        textDecoration: 'underline',
+                        textUnderlineOffset: '.5rem',
+                        color: colors.text,
+                        cursor: 'pointer',
+                        alignSelf: 'end',
+                    }}
+                >
+                    Back to Dashboard
+                </Link>
             </Box>
 
             <StudyInformation study={study} />
@@ -67,11 +73,13 @@ const StudyOverviewContent: FC<{study: Study}> = ({ study }) => {
                 <EditSubmittedStudy study={study} />
             </CollapsibleSection>
 
-            <AnalysisSection study={study} />
+            {/* TODO Put this back in one day when enclaves are ready */}
+            {/*<AnalysisSection study={study} />*/}
         </Box>
     )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
 const AnalysisSection: FC <{study: Study}> = ({ study }) => {
     const nav = useNavigate()
 
@@ -84,9 +92,9 @@ const AnalysisSection: FC <{study: Study}> = ({ study }) => {
                 </small>
             </Box>
 
-            <ResearcherButton onClick={() => nav(`/analysis/edit/new?studyId=${study.id}`)}>
-                + Create New Analysis
-            </ResearcherButton>
+            <Button leftSection={<IconPlus />} onClick={() => nav(`/analysis/edit/new?studyId=${study.id}`)}>
+                Create New Analysis
+            </Button>
         </Box>
     )
 }

@@ -7,6 +7,10 @@ $link-color: #0d6efd;
 @import "flatpickr/dist/flatpickr.css";
 @import 'swiper/swiper-bundle.css';
 
+.osano-cm-widget {
+    display: none !important;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
@@ -16,39 +20,4 @@ $link-color: #0d6efd;
     &:hover {
         color: $gray-200;
     }
-}
-
-.btn-researcher-primary {
-    --bs-btn-font-weight: 600;
-    --bs-btn-color: var(--bs-white);
-    --bs-btn-disabled-color: var(--bs-black);
-    --bs-btn-bg: #255ED3;
-    --bs-btn-border-color: #255ED3;
-    --bs-btn-border-radius: .5rem;
-    --bs-btn-hover-color: var(--bs-white);
-    --bs-btn-hover-bg: #{shade-color(#255ED3, 10%)};
-    --bs-btn-hover-border-color: #{shade-color(#255ED3, 10%)};
-    --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-    --bs-btn-active-color: var(--bs-btn-hover-color);
-    --bs-btn-active-bg: #{shade-color(#255ED3, 20%)};
-    --bs-btn-active-border-color: #{shade-color(#255ED3, 20%)};
-    --bs-btn-disabled-bg: #{shade-color(#DBDBDB, 10%)};
-    --bs-btn-disabled-border-color: var(--bs-gray);
-}
-
-.btn-researcher-secondary {
-    --bs-btn-font-weight: 600;
-    --bs-btn-color: #255ED3;
-    --bs-btn-bg: var(--bs-white);
-    --bs-btn-border-color: #255ED3;
-    --bs-btn-border-radius: .5rem;
-    --bs-btn-hover-color: #255ED3;
-    --bs-btn-hover-bg: #{shade-color(#FFF, 10%)};
-    --bs-btn-hover-border-color: #{shade-color(#255ED3, 10%)};
-    --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-    --bs-btn-active-color: var(--bs-btn-hover-color);
-    --bs-btn-active-bg: #{shade-color(#FFF, 20%)};
-    --bs-btn-active-border-color: #{shade-color(#FFF, 20%)};
-    --bs-btn-disabled-bg: #{shade-color(#DBDBDB, 10%)};
-    --bs-btn-disabled-border-color: var(--bs-gray);
 }

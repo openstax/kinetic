@@ -7,12 +7,13 @@ import {
     getStudyPi,
     getStudyPoints,
     isStudyLaunchable,
-    LaunchStudy,
+    launchStudy,
     studyIsMultipart,
 } from '@models'
 import { dayjs, useApi } from '@lib'
-import { Box, Button, Icon, IconKey, MultiSessionBar, OffCanvas } from '@components'
+import { Box, Icon, IconKey, MultiSessionBar, OffCanvas } from '@components'
 import { colors } from '@theme'
+import { Button } from '@mantine/core'
 
 interface StudyDetailsProps {
     study: ParticipantStudy
@@ -55,24 +56,23 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
     const api = useApi()
     const [isBusy, setBusy] = useState(false)
 
-    const onLaunch = useCallback(async () => {
+    const onLaunch = async () => {
         setBusy(true)
-        await LaunchStudy(api, study)
-        setBusy(false)
-    }, [api, study, LaunchStudy, setBusy])
+        await launchStudy(api, study.id)
+    }
 
     if (study.completedAt) {
         return (
-            <Button primary disabled>Completed on {dayjs(study.completedAt).format('LL')}</Button>
+            <Button color='purple' disabled>
+                Completed on {dayjs(study.completedAt).format('LL')}
+            </Button>
         )
     }
     const action = (study.stages?.length && !study.stages[0].isCompleted) ? 'Begin' : 'Continue'
     return (
         <Button
-            busy={isBusy}
-            css={{ justifyContent: 'center' }}
-            busyMessage="Launching Study"
-            primary
+            color='purple'
+            loading={isBusy}
             disabled={!isStudyLaunchable(study)}
             data-testid="launch-study"
             onClick={onLaunch}

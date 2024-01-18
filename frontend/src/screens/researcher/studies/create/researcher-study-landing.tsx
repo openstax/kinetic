@@ -1,8 +1,8 @@
-import { Box, React, styled, useNavigate, useState } from '@common'
-import { ExitButton, Page, ResearcherButton } from '@components';
+import { React, styled, useNavigate, useState } from '@common'
+import { ExitButton, Page } from '@components';
 import { colors } from '@theme';
-import { Link } from 'react-router-dom';
 import StartProcess from '@images/study-creation/start-process.svg'
+import { Button, Group, Stack, Title } from '@mantine/core';
 
 export default function ResearcherStudyLanding() {
     const [showSteps, setShowSteps] = useState<boolean>(false)
@@ -27,9 +27,8 @@ const StepSection: FCWC<{
     borderColor: string
 }> = ({ header, borderColor, children }) => {
     return (
-        <Box
-            direction='column'
-            width='570px'
+        <Stack
+            w={570}
             css={{ border: `1px solid ${borderColor}`, borderRadius: 10 }}
         >
             <div css={{ backgroundColor: colors.gray30, padding: `1rem`, borderRadius: `10px 10px 0 0` }}>
@@ -38,7 +37,7 @@ const StepSection: FCWC<{
             <div css={{ padding: `0 1rem 1rem` }}>
                 {children}
             </div>
-        </Box>
+        </Stack>
     )
 }
 
@@ -46,11 +45,11 @@ const StepsOverview: FC = () => {
     const nav = useNavigate()
 
     return (
-        <Box direction='column' align='center'>
+        <Stack align='center'>
             <ExitButton navTo='/studies'/>
-            <Box width='750px' gap='large' direction='column'>
+            <Stack w={750}>
                 <h2 className='fw-bold'>A brief overview of the study creation flow</h2>
-                <Box gap='large'>
+                <Group>
                     <StepSection header='Study Details' borderColor={colors.blue}>
                         <SectionHeader>
                             1. Internal Details - 2min ETA
@@ -83,13 +82,10 @@ const StepsOverview: FC = () => {
                         </SectionText>
                     </StepSection>
 
-                    <ResearcherButton
-                        onClick={() => nav('/study/edit/new')}
-                        css={{ alignSelf: 'center', padding: `10px 40px` }}
-                    >
+                    <Button color='blue' onClick={() => nav('/study/edit/new')}>
                         Start
-                    </ResearcherButton>
-                </Box>
+                    </Button>
+                </Group>
 
                 <StepSection header='Finalize Study' borderColor={colors.gray50}>
                     <SectionHeader>5. Waiting Period</SectionHeader>
@@ -102,27 +98,32 @@ const StepsOverview: FC = () => {
                         Choose your opening date and closing criteria to make your study visible to participants
                     </SectionText>
                 </StepSection>
-            </Box>
-        </Box>
+            </Stack>
+        </Stack>
     )
 }
 
 const Introduction: FC<{onClickStart: () => void}> = ({ onClickStart }) => {
     return (
-        <Box direction='column' align='center'>
+        <Stack align='center'>
             <ExitButton navTo='/studies'/>
-            <Box direction='column' width='650px' className='text-center' align='center'>
-                <h2 className='fw-bold mt-2'>Create a study to collect new data</h2>
-                <img className='mt-2' height={240} width={300} src={StartProcess} alt='get-started'/>
-                <h5 className='lh-lg mt-2'>The following steps will guide you through some fundamental questions that will help you determine your study needs. This process can take about 10-20 minutes.</h5>
-                <h6 className='mt-2' css={{ color: colors.text }}>
-                    <span>If you’re rather looking to access existing Kinetic data, please visit the </span>
-                    <Link to='/analysis'>analysis center.</Link>
-                </h6>
-                <ResearcherButton className='mt-4' onClick={() => onClickStart()}>
+            <Stack w={650} ta='center' align='center' gap='xl'>
+                <Title order={2}>
+                    Create a study to collect new data
+                </Title>
+                <img height={240} width={300} src={StartProcess} alt='get-started'/>
+                <Title order={5} lh='xl'>
+                    The following steps will guide you through some fundamental questions that will help you determine your study needs. This process can take about 10-20 minutes.
+                </Title>
+                {/* TODO Add back when analysis feature is ready */}
+                {/*<h6 className='mt-2' css={{ color: colors.text }}>*/}
+                {/*    <span>If you’re rather looking to access existing Kinetic data, please visit the </span>*/}
+                {/*    <Link to='/analysis'>analysis center.</Link>*/}
+                {/*</h6>*/}
+                <Button color='blue' onClick={() => onClickStart()}>
                     Start process
-                </ResearcherButton>
-            </Box>
-        </Box>
+                </Button>
+            </Stack>
+        </Stack>
     )
 }

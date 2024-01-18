@@ -27,8 +27,11 @@ module Api::V1::Bindings
     # User wishes to receive email about new sessions becoming available
     attr_accessor :session_available_email
 
-    # User has viewed the analysis tutorial overview on the frontend
+    # Researcher has viewed the analysis tutorial overview on the researcher analysis page
     attr_accessor :has_viewed_analysis_tutorial
+
+    # Learner has viewed the initial welcome message on the learner dashboard
+    attr_accessor :has_viewed_welcome_message
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -37,7 +40,8 @@ module Api::V1::Bindings
         :'prize_cycle_email' => :'prize_cycle_email',
         :'study_available_email' => :'study_available_email',
         :'session_available_email' => :'session_available_email',
-        :'has_viewed_analysis_tutorial' => :'has_viewed_analysis_tutorial'
+        :'has_viewed_analysis_tutorial' => :'has_viewed_analysis_tutorial',
+        :'has_viewed_welcome_message' => :'has_viewed_welcome_message'
       }
     end
 
@@ -53,7 +57,8 @@ module Api::V1::Bindings
         :'prize_cycle_email' => :'Boolean',
         :'study_available_email' => :'Boolean',
         :'session_available_email' => :'Boolean',
-        :'has_viewed_analysis_tutorial' => :'Boolean'
+        :'has_viewed_analysis_tutorial' => :'Boolean',
+        :'has_viewed_welcome_message' => :'Boolean'
       }
     end
 
@@ -97,6 +102,10 @@ module Api::V1::Bindings
       if attributes.key?(:'has_viewed_analysis_tutorial')
         self.has_viewed_analysis_tutorial = attributes[:'has_viewed_analysis_tutorial']
       end
+
+      if attributes.key?(:'has_viewed_welcome_message')
+        self.has_viewed_welcome_message = attributes[:'has_viewed_welcome_message']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -121,7 +130,8 @@ module Api::V1::Bindings
           prize_cycle_email == o.prize_cycle_email &&
           study_available_email == o.study_available_email &&
           session_available_email == o.session_available_email &&
-          has_viewed_analysis_tutorial == o.has_viewed_analysis_tutorial
+          has_viewed_analysis_tutorial == o.has_viewed_analysis_tutorial &&
+          has_viewed_welcome_message == o.has_viewed_welcome_message
     end
 
     # @see the `==` method
@@ -133,7 +143,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [cycle_deadlines_email, prize_cycle_email, study_available_email, session_available_email, has_viewed_analysis_tutorial].hash
+      [cycle_deadlines_email, prize_cycle_email, study_available_email, session_available_email, has_viewed_analysis_tutorial, has_viewed_welcome_message].hash
     end
 
     # Builds the object from hash

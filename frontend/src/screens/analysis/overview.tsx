@@ -7,6 +7,7 @@ import { FAQSection } from './researcher-faq';
 import { Link } from 'react-router-dom';
 import { RunsTable } from './runs-table';
 import { ENV } from '@lib'
+import { Button } from '@mantine/core';
 
 export const AnalysisOverview: FC = () => {
     const { analysisId } = useParams<string>();
@@ -230,12 +231,9 @@ const BottomBar: FC<{analysis: Analysis}> = ({ analysis }) => {
                         <span>Back to Analysis Basics</span>
                     </Box>
                 </Link>
-                <button
-                    className="btn btn-primary btn-researcher-primary"
-                    onClick={openEditor}
-                >
+                <Button color='blue' onClick={openEditor}>
                     Open R Studio
-                </button>
+                </Button>
             </Box>
         </Box>
     )

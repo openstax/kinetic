@@ -21,6 +21,10 @@ module Api::V1::Bindings
 
     attr_accessor :is_impersonating
 
+    attr_accessor :impersonating_researcher
+
+    attr_accessor :is_eligible
+
     attr_accessor :accounts_env_name
 
     attr_accessor :homepage_url
@@ -37,6 +41,8 @@ module Api::V1::Bindings
         :'user' => :'user',
         :'researcher' => :'researcher',
         :'is_impersonating' => :'is_impersonating',
+        :'impersonating_researcher' => :'impersonating_researcher',
+        :'is_eligible' => :'is_eligible',
         :'accounts_env_name' => :'accounts_env_name',
         :'homepage_url' => :'homepage_url',
         :'rewards_schedule' => :'rewards_schedule',
@@ -55,6 +61,8 @@ module Api::V1::Bindings
         :'user' => :'EnvironmentUser',
         :'researcher' => :'Researcher',
         :'is_impersonating' => :'Boolean',
+        :'impersonating_researcher' => :'Researcher',
+        :'is_eligible' => :'Boolean',
         :'accounts_env_name' => :'String',
         :'homepage_url' => :'String',
         :'rewards_schedule' => :'Array<RewardsScheduleSegment>',
@@ -93,6 +101,14 @@ module Api::V1::Bindings
 
       if attributes.key?(:'is_impersonating')
         self.is_impersonating = attributes[:'is_impersonating']
+      end
+
+      if attributes.key?(:'impersonating_researcher')
+        self.impersonating_researcher = attributes[:'impersonating_researcher']
+      end
+
+      if attributes.key?(:'is_eligible')
+        self.is_eligible = attributes[:'is_eligible']
       end
 
       if attributes.key?(:'accounts_env_name')
@@ -182,6 +198,8 @@ module Api::V1::Bindings
           user == o.user &&
           researcher == o.researcher &&
           is_impersonating == o.is_impersonating &&
+          impersonating_researcher == o.impersonating_researcher &&
+          is_eligible == o.is_eligible &&
           accounts_env_name == o.accounts_env_name &&
           homepage_url == o.homepage_url &&
           rewards_schedule == o.rewards_schedule &&
@@ -197,7 +215,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [user, researcher, is_impersonating, accounts_env_name, homepage_url, rewards_schedule, banners_schedule].hash
+      [user, researcher, is_impersonating, impersonating_researcher, is_eligible, accounts_env_name, homepage_url, rewards_schedule, banners_schedule].hash
     end
 
     # Builds the object from hash

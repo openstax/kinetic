@@ -2,7 +2,7 @@ import { React } from '@common'
 import styled from '@emotion/styled'
 import { colors } from '@theme'
 
-import { accountsUrl, useApi, useIsMobileDevice, useUserInfo, useUserPreferences } from '@lib'
+import { useAccountsURL, useApi, useCurrentUser, useIsMobileDevice, useUserPreferences } from '@lib'
 import {
     Box,
     Footer,
@@ -74,13 +74,14 @@ const Sidebar = () => {
 
 export default function AccountDetails() {
     const api = useApi()
-    const { data: userInfo } = useUserInfo()
     const isMobile = useIsMobileDevice()
-
     const { data: prefs } = useUserPreferences()
-    if (!userInfo || !prefs) return <LoadingAnimation message="Loading account…" />;
+    const accountsURL = useAccountsURL()
+    const user = useCurrentUser()
 
-    const email = userInfo.contact_infos.find(e => e.type == 'EmailAddress')
+    if (!user || !prefs) return <LoadingAnimation message="Loading account…" />;
+
+    const email = user.contactInfos?.find(e => e.type == 'EmailAddress')
     const savePrefs = async (update: UserPreferences) => {
         await api.updatePreferences({ updatePreferences: { preferences: update } })
     }
@@ -89,12 +90,12 @@ export default function AccountDetails() {
         <Wrapper direction='column' className="account">
             <TopNavBar />
 
-            <Box className="container-lg py-4" justify='between'>
-                <div >
+            <Box className="container-lg py-4 mb-auto" justify='between'>
+                <div>
                     <h2 className="mb-3">My Account</h2>
                     <Box justify='between' align="center">
                         <h5 className="mb-0 p-0">General</h5>
-                        <a href={`${accountsUrl()}`}>
+                        <a href={`${accountsURL}`}>
                             <span>Update Account</span>
                             <Icon icon="chevronRight" />
                         </a>
@@ -102,7 +103,7 @@ export default function AccountDetails() {
 
                     <label className="text">
                         <span>Name</span>
-                        <input disabled value={userInfo.full_name} />
+                        <input disabled value={user.fullName} />
                     </label>
 
                     {email && (<label className="text">
@@ -152,9 +153,9 @@ export default function AccountDetails() {
                     </Form >
                 </div>
                 {!isMobile && <Sidebar />}
-            </Box >
+            </Box>
 
-            <Footer className='mt-auto'/>
+            <Footer />
         </Wrapper>
     )
 }

@@ -64,6 +64,18 @@ export interface Environment {
     readonly isImpersonating?: boolean;
     /**
      * 
+     * @type {Researcher}
+     * @memberof Environment
+     */
+    impersonatingResearcher?: Researcher;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Environment
+     */
+    readonly isEligible?: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof Environment
      */
@@ -115,6 +127,8 @@ export function EnvironmentFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'user': EnvironmentUserFromJSON(json['user']),
         'researcher': !exists(json, 'researcher') ? undefined : ResearcherFromJSON(json['researcher']),
         'isImpersonating': !exists(json, 'is_impersonating') ? undefined : json['is_impersonating'],
+        'impersonatingResearcher': !exists(json, 'impersonating_researcher') ? undefined : ResearcherFromJSON(json['impersonating_researcher']),
+        'isEligible': !exists(json, 'is_eligible') ? undefined : json['is_eligible'],
         'accountsEnvName': json['accounts_env_name'],
         'homepageUrl': json['homepage_url'],
         'rewardsSchedule': ((json['rewards_schedule'] as Array<any>).map(RewardsScheduleSegmentFromJSON)),
@@ -133,6 +147,7 @@ export function EnvironmentToJSON(value?: Environment | null): any {
         
         'user': EnvironmentUserToJSON(value.user),
         'researcher': ResearcherToJSON(value.researcher),
+        'impersonating_researcher': ResearcherToJSON(value.impersonatingResearcher),
         'rewards_schedule': ((value.rewardsSchedule as Array<any>).map(RewardsScheduleSegmentToJSON)),
         'banners_schedule': ((value.bannersSchedule as Array<any>).map(BannerMessageToJSON)),
     };

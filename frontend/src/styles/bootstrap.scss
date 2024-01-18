@@ -12,6 +12,9 @@ $small-font-size: $font-size-base * .875 !default;
 $x-small-font-size: $font-size-base * .75 !default;
 $xx-small-font-size: $font-size-base * .6875 !default;
 $body-color: #424242;
+$input-bg: #FFFFFF;
+$input-disabled-bg: #E3E3E3;
+$input-disabled-border-color: #DBDBDB;
 
 .small {
     font-size: $small-font-size;
@@ -73,9 +76,6 @@ $spacers: map-merge(
   $spacers
 );
 
-$toast-background-color: rgba(#f6f8fa, 1);
-$toast-header-background-color: rgba(#f6f8fa, 1);
-
 // scss-docs-start import-stack
 // Configuration
 @import "node_modules/bootstrap/scss/functions";
@@ -109,7 +109,7 @@ $toast-header-background-color: rgba(#f6f8fa, 1);
 // @import "node_modules/bootstrap/scss/progress";
 @import "node_modules/bootstrap/scss/list-group";
 @import "node_modules/bootstrap/scss/close";
-@import "node_modules/bootstrap/scss/toasts";
+//@import "node_modules/bootstrap/scss/toasts";
 @import "node_modules/bootstrap/scss/modal";
 @import "node_modules/bootstrap/scss/tooltip";
 @import "node_modules/bootstrap/scss/popover";

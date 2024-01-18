@@ -1,7 +1,5 @@
 import { React } from '@common'
-import { UserInfo } from '@models'
 import { ErrorPage, IncorrectUser, LoadingAnimation } from '@components'
-import { useLocation } from 'react-router-dom'
 import { ENV } from './env'
 import { useApi } from './api-config'
 import { useQuery } from 'react-query';
@@ -20,7 +18,6 @@ export const useFetchEnvironment = () => {
 
 export const EnvironmentProvider: FCWC = ({ children }) => {
     const { data: env, error, isLoading } = useFetchEnvironment()
-    const location = useLocation()
 
     if (error) {
         return <ErrorPage error={error} />
@@ -30,7 +27,7 @@ export const EnvironmentProvider: FCWC = ({ children }) => {
         return <LoadingAnimation />
     }
 
-    if (!env.user.userId && (ENV.IS_PROD_MODE || !location.pathname.startsWith('/dev/user'))) {
+    if (!env.user.userId && (ENV.IS_PROD_MODE || !window.location.pathname.startsWith('/dev/user'))) {
         return (
             <EnvironmentContext.Provider value={env}>
                 <IncorrectUser />
@@ -57,12 +54,6 @@ export const useCurrentResearcher = () => {
     return env.researcher
 }
 
-export const useUserInfo = () => {
-    return useQuery('fetchUserInfo', () => {
-        return fetchUserInfo()
-    })
-}
-
 export const useUserPreferences = () => {
     const api = useApi()
 
@@ -71,7 +62,7 @@ export const useUserPreferences = () => {
     })
 }
 
-export const locationOrigin = () => {
+export const useLocationOrigin = () => {
     const env = useEnvironment()
     if (env.accountsEnvName === 'production') {
         return `https://openstax.org`;
@@ -79,30 +70,24 @@ export const locationOrigin = () => {
     return `https://${env.accountsEnvName}.openstax.org`;
 }
 
-export const loginURL = () => {
-    const url = accountsUrl()
+export const useLoginURL = () => {
+    const url = useAccountsURL()
     if (ENV.IS_DEV_MODE) return url
 
     return `${url}/login/?r=${encodeURIComponent(window.location.href)}`
 }
 
-export const logoutURL = () => {
+export const useLogoutURL = () => {
+    const locationOrigin = useLocationOrigin()
+    const accountsURL = useAccountsURL()
     if (ENV.IS_DEV_MODE) return '/dev/user';
-    const homepage = encodeURIComponent(`${locationOrigin()}/kinetic`);
-    return `${accountsUrl()}/signout?r=${homepage}`;
+    const homepage = encodeURIComponent(`${locationOrigin}/kinetic`);
+    return `${accountsURL}/signout?r=${homepage}`;
 }
 
-export const accountsUrl = (): string => {
+export const useAccountsURL = (): string => {
+    const locationOrigin = useLocationOrigin()
+
     if (ENV.IS_DEV_MODE) return '/dev/user'
-    return `${locationOrigin()}/accounts`;
-}
-
-export const accountsApiUrl = (): string => {
-    if (ENV.IS_DEV_MODE) return `${ENV.API_ADDRESS}/development/user/api/user`
-    return `${accountsUrl()}/api/user`
-}
-
-export const fetchUserInfo = async (): Promise<UserInfo> => {
-    const resp = await fetch(`${accountsApiUrl()}`, { credentials: 'include' })
-    return resp.json()
+    return `${locationOrigin}/accounts`;
 }

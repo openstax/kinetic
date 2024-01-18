@@ -45,11 +45,23 @@ export interface ParticipantStudy {
      */
     popularityRating?: number;
     /**
-     * Should this study be feautured more prominently?
+     * Is this study the demographic survey?
+     * @type {boolean}
+     * @memberof ParticipantStudy
+     */
+    readonly isDemographicSurvey?: boolean;
+    /**
+     * Should this study be featured more prominently?
      * @type {boolean}
      * @memberof ParticipantStudy
      */
     readonly isFeatured?: boolean;
+    /**
+     * Is this study a part of the syllabus contest?
+     * @type {boolean}
+     * @memberof ParticipantStudy
+     */
+    readonly isSyllabusContestStudy?: boolean;
     /**
      * When the study was completed; null means not completed.
      * @type {Date}
@@ -123,6 +135,12 @@ export interface ParticipantStudy {
      */
     isHidden?: boolean;
     /**
+     * Did the participant consent
+     * @type {boolean}
+     * @memberof ParticipantStudy
+     */
+    readonly consented?: boolean;
+    /**
      * When the study was launched; null means not launched
      * @type {Date}
      * @memberof ParticipantStudy
@@ -158,12 +176,6 @@ export interface ParticipantStudy {
      * @memberof ParticipantStudy
      */
     researchers?: Array<Researcher>;
-    /**
-     * Mandatory studies must be completed by all users
-     * @type {boolean}
-     * @memberof ParticipantStudy
-     */
-    isMandatory?: boolean;
     /**
      * How many times the study has been viewed
      * @type {number}
@@ -261,7 +273,9 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         
         'id': json['id'],
         'popularityRating': !exists(json, 'popularity_rating') ? undefined : json['popularity_rating'],
+        'isDemographicSurvey': !exists(json, 'is_demographic_survey') ? undefined : json['is_demographic_survey'],
         'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
+        'isSyllabusContestStudy': !exists(json, 'is_syllabus_contest_study') ? undefined : json['is_syllabus_contest_study'],
         'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
         'optedOutAt': !exists(json, 'opted_out_at') ? undefined : (new Date(json['opted_out_at'])),
         'totalPoints': json['total_points'],
@@ -274,13 +288,13 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
         'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
+        'consented': !exists(json, 'consented') ? undefined : json['consented'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
         'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
         'status': !exists(json, 'status') ? undefined : json['status'],
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
-        'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
         'publicOn': !exists(json, 'public_on') ? undefined : (json['public_on'] === null ? null : new Date(json['public_on'])),
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
@@ -320,7 +334,6 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'target_sample_size': value.targetSampleSize,
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(ResearcherToJSON)),
-        'is_mandatory': value.isMandatory,
         'view_count': value.viewCount,
         'public_on': value.publicOn === undefined ? undefined : (value.publicOn === null ? null : value.publicOn.toISOString()),
         'category': value.category,

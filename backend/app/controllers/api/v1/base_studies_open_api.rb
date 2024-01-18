@@ -39,6 +39,11 @@ class Api::V1::BaseStudiesOpenApi
         key :type, :boolean
         key :description, 'Is the study hidden from participants'
       end
+      property :consented do
+        key :type, :boolean
+        key :description, 'Did the participant consent'
+        key :readOnly, true
+      end
       property :first_launched_at do
         key :type, :string
         key :format, 'date-time'
@@ -74,10 +79,6 @@ class Api::V1::BaseStudiesOpenApi
         items do
           key :$ref, :Researcher
         end
-      end
-      property :is_mandatory do
-        key :type, :boolean
-        key :description, 'Mandatory studies must be completed by all users'
       end
       property :view_count do
         key :type, :number

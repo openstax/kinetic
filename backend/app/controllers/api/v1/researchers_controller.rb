@@ -7,7 +7,7 @@ class Api::V1::ResearchersController < Api::V1::Researcher::BaseController
   def index
     @researchers = Researcher.all
     response_binding = Api::V1::Bindings::ResearchersList.new(
-      data: @researchers.map do |researcher|
+      data: @researchers.order(:last_name).map do |researcher|
         Api::V1::Bindings::Researcher.create_from_model(researcher)
       end
     )
@@ -24,7 +24,7 @@ class Api::V1::ResearchersController < Api::V1::Researcher::BaseController
   def avatar_upload
     @researcher = Researcher.find(params[:researcher_id])
     if params[:avatar]
-      @researcher.avatar.attach(params[:avatar])
+      @researcher.avatar.attach(params.permit(:avatar)[:avatar])
       @researcher.reload
     end
     render json: Api::V1::Bindings::Researcher.create_from_model(@researcher), status: :ok

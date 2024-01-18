@@ -87,6 +87,12 @@ export interface StudyUpdate {
      */
     isHidden?: boolean;
     /**
+     * Did the participant consent
+     * @type {boolean}
+     * @memberof StudyUpdate
+     */
+    readonly consented?: boolean;
+    /**
      * When the study was launched; null means not launched
      * @type {Date}
      * @memberof StudyUpdate
@@ -122,12 +128,6 @@ export interface StudyUpdate {
      * @memberof StudyUpdate
      */
     researchers?: Array<Researcher>;
-    /**
-     * Mandatory studies must be completed by all users
-     * @type {boolean}
-     * @memberof StudyUpdate
-     */
-    isMandatory?: boolean;
     /**
      * How many times the study has been viewed
      * @type {number}
@@ -228,13 +228,13 @@ export function StudyUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
         'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
+        'consented': !exists(json, 'consented') ? undefined : json['consented'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
         'opensAt': !exists(json, 'opens_at') ? undefined : (json['opens_at'] === null ? null : new Date(json['opens_at'])),
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
         'status': !exists(json, 'status') ? undefined : json['status'],
         'researchers': !exists(json, 'researchers') ? undefined : ((json['researchers'] as Array<any>).map(ResearcherFromJSON)),
-        'isMandatory': !exists(json, 'is_mandatory') ? undefined : json['is_mandatory'],
         'viewCount': !exists(json, 'view_count') ? undefined : json['view_count'],
         'publicOn': !exists(json, 'public_on') ? undefined : (json['public_on'] === null ? null : new Date(json['public_on'])),
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
@@ -268,7 +268,6 @@ export function StudyUpdateToJSON(value?: StudyUpdate | null): any {
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'target_sample_size': value.targetSampleSize,
         'researchers': value.researchers === undefined ? undefined : ((value.researchers as Array<any>).map(ResearcherToJSON)),
-        'is_mandatory': value.isMandatory,
         'view_count': value.viewCount,
         'public_on': value.publicOn === undefined ? undefined : (value.publicOn === null ? null : value.publicOn.toISOString()),
         'category': value.category,

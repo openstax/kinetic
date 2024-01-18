@@ -3,9 +3,13 @@ import { Box, React, useNavigate, useState } from '@common';
 import { colors } from '@theme';
 import { StudyCardPreview, Tag } from '../../../../learner/card';
 import { StudyStep } from '../edit-study';
-import { Col, Modal, ResearcherButton, useFormContext } from '@components';
+import { Col, Modal, useFormContext } from '@components';
 import { Study } from '@api';
 import { useApi } from '@lib';
+import { capitalize } from 'lodash-es';
+import Waiting from '@images/study-creation/waiting.svg'
+import { useLocalstorageState } from 'rooks';
+import { Button } from '@mantine/core';
 
 export const ReviewStudy: FC<{ study: Study }> = ({ study }) => {
     return (
@@ -31,13 +35,13 @@ const EditingStudyInformation: FC<{ study: Study }> = ({ study }) => {
 
     return (
         <Box gap='xxlarge'>
-            <Col sm={5} direction='column' gap='large'>
-                <Box justify='between' direction='column'>
+            <Col sm={5} direction='column' gap='xlarge'>
+                <Box justify='between' direction='column' gap>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Internal Details</h6>
-                        <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.InternalDetails)}>
+                        <Button variant='outline' onClick={() => setStep(StudyStep.InternalDetails)}>
                             Edit
-                        </ResearcherButton>
+                        </Button>
                     </Col>
                     <Col sm={8} direction='column'>
                         <ul>
@@ -63,9 +67,9 @@ const EditingStudyInformation: FC<{ study: Study }> = ({ study }) => {
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Research Team</h6>
-                        <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.ResearchTeam)}>
+                        <Button color='blue' variant='outline' onClick={() => setStep(StudyStep.ResearchTeam)}>
                             Edit
-                        </ResearcherButton>
+                        </Button>
                     </Col>
                     <Col sm={8} direction='column'>
                         <ul>
@@ -97,13 +101,12 @@ const EditingStudyInformation: FC<{ study: Study }> = ({ study }) => {
                 <Box justify='between' direction='column'>
                     <Col justify='between' direction='row'>
                         <h6 className='fw-bold'>Participant View</h6>
-                        <ResearcherButton buttonType='secondary' onClick={() => setStep(StudyStep.ParticipantView)}>
+                        <Button variant='outline' color='blue' onClick={() => setStep(StudyStep.ParticipantView)}>
                             Edit
-                        </ResearcherButton>
+                        </Button>
                     </Col>
                     <Col sm={8} direction='column'>
-                        <small>Interact with the study card on the right-hand side to review how participants view your
-                            study</small>
+                        <small>Interact with the study card on the right-hand side to review how participants view your study</small>
                     </Col>
                 </Box>
 
@@ -128,7 +131,7 @@ const AdditionalSessionsOverview: FC<{ study: Study }> = ({ study }) => {
     }
 
     return (
-        <Box direction='column' gap='large'>
+        <Box direction='column' gap='xlarge'>
             <svg css={{ strokeWidth: 2, height: 40 }}>
                 <line x1="0" y1="30" x2="500" y2="30" strokeDasharray={10} stroke={colors.text}/>
             </svg>
@@ -137,12 +140,12 @@ const AdditionalSessionsOverview: FC<{ study: Study }> = ({ study }) => {
                 <Col justify='between' direction='row'>
                     <h6 className='fw-bold'>Additional Sessions (optional)</h6>
 
-                    <ResearcherButton
-                        buttonType={stageCount == 1 ? 'primary' : 'secondary'}
+                    <Button
+                        variant={stageCount == 1 ? 'filled' : 'outline'}
                         onClick={() => setStep(StudyStep.AdditionalSessions)}
                     >
                         {stageCount == 1 ? 'Start' : 'Edit'}
-                    </ResearcherButton>
+                    </Button>
                 </Col>
 
                 <Col sm={8} direction='column'>
@@ -152,16 +155,20 @@ const AdditionalSessionsOverview: FC<{ study: Study }> = ({ study }) => {
                     {study.stages?.map((stage, index) => {
                         if (index === 0) return null
                         return (
-                            <small key={stage.order}>
-                                Session {index + 1}: {stage.durationMinutes} minutes, {stage.points} points
-                            </small>
+                            <Col key={stage.order}>
+                                <small>
+                                    Session {index + 1}: {stage.durationMinutes} minutes, {stage.points} points
+                                </small>
+                                <small>
+                                    Participant Feedback: {stage.feedbackTypes?.map(capitalize).join(', ')}
+                                </small>
+                            </Col>
                         )
                     })}
                 </Col>
             </Box>
         </Box>
     )
-
 }
 
 export const SubmitStudyModal: FC<{
@@ -172,6 +179,8 @@ export const SubmitStudyModal: FC<{
     const api = useApi()
     const [submitted, setSubmitted] = useState(false)
     const [submitting, setSubmitting] = useState(false)
+    const [, , removeStudyProgressStep] = useLocalstorageState<StudyStep>(`study-progress-${study.id}`)
+    const [, , removeMaxStep] = useLocalstorageState<StudyStep>(`study-max-progress-${study.id}`)
     if (submitted) {
         return <SubmitSuccess show={submitted} />
     }
@@ -186,30 +195,33 @@ export const SubmitStudyModal: FC<{
     return (
         <Modal
             center
+            closeBtn={false}
             show={show}
             large
         >
             <Modal.Body>
                 <Box padding='4rem' align='center' justify='center' direction='column' gap='xlarge'>
                     <Box align='center' className='text-center' direction='column'>
-                        <p>You’re about to submit your study to the Kinetic team so that the appropriate permissions are set. Please review and confirm any final changes.</p>
-                        <p className='fw-bold text-danger'>You won’t be able to change your Kinetic study information past this point.</p>
+                        <p>You're about to submit your study to the Kinetic team so that the appropriate permissions are set. Please review and confirm any final changes.</p>
+                        <p className='fw-bold text-danger'>You won't be able to change your Kinetic study information past this point.</p>
                         <p>Are you ready to proceed?</p>
                     </Box>
                     <Box gap='large'>
-                        <ResearcherButton buttonType='secondary' onClick={() => setShow(false)}>
+                        <Button variant='outline' onClick={() => setShow(false)}>
                             Not yet, edit study
-                        </ResearcherButton>
-                        <ResearcherButton data-testid='submit-study-button' busyMessage='Submitting' busy={submitting} onClick={() => {
+                        </Button>
+                        <Button data-testid='submit-study-button' loading={submitting} onClick={() => {
                             setSubmitting(true)
                             submitStudy().then(() => {
                                 setSubmitted(true)
                                 setSubmitting(false)
                                 setShow(false)
+                                removeStudyProgressStep()
+                                removeMaxStep()
                             })
                         }}>
                             Yes, submit study
-                        </ResearcherButton>
+                        </Button>
                     </Box>
                 </Box>
             </Modal.Body>
@@ -223,17 +235,18 @@ const SubmitSuccess: FC<{ show: boolean }> = ({ show }) => {
         <Modal center show={show} large>
             <Modal.Body>
                 <Box padding='4rem' align='center' justify='center' direction='column' gap='xlarge'>
+                    <img src={Waiting} alt='waiting' height={200}/>
+
                     <Box align='center' className='text-center' direction='column'>
-                        <span>Our team is creating a Qualtrics template and setting up the correct permissions for your study. You will receive an email from owlsurveys@rice.edu containing an access code to your Qualtrics template and further instructions via your registered email within the next business day.</span>
-                        <br/>
-                        <span>Follow the instructions to build your task and come back here to proceed with finalizing your study and launching it on Kinetic.</span>
+                        <p>Our team is creating a Qualtrics template and setting up the correct permissions for your study. You will receive an email from <a href="mailto: owlsurveys@rice.edu">owlsurveys@rice.edu</a> containing an access code to your Qualtrics template and further instructions via your registered email within the next business day.</p>
+                        <p>Follow the instructions to build your task and come back here to proceed with finalizing your study and launching it on Kinetic.</p>
                     </Box>
 
-                    <ResearcherButton data-testid='submit-study-success-button' onClick={() => {
+                    <Button data-testid='submit-study-success-button' onClick={() => {
                         nav('/studies')
                     }}>
                         Return to Studies Dashboard
-                    </ResearcherButton>
+                    </Button>
                 </Box>
             </Modal.Body>
         </Modal>

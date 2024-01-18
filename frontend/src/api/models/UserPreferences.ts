@@ -44,11 +44,17 @@ export interface UserPreferences {
      */
     sessionAvailableEmail?: boolean;
     /**
-     * User has viewed the analysis tutorial overview on the frontend
+     * Researcher has viewed the analysis tutorial overview on the researcher analysis page
      * @type {boolean}
      * @memberof UserPreferences
      */
     hasViewedAnalysisTutorial?: boolean;
+    /**
+     * Learner has viewed the initial welcome message on the learner dashboard
+     * @type {boolean}
+     * @memberof UserPreferences
+     */
+    hasViewedWelcomeMessage?: boolean;
 }
 
 /**
@@ -75,6 +81,7 @@ export function UserPreferencesFromJSONTyped(json: any, ignoreDiscriminator: boo
         'studyAvailableEmail': !exists(json, 'study_available_email') ? undefined : json['study_available_email'],
         'sessionAvailableEmail': !exists(json, 'session_available_email') ? undefined : json['session_available_email'],
         'hasViewedAnalysisTutorial': !exists(json, 'has_viewed_analysis_tutorial') ? undefined : json['has_viewed_analysis_tutorial'],
+        'hasViewedWelcomeMessage': !exists(json, 'has_viewed_welcome_message') ? undefined : json['has_viewed_welcome_message'],
     };
 }
 
@@ -92,6 +99,7 @@ export function UserPreferencesToJSON(value?: UserPreferences | null): any {
         'study_available_email': value.studyAvailableEmail,
         'session_available_email': value.sessionAvailableEmail,
         'has_viewed_analysis_tutorial': value.hasViewedAnalysisTutorial,
+        'has_viewed_welcome_message': value.hasViewedWelcomeMessage,
     };
 }
 

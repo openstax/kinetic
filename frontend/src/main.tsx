@@ -1,14 +1,18 @@
 import { React } from '@common'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter as Router } from 'react-router-dom'
 import { EnvironmentProvider, whenDomReady } from '@lib'
 import { AppRoutes } from './routes'
 import './lib/sentry'
 import './index.css'
 import './styles/main.scss'
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+import '@mantine/dropzone/styles.css';
 import { mantineTheme } from '@theme'
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
+import { ImpersonatingBanner } from './components/impersonating-banner';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -20,15 +24,15 @@ const queryClient = new QueryClient({
 
 const App = () => (
     <React.StrictMode>
-        <Router>
-            <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClient}>
+            <MantineProvider theme={mantineTheme}>
                 <EnvironmentProvider>
-                    <MantineProvider withGlobalStyles withNormalizeCSS theme={mantineTheme}>
-                        <AppRoutes />
-                    </MantineProvider>
+                    <Notifications position='top-right' />
+                    <ImpersonatingBanner />
+                    <AppRoutes />
                 </EnvironmentProvider>
-            </QueryClientProvider>
-        </Router>
+            </MantineProvider>
+        </QueryClientProvider>
     </React.StrictMode>
 )
 

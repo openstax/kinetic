@@ -3,6 +3,28 @@
 class Api::V1::Admin::StudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
+  openapi_component do
+    schema :AdminStudyFilesListing do
+      key :required, [:responses, :infos]
+
+      property :responses do
+        key :type, :array
+        key :description, 'The responses for the study'
+        items do
+          key :$ref, :ResponseExport
+        end
+      end
+
+      property :infos do
+        key :type, :array
+        key :description, 'The info files for the study'
+        items do
+          key :$ref, :AnalysisInfo
+        end
+      end
+    end
+  end
+
   openapi_path '/admin/studies/{status}' do
     operation :get do
       key :summary, 'Retrieve all studies with status'
@@ -65,7 +87,7 @@ class Api::V1::Admin::StudiesOpenApi
       response 200 do
         key :description, 'Success.'
         content 'application/json' do
-          schema { key :$ref, :ResponsesListing }
+          schema { key :$ref, :AdminStudyFilesListing }
         end
       end
       extend Api::V1::OpenApiResponses::AuthenticationError
@@ -75,7 +97,83 @@ class Api::V1::Admin::StudiesOpenApi
     end
   end
 
-  openapi_path '/admin/responses/{id}' do
+  openapi_path '/admin/stage/{stage_id}/infos' do
+    operation :post do
+      key :summary, 'add a info file'
+      key :operationId, 'adminAddInfo'
+
+      parameter do
+        key :name, :stage_id
+        key :in, :path
+        key :description, 'id of stage'
+        key :required, true
+        key :schema, { type: :integer }
+      end
+      request_body do
+        key :description, 'The info data'
+        key :required, true
+        content 'multipart/form-data' do
+          schema do
+            property :file do
+              key :type, :string
+              key :format, 'binary'
+            end
+          end
+        end
+      end
+
+      response 200 do
+        key :description, 'Success.'
+        content 'application/json' do
+          schema { key :$ref, :AdminStudyFilesListing }
+        end
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+  end
+
+  openapi_path '/admin/stage/{stage_id}/analysis_info' do
+    operation :post do
+      key :summary, 'add an analysis info file'
+      key :operationId, 'adminAddAnalysisInfo'
+
+      parameter do
+        key :name, :stage_id
+        key :in, :path
+        key :description, 'id of stage'
+        key :required, true
+        key :schema, { type: :integer }
+      end
+      request_body do
+        key :description, 'The html formatted info file'
+        key :required, true
+        content 'multipart/form-data' do
+          schema do
+            property :file do
+              key :type, :string
+              key :format, 'binary'
+            end
+          end
+        end
+      end
+
+      response 200 do
+        key :description, 'Success.'
+        content 'application/json' do
+          schema { key :$ref, :AdminStudyFilesListing }
+        end
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+  end
+
+  openapi_path '/admin/response/{id}' do
     operation :delete do
       key :summary, 'remove a response file'
       key :operationId, 'adminDestroyResponse'
@@ -91,7 +189,7 @@ class Api::V1::Admin::StudiesOpenApi
       response 200 do
         key :description, 'Success.'
         content 'application/json' do
-          schema { key :$ref, :ResponsesListing }
+          schema { key :$ref, :AdminStudyFilesListing }
         end
       end
       extend Api::V1::OpenApiResponses::AuthenticationError
@@ -101,19 +199,15 @@ class Api::V1::Admin::StudiesOpenApi
     end
   end
 
-  openapi_path '/admin/study/{id}/responses' do
-    operation :get do
-      key :summary, 'Retrieve all responses for study'
-      key :description, <<~DESC
-        Returns listing of all responses for a study
-      DESC
-      key :operationId, 'adminResponsesForStudy'
+  openapi_path '/admin/info/{id}' do
+    operation :delete do
+      key :summary, 'remove a info file'
+      key :operationId, 'adminDestroyInfo'
 
       parameter do
         key :name, :id
         key :in, :path
-        key :description,
-            'fetch responses for the study with the given id'
+        key :description, 'id of info'
         key :required, true
         key :schema, { type: :integer }
       end
@@ -121,7 +215,37 @@ class Api::V1::Admin::StudiesOpenApi
       response 200 do
         key :description, 'Success.'
         content 'application/json' do
-          schema { key :$ref, :ResponsesListing }
+          schema { key :$ref, :AdminStudyFilesListing }
+        end
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+  end
+
+  openapi_path '/admin/study/{id}/files' do
+    operation :get do
+      key :summary, 'Retrieve all responses for study'
+      key :description, <<~DESC
+        Returns listing of all responses and info files for a study
+      DESC
+      key :operationId, 'adminFilesForStudy'
+
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description,
+            'fetch responses and help for the study with the given id'
+        key :required, true
+        key :schema, { type: :integer }
+      end
+
+      response 200 do
+        key :description, 'Success.'
+        content 'application/json' do
+          schema { key :$ref, :AdminStudyFilesListing }
         end
       end
       extend Api::V1::OpenApiResponses::AuthenticationError

@@ -1,23 +1,27 @@
-import { faker, goToPage, loginAs, test } from './test';
+import { faker, goToPage, test, useResearcherPage } from './test';
 import { expect } from '@playwright/test';
 
-test('can update researcher account details', async({ page }) => {
-    await loginAs({ page, login: 'researcher' })
-    await goToPage({ page, path: `/researcher-account` })
+test('can update researcher account details', async({ browser }) => {
+    const researcherPage = await useResearcherPage(browser)
+    await goToPage({ page: researcherPage, path: `/researcher-account` })
 
-    await page.fill('[name=firstName]', 'a'.repeat(60))
-    expect(await page.$('[name=firstName].is-invalid')).toBeDefined()
+    await researcherPage.fill('[name=firstName]', 'a'.repeat(60))
+    expect(researcherPage.locator('[name=firstName].is-invalid')).toBeDefined()
 
-    await page.fill('[name=firstName]', faker.name.firstName())
-    await page.fill('[name=firstName]', faker.name.lastName())
+    await researcherPage.fill('[name=firstName]', faker.name.firstName())
+    await researcherPage.fill('[name=firstName]', faker.name.lastName())
 
-    await page.fill('[name=researchInterest1]', faker.music.genre())
-    await page.fill('[name=researchInterest2]', faker.music.genre())
-    await page.fill('[name=researchInterest3]', faker.music.genre())
+    await researcherPage.fill('[name=researchInterest1]', faker.music.genre())
+    await researcherPage.fill('[name=researchInterest2]', faker.music.genre())
+    await researcherPage.fill('[name=researchInterest3]', faker.music.genre())
 
-    await page.fill('[name=labPage]', faker.internet.url())
-    await page.fill('[name=bio]', faker.name.jobDescriptor())
+    await researcherPage.fill('[name=labPage]', faker.internet.url())
+    await researcherPage.fill('[name=bio]', faker.name.jobDescriptor())
+    await researcherPage.locator('.select', {
+        has: researcherPage.locator(`input[name=institution]`),
+    }).click()
+    await researcherPage.keyboard.press('Enter')
 
-    await page.click('testId=form-save-btn')
-    await page.waitForLoadState('networkidle')
+    await researcherPage.click('testId=form-save-btn')
+    await researcherPage.waitForLoadState('networkidle')
 })

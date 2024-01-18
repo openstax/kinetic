@@ -6,7 +6,9 @@ class Study < ApplicationRecord
   # need the double quotes, order is a postgresql semi-reserved word
   has_many :stages, -> { order('"order"') }, inverse_of: :study, dependent: :destroy
   has_many :launched_stages, through: :stages
-  has_many :launched_studies, counter_cache: true
+  has_many :launched_studies
+
+  has_many :analysis_infos, through: :stages, source: :analysis_infos_attachments
 
   has_many :response_exports, through: :stages
   has_many :study_analysis
@@ -42,7 +44,9 @@ class Study < ApplicationRecord
   scope :multi_stage, -> { joins(:stages).group('studies.id').having('count(study_id) > 1') }
 
   scope :available_to_participants, -> {
-    where
+    joins(:stages)
+      .where(stages: { status: 'active' })
+      .where
       .not(opens_at: nil)
       .where(is_hidden: false)
       .where(arel[:opens_at].lteq(Time.now))
@@ -80,9 +84,36 @@ class Study < ApplicationRecord
     launched_studies.size
   end
 
+  def update_stages(updated_stages)
+    return if updated_stages.nil? || launched_stages.any?
+
+    # remove any extra stages that were removed
+    stages.delete(stages.last) while stages.count > updated_stages.count
+
+    updated_stages.each_with_index do |stage, i|
+      s = stages[i]
+      if s.present?
+        s.update!(stage.to_hash)
+      else
+        stages.create!(stage.to_hash.merge({ config: {} }))
+      end
+    end
+  end
+
   def is_featured?
     featured_ids = Rails.application.secrets.fetch(:featured_studies, [])
     featured_ids.any? && stages.any? { |st| featured_ids.include?(st.config['survey_id']) }
+  end
+
+  def is_demographic_survey?
+    stages.any? do |stage|
+      stage.config['survey_id'] == Rails.application.secrets.demographic_survey_id
+    end
+  end
+
+  def is_syllabus_contest_study?
+    contest_ids = Rails.application.secrets.fetch(:syllabus_contest_studies, [])
+    contest_ids.any? && stages.any? { |st| contest_ids.include?(st.config['survey_id']) }
   end
 
   def next_launchable_stage(user)
@@ -126,8 +157,10 @@ class Study < ApplicationRecord
     end
   end
 
-  def pause
-    stages.where.not(status: 'paused').first&.update!(status: 'paused')
+  def pause(stage_index=0)
+    stages.first(stage_index.to_i + 1).each do |stage|
+      stage.update!(status: 'paused')
+    end
   end
 
   def resume(stage_index=0)
@@ -156,9 +189,9 @@ class Study < ApplicationRecord
 
   # called from studies controller to update status using action and stage_index from params
   def update_status!(action, stage_index)
-    if %w[pause end launch].include?(action)
+    if %w[end launch].include?(action)
       send(action)
-    elsif %w[resume reopen].include?(action)
+    elsif %w[resume pause reopen].include?(action)
       send(action, stage_index)
     elsif action == 'submit'
       submit

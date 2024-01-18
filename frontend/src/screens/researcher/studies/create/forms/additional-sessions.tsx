@@ -66,9 +66,10 @@ const AdditionalSession: FC<{
     onDelete: (index: number) => void,
     session: Stage | NewStage
 }> = ({ index, onDelete, session }) => {
+    const { register, getValues } = useFormContext()
+
     // don't show the first session
     if (index === 0) return null
-    const { register, getValues } = useFormContext()
     const prevStagePoints = getValues(`stages.${index - 1}.points`)
 
     return (
@@ -90,32 +91,32 @@ const AdditionalSession: FC<{
                             <Box gap>
                                 <input
                                     type='radio'
-                                    id='min-5'
+                                    id={`min-5-${index}`}
                                     value={5}
                                     {...register(`stages.${index}.durationMinutes`)}
                                     defaultChecked={session?.durationMinutes === 5}
                                 />
-                                <label htmlFor='min-5'>~5 minutes</label>
+                                <label htmlFor={`min-5-${index}`}>~5 minutes</label>
                             </Box>
                             <Box gap>
                                 <input
                                     type='radio'
-                                    id='min-15'
+                                    id={`min-15-${index}`}
                                     value={15}
                                     {...register(`stages.${index}.durationMinutes`)}
                                     defaultChecked={session?.durationMinutes === 15}
                                 />
-                                <label htmlFor='min-15'>~15 minutes</label>
+                                <label htmlFor={`min-15-${index}`}>~15 minutes</label>
                             </Box>
                             <Box gap>
                                 <input
                                     type='radio'
-                                    id='min-25'
+                                    id={`min-25-${index}`}
                                     value={25}
                                     {...register(`stages.${index}.durationMinutes`)}
                                     defaultChecked={session?.durationMinutes === 25}
                                 />
-                                <label htmlFor='min-25'>~25 minutes</label>
+                                <label htmlFor={`min-25-${index}`}>~25 minutes</label>
                             </Box>
                         </Box>
                     </Col>

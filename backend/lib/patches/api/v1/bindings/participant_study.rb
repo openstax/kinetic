@@ -40,6 +40,8 @@ Rails.application.config.to_prepare do
     def self.attributes_from_study_model(model, user)
       model.attributes_for_binding(self).tap do |attributes|
         attributes[:is_featured] = model.is_featured?
+        attributes[:is_syllabus_contest_study] = model.is_syllabus_contest_study?
+        attributes[:is_demographic_survey] = model.is_demographic_survey?
         attributes[:total_points] = model.total_points
         attributes[:total_duration] = model.total_duration
         attributes[:stages] = model.stages.map do |stage_model|

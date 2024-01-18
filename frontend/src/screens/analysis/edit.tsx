@@ -6,10 +6,9 @@ import {
     FieldErrorMessage,
     FieldTitle,
     Form,
-    FormSaveButton,
     InputField,
     PageNotFound,
-    Toast,
+    showResearcherNotification,
     useFormState,
 } from '@components'
 import { Analysis, Study } from '@api'
@@ -17,6 +16,7 @@ import { getAnalysisValidationSchema, useFetchAnalyses } from '@models'
 import { errorToString, useApi, useQueryParam } from '@lib'
 import { SelectedStudies } from './selected-studies'
 import { ResearcherFAQ } from './researcher-faq';
+import { Button } from '@mantine/core';
 
 interface EditAnalysisProps {
     analyses: Analysis[]
@@ -72,16 +72,12 @@ export const EditAnalysis: FC<EditAnalysisProps> = ({ analyses, studies }) => {
         try {
             if (analysis.id) {
                 const updatedAnalysis = await api.updateAnalysis({ id: analysis.id, updateAnalysis: { analysis } })
-                Toast.show({
-                    message: `Successfully updated analysis ${updatedAnalysis.title}`,
-                })
+                showResearcherNotification(`Successfully updated analysis '${updatedAnalysis.title}'`)
                 await refetch()
                 nav(`/analysis/overview/${updatedAnalysis.id}`)
             } else {
                 const savedAnalysis = await api.addAnalysis({ addAnalysis: { analysis } })
-                Toast.show({
-                    message: `Successfully created analysis ${analysis.title}`,
-                })
+                showResearcherNotification(`Successfully created analysis '${analysis.title}'`)
                 await refetch()
                 nav(`/analysis/overview/${savedAnalysis.id}`)
             }
@@ -165,13 +161,14 @@ const BottomBar = () => {
     return (
         <Box className='fixed-bottom bg-white mt-auto' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
             <Box className='container-lg' align='center' justify='end'>
-                <FormSaveButton
+                <Button
+                    type='submit'
+                    color='blue'
                     data-testid='save-analysis-button'
-                    className='btn-researcher-primary'
                     disabled={!isValid}
                 >
                     Save & Continue
-                </FormSaveButton>
+                </Button>
             </Box>
         </Box>
     )

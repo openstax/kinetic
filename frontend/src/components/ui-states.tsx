@@ -1,8 +1,9 @@
 import { React, useEffect, useLocation } from '@common'
 import { Button } from '@components'
-import { LinkButton } from './styled-buttons'
 import { OXColoredStripe } from './ox-colored-stripe'
-import { reloadOnce, forceReload } from '../lib/reload';
+import { forceReload, reloadOnce } from '../lib/reload';
+import { NavLink } from 'react-router-dom';
+import { Container } from '@mantine/core';
 
 export const ErrorPage: React.FC<{ error: any }> = ({ error }) => {
     useEffect(reloadOnce, [])
@@ -27,12 +28,12 @@ export const PageNotFound: React.FC<{ name?: string }> = ({ name }) => {
     return (
         <div className="invalid-page not-found">
             <OXColoredStripe />
-            <div className="container pt-2">
+            <Container>
                 <h1>
                     Uh-oh, the <code>{path}</code> was not found
                 </h1>
-                <LinkButton primary to="/">Go Home</LinkButton>
-            </div>
+                <NavLink to="/">Go Home</NavLink>
+            </Container>
         </div>
     );
 }

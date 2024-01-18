@@ -30,7 +30,7 @@ export interface ParticipantStudyStage {
      * @type {string}
      * @memberof ParticipantStudyStage
      */
-    readonly title?: string;
+    title?: string;
     /**
      * The longer description shown to participants
      * @type {string}
@@ -79,12 +79,6 @@ export interface ParticipantStudyStage {
      * @memberof ParticipantStudyStage
      */
     feedbackTypes?: Array<string>;
-    /**
-     * Desired sample size set by researcher
-     * @type {number}
-     * @memberof ParticipantStudyStage
-     */
-    targetSampleSize?: number;
     /**
      * Status of the study
      * @type {string}
@@ -138,7 +132,6 @@ export function ParticipantStudyStageFromJSONTyped(json: any, ignoreDiscriminato
         'points': !exists(json, 'points') ? undefined : json['points'],
         'closesAt': !exists(json, 'closes_at') ? undefined : (json['closes_at'] === null ? null : new Date(json['closes_at'])),
         'feedbackTypes': !exists(json, 'feedback_types') ? undefined : json['feedback_types'],
-        'targetSampleSize': !exists(json, 'target_sample_size') ? undefined : json['target_sample_size'],
         'status': !exists(json, 'status') ? undefined : json['status'],
     };
 }
@@ -152,9 +145,9 @@ export function ParticipantStudyStageToJSON(value?: ParticipantStudyStage | null
     }
     return {
         
+        'title': value.title,
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'feedback_types': value.feedbackTypes,
-        'target_sample_size': value.targetSampleSize,
         'status': value.status,
     };
 }

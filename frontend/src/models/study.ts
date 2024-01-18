@@ -1,9 +1,9 @@
 import { DefaultApi, ParticipantStudy, ResearcherRoleEnum, Stage, Study, StudyStatusEnum } from '@api'
-import { isNil, useApi } from '@lib'
+import { useApi } from '@lib'
 import { dayjs, useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
-import { Toast } from '@nathanstitt/sundry/ui';
 import { useQuery } from 'react-query';
+import { showResearcherNotificationError } from '@components';
 
 export enum StudyStatus {
     Launched = 'Launched',
@@ -11,8 +11,8 @@ export enum StudyStatus {
     Completed = 'Completed',
 }
 
-export const LaunchStudy = async (api: DefaultApi, study: { id: number }, options: { preview?: boolean } = {}) => {
-    const launch = await api.launchStudy({ id: study.id, preview: options.preview || false })
+export const launchStudy = async (api: DefaultApi, studyId: number, options: { preview?: boolean } = {}) => {
+    const launch = await api.launchStudy({ id: studyId, preview: options.preview || false })
     window.location.assign(launch.url!)
     return launch
 }
@@ -84,10 +84,6 @@ export function getStudyLead(study: Study | ParticipantStudy) {
     return study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)
 }
 
-export function isParticipantStudy(study?: any): study is ParticipantStudy {
-    return study && !isNil((study).id) && !isNil((study).titleForParticipants)
-}
-
 export function studyIsMultipart(study: ParticipantStudy | Study): boolean {
     return Boolean(study.stages && study.stages.length > 1)
 }
@@ -113,25 +109,18 @@ export function getStudyDuration(study: ParticipantStudy): number {
 
 export const useFetchPublicStudies = () => {
     const api = useApi()
-    return useQuery('fetchPublicStudies', () => {
-        return api.getPublicStudies().then(res => res.data || [])
+    return useQuery('fetchPublicStudies', async () => {
+        const res = await api.getPublicStudies();
+        return res.data || [];
     })
 }
 
 export const useFetchStudies = () => {
     const api = useApi()
-    const [studies, setStudies] = useState<Study[]>([])
-    const fetchStudies = () => {
-        useEffect(() => {
-            api.getStudies().then(res => {
-                setStudies((res.data || []).filter(study => !study.isHidden))
-            })
-        }, [])
-    }
-
-    fetchStudies()
-
-    return { studies, setStudies, fetchStudies }
+    return useQuery('fetchStudies', async () => {
+        const res = await api.getStudies();
+        return res.data?.filter(study => !study.isHidden) || [];
+    })
 }
 
 export const useFetchStudy = (id: string) => {
@@ -156,11 +145,7 @@ export const useFetchStudy = (id: string) => {
             if (study) {
                 setStudy(study)
             } else {
-                Toast.show({
-                    error: true,
-                    title: 'Study not found',
-                    message: `Study with id ${id} not found`,
-                })
+                showResearcherNotificationError(`Study with id ${id} not found`)
             }
         })
     }, [id])
@@ -185,7 +170,7 @@ export const studyCategoryDescriptions = {
     'Transfer of Learning': 'Interventions that assess learning or other outcomes across domains',
 }
 
-export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other'
+export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other' | string
 export const studyTopics: StudyTopic[] = [
     'Learning',
     'Memory',

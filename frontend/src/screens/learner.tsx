@@ -3,45 +3,18 @@ import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
 import { Box, Footer, RewardsProgressBar, TopNavBar } from '@components'
-import { useIsMobileDevice } from '@lib'
+import { useEnvironment, useIsMobileDevice } from '@lib'
 import { StudyTopic, studyTopics } from '@models'
 import { StudyByTopics, useLearnerStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
-import { SplashImage } from './learner/splash-image'
-import { StudyModal } from './studies/modal'
 import { StudyDetails } from './learner/details'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { chunk } from 'lodash-es'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Pagination } from 'swiper';
-import { Title } from '@mantine/core';
-
-const Splash = styled(Box)({
-    width: '100%',
-    overflow: 'hidden',
-    position: 'relative',
-    height: 600,
-    [media.mobile]: {
-        height: 400,
-    },
-})
-
-const SplashHeader = styled(Title)({
-    maxWidth: '55%',
-    fontWeight: 700,
-    [media.mobile]: {
-        fontSize: 24,
-        maxWidth: '80%',
-        marginTop: '2rem',
-    },
-})
-
-const SplashText = styled.h4({
-    maxWidth: '55%',
-    [media.mobile]: {
-        fontSize: 15,
-    },
-})
+import { SyllabusContest } from './learner/syllabus-contest';
+import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
+import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
 
 interface StudyListProps {
     studies: ParticipantStudy[],
@@ -200,39 +173,33 @@ const HighlightedStudies: FCWOC<StudyListProps> = ({ onSelect, studies, title, c
 
 const LearnerDashboard = () => {
     const nav = useNavigate()
+    const env = useEnvironment()
     const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
     const {
-        highlightedStudies, mandatoryStudy, allStudies, filter, onMandatoryClose, setFilter, studiesByTopic,
+        highlightedStudies,
+        allStudies,
+        filter,
+        setFilter,
+        studiesByTopic,
+        syllabusContestStudies,
+        demographicSurvey,
     } = useLearnerStudies()
+
+    if (!env.isEligible) {
+        return <UnsupportedCountryModal />
+    }
 
     return (
         <div className="studies learner">
             <Routes>
                 <Route path={'details/:studyId'} element={<StudyDetails studies={allStudies} />} />
             </Routes>
-            <StudyModal study={mandatoryStudy} onHide={onMandatoryClose} />
             <TopNavBar />
+
+            <LearnerWelcomeModal demographicSurvey={demographicSurvey} />
             <RewardsProgressBar studies={allStudies} />
 
-            <Splash direction='column' justify='center' className="splash">
-                <SplashImage
-                    preserveAspectRatio='xMidYMid slice'
-                    css={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        zIndex: -1,
-                    }}
-                />
-                <Box className="container-lg h-100" direction='column' gap='xxlarge' justify={{ desktop: 'center' }}>
-                    <SplashHeader>Level up to new ways of learning, and earn prizes!</SplashHeader>
-                    <SplashText>
-                        With Kinetic, participate in scientific research and learn tips and tricks to help you become a better learner. All while winning prizes!
-                    </SplashText>
-                </Box>
-            </Splash >
+            <SyllabusContest studies={syllabusContestStudies} />
 
             <HighlightedStudies studies={highlightedStudies} title="Highlighted Studies on Kinetic" className="highlighted" onSelect={onStudySelect}/>
 

@@ -2,8 +2,9 @@ import { Study } from '@api'
 import { React, useEffect, useState } from '@common'
 import { useApi } from '@lib'
 import { useToggle } from 'rooks';
-import { ResearcherButton, Toast } from '@components';
+import { showResearcherNotification } from '@components';
 import { Main } from './grid'
+import { Button } from '@mantine/core';
 
 export function ApproveStudies() {
     const api = useApi()
@@ -63,20 +64,19 @@ const StudyRow: FC<{study: Study, setStudies: (studies: Study[] | undefined) => 
                 {study.titleForResearchers}
             </td>
             <td>
-                <ResearcherButton
+                <Button
+                    color='blue'
                     disabled={!selected}
                     data-testid={`${study.id}-approve`}
                     onClick={() => {
                         api.adminApproveStudy({ id: study.id }).then(response => {
                             setStudies(response.data)
-                            Toast.show({
-                                message: `${study.titleForResearchers} was updated successfully`,
-                            })
+                            showResearcherNotification(`'${study.titleForResearchers}' was successfully approved!`)
                         })
                     }}
                 >
                     Qualtrics Ready
-                </ResearcherButton>
+                </Button>
             </td>
         </tr>
     )

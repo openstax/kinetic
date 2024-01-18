@@ -22,11 +22,11 @@ const ResearcherImpersonation = () => {
     return (
         <Center mt='lg'>
             <Stack w={400}>
-                <Title order={4}>Become a researcher here</Title>
+                <Title order={4}>View kinetic as another researcher</Title>
                 <Select
-                    label='Select a researcher to impersonate'
+                    label='Select a researcher to view as'
                     searchable
-                    nothingFound='No results'
+                    nothingFoundMessage='No results'
                     onChange={(value) => {
                         if (!value) return setSelectedResearcher(null)
                         const researcher = researchers.find(r => r.id == +value)
@@ -40,7 +40,7 @@ const ResearcherImpersonation = () => {
                 />
                 {selectedResearcher &&
                     <Button color='blue' component='a' href={`${ENV.API_ADDRESS}/api/v1/admin/impersonate/researcher/${selectedResearcher.id}`}>
-                        Become {selectedResearcher.firstName} {selectedResearcher.lastName}
+                        View as {selectedResearcher.firstName} {selectedResearcher.lastName}
                     </Button>
                 }
             </Stack>

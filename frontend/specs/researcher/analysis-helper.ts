@@ -1,32 +1,32 @@
 import { expect, Page } from '@playwright/test';
-import { createStudy, getIdFromUrl, goToPage, loginAs } from '../helpers';
+import { createStudy, goToPage } from '../helpers';
 import { faker } from '../test';
 
 interface createAnalysisProps {
-    page: Page
+    researcherPage: Page
+    adminPage: Page
     withStudy?: boolean
 }
 
-export const createAnalysis = async({ page, withStudy = false }: createAnalysisProps) => {
-    await loginAs({ page, login: 'researcher' })
-    const studyName = faker.commerce.productName()
+export const createAnalysis = async({ researcherPage, adminPage, withStudy = false }: createAnalysisProps) => {
+    const name = faker.commerce.productName()
     const description = faker.commerce.productName()
+
     if (withStudy) {
-        const studyId = await createStudy({ page, studyName, description })
-        await goToPage({ page, path: `/analysis/edit/new?studyId=${studyId}` })
-        await expect(page.locator('[name=title]')).toHaveText(studyName)
-        await expect(page.locator('[name=description]')).toHaveText(description)
+        const studyId = await createStudy({ researcherPage, adminPage, name, description })
+        await goToPage({ page: researcherPage, path: `/analysis/edit/new?studyId=${studyId}` })
+        await expect(researcherPage.locator('[name=title]')).toMatchText(name)
+        await expect(researcherPage.locator('[name=description]')).toMatchText(description)
     } else {
-        await goToPage({ page, path: `/analysis/edit/new` })
-        await expect(page.locator('testId=save-analysis-button')).toBeDisabled()
-        await page.fill('[name=title]', studyName)
-        await page.fill('[name=description]', description)
-        await page.locator('.select-study-checkbox').first().check()
+        await goToPage({ page: researcherPage, path: `/analysis/edit/new` })
+        await expect(researcherPage.locator('testId=save-analysis-button')).toBeDisabled()
+        await researcherPage.fill('[name=title]', name)
+        await researcherPage.fill('[name=description]', description)
+        await researcherPage.locator('.select-study-checkbox').first().check()
     }
 
-    await expect(page.locator('testId=save-analysis-button')).toBeEnabled()
-    await page.click('testId=save-analysis-button')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(200)
-    return await getIdFromUrl(page)
+    await expect(researcherPage.locator('testId=save-analysis-button')).toBeEnabled()
+    await researcherPage.click('testId=save-analysis-button')
+    await researcherPage.waitForLoadState('networkidle')
+    await researcherPage.waitForURL('**/analysis/overview/**')
 }

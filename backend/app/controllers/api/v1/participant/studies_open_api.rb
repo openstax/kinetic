@@ -3,9 +3,7 @@
 class Api::V1::Participant::StudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
-  COMMON_REQUIRED_STUDY_FIELDS = [
-    :title, :short_description, :total_points, :total_duration
-  ].freeze
+  COMMON_REQUIRED_STUDY_FIELDS = [:short_description, :total_points, :total_duration].freeze
 
   add_components do
     schema :ParticipantStudy do
@@ -49,7 +47,6 @@ class Api::V1::Participant::StudiesOpenApi
       property :title do
         key :type, :string
         key :description, 'The name of the stage'
-        key :readOnly, true
       end
       property :description do
         key :type, :string
@@ -93,10 +90,6 @@ class Api::V1::Participant::StudiesOpenApi
         key :items, { 'type' => 'string' }
         key :description, 'Feedback types for this stage'
       end
-      property :target_sample_size do
-        key :type, :number
-        key :description, 'Desired sample size set by researcher'
-      end
       property :status do
         key :type, :string
         key :description, 'Status of the study'
@@ -123,9 +116,19 @@ class Api::V1::Participant::StudiesOpenApi
       key :type, :number
       key :description, 'How popular the study is on a fractional scale of 0.0 to 1.0'
     end
+    property :is_demographic_survey do
+      key :type, :boolean
+      key :description, 'Is this study the demographic survey?'
+      key :readOnly, true
+    end
     property :is_featured do
       key :type, :boolean
-      key :description, 'Should this study be feautured more prominently?'
+      key :description, 'Should this study be featured more prominently?'
+      key :readOnly, true
+    end
+    property :is_syllabus_contest_study do
+      key :type, :boolean
+      key :description, 'Is this study a part of the syllabus contest?'
       key :readOnly, true
     end
     property :completed_at do

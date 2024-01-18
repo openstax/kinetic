@@ -1,13 +1,8 @@
-import { cardImages, Category, Col, getImageUrl, imageCategories, Modal, ResearcherButton } from '@components'
-import { Box, React, styled, useEffect, useState } from '@common';
+import { cardImages, getImageUrl, imageCategories } from '@components'
+import { Box, React, styled, useState } from '@common';
 import { colors } from '@theme';
+import { Button, Flex, Group, Image, Modal, ScrollArea, SimpleGrid, Tabs } from '@mantine/core';
 
-const CategoryLink = styled.small({
-    cursor: 'pointer',
-    color: colors.blue,
-    textDecoration: 'underline',
-    textUnderlineOffset: '.4rem',
-})
 
 const UncheckedCircle = styled.div({
     position: 'absolute',
@@ -45,8 +40,9 @@ const CheckedCircle = () => (
 const ImageCard: FC<{
     imageId: string,
     selectedImage: string,
-    onSelect: (imageId?: string) => void
-}> = ({ imageId, selectedImage, onSelect }) => {
+    onSelect: (imageId?: string) => void,
+    altText: string
+}> = ({ imageId, selectedImage, onSelect, altText }) => {
     return (
         <div
             css={{ position: 'relative', cursor: 'pointer' }}
@@ -58,21 +54,14 @@ const ImageCard: FC<{
                 }
             }}
         >
-            <img src={getImageUrl(imageId)} data-testid='card-image' alt={imageId} width={250} height={140} css={{
-                border: `1px solid ${colors.gray50}`,
-                // padding: `0 25px`,
-            }}/>
             {selectedImage === imageId ? <CheckedCircle/> : <UncheckedCircle/>}
+
+            <Image src={getImageUrl(imageId)} data-testid='card-image' alt={altText} css={{
+                border: `1px solid ${colors.gray50}`,
+            }}/>
         </div>
     )
 }
-
-const ImageCardContainer = styled(Box)({
-    height: '100%',
-    overflow: 'auto',
-    paddingTop: 10,
-    gridTemplateColumns: 'repeat(3, [col-start] minmax(100px, 1fr) [col-end])',
-})
 
 export const ImageLibrary: FC<{
     show: boolean,
@@ -80,74 +69,67 @@ export const ImageLibrary: FC<{
     onSelect: (imageId: string) => void,
     currentImage?: string
 }> = ({ show, onHide, onSelect, currentImage }) => {
-    const currentCategory = cardImages.find(image => image.imageId == currentImage)?.category[0] || 'Learning'
-
-    const [category, setCategory] = useState<Category>(currentCategory)
+    const initialCategory = cardImages.find(image => image.imageId == currentImage)?.category[0] || 'Learning'
     const [selectedImage, setSelectedImage] = useState<string>(currentImage || 'Schoolfuturecareer_1')
-
-    useEffect(() => () => {
-        setCategory(currentCategory)
-        setSelectedImage(currentImage || 'Schoolfuturecareer_1')
-    }, [show])
 
     return (
         <Modal
-            onHide={onHide}
-            center
-            show={show}
-            xlarge
-            data-testid="image-library-modal"
-            title='Image Library'
+            onClose={onHide}
+            centered
+            opened={show}
+            size='85%'
+            title='Select an image for your study'
+            styles={{
+                body: {
+                    padding: 0,
+                },
+            }}
         >
-            <Modal.Body css={{ padding: 0, height: 500 }}>
-                <Box height='100%'>
-                    <Col sm={2}
-                        direction='column'
-                        css={{
-                            backgroundColor: colors.ash,
-                            padding: `20px 15px`,
-                        }}
-                        gap='large'
-                    >
-                        <h6>Category</h6>
+            <Modal.Body data-testid="image-library-modal">
+                <Flex direction='column'>
+                    <Tabs variant='pills' defaultValue={initialCategory} >
+                        <Tabs.List px='md'>
+                            {imageCategories.map(c =>
+                                <Tabs.Tab value={c} key={c}>
+                                    {c}
+                                </Tabs.Tab>
+                            )}
+                        </Tabs.List>
                         {imageCategories.map(c =>
-                            <CategoryLink key={c} onClick={() => setCategory(c)}>
-                                {c}
-                            </CategoryLink>
+                            <Tabs.Panel value={c} mt='lg' key={c}>
+                                <ScrollArea>
+                                    <SimpleGrid spacing='lg' verticalSpacing='lg' cols={4} p='lg' h={600}>
+                                        {cardImages.filter(i => i.category.includes(c)).map(cardImage => (
+                                            <ImageCard
+                                                key={cardImage.imageId}
+                                                imageId={cardImage.imageId}
+                                                selectedImage={selectedImage}
+                                                altText={cardImage.altText}
+                                                onSelect={(imageId?: string) => setSelectedImage(imageId || '')}
+                                            />
+                                        ))}
+                                    </SimpleGrid>
+                                </ScrollArea>
+                            </Tabs.Panel>
                         )}
-                    </Col>
-                    <Col sm={10} direction='column'>
-                        <Box css={{ padding: 20, height: '100%' }} direction='column'>
-                            <h4>{category}</h4>
-                            <ImageCardContainer wrap gap='xlarge' justify='evenly'>
-                                {cardImages.filter(i => i.category.includes(category)).map(cardImage => (
-                                    <ImageCard
-                                        key={cardImage.imageId}
-                                        imageId={cardImage.imageId}
-                                        selectedImage={selectedImage}
-                                        onSelect={(imageId?: string) => setSelectedImage(imageId || '')}
-                                    />
-                                ))}
-                            </ImageCardContainer>
-                        </Box>
-                        <Box gap='xlarge' css={{ padding: `10px 20px` }} alignSelf='end'>
-                            <ResearcherButton fixedWidth buttonType='secondary' onClick={() => onHide()}>
-                                Cancel
-                            </ResearcherButton>
-                            <ResearcherButton
-                                disabled={!selectedImage}
-                                fixedWidth
-                                testId='select-card-image'
-                                onClick={() => {
-                                    onSelect(selectedImage)
-                                    onHide()
-                                }}
-                            >
-                                Select
-                            </ResearcherButton>
-                        </Box>
-                    </Col>
-                </Box>
+                    </Tabs>
+                    <Group style={{ alignSelf: 'end' }} p='xl'>
+                        <Button variant='outline' onClick={() => onHide()}>
+                            Cancel
+                        </Button>
+                        <Button
+                            disabled={!selectedImage}
+                            color='blue'
+                            data-testid='select-card-image'
+                            onClick={() => {
+                                onSelect(selectedImage)
+                                onHide()
+                            }}
+                        >
+                            Select
+                        </Button>
+                    </Group>
+                </Flex>
             </Modal.Body>
         </Modal>
     )

@@ -6,6 +6,7 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     'extends': [
         'eslint:recommended',
+        'plugin:react-hooks/recommended',
         //  "plugin:react/recommended", // TODO: enable once
     ],
     'ignorePatterns': ['**/api/**/*.js'],

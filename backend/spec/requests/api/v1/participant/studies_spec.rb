@@ -96,6 +96,9 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
       before { stub_current_user(user1_id) }
 
       it 'returns studies' do
+        study1.launch
+        study2.launch
+        study3.launch
         api_get 'participant/studies'
         expect(response).to have_http_status(:success)
         expect(response_hash[:data]).to match a_collection_including(

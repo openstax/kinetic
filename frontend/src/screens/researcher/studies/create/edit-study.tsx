@@ -1,13 +1,14 @@
-import { Box, React, useEffect, useMemo, useNavigate, useParams, useState, Yup } from '@common'
+import { React, useMemo, useNavigate, useParams, useState, Yup } from '@common'
 import { useApi, useQueryParam } from '@lib';
 import { isDraft, useFetchStudy } from '@models';
 import {
-    Col,
-    ExitStudyFormButton,
+    ConfirmNavigationIfDirty,
+    ExitButton,
     Form,
     LoadingAnimation,
     Page,
     ResearcherProgressBar,
+    showResearcherNotification,
     Step,
     useFormContext,
     useFormState,
@@ -20,9 +21,10 @@ import { NewStudy, ResearcherRoleEnum, Study } from '@api';
 import { ActionFooter } from './action-footer';
 import { colors } from '@theme';
 import { ReviewStudy, SubmitStudyModal } from './forms/review-study';
-import { Toast } from '@nathanstitt/sundry/ui';
 import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
+import { Navigate } from 'react-router-dom';
+import { Box, Grid, Stack } from '@mantine/core';
 
 const buildValidationSchema = (allOtherStudies: Study[]) => {
     return Yup.object().shape({
@@ -45,7 +47,6 @@ const getFormDefaults = (study: Study, step: StudyStep) => {
 }
 
 export default function EditStudy() {
-    const nav = useNavigate()
     const id = useParams<{ id: string }>().id
     const { loading, study, setStudy, allStudies } = useFetchStudy(id || 'new')
 
@@ -54,10 +55,7 @@ export default function EditStudy() {
     }
 
     if (!study) {
-        useEffect(() => {
-            nav('/studies')
-        }, [])
-        return <></>
+        return <Navigate to={'/studies'} />
     }
 
     return (
@@ -115,37 +113,42 @@ const FormContent: FC<{
         setFormError,
     } = useFormContext()
     const [showSubmitStudy, setShowSubmitStudy] = useState(false)
-    const currentStep = watch('step')
+    const currentStep: number = watch('step')
     const id = useParams<{ id: string }>().id
     const isNew = 'new' === id
     const nav = useNavigate()
     const api = useApi()
     const [, setStudyProgressStep] = useLocalstorageState<StudyStep>(`study-progress-${id}`)
+    const [maxStep, setMaxStep] = useLocalstorageState<StudyStep>(`study-max-progress-${id}`, 0)
+    const { isValid, isDirty } = useFormState()
 
     if (!isDraft(study) && !isNew) {
-        nav(`/study/overview/${id}`)
+        return <Navigate to={`/study/overview/${id}`} />
     }
 
-    const { isValid, isDirty } = useFormState()
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true, shouldTouch: true })
         if (!isNew) {
             setStudyProgressStep(step)
         }
+        if (step > maxStep) {
+            setMaxStep(step)
+        }
     }
 
-    const saveStudy = async () => {
+    const saveStudy = async (goToStep: number) => {
         const study = getValues() as Study
         if (isNew) {
+            // Need to reset the dirty state before navigating to edit/{id}
+            reset(undefined, { keepValues: true, keepDirty: false });
+
             const savedStudy = await api.addStudy({
                 addStudy: { study: study as NewStudy },
             }).catch((err) => setFormError(err))
 
             if (savedStudy) {
-                nav(`/study/edit/${savedStudy.id}?step=${currentStep + 1}`)
-                Toast.show({
-                    message: `New copy of ${study.titleForResearchers} has been created and saved as a draft. It can now be found under ‘Draft’.`,
-                })
+                showResearcherNotification(`New copy of '${study.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`)
+                nav(`/study/edit/${savedStudy.id}?step=${goToStep + 1}`)
                 return setStudy(savedStudy)
             }
         }
@@ -155,8 +158,14 @@ const FormContent: FC<{
         }
 
         const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
-        reset(getFormDefaults(savedStudy, currentStep), { keepIsValid: true, keepDirty: false })
+        reset(getFormDefaults(savedStudy, goToStep), { keepIsValid: true, keepDirty: false })
         setStudy(savedStudy)
+    }
+
+    const saveAsDraft = async () => {
+        saveStudy(currentStep).then(() => {
+            showResearcherNotification(`New edits to the study “${study.titleForResearchers}” have successfully been saved.`)
+        })
     }
 
     const steps: Step[] = [
@@ -168,7 +177,7 @@ const FormContent: FC<{
                 text: 'Save & Continue',
                 disabled: !isValid,
                 action: async () => {
-                    await saveStudy()
+                    await saveStudy(currentStep)
                     setStep(StudyStep.ResearchTeam)
                 },
             },
@@ -177,7 +186,12 @@ const FormContent: FC<{
             index: StudyStep.ResearchTeam,
             component: <ResearchTeam study={study} />,
             text: 'Research Team',
-            backAction: () => setStep(StudyStep.InternalDetails),
+            backAction: () => {
+                if (!isDirty) {
+                    return setStep(StudyStep.InternalDetails)
+                }
+                saveStudy(StudyStep.InternalDetails)
+            },
             primaryAction: {
                 text: 'Continue',
                 disabled: !isValid,
@@ -186,16 +200,14 @@ const FormContent: FC<{
                         return setStep(StudyStep.ParticipantView)
                     }
 
-                    await saveStudy()
+                    await saveStudy(currentStep)
                     setStep(StudyStep.ParticipantView)
-                    Toast.show({
-                        message: `Invitations to collaborate on study ${study.titleForResearchers} have successfully been sent.`,
-                    })
+                    showResearcherNotification(`Invitations to collaborate on study '${study.titleForResearchers}' have successfully been sent.`)
                 },
             },
             secondaryAction: {
                 text: 'Save as draft',
-                action: saveStudy,
+                action: saveAsDraft,
                 disabled: !isDirty,
             },
         },
@@ -203,7 +215,12 @@ const FormContent: FC<{
             index: StudyStep.ParticipantView,
             component: <ParticipantView study={study} />,
             text: 'Participant View',
-            backAction: () => setStep(StudyStep.ResearchTeam),
+            backAction: () => {
+                if (!isDirty) {
+                    return setStep(StudyStep.ResearchTeam)
+                }
+                saveStudy(StudyStep.ResearchTeam)
+            },
             primaryAction: {
                 text: 'Continue',
                 disabled: !isValid,
@@ -211,13 +228,13 @@ const FormContent: FC<{
                     if (!isDirty) {
                         return setStep(StudyStep.AdditionalSessions)
                     }
-                    await saveStudy()
+                    await saveStudy(currentStep)
                     setStep(StudyStep.AdditionalSessions)
                 },
             },
             secondaryAction: {
                 text: 'Save as draft',
-                action: saveStudy,
+                action: saveAsDraft,
                 disabled: !isDirty,
             },
         },
@@ -225,7 +242,12 @@ const FormContent: FC<{
             index: StudyStep.AdditionalSessions,
             component: <AdditionalSessions study={study} />,
             text: 'Additional Sessions (optional)',
-            backAction: () => setStep(StudyStep.ParticipantView),
+            backAction: () => {
+                if (!isDirty) {
+                    return setStep(StudyStep.ParticipantView)
+                }
+                saveStudy(StudyStep.ParticipantView)
+            },
             optional: true,
             primaryAction: {
                 text: 'Continue',
@@ -234,13 +256,13 @@ const FormContent: FC<{
                     if (!isDirty) {
                         return setStep(StudyStep.ReviewStudy)
                     }
-                    await saveStudy()
+                    await saveStudy(currentStep)
                     setStep(StudyStep.ReviewStudy)
                 },
             },
             secondaryAction: {
                 text: 'Save as draft',
-                action: saveStudy,
+                action: saveAsDraft,
                 disabled: !isDirty,
             },
         },
@@ -248,6 +270,12 @@ const FormContent: FC<{
             index: StudyStep.ReviewStudy,
             component: <ReviewStudy study={study} />,
             text: 'Review Study',
+            backAction: () => {
+                if (!isDirty) {
+                    return setStep(StudyStep.AdditionalSessions)
+                }
+                saveStudy(StudyStep.AdditionalSessions)
+            },
             primaryAction: {
                 text: 'Submit Study',
                 action: () => {
@@ -258,23 +286,22 @@ const FormContent: FC<{
     ]
 
     return (
-        <Box direction='column' justify='between' className='edit-study-form'>
+        <Stack justify='space-between' className='edit-study-form'>
+            <ConfirmNavigationIfDirty />
             <SubmitStudyModal study={study as Study} show={showSubmitStudy} setShow={setShowSubmitStudy} />
-            <div className="py-2">
-                <Box justify='between' gap='xxlarge'>
-                    <Col sm={1}>
-                        <span></span>
-                    </Col>
-                    <Col sm={9}>
-                        <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} />
-                    </Col>
-                    <Col sm={1}>
-                        {currentStep !== StudyStep.InternalDetails && <ExitStudyFormButton study={getValues() as Study} saveStudy={saveStudy} />}
-                    </Col>
-                </Box>
+            <Grid gutter='xl' py='lg' justify='space-between'>
+                <Grid.Col span={1}></Grid.Col>
+                <Grid.Col span={9}>
+                    <ResearcherProgressBar steps={steps} currentStep={steps[currentStep]} setStep={setStep} maxStep={maxStep}/>
+                </Grid.Col>
+                <Grid.Col span={1}>
+                    <ExitButton navTo='/studies'/>
+                </Grid.Col>
+            </Grid>
+            <Box pb='120px'>
                 {steps[currentStep].component}
-            </div>
+            </Box>
             <ActionFooter step={steps[currentStep]} />
-        </Box>
+        </Stack>
     )
 }

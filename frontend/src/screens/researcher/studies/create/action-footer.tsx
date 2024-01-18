@@ -1,6 +1,12 @@
-import { Box, React, useCallback, useState } from '@common';
-import { Link } from 'react-router-dom';
-import { Icon, ResearcherButton, Step } from '@components';
+import { Box, React, styled, useCallback, useState } from '@common';
+import { Icon, Step } from '@components';
+import { Button } from '@mantine/core';
+
+const FakeLink = styled.span({
+    cursor: 'pointer',
+    color: 'blue',
+    textDecoration: 'underline',
+})
 
 export const ActionFooter: FC<{ step: Step, }> = ({ step }) => {
     const [busy, setBusy] = useState(false)
@@ -13,22 +19,22 @@ export const ActionFooter: FC<{ step: Step, }> = ({ step }) => {
     }, [setBusy]);
 
     return (
-        <Box className='fixed-bottom bg-white mt-auto' css={{ minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
+        <Box className='fixed-bottom bg-white mt-auto' css={{ zIndex: 200, minHeight: 80, boxShadow: `0px -3px 10px rgba(219, 219, 219, 0.5)` }}>
             <Box className='container-lg' align='center' justify='between'>
-                {step.backAction ? <Link to=''>
+                {step.backAction ? <FakeLink>
                     <Box align='center' gap='small' onClick={() => step.backAction?.()}>
                         <Icon icon='chevronLeft'></Icon>
                         <span>Back</span>
                     </Box>
-                </Link> : <span></span>}
+                </FakeLink> : <span></span>}
 
                 <Box align='center' gap='large'>
                     {step.secondaryAction ?
-                        <ResearcherButton
-                            buttonType='secondary'
-                            fixedWidth
-                            busy={busy}
-                            busyMessage='Saving'
+                        <Button
+                            color='blue'
+                            variant='outline'
+                            data-testid='secondary-action'
+                            loading={busy}
                             disabled={step.secondaryAction.disabled}
                             onClick={() => {
                                 step.secondaryAction?.action?.()
@@ -36,20 +42,20 @@ export const ActionFooter: FC<{ step: Step, }> = ({ step }) => {
                             }}
                         >
                             {step.secondaryAction?.text}
-                        </ResearcherButton>
-                        : <></>
+                        </Button>
+                        : null
                     }
 
                     {step.primaryAction ?
-                        <ResearcherButton
-                            fixedWidth
+                        <Button
+                            color='blue'
                             data-testid='study-primary-action'
                             disabled={step.primaryAction.disabled}
                             onClick={() => step.primaryAction?.action?.()}
                         >
                             {step.primaryAction?.text}
-                        </ResearcherButton>
-                        : <></>
+                        </Button>
+                        : null
                     }
                 </Box>
             </Box>

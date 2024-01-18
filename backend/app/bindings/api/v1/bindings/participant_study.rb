@@ -21,8 +21,14 @@ module Api::V1::Bindings
     # How popular the study is on a fractional scale of 0.0 to 1.0
     attr_accessor :popularity_rating
 
-    # Should this study be feautured more prominently?
+    # Is this study the demographic survey?
+    attr_accessor :is_demographic_survey
+
+    # Should this study be featured more prominently?
     attr_accessor :is_featured
+
+    # Is this study a part of the syllabus contest?
+    attr_accessor :is_syllabus_contest_study
 
     # When the study was completed; null means not completed.
     attr_accessor :completed_at
@@ -60,6 +66,9 @@ module Api::V1::Bindings
     # Is the study hidden from participants
     attr_accessor :is_hidden
 
+    # Did the participant consent
+    attr_accessor :consented
+
     # When the study was launched; null means not launched
     attr_accessor :first_launched_at
 
@@ -77,9 +86,6 @@ module Api::V1::Bindings
 
     # The study's researchers.
     attr_accessor :researchers
-
-    # Mandatory studies must be completed by all users
-    attr_accessor :is_mandatory
 
     # How many times the study has been viewed
     attr_accessor :view_count
@@ -135,7 +141,9 @@ module Api::V1::Bindings
       {
         :'id' => :'id',
         :'popularity_rating' => :'popularity_rating',
+        :'is_demographic_survey' => :'is_demographic_survey',
         :'is_featured' => :'is_featured',
+        :'is_syllabus_contest_study' => :'is_syllabus_contest_study',
         :'completed_at' => :'completed_at',
         :'opted_out_at' => :'opted_out_at',
         :'total_points' => :'total_points',
@@ -148,13 +156,13 @@ module Api::V1::Bindings
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
         :'is_hidden' => :'is_hidden',
+        :'consented' => :'consented',
         :'first_launched_at' => :'first_launched_at',
         :'opens_at' => :'opens_at',
         :'closes_at' => :'closes_at',
         :'target_sample_size' => :'target_sample_size',
         :'status' => :'status',
         :'researchers' => :'researchers',
-        :'is_mandatory' => :'is_mandatory',
         :'view_count' => :'view_count',
         :'public_on' => :'public_on',
         :'completed_count' => :'completed_count',
@@ -177,7 +185,9 @@ module Api::V1::Bindings
       {
         :'id' => :'Integer',
         :'popularity_rating' => :'Float',
+        :'is_demographic_survey' => :'Boolean',
         :'is_featured' => :'Boolean',
+        :'is_syllabus_contest_study' => :'Boolean',
         :'completed_at' => :'Time',
         :'opted_out_at' => :'Time',
         :'total_points' => :'Integer',
@@ -190,13 +200,13 @@ module Api::V1::Bindings
         :'image_id' => :'String',
         :'benefits' => :'String',
         :'is_hidden' => :'Boolean',
+        :'consented' => :'Boolean',
         :'first_launched_at' => :'Time',
         :'opens_at' => :'Time',
         :'closes_at' => :'Time',
         :'target_sample_size' => :'Float',
         :'status' => :'String',
         :'researchers' => :'Array<Researcher>',
-        :'is_mandatory' => :'Boolean',
         :'view_count' => :'Float',
         :'public_on' => :'Time',
         :'completed_count' => :'Float',
@@ -249,8 +259,16 @@ module Api::V1::Bindings
         self.popularity_rating = attributes[:'popularity_rating']
       end
 
+      if attributes.key?(:'is_demographic_survey')
+        self.is_demographic_survey = attributes[:'is_demographic_survey']
+      end
+
       if attributes.key?(:'is_featured')
         self.is_featured = attributes[:'is_featured']
+      end
+
+      if attributes.key?(:'is_syllabus_contest_study')
+        self.is_syllabus_contest_study = attributes[:'is_syllabus_contest_study']
       end
 
       if attributes.key?(:'completed_at')
@@ -301,6 +319,10 @@ module Api::V1::Bindings
         self.is_hidden = attributes[:'is_hidden']
       end
 
+      if attributes.key?(:'consented')
+        self.consented = attributes[:'consented']
+      end
+
       if attributes.key?(:'first_launched_at')
         self.first_launched_at = attributes[:'first_launched_at']
       end
@@ -325,10 +347,6 @@ module Api::V1::Bindings
         if (value = attributes[:'researchers']).is_a?(Array)
           self.researchers = value
         end
-      end
-
-      if attributes.key?(:'is_mandatory')
-        self.is_mandatory = attributes[:'is_mandatory']
       end
 
       if attributes.key?(:'view_count')
@@ -452,7 +470,9 @@ module Api::V1::Bindings
       self.class == o.class &&
           id == o.id &&
           popularity_rating == o.popularity_rating &&
+          is_demographic_survey == o.is_demographic_survey &&
           is_featured == o.is_featured &&
+          is_syllabus_contest_study == o.is_syllabus_contest_study &&
           completed_at == o.completed_at &&
           opted_out_at == o.opted_out_at &&
           total_points == o.total_points &&
@@ -465,13 +485,13 @@ module Api::V1::Bindings
           image_id == o.image_id &&
           benefits == o.benefits &&
           is_hidden == o.is_hidden &&
+          consented == o.consented &&
           first_launched_at == o.first_launched_at &&
           opens_at == o.opens_at &&
           closes_at == o.closes_at &&
           target_sample_size == o.target_sample_size &&
           status == o.status &&
           researchers == o.researchers &&
-          is_mandatory == o.is_mandatory &&
           view_count == o.view_count &&
           public_on == o.public_on &&
           completed_count == o.completed_count &&
@@ -492,7 +512,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, popularity_rating, is_featured, completed_at, opted_out_at, total_points, total_duration, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, is_mandatory, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
+      [id, popularity_rating, is_demographic_survey, is_featured, is_syllabus_contest_study, completed_at, opted_out_at, total_points, total_duration, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

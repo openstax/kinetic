@@ -10,4 +10,9 @@ Rails.application.config.to_prepare do
     end
   end
 
+  def self.admin_from_model(model)
+    attrs = create_from_model(model)
+    attrs[:response_exports]
+    attrs
+  end
 end

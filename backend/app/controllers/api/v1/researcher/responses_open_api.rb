@@ -65,6 +65,38 @@ class Api::V1::Researcher::ResponsesOpenApi
       extend Api::V1::OpenApiResponses::UnprocessableEntityError
       extend Api::V1::OpenApiResponses::ServerError
     end
-
   end
+
+  openapi_path '/researcher/responses/{api_key}/info' do
+    operation :get do
+      key :summary, 'and fetch response info'
+      key :operationId, 'getResponseInfo'
+      parameter do
+        key :name, :api_key
+        key :in, :path
+        key :description, 'Api key of the analysis.'
+        key :required, true
+        key :schema, { type: :string }
+      end
+
+      response 200 do
+        key :description, 'Success.  Returns urls for information on the analysis response exports.'
+        content 'application/json' do
+          schema do
+            key :type, :object
+            property :info_urls do
+              key :type, :array
+              key :description, 'URLs to download the help information'
+              key :items, { 'type' => 'string' }
+            end
+          end
+        end
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+  end
+
 end
