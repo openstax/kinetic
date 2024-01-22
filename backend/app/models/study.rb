@@ -46,8 +46,7 @@ class Study < ApplicationRecord
   scope :available_to_participants, -> {
     joins(:stages)
       .where(stages: { status: 'active' })
-      .where
-      .not(opens_at: nil)
+      .where.not(opens_at: nil)
       .where(is_hidden: false)
       .where(arel[:opens_at].lteq(Time.now))
       .where(arel[:closes_at].eq(nil).or(
