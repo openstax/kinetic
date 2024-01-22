@@ -51,6 +51,7 @@ class Study < ApplicationRecord
       .where(arel[:opens_at].lteq(Time.now))
       .where(arel[:closes_at].eq(nil).or(
                arel[:closes_at].gteq(Time.now)))
+      .distinct
   }
 
   scope :public_to_researchers, -> {
