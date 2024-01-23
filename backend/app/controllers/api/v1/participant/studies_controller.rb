@@ -21,7 +21,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
 
   def show
     model =
-      current_user.launched_studies.where(study_id: params[:id]).first ||
+      current_user.active_launched_studies.where(study_id: params[:id]).first ||
       Study.available_to_participants.find(params[:id])
     raise ActiveRecord::RecordNotFound if model.is_hidden?
 
