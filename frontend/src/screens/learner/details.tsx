@@ -14,6 +14,7 @@ import { dayjs, useApi } from '@lib'
 import { Box, Icon, IconKey, MultiSessionBar, OffCanvas } from '@components'
 import { colors } from '@theme'
 import { Button } from '@mantine/core'
+import { Navigate } from 'react-router-dom';
 
 interface StudyDetailsProps {
     study: ParticipantStudy
@@ -193,7 +194,9 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
         }
     }, [study])
 
-    if (!study) return null
+    if (!study) {
+        return <Navigate to="/studies" />
+    }
 
     return (
         <StudyDetailsPreview study={study} show={!!study} onHide={onHide} />
