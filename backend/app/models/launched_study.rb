@@ -8,14 +8,11 @@ class LaunchedStudy < ApplicationRecord
 
   scope :complete, -> { where.not(completed_at: nil) }
   scope :incomplete, -> { where(completed_at: nil) }
+  # scope :available, -> { where(study: { stages: { status: 'active' } }) }
 
   # forward a few methods so launched can be treated like a study
   delegate :completed_count, to: :study
   delegate :is_hidden?, to: :study
-
-  def available_stages
-    stage
-  end
 
   def completed?
     completed_at.present?

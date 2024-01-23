@@ -144,6 +144,12 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
         api_get 'participant/studies'
         expect(response_hash[:data]).not_to include(a_hash_including(id: study1.id))
       end
+
+      it 'excludes completed launched studies' do
+        study2.end
+        api_get 'participant/studies'
+        expect(response_hash[:data]).not_to include(a_hash_including(id: study1.id))
+      end
     end
   end
 

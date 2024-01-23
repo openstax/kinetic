@@ -5,7 +5,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   before_action :set_study, only: [:launch, :land, :stats]
 
   def index
-    launched_studies = current_user.launched_studies.includes(:stages, study: [:researchers])
+    launched_studies = current_user.active_launched_studies.includes(:stages, study: [:researchers])
 
     unlaunched_studies = Study.available_to_participants.includes(:researchers)
                            .where.not(id: launched_studies.map(&:study_id))

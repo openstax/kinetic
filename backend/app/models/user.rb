@@ -14,6 +14,12 @@ class User
     ResearchId.for_user(self)
   end
 
+  def active_launched_studies
+    LaunchedStudy.joins(:study, :stages)
+    .where(study: { is_hidden: false }, user_id: id)
+    .where(study: { stages: { status: 'active' } })
+  end
+
   def launched_studies
     LaunchedStudy.joins(:study).where(study: { is_hidden: false }, user_id: id)
   end
