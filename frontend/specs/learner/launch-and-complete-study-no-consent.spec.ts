@@ -21,10 +21,11 @@ test('launching study and completing with no consent', async ({ browser }) => {
 
     await userPage.click('testId=launch-study')
 
-    await userPage.getByText('I consent').click()
-    await userPage.getByText('18 or Older').click()
+    await userPage.getByText('I do not consent').click()
+    await userPage.getByText('Younger than 18').click()
     await userPage.click('#NextButton')
     await userPage.click('#NextButton')
+    await userPage.waitForLoadState('networkidle')
 
     // No consent will redirect back to studies after completion
     await userPage.waitForURL(`**/studies`)
