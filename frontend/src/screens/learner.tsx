@@ -192,7 +192,7 @@ const LearnerDashboard = () => {
     return (
         <div className="studies learner">
             <Routes>
-                <Route path={'details/:studyId'} element={<StudyDetails studies={allStudies} />} />
+                <Route path={'details/:studyId'} element={<StudyDetails />} />
             </Routes>
             <TopNavBar />
 

@@ -1,30 +1,30 @@
-import {
-    addReward,
-    createStudy, expect, goToPage,
-    interceptStudyLaunch,
-    test,
-    useAdminPage,
-    useResearcherPage,
-    useUserPage,
-} from '../test';
+import { addReward, createStudy, expect, goToPage, test, useAdminPage, useResearcherPage, useUserPage } from '../test';
 
 test('launching study and testing completion', async ({ browser }) => {
     const adminPage = await useAdminPage(browser)
-    const userPage = await useUserPage(browser)
     const researcherPage = await useResearcherPage(browser)
-
-    await interceptStudyLaunch(userPage)
 
     await addReward({ page: adminPage, points: 5, prize: 'Pony' })
 
     const studyId = await createStudy({ researcherPage, adminPage })
 
-    await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
+    const userPage = await useUserPage(browser)
+
+    await goToPage({ page: userPage, path: '/studies' })
+    await userPage.click('testId=Learning')
+    await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"]`)
+    await userPage.click(`[data-study-id="${studyId}"]`)
+
     await userPage.click('testId=launch-study')
-    await userPage.waitForLoadState('networkidle')
+
+    await userPage.getByText('I consent').click()
+    await userPage.getByText('18 or Older').click()
+    await userPage.click('#NextButton')
+    await userPage.click('#NextButton')
 
     // qualtrics will redirect here once complete
-    await goToPage({ page: userPage, path: `/study/land/${studyId}` })
+    // await goToPage({ page: userPage, path: `/study/land/${studyId}` })
+    await userPage.getByText('You just earned 10 points').isVisible()
     await userPage.click('testId=view-studies')
 
     // Our study is under "Learning"

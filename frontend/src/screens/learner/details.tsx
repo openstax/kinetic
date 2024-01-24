@@ -9,6 +9,7 @@ import {
     isStudyLaunchable,
     launchStudy,
     studyIsMultipart,
+    useFetchParticipantStudy,
 } from '@models'
 import { dayjs, useApi } from '@lib'
 import { Box, Icon, IconKey, MultiSessionBar, OffCanvas } from '@components'
@@ -177,13 +178,14 @@ const ResearcherSection: FC<StudyDetailsProps> = ({ study }) => {
     )
 }
 
-export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
+export const StudyDetails: React.FC = () => {
     const { studyId: sid } = useParams<{ studyId: string }>()
     const nav = useNavigate()
     const api = useApi()
     const studyId = Number(sid || '')
-    const study = studies.find(s => s.id === studyId)
     const onHide = useCallback(() => nav('/studies'), [nav])
+
+    const { data: study, isLoading } = useFetchParticipantStudy(studyId)
 
     useEffect(() => {
         if (study) {
@@ -194,9 +196,9 @@ export const StudyDetails: React.FC<{ studies: ParticipantStudy[] }> = ({ studie
         }
     }, [study])
 
-    if (!study) {
-        return <Navigate to="/studies" />
-    }
+    if (isLoading) return null
+
+    if (!study) return <Navigate to="/studies" />
 
     return (
         <StudyDetailsPreview study={study} show={!!study} onHide={onHide} />

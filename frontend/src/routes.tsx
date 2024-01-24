@@ -30,6 +30,7 @@ const router = createBrowserRouter([
             { path: 'study/land/:studyId', element: <StudyLanding /> },
             { path: 'study/create', element: <ResearcherStudyLanding /> },
             { path: 'study/overview/:id', element: <StudyOverview /> },
+            { path: 'study/create/:id', element: <EditStudy /> },
             { path: 'study/edit/:id', element: <EditStudy /> },
             { path: 'account', element: <AccountDetails /> },
             { path: 'researcher-account', element: <ResearcherAccountPage /> },

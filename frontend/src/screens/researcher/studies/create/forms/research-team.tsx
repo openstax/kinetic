@@ -44,7 +44,7 @@ export const ResearchTeam: FC<{study: Study}> = ({ study }) => {
         api.getResearchers().then(researchers => {
             setResearchers(researchers.data || [])
         })
-    }, [study])
+    }, [study, api])
 
     const researcherOptions: SelectOption[] = useMemo(() => {
         return researchers.map(r => ({
