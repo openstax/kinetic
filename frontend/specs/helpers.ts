@@ -32,21 +32,6 @@ export const goToPage = async ({ page, path }: goToPageArgs) => {
     await page.goto(url)
 }
 
-export const interceptStudyLaunch = async (page: Page) => {
-    await page.route(/studies\/\d+\/launch/, async route => {
-        const response = await page.request.fetch(route.request())
-        const body = await response.json()
-        body.url = '/'
-        await route.fulfill({ response, body: JSON.stringify(body) });
-    });
-}
-
-export const interceptStudyLand = async (page: Page) => {
-    return await page.route(/study\/land\/d+/, async route => {
-        return await route.fulfill({ status: 200, body: '{}' })
-    });
-}
-
 export const logout = async ({ page }: { page: Page }) => {
     await page.goto(TC.ORIGIN)
     await page.waitForFunction(() => (window as any)._TEST_METHODS)
