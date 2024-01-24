@@ -17,10 +17,7 @@ test('launching study and completing with no consent', async ({ browser }) => {
 
     const userPage = await useUserPage(browser)
 
-    await goToPage({ page: userPage, path: '/studies' })
-    await userPage.click('testId=Learning')
-    await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"]`)
-    await userPage.click(`[data-study-id="${studyId}"]`)
+    await goToPage({ page: userPage, path: `/studies/details/${studyId}` })
 
     await userPage.click('testId=launch-study')
 

@@ -23,7 +23,6 @@ test('launching study and testing completion', async ({ browser }) => {
     await userPage.click('#NextButton')
 
     // qualtrics will redirect here once complete
-    // await goToPage({ page: userPage, path: `/study/land/${studyId}` })
     await userPage.getByText('You just earned 10 points').isVisible()
     await userPage.click('testId=view-studies')
 
