@@ -15,9 +15,7 @@ class User
   end
 
   def active_launched_studies
-    LaunchedStudy.joins(:study, :stages)
-    .where(study: { is_hidden: false }, user_id: id)
-    .where(study: { stages: { status: 'active' } })
+    LaunchedStudy.joins(:study).merge(Study.available_to_participants).where(user_id: id)
   end
 
   def launched_studies
