@@ -140,8 +140,16 @@ class Study < ApplicationRecord
   end
 
   def submit
-    (survey_id, secret_key) = CloneSurvey.new.clone(title_for_researchers)
-    stages.each do |stage|
+    is_multistage = stages.many?
+    stages.each_with_index do |stage, indx|
+      next if stage.config['survey_id']
+
+      title = if is_multistage
+                "#{title_for_researchers} - #{indx + 1}"
+              else
+                title_for_researchers
+              end
+      (survey_id, secret_key) = CloneSurvey.new.clone(title)
       stage.update!(
         {
           status: 'waiting_period',
