@@ -142,7 +142,10 @@ class Study < ApplicationRecord
   def submit
     is_multistage = stages.many?
     stages.each_with_index do |stage, indx|
-      stage.update!({ status: 'waiting_period' }) if stage.config['survey_id']
+      if stage.config['survey_id']
+        stage.update!({ status: 'waiting_period' })
+        next
+      end
 
       title = if is_multistage
                 "#{title_for_researchers} - #{indx + 1}"
