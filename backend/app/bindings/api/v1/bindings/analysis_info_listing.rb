@@ -14,39 +14,14 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class Environment
-    attr_accessor :user
-
-    attr_accessor :researcher
-
-    attr_accessor :is_impersonating
-
-    attr_accessor :impersonating_researcher
-
-    attr_accessor :is_eligible
-
-    attr_accessor :accounts_env_name
-
-    attr_accessor :homepage_url
-
-    # The tags of the study object, used for grouping and filtering.
-    attr_accessor :rewards_schedule
-
-    # Banners that should be displayed to the user
-    attr_accessor :banners_schedule
+  class AnalysisInfoListing
+    # The info.
+    attr_accessor :data
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'user' => :'user',
-        :'researcher' => :'researcher',
-        :'is_impersonating' => :'is_impersonating',
-        :'impersonating_researcher' => :'impersonating_researcher',
-        :'is_eligible' => :'is_eligible',
-        :'accounts_env_name' => :'accounts_env_name',
-        :'homepage_url' => :'homepage_url',
-        :'rewards_schedule' => :'rewards_schedule',
-        :'banners_schedule' => :'banners_schedule'
+        :'data' => :'data'
       }
     end
 
@@ -58,15 +33,7 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'user' => :'EnvironmentUser',
-        :'researcher' => :'Researcher',
-        :'is_impersonating' => :'Boolean',
-        :'impersonating_researcher' => :'Researcher',
-        :'is_eligible' => :'Boolean',
-        :'accounts_env_name' => :'String',
-        :'homepage_url' => :'String',
-        :'rewards_schedule' => :'Array<RewardsScheduleSegment>',
-        :'banners_schedule' => :'Array<BannerMessage>'
+        :'data' => :'Array<AnalysisInfo>'
       }
     end
 
@@ -80,54 +47,20 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::Environment` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::AnalysisInfoListing` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::Environment`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::AnalysisInfoListing`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'user')
-        self.user = attributes[:'user']
-      end
-
-      if attributes.key?(:'researcher')
-        self.researcher = attributes[:'researcher']
-      end
-
-      if attributes.key?(:'is_impersonating')
-        self.is_impersonating = attributes[:'is_impersonating']
-      end
-
-      if attributes.key?(:'impersonating_researcher')
-        self.impersonating_researcher = attributes[:'impersonating_researcher']
-      end
-
-      if attributes.key?(:'is_eligible')
-        self.is_eligible = attributes[:'is_eligible']
-      end
-
-      if attributes.key?(:'accounts_env_name')
-        self.accounts_env_name = attributes[:'accounts_env_name']
-      end
-
-      if attributes.key?(:'homepage_url')
-        self.homepage_url = attributes[:'homepage_url']
-      end
-
-      if attributes.key?(:'rewards_schedule')
-        if (value = attributes[:'rewards_schedule']).is_a?(Array)
-          self.rewards_schedule = value
-        end
-      end
-
-      if attributes.key?(:'banners_schedule')
-        if (value = attributes[:'banners_schedule']).is_a?(Array)
-          self.banners_schedule = value
+      if attributes.key?(:'data')
+        if (value = attributes[:'data']).is_a?(Array)
+          self.data = value
         end
       end
     end
@@ -136,58 +69,13 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @user.nil?
-        invalid_properties.push('invalid value for "user", user cannot be nil.')
-      end
-
-      if @accounts_env_name.nil?
-        invalid_properties.push('invalid value for "accounts_env_name", accounts_env_name cannot be nil.')
-      end
-
-      if @homepage_url.nil?
-        invalid_properties.push('invalid value for "homepage_url", homepage_url cannot be nil.')
-      end
-
-      if @rewards_schedule.nil?
-        invalid_properties.push('invalid value for "rewards_schedule", rewards_schedule cannot be nil.')
-      end
-
-      if @banners_schedule.nil?
-        invalid_properties.push('invalid value for "banners_schedule", banners_schedule cannot be nil.')
-      end
-
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @user.nil?
-      return false if @accounts_env_name.nil?
-      return false if @homepage_url.nil?
-      return false if @rewards_schedule.nil?
-      return false if @banners_schedule.nil?
       true
-    end
-
-    # Custom attribute writer method with validation
-    # @param [Object] rewards_schedule Value to be assigned
-    def rewards_schedule=(rewards_schedule)
-      if rewards_schedule.nil?
-        fail ArgumentError, 'rewards_schedule cannot be nil'
-      end
-
-      @rewards_schedule = rewards_schedule
-    end
-
-    # Custom attribute writer method with validation
-    # @param [Object] banners_schedule Value to be assigned
-    def banners_schedule=(banners_schedule)
-      if banners_schedule.nil?
-        fail ArgumentError, 'banners_schedule cannot be nil'
-      end
-
-      @banners_schedule = banners_schedule
     end
 
     # Checks equality by comparing each attribute.
@@ -195,15 +83,7 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          user == o.user &&
-          researcher == o.researcher &&
-          is_impersonating == o.is_impersonating &&
-          impersonating_researcher == o.impersonating_researcher &&
-          is_eligible == o.is_eligible &&
-          accounts_env_name == o.accounts_env_name &&
-          homepage_url == o.homepage_url &&
-          rewards_schedule == o.rewards_schedule &&
-          banners_schedule == o.banners_schedule
+          data == o.data
     end
 
     # @see the `==` method
@@ -215,7 +95,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [user, researcher, is_impersonating, impersonating_researcher, is_eligible, accounts_env_name, homepage_url, rewards_schedule, banners_schedule].hash
+      [data].hash
     end
 
     # Builds the object from hash

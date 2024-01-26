@@ -29,4 +29,11 @@ Rails.application.config.to_prepare do
       new(attributes)
     end
   end
+
+  def self.admin_create_from_model(model)
+    attrs = create_from_model(model)
+    attrs[:stages] = model.stages.map do |stage_model|
+      Api::V1::Bindings::Stage.admin_create_from_model(stage_model)
+    end
+  end
 end

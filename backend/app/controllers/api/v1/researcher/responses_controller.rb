@@ -2,7 +2,7 @@
 
 class Api::V1::Researcher::ResponsesController < Api::V1::BaseController
 
-  def fetch
+  def fetch_responses
     (status, responses) = find_or_create_responses(
       params[:cutoff] ? params[:cutoff].to_datetime : Date.today,
       !has_enclaves_token?
@@ -12,6 +12,17 @@ class Api::V1::Researcher::ResponsesController < Api::V1::BaseController
       status: responses.all?(&:is_complete) ? 'complete' : 'pending',
       response_urls: responses.filter(&:is_complete).flat_map { |r| r.files.map { |f| url_for(f) } }
     )
+  end
+
+  def fetch_info
+    analysis = Analysis.find_by(api_key: params[:api_key])
+    return [:not_found, []] if analysis.nil?
+
+    urls = analysis.studies.flat_map do |studies|
+      studies.analysis_infos.map { |info| url_for(info) }
+    end
+
+    render status: status, json: { info_urls: urls }
   end
 
   private

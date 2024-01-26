@@ -1,0 +1,48 @@
+00000000-0000-0000-0000-000000000000:
+  :user_id: 00000000-0000-0000-0000-000000000000
+  :role: admin
+  :first_name: Admin
+  :last_name: Uno
+  :full_name: Admin Uno
+  :is_administrator: true
+  :is_researcher: false
+00000000-0000-0000-0000-000000000001:
+  :user_id: 00000000-0000-0000-0000-000000000001
+  :role: researcher
+  :full_name: Researcher Uno
+  :first_name: Researcher
+  :last_name: Uno
+  :is_administrator: false
+  :is_researcher: true
+00000000-0000-0000-0000-000000000002:
+  :user_id: 00000000-0000-0000-0000-000000000002
+  :role: user
+  :full_name: User Uno
+  :first_name: User
+  :last_name: Uno
+  :is_administrator: false
+  :is_researcher: false
+00000000-0000-0000-0000-000000000003:
+  :user_id: 00000000-0000-0000-0000-000000000003
+  :role: user
+  :full_name: User Dos
+  :first_name: User
+  :last_name: Dos
+  :is_administrator: false
+  :is_researcher: false
+00000000-0000-0000-0000-000000000004:
+  :user_id: 00000000-0000-0000-0000-000000000004
+  :role: user
+  :full_name: User Tres
+  :first_name: User
+  :last_name: Tres
+  :is_administrator: false
+  :is_researcher: false
+00000000-0000-0000-0000-000000000005:
+  :user_id: 00000000-0000-0000-0000-000000000005
+  :role: user
+  :full_name: User Cuatro
+  :first_name: User
+  :last_name: Cuatro
+  :is_administrator: false
+  :is_researcher: false

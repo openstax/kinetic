@@ -8,6 +8,8 @@ class Study < ApplicationRecord
   has_many :launched_stages, through: :stages
   has_many :launched_studies
 
+  has_many :analysis_infos, through: :stages, source: :analysis_infos_attachments
+
   has_many :response_exports, through: :stages
   has_many :study_analysis
   has_many :analysis, through: :study_analysis
@@ -44,12 +46,12 @@ class Study < ApplicationRecord
   scope :available_to_participants, -> {
     joins(:stages)
       .where(stages: { status: 'active' })
-      .where
-      .not(opens_at: nil)
+      .where.not(opens_at: nil)
       .where(is_hidden: false)
       .where(arel[:opens_at].lteq(Time.now))
       .where(arel[:closes_at].eq(nil).or(
                arel[:closes_at].gteq(Time.now)))
+      .distinct
   }
 
   scope :public_to_researchers, -> {

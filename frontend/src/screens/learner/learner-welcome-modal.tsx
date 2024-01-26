@@ -45,7 +45,7 @@ export const LearnerWelcomeModal: FC<{
                         <Text ta='center'>
                             <strong>Bonus:</strong> Take 5 minutes to finish your Kinetic profile and collect your first 10 points!
                         </Text>
-                        <Button c={colors.purple} color={colors.white} onClick={onFinishProfile}>
+                        <Button size='md' c={colors.purple} color={colors.white} onClick={onFinishProfile}>
                             Finish Profile (10pts)
                         </Button>
                     </Stack>
