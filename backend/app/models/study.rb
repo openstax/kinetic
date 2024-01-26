@@ -151,7 +151,7 @@ class Study < ApplicationRecord
                 "#{title_for_researchers} - #{indx + 1}"
               else
                 title_for_researchers
-      end
+              end
 
       (survey_id, secret_key) = CloneSurvey.new.clone(title)
       stage.update!(
