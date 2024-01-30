@@ -199,7 +199,8 @@ const LearnerDashboard = () => {
             <LearnerWelcomeModal demographicSurvey={demographicSurvey} />
             <RewardsProgressBar studies={allStudies} />
 
-            <SyllabusContest studies={syllabusContestStudies} />
+            {/* Temporarily disable syllabus contest due to legal, keep it just in case we re-enable in the future */}
+            {/*<SyllabusContest studies={syllabusContestStudies} />*/}
 
             <HighlightedStudies studies={highlightedStudies} title="Highlighted Studies on Kinetic" className="highlighted" onSelect={onStudySelect}/>
 
