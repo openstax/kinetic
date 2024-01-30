@@ -12,7 +12,6 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import { chunk } from 'lodash-es'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Pagination } from 'swiper';
-import { SyllabusContest } from './learner/syllabus-contest';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
 
@@ -181,7 +180,7 @@ const LearnerDashboard = () => {
         filter,
         setFilter,
         studiesByTopic,
-        syllabusContestStudies,
+        // syllabusContestStudies,
         demographicSurvey,
     } = useLearnerStudies()
 
