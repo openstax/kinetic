@@ -79,7 +79,6 @@ class Study < ApplicationRecord
       Time.now > opens_at &&
       (closes_at.nil? || Time.now <= closes_at) &&
       stages.any? { |stage| stage.status == 'active' }
-
   end
 
   def can_delete?
