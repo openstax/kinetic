@@ -73,7 +73,6 @@ class Study < ApplicationRecord
   end
 
   def available?
-    # Study.available_to_participants.count > 0
     !is_hidden? &&
       opens_at &&
       Time.now > opens_at &&
