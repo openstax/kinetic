@@ -14,7 +14,7 @@ class User
     ResearchId.for_user(self)
   end
 
-  def active_launched_studies
+  def available_launched_studies
     LaunchedStudy.joins(:study).merge(Study.available_to_participants).where(user_id: id)
   end
 

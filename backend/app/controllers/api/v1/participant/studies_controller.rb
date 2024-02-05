@@ -5,12 +5,13 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   before_action :set_study, only: [:launch, :land, :stats]
 
   def index
-    launched_studies = current_user.active_launched_studies.includes(:stages, study: [:researchers])
+    launched_studies = current_user.launched_studies.includes(:stages, study: [:researchers])
+                       .filter { |ls| ls.study.available? || ls.completed? }
 
-    unlaunched_studies = Study.available_to_participants.includes(:researchers)
-                           .where.not(id: launched_studies.map(&:study_id))
+    available_studies = Study.available_to_participants.includes(:stages, :researchers)
+                        .where.not(id: launched_studies.map(&:study_id))
 
-    studies = launched_studies + unlaunched_studies
+    studies = launched_studies + available_studies
 
     response_binding = Api::V1::Bindings::ParticipantStudies.new(
       data: Api::V1::Bindings::ParticipantStudy.create_from_models_list(studies, current_user)
@@ -20,8 +21,9 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   end
 
   def show
+    # TODO Should this match logic in participant controller
     model =
-      current_user.active_launched_studies.where(study_id: params[:id]).first ||
+      current_user.available_launched_studies.where(study_id: params[:id]).first ||
       Study.available_to_participants.find(params[:id])
     raise ActiveRecord::RecordNotFound if model.is_hidden?
 

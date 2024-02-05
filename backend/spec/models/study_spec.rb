@@ -3,17 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe Study, api: :v1 do
-  let!(:opens_and_closes_study) { create(:study, title: 'a') }
-  let!(:opens_and_closes_before_study) { create(:study, opens_at: 10.days.ago, closes_at: 3.days.ago, title: 'b') }
-  let!(:opens_only_study) { create(:study, closes_at: nil, title: 'c') }
-  let!(:opens_later_only_study) { create(:study, opens_at: 3.days.from_now, closes_at: nil, title: 'd') }
-  let!(:no_times_study) { create(:study, opens_at: nil, closes_at: nil, title: 'e') }
 
   describe '#open?' do
     let(:study) { create(:study, num_stages: 1) }
 
     it 'returns open studies' do
-      study.stages.first.update!(status: 'active')
       expect_query_results(described_class.available_to_participants, [study])
     end
 
@@ -52,6 +46,12 @@ RSpec.describe Study, api: :v1 do
   end
 
   describe '#available?' do
+    let!(:opens_and_closes_study) { create(:study, title: 'a') }
+    let!(:opens_and_closes_before_study) { create(:study, opens_at: 10.days.ago, closes_at: 3.days.ago, title: 'b') }
+    let!(:opens_only_study) { create(:study, closes_at: nil, title: 'c') }
+    let!(:opens_later_only_study) { create(:study, opens_at: 3.days.from_now, closes_at: nil, title: 'd') }
+    let!(:no_times_study) { create(:study, opens_at: nil, closes_at: nil, title: 'e') }
+
     it 'has all available attributes' do
       expect(opens_and_closes_study).to be_available
       expect(opens_and_closes_before_study).not_to be_available
