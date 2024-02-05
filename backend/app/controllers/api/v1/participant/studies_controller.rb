@@ -5,13 +5,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   before_action :set_study, only: [:launch, :land, :stats]
 
   def index
-    launched_studies = current_user.launched_studies.includes(:stages, study: [:researchers])
-                         .filter { |ls| ls.study.available? || ls.completed? }
-
-    available_studies = Study.available_to_participants.includes(:stages, :researchers)
-                          .where.not(id: launched_studies.map(&:study_id))
-
-    studies = launched_studies + available_studies
+    studies = self.participant_studies
 
     response_binding = Api::V1::Bindings::ParticipantStudies.new(
       data: Api::V1::Bindings::ParticipantStudy.create_from_models_list(studies, current_user)
@@ -21,11 +15,16 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   end
 
   def show
-    # TODO: Should this match logic in participant controller
-    model =
-      current_user.available_launched_studies.where(study_id: params[:id]).first ||
-      Study.available_to_participants.find(params[:id])
-    raise ActiveRecord::RecordNotFound if model.is_hidden?
+    debugger
+    model = self.participant_studies.find { |study|
+      if study.is_a? Study
+        study.id == params[:id].to_i
+      else
+        study.study_id == params[:id].to_i
+      end
+    }
+
+    raise ActiveRecord::RecordNotFound if model.nil? || model.is_hidden?
 
     response_binding = Api::V1::Bindings::ParticipantStudy.create_from_model(model, current_user)
     render json: response_binding, status: :ok
@@ -65,6 +64,16 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   end
 
   protected
+
+  def participant_studies
+    launched_studies = current_user.launched_studies.includes(:stages, study: [:researchers])
+                       .filter { |ls| ls.study.available? || ls.completed? }
+
+    available_studies = Study.available_to_participants.includes(:stages, :researchers)
+                        .where.not(id: launched_studies.map(&:study_id))
+
+    launched_studies + available_studies
+  end
 
   def set_study
     @study = Study.find(params[:study_id])

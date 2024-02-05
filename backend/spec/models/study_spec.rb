@@ -52,12 +52,19 @@ RSpec.describe Study, api: :v1 do
     let!(:opens_later_only_study) { create(:study, opens_at: 3.days.from_now, closes_at: nil, title: 'd') }
     let!(:no_times_study) { create(:study, opens_at: nil, closes_at: nil, title: 'e') }
 
+    let(:scope_studies) { described_class.available_to_participants }
+    let(:instance_studies) { Study.all.filter { |study| study.available? } }
+
     it 'has all available attributes' do
       expect(opens_and_closes_study).to be_available
       expect(opens_and_closes_before_study).not_to be_available
       expect(opens_only_study).to be_available
       expect(opens_later_only_study).not_to be_available
       expect(no_times_study).not_to be_available
+    end
+
+    it 'shows same studies for both available methods' do
+      expect(scope_studies).to match_array(instance_studies)
     end
   end
 
