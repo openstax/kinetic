@@ -66,10 +66,10 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
 
   def participant_studies
     launched_studies = current_user.launched_studies.includes(:stages, study: [:researchers])
-      .filter { |ls| ls.study.available? || ls.completed? }
+                         .filter { |ls| ls.study.available? || ls.completed? }
 
     available_studies = Study.available_to_participants.includes(:stages, :researchers)
-      .where.not(id: launched_studies.map(&:study_id))
+                          .where.not(id: launched_studies.map(&:study_id))
 
     launched_studies + available_studies
   end
