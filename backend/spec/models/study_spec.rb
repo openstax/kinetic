@@ -53,7 +53,7 @@ RSpec.describe Study, api: :v1 do
     let!(:no_times_study) { create(:study, opens_at: nil, closes_at: nil, title: 'e') }
 
     let(:scope_studies) { described_class.available_to_participants }
-    let(:instance_studies) { Study.all.filter { |study| study.available? } }
+    let(:instance_studies) { described_class.all.filter { |study| study.available? } }
 
     it 'has all available attributes' do
       expect(opens_and_closes_study).to be_available

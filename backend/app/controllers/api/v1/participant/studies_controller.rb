@@ -5,7 +5,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   before_action :set_study, only: [:launch, :land, :stats]
 
   def index
-    studies = self.participant_studies
+    studies = participant_studies
 
     response_binding = Api::V1::Bindings::ParticipantStudies.new(
       data: Api::V1::Bindings::ParticipantStudy.create_from_models_list(studies, current_user)
@@ -15,14 +15,13 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   end
 
   def show
-    debugger
-    model = self.participant_studies.find { |study|
+    model = participant_studies.find do |study|
       if study.is_a? Study
         study.id == params[:id].to_i
       else
         study.study_id == params[:id].to_i
       end
-    }
+    end
 
     raise ActiveRecord::RecordNotFound if model.nil? || model.is_hidden?
 
@@ -67,10 +66,10 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
 
   def participant_studies
     launched_studies = current_user.launched_studies.includes(:stages, study: [:researchers])
-                       .filter { |ls| ls.study.available? || ls.completed? }
+      .filter { |ls| ls.study.available? || ls.completed? }
 
     available_studies = Study.available_to_participants.includes(:stages, :researchers)
-                        .where.not(id: launched_studies.map(&:study_id))
+      .where.not(id: launched_studies.map(&:study_id))
 
     launched_studies + available_studies
   end
