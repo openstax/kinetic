@@ -19,7 +19,7 @@ export class User {
     id?: string = ''
     isAdmin: boolean = false
     isResearcher: boolean = false
-    name: string = ''
+    fullName: string = ''
 
     constructor(attrs?:any) {
         if (attrs) {
@@ -32,6 +32,7 @@ export class User {
         if (attrs.user_id != null) this.id = attrs.user_id
         if (attrs.is_researcher != null) this.isResearcher = attrs.is_researcher
         if (attrs.is_admin != null) this.isAdmin = attrs.is_admin
+        if (attrs.full_name != null) this.fullName = attrs.full_name
     }
 
     get isValid() {

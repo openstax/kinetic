@@ -27,7 +27,7 @@ const UserCard:React.FC<UserCardProps> = ({ users, type, becomeUser }) => {
                         data-user-id={u.id}
                         onClick={becomeUser}
                     >
-                        <b>{u.name}</b> ({u.id})
+                        <b>{u.fullName}</b> ({u.id})
                     </Anchor>
                 ))}
             </Stack>

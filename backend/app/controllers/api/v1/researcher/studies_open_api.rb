@@ -157,7 +157,13 @@ class Api::V1::Researcher::StudiesOpenApi
         key :description, 'The study updates.'
         key :required, false
         content 'application/json' do
-          schema { key :$ref, :Study }
+          schema do
+            key :type, :object
+            key :title, :studyUpdateStatus
+            property :study do
+              key :$ref, :Study
+            end
+          end
         end
       end
       response 200 do

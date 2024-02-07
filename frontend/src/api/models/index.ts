@@ -49,6 +49,7 @@ export * from './Study';
 export * from './StudyAnalysis';
 export * from './StudyResearcher';
 export * from './StudyUpdate';
+export * from './StudyUpdateStatus';
 export * from './UpdateAnalysis';
 export * from './UpdateAnalysisRun';
 export * from './UpdateBanner';

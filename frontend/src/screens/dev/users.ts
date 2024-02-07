@@ -5,6 +5,7 @@ interface UserPayload {
     user_id: string
     is_admin: boolean
     is_researcher: boolean
+    full_name: string
 }
 
 interface UsersPayload {
