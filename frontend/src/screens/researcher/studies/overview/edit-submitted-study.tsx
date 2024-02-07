@@ -1,4 +1,4 @@
-import { Study, StudyUpdate } from '@api';
+import { Study } from '@api';
 import { useApi, useQueryParam } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import {
@@ -120,7 +120,6 @@ const Sessions: FC<{study: Study}> = ({ study }) => {
                         </Box>
                     )
                 }
-
 
                 return (
                     <Box direction='column' gap key={stage.order}>
