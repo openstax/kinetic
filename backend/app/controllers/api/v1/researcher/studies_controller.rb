@@ -44,14 +44,14 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
   end
 
   def update
-    inbound_binding, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
+    study_update, error = bind(params.require(:study), Api::V1::Bindings::StudyUpdate)
     render(json: error, status: error.status_code) and return if error
 
-    notify_researchers(inbound_binding.researchers || []) if inbound_binding.researchers
+    notify_researchers(study_update.researchers || []) if study_update.researchers
 
-    @study.update!(inbound_binding.to_hash.except(:researchers, :stages))
+    @study.update!(study_update.to_hash.except(:researchers, :stages))
 
-    @study.update_stages(inbound_binding.stages)
+    @study.update_stages(study_update.stages)
 
     @study.reopen_if_possible
     response_binding = Api::V1::Bindings::Study.create_from_model(@study)
@@ -64,6 +64,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       render(json: error, status: error.status_code) and return if error
 
       @study.update!(study_update.to_hash.except(:researchers, :stages))
+      @study.update_stages(study_update.stages)
     end
 
     @study.update_status!(params[:status_action], params[:stage_index])

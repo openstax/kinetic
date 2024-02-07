@@ -1,4 +1,4 @@
-import { Study } from '@api';
+import { Study, StudyUpdate } from '@api';
 import { useApi, useQueryParam } from '@lib';
 import { FormContext } from '@nathanstitt/sundry/form-hooks';
 import {
@@ -121,6 +121,7 @@ const Sessions: FC<{study: Study}> = ({ study }) => {
                     )
                 }
 
+
                 return (
                     <Box direction='column' gap key={stage.order}>
                         <h4>Session {i + 1}</h4>
@@ -153,7 +154,7 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
     const { isValid, isDirty } = useFormState()
     const api = useApi()
     const [show, setShow] = useState(false)
-    const { getValues, reset } = useFormContext()
+    const { getValues, reset } = useFormContext<Study>()
 
     if (isReadyForLaunch(study)) {
         return (
@@ -166,7 +167,7 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
                         onClick={() => {
                             api.updateStudyStatus({
                                 id: study.id,
-                                study: getValues() as Study,
+                                studyUpdateStatus: { study: getValues() },
                                 statusAction: 'launch',
                             }).then(() => {
                                 reset(undefined, { keepValues: true, keepDirty: false });

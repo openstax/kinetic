@@ -40,6 +40,7 @@ import type {
   Stage,
   Studies,
   Study,
+  StudyUpdateStatus,
   UpdateAnalysis,
   UpdateAnalysisRun,
   UpdateBanner,
@@ -101,6 +102,8 @@ import {
     StudiesToJSON,
     StudyFromJSON,
     StudyToJSON,
+    StudyUpdateStatusFromJSON,
+    StudyUpdateStatusToJSON,
     UpdateAnalysisFromJSON,
     UpdateAnalysisToJSON,
     UpdateAnalysisRunFromJSON,
@@ -311,7 +314,7 @@ export interface UpdateStudyStatusRequest {
     id: number;
     statusAction: UpdateStudyStatusStatusActionEnum;
     stageIndex?: number;
-    study?: Study;
+    studyUpdateStatus?: StudyUpdateStatus;
 }
 
 /**
@@ -2050,7 +2053,7 @@ export class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: StudyToJSON(requestParameters.study),
+            body: StudyUpdateStatusToJSON(requestParameters.studyUpdateStatus),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => StudyFromJSON(jsonValue));
