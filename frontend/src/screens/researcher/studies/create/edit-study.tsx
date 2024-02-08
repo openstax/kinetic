@@ -25,6 +25,7 @@ import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
 import { Navigate } from 'react-router-dom';
 import { Box, Grid, Stack } from '@mantine/core';
+import { useEffect } from 'react';
 
 const buildValidationSchema = (allOtherStudies: Study[]) => {
     return Yup.object().shape({
@@ -122,9 +123,12 @@ const FormContent: FC<{
     const [maxStep, setMaxStep] = useLocalstorageState<StudyStep>(`study-max-progress-${id}`, 0)
     const { isValid, isDirty } = useFormState()
 
-    if (!isDraft(study) && !isNew) {
-        return <Navigate to={`/study/overview/${id}`} />
-    }
+    useEffect(() => {
+        if (!isDraft(study) && !isNew) {
+            nav(`/study/overview/${id}`)
+        }
+    }, [])
+
 
     const setStep = (step: StudyStep) => {
         setValue('step', step, { shouldValidate: true, shouldTouch: true })
@@ -148,8 +152,8 @@ const FormContent: FC<{
 
             if (savedStudy) {
                 showResearcherNotification(`New copy of '${study.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`)
-                nav(`/study/edit/${savedStudy.id}?step=${goToStep + 1}`)
-                return setStudy(savedStudy)
+                setStudy(savedStudy)
+                return nav(`/study/edit/${savedStudy.id}?step=1`)
             }
         }
 

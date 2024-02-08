@@ -27,6 +27,10 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
   before do
     responses_not_exceptions!
 
+    study1.launch
+    study2.launch
+    study3.launch
+
     # One new study (#1), one in progress (#2), one complete (#3)
     user1_study2_launch_pad.launch_url
     user1_study3_launch_pad.launch_url
@@ -96,9 +100,6 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
       before { stub_current_user(user1_id) }
 
       it 'returns studies' do
-        study1.launch
-        study2.launch
-        study3.launch
         api_get 'participant/studies'
         expect(response).to have_http_status(:success)
         expect(response_hash[:data]).to match a_collection_including(
@@ -143,6 +144,14 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
         expect(Study.available_to_participants.find_by(id: study1.id)).to be_nil
         api_get 'participant/studies'
         expect(response_hash[:data]).not_to include(a_hash_including(id: study1.id))
+      end
+
+      it 'excludes completed launched studies' do
+        # End both sessions
+        study2.end
+        study2.end
+        api_get 'participant/studies'
+        expect(response_hash[:data]).not_to include(a_hash_including(id: study2.id))
       end
     end
   end

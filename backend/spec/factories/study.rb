@@ -28,6 +28,8 @@ FactoryBot.define do
       study.researchers << researchers
 
       FactoryBot.create_list(:stage, evaluator.num_stages, study: study)
+
+      study.launch
     end
   end
 end

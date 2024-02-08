@@ -73,7 +73,11 @@ class Study < ApplicationRecord
   end
 
   def available?
-    !is_hidden? && opens_at && Time.now > opens_at && (closes_at.nil? || Time.now <= closes_at)
+    !is_hidden? &&
+      opens_at &&
+      Time.now > opens_at &&
+      (closes_at.nil? || Time.now <= closes_at) &&
+      stages.any? { |stage| stage.status == 'active' }
   end
 
   def can_delete?
