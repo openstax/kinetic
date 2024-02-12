@@ -92,7 +92,9 @@ class Study < ApplicationRecord
     return if updated_stages.nil?
 
     # remove any extra stages that were removed
-    stages.delete(stages.last) while stages.count > updated_stages.count unless launched_stages.any?
+    unless launched_stages.any?
+      (stages.delete(stages.last) while stages.count > updated_stages.count)
+    end
 
     updated_stages.each_with_index do |stage, i|
       s = stages[i]
