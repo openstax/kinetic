@@ -17,6 +17,6 @@ test('filtering studies', async ({ browser }) => {
     await createStudy({ researcherPage, adminPage })
 
     await goToPage({ page: userPage, path: '/studies' })
-    await userPage.click('testId=Learning')
+    await userPage.click('testId=Learning Goals')
     await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"]`)
 })
