@@ -36,7 +36,7 @@ class MigrateStudyData < ActiveRecord::Migration[6.1]
         :closes_at => data['closes_at']&.to_date,
         :public_on => data['public_on'] == 'now' ? DateTime.now : data['public_on']&.to_date
       })
-      
+
       data['stages'].each_with_index do |stage_data, index|
         study.stages[index]&.update({
           :status => data['status'],
