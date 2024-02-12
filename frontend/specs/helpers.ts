@@ -135,8 +135,8 @@ export const createStudy = async ({
     await researcherPage.fill('[name=titleForParticipants]', name)
     await researcherPage.fill('[name=shortDescription]', faker.commerce.department())
     await researcherPage.fill('[name=longDescription]', faker.commerce.department())
-    await selectFirstDropdownItem({ page: researcherPage, fieldName: 'topic' })
-    await selectFirstDropdownItem({ page: researcherPage, fieldName: 'subject' })
+    await selectDropdownOption({ page: researcherPage, fieldName: 'topic', option: 'Learning Goals' })
+    await selectDropdownOption({ page: researcherPage, fieldName: 'subject', option: 'Business Ethics' })
     await researcherPage.click("input[value='10']")
     await researcherPage.click("input[value='score']")
     await researcherPage.click("input[value='debrief']")
@@ -181,12 +181,11 @@ export const createStudy = async ({
     return studyId
 }
 
-export const selectFirstDropdownItem = async (
-    { fieldName, page }: { fieldName: string, page: Page }
+export const selectDropdownOption = async (
+    { fieldName, option, page }: { fieldName: string, option: string, page: Page }
 ) => {
     await page.locator('.select', { has: page.locator(`input[name=${fieldName}]`) }).click()
-
-    await page.keyboard.press('Enter')
+    await page.locator('.select', { has: page.locator(`input[name=${fieldName}]`) }).getByText(option).click()
 }
 
 export const setFlatpickrDate = async (
