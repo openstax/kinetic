@@ -177,14 +177,24 @@ export const studyCategoryDescriptions = {
     'Transfer of Learning': 'Interventions that assess learning or other outcomes across domains',
 }
 
-export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other' | string
+export type StudyTopic = 'Personality' | 'Memory & Cognition' | 'Learning Goals' | 'Self Reflection' | 'Study Strategies' | 'Other'
 export const studyTopics: StudyTopic[] = [
-    'Learning',
-    'Memory',
     'Personality',
-    'School & Career',
+    'Memory & Cognition',
+    'Learning Goals',
+    'Self Reflection',
+    'Study Strategies',
     'Other',
 ]
+
+export const studyTopicDescriptions = {
+    'Personality': 'Learn about yourself',
+    'Memory & Cognition': 'Test your cognitive skills',
+    'Learning Goals': 'Find what motivates you',
+    'Self Reflection': 'Explore opportunities for personal growth',
+    'Study Strategies': 'Explore your inclinations and how you retain knowledge',
+    'Other': 'Check out more studies',
+}
 
 export type StudySubject = 'Biology' | 'Business Ethics' | 'Chemistry' | 'Physics' | 'Psychology' | 'Sociology' | 'Statistics' | 'US History'
 
