@@ -82,7 +82,7 @@ const NavMenu = () => {
 
     return (
         <Menu shadow='md' opened={opened} onChange={setOpened} width={175}>
-            <Menu.Target>
+            <Menu.Target data-tour='account-info'>
                 {menuToggle}
             </Menu.Target>
 

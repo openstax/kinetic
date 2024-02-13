@@ -13,6 +13,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { ImpersonatingBanner } from './components/impersonating-banner';
+import { TourProvider } from '@reactour/tour';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -22,14 +23,31 @@ const queryClient = new QueryClient({
     },
 })
 
+const steps = [
+    {
+        selector: '[data-tour="highlighted-studies"]',
+        content: 'The best studies on the site',
+    },
+    {
+        selector: '[data-tour="study-filters"]',
+        content: 'Filter different studies',
+    },
+    {
+        selector: '[data-tour="account-info"]',
+        content: 'Access your account info here',
+    },
+];
+
 const App = () => (
     <React.StrictMode>
         <QueryClientProvider client={queryClient}>
             <MantineProvider theme={mantineTheme}>
                 <EnvironmentProvider>
-                    <Notifications position='top-right' />
-                    <ImpersonatingBanner />
-                    <AppRoutes />
+                    <TourProvider steps={steps}>
+                        <Notifications position='top-right' />
+                        <ImpersonatingBanner />
+                        <AppRoutes />
+                    </TourProvider>
                 </EnvironmentProvider>
             </MantineProvider>
         </QueryClientProvider>

@@ -4,6 +4,7 @@ import { StudyTopic } from '@models'
 import { ParticipantStudy } from '@api'
 import { groupBy, sortBy } from 'lodash'
 import { useApi } from '@lib'
+import { useTour } from '@reactour/tour';
 
 
 export type StudyByTopics = Record<StudyTopic, ParticipantStudy[]>
@@ -48,6 +49,8 @@ export const useLearnerStudies = () => {
         studiesByTopic: {} as StudyByTopics,
         demographicSurvey: null,
     })
+
+    const { setIsOpen } = useTour()
 
     const fetchStudies = useCallback(async () => {
         const fetchedStudies = await api.getParticipantStudies()
@@ -99,6 +102,7 @@ export const useLearnerStudies = () => {
             studiesByTopic,
             demographicSurvey,
         })
+        setIsOpen(true)
     }, [setStudyState])
 
 

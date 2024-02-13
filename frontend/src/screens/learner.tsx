@@ -1,4 +1,4 @@
-import { cx, React, useCallback } from '@common'
+import { cx, React, useCallback, useEffect } from '@common'
 import { ParticipantStudy } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
@@ -14,6 +14,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Pagination } from 'swiper';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
+import { useTour } from '@reactour/tour';
 
 interface StudyListProps {
     studies: ParticipantStudy[],
@@ -34,7 +35,7 @@ const Grid = styled.div({
 
 const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
     return (
-        <div className={cx('container', 'studies', 'my-3', className)} >
+        <div className={cx('container', 'studies', 'my-3', className)} data-tour='highlighted-studies'>
             <h3 css={{ margin: '2rem 0' }}>{title}</h3>
             {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
@@ -105,7 +106,7 @@ const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
     }
 
     return (
-        <Box gap="large" data-testid="topic-tabs" wrap margin={{ bottom: 'large' }}
+        <Box data-tour='study-filters' gap="large" data-testid="topic-tabs" wrap margin={{ bottom: 'large' }}
             css={{
                 span: {
                     cursor: 'pointer',
