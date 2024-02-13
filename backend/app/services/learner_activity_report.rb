@@ -28,8 +28,6 @@ class LearnerActivityReport
       'Completed At',
       'Participant Research ID',
       'Participant Name',
-      'Email',
-      'Opted Out',
       'Test Account?'
     ]
   end
@@ -51,8 +49,8 @@ class LearnerActivityReport
 
   def build_rows(csv, users, launches)
     launches.each do |launch|
+      next if launch.stage.study.first_launched_study.opted_out_at
       account = users[launch.user_id] || {}
-      email = find_user_email(account)
 
       csv << [
         launch.stage.study.id,
@@ -67,8 +65,6 @@ class LearnerActivityReport
         launch.completed_at,
         launch.research_id.id,
         account['name'] || '',
-        email['value'] || '',
-        launch.stage.study.first_launched_study.opted_out_at,
         account['is_test'] ? 'X' : nil
       ]
     end
