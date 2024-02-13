@@ -50,6 +50,7 @@ class LearnerActivityReport
   def build_rows(csv, users, launches)
     launches.each do |launch|
       next if launch.stage.study.first_launched_study.opted_out_at
+
       account = users[launch.user_id] || {}
 
       csv << [
