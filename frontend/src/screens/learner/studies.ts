@@ -4,6 +4,7 @@ import { StudyTopic } from '@models'
 import { ParticipantStudy } from '@api'
 import { groupBy, sortBy } from 'lodash'
 import { useApi } from '@lib'
+import { useQuery } from 'react-query';
 
 
 export type StudyByTopics = Record<StudyTopic, ParticipantStudy[]>
@@ -21,6 +22,30 @@ interface StudyState {
     syllabusContestStudies: ParticipantStudy[]
     studiesByTopic: StudyByTopics
     demographicSurvey: ParticipantStudy | null
+}
+
+export const useFetchParticipantStudies = () => {
+    const api = useApi()
+    return useQuery('fetchParticipantStudies', async () => {
+        const res = await api.getParticipantStudies();
+        return (res.data || []).sort(study => study.completedAt ? 1 : -1);
+    })
+}
+
+export const useDemographicSurvey = () => {
+    const { data: studies, isLoading } = useFetchParticipantStudies()
+    if (isLoading) return null
+    return studies?.find(s => s.isDemographicSurvey) || null
+}
+
+
+// Add methods to get all data derived from this,
+// rather than return it all in one hook
+export const useParticipantStudies = () => {
+    const { data: studies, isLoading } = useFetchParticipantStudies()
+
+    if (isLoading) return []
+    return studies
 }
 
 

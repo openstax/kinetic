@@ -5,6 +5,7 @@ import { toDayJS, useIsMobileDevice } from '@lib'
 import { ParticipantStudy } from '@api'
 import { colors } from '@theme'
 import { CSSObject } from '@emotion/react'
+import { Container } from '@mantine/core';
 
 interface RewardsProgressBarProps {
     studies: ParticipantStudy[]
@@ -162,7 +163,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
             top: 0,
             zIndex: 30,
         }}>
-            <div className="container-lg">
+            <Container>
 
                 <SegmentInfo schedule={schedule} />
 
@@ -191,7 +192,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
                         ))}
                     </SegmentedBar>
                 </Box>
-            </div>
+            </Container>
         </nav >
     )
 }

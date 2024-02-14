@@ -1,137 +1,74 @@
-import { cx, React, useCallback } from '@common'
+import { React } from '@common'
 import { ParticipantStudy } from '@api'
-import styled from '@emotion/styled'
-import { colors, media } from '@theme'
-import { Box, Footer, RewardsProgressBar, TopNavBar } from '@components'
+import { Footer, RewardsProgressBar, TopNavBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
 import { StudyTopic, studyTopics } from '@models'
-import { StudyByTopics, useLearnerStudies } from './learner/studies'
+import { StudyByTopics, useLearnerStudies, useParticipantStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
 import { StudyDetails } from './learner/details'
-import { Route, Routes, useNavigate } from 'react-router-dom'
-import { chunk } from 'lodash-es'
+import { Route, Routes } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCards, Pagination } from 'swiper';
+import { EffectCards, FreeMode, Mousewheel, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
+import { Box, Container, Flex, SimpleGrid, Stack, TextInput, Title } from '@mantine/core';
+import { IconSearch } from '@tabler/icons-react';
+import { useState } from 'react';
+import { groupBy } from 'lodash';
 
 interface StudyListProps {
     studies: ParticipantStudy[],
     title: string
-    className: string
-    onSelect(study: ParticipantStudy): void
 }
 
-const Grid = styled.div({
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, [col-start] minmax(100px, 1fr) [col-end])',
-    columnGap: 20,
-    rowGap: 20,
-    [media.tablet]: {
-        gridTemplateColumns: 'repeat(2, [col-start] minmax(100px, 1fr) [col-end])',
-    },
-})
-
-const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
+const StudyList: FC<StudyListProps> = ({ title, studies }) => {
     return (
-        <div className={cx('container', 'studies', 'my-3', className)} >
+        <div className='container studies my-3'>
             <h3 css={{ margin: '2rem 0' }}>{title}</h3>
-            {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
-            <Grid css={{ overflow: 'auto', paddingBottom: '10px' }} data-testid="studies-listing">
-                {studies.map((s) => <StudyCard onSelect={onSelect} study={s} key={s.id} />)}
-            </Grid>
+            <SimpleGrid cols={{ xs: 1, sm: 2, lg: 2, xl: 3 }} data-testid="studies-listing">
+                {studies.map((s) => <StudyCard study={s} key={s.id} />)}
+            </SimpleGrid>
         </div>
     )
 }
 
-const MobileStudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
+const MobileStudyList: FC<StudyListProps> = ({ title, studies }) => {
     return (
-        <div className={cx('container-lg', 'studies', 'my-3', className)}>
+        <div className='container-lg studies my-3'>
             <h3 className='py-2'>{title}</h3>
-            {children}
             {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
 
-            {chunk(studies, 6).map((studyChunk, i) =>
-                <Swiper
-                    key={i}
-                    effect={'cards'}
-                    slidesPerView={'auto'}
-                    cardsEffect={{
-                        slideShadows: false,
-                        perSlideOffset: 14,
-                    }}
-                    centeredSlides={true}
-                    pagination
-                    modules={[EffectCards, Pagination]}
-                    className="pb-3 mb-2 overflow-hidden"
-                >
-                    {studyChunk.map((s) =>
-                        <SwiperSlide key={s.id} className="pb-1">
-                            <StudyCard onSelect={onSelect} study={s} />
-                        </SwiperSlide>
-                    )}
-                </Swiper>
-            )}
+            <Swiper
+                effect={'cards'}
+                slidesPerView={'auto'}
+                cardsEffect={{
+                    slideShadows: false,
+                    perSlideOffset: 14,
+                }}
+                centeredSlides={true}
+                pagination
+                modules={[EffectCards, Pagination]}
+                className="pb-3 mb-2 overflow-hidden"
+            >
+                {studies.map((study) => (
+                    <SwiperSlide key={study.id} className="pb-1">
+                        <StudyCard study={study} />
+                    </SwiperSlide>
+                ))}
+            </Swiper>
         </div>
     )
 }
 
+// TODO rename
 interface FiltersProps {
     studies: StudyByTopics
     filter: StudyTopic
     setFilter(filter: StudyTopic): void
 }
 
-const TopicFilter: FC<{topic: StudyTopic, filter: StudyTopic, setFilter: (t: StudyTopic) => void}> = ({
-    topic, filter, setFilter,
-}) => {
-    return (
-        <span
-            className={topic == filter ? 'active' : ''}
-            data-testid={topic}
-            onClick={() => setFilter(topic)}
-            role="tab"
-        >
-            {topic}
-        </span>
-
-    )
-}
-
-const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
-    if (useIsMobileDevice()) {
-        return null
-    }
-
-    return (
-        <Box gap="large" data-testid="topic-tabs" wrap margin={{ bottom: 'large' }}
-            css={{
-                span: {
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    borderBottom: '3px solid transparent',
-                    color: colors.text,
-                    '&.active': {
-                        borderBottomColor: colors.purple,
-                        color: colors.purple,
-                    },
-                },
-            }}
-        >
-            {studyTopics.map((topic) => (
-                studies[topic]?.length && <TopicFilter topic={topic} key={topic} filter={filter} setFilter={setFilter} />
-            ))}
-        </Box>
-    )
-}
-
-interface AllSubjectsProps extends FiltersProps {
-    onSelect(study: ParticipantStudy): void
-}
-
-const AllSubjects: FC<AllSubjectsProps> = ({
-    onSelect,
+const AllSubjects: FC<FiltersProps> = ({
     filter,
     setFilter,
     studies,
@@ -142,7 +79,7 @@ const AllSubjects: FC<AllSubjectsProps> = ({
                 {studyTopics
                     .filter((topic) => !!studies[topic]?.length)
                     .map((topic) => (
-                        <MobileStudyList key={topic} onSelect={onSelect} title={topic} className={topic} studies={studies[topic] || []} />
+                        <MobileStudyList key={topic} title={topic} studies={studies[topic] || []} />
                     ))
                 }
             </>
@@ -150,37 +87,35 @@ const AllSubjects: FC<AllSubjectsProps> = ({
     }
 
     return (
-        <StudyList onSelect={onSelect} title="View All Studies" className="filtered" studies={studies[filter] || []} >
-            <Filters studies={studies} filter={filter} setFilter={setFilter} />
-        </StudyList>
+        <StudyList title="View All Studies" studies={studies[filter] || []} />
     )
 }
 
-const HighlightedStudies: FCWOC<StudyListProps> = ({ onSelect, studies, title, className }) => {
+const HighlightedStudies: FC<StudyListProps> = ({ studies, title }) => {
     if (useIsMobileDevice()) {
         return (
             <>
-                <MobileStudyList onSelect={onSelect} title={title} className={className} studies={studies} />
+                <MobileStudyList title={title} studies={studies} />
             </>
         )
     }
 
     return (
-        <StudyList onSelect={onSelect} title={title} className={className} studies={studies} />
+        <StudyList title={title} studies={studies} />
     )
 }
 
 const LearnerDashboard = () => {
-    const nav = useNavigate()
     const env = useEnvironment()
-    const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
+
+    useParticipantStudies()
+
     const {
         highlightedStudies,
         allStudies,
         filter,
         setFilter,
         studiesByTopic,
-        // syllabusContestStudies,
         demographicSurvey,
     } = useLearnerStudies()
 
@@ -193,20 +128,86 @@ const LearnerDashboard = () => {
             <Routes>
                 <Route path={'details/:studyId'} element={<StudyDetails />} />
             </Routes>
+
             <TopNavBar />
 
             <LearnerWelcomeModal demographicSurvey={demographicSurvey} />
+
             <RewardsProgressBar studies={allStudies} />
 
             {/* Temporarily disable syllabus contest due to legal, keep it just in case we re-enable in the future */}
             {/*<SyllabusContest studies={syllabusContestStudies} />*/}
 
-            <HighlightedStudies studies={highlightedStudies} title="Highlighted Studies on Kinetic" className="highlighted" onSelect={onStudySelect}/>
+            {/* TODO Uncomment after dev */}
+            {/*<HighlightedStudies studies={highlightedStudies} title="Highlighted Studies on Kinetic" />*/}
 
-            <AllSubjects onSelect={onStudySelect} studies={studiesByTopic} filter={filter} setFilter={setFilter} />
+            <StudiesContainer />
+            <AllSubjects studies={studiesByTopic} filter={filter} setFilter={setFilter} />
 
             <Footer includeFunders />
         </div>
+    )
+}
+
+export const StudiesContainer = () => {
+    const [search, setSearch] = useState('')
+
+    return (
+        <Container my='lg'>
+            <Stack gap='lg'>
+                <Flex justify='space-between' wrap='wrap'>
+                    <Title order={2}>All Studies</Title>
+
+                    <TextInput
+                        w='400'
+                        rightSectionPointerEvents="none"
+                        rightSection={<IconSearch />}
+                        placeholder="Search by study title, researcher, or topic name"
+                    />
+                </Flex>
+
+                <StudiesByTopic />
+            </Stack>
+
+        </Container>
+    )
+}
+
+export const StudiesByTopic = () => {
+    const participantStudies = useParticipantStudies()
+    const studiesByTopic = groupBy(participantStudies, (study) => study.topic)
+    return (
+        <Stack gap='lg'>
+            {Object.entries(studiesByTopic).map(([studyTopic, studies]) => {
+                return (
+                    <Stack key={studyTopic}>
+                        <Title order={4}>{studyTopic}</Title>
+                        <Box>
+                            <Swiper
+                                slidesPerView={3}
+                                cssMode={true}
+                                freeMode={true}
+                                pagination={{
+                                    clickable: true,
+                                }}
+                                style={{
+                                    paddingBottom: '2rem',
+                                    marginBottom: '1rem',
+                                }}
+                                mousewheel={true}
+                                modules={[FreeMode, Pagination, Mousewheel]}
+                            >
+                                {studies.map(study => (
+                                    <SwiperSlide style={{ padding: '1rem' }} key={study.id}>
+                                        <StudyCard study={study} />
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                        </Box>
+                    </Stack>
+                )
+            })}
+        </Stack>
     )
 }
 

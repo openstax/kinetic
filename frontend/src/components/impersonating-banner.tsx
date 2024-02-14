@@ -10,7 +10,7 @@ export const ImpersonatingBanner = () => {
 
     return (
         <Box bg='osOrange'>
-            <Container p='md' size='xl' bg='osOrange'>
+            <Container p='md'bg='osOrange'>
                 <Center>
                     <Group>
                         <Title order={6}>

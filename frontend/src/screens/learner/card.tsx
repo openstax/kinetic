@@ -1,4 +1,4 @@
-import { cx, React, useCallback, useState } from '@common'
+import { cx, React, useState } from '@common'
 import { Box, getImageUrl, Icon, MultiSessionBar } from '@components'
 import { useIsMobileDevice } from '@lib'
 import { getStudyDuration, getStudyPoints, studyHasFeedback, studyIsMultipart } from '@models'
@@ -8,10 +8,10 @@ import { colors, media } from '@theme'
 import { StudyDetailsPreview } from './details';
 import dayjs from 'dayjs';
 import { Button } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
 interface StudyCardProps {
     study: ParticipantStudy
-    className?: string
 }
 
 const Card = styled(Box)({
@@ -211,11 +211,9 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
     )
 }
 
-export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantStudy): void }> = ({
-    onSelect,
-    study,
-}) => {
-    const onClick = useCallback(() => onSelect(study), [onSelect]);
+export const StudyCard: React.FC<StudyCardProps> = ({ study }) => {
+    const nav = useNavigate()
+    const onClick = () => nav(`/studies/details/${study.id}`)
 
     return (
         <Card
@@ -250,7 +248,7 @@ const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
             <MultiSessionFlag study={study} />
             <FeedbackMultiSessionContainer study={study} />
             <h6>{study.titleForParticipants}</h6>
-            <Researcher className="xx-small" study={study} />
+            <Researcher study={study} />
             <small
                 className={cx({ 'x-small': isMobile })}
                 css={{ color: colors.text, overflowWrap: 'anywhere' }}

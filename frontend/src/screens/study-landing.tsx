@@ -7,7 +7,7 @@ import { useApi, useQueryParam } from '@lib'
 import { BackgroundImage, Box, Button, Container, Flex, Group, Modal, Space, Stack, Text, Title } from '@mantine/core';
 import Waves from '@images/waves.svg'
 import { launchStudy, RewardsSegment, useRewardsSchedule } from '@models';
-import { useLearnerStudies } from './learner/studies';
+import { useDemographicSurvey, useLearnerStudies } from './learner/studies';
 import dayjs from 'dayjs';
 import { noop } from 'lodash-es';
 
@@ -41,7 +41,8 @@ export default function StudyLanding() {
     const consent = useQueryParam('consent') != 'false'
     const abort = useQueryParam('abort') == 'true'
     const md = useQueryParam('md') || {}
-    const { allStudies, demographicSurvey } = useLearnerStudies()
+    const { allStudies } = useLearnerStudies()
+    const demographicSurvey = useDemographicSurvey()
     const { schedule } = useRewardsSchedule(allStudies)
     const nextReward = schedule.find(rewardSegment => !rewardSegment.achieved && rewardSegment.isFuture)
 
