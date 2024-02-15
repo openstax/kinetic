@@ -38,13 +38,21 @@ export const useDemographicSurvey = () => {
     return studies?.find(s => s.isDemographicSurvey) || null
 }
 
+export const getDemographicSurvey = (studies: ParticipantStudy[]) => {
+    return studies?.find(s => s.isDemographicSurvey) || null
+}
+
+export const getHighlightedStudies = (studies: ParticipantStudy[]) => {
+    return studies?.find(s => s.isDemographicSurvey) || null
+
+}
 
 // Add methods to get all data derived from this,
 // rather than return it all in one hook
 export const useParticipantStudies = () => {
     const { data: studies, isLoading } = useFetchParticipantStudies()
 
-    if (isLoading) return []
+    if (isLoading || !studies) return []
     return studies
 }
 

@@ -3,6 +3,7 @@ import { RewardsScheduleSegment, ParticipantStudy } from '@api'
 import { useEnvironment, dayjs, useApi } from '@lib'
 import { sortBy } from 'lodash-es'
 import { useQuery } from 'react-query';
+import { useParticipantStudies } from '../screens/learner/studies';
 
 export interface RewardsSegment extends RewardsScheduleSegment {
     totalPoints: number
@@ -50,6 +51,8 @@ const calculatePoints = (segment: RewardsScheduleSegment, cycleStart: Date, stud
 
 export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
     const env = useEnvironment()
+    // TODO Use this instead
+    // const studies = useParticipantStudies()
 
     const rs = sortBy(env.rewardsSchedule, 'startAt')
     const firstSegment = rs[0]
