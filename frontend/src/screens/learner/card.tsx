@@ -36,6 +36,19 @@ const Card = styled(Box)({
         minHeight: 200,
         maxHeight: 200,
     },
+    [media.tablet]: {
+        minWidth: 275,
+        maxWidth: 275,
+        margin: '0 auto',
+        padding: '1rem',
+        minHeight: 360,
+        maxHeight: 360,
+        '.study-card-image': {
+            minHeight: '35%',
+            maxHeight: '35%',
+            height: '35%',
+        },
+    },
     [media.mobile]: {
         minWidth: 275,
         maxWidth: 275,
