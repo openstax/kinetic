@@ -103,9 +103,17 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
                     perSlideOffset: 14,
                 }}
                 centeredSlides={true}
-                pagination
+                pagination={{
+                    enabled: true,
+                    dynamicBullets: true,
+                    dynamicMainBullets: 3,
+                }}
                 modules={[EffectCards, Pagination]}
-                className="pb-3 mb-2 overflow-hidden"
+                style={{
+                    paddingBottom: '2rem',
+                    marginBottom: '1rem',
+                }}
+
             >
                 {studies.map((study) => (
                     <SwiperSlide key={study.id} className="pb-1">
@@ -124,7 +132,12 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
                 slidesPerView={3}
                 simulateTouch={true}
                 freeMode={true}
-                pagination={{ clickable: true }}
+                pagination={{
+                    enabled: true,
+                    dynamicBullets: true,
+                    dynamicMainBullets: 3,
+                    clickable: true,
+                }}
                 style={{
                     paddingBottom: '2rem',
                     marginBottom: '1rem',
