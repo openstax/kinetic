@@ -7,7 +7,7 @@ import { useApi, useQueryParam } from '@lib'
 import { BackgroundImage, Box, Button, Container, Flex, Group, Modal, Space, Stack, Text, Title } from '@mantine/core';
 import Waves from '@images/waves.svg'
 import { launchStudy, RewardsSegment, useRewardsSchedule } from '@models';
-import { useDemographicSurvey, useLearnerStudies } from './learner/studies';
+import { useParticipantStudies } from './learner/studies';
 import dayjs from 'dayjs';
 import { noop } from 'lodash-es';
 
@@ -33,17 +33,14 @@ const landStudy = async (api: DefaultApi, params: LandStudyRequest): Promise<Lan
 export default function StudyLanding() {
     const { studyId } = useParams<string>();
 
-    // this is somewhat inaccurate but we do not want to say something like "recording status"
-    // since that will alarm participants who refused consent
     const [study, setLanded] = useState<LandedStudy | null>(null)
     const [error, setError] = useState<any>(null)
     const api = useApi()
     const consent = useQueryParam('consent') != 'false'
     const abort = useQueryParam('abort') == 'true'
     const md = useQueryParam('md') || {}
-    const { allStudies } = useLearnerStudies()
-    const demographicSurvey = useDemographicSurvey()
-    const { schedule } = useRewardsSchedule(allStudies)
+    const { demographicSurvey } = useParticipantStudies()
+    const { schedule } = useRewardsSchedule()
     const nextReward = schedule.find(rewardSegment => !rewardSegment.achieved && rewardSegment.isFuture)
 
     useEffect(() => {

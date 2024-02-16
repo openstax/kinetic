@@ -152,7 +152,7 @@ export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies 
         schedule,
         pointsEarned,
         totalPoints,
-    } = useRewardsSchedule(studies)
+    } = useRewardsSchedule()
     const completion = (pointsEarned / totalPoints) * 100
 
     return (
