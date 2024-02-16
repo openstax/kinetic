@@ -15,7 +15,6 @@ import {
 import { colors } from '@theme';
 import SyllabusContestBackground from './syllabus-contest-background.svg'
 import { StudyCard } from './card';
-import { useCallback, useNavigate } from '@common';
 import { ParticipantStudy } from '@api';
 import dayjs from 'dayjs';
 import { IconInfoCircleFilled } from '@tabler/icons-react';
@@ -119,13 +118,10 @@ const CompletedCountBadge: FC<{ studies: ParticipantStudy[] }> = ({ studies }) =
 }
 
 export const ContestCards: FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
-    const nav = useNavigate()
-    const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
-
     return (
         <Group>
             {studies.map((study) => (
-                <StudyCard key={study.id} onSelect={onStudySelect} study={study} />
+                <StudyCard key={study.id} study={study} />
             ))}
         </Group>
     )

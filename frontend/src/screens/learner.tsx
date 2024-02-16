@@ -12,7 +12,6 @@ import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
 import { Box, Container, Flex, Stack, TextInput, Title } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
-import { useState } from 'react';
 import { groupBy } from 'lodash';
 import { colors } from '@theme'
 
@@ -21,7 +20,7 @@ const HighlightedStudies: FC = () => {
     const isMobile = useIsMobileDevice()
 
     return (
-        <Box bg={colors.navy} py='lg'>
+        <Box bg={colors.navy} py='md'>
             <Container>
                 <Stack>
                     <Title c='white' order={2}>Highlighted Studies</Title>
@@ -70,7 +69,7 @@ const LearnerDashboard = () => {
 
 export const StudiesContainer = () => {
     // TODO Implement search later
-    const [search, setSearch] = useState('')
+    // const [search, setSearch] = useState('')
 
     return (
         <Container my='lg'>
