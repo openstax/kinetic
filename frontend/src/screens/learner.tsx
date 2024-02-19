@@ -19,6 +19,8 @@ const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
     const isMobile = useIsMobileDevice()
 
+    if (!highlightedStudies.length) return null
+
     return (
         <Box bg={colors.navy} py='md'>
             <Container>
@@ -90,6 +92,7 @@ export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy
         )
     }
 
+    // TODO Different pages? or just different views?
     return (
         <Title order={2}>
             View all studies
@@ -158,7 +161,6 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
                     paddingBottom: '2rem',
                     marginBottom: '1rem',
                 }}
-
             >
                 {studies.map((study) => (
                     <SwiperSlide key={study.id} className="pb-1">
@@ -200,13 +202,11 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
 }
 
 export const StudiesByTopic: FC<{filteredStudies: ParticipantStudy[]}> = ({ filteredStudies }) => {
-    // const { nonHighlightedStudies } = useParticipantStudies()
-    // const { search, filteredStudies } = useSearchStudies()
     const studiesByTopic = groupBy(filteredStudies, (study) => study.topic)
     const isMobile = useIsMobileDevice()
 
     return (
-        <Stack gap='lg'>
+        <Stack gap='lg' data-testid='studies-listing'>
             {Object.entries(studiesByTopic).map(([studyTopic, studies]) => {
                 return (
                     <Stack key={studyTopic}>

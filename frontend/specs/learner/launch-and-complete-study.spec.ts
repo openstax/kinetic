@@ -11,7 +11,6 @@ test('launching study and testing completion', async ({ browser }) => {
     const userPage = await useUserPage(browser)
 
     await goToPage({ page: userPage, path: '/studies' })
-    await userPage.click('testId=Learning')
     await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"]`)
     await userPage.click(`[data-study-id="${studyId}"]`)
 
@@ -25,9 +24,6 @@ test('launching study and testing completion', async ({ browser }) => {
     // qualtrics will redirect here once complete
     await userPage.getByText('You just earned 10 points').isVisible()
     await userPage.click('testId=view-studies')
-
-    // Our study is under "Learning"
-    await userPage.click('testId=Learning')
 
     await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"][data-is-completed="true"]`)
     await userPage.click(`[data-study-id="${studyId}"]`)
