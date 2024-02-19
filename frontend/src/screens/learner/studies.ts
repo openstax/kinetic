@@ -1,5 +1,9 @@
 import { useApi } from '@lib'
 import { useQuery } from 'react-query';
+import { useMemo, useState } from 'react';
+import Fuse from 'fuse.js'
+import { ParticipantStudy } from '@api';
+
 
 const FEATURED_COUNT = 3
 
@@ -19,6 +23,7 @@ export const useParticipantStudies = () => {
         studies: [],
         highlightedStudies: [],
         demographicSurvey: null,
+        nonHighlightedStudies: [],
         allStudies: [],
     }
 
@@ -44,5 +49,38 @@ export const useParticipantStudies = () => {
         nonHighlightedStudies,
         highlightedStudies,
         demographicSurvey,
+    }
+}
+
+export const useSearchStudies = () => {
+    const [search, setSearch] = useState('')
+    const [results, setResults] = useState<ParticipantStudy[]>([])
+    const { nonHighlightedStudies } = useParticipantStudies()
+
+    const fuseOptions = {
+        isCaseSensitive: false,
+        shouldSort: true,
+        includeMatches: true,
+        threshold: 0.3,
+        keys: [
+            'titleForParticipants',
+            'researchers.firstName',
+            'researchers.lastName',
+            'topic',
+        ],
+    };
+
+    const fuse = new Fuse(nonHighlightedStudies, fuseOptions);
+
+    useMemo(() => {
+        const mappedResults = fuse.search(search).map(result => result.item)
+        setResults(mappedResults)
+    }, [search])
+
+    console.log(results)
+    return {
+        search,
+        setSearch,
+        results,
     }
 }

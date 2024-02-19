@@ -1,8 +1,8 @@
-import { React } from '@common'
+import { React, useState } from '@common'
 import { ParticipantStudy } from '@api'
 import { Footer, RewardsProgressBar, TopNavBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
-import { useParticipantStudies } from './learner/studies'
+import { useParticipantStudies, useSearchStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
 import { StudyDetails } from './learner/details'
 import { Route, Routes } from 'react-router-dom'
@@ -67,22 +67,31 @@ const LearnerDashboard = () => {
     )
 }
 
-export const StudiesContainer = () => {
-    // TODO Implement search later
-    // const [search, setSearch] = useState('')
+export const SearchBar = () => {
+    const isMobile = useIsMobileDevice()
+    const { search, setSearch } = useSearchStudies()
 
+    return (
+        <TextInput
+            w={isMobile ? '100%' : '400px'}
+            size='lg'
+            value={search}
+            onChange={(event) => setSearch(event.currentTarget.value)}
+            rightSectionPointerEvents="none"
+            rightSection={<IconSearch />}
+            placeholder="Search by study title, researcher, or topic name"
+        />
+    )
+}
+
+export const StudiesContainer = () => {
     return (
         <Container my='lg'>
             <Stack gap='lg'>
                 <Flex justify='space-between' wrap='wrap'>
                     <Title order={2}>All Studies</Title>
 
-                    <TextInput
-                        w='400'
-                        rightSectionPointerEvents="none"
-                        rightSection={<IconSearch />}
-                        placeholder="Search by study title, researcher, or topic name"
-                    />
+                    <SearchBar />
                 </Flex>
 
                 <StudiesByTopic />
