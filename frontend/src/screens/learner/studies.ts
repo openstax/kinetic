@@ -1,6 +1,6 @@
 import { useApi } from '@lib'
 import { useQuery } from 'react-query';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Fuse from 'fuse.js'
 import { ParticipantStudy } from '@api';
 
@@ -25,6 +25,7 @@ export const useParticipantStudies = () => {
         demographicSurvey: null,
         nonHighlightedStudies: [],
         allStudies: [],
+        isLoading,
     }
 
     const eligibleStudies = studies.filter(s => !s.completedAt)
@@ -49,13 +50,14 @@ export const useParticipantStudies = () => {
         nonHighlightedStudies,
         highlightedStudies,
         demographicSurvey,
+        isLoading,
     }
 }
 
 export const useSearchStudies = () => {
     const [search, setSearch] = useState('')
-    const [results, setResults] = useState<ParticipantStudy[]>([])
-    const { nonHighlightedStudies } = useParticipantStudies()
+    const [filteredStudies, setFilteredStudies] = useState<ParticipantStudy[]>([])
+    const { isLoading, nonHighlightedStudies } = useParticipantStudies()
 
     const fuseOptions = {
         isCaseSensitive: false,
@@ -73,14 +75,17 @@ export const useSearchStudies = () => {
     const fuse = new Fuse(nonHighlightedStudies, fuseOptions);
 
     useMemo(() => {
-        const mappedResults = fuse.search(search).map(result => result.item)
-        setResults(mappedResults)
-    }, [search])
+        if (search) {
+            const mappedResults = fuse.search(search).map(result => result.item)
+            setFilteredStudies(mappedResults)
+        } else {
+            setFilteredStudies(nonHighlightedStudies)
+        }
+    }, [search, isLoading])
 
-    console.log(results)
     return {
         search,
         setSearch,
-        results,
+        filteredStudies,
     }
 }

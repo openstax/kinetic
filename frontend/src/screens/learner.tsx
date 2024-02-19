@@ -67,16 +67,15 @@ const LearnerDashboard = () => {
     )
 }
 
-export const SearchBar = () => {
+export const SearchBar: FC<{search: string, setSearch: (search: string) => void}> = ({ search, setSearch }) => {
     const isMobile = useIsMobileDevice()
-    const { search, setSearch } = useSearchStudies()
 
     return (
         <TextInput
             w={isMobile ? '100%' : '400px'}
             size='lg'
             value={search}
-            onChange={(event) => setSearch(event.currentTarget.value)}
+            onChange={(event) => setSearch(event.currentTarget.value.trim())}
             rightSectionPointerEvents="none"
             rightSection={<IconSearch />}
             placeholder="Search by study title, researcher, or topic name"
@@ -84,19 +83,56 @@ export const SearchBar = () => {
     )
 }
 
+export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = ({ search, filteredStudies }) => {
+    if (!search) {
+        return (
+            <Title order={2}>All Studies</Title>
+        )
+    }
+
+    return (
+        <Title order={2}>
+            View all studies
+        </Title>
+    )
+}
+
+export const SearchResults: FC<{search: string, filteredStudies: ParticipantStudy[]}> = ({ search, filteredStudies }) => {
+    if (!search) {
+        return null
+    }
+
+    if (filteredStudies.length == 0) {
+        return (
+            <Title order={4}>
+                Sorry, no results found for '{search}'
+            </Title>
+        )
+    }
+
+    return (
+        <Title order={4}>
+            {filteredStudies.length} result{filteredStudies.length == 1 ? '' : 's'} for '{search}'
+        </Title>
+    )
+}
+
 export const StudiesContainer = () => {
+    const { search, setSearch, filteredStudies } = useSearchStudies()
+
     return (
         <Container my='lg'>
             <Stack gap='lg'>
                 <Flex justify='space-between' wrap='wrap'>
-                    <Title order={2}>All Studies</Title>
+                    <StudiesTitle search={search} filteredStudies={filteredStudies} />
 
-                    <SearchBar />
+                    <SearchBar search={search} setSearch={setSearch} />
                 </Flex>
 
-                <StudiesByTopic />
-            </Stack>
+                <SearchResults search={search} filteredStudies={filteredStudies} />
 
+                <StudiesByTopic filteredStudies={filteredStudies} />
+            </Stack>
         </Container>
     )
 }
@@ -115,7 +151,7 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
                 pagination={{
                     enabled: true,
                     dynamicBullets: true,
-                    dynamicMainBullets: 3,
+                    dynamicMainBullets: 5,
                 }}
                 modules={[EffectCards, Pagination]}
                 style={{
@@ -144,12 +180,12 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
                 pagination={{
                     enabled: true,
                     dynamicBullets: true,
-                    dynamicMainBullets: 3,
+                    dynamicMainBullets: 5,
                     clickable: true,
                 }}
                 style={{
-                    paddingBottom: '2rem',
                     marginBottom: '1rem',
+                    paddingBottom: '2rem',
                 }}
                 modules={[FreeMode, Pagination]}
             >
@@ -163,9 +199,10 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
     )
 }
 
-export const StudiesByTopic = () => {
-    const { nonHighlightedStudies } = useParticipantStudies()
-    const studiesByTopic = groupBy(nonHighlightedStudies, (study) => study.topic)
+export const StudiesByTopic: FC<{filteredStudies: ParticipantStudy[]}> = ({ filteredStudies }) => {
+    // const { nonHighlightedStudies } = useParticipantStudies()
+    // const { search, filteredStudies } = useSearchStudies()
+    const studiesByTopic = groupBy(filteredStudies, (study) => study.topic)
     const isMobile = useIsMobileDevice()
 
     return (
