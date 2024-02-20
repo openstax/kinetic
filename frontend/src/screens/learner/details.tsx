@@ -12,46 +12,16 @@ import {
     useFetchParticipantStudy,
 } from '@models'
 import { dayjs, useApi } from '@lib'
-import { Box, Icon, IconKey, MultiSessionBar, OffCanvas } from '@components'
+import { Icon, MultiSessionBar } from '@components'
 import { colors } from '@theme'
-import { Button } from '@mantine/core'
+import { Box, Button, Drawer, Flex, Group, ScrollArea, Space, Stack, Text, Title } from '@mantine/core'
 import { Navigate } from 'react-router-dom';
+import { IconAlertTriangle, IconHeart, IconInfoCircle, IconMessageExclamation, IconUser } from '@tabler/icons-react';
+import { useReactId } from '@mantine/hooks/lib/use-id/use-react-id';
+import { useRef } from 'react'
 
 interface StudyDetailsProps {
     study: ParticipantStudy
-}
-
-const Part: FCWC<{ title: string, icon: IconKey }> = ({
-    children,
-    title,
-    icon,
-}) => {
-    if (!children) return null
-    return (
-        <Box direction="column" margin={{ bottom: 'large' }}>
-            <Box align='center' gap margin={{ vertical: 'default' }}>
-                <Icon icon={icon} color={colors.purple} />
-                <span>{title}</span>
-            </Box>
-            <div css={{ marginBottom: '0.5rem', color: colors.text }}>{children}</div>
-        </Box>
-    )
-}
-
-const StudyPart: FC<StudyDetailsProps & { title: string, icon: IconKey, property: string }> = ({
-    icon,
-    study,
-    title,
-    property,
-}) => {
-    const s = study as any
-    if (!s[property]) return null
-
-    return (
-        <Part title={title} icon={icon}>
-            {s[property]}
-        </Part>
-    )
 }
 
 const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
@@ -74,6 +44,7 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
     return (
         <Button
             color='purple'
+            mt='auto'
             loading={isBusy}
             disabled={!isStudyLaunchable(study)}
             data-testid="launch-study"
@@ -85,98 +56,40 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
 }
 
 
-const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
-    if (!study.stages || !studyIsMultipart(study)) return null
-
-    return (
-        <Box direction="column" margin={{ bottom: 'large' }}>
-            <Box align='center' gap>
-                <Icon
-                    icon="cardMultiple"
-                    color={colors.purple}
-                />
-                <span>Multi-Session</span>
-            </Box>
-            <Box margin={{ vertical: 'large' }}>
-                <MultiSessionBar study={study} />
-            </Box>
-        </Box >
-    )
-}
-
 const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
     const firstStage = getFirstStage(study)
     if (!firstStage?.durationMinutes || !firstStage.points) return null
 
     if (studyIsMultipart(study)) {
         return (
-            <Box className='mb-1' direction='column'>
-                <Box gap>
+            <Stack>
+                <Group>
                     <Icon icon="clockOutline" color={colors.purple} />
-                    <Box>
+                    <Group>
                         <span>*Total: {getStudyDuration(study)}min</span>
                         <span>&nbsp;&middot; {getStudyPoints(study)}pts</span>
-                    </Box>
-                </Box>
-                <Box css={{ color: colors.text }} direction='column'>
+                    </Group>
+                </Group>
+                <Stack c={colors.text}>
                     {study.stages?.map((stage, index) => (
                         <small key={index}>
                             Session {index + 1}: {stage.durationMinutes}min {stage.points}pts
                         </small>
                     ))}
-                </Box>
-            </Box>
+                </Stack>
+            </Stack>
         )
     }
 
     return (
-        <Box gap align="center" className='mb-1'>
+        <Group align="center">
             <Icon icon="clockOutline" color={colors.purple} />
             <div>{firstStage.durationMinutes}min</div>
             <span>{firstStage.points}pts</span>
-        </Box>
+        </Group>
     )
 }
 
-
-const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher }) => {
-    if (!researcher || !researcher.firstName || !researcher.lastName) return null
-
-    return (
-        <Part icon="person" title="About Researcher">
-            <Box direction="column">
-                <Box gap>
-                    Name:
-                    <span>{researcher.firstName} {researcher.lastName}</span>
-                </Box>
-                <Box gap>
-                    Institution:
-                    <span>{researcher.institution}</span>
-                </Box>
-                <Box gap>
-                    Bio:
-                    <p>{researcher.bio}</p>
-                </Box>
-            </Box>
-        </Part>
-    )
-}
-
-const ResearcherSection: FC<StudyDetailsProps> = ({ study }) => {
-    const pi = getStudyPi(study)
-    const lead = getStudyLead(study)
-
-    if (pi && lead && pi.id === lead.id) {
-        return <Researcher researcher={pi} />;
-    }
-
-    return (
-        <>
-            {pi && <Researcher researcher={pi} />}
-            {lead && <Researcher researcher={lead} />}
-        </>
-    )
-}
 
 export const StudyDetails: React.FC = () => {
     const { studyId: sid } = useParams<{ studyId: string }>()
@@ -211,37 +124,148 @@ export const StudyDetailsPreview: FC<{
     onHide: () => void,
     preview?: boolean
 }> = ({ study, show, onHide, preview = false }) => {
+    const drawerHeaderRef = useRef<HTMLDivElement>(null)
+    const drawerBodyRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        drawerBodyRef.current.style.height = 'calc'
+    }, [drawerHeaderRef])
     return (
-        <OffCanvas show={show} title="Study Detail" onHide={onHide}>
-            <Box direction="column" flex>
-                <div css={{ overflowY: 'auto', flex: 1 }}>
-                    <h3>{study.titleForParticipants}</h3>
-                    {study.topic && <Box gap align="center" margin={{ vertical: 'large' }}>
-                        <div css={{ position: 'relative' }}>
-                            <Icon icon="message" color={colors.purple} />
-                            <span css={{
-                                position: 'absolute',
-                                left: 6,
-                                top: 6,
-                                color: 'white',
-                                fontSize: 7,
-                            }}>#</span>
-                        </div>
-                        {study.topic}
-                    </Box>}
-                    <StudyTime study={study} />
-                    <StudyPart property="feedbackDescription" title="Feedback Available" icon="feedback" study={study} />
-                    <MultiSession study={study} />
-                    <Box margin={{ bottom: 'large' }} css={{ color: colors.text }}>{study.longDescription}</Box>
-                    <ResearcherSection study={study} />
-                    <StudyPart property="benefits" title="What’s in it for you" icon="heart" study={study} />
-                    <Part icon="warning" title="Notice">
-                        Your responses to this study will be used to further learning science and
-                        education research. All your data will be kept confidential and anonymous.
-                    </Part>
-                </div>
-                {!preview && <LaunchStudyButton study={study} />}
-            </Box>
-        </OffCanvas>
+        <Drawer.Root opened={show} onClose={onHide} position='right'>
+            <Drawer.Overlay />
+            <Drawer.Content>
+                <Drawer.Header ref={drawerHeaderRef}>
+                    <Drawer.Title>
+                        <Text span fw='bolder' size='xl'>{study.titleForParticipants}</Text>
+                    </Drawer.Title>
+                    <Drawer.CloseButton />
+                </Drawer.Header>
+                <Drawer.Body ref={drawerBodyRef}>
+                    <Stack gap='lg' h='100%'>
+                        <StudyTopic study={study} />
+
+                        <StudyTime study={study} />
+
+                        <MultiSession study={study} />
+
+                        <StudyDescription study={study} />
+
+                        <ResearcherSection study={study} />
+
+                        <StudyBenefits study={study} />
+
+                        <DataNotice />
+
+                        {!preview && <LaunchStudyButton study={study} />}
+                    </Stack>
+                </Drawer.Body>
+            </Drawer.Content>
+        </Drawer.Root>
+    )
+}
+
+const StudyDescription: FC<StudyDetailsProps> = ({ study }) => {
+    if (!study.longDescription) return null
+
+    return (
+        <Stack gap='xs'>
+            <Group>
+                <IconInfoCircle size={16} color={colors.purple} />
+                <Text>About this study</Text>
+            </Group>
+
+            <Text>{study.longDescription}</Text>
+        </Stack>
+    )
+}
+
+
+const StudyTopic: FC<StudyDetailsProps> = ({ study }) => {
+    if (!study.topic) return null
+
+    return (
+        <Group>
+            <IconMessageExclamation size={16} color={colors.purple} />
+            <Text>{study.topic}</Text>
+        </Group>
+    )
+}
+
+const StudyBenefits: FC<StudyDetailsProps> = ({ study }) => {
+    if (!study.benefits) return null
+
+    return (
+        <Stack gap='xs'>
+            <Group>
+                <IconHeart size={16} color={colors.purple} fill={colors.purple}/>
+                <Text>What's in it for you</Text>
+            </Group>
+
+            <Text>{study.benefits}</Text>
+        </Stack>
+    )
+}
+
+const DataNotice: FC = () => {
+    return (
+        <Stack gap='xs'>
+            <Group>
+                <IconAlertTriangle size={16} color={colors.purple} />
+                <Text>Notice</Text>
+            </Group>
+
+            <Text>Your responses to this study will be used to further learning science and education research. All your data will be kept confidential and anonymous.</Text>
+        </Stack>
+    )
+}
+
+const Researcher: React.FC<{ researcher?: PublicResearcher }> = ({ researcher }) => {
+    if (!researcher || !researcher.firstName || !researcher.lastName) return null
+
+    return (
+        <Stack gap='xs'>
+            <Group>
+                <IconUser size={16} color={colors.purple} fill={colors.purple}/>
+                <Text span>About {researcher.role == 'pi' ? 'Principal Investigator' : 'Study Lead'}</Text>
+            </Group>
+            <Stack gap='xs'>
+                <Text span>Name: {researcher.firstName} {researcher.lastName}</Text>
+                <Text span>Institution: {researcher.institution}</Text>
+                <Text>Bio: {researcher.bio}</Text>
+            </Stack>
+        </Stack>
+    )
+}
+
+const ResearcherSection: FC<StudyDetailsProps> = ({ study }) => {
+    const pi = getStudyPi(study)
+    const lead = getStudyLead(study)
+
+    if (pi && lead && pi.id === lead.id) {
+        return <Researcher researcher={pi} />;
+    }
+
+    return (
+        <>
+            {pi && <Researcher researcher={pi} />}
+            {lead && <Researcher researcher={lead} />}
+        </>
+    )
+}
+
+const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
+    if (!study.stages || !studyIsMultipart(study)) return null
+
+    return (
+        <Stack>
+            <Group>
+                <Icon
+                    icon="cardMultiple"
+                    color={colors.purple}
+                />
+                <span>Multi-Session</span>
+            </Group>
+            <MultiSessionBar study={study} />
+        </Stack >
     )
 }
