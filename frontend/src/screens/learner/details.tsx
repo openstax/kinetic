@@ -14,11 +14,9 @@ import {
 import { dayjs, useApi } from '@lib'
 import { Icon, MultiSessionBar } from '@components'
 import { colors } from '@theme'
-import { Box, Button, Drawer, Flex, Group, ScrollArea, Space, Stack, Text, Title } from '@mantine/core'
+import { Button, Drawer, Group, Stack, Text } from '@mantine/core'
 import { Navigate } from 'react-router-dom';
 import { IconAlertTriangle, IconHeart, IconInfoCircle, IconMessageExclamation, IconUser } from '@tabler/icons-react';
-import { useReactId } from '@mantine/hooks/lib/use-id/use-react-id';
-import { useRef } from 'react'
 
 interface StudyDetailsProps {
     study: ParticipantStudy
@@ -44,7 +42,6 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
     return (
         <Button
             color='purple'
-            mt='auto'
             loading={isBusy}
             disabled={!isStudyLaunchable(study)}
             data-testid="launch-study"
@@ -124,49 +121,40 @@ export const StudyDetailsPreview: FC<{
     onHide: () => void,
     preview?: boolean
 }> = ({ study, show, onHide, preview = false }) => {
-    const drawerHeaderRef = useRef<HTMLDivElement>(null)
-    const drawerBodyRef = useRef<HTMLDivElement>(null)
 
-    useEffect(() => {
-        if (drawerBodyRef.current && drawerHeaderRef.current) {
-            drawerBodyRef.current.style.height = `calc(100% - ${drawerHeaderRef.current.clientHeight})`
-        }
-    }, [drawerHeaderRef, drawerBodyRef])
     return (
         <Drawer.Root opened={show} onClose={onHide} position='right'>
             <Drawer.Overlay />
             <Drawer.Content>
-                {/*<Drawer.Header ref={drawerHeaderRef}>*/}
-                {/*    <Drawer.Title>*/}
-                {/*        <Text span fw='bolder' size='xl'>{study.titleForParticipants}</Text>*/}
-                {/*    </Drawer.Title>*/}
-                {/*    <Drawer.CloseButton />*/}
-                {/*</Drawer.Header>*/}
-                {/*<Drawer.Body ref={drawerBodyRef} h='100%'>*/}
-                <Stack gap='lg' h='100%' p='md'>
-                    <StudyTopic study={study} />
+                <Stack h='100%' p='md'>
+                    <Stack>
+                        <Group>
+                            <Text span fw='bolder' size='xl'>{study.titleForParticipants}</Text>
+                            <Drawer.CloseButton />
+                        </Group>
+                    </Stack>
 
-                    <StudyTime study={study} />
+                    <Stack gap='lg' style={{ flex: 1, overflow: 'auto' }}>
+                        <StudyTopic study={study} />
 
-                    <MultiSession study={study} />
+                        <StudyTime study={study} />
 
-                    <StudyDescription study={study} />
+                        <MultiSession study={study} />
 
-                    <ResearcherSection study={study} />
+                        <StudyDescription study={study} />
 
-                    <StudyBenefits study={study} />
+                        <ResearcherSection study={study} />
 
-                    <DataNotice />
-                    <DataNotice />
-                    <DataNotice />
-                    <DataNotice />
-                    <DataNotice />
-                    <DataNotice />
-                    <DataNotice />
+                        <StudyBenefits study={study} />
 
-                    {!preview && <LaunchStudyButton study={study} />}
+                        <DataNotice />
+                        <DataNotice />
+                    </Stack>
+
+                    <Stack>
+                        {!preview && <LaunchStudyButton study={study} />}
+                    </Stack>
                 </Stack>
-                {/*</Drawer.Body>*/}
             </Drawer.Content>
         </Drawer.Root>
     )
