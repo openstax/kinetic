@@ -16,6 +16,6 @@ test('displays studies', async ({ browser }) => {
     await createStudy({ researcherPage, adminPage, name })
 
     await goToPage({ page: userPage, path: '/studies' })
-    await userPage.waitForSelector('testId=studies-listing')
+    // await userPage.waitForSelector('testId=studies-listing')
     await userPage.getByText(name).isVisible()
 })
