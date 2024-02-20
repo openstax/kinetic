@@ -25,6 +25,7 @@ test('launching study and testing completion', async ({ browser }) => {
     await userPage.getByText('You just earned 10 points').isVisible()
     await userPage.click('testId=view-studies')
 
+    await userPage.waitForURL('**/studies')
     await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"][data-is-completed="true"]`)
     await userPage.click(`[data-study-id="${studyId}"]`)
     await expect(userPage).not.toHaveSelector('testId=launch-study', { timeout: 200 })
