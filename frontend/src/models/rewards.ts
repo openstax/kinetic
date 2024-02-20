@@ -51,7 +51,6 @@ const calculatePoints = (segment: RewardsScheduleSegment, cycleStart: Date, stud
 
 export const useRewardsSchedule = () => {
     const env = useEnvironment()
-    // TODO Use this instead
     const { allStudies } = useParticipantStudies()
 
     const rs = sortBy(env.rewardsSchedule, 'startAt')

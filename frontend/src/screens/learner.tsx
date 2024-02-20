@@ -1,4 +1,4 @@
-import { React, useState } from '@common'
+import { React } from '@common'
 import { ParticipantStudy } from '@api'
 import { Footer, RewardsProgressBar, TopNavBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
@@ -39,7 +39,7 @@ const HighlightedStudies: FC = () => {
 const LearnerDashboard = () => {
     const env = useEnvironment()
 
-    const { demographicSurvey, allStudies } = useParticipantStudies();
+    const { demographicSurvey } = useParticipantStudies();
 
     if (!env.isEligible) {
         return <UnsupportedCountryModal />
@@ -55,7 +55,7 @@ const LearnerDashboard = () => {
 
             <LearnerWelcomeModal demographicSurvey={demographicSurvey} />
 
-            <RewardsProgressBar studies={allStudies} />
+            <RewardsProgressBar />
 
             {/* Temporarily disable syllabus contest due to legal, keep it just in case we re-enable in the future */}
             {/*<SyllabusContest studies={syllabusContestStudies} />*/}
@@ -85,7 +85,7 @@ export const SearchBar: FC<{search: string, setSearch: (search: string) => void}
     )
 }
 
-export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = ({ search, filteredStudies }) => {
+export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = ({ search }) => {
     if (!search) {
         return (
             <Title order={2}>All Studies</Title>

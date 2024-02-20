@@ -2,14 +2,9 @@ import { Box, cx, React } from '@common'
 import { Icon, Segment, segmentCircleStyle, SegmentedBar, Tooltip } from '@components'
 import { RewardsSegment, useRewardsSchedule } from '@models'
 import { toDayJS, useIsMobileDevice } from '@lib'
-import { ParticipantStudy } from '@api'
 import { colors } from '@theme'
 import { CSSObject } from '@emotion/react'
 import { Container } from '@mantine/core';
-
-interface RewardsProgressBarProps {
-    studies: ParticipantStudy[]
-}
 
 const popOverStyle: CSSObject = {
     '.tooltip-inner': { width: '180px' },
@@ -147,7 +142,7 @@ const SegmentInfo: React.FC<{ schedule: RewardsSegment[] }> = ({ schedule }) => 
 
 const FINAL_STEP_WIDTH = 50
 
-export const RewardsProgressBar: React.FC<RewardsProgressBarProps> = ({ studies }) => {
+export const RewardsProgressBar: FC = () => {
     const {
         schedule,
         pointsEarned,
