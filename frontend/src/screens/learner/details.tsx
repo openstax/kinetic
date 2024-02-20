@@ -128,37 +128,45 @@ export const StudyDetailsPreview: FC<{
     const drawerBodyRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        drawerBodyRef.current.style.height = 'calc'
-    }, [drawerHeaderRef])
+        if (drawerBodyRef.current && drawerHeaderRef.current) {
+            drawerBodyRef.current.style.height = `calc(100% - ${drawerHeaderRef.current.clientHeight})`
+        }
+    }, [drawerHeaderRef, drawerBodyRef])
     return (
         <Drawer.Root opened={show} onClose={onHide} position='right'>
             <Drawer.Overlay />
             <Drawer.Content>
-                <Drawer.Header ref={drawerHeaderRef}>
-                    <Drawer.Title>
-                        <Text span fw='bolder' size='xl'>{study.titleForParticipants}</Text>
-                    </Drawer.Title>
-                    <Drawer.CloseButton />
-                </Drawer.Header>
-                <Drawer.Body ref={drawerBodyRef}>
-                    <Stack gap='lg' h='100%'>
-                        <StudyTopic study={study} />
+                {/*<Drawer.Header ref={drawerHeaderRef}>*/}
+                {/*    <Drawer.Title>*/}
+                {/*        <Text span fw='bolder' size='xl'>{study.titleForParticipants}</Text>*/}
+                {/*    </Drawer.Title>*/}
+                {/*    <Drawer.CloseButton />*/}
+                {/*</Drawer.Header>*/}
+                {/*<Drawer.Body ref={drawerBodyRef} h='100%'>*/}
+                <Stack gap='lg' h='100%' p='md'>
+                    <StudyTopic study={study} />
 
-                        <StudyTime study={study} />
+                    <StudyTime study={study} />
 
-                        <MultiSession study={study} />
+                    <MultiSession study={study} />
 
-                        <StudyDescription study={study} />
+                    <StudyDescription study={study} />
 
-                        <ResearcherSection study={study} />
+                    <ResearcherSection study={study} />
 
-                        <StudyBenefits study={study} />
+                    <StudyBenefits study={study} />
 
-                        <DataNotice />
+                    <DataNotice />
+                    <DataNotice />
+                    <DataNotice />
+                    <DataNotice />
+                    <DataNotice />
+                    <DataNotice />
+                    <DataNotice />
 
-                        {!preview && <LaunchStudyButton study={study} />}
-                    </Stack>
-                </Drawer.Body>
+                    {!preview && <LaunchStudyButton study={study} />}
+                </Stack>
+                {/*</Drawer.Body>*/}
             </Drawer.Content>
         </Drawer.Root>
     )
