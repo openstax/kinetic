@@ -11,7 +11,7 @@ import { EffectCards, FreeMode, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
 import { Box, Container, Flex, Stack, TextInput, Title } from '@mantine/core';
-import { IconSearch } from '@tabler/icons-react';
+import { IconSearch, IconX } from '@tabler/icons-react';
 import { groupBy } from 'lodash';
 import { colors } from '@theme'
 
@@ -39,7 +39,6 @@ const HighlightedStudies: FC = () => {
 const LearnerDashboard = () => {
     const env = useEnvironment()
 
-    const { demographicSurvey } = useParticipantStudies();
 
     if (!env.isEligible) {
         return <UnsupportedCountryModal />
@@ -53,7 +52,7 @@ const LearnerDashboard = () => {
 
             <TopNavBar />
 
-            <LearnerWelcomeModal demographicSurvey={demographicSurvey} />
+            <LearnerWelcomeModal />
 
             <RewardsProgressBar />
 
@@ -77,26 +76,19 @@ export const SearchBar: FC<{search: string, setSearch: (search: string) => void}
             w={isMobile ? '100%' : '400px'}
             size='lg'
             value={search}
-            onChange={(event) => setSearch(event.currentTarget.value.trim())}
-            rightSectionPointerEvents="none"
-            rightSection={<IconSearch />}
+            onChange={(event) => setSearch(event.currentTarget.value)}
+            rightSection={search.length ?
+                <IconX onClick={() => setSearch('')} style={{ cursor: 'pointer' }}/> :
+                <IconSearch />
+            }
             placeholder="Search by study title, researcher, or topic name"
         />
     )
 }
 
-export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = ({ search }) => {
-    if (!search) {
-        return (
-            <Title order={2}>All Studies</Title>
-        )
-    }
-
-    // TODO Different pages? or just different views?
+export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = () => {
     return (
-        <Title order={2}>
-            View all studies
-        </Title>
+        <Title order={2}>All Studies</Title>
     )
 }
 

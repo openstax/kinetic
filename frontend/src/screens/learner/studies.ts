@@ -1,8 +1,8 @@
 import { useApi } from '@lib'
-import { useQuery } from 'react-query';
-import { useEffect, useMemo, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMemo, useState } from 'react';
 import Fuse from 'fuse.js'
-import { ParticipantStudy } from '@api';
+import { LandStudyRequest, ParticipantStudy } from '@api';
 
 
 const FEATURED_COUNT = 3
@@ -15,10 +15,21 @@ export const useFetchParticipantStudies = () => {
     })
 }
 
-// Add methods to get all data derived from this,
-// rather than return it all in one hook
+export const useLandStudy = () => {
+    const api = useApi()
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (params: LandStudyRequest) => await api.landStudy(params),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['fetchParticipantStudies'] })
+        },
+    })
+}
+
 export const useParticipantStudies = () => {
     const { data: studies, isLoading } = useFetchParticipantStudies()
+
     if (isLoading || !studies) return {
         studies: [],
         highlightedStudies: [],
@@ -43,7 +54,8 @@ export const useParticipantStudies = () => {
 
     const nonHighlightedStudies = studies.filter(s => !highlightedStudies.includes(s))
 
-    const demographicSurvey = studies.find(s => s.isDemographicSurvey) || null
+    // const demographicSurvey = studies.find(s => s.isDemographicSurvey) || null
+    const demographicSurvey = studies[0]
 
     return {
         allStudies: studies,

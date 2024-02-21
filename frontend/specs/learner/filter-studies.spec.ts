@@ -12,11 +12,11 @@ test('searching studies', async ({ browser }) => {
     const researcherPage = await useResearcherPage(browser)
     const adminPage = await useAdminPage(browser)
 
-    const studyToFind = faker.animal.cetacean() + ' ' + faker.animal.rabbit();
+    const studyName = faker.animal.cetacean() + ' ' + faker.animal.rabbit();
 
-    const studyId = await createStudy({ researcherPage, adminPage, name: studyToFind })
+    const studyId = await createStudy({ researcherPage, adminPage, name: studyName })
 
     await goToPage({ page: userPage, path: '/studies' })
-    await userPage.getByPlaceholder('Search by study title, researcher, or topic name').fill(studyToFind)
+    await userPage.getByPlaceholder('Search by study title, researcher, or topic name').fill(studyName)
     await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"]`)
 })
