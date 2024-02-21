@@ -54,8 +54,7 @@ export const useParticipantStudies = () => {
 
     const nonHighlightedStudies = studies.filter(s => !highlightedStudies.includes(s))
 
-    // const demographicSurvey = studies.find(s => s.isDemographicSurvey) || null
-    const demographicSurvey = studies[0]
+    const demographicSurvey = studies.find(s => s.isDemographicSurvey) || null
 
     return {
         allStudies: studies,
