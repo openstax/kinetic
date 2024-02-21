@@ -161,7 +161,7 @@ class Study < ApplicationRecord
                 title_for_researchers
               end
 
-      (survey_id, secret_key) = CloneSurvey.new.clone(title)
+      (survey_id, secret_key) = CloneSurvey.new.clone("Kinetic - #{title}")
       stage.update!(
         {
           status: 'waiting_period',
