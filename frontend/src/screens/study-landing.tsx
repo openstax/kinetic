@@ -13,7 +13,6 @@ import { noop } from 'lodash-es';
 
 
 const Points: React.FC<{ study: ParticipantStudy }> = ({ study }) => {
-    console.log(study)
     const completed = study.stages?.find(stage => stage.isCompleted) || study.completedAt
     if (!completed) return null
 

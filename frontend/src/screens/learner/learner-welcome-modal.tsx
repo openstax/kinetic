@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Button, Modal, Stack, Text, Title } from '@mantine/core';
 import { colors } from '@theme';
 import { useApi, useUserPreferences } from '@lib';
-import { ParticipantStudy } from '@api';
 import Waves from '@images/waves.svg';
 import { launchStudy } from '@models';
 import { useParticipantStudies } from './studies';
