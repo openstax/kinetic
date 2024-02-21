@@ -148,7 +148,6 @@ export const StudyDetailsPreview: FC<{
                         <StudyBenefits study={study} />
 
                         <DataNotice />
-                        <DataNotice />
                     </Stack>
 
                     <Stack>
