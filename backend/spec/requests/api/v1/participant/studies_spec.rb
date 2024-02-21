@@ -236,7 +236,6 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
       end
 
       it 'works for a launched study not yet landed' do
-        allow_any_instance_of(LaunchPad).to receive(:land).and_return({})
         expect {
           api_put "participant/studies/#{study2.id}/land?md[foo]=bar&md[bar]=baz"
         }.to change { ParticipantMetadatum.count }.by 1
