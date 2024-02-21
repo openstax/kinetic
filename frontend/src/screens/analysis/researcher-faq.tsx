@@ -1,17 +1,12 @@
 import { Box, React, styled, useState } from '@common';
-import { Button, Icon, OffCanvas } from '@components';
+import { Button, Icon } from '@components';
 import FAQIcon from '@images/icons/faq.svg'
+import { Drawer } from '@mantine/core';
 
 const FAQButton = styled.img({
     cursor: 'pointer',
     height: 50,
     width: 50,
-})
-
-const StyledOffCanvas = styled(OffCanvas)({
-    '.offcanvas-body': {
-        height: 'auto',
-    },
 })
 
 export const ResearcherFAQ: FC = () => {
@@ -20,9 +15,9 @@ export const ResearcherFAQ: FC = () => {
     return (
         <div>
             <FAQButton src={FAQIcon} alt='faq-icon' onClick={() => setShow(true)} />
-            <StyledOffCanvas show={show} title='Help' onHide={() => setShow(false)}>
+            <Drawer opened={show} title='Help' onClose={() => setShow(false)} position='right'>
                 <AnalysisBasicsFAQ />
-            </StyledOffCanvas>
+            </Drawer>
         </div>
     )
 }
