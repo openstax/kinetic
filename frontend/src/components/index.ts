@@ -9,11 +9,8 @@ export * from './ui-states'
 
 export * from './incorrect-user'
 
-export * from './off-canvas'
-
 export * from './rewards-progress-bar'
 export * from './banners-bar'
-export * from './off-canvas'
 export * from './navbar/navbar-logo-link'
 export * from './navbar/top-navbar'
 export * from './resource-links'
