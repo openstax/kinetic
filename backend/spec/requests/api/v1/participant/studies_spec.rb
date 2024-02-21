@@ -207,7 +207,6 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
 
       it 'returns completion status for a multistage study' do
         stage1a.launch_by_user!(user1)
-        # expect_any_instance_of(LaunchPad).to receive(:land)
         api_put "participant/studies/#{study1.id}/land"
         expect(response_hash[:completed_at]).to be_nil
 

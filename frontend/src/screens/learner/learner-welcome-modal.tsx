@@ -9,10 +9,10 @@ import { useParticipantStudies } from './studies';
 export const LearnerWelcomeModal: FC = () => {
     const [open, setOpen] = useState(true)
     const api = useApi()
-    const { data: preferences, refetch } = useUserPreferences()
+    const { data: preferences, refetch, isLoading } = useUserPreferences()
     const { demographicSurvey } = useParticipantStudies();
 
-    if (!demographicSurvey || demographicSurvey.completedAt || preferences?.hasViewedWelcomeMessage) {
+    if (isLoading || !demographicSurvey || demographicSurvey.completedAt || preferences?.hasViewedWelcomeMessage) {
         return null
     }
 

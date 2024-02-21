@@ -45,6 +45,11 @@ Rails.application.config.to_prepare do
         attributes[:is_demographic_survey] = model.is_demographic_survey?
         attributes[:total_points] = model.total_points
         attributes[:total_duration] = model.total_duration
+        attributes[:first_launched_at] = model.first_launched_study&.first_launched_at || nil
+        attributes[:completed_at] = model.first_launched_study&.completed_at || nil
+        attributes[:aborted_at] = model.first_launched_study&.aborted_at || nil
+        attributes[:consented] = model.first_launched_study&.consent_granted || false
+
         attributes[:stages] = model.stages.map do |stage_model|
           Api::V1::Bindings::ParticipantStudyStage.create_from_model(stage_model, user)
         end
