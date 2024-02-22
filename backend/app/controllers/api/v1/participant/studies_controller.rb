@@ -54,12 +54,12 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
       )
     end
 
-    completion_status = launch_pad.land(
+    launched_study = launch_pad.land(
       consent: params[:consent] != 'false',
       aborted: params[:aborted]
     )
 
-    render json: Api::V1::Bindings::ParticipantStudyCompletion.new(completion_status)
+    render json: Api::V1::Bindings::ParticipantStudy.create_from_model(launched_study, current_user)
   end
 
   protected

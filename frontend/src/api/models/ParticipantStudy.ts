@@ -63,6 +63,12 @@ export interface ParticipantStudy {
      */
     readonly isSyllabusContestStudy?: boolean;
     /**
+     * When the study was aborted; null indicates stage was marked complete
+     * @type {Date}
+     * @memberof ParticipantStudy
+     */
+    abortedAt?: Date;
+    /**
      * When the study was completed; null means not completed.
      * @type {Date}
      * @memberof ParticipantStudy
@@ -276,6 +282,7 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'isDemographicSurvey': !exists(json, 'is_demographic_survey') ? undefined : json['is_demographic_survey'],
         'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
         'isSyllabusContestStudy': !exists(json, 'is_syllabus_contest_study') ? undefined : json['is_syllabus_contest_study'],
+        'abortedAt': !exists(json, 'aborted_at') ? undefined : (new Date(json['aborted_at'])),
         'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
         'optedOutAt': !exists(json, 'opted_out_at') ? undefined : (new Date(json['opted_out_at'])),
         'totalPoints': json['total_points'],
@@ -318,6 +325,7 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         
         'id': value.id,
         'popularity_rating': value.popularityRating,
+        'aborted_at': value.abortedAt === undefined ? undefined : (value.abortedAt.toISOString()),
         'completed_at': value.completedAt === undefined ? undefined : (value.completedAt.toISOString()),
         'opted_out_at': value.optedOutAt === undefined ? undefined : (value.optedOutAt.toISOString()),
         'total_points': value.totalPoints,

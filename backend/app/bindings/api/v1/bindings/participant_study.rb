@@ -30,6 +30,9 @@ module Api::V1::Bindings
     # Is this study a part of the syllabus contest?
     attr_accessor :is_syllabus_contest_study
 
+    # When the study was aborted; null indicates stage was marked complete
+    attr_accessor :aborted_at
+
     # When the study was completed; null means not completed.
     attr_accessor :completed_at
 
@@ -144,6 +147,7 @@ module Api::V1::Bindings
         :'is_demographic_survey' => :'is_demographic_survey',
         :'is_featured' => :'is_featured',
         :'is_syllabus_contest_study' => :'is_syllabus_contest_study',
+        :'aborted_at' => :'aborted_at',
         :'completed_at' => :'completed_at',
         :'opted_out_at' => :'opted_out_at',
         :'total_points' => :'total_points',
@@ -188,6 +192,7 @@ module Api::V1::Bindings
         :'is_demographic_survey' => :'Boolean',
         :'is_featured' => :'Boolean',
         :'is_syllabus_contest_study' => :'Boolean',
+        :'aborted_at' => :'Time',
         :'completed_at' => :'Time',
         :'opted_out_at' => :'Time',
         :'total_points' => :'Integer',
@@ -269,6 +274,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'is_syllabus_contest_study')
         self.is_syllabus_contest_study = attributes[:'is_syllabus_contest_study']
+      end
+
+      if attributes.key?(:'aborted_at')
+        self.aborted_at = attributes[:'aborted_at']
       end
 
       if attributes.key?(:'completed_at')
@@ -473,6 +482,7 @@ module Api::V1::Bindings
           is_demographic_survey == o.is_demographic_survey &&
           is_featured == o.is_featured &&
           is_syllabus_contest_study == o.is_syllabus_contest_study &&
+          aborted_at == o.aborted_at &&
           completed_at == o.completed_at &&
           opted_out_at == o.opted_out_at &&
           total_points == o.total_points &&
@@ -512,7 +522,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, popularity_rating, is_demographic_survey, is_featured, is_syllabus_contest_study, completed_at, opted_out_at, total_points, total_duration, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
+      [id, popularity_rating, is_demographic_survey, is_featured, is_syllabus_contest_study, aborted_at, completed_at, opted_out_at, total_points, total_duration, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

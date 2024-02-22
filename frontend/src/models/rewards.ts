@@ -3,6 +3,7 @@ import { RewardsScheduleSegment, ParticipantStudy } from '@api'
 import { useEnvironment, dayjs, useApi } from '@lib'
 import { sortBy } from 'lodash-es'
 import { useQuery } from 'react-query';
+import { useParticipantStudies } from '../screens/learner/studies';
 
 export interface RewardsSegment extends RewardsScheduleSegment {
     totalPoints: number
@@ -48,8 +49,9 @@ const calculatePoints = (segment: RewardsScheduleSegment, cycleStart: Date, stud
     }, 0)
 }
 
-export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
+export const useRewardsSchedule = () => {
     const env = useEnvironment()
+    const { allStudies } = useParticipantStudies()
 
     const rs = sortBy(env.rewardsSchedule, 'startAt')
     const firstSegment = rs[0]
@@ -59,14 +61,14 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
 
     let previousSegment: RewardsSegment | null = null
 
-    const recentlyEarnedPoints = studies.find(s => (
+    const recentlyEarnedPoints = allStudies.find(s => (
         s.completedAt && dayjs(s.completedAt).isBetween(now.subtract(1, 'day'), now)
     ))?.totalPoints || 0
 
     const allEvents = rs.map((s, index) => {
         totalPoints += s.points
 
-        const pointsEarned = calculatePoints(s, firstSegment.startAt, studies)
+        const pointsEarned = calculatePoints(s, firstSegment.startAt, allStudies)
         const achieved = pointsEarned >= totalPoints
         const isCurrent = now.isBetween(s.startAt, s.endAt)
 
@@ -90,8 +92,8 @@ export const useRewardsSchedule = (studies: ParticipantStudy[]) => {
     // earned points cannot be greater than total points
     const pointsEarned = useMemo(() => Math.min(
         totalPoints,
-        rewardPointsEarned(rs, studies)
-    ), [rs, totalPoints, studies])
+        rewardPointsEarned(rs, allStudies)
+    ), [rs, totalPoints, allStudies])
 
     return {
         schedule: allEvents,
