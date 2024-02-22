@@ -14,19 +14,6 @@ class Api::V1::Participant::StudiesOpenApi
         end
       end
     end
-
-    schema :ParticipantStudyCompletion do
-      property :aborted_at do
-        key :type, :string
-        key :format, 'date-time'
-        key :description, 'When the stage was aborted; null indicates stage was marked complete'
-      end
-      property :completed_at do
-        key :type, :string
-        key :format, 'date-time'
-        key :description, 'When the study was completed; null indicates study is not yet complete'
-      end
-    end
   end
 
   add_components do
@@ -130,6 +117,11 @@ class Api::V1::Participant::StudiesOpenApi
       key :type, :boolean
       key :description, 'Is this study a part of the syllabus contest?'
       key :readOnly, true
+    end
+    property :aborted_at do
+      key :type, :string
+      key :format, 'date-time'
+      key :description, 'When the study was aborted; null indicates stage was marked complete'
     end
     property :completed_at do
       key :type, :string
@@ -244,7 +236,7 @@ class Api::V1::Participant::StudiesOpenApi
       response 200 do
         key :description, 'Success.  Returns study completion status.'
         content 'application/json' do
-          schema { key :$ref, :ParticipantStudyCompletion }
+          schema { key :$ref, :ParticipantStudy }
         end
       end
       extend Api::V1::OpenApiResponses::AuthenticationError

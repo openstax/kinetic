@@ -1,22 +1,22 @@
 import { createStudy, expect, goToPage, test, useAdminPage, useResearcherPage, useUserPage } from '../test';
 import { completeWelcomeMessage } from '../data-helpers';
+import { faker } from '@faker-js/faker';
 
 test.beforeEach(async ({ browser }) => {
     const userPage = await useUserPage(browser)
     await completeWelcomeMessage(userPage.context())
 })
 
-test('filtering studies', async ({ browser }) => {
+test('searching studies', async ({ browser }) => {
     const userPage = await useUserPage(browser)
     const researcherPage = await useResearcherPage(browser)
     const adminPage = await useAdminPage(browser)
 
-    const studyId = await createStudy({ researcherPage, adminPage })
-    await createStudy({ researcherPage, adminPage })
-    await createStudy({ researcherPage, adminPage })
-    await createStudy({ researcherPage, adminPage })
+    const studyName = faker.animal.cetacean() + ' ' + faker.animal.rabbit();
+
+    const studyId = await createStudy({ researcherPage, adminPage, name: studyName })
 
     await goToPage({ page: userPage, path: '/studies' })
-    await userPage.click('testId=Learning')
+    await userPage.getByPlaceholder('Search by study title, researcher, or topic name').fill(studyName)
     await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"]`)
 })

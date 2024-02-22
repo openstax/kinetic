@@ -103,7 +103,7 @@ export const launchApprovedStudy = async(researcherPage: Page, studyId: number, 
 
 export const createStudy = async ({
     multiSession = false,
-    name = faker.commerce.productName() + ' ' + faker.hacker.abbreviation(),
+    name = faker.word.adjective() + ' ' + faker.animal.fish(),
     description = faker.commerce.color(),
     adminPage,
     researcherPage,
