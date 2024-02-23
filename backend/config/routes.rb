@@ -50,6 +50,8 @@ Rails.application.routes.draw do
       namespace :admin do
         resources :rewards
         resources :banners
+        resources :learning_paths
+
         get 'studies/:status', to: 'studies#index'
         post 'studies/:id/approve', to: 'studies#approve'
         get 'study/:id/files', to: 'studies#files'

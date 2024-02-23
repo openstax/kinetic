@@ -78,6 +78,8 @@ module Api::V1::Bindings
     # The study topic
     attr_accessor :topic
 
+    attr_accessor :learning_path
+
     # The study's subject
     attr_accessor :subject
 
@@ -136,6 +138,7 @@ module Api::V1::Bindings
         :'completed_count' => :'completed_count',
         :'category' => :'category',
         :'topic' => :'topic',
+        :'learning_path' => :'learning_path',
         :'subject' => :'subject',
         :'stages' => :'stages',
         :'launched_count' => :'launched_count',
@@ -172,6 +175,7 @@ module Api::V1::Bindings
         :'completed_count' => :'Float',
         :'category' => :'String',
         :'topic' => :'String',
+        :'learning_path' => :'LearningPath',
         :'subject' => :'String',
         :'stages' => :'Array<Stage>',
         :'launched_count' => :'Float',
@@ -297,6 +301,10 @@ module Api::V1::Bindings
         self.topic = attributes[:'topic']
       end
 
+      if attributes.key?(:'learning_path')
+        self.learning_path = attributes[:'learning_path']
+      end
+
       if attributes.key?(:'subject')
         self.subject = attributes[:'subject']
       end
@@ -397,6 +405,7 @@ module Api::V1::Bindings
           completed_count == o.completed_count &&
           category == o.category &&
           topic == o.topic &&
+          learning_path == o.learning_path &&
           subject == o.subject &&
           stages == o.stages &&
           launched_count == o.launched_count &&
@@ -412,7 +421,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, topic, learning_path, subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

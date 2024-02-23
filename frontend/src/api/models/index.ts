@@ -2,6 +2,7 @@
 /* eslint-disable */
 export * from './AddAnalysis';
 export * from './AddBanner';
+export * from './AddLearningPath';
 export * from './AddReward';
 export * from './AddStage';
 export * from './AddStudy';
@@ -24,6 +25,8 @@ export * from './Environment';
 export * from './EnvironmentUser';
 export * from './GetResponseInfo200Response';
 export * from './Launch';
+export * from './LearningPath';
+export * from './LearningPaths';
 export * from './NewStage';
 export * from './NewStudy';
 export * from './ParticipantStudies';
@@ -52,6 +55,7 @@ export * from './StudyUpdateStatus';
 export * from './UpdateAnalysis';
 export * from './UpdateAnalysisRun';
 export * from './UpdateBanner';
+export * from './UpdateLearningPath';
 export * from './UpdatePreferences';
 export * from './UpdateResearcher';
 export * from './UpdateReward';

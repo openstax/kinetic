@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { LearningPath } from './LearningPath';
+import {
+    LearningPathFromJSON,
+    LearningPathFromJSONTyped,
+    LearningPathToJSON,
+} from './LearningPath';
 import type { Researcher } from './Researcher';
 import {
     ResearcherFromJSON,
@@ -159,6 +165,12 @@ export interface StudyUpdate {
      */
     topic?: string;
     /**
+     * 
+     * @type {LearningPath}
+     * @memberof StudyUpdate
+     */
+    learningPath?: LearningPath;
+    /**
      * The study's subject
      * @type {string}
      * @memberof StudyUpdate
@@ -240,6 +252,7 @@ export function StudyUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
         'category': !exists(json, 'category') ? undefined : json['category'],
         'topic': !exists(json, 'topic') ? undefined : json['topic'],
+        'learningPath': !exists(json, 'learning_path') ? undefined : LearningPathFromJSON(json['learning_path']),
         'subject': !exists(json, 'subject') ? undefined : json['subject'],
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
         'launchedCount': !exists(json, 'launched_count') ? undefined : json['launched_count'],
@@ -272,6 +285,7 @@ export function StudyUpdateToJSON(value?: StudyUpdate | null): any {
         'public_on': value.publicOn === undefined ? undefined : (value.publicOn === null ? null : value.publicOn.toISOString()),
         'category': value.category,
         'topic': value.topic,
+        'learning_path': LearningPathToJSON(value.learningPath),
         'subject': value.subject,
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),
     };

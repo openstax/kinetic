@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   AddAnalysis,
   AddBanner,
+  AddLearningPath,
   AddReward,
   AddStage,
   AddStudy,
@@ -28,6 +29,8 @@ import type {
   Environment,
   GetResponseInfo200Response,
   Launch,
+  LearningPath,
+  LearningPaths,
   ParticipantStudies,
   ParticipantStudy,
   Researcher,
@@ -43,6 +46,7 @@ import type {
   UpdateAnalysis,
   UpdateAnalysisRun,
   UpdateBanner,
+  UpdateLearningPath,
   UpdatePreferences,
   UpdateResearcher,
   UpdateReward,
@@ -55,6 +59,8 @@ import {
     AddAnalysisToJSON,
     AddBannerFromJSON,
     AddBannerToJSON,
+    AddLearningPathFromJSON,
+    AddLearningPathToJSON,
     AddRewardFromJSON,
     AddRewardToJSON,
     AddStageFromJSON,
@@ -77,6 +83,10 @@ import {
     GetResponseInfo200ResponseToJSON,
     LaunchFromJSON,
     LaunchToJSON,
+    LearningPathFromJSON,
+    LearningPathToJSON,
+    LearningPathsFromJSON,
+    LearningPathsToJSON,
     ParticipantStudiesFromJSON,
     ParticipantStudiesToJSON,
     ParticipantStudyFromJSON,
@@ -107,6 +117,8 @@ import {
     UpdateAnalysisRunToJSON,
     UpdateBannerFromJSON,
     UpdateBannerToJSON,
+    UpdateLearningPathFromJSON,
+    UpdateLearningPathToJSON,
     UpdatePreferencesFromJSON,
     UpdatePreferencesToJSON,
     UpdateResearcherFromJSON,
@@ -179,6 +191,10 @@ export interface CreateBannerRequest {
     addBanner: AddBanner;
 }
 
+export interface CreateLearningPathRequest {
+    addLearningPath: AddLearningPath;
+}
+
 export interface CreateRewardRequest {
     addReward: AddReward;
 }
@@ -188,6 +204,10 @@ export interface DeleteAnalysisRequest {
 }
 
 export interface DeleteBannerRequest {
+    id: number;
+}
+
+export interface DeleteLearningPathRequest {
     id: number;
 }
 
@@ -276,6 +296,11 @@ export interface UpdateAnalysisRunRequest {
 export interface UpdateBannerRequest {
     id: number;
     updateBanner: UpdateBanner;
+}
+
+export interface UpdateLearningPathRequest {
+    id: number;
+    updateLearningPath: UpdateLearningPath;
 }
 
 export interface UpdatePreferencesRequest {
@@ -802,6 +827,39 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     /**
+     * Add a learning path
+     */
+    async createLearningPathRaw(requestParameters: CreateLearningPathRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LearningPath>> {
+        if (requestParameters.addLearningPath === null || requestParameters.addLearningPath === undefined) {
+            throw new runtime.RequiredError('addLearningPath','Required parameter requestParameters.addLearningPath was null or undefined when calling createLearningPath.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/admin/learning_paths`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AddLearningPathToJSON(requestParameters.addLearningPath),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LearningPathFromJSON(jsonValue));
+    }
+
+    /**
+     * Add a learning path
+     */
+    async createLearningPath(requestParameters: CreateLearningPathRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LearningPath> {
+        const response = await this.createLearningPathRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Add a reward
      */
     async createRewardRaw(requestParameters: CreateRewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Reward>> {
@@ -892,6 +950,35 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async deleteBanner(requestParameters: DeleteBannerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteBannerRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Remove a learningPath
+     */
+    async deleteLearningPathRaw(requestParameters: DeleteLearningPathRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteLearningPath.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/learning_paths/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Remove a learningPath
+     */
+    async deleteLearningPath(requestParameters: DeleteLearningPathRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteLearningPathRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -1133,6 +1220,34 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getLearnerActivityReport(requestParameters: GetLearnerActivityReportRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         const response = await this.getLearnerActivityReportRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns all learning paths
+     * Retrieve all learning paths
+     */
+    async getLearningPathsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LearningPaths>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/admin/learning_paths`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LearningPathsFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns all learning paths
+     * Retrieve all learning paths
+     */
+    async getLearningPaths(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LearningPaths> {
+        const response = await this.getLearningPathsRaw(initOverrides);
         return await response.value();
     }
 
@@ -1783,6 +1898,43 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async updateBanner(requestParameters: UpdateBannerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BannerNotice> {
         const response = await this.updateBannerRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update a learning path
+     */
+    async updateLearningPathRaw(requestParameters: UpdateLearningPathRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LearningPath>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateLearningPath.');
+        }
+
+        if (requestParameters.updateLearningPath === null || requestParameters.updateLearningPath === undefined) {
+            throw new runtime.RequiredError('updateLearningPath','Required parameter requestParameters.updateLearningPath was null or undefined when calling updateLearningPath.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/admin/learning_paths/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateLearningPathToJSON(requestParameters.updateLearningPath),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LearningPathFromJSON(jsonValue));
+    }
+
+    /**
+     * Update a learning path
+     */
+    async updateLearningPath(requestParameters: UpdateLearningPathRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LearningPath> {
+        const response = await this.updateLearningPathRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

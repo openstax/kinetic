@@ -435,7 +435,6 @@ ALTER SEQUENCE public.launched_studies_id_seq OWNED BY public.launched_studies.i
 
 CREATE TABLE public.learning_paths (
     id bigint NOT NULL,
-    study_id bigint NOT NULL,
     label character varying NOT NULL,
     description character varying NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
@@ -688,7 +687,8 @@ CREATE TABLE public.studies (
     internal_description character varying,
     target_sample_size integer,
     public_on timestamp with time zone,
-    launched_studies_count integer
+    launched_studies_count integer,
+    learning_path_id bigint
 );
 
 
@@ -1285,13 +1285,6 @@ CREATE UNIQUE INDEX index_launched_studies_on_user_id_and_study_id ON public.lau
 
 
 --
--- Name: index_learning_paths_on_study_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_learning_paths_on_study_id ON public.learning_paths USING btree (study_id);
-
-
---
 -- Name: index_participant_metadata_on_study_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1348,6 +1341,13 @@ CREATE INDEX index_stages_on_study_id ON public.stages USING btree (study_id);
 
 
 --
+-- Name: index_studies_on_learning_path_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_studies_on_learning_path_id ON public.studies USING btree (learning_path_id);
+
+
+--
 -- Name: index_study_analyses_on_analysis_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1387,6 +1387,14 @@ CREATE INDEX index_study_researchers_on_study_id ON public.study_researchers USI
 --
 
 CREATE INDEX index_user_preferences_on_user_id ON public.user_preferences USING btree (user_id);
+
+
+--
+-- Name: studies fk_rails_0a926dea61; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.studies
+    ADD CONSTRAINT fk_rails_0a926dea61 FOREIGN KEY (learning_path_id) REFERENCES public.learning_paths(id);
 
 
 --
@@ -1435,14 +1443,6 @@ ALTER TABLE ONLY public.active_storage_variant_records
 
 ALTER TABLE ONLY public.analysis_researchers
     ADD CONSTRAINT fk_rails_a9dd5a2de3 FOREIGN KEY (researcher_id) REFERENCES public.researchers(id);
-
-
---
--- Name: learning_paths fk_rails_bd49e683f2; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.learning_paths
-    ADD CONSTRAINT fk_rails_bd49e683f2 FOREIGN KEY (study_id) REFERENCES public.studies(id);
 
 
 --

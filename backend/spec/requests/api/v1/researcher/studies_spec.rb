@@ -8,6 +8,7 @@ RSpec.describe 'Studies', api: :v1 do
   let(:researcher2) { create(:researcher) }
   let(:researcher3) { create(:researcher) }
   let(:researcher4) { create(:researcher) }
+  let(:study_path) { create(:study_path) }
 
   describe 'POST researcher/studies' do
     let(:valid_new_study_attributes) do
@@ -22,6 +23,7 @@ RSpec.describe 'Studies', api: :v1 do
         subject: 'Biology',
         benefits: 'Some benefit to society',
         image_id: 'Schoolfuturecareer_1',
+        study_path_id: study_path.id,
         stages: [
           {
             points: 10,
