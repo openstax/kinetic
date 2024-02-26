@@ -51,7 +51,9 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
     @study.update!(study_update.to_hash.except(:researchers, :stages, :learning_path))
 
-    @study.update!(learning_path: LearningPath.find(study_update.learning_path.id)) if study_update.learning_path
+    if study_update.learning_path
+      @study.update!(learning_path: LearningPath.find(study_update.learning_path.id))
+    end
 
     @study.update_stages(study_update.stages)
 
