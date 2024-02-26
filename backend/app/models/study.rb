@@ -17,7 +17,6 @@ class Study < ApplicationRecord
   has_one :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
 
   belongs_to :learning_path, optional: true
-  accepts_nested_attributes_for :learning_path
 
   has_one :pi,
           -> {

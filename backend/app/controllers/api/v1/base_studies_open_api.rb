@@ -4,16 +4,6 @@ class Api::V1::BaseStudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
   openapi_component do
-    schema :LearningPath do
-      property :label do
-        key :type, :string
-        key :description, 'Learning path label'
-      end
-      property :description do
-        key :type, :string
-        key :description, 'Learning path label'
-      end
-    end
 
     schema :BaseStudy do
       property :title_for_participants do
