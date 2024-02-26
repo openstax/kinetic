@@ -49,7 +49,9 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
     notify_researchers(study_update.researchers || []) if study_update.researchers
 
-    @study.update!(study_update.to_hash.except(:researchers, :stages))
+    @study.update!(study_update.to_hash.except(:researchers, :stages, :learning_path))
+
+    @study.update!(learning_path: LearningPath.find(study_update.learning_path.id)) if study_update.learning_path
 
     @study.update_stages(study_update.stages)
 
