@@ -106,7 +106,7 @@ RSpec.describe 'Learning Paths', api: :v1 do
     context 'with invalid parameters' do
       before { stub_current_user(admin) }
 
-      it 'renders a JSON response with errors for the learning_path' do
+      it 'errors when trying to update with invalid params' do
         learning_path = LearningPath.create! valid_attributes
         api_put learning_path_url(learning_path),
                 params: { learning_path: invalid_attributes }
@@ -118,7 +118,7 @@ RSpec.describe 'Learning Paths', api: :v1 do
   describe 'DELETE /destroy' do
     before { stub_current_user(admin) }
 
-    it 'destroys the requested learning_path' do
+    it 'deletes the requested learning_path' do
       learning_path = LearningPath.create! valid_attributes
       expect {
         api_delete learning_path_url(learning_path)

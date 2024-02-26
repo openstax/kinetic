@@ -53,7 +53,7 @@ export function UpdateLearningPathFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'learningPath': !exists(json, 'learningPath') ? undefined : LearningPathFromJSON(json['learningPath']),
+        'learningPath': !exists(json, 'learning_path') ? undefined : LearningPathFromJSON(json['learning_path']),
     };
 }
 
@@ -66,7 +66,7 @@ export function UpdateLearningPathToJSON(value?: UpdateLearningPath | null): any
     }
     return {
         
-        'learningPath': LearningPathToJSON(value.learningPath),
+        'learning_path': LearningPathToJSON(value.learningPath),
     };
 }
 

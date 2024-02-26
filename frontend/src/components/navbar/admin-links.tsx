@@ -25,6 +25,11 @@ export default function AdminLinks() {
                     Approve Studies
                 </Menu.Item>
             </StyledLink>
+            <StyledLink to="/admin/manage-learning-paths">
+                <Menu.Item>
+                    Manage learning paths
+                </Menu.Item>
+            </StyledLink>
             <StyledLink to="/admin/workspaces">
                 <Menu.Item>
                     Manage workspaces

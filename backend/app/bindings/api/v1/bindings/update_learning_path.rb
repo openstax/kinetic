@@ -20,7 +20,7 @@ module Api::V1::Bindings
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'learning_path' => :'learningPath'
+        :'learning_path' => :'learning_path'
       }
     end
 

@@ -49,7 +49,7 @@ class Api::V1::Admin::LearningPathsOpenApi
           schema do
             key :type, :object
             key :title, :addLearningPath
-            property :learningPath do
+            property :learning_path do
               key :required, true
               key :$ref, :LearningPath
             end
@@ -102,7 +102,7 @@ class Api::V1::Admin::LearningPathsOpenApi
           schema do
             key :type, :object
             key :title, :updateLearningPath
-            property :learningPath do
+            property :learning_path do
               key :required, true
               key :$ref, :LearningPath
             end

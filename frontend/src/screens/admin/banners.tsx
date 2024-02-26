@@ -6,6 +6,7 @@ import {
 } from '@components'
 import { useApi, useFetchState } from '@lib'
 import { Main } from './grid'
+import { AppShell, Container } from '@mantine/core';
 
 const Banner: React.FC<{ banner: BannerNotice, onUpdate(): void }> = ({ banner, onUpdate }) => {
     const [error, setError] = useState('')
