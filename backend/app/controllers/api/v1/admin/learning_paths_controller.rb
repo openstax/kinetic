@@ -19,7 +19,10 @@ class Api::V1::Admin::LearningPathsController < Api::V1::Admin::BaseController
 
     learning_path = LearningPath.new(inbound_binding.to_hash)
 
-    render json: { errors: learning_path.errors.full_messages }, status: 500 unless learning_path.save
+    unless learning_path.save
+      render json: { errors: learning_path.errors.full_messages },
+             status: 500
+    end
     render json: learning_path, status: :created
   end
 
@@ -30,7 +33,7 @@ class Api::V1::Admin::LearningPathsController < Api::V1::Admin::BaseController
     @learning_path.update!(inbound_binding.to_hash)
 
     render json: @learning_path.to_api_binding(Api::V1::Bindings::LearningPath),
-      status: :ok
+           status: :ok
   end
 
   def destroy

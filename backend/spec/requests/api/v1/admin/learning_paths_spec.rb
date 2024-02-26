@@ -18,7 +18,7 @@ RSpec.describe 'Learning Paths', api: :v1 do
     }
   end
 
-  def learning_path_url(learning_path = nil)
+  def learning_path_url(learning_path=nil)
     if learning_path.nil?
       'admin/learning_paths'
     else
@@ -81,8 +81,8 @@ RSpec.describe 'Learning Paths', api: :v1 do
 
       let(:new_attributes) do
         {
-          label: "New label",
-          description: "New description"
+          label: 'New label',
+          description: 'New description'
         }
       end
 
