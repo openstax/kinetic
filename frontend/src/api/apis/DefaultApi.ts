@@ -42,6 +42,7 @@ import type {
   Stage,
   Studies,
   Study,
+  StudyIds,
   StudyUpdateStatus,
   UpdateAnalysis,
   UpdateAnalysisRun,
@@ -109,6 +110,8 @@ import {
     StudiesToJSON,
     StudyFromJSON,
     StudyToJSON,
+    StudyIdsFromJSON,
+    StudyIdsToJSON,
     StudyUpdateStatusFromJSON,
     StudyUpdateStatusToJSON,
     UpdateAnalysisFromJSON,
@@ -177,6 +180,10 @@ export interface AdminDestroyInfoRequest {
 
 export interface AdminDestroyResponseRequest {
     id: number;
+}
+
+export interface AdminFeatureStudiesRequest {
+    studyIds: StudyIds;
 }
 
 export interface AdminFilesForStudyRequest {
@@ -726,6 +733,39 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async adminDestroyResponse(requestParameters: AdminDestroyResponseRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdminStudyFilesListing> {
         const response = await this.adminDestroyResponseRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Mark studies as featured
+     */
+    async adminFeatureStudiesRaw(requestParameters: AdminFeatureStudiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Studies>> {
+        if (requestParameters.studyIds === null || requestParameters.studyIds === undefined) {
+            throw new runtime.RequiredError('studyIds','Required parameter requestParameters.studyIds was null or undefined when calling adminFeatureStudies.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/admin/studies/feature`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StudyIdsToJSON(requestParameters.studyIds),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StudiesFromJSON(jsonValue));
+    }
+
+    /**
+     * Mark studies as featured
+     */
+    async adminFeatureStudies(requestParameters: AdminFeatureStudiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Studies> {
+        const response = await this.adminFeatureStudiesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

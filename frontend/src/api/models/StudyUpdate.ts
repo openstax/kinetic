@@ -87,6 +87,12 @@ export interface StudyUpdate {
      */
     benefits?: string;
     /**
+     * Should this study be featured more prominently?
+     * @type {boolean}
+     * @memberof StudyUpdate
+     */
+    readonly isFeatured?: boolean;
+    /**
      * Is the study hidden from participants
      * @type {boolean}
      * @memberof StudyUpdate
@@ -239,6 +245,7 @@ export function StudyUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'internalDescription': !exists(json, 'internal_description') ? undefined : json['internal_description'],
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
+        'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
         'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
         'consented': !exists(json, 'consented') ? undefined : json['consented'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),

@@ -6,6 +6,7 @@ RSpec.describe 'Studies', api: :v1 do
   let(:path) { 'admin/studies' }
   let(:admin) { create(:admin) }
   let!(:study) { create(:study) }
+
   let(:response_export) { create(:response_export, stage: study.stages.first) }
 
   describe 'GET' do
@@ -69,6 +70,10 @@ RSpec.describe 'Studies', api: :v1 do
   describe 'POST' do
     before { stub_current_user(admin) }
 
+    let!(:study1) { create(:study) }
+    let!(:study2) { create(:study) }
+    let!(:study3) { create(:study) }
+
     it 'approves a study in waiting period' do
       api_post "#{path}/#{study.id}/approve"
       expect(response).to have_http_status(:success)
@@ -77,6 +82,27 @@ RSpec.describe 'Studies', api: :v1 do
           data: []
         )
       )
+    end
+
+    it 'marks studies as featured' do
+      api_post "#{path}/feature", params: {
+        featured_ids: [study1.id, study2.id],
+        non_featured_ids: [study3.id]
+      }
+      [study1, study2, study3].each(&:reload)
+      expect(study1.is_featured).to be true
+      expect(study2.is_featured).to be true
+      expect(study3.is_featured).to be false
+
+      api_post "#{path}/feature", params: {
+        featured_ids: [study3.id],
+        non_featured_ids: [study1.id, study2.id]
+      }
+      [study1, study2, study3].each(&:reload)
+
+      expect(study1.is_featured).to be false
+      expect(study2.is_featured).to be false
+      expect(study3.is_featured).to be true
     end
   end
 end

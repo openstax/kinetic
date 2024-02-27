@@ -31,6 +31,7 @@ Rails.application.config.to_prepare do
     end
   end
 
+  # TODO: Unused?
   def self.admin_create_from_model(model)
     attrs = create_from_model(model)
     attrs[:stages] = model.stages.map do |stage_model|

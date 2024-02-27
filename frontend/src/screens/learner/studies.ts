@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useMemo, useState } from 'react';
 import Fuse from 'fuse.js'
 import { LandStudyRequest, ParticipantStudy } from '@api';
+import { StudyIds } from '../../api/models/StudyIds';
 
 
 const FEATURED_COUNT = 3
@@ -12,6 +13,20 @@ export const useFetchParticipantStudies = () => {
     return useQuery('fetchParticipantStudies', async () => {
         const res = await api.getParticipantStudies();
         return (res.data || []).sort(study => study.completedAt ? 1 : -1);
+    })
+}
+
+export const useUpdateFeaturedStudies = () => {
+    const api = useApi()
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (studyIds: StudyIds) => await api.adminFeatureStudies({
+            studyIds,
+        }),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['getLearningPaths'] })
+        },
     })
 }
 

@@ -36,6 +36,11 @@ class Api::V1::BaseStudiesOpenApi
         key :type, :string
         key :description, 'Description of how the study benefits participants'
       end
+      property :is_featured do
+        key :type, :boolean
+        key :description, 'Should this study be featured more prominently?'
+        key :readOnly, true
+      end
       property :is_hidden do
         key :type, :boolean
         key :description, 'Is the study hidden from participants'

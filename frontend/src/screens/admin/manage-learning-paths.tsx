@@ -1,73 +1,162 @@
-import { React } from '@common';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useCreateLearningPath, useFetchLearningPaths, useUpdateLearningPath } from '../../models/learning-path';
-import { Button, Group, Loader, Stack, Textarea, TextInput, Title } from '@mantine/core';
+import { Button, Group, LoadingOverlay, MultiSelect, Select, Stack, Textarea, TextInput, Title } from '@mantine/core';
 import { Main } from './grid';
 import { LearningPath } from '@api';
 import * as yup from 'yup';
 import { useForm, yupResolver } from '@mantine/form';
+import { useUpdateFeaturedStudies } from '../learner/studies';
+import { reduce } from 'lodash-es';
 
 export const ManageLearningPaths = () => {
     const { data: learningPaths, isLoading } = useFetchLearningPaths()
+    const [selectedLearningPath, setSelectedLearningPath] = useState<string | null>('');
 
-    if (isLoading) return <Loader />
+    if (isLoading) return <LoadingOverlay visible={true} />
+
+    const options = learningPaths?.map(lp => lp.label || '') || []
+    const currentLearningPath = learningPaths?.find(lp => lp.label == selectedLearningPath)
 
     return (
         <Main className="container py-2">
             <Title order={4}>Manage learning paths</Title>
             <Stack>
-                <CreateLearningPath key='create-learning-path' />
+                <Select data={[...new Set(options)]}
+                    value={selectedLearningPath}
+                    clearable={true}
+                    onChange={setSelectedLearningPath}
+                    placeholder='Select a learning path, or create a new one below'
+                />
 
-                {learningPaths?.map(learningPath => {
-                    return (
-                        <EditLearningPath key={learningPath.id} learningPath={learningPath} />
-                    )
-                })}
+                {currentLearningPath ?
+                    <EditLearningPath setSelectedLearningPath={setSelectedLearningPath} learningPaths={learningPaths} learningPath={currentLearningPath} /> :
+                    <CreateLearningPath setSelectedLearningPath={setSelectedLearningPath} learningPaths={learningPaths} />
+                }
+
+                {currentLearningPath && <EditFeaturedStudies learningPath={currentLearningPath} />}
             </Stack>
         </Main>
     )
 }
 
-const validationSchema = yup.object().shape({
-    label: yup.string().required(),
-    description: yup.string().required(),
-})
+const EditFeaturedStudies: FC<{learningPath: LearningPath}> = ({ learningPath }) => {
+    const updateFeaturedStudies = useUpdateFeaturedStudies()
 
-const CreateLearningPath = () => {
+    const [featuredStudies, setFeaturedStudies] = useState<string[]>([]);
+
+    useEffect(() => {
+        setFeaturedStudies(
+            learningPath.studies?.reduce<string[]>((filtered, study) => {
+                if (study.isFeatured && study.titleForParticipants) filtered.push(study.titleForParticipants)
+                return filtered
+            }, []) || []
+        )
+    }, [learningPath]);
+
+    const studyTitles = learningPath.studies?.reduce<string[]>((filtered, study) => {
+        if (study.titleForParticipants) filtered.push(study.titleForParticipants)
+        return filtered
+    }, []) || []
+
+    if (!learningPath.studies) return <Title order={4}>Learning path has no studies</Title>
+
+    const onUpdate = () => {
+        const featuredIds = learningPath.studies?.reduce<number[]>((prev, study) => {
+            if (study.titleForParticipants && featuredStudies.includes(study.titleForParticipants)) prev.push(study.id)
+            return prev
+        }, [])
+
+        const nonFeaturedIds = learningPath.studies?.reduce<number[]>((prev, study) => {
+            if (study.titleForParticipants && !featuredStudies.includes(study.titleForParticipants)) prev.push(study.id)
+            return prev
+        }, [])
+
+        updateFeaturedStudies.mutate({
+            featuredIds: featuredIds,
+            nonFeaturedIds: nonFeaturedIds,
+        })
+    }
+
+    return (
+        <Stack>
+            <MultiSelect
+                label={`Featured studies for ${learningPath.label}`}
+                searchable
+                placeholder="Select studies to feature"
+                value={featuredStudies}
+                onChange={setFeaturedStudies}
+                data={[...new Set(studyTitles)]}
+            />
+            <Group justify="flex-end" mt="md">
+                <Button onClick={onUpdate}>
+                    Update featured studies
+                </Button>
+            </Group>
+        </Stack>
+    )
+}
+
+const getLearningPathValidationSchema = (learningPaths?: LearningPath[]) => {
+    if (!learningPaths) return yup.object()
+
+    return yup.object().shape({
+        label: yup.string().required().test(
+            'Unique',
+            'Label must be unique',
+            (value: string) => {
+                if (!learningPaths.length) {
+                    return true
+                }
+                return learningPaths.every(lp => lp.label?.toLowerCase().trim() !== value?.toLowerCase().trim())
+            }
+        ),
+        description: yup.string().required(),
+    })
+}
+
+const CreateLearningPath: FC<{
+    learningPaths?: LearningPath[],
+    setSelectedLearningPath: (label: string) => void,
+}> = ({ learningPaths, setSelectedLearningPath }) => {
     const form = useForm<LearningPath>({
         initialValues: {
             label: '',
             description: '',
         },
-        validate: yupResolver(validationSchema),
+        validate: yupResolver(getLearningPathValidationSchema(learningPaths)),
+        validateInputOnChange: true,
     })
-
-    type FormValues = typeof form.values;
 
     const createLearningPath = useCreateLearningPath()
 
-    const handleSubmit = (values: FormValues) => {
+    const handleSubmit = form.onSubmit((values) => {
         createLearningPath.mutate({
             learningPath: values,
         }, {
             onSuccess: () => {
+                if (values.label) {
+                    setSelectedLearningPath(values.label)
+                }
                 form.reset()
             },
         })
-    }
+    })
 
     return (
         <>
-            <form onSubmit={form.onSubmit(handleSubmit)}>
+            <form onSubmit={handleSubmit}>
                 <Stack>
                     <TextInput
                         withAsterisk
                         label="Label"
+                        error={form.errors['label']}
                         {...form.getInputProps('label')}
                     />
 
                     <Textarea
                         withAsterisk
                         label="Description"
+                        error={form.errors['description']}
                         {...form.getInputProps('description')}
                     />
                 </Stack>
@@ -82,42 +171,53 @@ const CreateLearningPath = () => {
     )
 }
 
-const EditLearningPath: FC<{learningPath: LearningPath}> = ({ learningPath }) => {
+const EditLearningPath: FC<{
+    learningPath?: LearningPath,
+    learningPaths?: LearningPath[],
+    setSelectedLearningPath: (label: string) => void,
+}> = ({ learningPath, learningPaths, setSelectedLearningPath }) => {
     const form = useForm<LearningPath>({
         initialValues: {
-            label: learningPath.label,
-            description: learningPath.description,
+            label: learningPath?.label,
+            description: learningPath?.description,
         },
-        validate: yupResolver(validationSchema),
+        validate: yupResolver(getLearningPathValidationSchema(learningPaths?.filter(lp => lp.id !== learningPath?.id))),
+        validateInputOnChange: true,
     })
-
-    type FormValues = typeof form.values;
 
     const updateLearningPath = useUpdateLearningPath()
 
-    const handleSubmit = (values: FormValues) => {
-        if (!learningPath.id) return
+    const handleSubmit = form.onSubmit((values) => {
+        if (!learningPath?.id) return
         updateLearningPath.mutate({
             id: learningPath.id,
             updateLearningPath: { learningPath: {
                 ...learningPath,
                 ...values,
             } },
+        }, {
+            onSuccess: () => {
+                if (values.label) {
+                    setSelectedLearningPath(values.label)
+                }
+            },
         })
-    }
+    })
 
     return (
-        <form onSubmit={form.onSubmit(handleSubmit)}>
+        <form onSubmit={handleSubmit}>
             <Stack>
                 <TextInput
                     withAsterisk
                     label="Label"
+                    error={form.errors['label']}
                     {...form.getInputProps('label')}
                 />
 
                 <Textarea
                     withAsterisk
                     label="Description"
+                    error={form.errors['description']}
                     {...form.getInputProps('description')}
                 />
             </Stack>

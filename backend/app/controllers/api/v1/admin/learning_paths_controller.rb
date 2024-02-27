@@ -7,8 +7,8 @@ class Api::V1::Admin::LearningPathsController < Api::V1::Admin::BaseController
   def index
     render status: :ok,
            json: Api::V1::Bindings::LearningPaths.new(
-             data: LearningPath.all.map do |learning_path|
-               learning_path.to_api_binding(Api::V1::Bindings::LearningPath)
+             data: LearningPath.includes(:studies).all.map do |learning_path|
+               Api::V1::Bindings::LearningPath.create_from_model(learning_path)
              end
           )
   end

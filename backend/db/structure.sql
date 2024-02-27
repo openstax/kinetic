@@ -688,7 +688,8 @@ CREATE TABLE public.studies (
     target_sample_size integer,
     public_on timestamp with time zone,
     launched_studies_count integer,
-    learning_path_id bigint
+    learning_path_id bigint,
+    is_featured boolean DEFAULT false
 );
 
 

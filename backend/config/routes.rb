@@ -54,6 +54,7 @@ Rails.application.routes.draw do
 
         get 'studies/:status', to: 'studies#index'
         post 'studies/:id/approve', to: 'studies#approve'
+        post 'studies/feature', to: 'studies#feature'
         get 'study/:id/files', to: 'studies#files'
         get 'study/:id/responses', to: 'studies#responses'
         post 'stage/:stage_id/responses', to: 'studies#add_response'

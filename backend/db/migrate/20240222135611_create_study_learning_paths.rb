@@ -7,5 +7,7 @@ class CreateStudyLearningPaths < ActiveRecord::Migration[6.1]
     end
 
     add_reference :studies, :learning_path, foreign_key: true
+
+    add_column :studies, :is_featured, :boolean, default: false
   end
 end

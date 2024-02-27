@@ -49,6 +49,7 @@ export * from './StageUpdate';
 export * from './Studies';
 export * from './Study';
 export * from './StudyAnalysis';
+export * from './StudyIds';
 export * from './StudyResearcher';
 export * from './StudyUpdate';
 export * from './StudyUpdateStatus';

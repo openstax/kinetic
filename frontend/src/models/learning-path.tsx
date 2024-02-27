@@ -25,7 +25,6 @@ export const useUpdateLearningPath = () => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['getLearningPaths'] })
-            // queryClient.setQueryData(['getLearningPaths', { id: variables.learningPath?.id }], data)
         },
     })
 }

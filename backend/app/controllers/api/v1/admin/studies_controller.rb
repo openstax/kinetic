@@ -13,6 +13,12 @@ class Api::V1::Admin::StudiesController < Api::V1::Admin::BaseController
     render status: :ok, json: query_studies('waiting_period')
   end
 
+  def feature
+    Study.where(id: params[:featured_ids]).update_all(is_featured: true)
+    Study.where(id: params[:non_featured_ids]).update_all(is_featured: false)
+    render status: :ok, json: { success: true }
+  end
+
   def files
     render status: :ok, json: files_for_study(Study.find(params[:id]))
   end
