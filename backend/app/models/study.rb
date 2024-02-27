@@ -17,7 +17,7 @@ class Study < ApplicationRecord
   has_one :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
 
   belongs_to :learning_path, required: false
-  validates_associated :learning_path, :if => Proc.new { |s| s.available? }
+  validates_presence_of :learning_path, :if => Proc.new { |s| s.available? }
 
   has_one :pi,
           -> {
