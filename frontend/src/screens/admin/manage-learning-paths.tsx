@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCreateLearningPath, useFetchLearningPaths, useUpdateLearningPath } from '../../models/learning-path';
 import { Button, Group, LoadingOverlay, MultiSelect, Select, Stack, Textarea, TextInput, Title } from '@mantine/core';
 import { Main } from './grid';
@@ -6,7 +6,6 @@ import { LearningPath } from '@api';
 import * as yup from 'yup';
 import { useForm, yupResolver } from '@mantine/form';
 import { useUpdateFeaturedStudies } from '../learner/studies';
-import { reduce } from 'lodash-es';
 
 export const ManageLearningPaths = () => {
     const { data: learningPaths, isLoading } = useFetchLearningPaths()
