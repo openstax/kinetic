@@ -281,4 +281,43 @@ class Api::V1::Admin::StudiesOpenApi
       extend Api::V1::OpenApiResponses::ServerError
     end
   end
+
+  openapi_path '/admin/studies/feature' do
+    operation :post do
+      key :summary, 'Mark studies as featured'
+      key :operationId, 'adminFeatureStudies'
+
+      request_body do
+        key :description, 'The study IDs to feature'
+        key :required, true
+        content 'application/json' do
+          schema do
+            key :type, :object
+            key :title, :studyIds
+            property :featured_ids do
+              key :type, :array
+              key :description, 'Studies that are featured'
+              key :items, { 'type' => 'number' }
+            end
+            property :non_featured_ids do
+              key :type, :array
+              key :description, 'Studies that are not featured'
+              key :items, { 'type' => 'number' }
+            end
+          end
+        end
+      end
+
+      response 200 do
+        key :description, 'Returns the featured studies'
+        content 'application/json' do
+          schema { key :$ref, :Studies }
+        end
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+  end
 end

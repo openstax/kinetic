@@ -8,6 +8,7 @@ RSpec.describe 'Studies', api: :v1 do
   let(:researcher2) { create(:researcher) }
   let(:researcher3) { create(:researcher) }
   let(:researcher4) { create(:researcher) }
+  let(:learning_path) { create(:learning_path) }
 
   describe 'POST researcher/studies' do
     let(:valid_new_study_attributes) do
@@ -22,6 +23,7 @@ RSpec.describe 'Studies', api: :v1 do
         subject: 'Biology',
         benefits: 'Some benefit to society',
         image_id: 'Schoolfuturecareer_1',
+        learning_path: learning_path,
         stages: [
           {
             points: 10,
@@ -310,6 +312,17 @@ RSpec.describe 'Studies', api: :v1 do
         )
       end
 
+      it 'updates the study learning path' do
+        api_put "researcher/studies/#{study1.id}", params: { study: { learning_path: learning_path } }
+
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match a_hash_including({
+          learning_path: a_hash_including({
+            label: learning_path.label
+          })
+        })
+      end
+
       it 'updates the study researchers' do
         researcher1.update_attribute(:role, 'member')
         researcher2.update_attribute(:role, 'pi')
@@ -424,6 +437,7 @@ RSpec.describe 'Studies', api: :v1 do
         }.not_to change { study1.internal_description }
         expect(response).to have_http_status(:unprocessable_entity)
       end
+
     end
   end
 

@@ -4,6 +4,7 @@ class Api::V1::BaseStudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
   openapi_component do
+
     schema :BaseStudy do
       property :title_for_participants do
         key :type, :string
@@ -34,6 +35,11 @@ class Api::V1::BaseStudiesOpenApi
       property :benefits do
         key :type, :string
         key :description, 'Description of how the study benefits participants'
+      end
+      property :is_featured do
+        key :type, :boolean
+        key :description, 'Should this study be featured more prominently?'
+        key :readOnly, true
       end
       property :is_hidden do
         key :type, :boolean
@@ -102,6 +108,9 @@ class Api::V1::BaseStudiesOpenApi
       property :topic do
         key :type, :string
         key :description, 'The study topic'
+      end
+      property :learning_path do
+        key :$ref, :LearningPath
       end
       property :subject do
         key :type, :string

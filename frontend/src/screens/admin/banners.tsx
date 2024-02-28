@@ -1,10 +1,8 @@
-import * as Yup from 'yup'
 import { BannerNotice, BannerNoticeFromJSON } from '@api'
 import { React, useState } from '@common'
-import {
-    Box, Icon, Col, EditingForm as Form, Alert, DateTimeField, InputField,
-} from '@components'
+import { Alert, Box, Col, DateTimeField, EditingForm as Form, Icon, InputField } from '@components'
 import { useApi, useFetchState } from '@lib'
+import { Yup } from '@common'
 import { Main } from './grid'
 
 const Banner: React.FC<{ banner: BannerNotice, onUpdate(): void }> = ({ banner, onUpdate }) => {

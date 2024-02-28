@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { LearningPath } from './LearningPath';
+import {
+    LearningPathFromJSON,
+    LearningPathFromJSONTyped,
+    LearningPathToJSON,
+} from './LearningPath';
 import type { Researcher } from './Researcher';
 import {
     ResearcherFromJSON,
@@ -80,6 +86,12 @@ export interface Study {
      * @memberof Study
      */
     benefits?: string;
+    /**
+     * Should this study be featured more prominently?
+     * @type {boolean}
+     * @memberof Study
+     */
+    readonly isFeatured?: boolean;
     /**
      * Is the study hidden from participants
      * @type {boolean}
@@ -159,6 +171,12 @@ export interface Study {
      */
     topic?: string;
     /**
+     * 
+     * @type {LearningPath}
+     * @memberof Study
+     */
+    learningPath?: LearningPath;
+    /**
      * The study's subject
      * @type {string}
      * @memberof Study
@@ -230,6 +248,7 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'internalDescription': json['internal_description'],
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
+        'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
         'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
         'consented': !exists(json, 'consented') ? undefined : json['consented'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
@@ -243,6 +262,7 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
         'category': !exists(json, 'category') ? undefined : json['category'],
         'topic': !exists(json, 'topic') ? undefined : json['topic'],
+        'learningPath': !exists(json, 'learning_path') ? undefined : LearningPathFromJSON(json['learning_path']),
         'subject': !exists(json, 'subject') ? undefined : json['subject'],
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
         'launchedCount': !exists(json, 'launched_count') ? undefined : json['launched_count'],
@@ -275,6 +295,7 @@ export function StudyToJSON(value?: Study | null): any {
         'public_on': value.publicOn === undefined ? undefined : (value.publicOn === null ? null : value.publicOn.toISOString()),
         'category': value.category,
         'topic': value.topic,
+        'learning_path': LearningPathToJSON(value.learningPath),
         'subject': value.subject,
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),
     };

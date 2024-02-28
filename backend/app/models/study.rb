@@ -16,6 +16,10 @@ class Study < ApplicationRecord
 
   has_one :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
 
+  belongs_to :learning_path, required: false
+  # TODO: Add this back in with migration & researcher study form changes
+  # validates_presence_of :learning_path, if: proc { |s| s.available? }
+
   has_one :pi,
           -> {
             joins(:study_researchers).where(researchers: { study_researchers: { role: 'pi' } })

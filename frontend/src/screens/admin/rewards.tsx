@@ -1,10 +1,10 @@
-import * as Yup from 'yup'
 import { Reward, RewardFromJSON } from '@api'
 import { React, useState } from '@common'
 import { Alert, Box, Col, DateTimeField, EditingForm as Form, Icon, InputField } from '@components'
 import { useApi, useFetchState } from '@lib'
 import { Main } from './grid'
 import { colors } from '@theme';
+import { Yup } from '@common'
 
 const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, onUpdate }) => {
     const [error, setError] = useState('')

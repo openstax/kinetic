@@ -39,6 +39,9 @@ module Api::V1::Bindings
     # Description of how the study benefits participants
     attr_accessor :benefits
 
+    # Should this study be featured more prominently?
+    attr_accessor :is_featured
+
     # Is the study hidden from participants
     attr_accessor :is_hidden
 
@@ -77,6 +80,8 @@ module Api::V1::Bindings
 
     # The study topic
     attr_accessor :topic
+
+    attr_accessor :learning_path
 
     # The study's subject
     attr_accessor :subject
@@ -123,6 +128,7 @@ module Api::V1::Bindings
         :'internal_description' => :'internal_description',
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
+        :'is_featured' => :'is_featured',
         :'is_hidden' => :'is_hidden',
         :'consented' => :'consented',
         :'first_launched_at' => :'first_launched_at',
@@ -136,6 +142,7 @@ module Api::V1::Bindings
         :'completed_count' => :'completed_count',
         :'category' => :'category',
         :'topic' => :'topic',
+        :'learning_path' => :'learning_path',
         :'subject' => :'subject',
         :'stages' => :'stages',
         :'launched_count' => :'launched_count',
@@ -159,6 +166,7 @@ module Api::V1::Bindings
         :'internal_description' => :'String',
         :'image_id' => :'String',
         :'benefits' => :'String',
+        :'is_featured' => :'Boolean',
         :'is_hidden' => :'Boolean',
         :'consented' => :'Boolean',
         :'first_launched_at' => :'Time',
@@ -172,6 +180,7 @@ module Api::V1::Bindings
         :'completed_count' => :'Float',
         :'category' => :'String',
         :'topic' => :'String',
+        :'learning_path' => :'LearningPath',
         :'subject' => :'String',
         :'stages' => :'Array<Stage>',
         :'launched_count' => :'Float',
@@ -243,6 +252,10 @@ module Api::V1::Bindings
         self.benefits = attributes[:'benefits']
       end
 
+      if attributes.key?(:'is_featured')
+        self.is_featured = attributes[:'is_featured']
+      end
+
       if attributes.key?(:'is_hidden')
         self.is_hidden = attributes[:'is_hidden']
       end
@@ -295,6 +308,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'topic')
         self.topic = attributes[:'topic']
+      end
+
+      if attributes.key?(:'learning_path')
+        self.learning_path = attributes[:'learning_path']
       end
 
       if attributes.key?(:'subject')
@@ -384,6 +401,7 @@ module Api::V1::Bindings
           internal_description == o.internal_description &&
           image_id == o.image_id &&
           benefits == o.benefits &&
+          is_featured == o.is_featured &&
           is_hidden == o.is_hidden &&
           consented == o.consented &&
           first_launched_at == o.first_launched_at &&
@@ -397,6 +415,7 @@ module Api::V1::Bindings
           completed_count == o.completed_count &&
           category == o.category &&
           topic == o.topic &&
+          learning_path == o.learning_path &&
           subject == o.subject &&
           stages == o.stages &&
           launched_count == o.launched_count &&
@@ -412,7 +431,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_featured, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, topic, learning_path, subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash
