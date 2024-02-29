@@ -36,8 +36,11 @@ module Api::V1::Bindings
     # Description of how the study benefits participants
     attr_accessor :benefits
 
-    # Should this study be featured more prominently?
+    # Is this study featured?
     attr_accessor :is_featured
+
+    # Is this study highlighted?
+    attr_accessor :is_highlighted
 
     # Is the study hidden from participants
     attr_accessor :is_hidden
@@ -74,9 +77,6 @@ module Api::V1::Bindings
 
     # The category (type of) study
     attr_accessor :category
-
-    # The study topic
-    attr_accessor :topic
 
     attr_accessor :learning_path
 
@@ -125,6 +125,7 @@ module Api::V1::Bindings
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
         :'is_featured' => :'is_featured',
+        :'is_highlighted' => :'is_highlighted',
         :'is_hidden' => :'is_hidden',
         :'consented' => :'consented',
         :'first_launched_at' => :'first_launched_at',
@@ -137,7 +138,6 @@ module Api::V1::Bindings
         :'public_on' => :'public_on',
         :'completed_count' => :'completed_count',
         :'category' => :'category',
-        :'topic' => :'topic',
         :'learning_path' => :'learning_path',
         :'subject' => :'subject',
         :'stages' => :'stages',
@@ -162,6 +162,7 @@ module Api::V1::Bindings
         :'image_id' => :'String',
         :'benefits' => :'String',
         :'is_featured' => :'Boolean',
+        :'is_highlighted' => :'Boolean',
         :'is_hidden' => :'Boolean',
         :'consented' => :'Boolean',
         :'first_launched_at' => :'Time',
@@ -174,7 +175,6 @@ module Api::V1::Bindings
         :'public_on' => :'Time',
         :'completed_count' => :'Float',
         :'category' => :'String',
-        :'topic' => :'String',
         :'learning_path' => :'LearningPath',
         :'subject' => :'String',
         :'stages' => :'Array<Stage>',
@@ -240,6 +240,10 @@ module Api::V1::Bindings
         self.is_featured = attributes[:'is_featured']
       end
 
+      if attributes.key?(:'is_highlighted')
+        self.is_highlighted = attributes[:'is_highlighted']
+      end
+
       if attributes.key?(:'is_hidden')
         self.is_hidden = attributes[:'is_hidden']
       end
@@ -288,10 +292,6 @@ module Api::V1::Bindings
 
       if attributes.key?(:'category')
         self.category = attributes[:'category']
-      end
-
-      if attributes.key?(:'topic')
-        self.topic = attributes[:'topic']
       end
 
       if attributes.key?(:'learning_path')
@@ -385,6 +385,7 @@ module Api::V1::Bindings
           image_id == o.image_id &&
           benefits == o.benefits &&
           is_featured == o.is_featured &&
+          is_highlighted == o.is_highlighted &&
           is_hidden == o.is_hidden &&
           consented == o.consented &&
           first_launched_at == o.first_launched_at &&
@@ -397,7 +398,6 @@ module Api::V1::Bindings
           public_on == o.public_on &&
           completed_count == o.completed_count &&
           category == o.category &&
-          topic == o.topic &&
           learning_path == o.learning_path &&
           subject == o.subject &&
           stages == o.stages &&
@@ -414,7 +414,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_featured, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, topic, learning_path, subject, stages, launched_count, return_url].hash
+      [title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_featured, is_highlighted, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, learning_path, subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

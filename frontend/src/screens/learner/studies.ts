@@ -3,8 +3,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useMemo, useState } from 'react';
 import Fuse from 'fuse.js'
 import { LandStudyRequest, ParticipantStudy } from '@api';
-import { StudyIds } from '../../api/models/StudyIds';
-
+import { orderBy } from 'lodash-es';
 
 const FEATURED_COUNT = 3
 
@@ -12,21 +11,7 @@ export const useFetchParticipantStudies = () => {
     const api = useApi()
     return useQuery('fetchParticipantStudies', async () => {
         const res = await api.getParticipantStudies();
-        return (res.data || []).sort(study => study.completedAt ? 1 : -1);
-    })
-}
-
-export const useUpdateFeaturedStudies = () => {
-    const api = useApi()
-    const queryClient = useQueryClient()
-
-    return useMutation({
-        mutationFn: async (studyIds: StudyIds) => await api.adminFeatureStudies({
-            studyIds,
-        }),
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['getLearningPaths'] })
-        },
+        return orderBy((res.data || []), ['isFeatured', 'completedAt'], ['desc', 'desc'])
     })
 }
 
@@ -56,15 +41,15 @@ export const useParticipantStudies = () => {
 
     const eligibleStudies = studies.filter(s => !s.completedAt)
 
-    const featuredStudies = eligibleStudies.filter(s => s.isFeatured).slice(-1 * FEATURED_COUNT)
+    const allHighlightedStudies = eligibleStudies.filter(s => s.isHighlighted).slice(-1 * FEATURED_COUNT)
 
     // If less than 3 are featured, grab and fill random studies until we have 3
-    const randomlyFeatured = eligibleStudies
-        .filter(s => !s.isFeatured)
-        .slice(-1 * (FEATURED_COUNT - featuredStudies.length))
+    const randomlyHighlighted = eligibleStudies
+        .filter(s => !s.isHighlighted)
+        .slice(-1 * (FEATURED_COUNT - allHighlightedStudies.length))
 
-    const highlightedStudies = featuredStudies.concat(
-        featuredStudies.length == FEATURED_COUNT ? [] : randomlyFeatured
+    const highlightedStudies = allHighlightedStudies.concat(
+        allHighlightedStudies.length == FEATURED_COUNT ? [] : randomlyHighlighted
     )
 
     const nonHighlightedStudies = studies.filter(s => !highlightedStudies.includes(s))

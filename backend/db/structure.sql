@@ -682,14 +682,14 @@ CREATE TABLE public.studies (
     is_hidden boolean DEFAULT false NOT NULL,
     view_count integer DEFAULT 0,
     category character varying,
-    topic character varying,
     subject character varying,
     internal_description character varying,
     target_sample_size integer,
     public_on timestamp with time zone,
     launched_studies_count integer,
     learning_path_id bigint,
-    is_featured boolean DEFAULT false
+    is_featured boolean DEFAULT false,
+    is_highlighted boolean DEFAULT false
 );
 
 
@@ -1549,6 +1549,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20231120172017'),
 ('20231212191239'),
 ('20240208194357'),
-('20240222135611');
+('20240222135611'),
+('20240229135718');
 
 

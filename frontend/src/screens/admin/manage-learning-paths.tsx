@@ -5,7 +5,7 @@ import { Main } from './grid';
 import { LearningPath } from '@api';
 import * as yup from 'yup';
 import { useForm, yupResolver } from '@mantine/form';
-import { useUpdateFeaturedStudies } from '../learner/studies';
+import { useUpdateFeaturedStudies } from '@models';
 
 export const ManageLearningPaths = () => {
     const { data: learningPaths, isLoading } = useFetchLearningPaths()

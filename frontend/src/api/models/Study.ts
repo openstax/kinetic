@@ -87,11 +87,17 @@ export interface Study {
      */
     benefits?: string;
     /**
-     * Should this study be featured more prominently?
+     * Is this study featured?
      * @type {boolean}
      * @memberof Study
      */
     readonly isFeatured?: boolean;
+    /**
+     * Is this study highlighted?
+     * @type {boolean}
+     * @memberof Study
+     */
+    readonly isHighlighted?: boolean;
     /**
      * Is the study hidden from participants
      * @type {boolean}
@@ -164,12 +170,6 @@ export interface Study {
      * @memberof Study
      */
     category?: string;
-    /**
-     * The study topic
-     * @type {string}
-     * @memberof Study
-     */
-    topic?: string;
     /**
      * 
      * @type {LearningPath}
@@ -249,6 +249,7 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
         'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
+        'isHighlighted': !exists(json, 'is_highlighted') ? undefined : json['is_highlighted'],
         'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
         'consented': !exists(json, 'consented') ? undefined : json['consented'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
@@ -261,7 +262,6 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'publicOn': !exists(json, 'public_on') ? undefined : (json['public_on'] === null ? null : new Date(json['public_on'])),
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
         'category': !exists(json, 'category') ? undefined : json['category'],
-        'topic': !exists(json, 'topic') ? undefined : json['topic'],
         'learningPath': !exists(json, 'learning_path') ? undefined : LearningPathFromJSON(json['learning_path']),
         'subject': !exists(json, 'subject') ? undefined : json['subject'],
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
@@ -294,7 +294,6 @@ export function StudyToJSON(value?: Study | null): any {
         'view_count': value.viewCount,
         'public_on': value.publicOn === undefined ? undefined : (value.publicOn === null ? null : value.publicOn.toISOString()),
         'category': value.category,
-        'topic': value.topic,
         'learning_path': LearningPathToJSON(value.learningPath),
         'subject': value.subject,
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),

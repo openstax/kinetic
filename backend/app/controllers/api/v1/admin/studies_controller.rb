@@ -19,6 +19,12 @@ class Api::V1::Admin::StudiesController < Api::V1::Admin::BaseController
     render status: :ok, json: { success: true }
   end
 
+  def highlight
+    Study.where(id: params[:highlighted_ids]).update_all(is_highlighted: true)
+    Study.where.not(id: params[:highlighted_ids]).update_all(is_highlighted: false)
+    render status: :ok, json: { success: true }
+  end
+
   def files
     render status: :ok, json: files_for_study(Study.find(params[:id]))
   end

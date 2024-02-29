@@ -38,7 +38,12 @@ class Api::V1::BaseStudiesOpenApi
       end
       property :is_featured do
         key :type, :boolean
-        key :description, 'Should this study be featured more prominently?'
+        key :description, 'Is this study featured?'
+        key :readOnly, true
+      end
+      property :is_highlighted do
+        key :type, :boolean
+        key :description, 'Is this study highlighted?'
         key :readOnly, true
       end
       property :is_hidden do
@@ -104,10 +109,6 @@ class Api::V1::BaseStudiesOpenApi
       property :category do
         key :type, :string
         key :description, 'The category (type of) study'
-      end
-      property :topic do
-        key :type, :string
-        key :description, 'The study topic'
       end
       property :learning_path do
         key :$ref, :LearningPath
