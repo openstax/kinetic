@@ -19,7 +19,6 @@ RSpec.describe 'Studies', api: :v1 do
         short_description: 'A short description',
         long_description: 'A longer description',
         category: 'Research',
-        topic: 'Learning',
         subject: 'Biology',
         benefits: 'Some benefit to society',
         image_id: 'Schoolfuturecareer_1',

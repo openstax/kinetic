@@ -43,6 +43,7 @@ const getFormDefaults = (study: Study, step: StudyStep) => {
         researcherPi: pi,
         researcherLead: lead,
         stages: study.stages,
+        learningPath: study.learningPath,
         step,
     }
 }
@@ -142,6 +143,7 @@ const FormContent: FC<{
 
     const saveStudy = async (goToStep: number) => {
         const study = getValues() as Study
+
         if (isNew) {
             // Need to reset the dirty state before navigating to edit/{id}
             reset(undefined, { keepValues: true, keepDirty: false });

@@ -37,13 +37,13 @@ export interface LearningPath {
      * @type {string}
      * @memberof LearningPath
      */
-    label?: string;
+    label: string;
     /**
-     * Learning path label
+     * Learning path description
      * @type {string}
      * @memberof LearningPath
      */
-    description?: string;
+    description: string;
     /**
      * Studies with this learning path
      * @type {Array<Study>}
@@ -57,6 +57,8 @@ export interface LearningPath {
  */
 export function instanceOfLearningPath(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "label" in value;
+    isInstance = isInstance && "description" in value;
 
     return isInstance;
 }
@@ -72,8 +74,8 @@ export function LearningPathFromJSONTyped(json: any, ignoreDiscriminator: boolea
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'label': !exists(json, 'label') ? undefined : json['label'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
+        'label': json['label'],
+        'description': json['description'],
         'studies': !exists(json, 'studies') ? undefined : ((json['studies'] as Array<any>).map(StudyFromJSON)),
     };
 }

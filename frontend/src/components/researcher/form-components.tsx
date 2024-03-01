@@ -45,7 +45,7 @@ export const ResearcherCheckbox = styled(InputField)({
 
 export const ResearcherDetailedCheckbox: FC<{
     name: string,
-    value?: string,
+    value?: any,
     label: string,
     desc: string,
     radio?: boolean

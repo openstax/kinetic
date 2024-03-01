@@ -104,5 +104,24 @@ RSpec.describe 'Studies', api: :v1 do
       expect(study2.is_featured).to be false
       expect(study3.is_featured).to be true
     end
+
+    it 'marks studies as highlighted' do
+      api_post "#{path}/highlight", params: {
+        highlighted_ids: [study1.id, study2.id]
+      }
+      [study1, study2, study3].each(&:reload)
+      expect(study1.is_highlighted).to be true
+      expect(study2.is_highlighted).to be true
+      expect(study3.is_highlighted).to be false
+
+      api_post "#{path}/highlight", params: {
+        highlighted_ids: [study3.id]
+      }
+      [study1, study2, study3].each(&:reload)
+
+      expect(study1.is_highlighted).to be false
+      expect(study2.is_highlighted).to be false
+      expect(study3.is_highlighted).to be true
+    end
   end
 end

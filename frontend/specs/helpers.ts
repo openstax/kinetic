@@ -135,7 +135,9 @@ export const createStudy = async ({
     await researcherPage.fill('[name=titleForParticipants]', name)
     await researcherPage.fill('[name=shortDescription]', faker.commerce.department())
     await researcherPage.fill('[name=longDescription]', faker.commerce.department())
-    await selectDropdownOption({ page: researcherPage, fieldName: 'topic', option: 'Learning' })
+    await researcherPage.fill('[name=longDescription]', faker.commerce.department())
+    await researcherPage.getByTestId('learning-path').first().check();
+
     await selectDropdownOption({ page: researcherPage, fieldName: 'subject', option: 'Business Ethics' })
     await researcherPage.click("input[value='10']")
     await researcherPage.click("input[value='score']")

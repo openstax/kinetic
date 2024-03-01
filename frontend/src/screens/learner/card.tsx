@@ -211,7 +211,6 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
     return (
         <Box className={cx({ 'small': !isMobile, 'xx-small': isMobile }, 'mt-auto', 'pt-1')} justify='between' align='center' wrap>
             <Box gap='small'>
-                <Tag tag={study.topic} />
                 <Tag tag={study.subject} />
             </Box>
             <Box gap='small'>

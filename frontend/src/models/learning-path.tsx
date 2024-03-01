@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useApi } from '@lib';
 import { AddLearningPath, UpdateLearningPathRequest } from '@api';
 
-export const useFetchLearningPaths = () => {
+export const useGetLearningPaths = () => {
     const api = useApi()
     return useQuery('getLearningPaths', async () => {
         const res = await api.getLearningPaths();

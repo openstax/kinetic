@@ -14,7 +14,6 @@ FactoryBot.define do
     long_description { Faker::Lorem.paragraph_by_chars(number: rand(80..250)) }
     internal_description { Faker::Lorem.paragraph_by_chars(number: rand(80..250)) }
     category { 'Research' }
-    topic { 'Learning' }
     subject { 'Biology' }
     learning_path { create(:learning_path) }
     benefits { Faker::Lorem.paragraph_by_chars(number: rand(50..170)) }

@@ -5,6 +5,8 @@ class Api::V1::Admin::LearningPathsOpenApi
 
   openapi_component do
     schema :LearningPath do
+      key :required, [:label, :description]
+
       property :id do
         key :type, :number
         key :description, 'The learning path ID'
@@ -15,7 +17,7 @@ class Api::V1::Admin::LearningPathsOpenApi
       end
       property :description do
         key :type, :string
-        key :description, 'Learning path label'
+        key :description, 'Learning path description'
       end
       property :studies do
         key :type, :array

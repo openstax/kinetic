@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useCreateLearningPath, useFetchLearningPaths, useUpdateLearningPath } from '../../models/learning-path';
+import { useCreateLearningPath, useGetLearningPaths, useUpdateLearningPath } from '../../models/learning-path';
 import { Button, Group, LoadingOverlay, MultiSelect, Select, Stack, Textarea, TextInput, Title } from '@mantine/core';
 import { Main } from './grid';
 import { LearningPath } from '@api';
@@ -8,7 +8,7 @@ import { useForm, yupResolver } from '@mantine/form';
 import { useUpdateFeaturedStudies } from '@models';
 
 export const ManageLearningPaths = () => {
-    const { data: learningPaths, isLoading } = useFetchLearningPaths()
+    const { data: learningPaths, isLoading } = useGetLearningPaths()
     const [selectedLearningPath, setSelectedLearningPath] = useState<string | null>('');
 
     if (isLoading) return <LoadingOverlay visible={true} />
@@ -177,8 +177,8 @@ const EditLearningPath: FC<{
 }> = ({ learningPath, learningPaths, setSelectedLearningPath }) => {
     const form = useForm<LearningPath>({
         initialValues: {
-            label: learningPath?.label,
-            description: learningPath?.description,
+            label: learningPath?.label || '',
+            description: learningPath?.description || '',
         },
         validate: yupResolver(getLearningPathValidationSchema(learningPaths?.filter(lp => lp.id !== learningPath?.id))),
         validateInputOnChange: true,

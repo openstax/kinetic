@@ -1,4 +1,4 @@
-import { studySubjects, studyTopics } from '@models';
+import { studySubjects } from '@models';
 import { Box, React, useState, Yup } from '@common';
 import {
     Col,
@@ -15,10 +15,11 @@ import {
 import { ImageLibrary } from '../image-library';
 import { StudyCardPreview } from '../../../../learner/card';
 import { first } from 'lodash-es';
-import { Study } from '@api';
+import { LearningPath, Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
 import { colors } from '@theme';
-import { Button } from '@mantine/core';
+import { Button, Radio } from '@mantine/core';
+import { useGetLearningPaths } from '../../../../../models/learning-path';
 
 export const participantViewValidation = (allOtherStudies: Study[]) => {
     return {
@@ -44,7 +45,7 @@ export const participantViewValidation = (allOtherStudies: Study[]) => {
             is: 2,
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
-        topic: Yup.string().when('step', {
+        learningPath: Yup.object().when('step', {
             is: 2,
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
@@ -99,12 +100,21 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
     const initialSubjects = study.subject ? [...new Set([...studySubjects, study.subject])] : studySubjects
     const [allStudySubjects, setAllStudySubjects] = useState<string[]>(initialSubjects)
     const { setValue, watch, getValues, control } = useFormContext<Study>()
+    const { data: learningPaths } = useGetLearningPaths()
     const { update } = useFieldArray({
         control,
         name: 'stages',
         keyName: 'customId',
     })
     const firstSession = first(study.stages)
+
+    const setLearningPath = (learningPath: LearningPath) => {
+        setValue('learningPath', learningPath, {
+            shouldDirty: true,
+            shouldTouch: true,
+            shouldValidate: true,
+        })
+    }
 
     const setDurationAndPoints = (e: React.ChangeEvent<HTMLInputElement>) => {
         const stage = getValues('stages.0')
@@ -178,17 +188,33 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
 
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
+                            <FieldTitle required>Learning Path</FieldTitle>
+                            <small>Pick a learning path for your study</small>
+                        </Col>
+
+                        <Col sm={6} direction='column' gap>
+                            {learningPaths?.map(learningPath => (
+                                <Radio
+                                    name='learningPath'
+                                    data-testid='learning-path'
+                                    key={learningPath.label}
+                                    label={learningPath.label}
+                                    description={learningPath.description}
+                                    defaultChecked={study.learningPath?.id == learningPath.id}
+                                    onChange={() => setLearningPath(learningPath)}
+                                />
+                            ))}
+                            <FieldErrorMessage name='learningPath' />
+                        </Col>
+                    </Box>
+
+                    <Box gap='xlarge'>
+                        <Col sm={4} direction='column' gap>
                             <FieldTitle required>Add tags</FieldTitle>
                             <small>Select the study type and content area (if applicable) that best describes your study to participants</small>
                         </Col>
 
                         <Col sm={6} direction='column' gap>
-                            <SelectField
-                                name="topic"
-                                placeholder="Study Topic*"
-                                options={studyTopics.map(s => ({ value: s, label: s }))}
-                            />
-                            <FieldErrorMessage name='topic' />
                             <SelectField
                                 name="subject"
                                 allowCreate

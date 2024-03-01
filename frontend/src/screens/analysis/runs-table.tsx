@@ -205,7 +205,7 @@ const useRunsTable = (analysis: Analysis) => {
                 )
             },
         },
-    ], [])
+    ], [api])
 
     const table: Table<AnalysisRun> = useReactTable({
         data: analysis.runs || [],
