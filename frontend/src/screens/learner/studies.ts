@@ -79,9 +79,6 @@ export const useSearchStudies = () => {
             'titleForParticipants',
             'researchers.firstName',
             'researchers.lastName',
-            // TODO: Confirm with iris about searchable fields
-            // 'learningPath.label',
-            // 'learningPath.description',
         ],
     };
 
