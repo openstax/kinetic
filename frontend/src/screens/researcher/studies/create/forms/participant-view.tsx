@@ -18,7 +18,7 @@ import { first } from 'lodash-es';
 import { LearningPath, Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
 import { colors } from '@theme';
-import { Button, Radio } from '@mantine/core';
+import { Button, Radio, Stack } from '@mantine/core';
 import { useGetLearningPaths } from '../../../../../models/learning-path';
 
 export const participantViewValidation = (allOtherStudies: Study[]) => {
@@ -235,42 +235,31 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
                         </Col>
 
                         <Col sm={6} direction='column'>
-                            <Box direction='column'>
-                                <Box gap>
-                                    <input
-                                        id='points-10'
-                                        type='radio'
-                                        name='stages.0.points'
-                                        value={10}
-                                        defaultChecked={firstSession?.points === 10}
-                                        onChange={setDurationAndPoints}
-                                    />
-                                    <label htmlFor='points-10'>~5 minutes: 10 pts</label>
-                                </Box>
-                                <Box gap>
-                                    <input
-                                        id='points-20'
-                                        type='radio'
-                                        name='stages.0.points'
-                                        value={20}
-                                        defaultChecked={firstSession?.points === 20}
-                                        onChange={setDurationAndPoints}
-                                    />
-                                    <label htmlFor='points-20'>~15 minutes: 20 pts</label>
-                                </Box>
-                                <Box gap>
-                                    <input
-                                        id='points-30'
-                                        type='radio'
-                                        name='stages.0.points'
-                                        value={30}
-                                        defaultChecked={firstSession?.points === 30}
-                                        onChange={setDurationAndPoints}
-                                    />
-                                    <label htmlFor='points-30'>~25 minutes: 30 pts</label>
-                                </Box>
+                            <Stack>
+                                <Radio
+                                    name='stages.0.points'
+                                    label='~5 minutes: 10 pts'
+                                    value={10}
+                                    defaultChecked={firstSession?.points === 10}
+                                    onChange={setDurationAndPoints}
+                                />
+
+                                <Radio
+                                    name='stages.0.points'
+                                    label='~15 minutes: 20 pts'
+                                    value={20}
+                                    defaultChecked={firstSession?.points === 20}
+                                    onChange={setDurationAndPoints}
+                                />
+                                <Radio
+                                    name='stages.0.points'
+                                    label='~25 minutes: 30 pts'
+                                    value={30}
+                                    defaultChecked={firstSession?.points === 30}
+                                    onChange={setDurationAndPoints}
+                                />
                                 <FieldErrorMessage name='stages.0.points'/>
-                            </Box>
+                            </Stack>
                         </Col>
                     </Box>
 
