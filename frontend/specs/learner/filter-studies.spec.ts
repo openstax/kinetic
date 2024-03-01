@@ -12,7 +12,7 @@ test('searching studies', async ({ browser }) => {
     const researcherPage = await useResearcherPage(browser)
     const adminPage = await useAdminPage(browser)
 
-    const studyName = faker.animal.cetacean() + ' ' + faker.animal.rabbit();
+    const studyName = faker.random.words(3);
 
     const studyId = await createStudy({ researcherPage, adminPage, name: studyName })
 

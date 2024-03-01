@@ -65,7 +65,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       study_update, error = bind(params[:study], Api::V1::Bindings::StudyUpdate)
       render(json: error, status: error.status_code) and return if error
 
-      @study.update!(study_update.to_hash.except(:researchers, :stages))
+      @study.update!(study_update.to_hash.except(:researchers, :stages, :learning_path))
       @study.update_stages(study_update.stages)
     end
 
