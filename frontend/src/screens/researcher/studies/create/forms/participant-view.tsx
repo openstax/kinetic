@@ -243,7 +243,6 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
                                     defaultChecked={firstSession?.points === 10}
                                     onChange={setDurationAndPoints}
                                 />
-
                                 <Radio
                                     name='stages.0.points'
                                     label='~15 minutes: 20 pts'

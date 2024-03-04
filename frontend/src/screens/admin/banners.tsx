@@ -1,76 +1,106 @@
-import { BannerNotice, BannerNoticeFromJSON } from '@api'
-import { React, useState } from '@common'
-import { Alert, Box, Col, DateTimeField, EditingForm as Form, Icon, InputField } from '@components'
-import { useApi, useFetchState } from '@lib'
-import { Yup } from '@common'
+import { BannerNotice } from '@api'
+import React, { useEffect, useState } from 'react'
 import { Main } from './grid'
+import { useCreateBanner, useDeleteBanner, useFetchBanners, useUpdateBanner } from '@models';
+import { Button, Group, LoadingOverlay, Stack, TextInput } from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
+import { useForm, yupResolver } from '@mantine/form'
+import * as yup from 'yup';
+import { colors } from '@theme';
+import { IconTrash, IconTrashFilled, IconTrashX } from '@tabler/icons-react';
 
-const Banner: React.FC<{ banner: BannerNotice, onUpdate(): void }> = ({ banner, onUpdate }) => {
-    const [error, setError] = useState('')
-    const api = useApi()
-    const onDelete = () => {
-        api.deleteBanner({ id: banner.id! }).then(onUpdate)
-    }
-    const saveBanner = async (banner: BannerNotice) => {
-        try {
-            if (banner.id) {
-                await api.updateBanner({ id: banner.id, updateBanner: { banner } })
-            } else {
-                await api.createBanner({ addBanner: { banner } })
-            }
-            onUpdate()
-        } catch (e) {
-            setError(String(e))
+const EditBanner: FC<{banner?: BannerNotice}> = ({ banner }) => {
+    const [bannerDateRange, setBannerDateRange] = useState<[Date | null, Date | null]>([null, null]);
+    const updateBanner = useUpdateBanner()
+    const createBanner = useCreateBanner()
+    const deleteBanner = useDeleteBanner()
+
+    const form = useForm<BannerNotice>({
+        initialValues: {
+            message: banner?.message || '',
+            startAt: banner?.startAt || '',
+            endAt: banner?.endAt || '',
+        },
+
+        validate: yupResolver(yup.object().shape({
+            message: yup.string().required(),
+        })),
+    });
+
+    useEffect(() => {
+        if (banner?.id && banner.startAt && banner.endAt) {
+            setBannerDateRange([
+                new Date(banner.startAt),
+                new Date(banner.endAt),
+            ])
         }
+    }, [banner]);
+
+    const onDelete = (id?: number) => {
+        id && deleteBanner.mutate(id)
     }
+
+    const handleSubmit = form.onSubmit((values) => {
+        const [startAt, endAt] = bannerDateRange
+        if (banner?.id) {
+            updateBanner.mutate({
+                id: banner.id!,
+                updateBanner: {
+                    banner: {
+                        ...values,
+                        startAt: startAt?.toString(),
+                        endAt: endAt?.toString(),
+                    },
+                },
+            })
+        } else {
+            createBanner.mutate({
+                banner: {
+                    ...values,
+                    startAt: startAt?.toString(),
+                    endAt: endAt?.toString(),
+                },
+            }, {
+                onSuccess: () => {
+                    setBannerDateRange([null, null])
+                    form.reset()
+                },
+            })
+        }
+    })
+
     return (
-        <Col
-            data-banner-id={banner.id || 'new'}
-            sm={12}
-            align="stretch"
-            direction="column"
-            className="mb-2 border bg-white"
-        >
-            <Box className="card-header" justify="end">
-                <Icon icon="trash" data-testid="delete-banner" onClick={onDelete} />
-            </Box>
-            <Box className="card-body" direction="column">
-                <Form
-                    name="banner"
-                    onSubmit={saveBanner}
-                    showControls={!banner.id}
-                    validationSchema={Yup.object().shape({
-                        message: Yup.string().required(),
-                        startAt: Yup.string().required(),
-                        endAt: Yup.string().required(),
-                    })}
-                    defaultValues={banner}
-                >
-                    <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
-                    <DateTimeField name="dates" withTime rangeNames={['startAt', 'endAt']} label="Date range" />
-                    <InputField name="message" id="message" label="Message" type="textarea" />
-                </Form>
-            </Box>
-        </Col>
+        <form onSubmit={handleSubmit}>
+            <Stack>
+                <TextInput placeholder='New banner message' label='Message' {...form.getInputProps('message')} />
+                <DatePickerInput placeholder='New banner date range' label='Date Range' type="range" value={bannerDateRange} onChange={setBannerDateRange} />
+                <Group justify="flex-end">
+                    {banner?.id && <Button color={colors.red} onClick={() => onDelete(banner.id)}>
+                        Delete Banner
+                    </Button>}
+                    <Button type="submit" disabled={!form.isDirty() || !form.isValid()}>
+                        {banner?.id ? 'Update banner' : 'Create banner'}
+                    </Button>
+                </Group>
+            </Stack>
+            <hr/>
+        </form>
     )
 }
 
 
 export function AdminBanners() {
-    const api = useApi()
-    const state = useFetchState<BannerNotice>({
-        fetch: async () => api.getBanners().then(list => list.data),
-        addRecord: async () => BannerNoticeFromJSON({}),
-    })
-    if (state.busy) return state.busy
+    const { data: banners, isLoading } = useFetchBanners()
+
+    if (isLoading) return <LoadingOverlay />
 
     return (
-        <Main className="container pt-2">
-            <Box justify="between" align="center" margin="bottom">
+        <Main className='container'>
+            <Stack py='lg'>
                 <h4>Scheduled Banners</h4>
-                <Icon height={24} icon="plusCircleOutline" data-testid="add-banner" onClick={state.addNewRecord} />
-            </Box>
-            {state.records.map((banner, i) => <Banner key={banner.id || i} banner={banner} onUpdate={state.fetchRecords} />)}
+                <EditBanner />
+                {banners?.map((banner) => <EditBanner banner={banner} key={banner.startAt} />)}
+            </Stack>
         </Main>
     )
 }
