@@ -1,68 +1,55 @@
 import { BannerNotice } from '@api'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Main } from './grid'
 import { useCreateBanner, useDeleteBanner, useFetchBanners, useUpdateBanner } from '@models';
 import { Button, Group, LoadingOverlay, Stack, TextInput } from '@mantine/core';
-import { DatePickerInput } from '@mantine/dates';
+import { DateInput } from '@mantine/dates';
 import { useForm, yupResolver } from '@mantine/form'
 import * as yup from 'yup';
 import { colors } from '@theme';
-import { IconTrash, IconTrashFilled, IconTrashX } from '@tabler/icons-react';
 
 const EditBanner: FC<{banner?: BannerNotice}> = ({ banner }) => {
-    const [bannerDateRange, setBannerDateRange] = useState<[Date | null, Date | null]>([null, null]);
     const updateBanner = useUpdateBanner()
     const createBanner = useCreateBanner()
     const deleteBanner = useDeleteBanner()
 
-    const form = useForm<BannerNotice>({
+    const form = useForm({
         initialValues: {
             message: banner?.message || '',
-            startAt: banner?.startAt || '',
-            endAt: banner?.endAt || '',
+            startAt: banner?.startAt ? new Date(banner.startAt) : null,
+            endAt: banner?.endAt ? new Date(banner.endAt) : null,
         },
+
+        transformValues: (values) => ({
+            ...values,
+            startAt: values.startAt?.toString(),
+            endAt: values.endAt?.toString(),
+        }),
 
         validate: yupResolver(yup.object().shape({
             message: yup.string().required(),
+            startAt: yup.date().required(),
+            endAt: yup.date().required(),
         })),
     });
-
-    useEffect(() => {
-        if (banner?.id && banner.startAt && banner.endAt) {
-            setBannerDateRange([
-                new Date(banner.startAt),
-                new Date(banner.endAt),
-            ])
-        }
-    }, [banner]);
 
     const onDelete = (id?: number) => {
         id && deleteBanner.mutate(id)
     }
 
     const handleSubmit = form.onSubmit((values) => {
-        const [startAt, endAt] = bannerDateRange
         if (banner?.id) {
             updateBanner.mutate({
                 id: banner.id!,
                 updateBanner: {
-                    banner: {
-                        ...values,
-                        startAt: startAt?.toString(),
-                        endAt: endAt?.toString(),
-                    },
+                    banner: values,
                 },
             })
         } else {
             createBanner.mutate({
-                banner: {
-                    ...values,
-                    startAt: startAt?.toString(),
-                    endAt: endAt?.toString(),
-                },
+                banner: values,
             }, {
                 onSuccess: () => {
-                    setBannerDateRange([null, null])
                     form.reset()
                 },
             })
@@ -70,10 +57,23 @@ const EditBanner: FC<{banner?: BannerNotice}> = ({ banner }) => {
     })
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} data-testid={`${banner?.message || 'new-banner'}-form`}>
             <Stack>
-                <TextInput placeholder='New banner message' label='Message' {...form.getInputProps('message')} />
-                <DatePickerInput placeholder='New banner date range' label='Date Range' type="range" value={bannerDateRange} onChange={setBannerDateRange} />
+                <TextInput placeholder='Banner message' label='Message' {...form.getInputProps('message')} />
+                <Group grow justify='space-between'>
+                    <DateInput placeholder='Starts at'
+                        maxDate={form.values.endAt ? new Date(form.values.endAt) : undefined}
+                        label='Starts at'
+                        clearable
+                        {...form.getInputProps('startAt')}
+                    />
+                    <DateInput placeholder='Ends at'
+                        minDate={form.values.startAt ? new Date(form.values.startAt) : undefined}
+                        label='Ends at'
+                        clearable
+                        {...form.getInputProps('endAt')}
+                    />
+                </Group>
                 <Group justify="flex-end">
                     {banner?.id && <Button color={colors.red} onClick={() => onDelete(banner.id)}>
                         Delete Banner
@@ -82,12 +82,11 @@ const EditBanner: FC<{banner?: BannerNotice}> = ({ banner }) => {
                         {banner?.id ? 'Update banner' : 'Create banner'}
                     </Button>
                 </Group>
+                <hr/>
             </Stack>
-            <hr/>
         </form>
     )
 }
-
 
 export function AdminBanners() {
     const { data: banners, isLoading } = useFetchBanners()
@@ -97,9 +96,11 @@ export function AdminBanners() {
     return (
         <Main className='container'>
             <Stack py='lg'>
-                <h4>Scheduled Banners</h4>
+                <Group grow justify='space-between'>
+                    <h4>Scheduled Banners</h4>
+                </Group>
                 <EditBanner />
-                {banners?.map((banner) => <EditBanner banner={banner} key={banner.startAt} />)}
+                {banners?.map((banner) => <EditBanner banner={banner} key={banner.message} />)}
             </Stack>
         </Main>
     )

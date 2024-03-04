@@ -1,5 +1,5 @@
 import { addReward, useAdminPage, useResearcherPage } from './helpers'
-import { dayjs, expect, faker, goToPage, setDateField, test } from './test'
+import { dayjs, expect, faker, goToPage, test } from './test'
 
 test('creates a learning path', async ({ browser }) => {
     const adminPage = await useAdminPage(browser)
@@ -36,32 +36,36 @@ test('displays panel only when allowed', async ({ browser }) => {
     await researcherPage.waitForURL('**/studies')
 })
 
-
 test('can add/update/delete banners', async ({ browser }) => {
     const adminPage = await useAdminPage(browser)
+    const today = dayjs().format('MMMM D, YYYY')
+    const message = faker.random.words(4)
+    const updatedMessage = faker.random.words(3)
 
-    const message = faker.commerce.productDescription()
     await goToPage({ page: adminPage, path: '/admin/banners' })
-    await adminPage.click('testId=add-banner', { force: true })
-    await expect(adminPage.locator('[data-banner-id=new]')).toBeVisible()
 
-    await setDateField({
-        page: adminPage, fieldName: 'dates', date: [dayjs().add(1, 'day'), dayjs().add(1, 'month')],
-    })
+    // Adding
+    await expect(adminPage.getByText('Create banner')).toBeDisabled()
+    await adminPage.getByPlaceholder('Banner message').first().fill(message)
+    await adminPage.getByPlaceholder('Starts at').first().fill(today)
+    await adminPage.getByPlaceholder('Ends at').first().fill(today)
+    await expect(adminPage.getByText('Create banner')).toBeEnabled()
+    await adminPage.getByText('Create banner').click()
+    await adminPage.waitForLoadState('networkidle')
 
-    await adminPage.fill('[name="message"]', message)
-    await adminPage.click('testId=form-save-btn')
+    await expect(adminPage.getByPlaceholder('Banner message').first()).toHaveValue('')
+    await expect(adminPage.getByPlaceholder('Starts at').first()).toHaveValue('')
+    await expect(adminPage.getByPlaceholder('Ends at').first()).toHaveValue('')
 
-    const banner = adminPage.locator(`[data-banner-id]:not([data-banner-id=new]):has-text("${message}")`)
-    const bannerId = await banner.getAttribute('data-banner-id')
+    // Updating
+    const bannerForm = adminPage.getByTestId(`${message}-form`)
+    await bannerForm.getByPlaceholder('Banner message').fill(updatedMessage)
+    await bannerForm.getByText('Update banner').click()
+    await adminPage.waitForLoadState('networkidle')
 
-    await adminPage.fill(`[data-banner-id="${bannerId}"] >> [name="message"]`, message + ' UPDATED')
-    await adminPage.click('testId=form-save-btn')
-
-    await adminPage.waitForSelector(`[data-banner-id="${bannerId}"]:has-text("UPDATED")`)
-
-    await adminPage.click(`[data-banner-id="${bannerId}"] >> testId="delete-banner"`)
-    await adminPage.waitForSelector(`[data-banner-id="${bannerId}"]`, { state: 'detached' })
+    // Deleting
+    await bannerForm.getByText('Delete banner').click()
+    await adminPage.waitForLoadState('networkidle')
 })
 
 test('can add/update/delete rewards', async ({ browser }) => {
