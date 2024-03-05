@@ -51,21 +51,21 @@ test('can add/update/delete banners', async ({ browser }) => {
     await adminPage.getByPlaceholder('Ends at').first().fill(today)
     await expect(adminPage.getByText('Create banner')).toBeEnabled()
     await adminPage.getByText('Create banner').click()
-    await adminPage.waitForLoadState('networkidle')
 
     await expect(adminPage.getByPlaceholder('Banner message').first()).toHaveValue('')
     await expect(adminPage.getByPlaceholder('Starts at').first()).toHaveValue('')
     await expect(adminPage.getByPlaceholder('Ends at').first()).toHaveValue('')
 
+    await adminPage.waitForLoadState('networkidle')
+
     // Updating
     const bannerForm = adminPage.getByTestId(`${message}-form`)
     await bannerForm.getByPlaceholder('Banner message').fill(updatedMessage)
-    await bannerForm.getByText('Update banner').click()
+    await bannerForm.getByRole('button', { name: /Update banner/ }).click()
     await adminPage.waitForLoadState('networkidle')
 
     // Deleting
-    await expect(bannerForm.getByText('Delete banner')).toBeEnabled()
-    await bannerForm.getByText('Delete banner').click()
+    await bannerForm.getByRole('button', { name: /Delete banner/ }).click()
     await adminPage.waitForLoadState('networkidle')
 })
 
