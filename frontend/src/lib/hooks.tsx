@@ -1,4 +1,4 @@
-import { React, useEffect, useCallback, useMemo, useState } from '@common'
+import { React, useEffect, useMemo, useState } from '@common'
 import { useLocation, useParams } from 'react-router-dom'
 import { LoadingAnimation } from '@components'
 import qs from 'qs'
@@ -19,23 +19,6 @@ export const usePendingState = (isEnabled = true, delay = 150) => {
     }, [isEnabled, delay])
     return isPending
 };
-
-
-// Returning a new object reference guarantees that a before-and-after
-//   equivalence check will always be false, resulting in a re-render, even
-//   when multiple calls to forceUpdate are batched.
-export function useForceUpdate(): () => void {
-    const [ , dispatch ] = useState<{}>(Object.create(null));
-
-    // Turn dispatch(required_parameter) into dispatch().
-    const memoizedDispatch = useCallback(
-        (): void => {
-            dispatch(Object.create(null));
-        },
-        [ dispatch ],
-    );
-    return memoizedDispatch;
-}
 
 export function useQueryParam<T = string>(param: string) {
     const { search } = useLocation();

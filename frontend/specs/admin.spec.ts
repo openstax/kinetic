@@ -67,6 +67,7 @@ test('can add/update/delete banners', async ({ browser }) => {
     // Deleting
     await bannerForm.getByRole('button', { name: /Delete banner/ }).click()
     await adminPage.waitForLoadState('networkidle')
+    await expect(adminPage.getByText(updatedMessage)).not.toBeAttached()
 })
 
 test('can add/update/delete rewards', async ({ browser }) => {
