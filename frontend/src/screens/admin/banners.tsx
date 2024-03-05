@@ -76,7 +76,7 @@ const EditBanner: FC<{banner?: BannerNotice}> = ({ banner }) => {
                 </Group>
                 <Group justify="flex-end">
                     {banner?.id && <Button color={colors.red} onClick={() => onDelete(banner.id)}>
-                        Delete Banner
+                        Delete banner
                     </Button>}
                     <Button type="submit" disabled={!form.isDirty() || !form.isValid()}>
                         {banner?.id ? 'Update banner' : 'Create banner'}

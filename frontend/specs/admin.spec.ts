@@ -64,6 +64,7 @@ test('can add/update/delete banners', async ({ browser }) => {
     await adminPage.waitForLoadState('networkidle')
 
     // Deleting
+    await expect(bannerForm.getByText('Delete banner')).toBeVisible()
     await bannerForm.getByText('Delete banner').click()
     await adminPage.waitForLoadState('networkidle')
 })
