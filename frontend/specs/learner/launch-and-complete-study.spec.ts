@@ -6,7 +6,7 @@ test('launching study and testing completion', async ({ browser }) => {
     const researcherPage = await useResearcherPage(browser)
     const studyName = faker.animal.insect() + ' ' + faker.datatype.string(10)
 
-    await addReward({ page: adminPage, points: 5, prize: 'Pony' })
+    await addReward({ adminPage })
 
     const studyId = await createStudy({ researcherPage, adminPage, name: studyName })
 

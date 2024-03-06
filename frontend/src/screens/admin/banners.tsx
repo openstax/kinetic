@@ -89,7 +89,7 @@ const EditBanner: FC<{banner?: BannerNotice}> = ({ banner }) => {
 }
 
 export function AdminBanners() {
-    const { data: banners, isLoading } = useFetchBanners()
+    const { data: banners = [], isLoading } = useFetchBanners()
 
     if (isLoading) return <LoadingOverlay />
 
@@ -100,7 +100,7 @@ export function AdminBanners() {
                     <h4>Scheduled Banners</h4>
                 </Group>
                 <EditBanner />
-                {banners?.map((banner) => <EditBanner banner={banner} key={banner.message} />)}
+                {banners.map((banner) => <EditBanner banner={banner} key={banner.message} />)}
             </Stack>
         </Main>
     )

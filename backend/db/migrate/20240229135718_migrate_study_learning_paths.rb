@@ -19,7 +19,7 @@ class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
     # study_strategies = [2, 6, 10, 13, 14, 15, 19, 20, 28, 31, 77, 80, 117, 123, 124, 126]
     # other = [38, 40, 43, 44, 83, 118, 129]
 
-    Study.all.each do |study|
+    Study.find_each do |study|
       # 50/50 for dev
       if [true, false].sample
         study.update!(learning_path_id: example_path.id)
