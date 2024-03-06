@@ -117,8 +117,10 @@ export const useCreateReward = () => {
 
     return useMutation({
         mutationFn: async (addReward: AddReward) => await api.createReward({ addReward }),
-        onSuccess: async () => {
+        onSuccess: async (data) => {
+            console.log(data)
             await queryClient.invalidateQueries({ queryKey: ['fetchRewards'] })
+            return data
         },
     })
 }

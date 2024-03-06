@@ -193,45 +193,29 @@ export const selectDropdownOption = async ({
     await page.keyboard.press('Enter')
 }
 
-export const setFlatpickrDate = async (
-    { selector, date, page }: { selector: string, date: dayjs.Dayjs | [dayjs.Dayjs, dayjs.Dayjs], page: Page },
-) => {
-    const dates = (Array.isArray(date) ? date : [date]).map(date => date.format('M/D/YYYY'))
-    const inputSelector = `css=${selector} >> css=input`
-    await page.waitForSelector(inputSelector)
-    await page.$eval(inputSelector, (el, dates) => {
-        (el as any)._flatpickr.setDate(dates, true, 'm/d/Y')
-        return true
-    }, dates)
-}
-
-export const setDateField = async ({
-    fieldName, date, page,
-}: {
-    fieldName: string, date: dayjs.Dayjs | [dayjs.Dayjs, dayjs.Dayjs], page: Page,
-}) => {
-    return await setFlatpickrDate({ page, date, selector: `[data-field-name="${fieldName}"]` })
-}
-
-
 export const addReward = async ({
-    page, points, prize,
-    startAt = dayjs().subtract(1, 'day'),
-    endAt = dayjs().add(1, 'day'),
+    adminPage,
+    points = faker.random.numeric(2),
+    prize = faker.random.words(3),
+    description = faker.random.words(6),
+    startAt = dayjs().subtract(1, 'day').format('MMMM D, YYYY'),
+    endAt = dayjs().add(1, 'day').format('MMMM D, YYYY'),
 }: {
-    page: Page, points: number, prize: string
+    adminPage: Page,
+    points?: string,
+    prize?: string
+    description?: string,
     startAt?: dayjs.Dayjs,
     endAt?: dayjs.Dayjs,
 }) => {
-    await goToPage({ page, path: '/admin/rewards' })
-    await page.click('testId=add-reward', { force: true })
-    await page.waitForLoadState('networkidle')
-    await expect(page.locator('[data-reward-id="new"]')).toBeVisible()
-    await setDateField({ page, fieldName: 'dates', date: [startAt, endAt] })
-    await page.fill('[name="points"]', String(points))
-    await page.fill('[name="prize"]', prize)
-    await page.fill('[name="description"]', faker.vehicle.type())
-    await page.click('testId=form-save-btn')
+    await goToPage({ page: adminPage, path: '/admin/rewards' })
+
+    await adminPage.getByPlaceholder('Prize').fill(prize)
+    await adminPage.getByPlaceholder('Points').fill(points)
+    await adminPage.getByPlaceholder('Description').fill(description)
+    await adminPage.getByPlaceholder('Starts at').first().fill(startAt)
+    await adminPage.getByPlaceholder('Ends at').first().fill(endAt)
+    await adminPage.getByText('Create reward').click()
 }
 
 export const removeOsanoFooter  = async (page:Page) => {

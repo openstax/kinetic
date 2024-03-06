@@ -1,87 +1,200 @@
-import { Reward, RewardFromJSON } from '@api'
-import { React, useState } from '@common'
-import { Alert, Box, Col, DateTimeField, EditingForm as Form, Icon, InputField } from '@components'
-import { useApi, useFetchState } from '@lib'
-import { Main } from './grid'
+import { Reward } from '@api'
+import { Main, Sidebar } from './grid'
 import { colors } from '@theme';
-import { Yup } from '@common'
+import { useCreateReward, useDeleteReward, useFetchRewards, useUpdateReward } from '@models';
+import {
+    Button,
+    Card,
+    Group,
+    Loader,
+    LoadingOverlay,
+    NumberInput,
+    Stack,
+    Text,
+    Textarea,
+    TextInput,
+    Title,
+} from '@mantine/core';
+import dayjs from 'dayjs';
+import { useForm, yupResolver } from '@mantine/form';
+import * as yup from 'yup';
+import React, { useEffect, useState } from 'react'
+import { DateInput } from '@mantine/dates';
 
-const RewardCard: React.FC<{ reward: Reward, onUpdate(): void }> = ({ reward, onUpdate }) => {
-    const [error, setError] = useState('')
-    const api = useApi()
-    const onDelete = async () => {
-        if (reward.id) {
-            await api.deleteReward({ id: reward.id })
+const EditReward: FC<{ reward?: Reward }> = ({ reward }) => {
+    const updateReward = useUpdateReward()
+    const createReward = useCreateReward()
+
+    const form = useForm({
+        initialValues: {
+            prize: reward?.prize || '',
+            points: reward?.points || 0,
+            description: reward?.description || '',
+            startAt: reward?.startAt ? new Date(reward.startAt) : '',
+            endAt: reward?.endAt ? new Date(reward.endAt) : '',
+        },
+
+        transformValues: (values) => {
+            return ({
+                ...values,
+                startAt: values.startAt?.toString(),
+                endAt: values.endAt?.toString(),
+            })
+        },
+
+        validate: yupResolver(yup.object().shape({
+            prize: yup.string().required(),
+            points: yup.number().required().min(1),
+            description: yup.string().required(),
+            startAt: yup.date().required(),
+            endAt: yup.date().required(),
+        })),
+    });
+
+    useEffect(() => {
+        if (reward) {
+            form.setValues({
+                ...reward,
+                startAt: reward?.startAt ? new Date(reward.startAt) : '',
+                endAt: reward?.endAt ? new Date(reward.endAt) : '',
+            })
+            form.resetDirty()
+        } else {
+            form.reset()
         }
-        onUpdate()
-    }
-    const saveReward = async (reward: Reward) => {
-        try {
-            if (reward.id) {
-                await api.updateReward({ id: reward.id, updateReward: { reward } })
-            } else {
-                await api.createReward({ addReward: { reward } })
-            }
-            onUpdate()
-        } catch (e) { setError(String(e)) }
+    }, [reward]);
+
+    const handleSubmit = form.onSubmit((values) => {
+        if (reward?.id) {
+            updateReward.mutate({
+                id: reward.id,
+                updateReward: {
+                    reward: values,
+                },
+            })
+        } else {
+            createReward.mutate({
+                reward: values,
+            }, {
+                onSuccess: () => {
+                    form.reset()
+                },
+            })
+        }
+    })
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <Stack>
+                <Group grow>
+                    <TextInput placeholder='Prize' label='Prize' {...form.getInputProps('prize')} />
+                    <NumberInput placeholder='Points' label='Points' {...form.getInputProps('points')} />
+                </Group>
+                <Textarea placeholder='Description' label='Description' {...form.getInputProps('description')} />
+
+                <Group grow justify='space-between'>
+                    <DateInput placeholder='Starts at'
+                        maxDate={form.values.endAt ? new Date(form.values.endAt) : undefined}
+                        label='Starts at'
+                        clearable
+                        {...form.getInputProps('startAt')}
+                    />
+                    <DateInput placeholder='Ends at'
+                        minDate={form.values.startAt ? new Date(form.values.startAt) : undefined}
+                        label='Ends at'
+                        clearable
+                        {...form.getInputProps('endAt')}
+                    />
+                </Group>
+                <Group justify="flex-end">
+                    <Button type="submit" disabled={!form.isDirty() || !form.isValid()}>
+                        {reward?.id ? 'Update reward' : 'Create reward'}
+                    </Button>
+                </Group>
+            </Stack>
+        </form>
+    )
+}
+
+const RewardCard: FC<{
+    reward: Reward,
+    setCurrentReward: (reward?: Reward) => void,
+    active: boolean
+}> = ({ reward, setCurrentReward, active }) => {
+    const { mutate, isLoading: isDeleting } = useDeleteReward()
+
+    if (!reward) return null
+    if (isDeleting) return <Loader />
+
+    const onDelete = () => {
+        if (reward.id) {
+            mutate(reward.id, {
+                onSuccess: () => {
+                    if (active) {
+                        setCurrentReward(undefined)
+                    }
+                },
+            })
+        }
     }
 
     return (
-        <Col
-            data-reward-id={reward.id || 'new'}
-            sm={12} align="stretch" direction="column" className="mb-2 border"
-        >
-            <Box className="card-header" justify="end">
-                <Icon height={24} color={colors.red} icon="trash" data-testid="delete-reward" onClick={onDelete} />
-            </Box>
-            <Box className="card-body" direction="column">
-                <Form
-                    name="reward"
-                    onSubmit={saveReward}
-                    showControls={!reward.id}
-                    validationSchema={Yup.object().shape({
-                        points: Yup.string().required(),
-                        prize: Yup.string().required(),
-                        startAt: Yup.string().required(),
-                        endAt: Yup.string().required(),
-                        description: Yup.string(),
-                    })}
-                    defaultValues={reward}
-                >
-                    <Alert warning={true} onDismiss={() => setError('')} message={error}></Alert>
-                    <InputField name="points" id="points" label="Points" type="number" md={2} />
-                    <DateTimeField
-                        rangeNames={['startAt', 'endAt']}
-                        name="dates"
-                        label="Date Range"
-                        withTime
-                        sm={10}
-                    />
-                    <InputField name="prize" id="prize" label="Prize" type="text" />
-                    <InputField name="description" id="description" label="Reward Description" type="text" />
-                </Form>
-            </Box>
-        </Col>
+        <Stack key={(reward.description || '') + ' ' + reward.prize}>
+            <Card withBorder={active} p='lg'>
+                <Stack>
+                    <Card.Section>
+                        <Group>
+                            <Text>{reward.prize}</Text>
+                            <Text>
+                                {dayjs(reward.startAt).format('MMMM D, YYYY')} - {dayjs(reward.endAt).format('MMMM D, YYYY')}
+                            </Text>
+                        </Group>
+                    </Card.Section>
+                    <Card.Section>
+                        <Text>Description: {reward.description}</Text>
+                    </Card.Section>
+                    <Card.Section>
+                        <Group justify='flex-end'>
+                            <Button onClick={() => setCurrentReward(reward)}>
+                                Edit
+                            </Button>
+                            <Button color={colors.red} onClick={onDelete}>
+                                Delete
+                            </Button>
+                        </Group>
+                    </Card.Section>
+                </Stack>
+            </Card>
+            <hr/>
+        </Stack>
     )
 }
 
 export function AdminRewards() {
-    const api = useApi()
-    const state = useFetchState<Reward>({
-        fetch: async () => api.getRewards().then(list => list.data),
-        addRecord: async () => RewardFromJSON({}),
-    })
-    if (state.busy) return state.busy
+    const [currentReward, setCurrentReward] = useState<Reward | undefined>()
+
+    const { data: rewards, isLoading } = useFetchRewards()
+
+    if (isLoading) return <LoadingOverlay />
 
     return (
-        <Main className="container pt-2">
-            <Box justify="between" align="center" margin="bottom">
-                <h4>Scheduled Rewards</h4>
-                <Icon height={24} icon="plusCircleOutline" data-testid="add-reward" onClick={state.addNewRecord} />
-            </Box>
-            {state.records.map((reward, i) => (
-                <RewardCard key={reward.id || i} reward={reward} onUpdate={state.fetchRecords} />
-            ))}
-        </Main>
+        <>
+            <Sidebar>
+                <Stack>
+                    <Title order={3}>Scheduled Rewards</Title>
+                    <Button onClick={() => setCurrentReward(undefined)}>
+                        + Create new reward
+                    </Button>
+                    <Stack p='md' style={{ border: '1px solid black' }} data-testid='rewards-list'>
+                        {rewards?.map(reward => (
+                            <RewardCard reward={reward} active={currentReward?.id == reward.id} setCurrentReward={setCurrentReward} key={`${reward.prize}${reward.startAt}`} />
+                        ))}
+                    </Stack>
+                </Stack>
+            </Sidebar>
+            <Main className="container pt-2">
+                <EditReward reward={currentReward} />
+            </Main>
+        </>
     )
 }
