@@ -1,7 +1,7 @@
 import { toDayJS, useApi, useEnvironment } from '@lib'
 import { useCallback } from 'react'
 import { useLocalstorageState } from 'rooks'
-import { AddBanner, BannerMessage, BannerNotice, UpdateBannerRequest } from '@api'
+import { AddBanner, BannerMessage, UpdateBannerRequest } from '@api'
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 type RemoveBannerT = (b: BannerMessage) => void
@@ -16,8 +16,6 @@ export const useFetchBanners = () => {
     return useQuery('fetchBanners', async () => {
         const res = await api.getBanners();
         return res.data;
-    }, {
-        placeholderData: [],
     })
 }
 

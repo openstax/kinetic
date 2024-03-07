@@ -28,9 +28,9 @@ export const useLandStudy = () => {
 }
 
 export const useParticipantStudies = () => {
-    const { data: studies, isLoading } = useFetchParticipantStudies()
+    const { data: studies = [], isLoading } = useFetchParticipantStudies()
 
-    if (isLoading || !studies) return {
+    if (isLoading) return {
         studies: [],
         highlightedStudies: [],
         demographicSurvey: null,

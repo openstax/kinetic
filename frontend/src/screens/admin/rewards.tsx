@@ -173,20 +173,20 @@ const RewardCard: FC<{
 export function AdminRewards() {
     const [currentReward, setCurrentReward] = useState<Reward | undefined>()
 
-    const { data: rewards, isLoading } = useFetchRewards()
+    const { data: rewards = [], isLoading } = useFetchRewards()
 
     if (isLoading) return <LoadingOverlay />
 
     return (
         <>
             <Sidebar>
-                <Stack>
+                <Stack p='sm'>
                     <Title order={3}>Scheduled Rewards</Title>
                     <Button onClick={() => setCurrentReward(undefined)}>
                         + Create new reward
                     </Button>
                     <Stack p='md' style={{ border: '1px solid black' }} data-testid='rewards-list'>
-                        {rewards?.map(reward => (
+                        {rewards.map(reward => (
                             <RewardCard reward={reward} active={currentReward?.id == reward.id} setCurrentReward={setCurrentReward} key={`${reward.prize}${reward.startAt}`} />
                         ))}
                     </Stack>
