@@ -66,6 +66,9 @@ module Api::V1::Bindings
     # Description of how the study benefits participants
     attr_accessor :benefits
 
+    # An integer that describes the sort order for this study
+    attr_accessor :featured_order
+
     # Is this study highlighted?
     attr_accessor :is_highlighted
 
@@ -161,6 +164,7 @@ module Api::V1::Bindings
         :'internal_description' => :'internal_description',
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
+        :'featured_order' => :'featured_order',
         :'is_highlighted' => :'is_highlighted',
         :'is_hidden' => :'is_hidden',
         :'consented' => :'consented',
@@ -207,6 +211,7 @@ module Api::V1::Bindings
         :'internal_description' => :'String',
         :'image_id' => :'String',
         :'benefits' => :'String',
+        :'featured_order' => :'Integer',
         :'is_highlighted' => :'Boolean',
         :'is_hidden' => :'Boolean',
         :'consented' => :'Boolean',
@@ -326,6 +331,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'benefits')
         self.benefits = attributes[:'benefits']
+      end
+
+      if attributes.key?(:'featured_order')
+        self.featured_order = attributes[:'featured_order']
       end
 
       if attributes.key?(:'is_highlighted')
@@ -502,6 +511,7 @@ module Api::V1::Bindings
           internal_description == o.internal_description &&
           image_id == o.image_id &&
           benefits == o.benefits &&
+          featured_order == o.featured_order &&
           is_highlighted == o.is_highlighted &&
           is_hidden == o.is_hidden &&
           consented == o.consented &&
@@ -531,7 +541,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, popularity_rating, is_demographic_survey, is_featured, is_syllabus_contest_study, aborted_at, completed_at, opted_out_at, total_points, total_duration, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_highlighted, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, learning_path, subject, stages, launched_count, return_url].hash
+      [id, popularity_rating, is_demographic_survey, is_featured, is_syllabus_contest_study, aborted_at, completed_at, opted_out_at, total_points, total_duration, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, featured_order, is_highlighted, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, learning_path, subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

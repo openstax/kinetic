@@ -14,8 +14,11 @@ class Api::V1::Admin::StudiesController < Api::V1::Admin::BaseController
   end
 
   def feature
-    Study.where(id: params[:featured_ids]).update_all(is_featured: true)
-    Study.where(id: params[:non_featured_ids]).update_all(is_featured: false)
+    params[:featured_ids].each_with_index do |study_id, index|
+      Study.find(study_id).update(is_featured: true, featured_order: index)
+    end
+
+    Study.where(id: params[:non_featured_ids]).update_all(is_featured: false, featured_order: nil)
     render status: :ok, json: { success: true }
   end
 

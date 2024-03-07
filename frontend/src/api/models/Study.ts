@@ -93,6 +93,12 @@ export interface Study {
      */
     readonly isFeatured?: boolean;
     /**
+     * An integer that describes the sort order for this study
+     * @type {number}
+     * @memberof Study
+     */
+    readonly featuredOrder?: number;
+    /**
      * Is this study highlighted?
      * @type {boolean}
      * @memberof Study
@@ -249,6 +255,7 @@ export function StudyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Stu
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
         'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
+        'featuredOrder': !exists(json, 'featured_order') ? undefined : json['featured_order'],
         'isHighlighted': !exists(json, 'is_highlighted') ? undefined : json['is_highlighted'],
         'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
         'consented': !exists(json, 'consented') ? undefined : json['consented'],

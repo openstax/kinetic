@@ -689,6 +689,7 @@ CREATE TABLE public.studies (
     launched_studies_count integer,
     learning_path_id bigint,
     is_featured boolean DEFAULT false,
+    featured_order integer,
     is_highlighted boolean DEFAULT false
 );
 

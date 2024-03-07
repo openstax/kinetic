@@ -42,6 +42,9 @@ module Api::V1::Bindings
     # Is this study featured?
     attr_accessor :is_featured
 
+    # An integer that describes the sort order for this study
+    attr_accessor :featured_order
+
     # Is this study highlighted?
     attr_accessor :is_highlighted
 
@@ -129,6 +132,7 @@ module Api::V1::Bindings
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
         :'is_featured' => :'is_featured',
+        :'featured_order' => :'featured_order',
         :'is_highlighted' => :'is_highlighted',
         :'is_hidden' => :'is_hidden',
         :'consented' => :'consented',
@@ -167,6 +171,7 @@ module Api::V1::Bindings
         :'image_id' => :'String',
         :'benefits' => :'String',
         :'is_featured' => :'Boolean',
+        :'featured_order' => :'Integer',
         :'is_highlighted' => :'Boolean',
         :'is_hidden' => :'Boolean',
         :'consented' => :'Boolean',
@@ -254,6 +259,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'is_featured')
         self.is_featured = attributes[:'is_featured']
+      end
+
+      if attributes.key?(:'featured_order')
+        self.featured_order = attributes[:'featured_order']
       end
 
       if attributes.key?(:'is_highlighted')
@@ -425,6 +434,7 @@ module Api::V1::Bindings
           image_id == o.image_id &&
           benefits == o.benefits &&
           is_featured == o.is_featured &&
+          featured_order == o.featured_order &&
           is_highlighted == o.is_highlighted &&
           is_hidden == o.is_hidden &&
           consented == o.consented &&
@@ -454,7 +464,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_featured, is_highlighted, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, learning_path, subject, stages, launched_count, return_url].hash
+      [id, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_featured, featured_order, is_highlighted, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, learning_path, subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

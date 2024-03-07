@@ -86,7 +86,7 @@ RSpec.describe 'Studies', api: :v1 do
 
     it 'marks studies as featured' do
       api_post "#{path}/feature", params: {
-        featured_ids: [study1.id, study2.id],
+        featured_ids: [study2.id, study1.id],
         non_featured_ids: [study3.id]
       }
       [study1, study2, study3].each(&:reload)

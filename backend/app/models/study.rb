@@ -46,6 +46,8 @@ class Study < ApplicationRecord
 
   scope :multi_stage, -> { joins(:stages).group('studies.id').having('count(study_id) > 1') }
 
+  scope :featured_order, -> { order('featured_order') }
+
   scope :available_to_participants, -> {
     joins(:stages)
       .where(stages: { status: 'active' })

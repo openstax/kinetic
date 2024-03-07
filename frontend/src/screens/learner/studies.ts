@@ -11,7 +11,7 @@ export const useFetchParticipantStudies = () => {
     const api = useApi()
     return useQuery('fetchParticipantStudies', async () => {
         const res = await api.getParticipantStudies();
-        return orderBy((res.data || []), ['isFeatured', 'completedAt'], ['desc', 'desc'])
+        return orderBy((res.data || []), ['featuredOrder', 'isFeatured', 'completedAt'], ['asc', 'desc', 'desc'])
     })
 }
 

@@ -41,6 +41,11 @@ class Api::V1::BaseStudiesOpenApi
         key :description, 'Is this study featured?'
         key :readOnly, true
       end
+      property :featured_order do
+        key :type, :integer
+        key :description, 'An integer that describes the sort order for this study'
+        key :readOnly, true
+      end
       property :is_highlighted do
         key :type, :boolean
         key :description, 'Is this study highlighted?'

@@ -6,6 +6,7 @@ import { LearningPath } from '@api';
 import * as yup from 'yup';
 import { useForm, yupResolver } from '@mantine/form';
 import { useUpdateFeaturedStudies } from '@models';
+import { sortBy } from 'lodash-es';
 
 export const ManageLearningPaths = () => {
     const { data: learningPaths, isLoading } = useGetLearningPaths()
@@ -43,27 +44,25 @@ const EditFeaturedStudies: FC<{learningPath: LearningPath}> = ({ learningPath })
 
     const [featuredStudies, setFeaturedStudies] = useState<string[]>([]);
 
-    useEffect(() => {
-        setFeaturedStudies(
-            learningPath.studies?.reduce<string[]>((filtered, study) => {
-                if (study.isFeatured && study.titleForParticipants) filtered.push(study.titleForParticipants)
-                return filtered
-            }, []) || []
-        )
-    }, [learningPath]);
-
-    const studyTitles = learningPath.studies?.reduce<string[]>((filtered, study) => {
+    const studyTitles = sortBy(learningPath.studies, 'featuredOrder').reduce<string[]>((filtered, study) => {
         if (study.titleForParticipants) filtered.push(study.titleForParticipants)
         return filtered
-    }, []) || []
+    }, [])
 
-    if (!learningPath.studies) return <Title order={4}>Learning path has no studies</Title>
+    useEffect(() => {
+        if (!learningPath || !learningPath.studies) return setFeaturedStudies([])
+        const featured = sortBy(learningPath.studies, 'featuredOrder').reduce<string[]>((filtered, study) => {
+            if (study.isFeatured && study.titleForParticipants) filtered.push(study.titleForParticipants)
+            return filtered
+        }, [])
+        setFeaturedStudies(featured)
+    }, [learningPath]);
 
     const onUpdate = () => {
-        const featuredIds = learningPath.studies?.reduce<number[]>((prev, study) => {
-            if (study.titleForParticipants && featuredStudies.includes(study.titleForParticipants)) prev.push(study.id)
-            return prev
-        }, [])
+        const featuredIds = featuredStudies.map(featuredStudy => {
+            const study = learningPath.studies?.find(study => study.titleForParticipants == featuredStudy)
+            return study?.id!
+        })
 
         const nonFeaturedIds = learningPath.studies?.reduce<number[]>((prev, study) => {
             if (study.titleForParticipants && !featuredStudies.includes(study.titleForParticipants)) prev.push(study.id)
@@ -76,6 +75,8 @@ const EditFeaturedStudies: FC<{learningPath: LearningPath}> = ({ learningPath })
         })
     }
 
+    if (!learningPath.studies) return <Title order={4}>Learning path has no studies</Title>
+
     return (
         <Stack>
             <MultiSelect
@@ -84,6 +85,7 @@ const EditFeaturedStudies: FC<{learningPath: LearningPath}> = ({ learningPath })
                 placeholder="Select studies to feature"
                 value={featuredStudies}
                 onChange={setFeaturedStudies}
+                nothingFoundMessage='No studies found'
                 data={[...new Set(studyTitles)]}
             />
             <Group justify="flex-end" mt="md">
