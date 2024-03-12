@@ -23,6 +23,11 @@ class Api::V1::Researcher::ResponsesController < Api::V1::BaseController
       studies.analysis_infos.map { |info| url_for(info) }
     end
 
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
+    response.headers['Access-Control-Allow-Methods'] = 'GET'
+    response.headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Authorization, Token, Auth-Token, Email, X-User-Token, X-User-Email'
+    response.headers['Access-Control-Max-Age'] = '86400'
     render status: status, json: { info_urls: urls }
   end
 
