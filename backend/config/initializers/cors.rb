@@ -35,5 +35,10 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
       credentials: true,
       methods: [:get, :options, :head, :put, :delete, :post]
     }
+    resource '/files/*', {
+      headers: :any,
+      credentials: true,
+      methods: [:get, :options, :head, :put, :delete, :post]
+    }
   end
 end
