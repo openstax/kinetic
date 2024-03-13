@@ -6,13 +6,14 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/* && \
     gem install bundler --no-document && \
     bundle config set no-cache 'true' && \
-    bundle config set silence_root_warning 'true'
+    bundle config set silence_root_warning 'true' && \
+    bundle config set --local deployment 'true'
 
 WORKDIR /code/backend
 
 COPY backend/Gemfile Gemfile
 COPY backend/Gemfile.lock Gemfile.lock
-RUN bundle install --deployment
+RUN bundle install
 
 FROM node:20-slim as node
 

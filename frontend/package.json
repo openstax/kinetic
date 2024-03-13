@@ -9,7 +9,6 @@
     "build": "bin/env vite build",
     "testserver": "bin/env vite --strictPort",
     "serve": "bin/env vite preview",
-    "test:ci": "bin/test-ci",
     "test": "bin/env playwright test",
     "test:watch": "chokidar 'specs/*.ts' --initial bin/env -c 'yarn run playwright test {path}'",
     "test:debug": "PWDEBUG=1 yarn run test --workers=1",

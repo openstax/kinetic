@@ -8,7 +8,7 @@ const config: PlaywrightTestConfig = {
         screenshot: 'only-on-failure',
         trace: 'retain-on-failure',
     },
-    workers: process.env.CI ? 1 : undefined,
+    workers: process.env.CI ? 4 : undefined,
 }
 
 export default config;

@@ -56,10 +56,9 @@ RSpec.describe 'Studies', api: :v1 do
     context 'when signed in as a researcher' do
       before do
         stub_current_user(researcher1)
-        stub_qualtrics_clone_survey!
       end
 
-      let!(:study_with_stages) { create(:study, researchers: researcher1) }
+      let!(:study_with_stages) { create(:study, researchers: researcher1, num_stages: 2) }
 
       it 'successfully creates a new study' do
         api_post 'researcher/studies', params: { study: valid_new_study_attributes }
@@ -85,23 +84,36 @@ RSpec.describe 'Studies', api: :v1 do
       it 'submits the study for review' do
         api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=submit"
         expect(response).to have_http_status(:success)
-        expect(response_hash).to match(a_hash_including(
-                                         stages: a_collection_containing_exactly(
-                                           a_hash_including({ status: 'waiting_period' })
-                                         )
+        expect(response_hash).to match(
+          a_hash_including(
+            stages: a_collection_containing_exactly(
+              a_hash_including({ status: 'waiting_period' }),
+              a_hash_including({ status: 'waiting_period' })
+            )
         ))
       end
 
       it 'launches the study and the study status should be active' do
         api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=launch",
-                 params: { study: { opens_at: 1.day.ago } }
+                 params: { study: {
+                   opens_at: 1.day.ago,
+                   stages: [
+                     {},
+                     { available_after_days: 5 }
+                   ]
+                 } }
 
         expect(response).to have_http_status(:success)
         expect(response_hash).to match(
           a_hash_including(
             stages: a_collection_containing_exactly(
               a_hash_including({
-                status: 'active'
+                status: 'active',
+                available_after_days: 1
+              }),
+              a_hash_including({
+                status: 'active',
+                available_after_days: 5
               })
             )
           )
@@ -116,24 +128,24 @@ RSpec.describe 'Studies', api: :v1 do
         expect(response_hash).to match(
           a_hash_including(
             stages: a_collection_containing_exactly(
-              a_hash_including({
-                status: 'scheduled'
-              })
+              a_hash_including({ status: 'scheduled' }),
+              a_hash_including({ status: 'scheduled' })
             )
           )
         )
       end
 
-      it 'ends and reopens study' do
+      it 'launches, ends and reopens study' do
+        # Can only end one session at a time
+        api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=end"
         api_post "researcher/studies/#{study_with_stages.id}/update_status?status_action=end"
 
         expect(response).to have_http_status(:success)
         expect(response_hash).to match(
           a_hash_including(
             stages: a_collection_containing_exactly(
-              a_hash_including({
-                status: 'completed'
-              })
+              a_hash_including({ status: 'completed' }),
+              a_hash_including({ status: 'completed' })
             )
           )
         )
@@ -147,9 +159,8 @@ RSpec.describe 'Studies', api: :v1 do
         expect(response_hash).to match(
           a_hash_including(
             stages: a_collection_containing_exactly(
-              a_hash_including({
-                status: 'active'
-              })
+              a_hash_including({ status: 'active' }),
+              a_hash_including({ status: 'active' })
             )
           )
         )
@@ -303,11 +314,14 @@ RSpec.describe 'Studies', api: :v1 do
         researcher1.update_attribute(:role, 'member')
         researcher2.update_attribute(:role, 'pi')
         researcher3.update_attribute(:role, 'lead')
-        api_put "researcher/studies/#{study1.id}", params: { study: { researchers: [
-          researcher1,
-          researcher2,
-          researcher3
-        ] } }
+        api_put "researcher/studies/#{study1.id}", params: { study: {
+          researchers: [
+            researcher1,
+            researcher2,
+            researcher3
+          ],
+          stages: []
+        } }
 
         expect(response).to have_http_status(:success)
         expect(response_hash).to match a_hash_including(

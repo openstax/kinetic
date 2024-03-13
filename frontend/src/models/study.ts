@@ -115,6 +115,13 @@ export const useFetchPublicStudies = () => {
     })
 }
 
+export const useFetchParticipantStudy = (id: number) => {
+    const api = useApi()
+    return useQuery('getParticipantStudy', async () => {
+        return await api.getParticipantStudy({ id });
+    })
+}
+
 export const useFetchStudies = () => {
     const api = useApi()
     return useQuery('fetchStudies', async () => {

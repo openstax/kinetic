@@ -14,6 +14,10 @@ class User
     ResearchId.for_user(self)
   end
 
+  def available_launched_studies
+    LaunchedStudy.joins(:study).merge(Study.available_to_participants).where(user_id: id)
+  end
+
   def launched_studies
     LaunchedStudy.joins(:study).where(study: { is_hidden: false }, user_id: id)
   end

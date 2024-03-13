@@ -46,12 +46,12 @@ class Study < ApplicationRecord
   scope :available_to_participants, -> {
     joins(:stages)
       .where(stages: { status: 'active' })
-      .where
-      .not(opens_at: nil)
+      .where.not(opens_at: nil)
       .where(is_hidden: false)
       .where(arel[:opens_at].lteq(Time.now))
       .where(arel[:closes_at].eq(nil).or(
                arel[:closes_at].gteq(Time.now)))
+      .distinct
   }
 
   scope :public_to_researchers, -> {
@@ -73,7 +73,11 @@ class Study < ApplicationRecord
   end
 
   def available?
-    !is_hidden? && opens_at && Time.now > opens_at && (closes_at.nil? || Time.now <= closes_at)
+    !is_hidden? &&
+      opens_at &&
+      Time.now > opens_at &&
+      (closes_at.nil? || Time.now <= closes_at) &&
+      stages.any? { |stage| stage.status == 'active' }
   end
 
   def can_delete?
@@ -85,10 +89,12 @@ class Study < ApplicationRecord
   end
 
   def update_stages(updated_stages)
-    return if updated_stages.nil? || launched_stages.any?
+    return if updated_stages.nil?
 
     # remove any extra stages that were removed
-    stages.delete(stages.last) while stages.count > updated_stages.count
+    unless launched_stages.any?
+      (stages.delete(stages.last) while stages.count > updated_stages.count)
+    end
 
     updated_stages.each_with_index do |stage, i|
       s = stages[i]
@@ -142,8 +148,20 @@ class Study < ApplicationRecord
   end
 
   def submit
-    (survey_id, secret_key) = CloneSurvey.new.clone(title_for_researchers)
-    stages.each do |stage|
+    is_multistage = stages.many?
+    stages.each_with_index do |stage, indx|
+      if stage.config['survey_id']
+        stage.update!({ status: 'waiting_period' })
+        next
+      end
+
+      title = if is_multistage
+                "#{title_for_researchers} - #{indx + 1}"
+              else
+                title_for_researchers
+              end
+
+      (survey_id, secret_key) = CloneSurvey.new.clone("Kinetic - #{title}")
       stage.update!(
         {
           status: 'waiting_period',

@@ -12,7 +12,6 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 import { chunk } from 'lodash-es'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Pagination } from 'swiper';
-import { SyllabusContest } from './learner/syllabus-contest';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
 
@@ -181,7 +180,7 @@ const LearnerDashboard = () => {
         filter,
         setFilter,
         studiesByTopic,
-        syllabusContestStudies,
+        // syllabusContestStudies,
         demographicSurvey,
     } = useLearnerStudies()
 
@@ -192,14 +191,15 @@ const LearnerDashboard = () => {
     return (
         <div className="studies learner">
             <Routes>
-                <Route path={'details/:studyId'} element={<StudyDetails studies={allStudies} />} />
+                <Route path={'details/:studyId'} element={<StudyDetails />} />
             </Routes>
             <TopNavBar />
 
             <LearnerWelcomeModal demographicSurvey={demographicSurvey} />
             <RewardsProgressBar studies={allStudies} />
 
-            <SyllabusContest studies={syllabusContestStudies} />
+            {/* Temporarily disable syllabus contest due to legal, keep it just in case we re-enable in the future */}
+            {/*<SyllabusContest studies={syllabusContestStudies} />*/}
 
             <HighlightedStudies studies={highlightedStudies} title="Highlighted Studies on Kinetic" className="highlighted" onSelect={onStudySelect}/>
 

@@ -153,7 +153,7 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
     const { isValid, isDirty } = useFormState()
     const api = useApi()
     const [show, setShow] = useState(false)
-    const { getValues, reset } = useFormContext()
+    const { getValues, reset } = useFormContext<Study>()
 
     if (isReadyForLaunch(study)) {
         return (
@@ -166,7 +166,7 @@ const FormActions: FC<{study: Study}> = ({ study }) => {
                         onClick={() => {
                             api.updateStudyStatus({
                                 id: study.id,
-                                study: getValues() as Study,
+                                studyUpdateStatus: { study: getValues() },
                                 statusAction: 'launch',
                             }).then(() => {
                                 reset(undefined, { keepValues: true, keepDirty: false });

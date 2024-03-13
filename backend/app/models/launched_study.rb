@@ -13,10 +13,6 @@ class LaunchedStudy < ApplicationRecord
   delegate :completed_count, to: :study
   delegate :is_hidden?, to: :study
 
-  def available_stages
-    stage
-  end
-
   def completed?
     completed_at.present?
   end

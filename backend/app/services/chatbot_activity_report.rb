@@ -31,11 +31,12 @@ class ChatbotActivityReport
         expression_attribute_values: {
           ':startdate' => @start_date.iso8601,
           ':enddate' => (@end_date + 1.day).iso8601,
-          ':type' => 'Message',
+          ':msg' => 'Message',
           ':chat' => 'Chat',
-          ':user' => 'User'
+          ':user' => 'User',
+          ':grade' => 'ChatGrade'
         },
-        filter_expression: '(#TY = :type AND #CR > :startdate AND #CR < :enddate) OR (#TY = :chat) OR (#TY = :user)'
+        filter_expression: '((#TY = :msg or #TY = :grade) AND #CR > :startdate AND #CR < :enddate) OR (#TY = :chat) OR (#TY = :user)'
       )
       resp.items.each(&block)
       last_key = resp.last_evaluated_key
@@ -55,21 +56,22 @@ class ChatbotActivityReport
     @tables
   end
 
-  def chat_and_user_for_msg(msg)
+  def related_records_msg(msg)
     chat = (tables['Chat'][msg['chatId']] || {}).clone
     user = (tables['User'][chat['userId']] || {}).clone
-    [chat, user]
+    grade = (tables['ChatGrade'][chat['gradeId'] || {}]).clone
+    [chat, user, grade]
   end
 
   def each_message(&block)
     tables['Message'].values.sort_by { |msg| msg['created'] }.each do |msg|
-      chat, user = chat_and_user_for_msg(msg)
-      block.call(msg, chat, user)
+      chat, user, grade = related_records_msg(msg)
+      block.call(msg, chat, user, grade)
     end
   end
 
   def columns_for_rows
-    columns = Set.new(['research_id'])
+    columns = Set.new(%w[research_id grade grade_reasons])
     each_message do |msg, chat, user|
       user.each { |key, _| columns.add("user_#{key}") }
       chat.each { |key, _| columns.add("chat_#{key}") }
@@ -80,13 +82,21 @@ class ChatbotActivityReport
     columns.subtract(HIDDEN_COLUMNS)
   end
 
+  def row_for_column(user, grade)
+    [
+      (user['id'].present? ? ResearchId.for_user_id(user['id']).id : ''),
+      grade&.[]('grade') || '',
+      grade&.[]('reasons')&.join('\n') || ''
+    ]
+  end
+
   def as_csv_string
     CSV.generate do |csv|
       columns = columns_for_rows
       csv << columns.map(&:titleize)
-      each_message do |msg, chat, user|
+      each_message do |msg, chat, user, grade|
 
-        row = [(user['id'].present? ? ResearchId.for_user_id(user['id']).id : '')]
+        row = row_for_column(user, grade)
 
         columns.each do |column|
           prefix, key = column.split('_')
