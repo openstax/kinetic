@@ -16,7 +16,7 @@ module RescueFromUnlessLocal
     # If send_to_sentry is true and the exception is not already going to be reraised,
     # the exception will be captured off to Sentry.
     def rescue_from_unless_local(*klasses, with: nil, send_to_sentry: false, &block)
-      rescue_from(*klasses, with: with) do |exception|
+      rescue_from(*klasses, with:) do |exception|
         # This new_block assignment borrowed from pieces of ActiveSupport::Rescuable
         # The Symbol and Proc values of `with` have not been tested :-o
         new_block =

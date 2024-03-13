@@ -133,7 +133,7 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
 
   routes.default_url_options.merge!(
     {
-      host: host,
+      host:,
       protocol: 'https'
     }
   )

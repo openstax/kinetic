@@ -16,11 +16,11 @@ RSpec.describe QualtricsLauncher do
     'ql5aeihGrs3oG5tR0BDuaxSGKRVPmfd5zUK08QLn9Ld5gddl7GVTN%2FtZS3j5%2BTZusMRi0EgMi67ocXYrVJs45lbbHEr2w3tr%2BjDv1qZYztIcfWOxH1Ik3ndIudGOkG%2FcQuF88D%2BlIa%2Br1Q%2BC%2FDFi0tH83whoPh%2B52aRbBYolcNk%3D'
   end
 
-  let(:launch_pad) { LaunchPad.new(study_id: study1.id, user_id: user_id) }
+  let(:launch_pad) { LaunchPad.new(study_id: study1.id, user_id:) }
 
   let(:launcher) do
     described_class.new(
-      secret_key: secret_key, survey_id: survey_id, user_id: user_id, study_id: study1.id, stage_ordinal: stage1a.order
+      secret_key:, survey_id:, user_id:, study_id: study1.id, stage_ordinal: stage1a.order
     )
   end
 
@@ -58,7 +58,7 @@ RSpec.describe QualtricsLauncher do
   def decrypt_params(url:, key:)
     url = URI(url)
     hash = URI.decode_www_form(url.query).to_h
-    query_params = URI.decode_www_form(decrypt(token_value: hash['ssotoken'], key: key)).to_h
+    query_params = URI.decode_www_form(decrypt(token_value: hash['ssotoken'], key:)).to_h
     query_params.slice('research_id', 'study_id', 'return_to_url', 'is_testing', 'opted_out', 'consented', 'stage_ordinal')
   end
 

@@ -31,6 +31,7 @@ RUN gem install bundler --no-document --version $bundler_version && \
     bundle config set path /gems && \
     bundle config set no-cache 'true' && \
     bundle config set silence_root_warning 'true' && \
+    bundle update && \
     bundle install && \
     bundle binstubs --all && \
     echo 'export PATH=/code/backend/bin:$PATH' >> ~/.bashrc

@@ -14,7 +14,7 @@ RSpec.describe QualtricsTestData do
   before do
     stub_qualtrics_survey_definition!
     analysis.studies << study
-    study.stages.first.update!(config: { type: 'qualtrics', survey_id: survey_id })
+    study.stages.first.update!(config: { type: 'qualtrics', survey_id: })
   end
 
   it 'generates a CSV' do

@@ -17,7 +17,7 @@ namespace :heroku do
 
     # Configure Custom Domain in Heroku
     heroku_client = PlatformAPI.connect_oauth ENV.fetch('HEROKU_API_TOKEN', nil)
-    heroku_client.domain.create(heroku_app_name, hostname: hostname)
+    heroku_client.domain.create(heroku_app_name, hostname:)
     heroku_domain = heroku_client.domain.info(heroku_app_name, hostname)['cname']
 
     # Create or update (UPSERT) CNAME record in Route53 - credentials are in ENV

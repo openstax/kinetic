@@ -6,6 +6,8 @@ class Researcher < ApplicationRecord
 
   has_many :analysis_researchers
   has_many :analysis, through: :analysis_researchers, inverse_of: :researchers
+
+  attribute :role, :string
   enum role: [:member, :pi, :lead], _default: 'member'
 
   has_one_attached :avatar

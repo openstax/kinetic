@@ -19,7 +19,7 @@ namespace :heroku do
                     end [0]
 
     if heroku_domain.nil?
-      heroku_client.domain.create(heroku_app_name, hostname: hostname)
+      heroku_client.domain.create(heroku_app_name, hostname:)
       heroku_cname = heroku_client.domain.info(heroku_app_name, hostname)['cname']
     else
       heroku_cname = heroku_domain['cname']
