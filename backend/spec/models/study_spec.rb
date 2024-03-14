@@ -118,8 +118,8 @@ RSpec.describe Study, api: :v1 do
       expect(study.status).to eq 'waiting_period'
       study.stages.each do |stage|
         expect(stage.status).to eq 'waiting_period'
-        expect(stage.config['survey_id']).to eq Rails.application.secrets.qualtrics_template_survey_id
-        expect(stage.config['secret_key']).to eq Rails.application.secrets.qualtrics_template_survey_secret_key
+        expect(stage.config['survey_id']).to eq Rails.application.credentials.qualtrics_template_survey_id
+        expect(stage.config['secret_key']).to eq Rails.application.credentials.qualtrics_template_survey_secret_key
       end
     end
 

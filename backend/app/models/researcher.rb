@@ -7,9 +7,7 @@ class Researcher < ApplicationRecord
   has_many :analysis_researchers
   has_many :analysis, through: :analysis_researchers, inverse_of: :researchers
 
-  # https://github.com/rails/rails/pull/49769
   attribute :role, :string, default: 'member'
-  enum role: [:member, :pi, :lead], _default: 'member'
 
   has_one_attached :avatar
 

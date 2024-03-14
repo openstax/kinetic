@@ -12,7 +12,7 @@ module ApiV1Helpers
   end
 
   def set_admin_api_token
-    set_api_token(Rails.application.secrets.admin_api_token)
+    set_api_token(Rails.application.credentials.admin_api_token)
   end
 
   def set_bad_admin_api_token

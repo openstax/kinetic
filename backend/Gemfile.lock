@@ -148,7 +148,7 @@ GEM
     backport (1.2.0)
     base64 (0.2.0)
     benchmark (0.3.0)
-    bigdecimal (3.1.6)
+    bigdecimal (3.1.7)
     bindata (2.5.0)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
@@ -295,7 +295,7 @@ GEM
     mime-types-data (3.2024.0305)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
-    minitest (5.22.2)
+    minitest (5.22.3)
     moneta (1.0.0)
     msgpack (1.7.2)
     multi_json (1.15.0)
@@ -479,14 +479,14 @@ GEM
     rspec-mocks (3.13.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-rails (5.0.3)
-      actionpack (>= 5.2)
-      activesupport (>= 5.2)
-      railties (>= 5.2)
-      rspec-core (~> 3.10)
-      rspec-expectations (~> 3.10)
-      rspec-mocks (~> 3.10)
-      rspec-support (~> 3.10)
+    rspec-rails (6.1.1)
+      actionpack (>= 6.1)
+      activesupport (>= 6.1)
+      railties (>= 6.1)
+      rspec-core (~> 3.12)
+      rspec-expectations (~> 3.12)
+      rspec-mocks (~> 3.12)
+      rspec-support (~> 3.12)
     rspec-support (3.13.1)
     rubocop (1.62.1)
       json (~> 2.3)
@@ -604,7 +604,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   httpx (~> 0.21)
-  image_processing (~> 1.2)
+  image_processing
   listen (~> 3.3)
   lograge
   mailgun-ruby (~> 1.2.5)
@@ -618,7 +618,7 @@ DEPENDENCIES
   qualtrics_api!
   rack-cors
   rails (~> 7.1)
-  rspec-rails (~> 5.0.0)
+  rspec-rails
   rubocop
   rubocop-rails
   rubocop-rspec

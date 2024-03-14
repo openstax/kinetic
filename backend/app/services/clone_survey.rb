@@ -4,7 +4,7 @@ class CloneSurvey
 
   attr_reader :api
 
-  def initialize(survey_id=Rails.application.secrets.qualtrics_template_survey_id)
+  def initialize(survey_id = Rails.application.credentials.qualtrics_template_survey_id)
     @survey_id = survey_id
     @api = QualtricsApi.new
   end
@@ -13,7 +13,7 @@ class CloneSurvey
     unless Rails.env.production?
       return [
         @survey_id,
-        Rails.application.secrets.qualtrics_template_survey_secret_key
+        Rails.application.credentials.qualtrics_template_survey_secret_key
       ]
     end
 
@@ -26,7 +26,7 @@ class CloneSurvey
     ))
     @api.share_survey(
       result['SurveyID'],
-      Rails.application.secrets.qualtrics_group_library,
+      Rails.application.credentials.qualtrics_group_library,
       {
         # TODO: viewSurvey is ignored, have contacted support about it
         viewSurveyResults: true, viewSurveys: true,

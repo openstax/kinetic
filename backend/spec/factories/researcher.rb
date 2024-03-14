@@ -11,6 +11,7 @@ FactoryBot.define do
     research_interest1 { Faker::Hobby.activity }
     research_interest2 { Faker::Hobby.activity }
     research_interest3 { Faker::Hobby.activity }
+    add_attribute(:role) { 'member' }
     trait :with_avatar do
       after :build do |researcher|
         file_name = 'tela.jpg'

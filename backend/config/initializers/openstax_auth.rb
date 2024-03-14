@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-secrets = Rails.application.secrets.accounts.try(:[], :sso)
+secrets = Rails.application.credentials.accounts.try(:[], :sso)
 
 unless secrets
   warn 'No auth secrets provided; not configuring OpenStax::Auth!'

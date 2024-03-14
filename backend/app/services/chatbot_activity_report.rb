@@ -21,7 +21,7 @@ class ChatbotActivityReport
     last_key = nil
     loop do
       resp = client.scan(
-        table_name: Rails.application.secrets.chatbot[:table_name],
+        table_name: Rails.application.credentials.chatbot[:table_name],
         exclusive_start_key: last_key,
         expression_attribute_names: {
           '#CR' => 'created',

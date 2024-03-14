@@ -39,7 +39,7 @@ class Api::V1::BaseController < ApplicationController
 
   def has_enclaves_token?
     authenticate_with_http_token do |token, _o|
-      Rails.application.secrets.enclave_api_key == token
+      Rails.application.credentials.enclave_api_key == token
     end
   end
 

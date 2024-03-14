@@ -14,8 +14,8 @@ RSpec.describe 'Stages', api: :v1 do
     {
       config: {
         type: 'qualtrics',
-        survey_id: Rails.application.secrets.qualtrics_template_survey_id,
-        secret_key: Rails.application.secrets.qualtrics_template_survey_secret_key
+        survey_id: Rails.application.credentials.qualtrics_template_survey_id,
+        secret_key: Rails.application.credentials.qualtrics_template_survey_secret_key
       }
     }
   end
