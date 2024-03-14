@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.2.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem 'rails', '~> 7.1.3'
+gem 'rails', '~> 7.1'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.5', '>= 1.5.6'
 # Use Puma as the app server
@@ -14,9 +14,6 @@ gem 'puma', '~> 6.4', '>= 6.4.2'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '~> 1.18', '>= 1.18.3'
-
-# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-# gem 'rack-cors'
 
 # Use Heroku for review apps
 gem 'platform-api'
@@ -26,9 +23,6 @@ gem 'versionist'
 
 # More concise, one-liner logs (better for production)
 gem 'lograge'
-
-# Gives 200 OK from /ping
-gem 'openstax_healthcheck'
 
 gem 'dotenv-rails'
 

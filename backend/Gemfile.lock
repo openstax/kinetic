@@ -365,8 +365,6 @@ GEM
       roar
       roar-rails (>= 1)
       uber
-    openstax_healthcheck (1.0.1)
-      rails (>= 3.0)
     openstax_transaction_retry (1.2.0)
       activerecord (>= 5.1)
       transaction_isolation (>= 1.0.5)
@@ -613,14 +611,13 @@ DEPENDENCIES
   openstax_accounts (= 9.9.0)
   openstax_api (= 9.6.0)
   openstax_auth!
-  openstax_healthcheck
   openstax_openapi!
   pg (~> 1.5, >= 1.5.6)
   platform-api
   puma (~> 6.4, >= 6.4.2)
   qualtrics_api!
   rack-cors
-  rails (~> 7.1.3)
+  rails (~> 7.1)
   rspec-rails (~> 5.0.0)
   rubocop
   rubocop-rails
