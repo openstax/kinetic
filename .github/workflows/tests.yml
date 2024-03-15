@@ -7,7 +7,7 @@ on:
       - main
 
 env:
-  RAILS_MASTER_KEY: ${{ vars.RAILS_MASTER_KEY }}
+  RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
 jobs:
   playwright:
