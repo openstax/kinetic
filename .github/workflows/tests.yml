@@ -6,11 +6,11 @@ on:
     branches:
       - main
 
+env:
+  RAILS_MASTER_KEY: ${{ vars.RAILS_MASTER_KEY }}
+
 jobs:
   playwright:
-    env:
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-
     timeout-minutes: 15
     runs-on: ubuntu-22.04
     steps:
@@ -54,9 +54,6 @@ jobs:
         run: docker-compose down
 
   rspec:
-    env:
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-
     timeout-minutes: 5
     runs-on: ubuntu-22.04
     steps:
