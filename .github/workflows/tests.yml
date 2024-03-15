@@ -20,13 +20,13 @@ jobs:
           working-directory: frontend
       - name: Build and run docker
         run: |
-          docker compose run -e RAILS_MASTER_KEY=$RAILS_MASTER_KEY api bundle exec rake db:migrate
-          docker compose up -d -e RAILS_MASTER_KEY=$RAILS_MASTER_KEY
+          docker compose run api bundle exec rake db:migrate
+          docker compose up -d
       - name: Wait for api to boot
         working-directory: frontend
         run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
       - name: Generate bindings
-        run: docker compose exec -e RAILS_MASTER_KEY=$RAILS_MASTER_KEY api bundle exec rake openstax_openapi:generate_model_bindings[1]
+        run: docker compose exec api bundle exec rake openstax_openapi:generate_model_bindings[1]
       - name: Check for changes in bindings
         uses: tj-actions/verify-changed-files@v17
         id: verify-changed-files
