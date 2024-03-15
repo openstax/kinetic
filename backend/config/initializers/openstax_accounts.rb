@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-secrets = Rails.application.credentials.accounts.try(:[], :oauth)
+secrets = Rails.application.credentials.dig(:accounts, :oauth, :secret)
 
 unless secrets
   warn 'No oauth client_id/secret provided; not configuring OpenStax::Accounts!'
