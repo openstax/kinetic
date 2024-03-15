@@ -71,7 +71,7 @@ jobs:
       - name: Build docker image and run specs within it
         run: |
           docker-compose build api postgres postgres_test
-          docker-compose run -T CI=true api /bin/bash -c "bundle exec rspec"
+          docker-compose run -T api /bin/bash -c "bundle exec rspec"
       - name: Stop containers
         if: always()
         run: docker-compose down
