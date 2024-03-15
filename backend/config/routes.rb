@@ -102,7 +102,7 @@ Rails.application.routes.draw do
     get 'study/land/:study_id', as: :returning, via: :get, to: 'static#catchall'
   end
 
-  get "ping" => "rails/health#show", as: :rails_health_check
+  get 'ping' => 'rails/health#show', as: :rails_health_check
   match '/', via: :get, to: 'static#catchall'
   match '*path', via: :get, to: 'static#catchall', constraints: lambda { |req|
     req.path.exclude? 'files'

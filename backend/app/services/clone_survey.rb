@@ -4,7 +4,7 @@ class CloneSurvey
 
   attr_reader :api
 
-  def initialize(survey_id = Rails.application.credentials.qualtrics_template_survey_id)
+  def initialize(survey_id=Rails.application.credentials.qualtrics_template_survey_id)
     @survey_id = survey_id
     @api = QualtricsApi.new
   end

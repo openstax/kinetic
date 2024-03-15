@@ -126,10 +126,10 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
   # but this code runs before secrets is fully initialized
 
   host = if ENV['HEROKU_PR_NUMBER']
-    "pr-#{ENV.fetch('HEROKU_PR_NUMBER', nil)}.kinetic.sandbox.openstax.org"
-  else
-    ENV.fetch('HOST', 'staging.kinetic.openstax.org')
-  end
+           "pr-#{ENV.fetch('HEROKU_PR_NUMBER', nil)}.kinetic.sandbox.openstax.org"
+         else
+           ENV.fetch('HOST', 'staging.kinetic.openstax.org')
+         end
 
   routes.default_url_options.merge!(
     {

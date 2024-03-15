@@ -49,6 +49,14 @@ Then you can run `rake db:migrate`, `rspec`, whatever.  Or you can run those dir
 $> docker compose exec api rake db:migrate
 ```
 
+#### Updating rails credentials
+```bash
+EDITOR=vim bin/rails credentials:edit --environment development
+EDITOR=vim bin/rails credentials:edit --environment test
+EDITOR=vim bin/rails credentials:edit --environment staging
+EDITOR=vim bin/rails credentials:edit --environment production
+```
+
 ### Deploying Kinetic
 
 Kinetic is currently hosted on Heroku using the Docker integration.  To deploy the application you need to add a git remote per the [heroku  instructions](https://devcenter.heroku.com/articles/git)

@@ -38,7 +38,7 @@ module Kinetic
 
     config.host_authorization = { exclude: ->(request) { request.path =~ /ping/ } }
 
-    # TODO Migrate to vips at some point, its the new rails 7 default
+    # TODO: Migrate to vips at some point, its the new rails 7 default
     #  https://github.com/heroku/heroku-buildpack-ruby/issues/1200
     config.active_storage.variant_processor = :mini_magick
 
