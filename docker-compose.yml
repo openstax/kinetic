@@ -3,7 +3,7 @@ services:
   api:
     build:
       context: ./backend
-      dockerfile: docker/Dockerfile${API_DOCKERFILE_EXT:-}
+      dockerfile: docker/Dockerfile
       args:
         bundler_version: 2.4.19
     networks:
@@ -30,7 +30,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: docker/Dockerfile${API_DOCKERFILE_EXT:-}
+      dockerfile: docker/Dockerfile
     networks:
       - kinetic
     volumes:

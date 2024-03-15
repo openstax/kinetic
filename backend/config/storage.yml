@@ -6,6 +6,7 @@ test:
   service: Disk
   root: <%= Rails.root.join("tmp/storage") %>
 
+# TODO: Fetch from credentials?
 amazon:
   service: S3
   bucket: <%= ENV.fetch('AWS_APP_STORAGE_BUCKET', 'kinetic-app-storage') %>
