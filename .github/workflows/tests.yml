@@ -1,8 +1,5 @@
 name: Tests
 
-env:
-  RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-
 on:
   pull_request:
   push:
@@ -11,6 +8,9 @@ on:
 
 jobs:
   playwright:
+    env:
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+
     timeout-minutes: 15
     runs-on: ubuntu-22.04
     steps:
@@ -54,6 +54,9 @@ jobs:
         run: docker-compose down
 
   rspec:
+    env:
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+
     timeout-minutes: 5
     runs-on: ubuntu-22.04
     steps:
@@ -68,7 +71,8 @@ jobs:
       - name: Build docker image and run specs within it
         run: |
           docker-compose build
-          docker-compose run -T -e CI_ENV="$CI_ENV" -e ENABLE_CODECOV=1 -e CI=true api /bin/bash -c "bundle config path vendor/bundle; bundle install; bundle exec rspec"
+          docker-compose up --build api postgres postgres_test
+          docker compose exec api bundle exec rspec
       - name: Stop containers
         if: always()
         run: docker-compose down
