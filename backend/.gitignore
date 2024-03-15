@@ -3,7 +3,6 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
-/config/secrets.yml
 
 # Ignore bundler config.
 /.bundle
@@ -24,5 +23,4 @@
 /config/credentials/development.key
 /config/credentials/test.key
 /config/credentials/production.key
-
 /config/credentials/staging.key
