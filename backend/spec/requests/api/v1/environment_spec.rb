@@ -44,10 +44,9 @@ RSpec.describe 'Environment', api: :v1 do
     end
 
     it 'returns the environment' do
-      allow(Rails.application.credentials.accounts).to receive(:[]).with(:env_name).and_return 'foo'
       get '/api/v1/environment'
       expect(response_hash).to include({
-        accounts_env_name: 'foo',
+        accounts_env_name: 'dev',
         homepage_url: 'http://localhost:4000',
         rewards_schedule: a_kind_of(Array),
         banners_schedule: a_kind_of(Array)
