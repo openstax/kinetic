@@ -26,7 +26,8 @@ jobs:
         working-directory: frontend
         run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
       - name: Generate bindings
-        run: docker compose exec api bundle exec rake openstax_openapi:generate_model_bindings[1]
+        run: docker compose run -T -e RAILS_MASTER_KEY=$RAILS_MASTER_KEY api /bin/bash -c "bundle exec rake openstax_openapi:generate_model_bindings[1]"
+      #        run: docker compose exec api bundle exec rake openstax_openapi:generate_model_bindings[1]
       - name: Check for changes in bindings
         uses: tj-actions/verify-changed-files@v17
         id: verify-changed-files
