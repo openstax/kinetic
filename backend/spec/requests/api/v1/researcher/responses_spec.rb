@@ -34,19 +34,30 @@ RSpec.describe 'Researcher::Responses', api: :v1 do
 
   end
 
-  describe 'GET researcher/responses/<key>/info' do
-    it 'returns empty array when no stages exists' do
-      api_get "researcher/responses/#{analysis.api_key}/info"
-      expect(response).to have_http_status(:ok)
-      expect(response_hash[:info_urls]).to be_empty
-    end
-
-    it 'returns url for each analysis upload' do
+  describe 'GET researcher/responses/<id>/info' do
+    before do
       analysis.studies << response_export.stage.study
       analysis.save!
       analysis.stages.first.analysis_infos.attach(io: File.open(__FILE__), filename: 'spec.rb', content_type: 'text/plain')
-      api_get "researcher/responses/#{analysis.api_key}/info"
-      expect(response_hash[:info_urls].size).to eq 1
+    end
+
+    it 'raises SecurityTransgression' do
+      expect(analysis.stages).not_to be_empty
+      expect {
+        api_get "researcher/responses/#{analysis.id}/info"
+        expect(response).to have_http_status(:ok)
+      }.to raise_error(SecurityTransgression)
+    end
+
+    describe 'with researcher' do
+      before { stub_current_user(analysis.researchers.first) }
+
+      it 'returns file for each stage' do
+        expect(analysis.stages).not_to be_empty
+        api_get "researcher/responses/#{analysis.id}/info"
+        expect(response).to have_http_status(:ok)
+        expect(response_hash[:info_urls].size).to eq 1
+      end
     end
   end
 
