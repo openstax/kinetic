@@ -1,5 +1,8 @@
 name: Tests
 
+env:
+  RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+
 on:
   pull_request:
   push:
