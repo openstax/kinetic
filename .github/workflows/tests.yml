@@ -58,27 +58,17 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      #      - uses: actions/cache@v4
-      #        with:
-      #          path: vendor/bundle
-      #          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-      #          restore-keys: |
-      #            ${{ runner.os }}-gems-
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2.2'
           bundler-cache: true
           working-directory: backend
 
-      - name: Run Rubocop
-        working-directory: backend
-        run: bundle exec rspec
-#      - name: Build docker image and run specs within it
-#        run: |
-#          CI_ENV=`bash <(curl -s https://codecov.io/env)`
-#          docker-compose build
-#          docker-compose run -T -e CI_ENV="$CI_ENV" -e ENABLE_CODECOV=1 -e CI=true api /bin/bash -c "bundle config path vendor/bundle; bundle install; bundle exec rspec"
-#      - name: Stop containers
-#        if: always()
-#        run: docker-compose down
+      - name: Build docker image and run specs within it
+        run: |
+          docker-compose build
+          docker-compose run -T -e CI_ENV="$CI_ENV" -e ENABLE_CODECOV=1 -e CI=true api /bin/bash -c "bundle config path vendor/bundle; bundle install; bundle exec rspec"
+      - name: Stop containers
+        if: always()
+        run: docker-compose down

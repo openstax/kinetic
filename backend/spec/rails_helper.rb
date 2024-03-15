@@ -1,21 +1,5 @@
 # frozen_string_literal: true
 
-# FIXME: disabled codecov until we can figure
-# out how to get it's uploads working
-# if ENV['ENABLE_CODECOV']
-#   require 'simplecov'
-#   SimpleCov.start 'rails' do
-#     add_filter(/^\/app\/bindings\//)
-#     add_filter { |src| src.filename =~ /openapi/ }
-#     add_filter { |src| src.filename =~ /scout/ }
-#   end
-
-#   if ENV['CI'] == 'true'
-#     require 'codecov'
-#     SimpleCov.formatter = SimpleCov::Formatter::Codecov
-#   end
-# end
-
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'

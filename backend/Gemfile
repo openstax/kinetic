@@ -69,8 +69,6 @@ gem 'image_processing'
 
 group :test do
   # Code Climate integration
-  gem 'codecov', require: false
-  gem 'simplecov', require: false
 end
 
 group :development, :test do
