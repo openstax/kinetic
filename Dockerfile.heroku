@@ -1,20 +1,3 @@
-FROM ruby:3.2.2
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    libpq-dev postgresql-client \
-    && rm -rf /var/lib/apt/lists/* && \
-    gem install bundler --no-document && \
-    bundle config set no-cache 'true' && \
-    bundle config set silence_root_warning 'true' && \
-    bundle config set --local deployment 'true'
-
-WORKDIR /code/backend
-
-COPY backend/Gemfile Gemfile
-COPY backend/Gemfile.lock Gemfile.lock
-RUN bundle install
-
 FROM node:20-slim as node
 
 # variables below will be substituted into the JS while building
@@ -36,6 +19,21 @@ COPY frontend ./
 RUN yarn run build
 
 FROM ruby:3.2.2
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libpq-dev postgresql-client \
+    && rm -rf /var/lib/apt/lists/* && \
+    gem install bundler --no-document && \
+    bundle config set no-cache 'true' && \
+    bundle config set silence_root_warning 'true' && \
+    bundle config set --local deployment 'true'
+
+WORKDIR /code/backend
+
+COPY backend/Gemfile Gemfile
+COPY backend/Gemfile.lock Gemfile.lock
+RUN bundle install
 
 ARG SENTRY_DSN
 ARG MG_API_KEY
