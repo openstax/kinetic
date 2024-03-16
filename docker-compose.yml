@@ -20,7 +20,7 @@ services:
       - TEST_DB_NAME=kinetic_test
       - TEST_DB_USER=kinetic
       - TEST_DB_PASS=kinetic
-      - ACCOUNTS_ENV_NAME=dev
+      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
     depends_on:
       - postgres
       - postgres_test
