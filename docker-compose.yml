@@ -42,6 +42,7 @@ services:
       - api
     environment:
       - API_ADDRESS=http://localhost:4006
+      - RAILS_MASTER_KEY=$RAILS_MASTER_KEY
   postgres:
     image: "postgres:13"
     volumes:
