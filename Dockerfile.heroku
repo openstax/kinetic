@@ -35,8 +35,6 @@ COPY frontend ./
 
 RUN yarn run build
 
-FROM ruby as ruby2
-
 ARG SENTRY_DSN
 ARG MG_API_KEY
 ENV RUBY_ENV=production
@@ -45,6 +43,7 @@ ENV SENTRY_DSN=$SENTRY_DSN
 ENV RUBY_SERVE_STATIC_FILES=true
 ENV RAILS_ENV=production
 ENV MG_API_KEY=$MG_API_KEY
+ENV RAILS_MASTER_KEY=$RAILS_MASTER_KEY
 
 WORKDIR /code/backend
 COPY backend ./
