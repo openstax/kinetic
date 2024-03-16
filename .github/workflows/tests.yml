@@ -18,11 +18,13 @@ jobs:
       - uses: bahmutov/npm-install@v1
         with:
           working-directory: frontend
-      - name: Build and run docker
-        run: |
-          docker compose build
-          docker compose up -d
+      - name: Build docker
+        run: docker compose build
           docker compose run -T api /bin/bash -c "bundle exec rake db:migrate"
+      - name: Run docker
+        run: docker compose up -d
+      - name: Run migrations
+        run: docker compose run -T api /bin/bash -c "bin/rails db:migrate"
       - name: Wait for api to boot
         working-directory: frontend
         run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
@@ -52,7 +54,7 @@ jobs:
           path: ./frontend/test-results
       - name: Shutdown docker compose
         if: always()
-        run: docker-compose down
+        run: docker compose down
 
   rspec:
     timeout-minutes: 5
@@ -68,8 +70,8 @@ jobs:
 
       - name: Build docker image and run specs within it
         run: |
-          docker-compose build api postgres postgres_test
-          docker-compose run -T api /bin/bash -c "bundle exec rspec"
+          docker compose build api postgres postgres_test
+          docker compose run -T api /bin/bash -c "bundle exec rspec"
       - name: Stop containers
         if: always()
-        run: docker-compose down
+        run: docker compose down
