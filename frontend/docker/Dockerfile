@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:focal
+FROM node:20-slim
 
 WORKDIR /app
 
