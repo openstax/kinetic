@@ -1,4 +1,4 @@
-FROM ruby:3.2.2 as ruby
+FROM ruby:3.2.2
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -34,6 +34,8 @@ RUN yarn install
 COPY frontend ./
 
 RUN yarn run build
+
+FROM ruby:3.2.2
 
 ARG SENTRY_DSN
 ARG MG_API_KEY
