@@ -19,15 +19,13 @@ jobs:
       - uses: bahmutov/npm-install@v1
         with:
           working-directory: frontend
-      - name: Run Docker
-        run: docker compose up -d
-      #      - name: Build and run docker
-      #        run: |
-      #          docker compose run api /bin/bash -c "bin/rails db:migrate RAILS_ENV=test"
-      #          docker compose up -d
-      - name: Wait for api to boot
-        working-directory: frontend
-        run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
+      - name: Build and run docker
+        run: |
+          docker compose up -d
+          docker compose run api /bin/bash -c "bin/rails db:migrate RAILS_ENV=test"
+      #      - name: Wait for api to boot
+      #        working-directory: frontend
+      #        run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
       - name: Generate bindings
         run: docker compose exec api bundle exec rake openstax_openapi:generate_model_bindings[1]
       - name: Check for changes in bindings
