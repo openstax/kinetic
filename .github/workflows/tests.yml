@@ -18,12 +18,10 @@ jobs:
       - uses: bahmutov/npm-install@v1
         with:
           working-directory: frontend
-      - name: Build docker
-        run: docker compose build
-      - name: Run docker
-        run: docker compose up -d
-      - name: Run migrations
-        run: docker compose run -T api /bin/bash -c "bin/rails db:migrate RAILS_ENV=test"
+      - name: Build and run docker
+        run: |
+          docker compose run api /bin/bash -c "bin/rails db:migrate RAILS_ENV=test"
+          docker compose up -d
       - name: Wait for api to boot
         working-directory: frontend
         run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
