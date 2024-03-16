@@ -12,6 +12,6 @@ Dir[Rails.root.join('lib', 'patches', '**', '*.rb')].each { |f| require f }
 Dir[Rails.root.join('lib', 'validators', '**', '*.rb')].each { |f| require f }
 
 puts "WHATSUP!"
-puts ENV['RAILS_MASTER_KEY']
+puts Rails.env
 # Initialize the Rails application.
 Rails.application.initialize!
