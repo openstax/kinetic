@@ -6,15 +6,12 @@ on:
     branches:
       - main
 
-
-
 jobs:
   playwright:
     timeout-minutes: 15
     runs-on: ubuntu-22.04
     env:
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_DEVELOPMENY_KEY }}
-      RAILS_ENV: development
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_DEVELOPMENT_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: bahmutov/npm-install@v1
@@ -60,7 +57,6 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-      RAILS_ENV: test
     steps:
       - uses: actions/checkout@v4
 
