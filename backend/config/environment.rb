@@ -11,5 +11,7 @@ require 'unique_token'
 Dir[Rails.root.join('lib', 'patches', '**', '*.rb')].each { |f| require f }
 Dir[Rails.root.join('lib', 'validators', '**', '*.rb')].each { |f| require f }
 
+puts "WHATSUP!"
+puts ENV['RAILS_MASTER_KEY']
 # Initialize the Rails application.
 Rails.application.initialize!
