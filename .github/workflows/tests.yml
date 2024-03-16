@@ -20,8 +20,9 @@ jobs:
           working-directory: frontend
       - name: Build and run docker
         run: |
-          docker compose run api bundle exec rake db:migrate
-          docker compose up -d
+          docker-compose build api postgres postgres_test
+          docker-compose run -T api /bin/bash -c "bundle exec rake db:migrate"
+          docker compose up
       - name: Wait for api to boot
         working-directory: frontend
         run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
