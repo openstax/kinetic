@@ -20,7 +20,7 @@ jobs:
           working-directory: frontend
       - name: Build and run docker
         run: |
-          docker-compose build -e RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+          docker compose build
           docker compose run -e RAILS_MASTER_KEY=${RAILS_MASTER_KEY} api bundle exec rake db:migrate
           docker compose up -d
       - name: Wait for api to boot
