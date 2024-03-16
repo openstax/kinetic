@@ -20,7 +20,7 @@ jobs:
       - name: Build and run docker
         run: |
           docker compose up -d
-          docker compose run -e RAILS_MASTER_KEY=${{ secrets.RAILS_DEVELOPMENT_KEY }} api /bin/bash -c "bin/rails db:migrate"
+          docker compose run api /bin/bash -c "bin/rails db:migrate"
       - name: Wait for api to boot
         working-directory: frontend
         run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
