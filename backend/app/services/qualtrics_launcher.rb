@@ -14,7 +14,7 @@ class QualtricsLauncher
   end
 
   def url
-    uri = URI("#{Rails.application.credentials.qualtrics_launch_url}/#{survey_id}")
+    uri = URI("#{Rails.application.secrets.qualtrics_launch_url}/#{survey_id}")
     uri.query = URI.encode_www_form([['ssotoken', sso_token]])
     uri.to_s
   end

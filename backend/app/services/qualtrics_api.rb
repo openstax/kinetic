@@ -7,7 +7,7 @@ class QualtricsApi
 
   def initialize
     @http = HTTPX.plugin(:compression).with(
-      headers: { 'X-API-TOKEN': Rails.application.credentials.qualtrics_api_key }
+      headers: { 'X-API-TOKEN': Rails.application.secrets.qualtrics_api_key }
     ).plugin(:stream)
   end
 
@@ -74,7 +74,7 @@ class QualtricsApi
   def get_survey_definition(survey_id, format: nil)
     Rails.cache.fetch(
       "qualtrics-survey-definition/#{survey_id}",
-      expires_in: Rails.application.credentials.export_cache_hours
+      expires_in: Rails.application.secrets.export_cache_hours
     ) do
       fqp = format ? "?format=#{format}" : ''
       request('GET', "survey-definitions/#{survey_id}#{fqp}")['result']
@@ -87,7 +87,7 @@ class QualtricsApi
   end
 
   def path_to(suffix)
-    "#{Rails.application.credentials.qualtrics_api_url}/#{suffix}"
+    "#{Rails.application.secrets.qualtrics_api_url}/#{suffix}"
   end
 
   def request(method, path, json: nil)

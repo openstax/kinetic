@@ -4,7 +4,7 @@ require 'rails_helper'
 require 'csv'
 
 RSpec.describe QualtricsTestData do
-  let(:survey_id) { Rails.application.credentials.demographic_survey_id } # demographic survey
+  let(:survey_id) { Rails.application.secrets.demographic_survey_id } # demographic survey
   let(:study) { create(:study, num_stages: 1) }
   let(:analysis) { create(:analysis) }
   let(:stage) { study1.stages.first }

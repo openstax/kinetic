@@ -8,7 +8,7 @@ class StaticController < ActionController::Base
 
     # see other is treated as signal that target should be canonical
     # https://developers.google.com/search/docs/crawling-indexing/301-redirects
-    redirect_to Rails.application.credentials.homepage_url, status: :see_other
+    redirect_to Rails.application.secrets.homepage_url, status: :see_other
   end
 
   def error404
@@ -27,6 +27,6 @@ class StaticController < ActionController::Base
   include CookieAuthentication
 
   def local_dev_path_for_request
-    Rails.application.credentials.frontend_url + request.fullpath
+    Rails.application.secrets.frontend_url + request.fullpath
   end
 end

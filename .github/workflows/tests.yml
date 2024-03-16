@@ -10,8 +10,6 @@ jobs:
   playwright:
     timeout-minutes: 15
     runs-on: ubuntu-22.04
-    env:
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_DEVELOPMENT_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: bahmutov/npm-install@v1
@@ -55,8 +53,6 @@ jobs:
   rspec:
     timeout-minutes: 5
     runs-on: ubuntu-22.04
-    env:
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -69,7 +65,7 @@ jobs:
       - name: Build docker image and run specs within it
         run: |
           docker compose build api postgres postgres_test
-          docker compose run -e RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} -T api /bin/bash -c "bundle exec rspec"
+          docker compose run -T api /bin/bash -c "bundle exec rspec"
       - name: Stop containers
         if: always()
         run: docker compose down

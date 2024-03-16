@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Enclave', api: :v1 do
   let(:researcher) { create(:researcher) }
   let(:analysis) { create(:analysis, researchers: [researcher]) }
-  let(:api_key) { Rails.application.credentials.enclave_api_key }
+  let(:api_key) { Rails.application.secrets.enclave_api_key }
   let(:run) { analysis.runs.create(message: 'testing, not resting') }
 
   describe 'create' do
@@ -20,7 +20,7 @@ RSpec.describe 'Enclave', api: :v1 do
 
     context 'with api key and analysis' do
       before do
-        set_header('Authorization', "Bearer #{Rails.application.credentials.enclave_api_key}")
+        set_header('Authorization', "Bearer #{Rails.application.secrets.enclave_api_key}")
       end
 
       it 'creates a run' do

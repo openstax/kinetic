@@ -5,12 +5,12 @@ class Api::V1::Admin::ImpersonateController < Api::V1::Admin::BaseController
   def impersonate_researcher
     researcher = Researcher.find(params[:id])
     session[:impersonating] = researcher.user_id
-    redirect_to(Rails.application.credentials.frontend_url, allow_other_host: true)
+    redirect_to(Rails.application.secrets.frontend_url, allow_other_host: true)
   end
 
   def stop
     session.delete :impersonating
-    redirect_to("#{Rails.application.credentials.frontend_url}/admin/impersonate",
+    redirect_to("#{Rails.application.secrets.frontend_url}/admin/impersonate",
                 allow_other_host: true)
   end
 end

@@ -107,18 +107,18 @@ class Study < ApplicationRecord
   end
 
   def is_featured?
-    featured_ids = Rails.application.credentials.fetch(:featured_studies, [])
+    featured_ids = Rails.application.secrets.fetch(:featured_studies, [])
     featured_ids.any? && stages.any? { |st| featured_ids.include?(st.config['survey_id']) }
   end
 
   def is_demographic_survey?
     stages.any? do |stage|
-      stage.config['survey_id'] == Rails.application.credentials.demographic_survey_id
+      stage.config['survey_id'] == Rails.application.secrets.demographic_survey_id
     end
   end
 
   def is_syllabus_contest_study?
-    contest_ids = Rails.application.credentials.fetch(:syllabus_contest_studies, [])
+    contest_ids = Rails.application.secrets.fetch(:syllabus_contest_studies, [])
     contest_ids.any? && stages.any? { |st| contest_ids.include?(st.config['survey_id']) }
   end
 

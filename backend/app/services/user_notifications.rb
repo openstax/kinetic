@@ -17,7 +17,7 @@ class UserNotifications
       uuids = LaunchedStage
                 .joins(:stages)
                 .where(stages: {
-                         config: { survey_id: Rails.application.credentials.demographic_survey_id }
+                         config: { survey_id: Rails.application.secrets.demographic_survey_id }
                        })
                 .group(:user_id)
                 .pluck(:user_id)

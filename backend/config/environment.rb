@@ -11,7 +11,5 @@ require 'unique_token'
 Dir[Rails.root.join('lib', 'patches', '**', '*.rb')].each { |f| require f }
 Dir[Rails.root.join('lib', 'validators', '**', '*.rb')].each { |f| require f }
 
-puts "RAILS ENV"
-puts Rails.env
 # Initialize the Rails application.
 Rails.application.initialize!

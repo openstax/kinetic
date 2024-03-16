@@ -6,8 +6,8 @@ class Api::V1::EnvironmentController < Api::V1::BaseController
     render status: :ok, json: Api::V1::Bindings::Environment.new(
       user: UserInfo.for_uuid(current_user_uuid),
       researcher: researcher ? Api::V1::Bindings::Researcher.create_from_model(researcher) : nil,
-      accounts_env_name: Rails.application.credentials.dig(:accounts, :env_name),
-      homepage_url: Rails.application.credentials.homepage_url,
+      accounts_env_name: Rails.application.secrets.dig(:accounts, :env_name),
+      homepage_url: Rails.application.secrets.homepage_url,
       banners_schedule: Banner.active.to_a || [],
       rewards_schedule: Reward.all.to_a,
       is_impersonating: session[:impersonating].present?,
