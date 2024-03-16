@@ -20,7 +20,7 @@ jobs:
           working-directory: frontend
       - name: Build and run docker
         run: |
-          docker-compose build -e RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} api postgres postgres_test
+          docker-compose build -e RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }
           docker compose up -d
       #          docker compose run api bundle exec rake db:migrate
       #          docker compose up -d
