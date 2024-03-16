@@ -23,7 +23,7 @@ jobs:
       - name: Run docker
         run: docker compose up -d
       - name: Run migrations
-        run: docker compose run -T api /bin/bash -c "bin/rails db:migrate"
+        run: docker compose run -T api /bin/bash -c "bin/rails db:migrate RAILS_ENV=test"
       - name: Wait for api to boot
         working-directory: frontend
         run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
