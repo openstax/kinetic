@@ -61,8 +61,6 @@ class QualtricsLauncher
   end
 
   def md5_hash(value)
-    puts('HELLO!!!')
-    puts(secret_key, value)
     hash = OpenSSL::HMAC.digest(OpenSSL::Digest.new('md5'), secret_key, value)
     Base64.strict_encode64(hash)
   end
