@@ -93,7 +93,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
           id: study3.id,
           learning_path: a_hash_including({
             completed: true
-          }),
+          })
         )
       end
 
@@ -104,7 +104,7 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
           id: study1.id,
           learning_path: a_hash_including({
             completed: false
-          }),
+          })
         )
       end
     end
