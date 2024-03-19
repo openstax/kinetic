@@ -34,7 +34,7 @@ class ResponseExport < ApplicationRecord
   def fetch_real_responses
     # make sure we're not already fetching
     api = QualtricsApi.new
-    latest = stage.response_exports.where.not(id: id).real.completed.by_date.last
+    latest = stage.response_exports.where.not(id:).real.completed.by_date.last
 
     progress_id = api.start_response_export(
       stage.config['survey_id'], latest&.cutoff_at, cutoff_at
@@ -49,7 +49,7 @@ class ResponseExport < ApplicationRecord
         update!(
           is_complete: false,
           metadata: metadata.merge(
-            progress_id: progress_id, retries: retries,
+            progress_id:, retries:,
             status: { failed_at: Time.now })
         )
         save!
@@ -72,7 +72,7 @@ class ResponseExport < ApplicationRecord
     update!(
       is_complete: true,
       metadata: metadata.merge(
-        retries: retries,
+        retries:,
         file_id: completion['fileId'],
         status: { completed_at: Time.now })
       )
@@ -97,7 +97,7 @@ class ResponseExport < ApplicationRecord
                         raise "Unsupported stage type: '#{stage.config[:type]}'"
                       end
 
-    generator = generator_klass.new(stage: stage, random_seed: seed)
+    generator = generator_klass.new(stage:, random_seed: seed)
     csvs << generator.to_csv
 
     files.attach(csvs.map { |f| file_attachment(f.path) })

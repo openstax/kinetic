@@ -8,14 +8,14 @@ class ResearcherNotifications
 
       return if users_info.empty?
 
-      users_info.each do |_, user|
-        UserMailer.with(target_user: user, study: study,
+      users_info.each_value do |user|
+        UserMailer.with(target_user: user, study:,
                         current_user: current_researcher).invite_researcher_to_study.deliver
       end
     end
 
     def notify_kinetic_study_review(study)
-      UserMailer.with(study: study).submit_study_for_review.deliver
+      UserMailer.with(study:).submit_study_for_review.deliver
     end
   end
 end

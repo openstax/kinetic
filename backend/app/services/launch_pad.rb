@@ -36,7 +36,7 @@ class LaunchPad
       return { aborted_at: Time.now }
     end
 
-    stages = user.launched_stages(study: study)
+    stages = user.launched_stages(study:)
     # At any time, a user has zero or one incomplete launched stages for a particular study.
     # If they are landing, they must have one launched stage or we need to error.
     stage = stages.where(completed_at: nil).first
@@ -83,6 +83,6 @@ class LaunchPad
   end
 
   def launched_study
-    @launched_study ||= LaunchedStudy.find_or_create_by!(study_id: study_id, user_id: user_id)
+    @launched_study ||= LaunchedStudy.find_or_create_by!(study_id:, user_id:)
   end
 end

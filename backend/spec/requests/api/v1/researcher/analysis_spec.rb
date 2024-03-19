@@ -143,7 +143,7 @@ RSpec.describe 'Analysis', api: :v1 do
 
   describe 'POST researcher/analysis/:id/run/:run_id' do
     let(:analysis) { create(:analysis, researchers: [researcher1]) }
-    let(:run) { create(:analysis_run, analysis: analysis) }
+    let(:run) { create(:analysis_run, analysis:) }
 
     before { stub_current_user(researcher1) }
 

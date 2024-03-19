@@ -22,8 +22,8 @@ class UserNotifications
                 .group(:user_id)
                 .pluck(:user_id)
 
-      UserInfo.for_uuids(uuids).each do |_, user|
-        UserMailer.with(user: user).welcome.deliver
+      UserInfo.for_uuids(uuids).each_value do |user|
+        UserMailer.with(user:).welcome.deliver
       end
     end
 
@@ -36,8 +36,8 @@ class UserNotifications
       reward = Reward.find_by(start_at: yesterday)
       return unless reward.present?
 
-      users.each do |_, user|
-        UserMailer.with(user: user, reward: reward).new_prize_cycle.deliver
+      users.each_value do |user|
+        UserMailer.with(user:, reward:).new_prize_cycle.deliver
       end
     end
 
@@ -59,7 +59,7 @@ class UserNotifications
                    .joins(study: :stages)
                    .sum('stages.points')
         if points < points_needed
-          UserMailer.with(user: user, reward: reward).upcoming_prize_cycle_deadline.deliver
+          UserMailer.with(user:, reward:).upcoming_prize_cycle_deadline.deliver
         end
       end
     end
@@ -75,8 +75,8 @@ class UserNotifications
       users = users_with_emails_for('new_studies')
       return unless users.any?
 
-      users.each do |_, user|
-        UserMailer.with(user: user, studies: studies).new_studies.deliver
+      users.each_value do |user|
+        UserMailer.with(user:, studies:).new_studies.deliver
       end
     end
 

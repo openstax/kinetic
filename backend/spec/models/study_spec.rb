@@ -34,7 +34,7 @@ RSpec.describe Study, api: :v1 do
       attrs << update
       study.update_stages(attrs)
       expect(study.stages.length).to eq attrs.length
-      expect(study.stages.last.as_json).to match(a_hash_including((update.stringify_keys)))
+      expect(study.stages.last.as_json).to match(a_hash_including(update.stringify_keys))
     end
 
     it 'removes stages' do
@@ -255,8 +255,6 @@ RSpec.describe Study, api: :v1 do
   end
 
   def expect_query_results(query, results)
-    expect(query.all.map(&:title_for_researchers)).to contain_exactly(
-      *results.map(&:title_for_researchers)
-    )
+    expect(query.all.map(&:title_for_researchers)).to match_array(results.map(&:title_for_researchers))
   end
 end

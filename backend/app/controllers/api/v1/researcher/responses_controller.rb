@@ -8,7 +8,7 @@ class Api::V1::Researcher::ResponsesController < Api::V1::BaseController
       !has_enclaves_token?
     )
 
-    render status: status, json: Api::V1::Bindings::Responses.new(
+    render status:, json: Api::V1::Bindings::Responses.new(
       status: responses.all?(&:is_complete) ? 'complete' : 'pending',
       response_urls: responses.filter(&:is_complete).flat_map { |r| r.files.map { |f| url_for(f) } }
     )
@@ -23,7 +23,7 @@ class Api::V1::Researcher::ResponsesController < Api::V1::BaseController
       studies.analysis_infos.map { |info| url_for(info) }
     end
 
-    render status: status, json: { info_urls: urls }
+    render status:, json: { info_urls: urls }
   end
 
   private
@@ -35,13 +35,13 @@ class Api::V1::Researcher::ResponsesController < Api::V1::BaseController
     # add a day so that it gets everything that's contained in the day requested
     responses = analysis.response_exports
                   .for_cutoff(cutoff)
-                  .where(is_testing: is_testing)
+                  .where(is_testing:)
                   .order(created_at: :desc)
 
     if responses.none? || responses.first.is_stale?(cutoff)
       responses = analysis.stages.map do |stage|
         stage.response_exports.create!(
-          is_testing: is_testing, cutoff_at: cutoff
+          is_testing:, cutoff_at: cutoff
           )
       end
     end

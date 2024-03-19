@@ -167,8 +167,8 @@ class Study < ApplicationRecord
           status: 'waiting_period',
           config: {
             type: 'qualtrics',
-            survey_id: survey_id,
-            secret_key: secret_key
+            survey_id:,
+            secret_key:
           }
         }
       )

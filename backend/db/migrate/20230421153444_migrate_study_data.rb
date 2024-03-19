@@ -1,6 +1,9 @@
 class MigrateStudyData < ActiveRecord::Migration[6.1]
   def up
-    studies = YAML.load_file(Rails.root.join('db/migrate/study_migration_data.yaml'))
+    studies = YAML.load_file(
+      Rails.root.join('db/migrate/study_migration_data.yaml'),
+      permitted_classes: [Time]
+    )
     studies.each do |data|
       study = Study.includes(:stages, :study_researchers).find_by(id: data['id'])
 
