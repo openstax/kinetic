@@ -18,7 +18,7 @@ jobs:
       - name: Build and run docker
         run: docker compose up -d
       - name: Run migrations
-        run: docker compose exec api "bin/rails db:migrate"
+        run: docker compose exec api bundle exec rake db:migrate
       - name: Wait for api to boot
         working-directory: frontend
         run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
