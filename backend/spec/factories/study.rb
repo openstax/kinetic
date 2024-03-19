@@ -27,7 +27,7 @@ FactoryBot.define do
       researchers = [create(:researcher)] if researchers.empty?
       study.researchers << researchers
 
-      FactoryBot.create_list(:stage, evaluator.num_stages, study: study)
+      FactoryBot.create_list(:stage, evaluator.num_stages, study:)
 
       study.launch
     end

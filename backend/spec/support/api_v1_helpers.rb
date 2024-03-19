@@ -71,24 +71,24 @@ module ApiV1Helpers
     @headers = nil
   end
 
-  def api_post(*args, &block)
+  def api_post(*args, &)
     url, opts = prep_request_args(args)
-    post(url, **opts, &block)
+    post(url, **opts, &)
   end
 
-  def api_get(*args, &block)
+  def api_get(*args, &)
     url, opts = prep_request_args(args)
-    get(url, **opts, &block)
+    get(url, **opts, &)
   end
 
-  def api_put(*args, &block)
+  def api_put(*args, &)
     url, opts = prep_request_args(args)
-    put(url, **opts, &block)
+    put(url, **opts, &)
   end
 
-  def api_delete(*args, &block)
+  def api_delete(*args, &)
     url, opts = prep_request_args(args)
-    delete(url, **opts, &block)
+    delete(url, **opts, &)
   end
 
   def add_path_prefix(args)
@@ -103,7 +103,7 @@ module ApiV1Helpers
       headers['CONTENT_TYPE'] = 'application/json'
 
       if copy.length == 1
-        copy.push({ headers: headers })
+        copy.push({ headers: })
       elsif copy[1].is_a?(Hash)
         copy[1][:params] = copy[1][:params].to_json if copy[1][:params]
         copy[1][:headers] = headers.merge(copy[1][:headers] || {})

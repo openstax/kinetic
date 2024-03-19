@@ -94,7 +94,7 @@ class QualtricsApi
     resp = @http.request(
       method,
       path_to(path),
-      json: json
+      json:
     )
 
     # timeout, host not found errors won't have a body

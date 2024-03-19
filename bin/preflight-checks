@@ -7,4 +7,4 @@ yarn run typecheck
 
 cd ../backend
 
-docker-compose exec api bundle exec rubocop
+docker compose exec api bundle exec rubocop

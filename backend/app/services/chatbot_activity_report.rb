@@ -2,7 +2,6 @@
 
 require 'csv'
 require 'zip'
-require 'set'
 
 class ChatbotActivityReport
   META_KEYS = Set.new(%w[gs1 sk pk _type]).freeze
@@ -73,9 +72,9 @@ class ChatbotActivityReport
   def columns_for_rows
     columns = Set.new(%w[research_id grade grade_reasons])
     each_message do |msg, chat, user|
-      user.each { |key, _| columns.add("user_#{key}") }
-      chat.each { |key, _| columns.add("chat_#{key}") }
-      msg.each do |key, _|
+      user.each_key { |key| columns.add("user_#{key}") }
+      chat.each_key { |key| columns.add("chat_#{key}") }
+      msg.each_key do |key|
         columns.add("msg_#{key}") unless META_KEYS.include?(key)
       end
     end

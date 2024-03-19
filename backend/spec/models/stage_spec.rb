@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Stage, multi_stage: true do
+RSpec.describe Stage, :multi_stage do
   let(:study1) { create(:study, num_stages: 2) }
   let(:study2) { create(:study, num_stages: 2) }
 

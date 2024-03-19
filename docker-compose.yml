@@ -3,14 +3,14 @@ services:
   api:
     build:
       context: ./backend
-      dockerfile: docker/Dockerfile${API_DOCKERFILE_EXT:-}
+      dockerfile: docker/Dockerfile
       args:
-        bundler_version: 2.2.32
+        bundler_version: 2.4.19
     networks:
       - kinetic
     ports:
       - "4006:4006"
-    command: bash -c "bundle exec rake about && rm -rf tmp/pids/*.pid && bundle exec rails server -b '0.0.0.0' -p 4006"
+    command: bash -c "rm -rf tmp/pids/*.pid && bundle exec rails server -b '0.0.0.0' -p 4006"
     environment:
       - DB_HOST=postgres
       - DB_USER=kinetic
@@ -20,7 +20,6 @@ services:
       - TEST_DB_NAME=kinetic_test
       - TEST_DB_USER=kinetic
       - TEST_DB_PASS=kinetic
-      - ACCOUNTS_ENV_NAME=dev
     depends_on:
       - postgres
       - postgres_test
@@ -30,7 +29,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: docker/Dockerfile${API_DOCKERFILE_EXT:-}
+      dockerfile: docker/Dockerfile
     networks:
       - kinetic
     volumes:

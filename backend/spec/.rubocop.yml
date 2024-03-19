@@ -60,3 +60,6 @@ Layout/MultilineMethodCallIndentation:
 
 RSpec/ExpectChange:
   EnforcedStyle: block
+
+RSpec/IndexedLet:
+  Enabled: false

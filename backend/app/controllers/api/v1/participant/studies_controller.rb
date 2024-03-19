@@ -32,7 +32,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   def launch
     LaunchedStudy.transaction do
       url = launch_pad.launch_url(preview: params[:preview] == 'true')
-      response_binding = Api::V1::Bindings::Launch.new(url: url)
+      response_binding = Api::V1::Bindings::Launch.new(url:)
       render json: response_binding, status: :ok
     end
   end

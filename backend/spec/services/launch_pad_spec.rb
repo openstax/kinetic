@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe LaunchPad, multi_stage: true do
+RSpec.describe LaunchPad, :multi_stage do
 
   let(:study1) { create(:study, num_stages: 2) }
   let(:stage1a) { study1.stages.order(:order)[0] }
@@ -59,7 +59,7 @@ RSpec.describe LaunchPad, multi_stage: true do
   context 'when a user has launched the first stage' do
     before { user1_study1_launch_pad.launch_url }
 
-    it 'will launch the first stage again' do
+    it 'launches the first stage again' do
       url = nil
       expect {
         url = user1_study1_launch_pad.launch_url
