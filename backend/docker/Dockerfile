@@ -1,4 +1,4 @@
-FROM ruby:3.2.2
+FROM ruby:3.3.0
 ARG OPENAPI_VERSION=6.6.0
 ARG bundler_version=2.4.19
 
