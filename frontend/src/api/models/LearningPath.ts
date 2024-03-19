@@ -45,6 +45,12 @@ export interface LearningPath {
      */
     description: string;
     /**
+     * Has the user completed this learning path?
+     * @type {boolean}
+     * @memberof LearningPath
+     */
+    completed?: boolean;
+    /**
      * Studies with this learning path
      * @type {Array<Study>}
      * @memberof LearningPath
@@ -76,6 +82,7 @@ export function LearningPathFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'id': !exists(json, 'id') ? undefined : json['id'],
         'label': json['label'],
         'description': json['description'],
+        'completed': !exists(json, 'completed') ? undefined : json['completed'],
         'studies': !exists(json, 'studies') ? undefined : ((json['studies'] as Array<any>).map(StudyFromJSON)),
     };
 }
@@ -92,6 +99,7 @@ export function LearningPathToJSON(value?: LearningPath | null): any {
         'id': value.id,
         'label': value.label,
         'description': value.description,
+        'completed': value.completed,
         'studies': value.studies === undefined ? undefined : ((value.studies as Array<any>).map(StudyToJSON)),
     };
 }

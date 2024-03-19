@@ -19,6 +19,10 @@ class Api::V1::Admin::LearningPathsOpenApi
         key :type, :string
         key :description, 'Learning path description'
       end
+      property :completed do
+        key :type, :boolean
+        key :description, 'Has the user completed this learning path?'
+      end
       property :studies do
         key :type, :array
         key :description, 'Studies with this learning path'

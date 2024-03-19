@@ -24,6 +24,9 @@ module Api::V1::Bindings
     # Learning path description
     attr_accessor :description
 
+    # Has the user completed this learning path?
+    attr_accessor :completed
+
     # Studies with this learning path
     attr_accessor :studies
 
@@ -33,6 +36,7 @@ module Api::V1::Bindings
         :'id' => :'id',
         :'label' => :'label',
         :'description' => :'description',
+        :'completed' => :'completed',
         :'studies' => :'studies'
       }
     end
@@ -48,6 +52,7 @@ module Api::V1::Bindings
         :'id' => :'Float',
         :'label' => :'String',
         :'description' => :'String',
+        :'completed' => :'Boolean',
         :'studies' => :'Array<Study>'
       }
     end
@@ -83,6 +88,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'description')
         self.description = attributes[:'description']
+      end
+
+      if attributes.key?(:'completed')
+        self.completed = attributes[:'completed']
       end
 
       if attributes.key?(:'studies')
@@ -123,6 +132,7 @@ module Api::V1::Bindings
           id == o.id &&
           label == o.label &&
           description == o.description &&
+          completed == o.completed &&
           studies == o.studies
     end
 
@@ -135,7 +145,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, label, description, studies].hash
+      [id, label, description, completed, studies].hash
     end
 
     # Builds the object from hash

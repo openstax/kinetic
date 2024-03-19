@@ -65,9 +65,10 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   protected
 
   def participant_studies
-    launched_studies = current_user.launched_studies.includes(:stages,
-                                                              study: [:researchers, :learning_path])
-                         .filter do |ls|
+    launched_studies = current_user.launched_studies.includes(
+      :stages,
+      study: [:researchers, :learning_path]
+    ).filter do |ls|
       ls.study.available? || ls.completed?
     end
 

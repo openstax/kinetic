@@ -139,19 +139,6 @@ ALTER SEQUENCE public.active_storage_variant_records_id_seq OWNED BY public.acti
 
 
 --
--- Name: activesupport_cache_entries; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.activesupport_cache_entries (
-    key bytea NOT NULL,
-    value bytea NOT NULL,
-    version character varying,
-    created_at timestamp with time zone NOT NULL,
-    expires_at timestamp with time zone
-);
-
-
---
 -- Name: admins; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -985,14 +972,6 @@ ALTER TABLE ONLY public.active_storage_variant_records
 
 
 --
--- Name: activesupport_cache_entries activesupport_cache_entries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.activesupport_cache_entries
-    ADD CONSTRAINT activesupport_cache_entries_pkey PRIMARY KEY (key);
-
-
---
 -- Name: admins admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1186,27 +1165,6 @@ CREATE UNIQUE INDEX index_active_storage_blobs_on_key ON public.active_storage_b
 --
 
 CREATE UNIQUE INDEX index_active_storage_variant_records_uniqueness ON public.active_storage_variant_records USING btree (blob_id, variation_digest);
-
-
---
--- Name: index_activesupport_cache_entries_on_created_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_activesupport_cache_entries_on_created_at ON public.activesupport_cache_entries USING btree (created_at);
-
-
---
--- Name: index_activesupport_cache_entries_on_expires_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_activesupport_cache_entries_on_expires_at ON public.activesupport_cache_entries USING btree (expires_at);
-
-
---
--- Name: index_activesupport_cache_entries_on_version; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_activesupport_cache_entries_on_version ON public.activesupport_cache_entries USING btree (version);
 
 
 --
@@ -1549,7 +1507,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20231113162430'),
 ('20231120172017'),
 ('20231212191239'),
-('20240208194357'),
 ('20240222135611'),
 ('20240229135718');
 
