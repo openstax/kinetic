@@ -27,7 +27,7 @@ Rails.application.routes.draw do
         end
 
         get 'responses/:api_key', to: 'responses#fetch_responses'
-        get 'responses/:api_key/info', to: 'responses#fetch_info'
+        get 'responses/:analysis_id/info', to: 'responses#fetch_info'
       end
 
       namespace :participant do

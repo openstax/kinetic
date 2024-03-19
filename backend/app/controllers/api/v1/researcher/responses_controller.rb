@@ -15,8 +15,9 @@ class Api::V1::Researcher::ResponsesController < Api::V1::BaseController
   end
 
   def fetch_info
-    analysis = Analysis.find_by(api_key: params[:api_key])
+    analysis = Analysis.find(params[:analysis_id])
     return [:not_found, []] if analysis.nil?
+    raise SecurityTransgression if analysis.researchers.where({ user_id: current_user_uuid }).none?
 
     urls = analysis.studies.flat_map do |studies|
       studies.analysis_infos.map { |info| url_for(info) }
