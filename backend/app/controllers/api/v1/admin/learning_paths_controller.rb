@@ -30,10 +30,8 @@ class Api::V1::Admin::LearningPathsController < Api::V1::Admin::BaseController
     inbound_binding, error = bind(params.require(:learning_path), Api::V1::Bindings::LearningPath)
     render(json: error, status: error.status_code) and return if error
 
-    puts('howdy')
-    puts('ids: ', inbound_binding.studies.map(&:id))
-    unless inbound_binding.studies.empty?
-      @learning_path.study_ids = inbound_binding.studies.map(&:id)
+    unless inbound_binding.studies.blank?
+      @learning_path.study_ids = inbound_binding.studies&.map(&:id)
     end
     @learning_path.update!(inbound_binding.to_hash.except(:studies))
 
