@@ -431,6 +431,7 @@ CREATE TABLE public.learning_paths (
     id bigint NOT NULL,
     label character varying NOT NULL,
     description character varying NOT NULL,
+    badge_id character varying,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL
 );

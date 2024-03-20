@@ -43,7 +43,7 @@ export interface Study {
      * @type {number}
      * @memberof Study
      */
-    readonly id: number;
+    id: number;
     /**
      * The study name that participants see.
      * @type {string}
@@ -286,6 +286,7 @@ export function StudyToJSON(value?: Study | null): any {
     }
     return {
         
+        'id': value.id,
         'title_for_participants': value.titleForParticipants,
         'title_for_researchers': value.titleForResearchers,
         'short_description': value.shortDescription,

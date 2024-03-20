@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useApi } from '@lib';
-import { AddLearningPath, UpdateLearningPathRequest } from '@api';
+import { AddLearningPath, DeleteLearningPathRequest, UpdateLearningPathRequest } from '@api';
 
 export const useGetLearningPaths = () => {
     const api = useApi()
@@ -21,6 +21,22 @@ export const useUpdateLearningPath = () => {
             await api.updateLearningPath({
                 id,
                 updateLearningPath: learningPathRequest.updateLearningPath,
+            })
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['getLearningPaths'] })
+        },
+    })
+}
+
+export const useDeleteLearningPath = () => {
+    const api = useApi()
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (learningPathRequest: DeleteLearningPathRequest) => {
+            await api.deleteLearningPath({
+                id: learningPathRequest.id,
             })
         },
         onSuccess: async () => {

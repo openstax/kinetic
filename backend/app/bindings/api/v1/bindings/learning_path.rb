@@ -24,6 +24,9 @@ module Api::V1::Bindings
     # Learning path description
     attr_accessor :description
 
+    # Open badge factory badge_id value
+    attr_accessor :badge_id
+
     # Has the user completed this learning path?
     attr_accessor :completed
 
@@ -36,6 +39,7 @@ module Api::V1::Bindings
         :'id' => :'id',
         :'label' => :'label',
         :'description' => :'description',
+        :'badge_id' => :'badge_id',
         :'completed' => :'completed',
         :'studies' => :'studies'
       }
@@ -52,6 +56,7 @@ module Api::V1::Bindings
         :'id' => :'Float',
         :'label' => :'String',
         :'description' => :'String',
+        :'badge_id' => :'String',
         :'completed' => :'Boolean',
         :'studies' => :'Array<Study>'
       }
@@ -88,6 +93,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'description')
         self.description = attributes[:'description']
+      end
+
+      if attributes.key?(:'badge_id')
+        self.badge_id = attributes[:'badge_id']
       end
 
       if attributes.key?(:'completed')
@@ -132,6 +141,7 @@ module Api::V1::Bindings
           id == o.id &&
           label == o.label &&
           description == o.description &&
+          badge_id == o.badge_id &&
           completed == o.completed &&
           studies == o.studies
     end
@@ -145,7 +155,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, label, description, completed, studies].hash
+      [id, label, description, badge_id, completed, studies].hash
     end
 
     # Builds the object from hash

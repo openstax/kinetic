@@ -43,7 +43,7 @@ export interface StudyUpdate {
      * @type {number}
      * @memberof StudyUpdate
      */
-    readonly id?: number;
+    id?: number;
     /**
      * The study name that participants see.
      * @type {string}
@@ -283,6 +283,7 @@ export function StudyUpdateToJSON(value?: StudyUpdate | null): any {
     }
     return {
         
+        'id': value.id,
         'title_for_participants': value.titleForParticipants,
         'title_for_researchers': value.titleForResearchers,
         'short_description': value.shortDescription,

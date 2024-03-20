@@ -3,6 +3,7 @@ class CreateStudyLearningPaths < ActiveRecord::Migration[6.1]
     create_table :learning_paths do |t|
       t.string :label, null: false
       t.string :description, null: false
+      t.string :badge_id
       t.timestamps
     end
 

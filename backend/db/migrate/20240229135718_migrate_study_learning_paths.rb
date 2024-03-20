@@ -13,6 +13,12 @@ class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
       description: 'a boring path for testing'
     )
 
+    if Rails.env.production?
+      # do random samples
+    else
+      # do the real thing
+    end
+
     # Topics with the corresponding study IDs
     # personality = [3, 5, 7, 17, 22, 24, 79, 82]
     # memory_and_cognition = [1, 11, 12, 18, 39]

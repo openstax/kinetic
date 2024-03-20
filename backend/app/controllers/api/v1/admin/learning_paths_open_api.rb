@@ -19,6 +19,10 @@ class Api::V1::Admin::LearningPathsOpenApi
         key :type, :string
         key :description, 'Learning path description'
       end
+      property :badge_id do
+        key :type, :string
+        key :description, 'Open badge factory badge_id value'
+      end
       property :completed do
         key :type, :boolean
         key :description, 'Has the user completed this learning path?'

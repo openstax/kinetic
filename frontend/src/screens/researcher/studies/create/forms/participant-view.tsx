@@ -15,11 +15,10 @@ import {
 import { ImageLibrary } from '../image-library';
 import { StudyCardPreview } from '../../../../learner/card';
 import { first } from 'lodash-es';
-import { LearningPath, Study } from '@api';
+import { Study } from '@api';
 import { useFieldArray } from 'react-hook-form';
 import { colors } from '@theme';
 import { Button, Radio, Stack } from '@mantine/core';
-import { useGetLearningPaths } from '../../../../../models/learning-path';
 
 export const participantViewValidation = (allOtherStudies: Study[]) => {
     return {
@@ -42,10 +41,6 @@ export const participantViewValidation = (allOtherStudies: Study[]) => {
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
         longDescription: Yup.string().max(250).when('step', {
-            is: 2,
-            then: (s: Yup.BaseSchema) => s.required('Required'),
-        }),
-        learningPath: Yup.object().when('step', {
             is: 2,
             then: (s: Yup.BaseSchema) => s.required('Required'),
         }),
@@ -100,21 +95,12 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
     const initialSubjects = study.subject ? [...new Set([...studySubjects, study.subject])] : studySubjects
     const [allStudySubjects, setAllStudySubjects] = useState<string[]>(initialSubjects)
     const { setValue, watch, getValues, control } = useFormContext<Study>()
-    const { data: learningPaths } = useGetLearningPaths()
     const { update } = useFieldArray({
         control,
         name: 'stages',
         keyName: 'customId',
     })
     const firstSession = first(study.stages)
-
-    const setLearningPath = (learningPath: LearningPath) => {
-        setValue('learningPath', learningPath, {
-            shouldDirty: true,
-            shouldTouch: true,
-            shouldValidate: true,
-        })
-    }
 
     const setDurationAndPoints = (e: React.ChangeEvent<HTMLInputElement>) => {
         const stage = getValues('stages.0')
@@ -183,28 +169,6 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
                         <Col sm={6} direction='column' gap>
                             <InputField type='textarea' name='longDescription' />
                             <FieldErrorMessage name='longDescription' liveCountMax={250} />
-                        </Col>
-                    </Box>
-
-                    <Box gap='xlarge'>
-                        <Col sm={4} direction='column' gap>
-                            <FieldTitle required>Learning Path</FieldTitle>
-                            <small>Pick a learning path for your study</small>
-                        </Col>
-
-                        <Col sm={6} direction='column' gap>
-                            {learningPaths?.map(learningPath => (
-                                <Radio
-                                    name='learningPath'
-                                    data-testid='learning-path'
-                                    key={learningPath.label}
-                                    label={learningPath.label}
-                                    description={learningPath.description}
-                                    defaultChecked={study.learningPath?.id == learningPath.id}
-                                    onChange={() => setLearningPath(learningPath)}
-                                />
-                            ))}
-                            <FieldErrorMessage name='learningPath' />
                         </Col>
                     </Box>
 

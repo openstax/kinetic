@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useCreateLearningPath, useGetLearningPaths, useUpdateLearningPath } from '../../models/learning-path';
+import {
+    useCreateLearningPath,
+    useDeleteLearningPath,
+    useGetLearningPaths,
+    useUpdateLearningPath,
+} from '../../models/learning-path';
 import { Button, Group, LoadingOverlay, MultiSelect, Select, Stack, Textarea, TextInput, Title } from '@mantine/core';
 import { Main } from './grid';
-import { LearningPath } from '@api';
+import { LearningPath, Study } from '@api';
 import * as yup from 'yup';
-import { useForm, yupResolver } from '@mantine/form';
-import { useUpdateFeaturedStudies } from '@models';
+import { useForm, UseFormReturnType, yupResolver } from '@mantine/form';
+import { useAdminGetStudies, useUpdateFeaturedStudies } from '@models';
 import { sortBy } from 'lodash-es';
+import { colors } from '@theme';
 
 export const ManageLearningPaths = () => {
     const { data: learningPaths, isLoading } = useGetLearningPaths()
@@ -36,6 +42,47 @@ export const ManageLearningPaths = () => {
                 {currentLearningPath && <EditFeaturedStudies learningPath={currentLearningPath} />}
             </Stack>
         </Main>
+    )
+}
+
+const ManageLearningPathStudies: FC<{
+    learningPath: LearningPath,
+    form: UseFormReturnType<LearningPath>
+}> = ({ learningPath, form }) => {
+    const [studies, setStudies] = useState<string[]>([]);
+
+    const { data: allStudies = [] } = useAdminGetStudies()
+
+    const studyTitles = allStudies.map(s => s.titleForParticipants!)
+
+    useEffect(() => {
+        if (learningPath.studies) {
+            setStudies(learningPath.studies.map(s => s.titleForParticipants!))
+        }
+    }, [learningPath.studies])
+
+    return (
+        <Stack>
+            <MultiSelect
+                {...form.getInputProps('studies')}
+                label={`Featured studies for ${learningPath.label}`}
+                searchable
+                placeholder="Add studies to this learning path"
+                value={studies}
+                onChange={(selectedStudies) => {
+                    setStudies(selectedStudies)
+
+                    const mapped = selectedStudies.reduce<Study[]>((result, title) => {
+                        const study = allStudies.find(s => s.titleForParticipants === title)
+                        if (study) result.push(study)
+                        return result
+                    }, [])
+                    form.setFieldValue('studies', mapped)
+                }}
+                nothingFoundMessage='No studies found'
+                data={[...new Set(studyTitles)]}
+            />
+        </Stack>
     )
 }
 
@@ -144,38 +191,37 @@ const CreateLearningPath: FC<{
     })
 
     return (
-        <>
-            <form onSubmit={handleSubmit}>
-                <Stack>
-                    <TextInput
-                        withAsterisk
-                        label="Label"
-                        error={form.errors['label']}
-                        {...form.getInputProps('label')}
-                    />
+        <form onSubmit={handleSubmit}>
+            <Stack>
+                <TextInput
+                    withAsterisk
+                    label="Label"
+                    error={form.errors['label']}
+                    {...form.getInputProps('label')}
+                />
 
-                    <Textarea
-                        withAsterisk
-                        label="Description"
-                        error={form.errors['description']}
-                        {...form.getInputProps('description')}
-                    />
-                </Stack>
+                <Textarea
+                    withAsterisk
+                    label="Description"
+                    error={form.errors['description']}
+                    {...form.getInputProps('description')}
+                />
 
-                <Group justify="flex-end" mt="md">
-                    <Button type="submit" disabled={!form.isValid()}>
-                        Create Learning Path
-                    </Button>
-                </Group>
-            </form>
-        </>
+            </Stack>
+
+            <Group justify="flex-end" mt="md">
+                <Button type="submit" disabled={!form.isValid()}>
+                    Create Learning Path
+                </Button>
+            </Group>
+        </form>
     )
 }
 
 const EditLearningPath: FC<{
     learningPath?: LearningPath,
     learningPaths?: LearningPath[],
-    setSelectedLearningPath: (label: string) => void,
+    setSelectedLearningPath: (label: string | null) => void,
 }> = ({ learningPath, learningPaths, setSelectedLearningPath }) => {
     const form = useForm<LearningPath>({
         initialValues: {
@@ -187,6 +233,19 @@ const EditLearningPath: FC<{
     })
 
     const updateLearningPath = useUpdateLearningPath()
+    const deleteLearningPath = useDeleteLearningPath()
+
+    if (!learningPath?.id) return null
+
+    const handleDelete = () => {
+        deleteLearningPath.mutate({
+            id: learningPath.id!,
+        }, {
+            onSuccess: () => {
+                setSelectedLearningPath(null)
+            },
+        })
+    }
 
     const handleSubmit = form.onSubmit((values) => {
         if (!learningPath?.id) return
@@ -221,9 +280,14 @@ const EditLearningPath: FC<{
                     error={form.errors['description']}
                     {...form.getInputProps('description')}
                 />
+
+                <ManageLearningPathStudies form={form} learningPath={learningPath} />
             </Stack>
 
             <Group justify="flex-end" mt="md">
+                <Button onClick={handleDelete} color={colors.red} disabled={!!learningPath?.studies?.length}>
+                    Delete Learning Path
+                </Button>
                 <Button type="submit" disabled={!form.isDirty() || !form.isValid()}>
                     Update Learning Path
                 </Button>
