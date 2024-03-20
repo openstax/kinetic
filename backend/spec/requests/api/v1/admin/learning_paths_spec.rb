@@ -106,17 +106,17 @@ RSpec.describe 'Learning Paths', api: :v1 do
       it 'updates studies on the learning path' do
         learning_path = LearningPath.create! valid_attributes
         api_put learning_path_url(learning_path),
-          params: {
-            learning_path: new_attributes.merge(
-              studies: [study]
-            ),
-          }
+                params: {
+                  learning_path: new_attributes.merge(
+                    studies: [study]
+                  )
+                }
         expect(response).to have_http_status(:ok)
         expect(response_hash).to match(
           a_hash_including(
             studies: array_including(
               a_hash_including(
-                id: study.id,
+                id: study.id
               )
             )
           )
