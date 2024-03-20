@@ -25,7 +25,7 @@ import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
 import { Navigate } from 'react-router-dom';
 import { Box, Grid, Stack } from '@mantine/core';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 const buildValidationSchema = (allOtherStudies: Study[]) => {
     return Yup.object().shape({
@@ -141,7 +141,7 @@ const FormContent: FC<{
         }
     }
 
-    const saveStudy = async (goToStep: number) => {
+    const saveStudy = useCallback(async (goToStep: number) => {
         const study = getValues() as Study
 
         if (isNew) {
@@ -163,10 +163,10 @@ const FormContent: FC<{
             return;
         }
 
-        const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
+        const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study } })
         reset(getFormDefaults(savedStudy, goToStep), { keepIsValid: true, keepDirty: false })
         setStudy(savedStudy)
-    }
+    }, [study])
 
     const saveAsDraft = async () => {
         saveStudy(currentStep).then(() => {
