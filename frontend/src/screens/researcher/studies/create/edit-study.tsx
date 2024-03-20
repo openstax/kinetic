@@ -143,16 +143,19 @@ const FormContent: FC<{
 
     const saveStudy = useCallback(async (goToStep: number) => {
         if (isNew) {
+            const newStudy = getValues() as NewStudy
+
             // Need to reset the dirty state before navigating to edit/{id}
             reset(undefined, { keepValues: true, keepDirty: false });
 
             const savedStudy = await api.addStudy({
-                addStudy: { study: getValues() as NewStudy },
+                addStudy: { study: newStudy },
             }).catch((err) => setFormError(err))
 
             if (savedStudy) {
                 showResearcherNotification(`New copy of '${savedStudy.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`)
                 setStudy(savedStudy)
+
                 return nav(`/study/edit/${savedStudy.id}?step=1`)
             }
         }
@@ -163,11 +166,16 @@ const FormContent: FC<{
 
         const savedStudy = await api.updateStudy({
             id: Number(id),
-            updateStudy: { study: getValues() as Study },
+            updateStudy: {
+                study: {
+                    ...getValues(),
+                    id: study.id,
+                } as Study,
+            },
         })
         reset(getFormDefaults(savedStudy, goToStep), { keepIsValid: true, keepDirty: false })
         setStudy(savedStudy)
-    }, [study, isDirty])
+    }, [study, isDirty, isNew, id])
 
     const saveAsDraft = async () => {
         saveStudy(currentStep).then(() => {

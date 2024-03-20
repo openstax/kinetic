@@ -49,9 +49,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
     notify_researchers(study_update.researchers || []) if study_update.researchers
 
-    @study.update!(study_update.to_hash.except(:researchers, :stages, :learning_path))
-
-    @study.update!(learning_path_id: study_update.learning_path.id) if study_update.learning_path
+    @study.update!(study_update.to_hash.except(:researchers, :stages))
 
     @study.update_stages(study_update.stages)
 
@@ -65,7 +63,7 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
       study_update, error = bind(params[:study], Api::V1::Bindings::StudyUpdate)
       render(json: error, status: error.status_code) and return if error
 
-      @study.update!(study_update.to_hash.except(:researchers, :stages, :learning_path))
+      @study.update!(study_update.to_hash.except(:researchers, :stages))
       @study.update_stages(study_update.stages)
     end
 

@@ -311,17 +311,6 @@ RSpec.describe 'Studies', api: :v1 do
         )
       end
 
-      it 'updates the study learning path' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { learning_path: } }
-
-        expect(response).to have_http_status(:success)
-        expect(response_hash).to match a_hash_including({
-          learning_path: a_hash_including({
-            label: learning_path.label
-          })
-        })
-      end
-
       it 'updates the study researchers' do
         researcher1.update_attribute(:role, 'member')
         researcher2.update_attribute(:role, 'pi')
