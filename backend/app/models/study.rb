@@ -17,7 +17,8 @@ class Study < ApplicationRecord
   has_one :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
 
   belongs_to :learning_path, required: false
-  validates_presence_of :learning_path, if: proc { |s| s.available? }
+  # Only admins can set studies for learning paths now, saving this for useful notes though
+  # validates_presence_of :learning_path, if: proc { |s| s.available? }
 
   has_one :pi,
           -> {
