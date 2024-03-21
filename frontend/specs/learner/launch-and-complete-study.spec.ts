@@ -10,6 +10,7 @@ test('launching study and testing completion', async ({ browser }) => {
 
     const studyId = await createStudy({ researcherPage, adminPage, name: studyName })
 
+
     const userPage = await useUserPage(browser)
 
     await goToPage({ page: userPage, path: '/studies' })
@@ -25,9 +26,9 @@ test('launching study and testing completion', async ({ browser }) => {
 
     // Qualtrics redirected to study landing page
     await userPage.getByText('You just earned 10 points').isVisible()
-    await userPage.waitForLoadState('networkidle')
     await userPage.click('testId=view-studies')
 
+    await userPage.reload()
     await userPage.waitForLoadState('networkidle')
     await userPage.getByPlaceholder('Search by study title, researcher, or topic name').fill(studyName)
     await userPage.waitForSelector(`[data-study-id="${studyId}"][data-is-completed="true"]`)

@@ -179,6 +179,15 @@ export const createStudy = async ({
     await approveWaitingStudy(adminPage, studyId)
     await launchApprovedStudy(researcherPage, studyId, multiSession)
 
+    // Add the study to a learning path
+    await goToPage({ page: adminPage, path: '/admin/manage-learning-paths' })
+    await adminPage.getByPlaceholder('Select a learning path, or create a new one below').click()
+    await adminPage.getByRole('option').first().click()
+    await adminPage.getByPlaceholder('Add studies to this learning path').click()
+    await adminPage.getByText(name).click()
+    await adminPage.locator('body').click()
+    await adminPage.getByText('Update Learning Path').click()
+
     return studyId
 }
 
