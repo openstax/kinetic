@@ -141,6 +141,18 @@ export interface ParticipantStudy {
      */
     benefits?: string;
     /**
+     * An integer that describes the sort order for this study
+     * @type {number}
+     * @memberof ParticipantStudy
+     */
+    readonly featuredOrder?: number;
+    /**
+     * Is this study highlighted?
+     * @type {boolean}
+     * @memberof ParticipantStudy
+     */
+    readonly isHighlighted?: boolean;
+    /**
      * Is the study hidden from participants
      * @type {boolean}
      * @memberof ParticipantStudy
@@ -212,12 +224,6 @@ export interface ParticipantStudy {
      * @memberof ParticipantStudy
      */
     category?: string;
-    /**
-     * The study topic
-     * @type {string}
-     * @memberof ParticipantStudy
-     */
-    topic?: string;
     /**
      * 
      * @type {LearningPath}
@@ -306,6 +312,8 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'internalDescription': !exists(json, 'internal_description') ? undefined : json['internal_description'],
         'imageId': !exists(json, 'image_id') ? undefined : json['image_id'],
         'benefits': !exists(json, 'benefits') ? undefined : json['benefits'],
+        'featuredOrder': !exists(json, 'featured_order') ? undefined : json['featured_order'],
+        'isHighlighted': !exists(json, 'is_highlighted') ? undefined : json['is_highlighted'],
         'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
         'consented': !exists(json, 'consented') ? undefined : json['consented'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),
@@ -318,7 +326,6 @@ export function ParticipantStudyFromJSONTyped(json: any, ignoreDiscriminator: bo
         'publicOn': !exists(json, 'public_on') ? undefined : (json['public_on'] === null ? null : new Date(json['public_on'])),
         'completedCount': !exists(json, 'completed_count') ? undefined : json['completed_count'],
         'category': !exists(json, 'category') ? undefined : json['category'],
-        'topic': !exists(json, 'topic') ? undefined : json['topic'],
         'learningPath': !exists(json, 'learning_path') ? undefined : LearningPathFromJSON(json['learning_path']),
         'subject': !exists(json, 'subject') ? undefined : json['subject'],
         'stages': !exists(json, 'stages') ? undefined : ((json['stages'] as Array<any>).map(StageFromJSON)),
@@ -358,7 +365,6 @@ export function ParticipantStudyToJSON(value?: ParticipantStudy | null): any {
         'view_count': value.viewCount,
         'public_on': value.publicOn === undefined ? undefined : (value.publicOn === null ? null : value.publicOn.toISOString()),
         'category': value.category,
-        'topic': value.topic,
         'learning_path': LearningPathToJSON(value.learningPath),
         'subject': value.subject,
         'stages': value.stages === undefined ? undefined : ((value.stages as Array<any>).map(StageToJSON)),

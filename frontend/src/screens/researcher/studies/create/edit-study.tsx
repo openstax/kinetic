@@ -25,7 +25,7 @@ import { noop } from 'lodash-es';
 import { useLocalstorageState } from 'rooks';
 import { Navigate } from 'react-router-dom';
 import { Box, Grid, Stack } from '@mantine/core';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 const buildValidationSchema = (allOtherStudies: Study[]) => {
     return Yup.object().shape({
@@ -43,6 +43,7 @@ const getFormDefaults = (study: Study, step: StudyStep) => {
         researcherPi: pi,
         researcherLead: lead,
         stages: study.stages,
+        learningPath: study.learningPath,
         step,
     }
 }
@@ -140,19 +141,21 @@ const FormContent: FC<{
         }
     }
 
-    const saveStudy = async (goToStep: number) => {
-        const study = getValues() as Study
+    const saveStudy = useCallback(async (goToStep: number) => {
         if (isNew) {
+            const newStudy = getValues() as NewStudy
+
             // Need to reset the dirty state before navigating to edit/{id}
             reset(undefined, { keepValues: true, keepDirty: false });
 
             const savedStudy = await api.addStudy({
-                addStudy: { study: study as NewStudy },
+                addStudy: { study: newStudy },
             }).catch((err) => setFormError(err))
 
             if (savedStudy) {
-                showResearcherNotification(`New copy of '${study.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`)
+                showResearcherNotification(`New copy of '${savedStudy.titleForResearchers}' has been created and saved as a draft. It can now be found under ‘Draft’.`)
                 setStudy(savedStudy)
+
                 return nav(`/study/edit/${savedStudy.id}?step=1`)
             }
         }
@@ -161,10 +164,18 @@ const FormContent: FC<{
             return;
         }
 
-        const savedStudy = await api.updateStudy({ id: Number(id), updateStudy: { study: study as any } })
+        const savedStudy = await api.updateStudy({
+            id: Number(id),
+            updateStudy: {
+                study: {
+                    ...getValues(),
+                    id: study.id,
+                } as Study,
+            },
+        })
         reset(getFormDefaults(savedStudy, goToStep), { keepIsValid: true, keepDirty: false })
         setStudy(savedStudy)
-    }
+    }, [study, isDirty, isNew, id])
 
     const saveAsDraft = async () => {
         saveStudy(currentStep).then(() => {

@@ -293,7 +293,7 @@ class Api::V1::Admin::StudiesOpenApi
         content 'application/json' do
           schema do
             key :type, :object
-            key :title, :studyIds
+            key :title, :featuredStudyIds
             property :featured_ids do
               key :type, :array
               key :description, 'Studies that are featured'
@@ -309,10 +309,38 @@ class Api::V1::Admin::StudiesOpenApi
       end
 
       response 200 do
-        key :description, 'Returns the featured studies'
+        key :description, 'Success'
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+  end
+
+  openapi_path '/admin/studies/highlight' do
+    operation :post do
+      key :summary, 'Mark studies as highlighted'
+      key :operationId, 'adminHighlightStudies'
+
+      request_body do
+        key :description, 'The study IDs to highlight'
+        key :required, true
         content 'application/json' do
-          schema { key :$ref, :Studies }
+          schema do
+            key :type, :object
+            key :title, :highlightedStudyIds
+            property :highlighted_ids do
+              key :type, :array
+              key :description, 'Studies to be highlighted'
+              key :items, { 'type' => 'number' }
+            end
+          end
         end
+      end
+
+      response 200 do
+        key :description, 'Success'
       end
       extend Api::V1::OpenApiResponses::AuthenticationError
       extend Api::V1::OpenApiResponses::ForbiddenError

@@ -44,7 +44,7 @@ class Api::V1::BaseController < ApplicationController
   end
 
   def binding_error(status_code:, messages:)
-    Api::V1::Bindings::ServerError.new(status_code: status_code, messages: messages)
+    Api::V1::Bindings::ServerError.new(status_code:, messages:)
   end
 
   def exhaustive_request_logging
@@ -58,7 +58,7 @@ class Api::V1::BaseController < ApplicationController
       value = request.headers[key]
       next unless value.is_a?(String) # don't dump things like "puma_config"
 
-      puts format('%<key>20s : %<value>s', { key: key, value: value }).join(' ')
+      puts format('%<key>20s : %<value>s', { key:, value: }).join(' ')
     end
     puts '-' * 40
     params.each_key do |key|

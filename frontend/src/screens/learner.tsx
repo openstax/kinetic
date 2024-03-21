@@ -10,10 +10,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, FreeMode, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
-import { Box, Container, Flex, Stack, TextInput, Title } from '@mantine/core';
+import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title } from '@mantine/core';
 import { IconSearch, IconX } from '@tabler/icons-react';
 import { groupBy } from 'lodash';
 import { colors } from '@theme'
+import { useMemo } from 'react';
+import { orderBy, uniqBy } from 'lodash-es';
 
 const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
@@ -126,7 +128,7 @@ export const StudiesContainer = () => {
 
                 <SearchResults search={search} filteredStudies={filteredStudies} />
 
-                <StudiesByTopic filteredStudies={filteredStudies} />
+                <StudiesByLearningPath filteredStudies={filteredStudies} />
             </Stack>
         </Container>
     )
@@ -193,16 +195,37 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
     )
 }
 
-export const StudiesByTopic: FC<{filteredStudies: ParticipantStudy[]}> = ({ filteredStudies }) => {
-    const studiesByTopic = groupBy(filteredStudies, (study) => study.topic)
+export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = ({ filteredStudies }) => {
+    const [learningPaths, studiesByLearningPath] = useMemo(() => {
+        return [
+            orderBy(
+                (uniqBy(filteredStudies.map(fs => fs.learningPath), (lp) => lp?.label)),
+                ['completed'],
+                ['asc']
+            ),
+            groupBy(filteredStudies, (study) => study.learningPath?.label),
+        ]
+    }, [filteredStudies])
+
     const isMobile = useIsMobileDevice()
 
     return (
         <Stack gap='lg' data-testid='studies-listing'>
-            {Object.entries(studiesByTopic).map(([studyTopic, studies]) => {
+            {learningPaths.map(learningPath => {
+                if (!learningPath) return null
+                const studies = studiesByLearningPath[learningPath.label]
                 return (
-                    <Stack key={studyTopic}>
-                        <Title order={4}>{studyTopic}</Title>
+                    <Stack key={learningPath.label}>
+                        <Group gap='sm'>
+                            <Title order={4}>
+                                {learningPath.label}
+                            </Title>
+                            <Text span>|</Text>
+                            <Title order={6}>
+                                {learningPath.description}
+                            </Title>
+                            {learningPath.completed ? <Badge c={colors.text} color={colors.green}>Completed</Badge> : null}
+                        </Group>
                         {isMobile ?
                             <MobileStudyCards studies={studies} /> :
                             <DesktopStudyCards studies={studies} />

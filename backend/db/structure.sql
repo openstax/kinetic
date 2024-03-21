@@ -10,6 +10,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+--
 -- Name: api_key(text, integer); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -136,19 +143,6 @@ CREATE SEQUENCE public.active_storage_variant_records_id_seq
 --
 
 ALTER SEQUENCE public.active_storage_variant_records_id_seq OWNED BY public.active_storage_variant_records.id;
-
-
---
--- Name: activesupport_cache_entries; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.activesupport_cache_entries (
-    key bytea NOT NULL,
-    value bytea NOT NULL,
-    version character varying,
-    created_at timestamp with time zone NOT NULL,
-    expires_at timestamp with time zone
-);
 
 
 --
@@ -437,6 +431,7 @@ CREATE TABLE public.learning_paths (
     id bigint NOT NULL,
     label character varying NOT NULL,
     description character varying NOT NULL,
+    badge_id character varying,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL
 );
@@ -682,14 +677,15 @@ CREATE TABLE public.studies (
     is_hidden boolean DEFAULT false NOT NULL,
     view_count integer DEFAULT 0,
     category character varying,
-    topic character varying,
     subject character varying,
     internal_description character varying,
     target_sample_size integer,
     public_on timestamp with time zone,
     launched_studies_count integer,
     learning_path_id bigint,
-    is_featured boolean DEFAULT false
+    is_featured boolean DEFAULT false,
+    featured_order integer,
+    is_highlighted boolean DEFAULT false
 );
 
 
@@ -984,14 +980,6 @@ ALTER TABLE ONLY public.active_storage_variant_records
 
 
 --
--- Name: activesupport_cache_entries activesupport_cache_entries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.activesupport_cache_entries
-    ADD CONSTRAINT activesupport_cache_entries_pkey PRIMARY KEY (key);
-
-
---
 -- Name: admins admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1185,27 +1173,6 @@ CREATE UNIQUE INDEX index_active_storage_blobs_on_key ON public.active_storage_b
 --
 
 CREATE UNIQUE INDEX index_active_storage_variant_records_uniqueness ON public.active_storage_variant_records USING btree (blob_id, variation_digest);
-
-
---
--- Name: index_activesupport_cache_entries_on_created_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_activesupport_cache_entries_on_created_at ON public.activesupport_cache_entries USING btree (created_at);
-
-
---
--- Name: index_activesupport_cache_entries_on_expires_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_activesupport_cache_entries_on_expires_at ON public.activesupport_cache_entries USING btree (expires_at);
-
-
---
--- Name: index_activesupport_cache_entries_on_version; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_activesupport_cache_entries_on_version ON public.activesupport_cache_entries USING btree (version);
 
 
 --
@@ -1509,46 +1476,45 @@ ALTER TABLE ONLY public.response_exports
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20210618163926'),
-('20210618164053'),
-('20210618181410'),
-('20210618181948'),
-('20210618182731'),
-('20210618182920'),
-('20210618183842'),
-('20210916155137'),
-('20211018140839'),
-('20211129180319'),
-('20220110162620'),
-('20220303160442'),
-('20220407193306'),
-('20220408162010'),
-('20220810173840'),
-('20220817161302'),
-('20220824152243'),
-('20220831143454'),
-('20220912181638'),
-('20221020135148'),
-('20221129153239'),
-('20221129161350'),
-('20221129202926'),
-('20221129224957'),
-('20230109200606'),
-('20230130155253'),
-('20230216162207'),
-('20230404161002'),
-('20230421153444'),
-('20230524011047'),
-('20230616223657'),
-('20230626173336'),
-('20230712163112'),
-('20230726142755'),
-('20230808163159'),
-('20230905121510'),
-('20231113162430'),
-('20231120172017'),
+('20240229135718'),
+('20240222135611'),
 ('20231212191239'),
-('20240208194357'),
-('20240222135611');
-
+('20231120172017'),
+('20231113162430'),
+('20230905121510'),
+('20230808163159'),
+('20230726142755'),
+('20230712163112'),
+('20230626173336'),
+('20230616223657'),
+('20230524011047'),
+('20230421153444'),
+('20230404161002'),
+('20230216162207'),
+('20230130155253'),
+('20230109200606'),
+('20221129224957'),
+('20221129202926'),
+('20221129161350'),
+('20221129153239'),
+('20221020135148'),
+('20220912181638'),
+('20220831143454'),
+('20220824152243'),
+('20220817161302'),
+('20220810173840'),
+('20220408162010'),
+('20220407193306'),
+('20220303160442'),
+('20220110162620'),
+('20211129180319'),
+('20211018140839'),
+('20210916155137'),
+('20210618183842'),
+('20210618182920'),
+('20210618182731'),
+('20210618181948'),
+('20210618181410'),
+('20210618164053'),
+('20210618163926');
 

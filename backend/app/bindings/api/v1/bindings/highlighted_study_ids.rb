@@ -14,18 +14,14 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class StudyIds
-    # Studies that are featured
-    attr_accessor :featured_ids
-
-    # Studies that are not featured
-    attr_accessor :non_featured_ids
+  class HighlightedStudyIds
+    # Studies to be highlighted
+    attr_accessor :highlighted_ids
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'featured_ids' => :'featured_ids',
-        :'non_featured_ids' => :'non_featured_ids'
+        :'highlighted_ids' => :'highlighted_ids'
       }
     end
 
@@ -37,8 +33,7 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'featured_ids' => :'Array<Float>',
-        :'non_featured_ids' => :'Array<Float>'
+        :'highlighted_ids' => :'Array<Float>'
       }
     end
 
@@ -52,26 +47,20 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::StudyIds` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::HighlightedStudyIds` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::StudyIds`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::HighlightedStudyIds`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'featured_ids')
-        if (value = attributes[:'featured_ids']).is_a?(Array)
-          self.featured_ids = value
-        end
-      end
-
-      if attributes.key?(:'non_featured_ids')
-        if (value = attributes[:'non_featured_ids']).is_a?(Array)
-          self.non_featured_ids = value
+      if attributes.key?(:'highlighted_ids')
+        if (value = attributes[:'highlighted_ids']).is_a?(Array)
+          self.highlighted_ids = value
         end
       end
     end
@@ -94,8 +83,7 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          featured_ids == o.featured_ids &&
-          non_featured_ids == o.non_featured_ids
+          highlighted_ids == o.highlighted_ids
     end
 
     # @see the `==` method
@@ -107,7 +95,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [featured_ids, non_featured_ids].hash
+      [highlighted_ids].hash
     end
 
     # Builds the object from hash

@@ -19,11 +19,10 @@ RSpec.describe 'Studies', api: :v1 do
         short_description: 'A short description',
         long_description: 'A longer description',
         category: 'Research',
-        topic: 'Learning',
         subject: 'Biology',
         benefits: 'Some benefit to society',
         image_id: 'Schoolfuturecareer_1',
-        learning_path: learning_path,
+        learning_path:,
         stages: [
           {
             points: 10,
@@ -310,17 +309,6 @@ RSpec.describe 'Studies', api: :v1 do
         expect(response_hash).to match(
           a_hash_including(title_for_researchers: 'Test')
         )
-      end
-
-      it 'updates the study learning path' do
-        api_put "researcher/studies/#{study1.id}", params: { study: { learning_path: learning_path } }
-
-        expect(response).to have_http_status(:success)
-        expect(response_hash).to match a_hash_including({
-          learning_path: a_hash_including({
-            label: learning_path.label
-          })
-        })
       end
 
       it 'updates the study researchers' do

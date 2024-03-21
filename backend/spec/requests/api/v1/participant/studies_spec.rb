@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
+RSpec.describe 'Participant Studies', :multi_stage, api: :v1 do
 
   let!(:closed_study) { create(:study, title: 'closed study', opens_at: 10.days.ago, closes_at: 3.days.ago, stages: [create(:stage)]) }
 
@@ -84,6 +84,28 @@ RSpec.describe 'Participant Studies', api: :v1, multi_stage: true do
         study1.update!(is_hidden: true)
         api_get "participant/studies/#{study1.id}"
         expect(response).to have_http_status(:not_found)
+      end
+
+      it 'marks learning path as complete' do
+        api_get "participant/studies/#{study3.id}"
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match a_hash_including(
+          id: study3.id,
+          learning_path: a_hash_including({
+            completed: true
+          })
+        )
+      end
+
+      it 'marks learning path as incomplete' do
+        api_get "participant/studies/#{study1.id}"
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match a_hash_including(
+          id: study1.id,
+          learning_path: a_hash_including({
+            completed: false
+          })
+        )
       end
     end
   end

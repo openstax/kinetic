@@ -37,13 +37,25 @@ export interface LearningPath {
      * @type {string}
      * @memberof LearningPath
      */
-    label?: string;
+    label: string;
     /**
-     * Learning path label
+     * Learning path description
      * @type {string}
      * @memberof LearningPath
      */
-    description?: string;
+    description: string;
+    /**
+     * Open badge factory badge_id value
+     * @type {string}
+     * @memberof LearningPath
+     */
+    badgeId?: string;
+    /**
+     * Has the user completed this learning path?
+     * @type {boolean}
+     * @memberof LearningPath
+     */
+    completed?: boolean;
     /**
      * Studies with this learning path
      * @type {Array<Study>}
@@ -57,6 +69,8 @@ export interface LearningPath {
  */
 export function instanceOfLearningPath(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "label" in value;
+    isInstance = isInstance && "description" in value;
 
     return isInstance;
 }
@@ -72,8 +86,10 @@ export function LearningPathFromJSONTyped(json: any, ignoreDiscriminator: boolea
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
-        'label': !exists(json, 'label') ? undefined : json['label'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
+        'label': json['label'],
+        'description': json['description'],
+        'badgeId': !exists(json, 'badge_id') ? undefined : json['badge_id'],
+        'completed': !exists(json, 'completed') ? undefined : json['completed'],
         'studies': !exists(json, 'studies') ? undefined : ((json['studies'] as Array<any>).map(StudyFromJSON)),
     };
 }
@@ -90,6 +106,8 @@ export function LearningPathToJSON(value?: LearningPath | null): any {
         'id': value.id,
         'label': value.label,
         'description': value.description,
+        'badge_id': value.badgeId,
+        'completed': value.completed,
         'studies': value.studies === undefined ? undefined : ((value.studies as Array<any>).map(StudyToJSON)),
     };
 }

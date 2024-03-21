@@ -30,10 +30,12 @@ class Api::V1::Admin::LearningPathsController < Api::V1::Admin::BaseController
     inbound_binding, error = bind(params.require(:learning_path), Api::V1::Bindings::LearningPath)
     render(json: error, status: error.status_code) and return if error
 
-    @learning_path.update!(inbound_binding.to_hash)
+    unless inbound_binding.studies.blank?
+      @learning_path.study_ids = inbound_binding.studies&.map(&:id)
+    end
+    @learning_path.update!(inbound_binding.to_hash.except(:studies))
 
-    render json: @learning_path.to_api_binding(Api::V1::Bindings::LearningPath),
-           status: :ok
+    render json: Api::V1::Bindings::LearningPath.create_from_model(@learning_path), status: :ok
   end
 
   def destroy

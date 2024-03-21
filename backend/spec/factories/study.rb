@@ -14,9 +14,8 @@ FactoryBot.define do
     long_description { Faker::Lorem.paragraph_by_chars(number: rand(80..250)) }
     internal_description { Faker::Lorem.paragraph_by_chars(number: rand(80..250)) }
     category { 'Research' }
-    topic { 'Learning' }
     subject { 'Biology' }
-    learning_path { create(:learning_path) }
+    learning_path
     benefits { Faker::Lorem.paragraph_by_chars(number: rand(50..170)) }
     image_id { 'Schoolfuturecareer_1' }
     target_sample_size { 100 }
@@ -28,7 +27,7 @@ FactoryBot.define do
       researchers = [create(:researcher)] if researchers.empty?
       study.researchers << researchers
 
-      FactoryBot.create_list(:stage, evaluator.num_stages, study: study)
+      FactoryBot.create_list(:stage, evaluator.num_stages, study:)
 
       study.launch
     end

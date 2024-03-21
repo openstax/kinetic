@@ -17,7 +17,7 @@ class Study < ApplicationRecord
   has_one :first_launched_study, -> { order 'first_launched_at asc' }, class_name: 'LaunchedStudy'
 
   belongs_to :learning_path, required: false
-  # TODO: Add this back in with migration & researcher study form changes
+  # Only admins can set studies for learning paths now, saving this for useful notes though
   # validates_presence_of :learning_path, if: proc { |s| s.available? }
 
   has_one :pi,
@@ -46,6 +46,8 @@ class Study < ApplicationRecord
   arel = Study.arel_table
 
   scope :multi_stage, -> { joins(:stages).group('studies.id').having('count(study_id) > 1') }
+
+  scope :featured_order, -> { order('featured_order') }
 
   scope :available_to_participants, -> {
     joins(:stages)
@@ -110,11 +112,6 @@ class Study < ApplicationRecord
     end
   end
 
-  def is_featured?
-    featured_ids = Rails.application.secrets.fetch(:featured_studies, [])
-    featured_ids.any? && stages.any? { |st| featured_ids.include?(st.config['survey_id']) }
-  end
-
   def is_demographic_survey?
     stages.any? do |stage|
       stage.config['survey_id'] == Rails.application.secrets.demographic_survey_id
@@ -171,8 +168,8 @@ class Study < ApplicationRecord
           status: 'waiting_period',
           config: {
             type: 'qualtrics',
-            survey_id: survey_id,
-            secret_key: secret_key
+            survey_id:,
+            secret_key:
           }
         }
       )

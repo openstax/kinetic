@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-CMD=$1
-
-docker exec "${PACKAGE:=openstax/kinetic.frontend:latest}" yarn run $CMD

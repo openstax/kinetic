@@ -37,7 +37,7 @@ RSpec.describe 'Environment', api: :v1 do
       before { stub_current_user(user_id) }
 
       it 'returns their saved preferences' do
-        UserPreferences.create!(user_id: user_id, cycle_deadlines_email: true)
+        UserPreferences.create!(user_id:, cycle_deadlines_email: true)
         get '/api/v1/preferences'
         expect(response).to have_http_status(:ok)
         expect(response_hash).to match(

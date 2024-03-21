@@ -33,11 +33,6 @@ module CookieAuthentication
   end
 
   def current_user_is_admin?
-    unless Utilities.real_production_deployment?
-      configured_admin_uuids = Rails.application.secrets.admin_uuids&.split(',')&.map(&:strip) || []
-      return true if configured_admin_uuids.include?(current_user_uuid)
-    end
-
     Admin.where(user_id: current_user_uuid).any?
   end
 end

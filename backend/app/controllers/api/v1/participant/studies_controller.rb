@@ -32,7 +32,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   def launch
     LaunchedStudy.transaction do
       url = launch_pad.launch_url(preview: params[:preview] == 'true')
-      response_binding = Api::V1::Bindings::Launch.new(url: url)
+      response_binding = Api::V1::Bindings::Launch.new(url:)
       render json: response_binding, status: :ok
     end
   end
@@ -65,10 +65,15 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   protected
 
   def participant_studies
-    launched_studies = current_user.launched_studies.includes(:stages, study: [:researchers])
-                         .filter { |ls| ls.study.available? || ls.completed? }
+    launched_studies = current_user.launched_studies.includes(
+      :stages,
+      study: [:researchers, :learning_path]
+    ).filter do |ls|
+      ls.study.available? || ls.completed?
+    end
 
-    available_studies = Study.available_to_participants.includes(:stages, :researchers)
+    available_studies = Study.available_to_participants.includes(:stages, :researchers,
+                                                                 :learning_path)
                           .where.not(id: launched_studies.map(&:study_id))
 
     launched_studies + available_studies

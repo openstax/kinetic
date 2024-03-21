@@ -16,16 +16,16 @@ jobs:
         with:
           working-directory: frontend
       - name: Build and run docker
-        run: |
-          docker compose run api bundle exec rake db:migrate
-          docker compose up -d
+        run: docker compose up -d
+      - name: Run migrations
+        run: docker compose exec api bundle exec rake db:migrate
       - name: Wait for api to boot
         working-directory: frontend
         run: yarn run wait-on http://localhost:4006/api/v1/openapi.json
       - name: Generate bindings
         run: docker compose exec api bundle exec rake openstax_openapi:generate_model_bindings[1]
       - name: Check for changes in bindings
-        uses: tj-actions/verify-changed-files@v17
+        uses: tj-actions/verify-changed-files@v19
         id: verify-changed-files
         with:
           files: |
@@ -48,24 +48,24 @@ jobs:
           path: ./frontend/test-results
       - name: Shutdown docker compose
         if: always()
-        run: docker-compose down
+        run: docker compose down
 
   rspec:
     timeout-minutes: 5
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
+          bundler-cache: true
+          working-directory: backend
+
       - name: Build docker image and run specs within it
         run: |
-          CI_ENV=`bash <(curl -s https://codecov.io/env)`
-          API_DOCKERFILE_EXT=.ci docker-compose build
-          docker-compose run -T -e CI_ENV="$CI_ENV" -e ENABLE_CODECOV=1 -e CI=true api /bin/bash -c "bundle config path vendor/bundle; bundle install; bundle exec rspec"
+          docker compose build api postgres postgres_test
+          docker compose run -T api /bin/bash -c "bundle exec rspec"
       - name: Stop containers
         if: always()
-        run: docker-compose down
+        run: docker compose down

@@ -1,8 +1,8 @@
 import { useMemo } from '@common'
-import { RewardsScheduleSegment, ParticipantStudy } from '@api'
-import { useEnvironment, dayjs, useApi } from '@lib'
+import { AddReward, ParticipantStudy, RewardsScheduleSegment, UpdateRewardRequest } from '@api'
+import { dayjs, useApi, useEnvironment } from '@lib'
 import { sortBy } from 'lodash-es'
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useParticipantStudies } from '../screens/learner/studies';
 
 export interface RewardsSegment extends RewardsScheduleSegment {
@@ -105,16 +105,49 @@ export const useRewardsSchedule = () => {
 
 export const useFetchRewards = () => {
     const api = useApi()
-    return useQuery('fetchRewards', () => {
-        return api.getRewards()
+    return useQuery('fetchRewards', async () => {
+        const res = await api.getRewards();
+        return res.data || [];
     })
 }
 
-export const useNextReward = () => {
-    const env = useEnvironment()
-    const rewardSchedule = env.rewardsSchedule
-    const today = dayjs()
-    return rewardSchedule.find(reward => {
-        return today.isBefore(dayjs(reward.endAt))
+export const useCreateReward = () => {
+    const api = useApi()
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (addReward: AddReward) => await api.createReward({ addReward }),
+        onSuccess: async (data) => {
+            console.log(data)
+            await queryClient.invalidateQueries({ queryKey: ['fetchRewards'] })
+            return data
+        },
+    })
+}
+
+export const useUpdateReward = () => {
+    const api = useApi()
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (updateRewardRequest: UpdateRewardRequest) => await api.updateReward({
+            updateReward: updateRewardRequest.updateReward,
+            id: updateRewardRequest.id,
+        }),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['fetchRewards'] })
+        },
+    })
+}
+
+export const useDeleteReward = () => {
+    const api = useApi()
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (id: number) => await api.deleteReward({ id }),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['fetchRewards'] })
+        },
     })
 }

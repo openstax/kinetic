@@ -8,7 +8,7 @@ RSpec.describe 'Reports', api: :v1 do
 
   let(:study) { create(:study, num_stages: 1) }
   let(:user_id) { SecureRandom.uuid }
-  let(:launch_pad) { LaunchPad.new(study_id: study.id, user_id: user_id) }
+  let(:launch_pad) { LaunchPad.new(study_id: study.id, user_id:) }
   let(:task_name) { 'report:activity' }
   let(:accounts_user) do
     {

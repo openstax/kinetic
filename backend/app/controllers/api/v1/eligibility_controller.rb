@@ -7,7 +7,7 @@ class Api::V1::EligibilityController < Api::V1::BaseController
     book = params[:book]
     render status: :ok, json: {
       eligible: Eligibility.is_country_eligible?(country) && Eligibility.is_book_eligible?(book),
-      country: country
+      country:
     }
   end
 end

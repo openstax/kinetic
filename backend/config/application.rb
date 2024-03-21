@@ -10,13 +10,8 @@ require 'active_record/railtie'
 require 'active_storage/engine'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
-# require 'action_mailbox/engine'
-# require 'action_text/engine'
-# require 'action_view/railtie'
-# require 'action_cable/engine'
-# require "sprockets/railtie"
-# require 'rails/test_unit/railtie'
 require 'active_storage/attached'
+
 ActiveSupport.on_load(:active_record) do
   include ActiveStorage::Reflection::ActiveRecordExtensions
   ActiveRecord::Reflection.singleton_class.prepend(ActiveStorage::Reflection::ReflectionExtension)
@@ -39,7 +34,13 @@ module Kinetic
 
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.1
+
+    config.host_authorization = { exclude: ->(request) { request.path =~ /ping/ } }
+
+    # TODO: Migrate to vips at some point, its the new rails 7 default
+    #  https://github.com/heroku/heroku-buildpack-ruby/issues/1200
+    config.active_storage.variant_processor = :mini_magick
 
     config.active_record.schema_format = :sql
     config.active_storage.routes_prefix = '/files'

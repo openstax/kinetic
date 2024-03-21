@@ -17,10 +17,6 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local = false
 
-  # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
-  # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
-  # config.require_master_key = true
-
   # disable ip spoofing safeguard
   # cloudfront will occasionally send a mismatched ip and trigger it
   config.action_dispatch.ip_spoofing_check = false
@@ -53,9 +49,6 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
-
-  # Use a different cache store in production.
-  config.cache_store = ActiveSupport::Cache::DatabaseStore.new
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
@@ -133,7 +126,7 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
 
   routes.default_url_options.merge!(
     {
-      host: host,
+      host:,
       protocol: 'https'
     }
   )

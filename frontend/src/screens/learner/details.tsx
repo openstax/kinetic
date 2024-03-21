@@ -176,12 +176,13 @@ const StudyDescription: FC<StudyDetailsProps> = ({ study }) => {
 
 
 const StudyTopic: FC<StudyDetailsProps> = ({ study }) => {
-    if (!study.topic) return null
+    if (!study.learningPath) return null
 
     return (
         <Group>
             <IconMessageExclamation size={16} color={colors.purple} />
-            <Text>{study.topic}</Text>
+            <Text>{study.learningPath.label}</Text>
+            <Text size='sm'>{study.learningPath.description}</Text>
         </Group>
     )
 }

@@ -1,13 +1,13 @@
 import { cx, React, useState } from '@common'
 import { Box, getImageUrl, Icon, MultiSessionBar } from '@components'
 import { useIsMobileDevice } from '@lib'
-import { getStudyDuration, getStudyPoints, studyHasFeedback, studyIsMultipart } from '@models'
+import { getStudyDuration, getStudyPoints, studyIsMultipart } from '@models'
 import { ParticipantStudy, Study } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
 import { StudyDetailsPreview } from './details';
 import dayjs from 'dayjs';
-import { Button } from '@mantine/core';
+import { Button, Space } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
 interface StudyCardProps {
@@ -80,17 +80,6 @@ const Researcher: React.FC<StudyCardProps> = ({ study }) => {
     return (
         <Box className='x-small' padding={{ bottom: 'small' }}>
             {pi.firstName} {pi.lastName}
-        </Box>
-    )
-}
-
-const Feedback: React.FC<StudyCardProps> = ({ study }) => {
-    if (!studyHasFeedback(study)) return <span />
-
-    return (
-        <Box align='center' gap>
-            <Icon height={18} icon="feedback" color={colors.purple} />
-            <span>Feedback Available</span>
         </Box>
     )
 }
@@ -185,10 +174,8 @@ const MultiSessionFlag: FC<StudyCardProps> = ({ study }) => {
 const FeedbackMultiSessionContainer: FC<StudyCardProps> = ({ study }) => {
     const isMobile = useIsMobileDevice();
 
-    if (!studyHasFeedback(study) && !studyIsMultipart(study)) {
-        return (
-            <Box margin={{ top: 'default', bottom: 'default' }}></Box>
-        )
+    if (!studyIsMultipart(study)) {
+        return <Space h='md' />
     }
 
     return (
@@ -199,7 +186,6 @@ const FeedbackMultiSessionContainer: FC<StudyCardProps> = ({ study }) => {
             margin={{ top: 'default' }}
             css={{ minHeight: 35 }}
         >
-            <Feedback study={study} />
             <MultiSession study={study} />
         </Box>
     )
@@ -211,7 +197,6 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
     return (
         <Box className={cx({ 'small': !isMobile, 'xx-small': isMobile }, 'mt-auto', 'pt-1')} justify='between' align='center' wrap>
             <Box gap='small'>
-                <Tag tag={study.topic} />
                 <Tag tag={study.subject} />
             </Box>
             <Box gap='small'>
