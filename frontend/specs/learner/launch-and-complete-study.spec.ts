@@ -25,6 +25,7 @@ test('launching study and testing completion', async ({ browser }) => {
 
     // Qualtrics redirected to study landing page
     await userPage.getByText('You just earned 10 points').isVisible()
+    await userPage.waitForLoadState('networkidle')
     await userPage.click('testId=view-studies')
 
     await userPage.waitForLoadState('networkidle')
