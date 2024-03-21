@@ -38,7 +38,7 @@ class Api::V1::Researcher::ResponsesController < Api::V1::BaseController
                   .where(is_testing:)
                   .order(created_at: :desc)
 
-    if responses.none? || responses.first.is_stale?(cutoff)
+    if responses.none? || ( !is_testing && responses.first.is_stale?(cutoff) )
       responses = analysis.stages.map do |stage|
         stage.response_exports.create!(
           is_testing:, cutoff_at: cutoff
