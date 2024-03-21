@@ -222,13 +222,13 @@ GEM
       moneta
       multi_json (>= 1.9.2)
       webrick
-    http-2-next (0.5.1)
+    http-2-next (1.0.3)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     httpclient (2.8.3)
-    httpx (0.24.7)
-      http-2-next (< 1.0.0)
+    httpx (1.2.3)
+      http-2-next (>= 1.0.3)
     i18n (1.14.4)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
@@ -305,7 +305,7 @@ GEM
     net-smtp (0.4.0.1)
       net-protocol
     netrc (0.11.0)
-    nio4r (2.7.0)
+    nio4r (2.7.1)
     nokogiri (1.16.3-aarch64-linux)
       racc (~> 1.4)
     nokogiri (1.16.3-arm64-darwin)
@@ -384,7 +384,7 @@ GEM
     puma (6.4.2)
       nio4r (~> 2.0)
     racc (1.7.3)
-    rack (3.0.9.1)
+    rack (3.0.10)
     rack-cors (2.0.2)
       rack (>= 2.0.0)
     rack-protection (4.0.0)
@@ -433,7 +433,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rbs (2.8.4)
-    rdoc (6.6.2)
+    rdoc (6.6.3.1)
       psych (>= 4.0.0)
     regexp_parser (2.9.0)
     reline (0.4.3)
@@ -589,7 +589,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
-  httpx (~> 0.21)
+  httpx
   image_processing
   listen (~> 3.3)
   lograge
