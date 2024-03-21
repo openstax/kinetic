@@ -14,9 +14,9 @@ class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
     )
 
     if Rails.env.production?
-      # do random samples
-    else
       # do the real thing
+    else
+      # do random samples
     end
 
     # Topics with the corresponding study IDs
