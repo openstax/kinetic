@@ -6,6 +6,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
 
   def index
     studies = participant_studies
+    OpenBadgeApi.new
 
     response_binding = Api::V1::Bindings::ParticipantStudies.new(
       data: Api::V1::Bindings::ParticipantStudy.create_from_models_list(studies, current_user)

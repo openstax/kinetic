@@ -170,6 +170,7 @@ const CreateLearningPath: FC<{
         initialValues: {
             label: '',
             description: '',
+            badgeId: '',
         },
         validate: yupResolver(getLearningPathValidationSchema(learningPaths)),
         validateInputOnChange: true,
@@ -207,6 +208,12 @@ const CreateLearningPath: FC<{
                     {...form.getInputProps('description')}
                 />
 
+                <TextInput
+                    withAsterisk
+                    label="Badge ID"
+                    error={form.errors['badgeId']}
+                    {...form.getInputProps('badgeId')}
+                />
             </Stack>
 
             <Group justify="flex-end" mt="md">
@@ -227,6 +234,7 @@ const EditLearningPath: FC<{
         initialValues: {
             label: learningPath?.label || '',
             description: learningPath?.description || '',
+            badgeId: learningPath?.badgeId || '',
         },
         validate: yupResolver(getLearningPathValidationSchema(learningPaths?.filter(lp => lp.id !== learningPath?.id))),
         validateInputOnChange: true,
@@ -279,6 +287,13 @@ const EditLearningPath: FC<{
                     label="Description"
                     error={form.errors['description']}
                     {...form.getInputProps('description')}
+                />
+
+                <TextInput
+                    withAsterisk
+                    label="Badge ID"
+                    error={form.errors['badgeId']}
+                    {...form.getInputProps('badgeId')}
                 />
 
                 <ManageLearningPathStudies form={form} learningPath={learningPath} />

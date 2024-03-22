@@ -5,7 +5,7 @@ services:
       context: ./backend
       dockerfile: docker/Dockerfile
       args:
-        bundler_version: 2.4.19
+        bundler_version: 2.5.6
     networks:
       - kinetic
     ports:
