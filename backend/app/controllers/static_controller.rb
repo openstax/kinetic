@@ -3,12 +3,15 @@
 class StaticController < ActionController::Base
 
   def catchall
-    redirect_to local_dev_path_for_request and return unless Rails.env.production?
+    unless Rails.env.production?
+      redirect_to(local_dev_path_for_request,
+                  allow_other_host: true) and return
+    end
     render file: 'public/app-root.html' and return if has_auth_cookie?
 
     # see other is treated as signal that target should be canonical
     # https://developers.google.com/search/docs/crawling-indexing/301-redirects
-    redirect_to Rails.application.secrets.homepage_url, status: :see_other
+    redirect_to(Rails.application.secrets.homepage_url, status: :see_other, allow_other_host: true)
   end
 
   def error404

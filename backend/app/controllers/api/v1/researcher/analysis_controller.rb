@@ -50,7 +50,7 @@ class Api::V1::Researcher::AnalysisController < Api::V1::Researcher::BaseControl
 
   def download_run_results
     run = @analysis.runs.find(params[:run_id])
-    redirect_to url_for(run.output)
+    redirect_to url_for(run.output, allow_other_host: true)
   end
 
   def update_run
