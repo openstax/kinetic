@@ -3,7 +3,10 @@
 class StaticController < ActionController::Base
 
   def catchall
-    redirect_to(local_dev_path_for_request, allow_other_host: true) and return unless Rails.env.production?
+    unless Rails.env.production?
+      redirect_to(local_dev_path_for_request,
+                  allow_other_host: true) and return
+    end
     render file: 'public/app-root.html' and return if has_auth_cookie?
 
     # see other is treated as signal that target should be canonical
