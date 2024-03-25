@@ -1,21 +1,20 @@
 import React, { useState } from 'react'
-import { Button, Modal, Stack, Text, Title } from '@mantine/core';
+import { Anchor, Box, Button, Checkbox, Flex, Group, Image, Modal, Stack, Text, Title } from '@mantine/core';
+import { useApi, useIsMobileDevice, useUserPreferences } from '@lib';
+import Greeting from '@images/welcome-banner/welcome-greeting.svg';
+import Success from '@images/welcome-banner/welcome-success.svg';
 import { colors } from '@theme';
-import { useApi, useUserPreferences } from '@lib';
-import { ParticipantStudy } from '@api';
-import Waves from '@images/waves.svg';
-import { launchStudy } from '@models';
 
-export const LearnerWelcomeModal: FC<{
-    demographicSurvey: ParticipantStudy | null
-}> = ({ demographicSurvey }) => {
+export const LearnerWelcomeModal: FC = () => {
     const [open, setOpen] = useState(true)
     const api = useApi()
     const { data: preferences, refetch } = useUserPreferences()
+    const [step, setStep] = useState(0)
+    const isMobile = useIsMobileDevice()
 
-    if (!demographicSurvey || demographicSurvey.completedAt || preferences?.hasViewedWelcomeMessage) {
-        return null
-    }
+    // if (preferences?.hasViewedWelcomeMessage) {
+    //     return null
+    // }
 
     const onClose = async () => {
         await api.updatePreferences({ updatePreferences: { preferences: { hasViewedWelcomeMessage: true } } }).then(() => {
@@ -25,32 +24,86 @@ export const LearnerWelcomeModal: FC<{
         })
     }
 
-    const onFinishProfile = async () => {
-        await onClose()
-        await launchStudy(api, demographicSurvey.id)
-    }
+    return (
+        <Modal closeOnClickOutside={false}
+            closeOnEscape={false}
+            opened={open}
+            onClose={onClose}
+            size='80%'
+            centered
+            fullScreen={isMobile}
+            withCloseButton={step == 1}
+        >
+            {step == 0 ? <WelcomeStep setStep={setStep} /> : <EarnStep />}
+        </Modal>
+    )
+}
+
+const WelcomeStep: FC<{
+    setStep: (step: number) => void}
+> = ({ setStep }) => {
+    const [agreed, setAgreed] = useState(false)
+    const isMobile = useIsMobileDevice()
 
     return (
-        <Modal.Root opened={open} onClose={onClose} size='70%' centered>
-            <Modal.Overlay />
-            <Modal.Content >
-                <Modal.Body style={{ backgroundImage: `url(${Waves}`, backgroundSize: 'cover' }} p='xl'>
-                    <Modal.CloseButton variant='transparent' c='white' style={{ position: 'absolute', top: 5, right: 5 }} />
-                    <Stack justify='center' align='center' gap='xl' c='white'>
-                        <Title order={2}>Welcome to OpenStax Kinetic!</Title>
-                        <Text ta='center'>
-                            Participate in learning research and earn points towards exciting monthly prize draws!
-                            With each participation, you will gather more insight about yourself, and understand the learning techniques that work best for you.
-                        </Text>
-                        <Text ta='center'>
-                            <strong>Bonus:</strong> Take 5 minutes to finish your Kinetic profile and collect your first 10 points!
-                        </Text>
-                        <Button size='md' c={colors.purple} color={colors.white} onClick={onFinishProfile}>
-                            Finish Profile (10pts)
-                        </Button>
-                    </Stack>
-                </Modal.Body>
-            </Modal.Content>
-        </Modal.Root>
+        <Flex m='xl' gap={isMobile ? 'xs' : '4rem'} direction={isMobile ? 'column-reverse' : 'row'}>
+            <Box style={{ flex: 1 }}>
+                <Image src={Greeting} />
+            </Box>
+
+            <Stack gap='xl' style={{ flex: 2 }}>
+                <Title order={2} c='purple'>
+                    Welcome to OpenStax Kinetic
+                </Title>
+
+                <Title order={6} c={colors.text}>
+                    Participate in educational research to understand yourself and your learning techniques. Earn points, recognition badges, and the opportunity to connect with learning experts.
+                </Title>
+
+                <Checkbox color='purple' label={
+                    <Text c={colors.text} fw='500'>
+                        <Text span>I agree to Openstax Kinetic&apos;s </Text>
+                        <Anchor href="https://openstax.org/accounts/terms/1" target="_blank" inherit>
+                            Terms of Use
+                        </Anchor>
+                        <Text span> and </Text>
+                        <Anchor href="https://openstax.org/accounts/terms/69" target="_blank" inherit>
+                            Privacy Notice
+                        </Anchor>
+                    </Text>
+                } onChange={(event) => setAgreed(event.currentTarget.checked)}/>
+
+                <Box>
+                    <Button color='purple' disabled={!agreed} onClick={() => setStep(1)}>
+                        Continue
+                    </Button>
+                </Box>
+            </Stack>
+        </Flex>
+    )
+}
+
+const EarnStep: FC = () => {
+    const isMobile = useIsMobileDevice()
+    return (
+        <Flex direction={isMobile ? 'column' : 'row'}>
+            <Box style={{ flex: 1 }}>
+                <Image maw={300} src={Success} />
+            </Box>
+            <Stack gap='xl' my='5rem' style={{ flex: 2 }}>
+                <Title order={1} c='purple'>
+                    Earn your first 10 points!
+                </Title>
+
+                <Title order={5} c={colors.text}>
+                    Take a Kinetic study and discover its learning benefits. Plus, earn recognition badges and unlock access to additional learning rewards
+                </Title>
+
+                <Group gap='lg'>
+                    TODO: Studies here
+                </Group>
+
+            </Stack>
+        </Flex>
     )
 }

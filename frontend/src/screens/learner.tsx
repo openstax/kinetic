@@ -180,8 +180,6 @@ const LearnerDashboard = () => {
         filter,
         setFilter,
         studiesByTopic,
-        // syllabusContestStudies,
-        demographicSurvey,
     } = useLearnerStudies()
 
     if (!env.isEligible) {
@@ -195,11 +193,8 @@ const LearnerDashboard = () => {
             </Routes>
             <TopNavBar />
 
-            <LearnerWelcomeModal demographicSurvey={demographicSurvey} />
+            <LearnerWelcomeModal />
             <RewardsProgressBar studies={allStudies} />
-
-            {/* Temporarily disable syllabus contest due to legal, keep it just in case we re-enable in the future */}
-            {/*<SyllabusContest studies={syllabusContestStudies} />*/}
 
             <HighlightedStudies studies={highlightedStudies} title="Highlighted Studies on Kinetic" className="highlighted" onSelect={onStudySelect}/>
 
