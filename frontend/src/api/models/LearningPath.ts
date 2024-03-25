@@ -51,6 +51,12 @@ export interface LearningPath {
      */
     badgeId?: string;
     /**
+     * Open Badge Factory badge info
+     * @type {object}
+     * @memberof LearningPath
+     */
+    badgeInfo?: object;
+    /**
      * Has the user completed this learning path?
      * @type {boolean}
      * @memberof LearningPath
@@ -89,6 +95,7 @@ export function LearningPathFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'label': json['label'],
         'description': json['description'],
         'badgeId': !exists(json, 'badge_id') ? undefined : json['badge_id'],
+        'badgeInfo': !exists(json, 'badge_info') ? undefined : json['badge_info'],
         'completed': !exists(json, 'completed') ? undefined : json['completed'],
         'studies': !exists(json, 'studies') ? undefined : ((json['studies'] as Array<any>).map(StudyFromJSON)),
     };
@@ -107,6 +114,7 @@ export function LearningPathToJSON(value?: LearningPath | null): any {
         'label': value.label,
         'description': value.description,
         'badge_id': value.badgeId,
+        'badge_info': value.badgeInfo,
         'completed': value.completed,
         'studies': value.studies === undefined ? undefined : ((value.studies as Array<any>).map(StudyToJSON)),
     };

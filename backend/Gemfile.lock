@@ -222,13 +222,13 @@ GEM
       moneta
       multi_json (>= 1.9.2)
       webrick
-    http-2-next (0.5.1)
+    http-2-next (1.0.3)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     httpclient (2.8.3)
-    httpx (0.24.7)
-      http-2-next (< 1.0.0)
+    httpx (1.2.3)
+      http-2-next (>= 1.0.3)
     i18n (1.14.4)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
@@ -588,7 +588,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
-  httpx (~> 0.21)
+  httpx (~> 1.1)
   image_processing
   listen (~> 3.3)
   lograge
@@ -621,4 +621,4 @@ RUBY VERSION
    ruby 3.3.0p0
 
 BUNDLED WITH
-   2.4.10
+   2.5.6
