@@ -6,7 +6,7 @@ require 'zip'
 class QualtricsApi
 
   def initialize
-    @http = HTTPX.plugin(:compression).with(
+    @http = HTTPX.with(
       headers: { 'X-API-TOKEN': Rails.application.secrets.qualtrics_api_key }
     ).plugin(:stream)
   end

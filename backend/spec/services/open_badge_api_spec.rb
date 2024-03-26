@@ -7,11 +7,13 @@ RSpec.describe OpenBadgeApi do
 
   it 'gets an auth token' do
     token = open_badge_api.authenticate
-    expect(token).to be_a_kind_of(String)
+    expect(token).to be_a(String)
   end
 
   it 'gets badge info' do
-    open_badge_api.badge_info('SAJS8Va7DGDaC3D')
+    badge_info = open_badge_api.badge_info('SAJSINa7DGDaC4D')
+    expect(badge_info['name']).to be_a(String)
+    expect(badge_info['image']).to be_a(String)
   end
 
 end

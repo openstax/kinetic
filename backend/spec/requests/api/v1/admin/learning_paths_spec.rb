@@ -9,7 +9,8 @@ RSpec.describe 'Learning Paths', api: :v1 do
   let(:valid_attributes) do
     {
       label: 'Cool Path',
-      description: 'Cool description'
+      description: 'Cool description',
+      badge_id: 'SAJSINa7DGDaC4D'
     }
   end
 
@@ -38,7 +39,12 @@ RSpec.describe 'Learning Paths', api: :v1 do
             a_hash_including(
               id: learning_path.id,
               label: learning_path.label,
-              description: learning_path.description
+              description: learning_path.description,
+              badge: a_hash_including(
+                name: a_kind_of(String),
+                id: a_kind_of(String),
+                image: a_kind_of(String),
+              )
             )
           )
         )
