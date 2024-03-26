@@ -9,6 +9,8 @@ import { ApproveStudies } from './admin/approve-studies'
 import { AdminWorkspaces } from './admin/workspaces'
 import { Impersonation } from './admin/impersonation'
 import { AdminReports } from './admin/admin-reports';
+import { ManageLearningPaths } from './admin/manage-learning-paths';
+import { ManageHighlightedStudies } from './admin/manage-highlighted-studies';
 
 export default function AdminHome() {
     const user = useCurrentUser()
@@ -20,6 +22,8 @@ export default function AdminHome() {
             <Routes>
                 <Route path="/" element={<Navigate to="/admin/banners" />} />
                 <Route path="/banners" element={<AdminBanners />} />
+                <Route path="/manage-learning-paths" element={<ManageLearningPaths />} />
+                <Route path="/manage-highlighted-studies" element={<ManageHighlightedStudies />} />
                 <Route path="/approve-studies" element={<ApproveStudies />} />
                 <Route path="/rewards" element={<AdminRewards />} />
                 <Route path="/workspaces/:studyId?" element={<AdminWorkspaces />} />

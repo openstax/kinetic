@@ -7,17 +7,14 @@ $link-color: #0d6efd;
 @import "flatpickr/dist/flatpickr.css";
 @import 'swiper/swiper-bundle.css';
 
+:root {
+    --swiper-theme-color: #3d2dcb;
+}
+
 .osano-cm-widget {
     display: none !important;
 }
 
 .cursor-pointer {
     cursor: pointer;
-}
-
-.btn-primary {
-    color: $white;
-    &:hover {
-        color: $gray-200;
-    }
 }

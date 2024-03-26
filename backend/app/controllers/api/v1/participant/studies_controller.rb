@@ -54,21 +54,26 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
       )
     end
 
-    completion_status = launch_pad.land(
+    launched_study = launch_pad.land(
       consent: params[:consent] != 'false',
       aborted: params[:aborted]
     )
 
-    render json: Api::V1::Bindings::ParticipantStudyCompletion.new(completion_status)
+    render json: Api::V1::Bindings::ParticipantStudy.create_from_model(launched_study, current_user)
   end
 
   protected
 
   def participant_studies
-    launched_studies = current_user.launched_studies.includes(:stages, study: [:researchers])
-                         .filter { |ls| ls.study.available? || ls.completed? }
+    launched_studies = current_user.launched_studies.includes(
+      :stages,
+      study: [:researchers, :learning_path]
+    ).filter do |ls|
+      ls.study.available? || ls.completed?
+    end
 
-    available_studies = Study.available_to_participants.includes(:stages, :researchers)
+    available_studies = Study.available_to_participants.includes(:stages, :researchers,
+                                                                 :learning_path)
                           .where.not(id: launched_studies.map(&:study_id))
 
     launched_studies + available_studies

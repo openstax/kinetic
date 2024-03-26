@@ -1,19 +1,18 @@
 import { Navigate, NavLink, useParams } from 'react-router-dom'
 import { React, useEffect, useState } from '@common'
 import { colors } from '@theme'
-import { DefaultApi, LandStudyAbortedEnum, LandStudyRequest, ParticipantStudy } from '@api'
+import { LandStudyAbortedEnum, LandStudyRequest, ParticipantStudy } from '@api'
 import { ErrorPage, LoadingAnimation } from '@components'
 import { useApi, useQueryParam } from '@lib'
 import { BackgroundImage, Box, Button, Container, Flex, Group, Modal, Space, Stack, Text, Title } from '@mantine/core';
 import Waves from '@images/waves.svg'
 import { launchStudy, RewardsSegment, useRewardsSchedule } from '@models';
-import { useLearnerStudies } from './learner/studies';
+import { useLandStudy, useParticipantStudies } from './learner/studies';
 import dayjs from 'dayjs';
 import { noop } from 'lodash-es';
 
-type LandedStudy = ParticipantStudy & { completedAt?: Date, abortedAt?: Date }
 
-const Points: React.FC<{ study: LandedStudy }> = ({ study }) => {
+const Points: React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     const completed = study.stages?.find(stage => stage.isCompleted) || study.completedAt
     if (!completed) return null
 
@@ -24,26 +23,17 @@ const Points: React.FC<{ study: LandedStudy }> = ({ study }) => {
     )
 }
 
-const landStudy = async (api: DefaultApi, params: LandStudyRequest): Promise<LandedStudy> => {
-    const study = await api.getParticipantStudy({ id: params.id })
-    const landing = await api.landStudy(params)
-    return { ...study, ...landing }
-}
-
 export default function StudyLanding() {
     const { studyId } = useParams<string>();
-
-    // this is somewhat inaccurate but we do not want to say something like "recording status"
-    // since that will alarm participants who refused consent
-    const [study, setLanded] = useState<LandedStudy | null>(null)
+    const [study, setStudy] = useState<ParticipantStudy | null>(null)
     const [error, setError] = useState<any>(null)
-    const api = useApi()
     const consent = useQueryParam('consent') != 'false'
     const abort = useQueryParam('abort') == 'true'
     const md = useQueryParam('md') || {}
-    const { allStudies, demographicSurvey } = useLearnerStudies()
-    const { schedule } = useRewardsSchedule(allStudies)
+    const { demographicSurvey } = useParticipantStudies()
+    const { schedule } = useRewardsSchedule()
     const nextReward = schedule.find(rewardSegment => !rewardSegment.achieved && rewardSegment.isFuture)
+    const landStudy = useLandStudy()
 
     useEffect(() => {
         const params: LandStudyRequest = {
@@ -55,9 +45,10 @@ export default function StudyLanding() {
             params['aborted'] = LandStudyAbortedEnum.Refusedconsent
         }
 
-        landStudy(api, params)
-            .then(setLanded)
-            .catch(setError)
+        landStudy.mutate(params, {
+            onSuccess: setStudy,
+            onError: setError,
+        })
     }, [])
 
     // Learners who don't consent won't earn points, so we'll just redirect them home

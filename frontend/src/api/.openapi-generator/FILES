@@ -16,7 +16,6 @@ models/NewStage.ts
 models/NewStudy.ts
 models/ParticipantStudies.ts
 models/ParticipantStudy.ts
-models/ParticipantStudyCompletion.ts
 models/ParticipantStudyStage.ts
 models/PublicResearcher.ts
 models/QualtricsStage.ts

@@ -15,9 +15,9 @@ export function Impersonation() {
 }
 
 const ResearcherImpersonation = () => {
-    const { data: researchers, isLoading } = useFetchResearchers()
+    const { data: researchers = [], isLoading } = useFetchResearchers()
     const [selectedResearcher, setSelectedResearcher] = useState<Researcher | null>(null)
-    if (isLoading || !researchers) return <LoadingAnimation />
+    if (isLoading) return <LoadingAnimation />
 
     return (
         <Center mt='lg'>

@@ -2,7 +2,6 @@ import { React, useNavigate } from '@common'
 import { Box, Page } from '@components'
 import { StudyStatus } from '@models'
 import { colors } from '@theme';
-import 'bootstrap/js/dist/dropdown'
 import { StudiesTable } from './studies-table';
 import { StudyStatusEnum } from '@api';
 import { useParams } from 'react-router-dom';

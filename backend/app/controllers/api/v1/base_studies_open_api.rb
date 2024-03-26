@@ -4,6 +4,7 @@ class Api::V1::BaseStudiesOpenApi
   include OpenStax::OpenApi::Blocks
 
   openapi_component do
+
     schema :BaseStudy do
       property :title_for_participants do
         key :type, :string
@@ -34,6 +35,21 @@ class Api::V1::BaseStudiesOpenApi
       property :benefits do
         key :type, :string
         key :description, 'Description of how the study benefits participants'
+      end
+      property :is_featured do
+        key :type, :boolean
+        key :description, 'Is this study featured?'
+        key :readOnly, true
+      end
+      property :featured_order do
+        key :type, :integer
+        key :description, 'An integer that describes the sort order for this study'
+        key :readOnly, true
+      end
+      property :is_highlighted do
+        key :type, :boolean
+        key :description, 'Is this study highlighted?'
+        key :readOnly, true
       end
       property :is_hidden do
         key :type, :boolean
@@ -99,9 +115,8 @@ class Api::V1::BaseStudiesOpenApi
         key :type, :string
         key :description, 'The category (type of) study'
       end
-      property :topic do
-        key :type, :string
-        key :description, 'The study topic'
+      property :learning_path do
+        key :$ref, :LearningPath
       end
       property :subject do
         key :type, :string

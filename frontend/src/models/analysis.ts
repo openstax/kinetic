@@ -1,7 +1,6 @@
-import * as Yup from 'yup'
 import { Analysis, AnalysisRun } from '@api';
 import { useQuery } from 'react-query';
-import { useMemo } from '@common';
+import { useMemo, Yup } from '@common';
 import { useApi } from '@lib';
 import { last } from 'lodash-es';
 

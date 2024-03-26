@@ -51,7 +51,6 @@ class Api::V1::Researcher::StudiesOpenApi
     property :id do
       key :type, :integer
       key :description, 'The study ID.'
-      key :readOnly, true
     end
   end
 

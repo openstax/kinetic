@@ -10,6 +10,7 @@ import { capitalize } from 'lodash-es';
 import Waiting from '@images/study-creation/waiting.svg'
 import { useLocalstorageState } from 'rooks';
 import { Button } from '@mantine/core';
+import { NavLink } from 'react-router-dom';
 
 export const ReviewStudy: FC<{ study: Study }> = ({ study }) => {
     return (
@@ -242,11 +243,16 @@ const SubmitSuccess: FC<{ show: boolean }> = ({ show }) => {
                         <p>Follow the instructions to build your task and come back here to proceed with finalizing your study and launching it on Kinetic.</p>
                     </Box>
 
-                    <Button data-testid='submit-study-success-button' onClick={() => {
-                        nav('/studies')
-                    }}>
-                        Return to Studies Dashboard
-                    </Button>
+                    <NavLink to='/studies'>
+
+                        <Button data-testid='submit-study-success-button' onClick={() => {
+                            nav('/studies')
+                        }}>
+                            Return to Studies Dashboard
+
+                        </Button>
+                    </NavLink>
+
                 </Box>
             </Modal.Body>
         </Modal>
