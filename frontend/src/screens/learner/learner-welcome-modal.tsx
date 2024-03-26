@@ -1,26 +1,24 @@
 import React, { useState } from 'react'
 import { Anchor, Box, Button, Checkbox, Flex, Group, Image, Modal, Stack, Text, Title } from '@mantine/core';
-import { useApi, useIsMobileDevice, useUserPreferences } from '@lib';
+import { useApi, useIsMobileDevice, useUpdateUserPreferences, useUserPreferences } from '@lib';
 import Greeting from '@images/welcome-banner/welcome-greeting.svg';
 import Success from '@images/welcome-banner/welcome-success.svg';
 import { colors } from '@theme';
 
 export const LearnerWelcomeModal: FC = () => {
     const [open, setOpen] = useState(true)
-    const api = useApi()
-    const { data: preferences, refetch } = useUserPreferences()
+    const { data: preferences } = useUserPreferences()
+    const updatePreferences = useUpdateUserPreferences()
     const [step, setStep] = useState(0)
     const isMobile = useIsMobileDevice()
 
-    // if (preferences?.hasViewedWelcomeMessage) {
-    //     return null
-    // }
+    if (preferences?.hasViewedWelcomeMessage) {
+        return null
+    }
 
     const onClose = async () => {
-        await api.updatePreferences({ updatePreferences: { preferences: { hasViewedWelcomeMessage: true } } }).then(() => {
-            refetch().then(() => {
-                setOpen(false)
-            })
+        updatePreferences.mutate({ updatePreferences: { preferences: { hasViewedWelcomeMessage: true } } }, {
+            onSuccess: () => setOpen(false),
         })
     }
 
@@ -46,7 +44,7 @@ const WelcomeStep: FC<{
     const isMobile = useIsMobileDevice()
 
     return (
-        <Flex m='xl' gap={isMobile ? 'xs' : '4rem'} direction={isMobile ? 'column-reverse' : 'row'}>
+        <Flex m='xl' gap='xl' direction={isMobile ? 'column-reverse' : 'row'}>
             <Box style={{ flex: 1 }}>
                 <Image src={Greeting} />
             </Box>
@@ -86,11 +84,11 @@ const WelcomeStep: FC<{
 const EarnStep: FC = () => {
     const isMobile = useIsMobileDevice()
     return (
-        <Flex direction={isMobile ? 'column' : 'row'}>
-            <Box style={{ flex: 1 }}>
+        <Flex direction={isMobile ? 'column' : 'row'} m='xl'>
+            <Flex style={{ flex: 1 }} align='flex-end'>
                 <Image maw={300} src={Success} />
-            </Box>
-            <Stack gap='xl' my='5rem' style={{ flex: 2 }}>
+            </Flex>
+            <Stack gap='xl' style={{ flex: 2 }}>
                 <Title order={1} c='purple'>
                     Earn your first 10 points!
                 </Title>
@@ -102,7 +100,6 @@ const EarnStep: FC = () => {
                 <Group gap='lg'>
                     TODO: Studies here
                 </Group>
-
             </Stack>
         </Flex>
     )
