@@ -51,6 +51,10 @@ jobs:
         run: docker compose down
 
   rspec:
+    env:
+      OBF_CLIENT_ID: ${{ secrets.OBF_CLIENT_ID }}
+      OBF_CLIENT_SECRET: ${{ secrets.OBF_CLIENT_SECRET }}
+      OBF_EXAMPLE_BADGE_ID: ${{ secrets.OBF_EXAMPLE_BADGE_ID }}
     timeout-minutes: 5
     runs-on: ubuntu-22.04
     steps:
