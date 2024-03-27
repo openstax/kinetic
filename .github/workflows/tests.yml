@@ -63,10 +63,10 @@ jobs:
       - name: Build docker image
         run: docker compose build api postgres postgres_test
       - name: Run Specs
-        run: docker compose run -e OBF_CLIENT_ID=${{ secrets.OBF_CLIENT_ID }} \
+        run: docker compose run api -T -e OBF_CLIENT_ID=${{ secrets.OBF_CLIENT_ID }} \
           -e OBF_CLIENT_SECRET=${{ secrets.OBF_CLIENT_SECRET }} \
           -e OBF_EXAMPLE_BADGE_ID=${{ secrets.OBF_EXAMPLE_BADGE_ID }} \
-          -T api /bin/bash -c "bundle exec rspec"
+          /bin/bash -c "bundle exec rspec"
 
       - name: Stop containers
         if: always()
