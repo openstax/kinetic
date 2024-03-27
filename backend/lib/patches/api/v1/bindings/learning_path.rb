@@ -8,9 +8,7 @@ Rails.application.config.to_prepare do
       new(attributes).tap do |bnd|
         bnd.studies = model.studies
         bnd.completed = model.completed?(user) unless user.nil?
-        unless model.badge_id.nil?
-          bnd.badge = OpenBadgeApi.instance.badge_info(model.badge_id)
-        end
+        bnd.badge = OpenBadgeApi.instance.badge_info(model.badge_id) unless model.badge_id.nil?
       end
     end
   end

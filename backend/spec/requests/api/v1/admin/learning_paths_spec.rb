@@ -43,7 +43,7 @@ RSpec.describe 'Learning Paths', api: :v1 do
               badge: a_hash_including(
                 name: a_kind_of(String),
                 id: a_kind_of(String),
-                image: a_kind_of(String),
+                image: a_kind_of(String)
               )
             )
           )

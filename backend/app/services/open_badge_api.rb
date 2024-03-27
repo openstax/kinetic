@@ -14,11 +14,11 @@ class OpenBadgeApi
   def token
     Rails.cache.fetch('obf-api-oauth-token', expires_in: 36_000) do
       response = HTTPX.accept('application/json')
-                 .post('https://openbadgefactory.com/v1/client/oauth2/token', form: {
-                   grant_type: 'client_credentials',
-                   client_id: @client_id,
-                   client_secret: @client_secret
-                 })
+                   .post('https://openbadgefactory.com/v1/client/oauth2/token', form: {
+                           grant_type: 'client_credentials',
+                           client_id: @client_id,
+                           client_secret: @client_secret
+                         })
       @token = response.json['access_token']
     end
   end
@@ -26,14 +26,14 @@ class OpenBadgeApi
   def badge_info(badge_id)
     Rails.cache.fetch("obf-badge-#{badge_id}", expires_in: 86_400) do
       response = HTTPX.plugin(:auth)
-                 .with(headers: { 'content-type' => 'application/json' })
-                 .authorization("Bearer #{token}")
-                 .get("https://openbadgefactory.com/v1/badge/#{@client_id}/#{badge_id}")
+                   .with(headers: { 'content-type' => 'application/json' })
+                   .authorization("Bearer #{token}")
+                   .get("https://openbadgefactory.com/v1/badge/#{@client_id}/#{badge_id}")
       data = response.json
       {
         name: data['name'],
         id: data['id'],
-        image: data['image'],
+        image: data['image']
       }
 
     end
