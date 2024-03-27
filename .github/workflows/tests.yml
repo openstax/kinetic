@@ -67,7 +67,7 @@ jobs:
       - name: Build docker image
         run: docker compose build api postgres_test
       - name: Run docker containers
-        run: docker compose up api postgres_test
+        run: docker compose up api postgres_test -d
       - name: Run Specs
         run: docker compose exec api bundle exec rspec
       - name: Stop containers
