@@ -65,9 +65,11 @@ jobs:
           bundler-cache: true
           working-directory: backend
       - name: Build docker image
-        run: docker compose build api postgres postgres_test
+        run: docker compose build api postgres_test
+      - name: Run docker containers
+        run: docker compose up api postgres_test
       - name: Run Specs
-        run: docker compose run -T api /bin/bash -c "bundle exec rspec"
+        run: docker compose exec api bundle exec rspec
       - name: Stop containers
         if: always()
         run: docker compose down
