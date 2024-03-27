@@ -10,7 +10,7 @@ RSpec.describe 'Learning Paths', api: :v1 do
     {
       label: 'Cool Path',
       description: 'Cool description',
-      badge_id: ENV['OBF_EXAMPLE_BADGE_ID']
+      badge_id: ENV.fetch('OBF_EXAMPLE_BADGE_ID', nil)
     }
   end
 
