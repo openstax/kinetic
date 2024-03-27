@@ -7,8 +7,8 @@ class OpenBadgeApi
   include Singleton
 
   def initialize
-    @client_id = ENV.fetch('OPEN_BADGE_FACTORY_CLIENT_ID', nil)
-    @client_secret = ENV.fetch('OPEN_BADGE_FACTORY_CLIENT_SECRET', nil)
+    @client_id = ENV['OBF_CLIENT_ID']
+    @client_secret = ENV['OBF_CLIENT_SECRET']
   end
 
   def token
