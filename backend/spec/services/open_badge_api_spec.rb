@@ -11,6 +11,8 @@ RSpec.describe OpenBadgeApi do
   end
 
   it 'gets badge info' do
+    puts('whatup')
+    puts(ENV.fetch('OBF_EXAMPLE_BADGE_ID'))
     badge_info = open_badge_api.badge_info(ENV.fetch('OBF_EXAMPLE_BADGE_ID', nil))
     expect(badge_info[:name]).to be_a(String)
     expect(badge_info[:image]).to be_a(String)
