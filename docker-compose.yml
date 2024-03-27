@@ -20,9 +20,7 @@ services:
       - TEST_DB_NAME=kinetic_test
       - TEST_DB_USER=kinetic
       - TEST_DB_PASS=kinetic
-      - OBF_CLIENT_ID=${{ secrets.OBF_CLIENT_ID }}
-      - OBF_CLIENT_SECRET=${{ secrets.OBF_CLIENT_SECRET }}
-      - OBF_EXAMPLE_BADGE_ID=${{ secrets.OBF_EXAMPLE_BADGE_ID }}
+
     depends_on:
       - postgres
       - postgres_test
