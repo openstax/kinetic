@@ -58,6 +58,9 @@ jobs:
       OBF_CLIENT_SECRET: ${{ secrets.OBF_CLIENT_SECRET }}
       OBF_EXAMPLE_BADGE_ID: ${{ secrets.OBF_EXAMPLE_BADGE_ID }}
     steps:
+      - name: Show repo env secret
+        run: |
+          echo ${{ secrets.OBF_EXAMPLE_BADGE_ID }}
       - uses: actions/checkout@v4
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
