@@ -53,10 +53,6 @@ jobs:
   rspec:
     timeout-minutes: 5
     runs-on: ubuntu-22.04
-    env:
-      OBF_CLIENT_ID: ${{ secrets.OBF_CLIENT_ID }}
-      OBF_CLIENT_SECRET: ${{ secrets.OBF_CLIENT_SECRET }}
-      OBF_EXAMPLE_BADGE_ID: ${{ secrets.OBF_EXAMPLE_BADGE_ID }}
     steps:
       - name: Show repo env secret
         run: |
@@ -72,17 +68,13 @@ jobs:
       - name: Run docker containers
         run: docker compose up api postgres_test -d
       - name: Run Specs
-        #        run: docker compose exec api bundle exec rspec
-        run: |
-          docker compose exec \
-          -e OBF_EXAMPLE_BADGE_ID=${{ secrets.OBF_EXAMPLE_BADGE_ID }} \
-          -e OBF_CLIENT_ID=${{ secrets.OBF_CLIENT_ID }} \
-          -e OBF_CLIENT_SECRET=${{ secrets.OBF_CLIENT_SECRET }} \
-          api bundle exec rspec
-        env:
-          OBF_CLIENT_ID: ${{ secrets.OBF_CLIENT_ID }}
-          OBF_CLIENT_SECRET: ${{ secrets.OBF_CLIENT_SECRET }}
-          OBF_EXAMPLE_BADGE_ID: ${{ secrets.OBF_EXAMPLE_BADGE_ID }}
+        run: docker compose exec api bundle exec rspec
+        #        run: |
+        #          docker compose exec \
+        #          -e OBF_EXAMPLE_BADGE_ID=${{ secrets.OBF_EXAMPLE_BADGE_ID }} \
+        #          -e OBF_CLIENT_ID=${{ secrets.OBF_CLIENT_ID }} \
+        #          -e OBF_CLIENT_SECRET=${{ secrets.OBF_CLIENT_SECRET }} \
+        #          api bundle exec rspec
       - name: Stop containers
         if: always()
         run: docker compose down
