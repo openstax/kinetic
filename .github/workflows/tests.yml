@@ -68,6 +68,10 @@ jobs:
       - name: Run docker containers
         run: docker compose up api postgres_test -d
       - name: Run Specs
+        env:
+          OBF_EXAMPLE_BADGE_ID: ${{ secrets.OBF_EXAMPLE_BADGE_ID }}
+          OBF_CLIENT_ID: ${{ secrets.OBF_CLIENT_ID }}
+          OBF_CLIENT_SECRET: ${{ secrets.OBF_CLIENT_SECRET }}
         run: docker compose exec api bundle exec rspec
         #        run: |
         #          docker compose exec \

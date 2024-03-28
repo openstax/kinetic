@@ -6,6 +6,7 @@ require 'zip'
 class QualtricsApi
 
   def initialize
+    puts('qualtrics api key')
     puts(Rails.application.secrets.qualtrics_api_key)
     @http = HTTPX.with(
       headers: { 'X-API-TOKEN': Rails.application.secrets.qualtrics_api_key }
