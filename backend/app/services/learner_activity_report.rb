@@ -33,7 +33,7 @@ class LearnerActivityReport
   end
 
   def get_users(launches)
-    launches.each do |launch|
+    launches.find_each do |launch|
       @user_uuids << launch.user_id
     end
     UserInfo.for_uuids(@user_uuids)
@@ -48,7 +48,7 @@ class LearnerActivityReport
   end
 
   def build_rows(csv, users, launches)
-    launches.each do |launch|
+    launches.find_each do |launch|
       next if launch.stage.study.first_launched_study.opted_out_at
 
       account = users[launch.user_id] || {}
