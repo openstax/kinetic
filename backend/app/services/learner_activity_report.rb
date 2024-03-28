@@ -33,9 +33,8 @@ class LearnerActivityReport
   end
 
   def get_users(launches)
-    launches.find_each do |launch|
-      @user_uuids << launch.user_id
-    end
+    @user_uuids = launches.clone.pluck('user_id')
+
     UserInfo.for_uuids(@user_uuids)
   end
 
