@@ -48,7 +48,8 @@ class LearnerActivityReport
   end
 
   def build_rows(csv, users, launches)
-    launches.find_each do |launch|
+    launches.includes(:stage, study: :first_launched_study).find_each do |launch|
+      debugger
       next if launch.stage.study.first_launched_study.opted_out_at
 
       account = users[launch.user_id] || {}
