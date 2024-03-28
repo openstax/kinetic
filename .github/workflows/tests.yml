@@ -58,7 +58,7 @@ jobs:
         run: |
           echo ${{ secrets.OBF_EXAMPLE_BADGE_ID }}
           echo $OBF_EXAMPLE_BADGE_ID
-          echo ${{env.OBF_EXAMPLE_BADGE_ID}}
+          echo ${{vars.OBF_EXAMPLE_BADGE_ID}}
       - uses: actions/checkout@v4
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -69,9 +69,9 @@ jobs:
         run: docker compose up api postgres_test -d
       - name: Run Specs
         env:
-          OBF_EXAMPLE_BADGE_ID: ${{ secrets.OBF_EXAMPLE_BADGE_ID }}
-          OBF_CLIENT_ID: ${{ secrets.OBF_CLIENT_ID }}
-          OBF_CLIENT_SECRET: ${{ secrets.OBF_CLIENT_SECRET }}
+          OBF_EXAMPLE_BADGE_ID: ${{ vars.OBF_EXAMPLE_BADGE_ID }}
+          OBF_CLIENT_ID: ${{ vars.OBF_CLIENT_ID }}
+          OBF_CLIENT_SECRET: ${{ vars.OBF_CLIENT_SECRET }}
         run: docker compose exec api bundle exec rspec
         #        run: |
         #          docker compose exec \
