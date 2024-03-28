@@ -65,7 +65,7 @@ const ManageLearningPathStudies: FC<{
         <Stack>
             <MultiSelect
                 {...form.getInputProps('studies')}
-                label={`Featured studies for ${learningPath.label}`}
+                label={`Add studies to ${learningPath.label}`}
                 searchable
                 placeholder="Add studies to this learning path"
                 value={studies}
