@@ -57,14 +57,14 @@ jobs:
       - name: Show repo env secret
         run: |
           echo ${{ secrets.OBF_EXAMPLE_BADGE_ID }}
+          echo $OBF_EXAMPLE_BADGE_ID
+          echo ${{env.OBF_EXAMPLE_BADGE_ID}}
       - uses: actions/checkout@v4
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
           working-directory: backend
-      - name: Build docker image
-        run: docker compose build api postgres_test
       - name: Run docker containers
         run: docker compose up api postgres_test -d
       - name: Run Specs

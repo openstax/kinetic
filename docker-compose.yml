@@ -60,16 +60,17 @@ services:
       - POSTGRES_USER=kinetic
       - POSTGRES_PASSWORD=kinetic
       - POSTGRES_DB=kinetic_test
-  petstore:
-    image: "swaggerapi/petstore3"
-    networks:
-      - kinetic
-    environment:
-      - SWAGGER_HOST=http://0.0.0.0:4008
-      - SWAGGER_BASE_PATH=/api/v1
-      - SWAGGER_URL=http://0.0.0.0:4006
-    ports:
-      - "4008:8080"
+#  TODO: Investigate if needed
+#  petstore:
+#    image: "swaggerapi/petstore3"
+#    networks:
+#      - kinetic
+#    environment:
+#      - SWAGGER_HOST=http://0.0.0.0:4008
+#      - SWAGGER_BASE_PATH=/api/v1
+#      - SWAGGER_URL=http://0.0.0.0:4006
+#    ports:
+#      - "4008:8080"
 
 
 networks:
