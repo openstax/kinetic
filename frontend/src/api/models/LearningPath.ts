@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Badge } from './Badge';
+import {
+    BadgeFromJSON,
+    BadgeFromJSONTyped,
+    BadgeToJSON,
+} from './Badge';
 import type { Study } from './Study';
 import {
     StudyFromJSON,
@@ -50,6 +56,12 @@ export interface LearningPath {
      * @memberof LearningPath
      */
     badgeId?: string;
+    /**
+     * 
+     * @type {Badge}
+     * @memberof LearningPath
+     */
+    badge?: Badge;
     /**
      * Has the user completed this learning path?
      * @type {boolean}
@@ -89,6 +101,7 @@ export function LearningPathFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'label': json['label'],
         'description': json['description'],
         'badgeId': !exists(json, 'badge_id') ? undefined : json['badge_id'],
+        'badge': !exists(json, 'badge') ? undefined : BadgeFromJSON(json['badge']),
         'completed': !exists(json, 'completed') ? undefined : json['completed'],
         'studies': !exists(json, 'studies') ? undefined : ((json['studies'] as Array<any>).map(StudyFromJSON)),
     };
@@ -107,6 +120,7 @@ export function LearningPathToJSON(value?: LearningPath | null): any {
         'label': value.label,
         'description': value.description,
         'badge_id': value.badgeId,
+        'badge': BadgeToJSON(value.badge),
         'completed': value.completed,
         'studies': value.studies === undefined ? undefined : ((value.studies as Array<any>).map(StudyToJSON)),
     };

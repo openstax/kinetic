@@ -150,7 +150,7 @@ export const SegmentedBar: FCWC<SegmentedBarProps> = ({ className, children, com
             >
                 <span
                     data-testid="progress-indicator"
-                    data-percentage-complete={completedPercentage}
+                    data-percentage-complete={completedPercentage || ''}
                     css={{
                         height: '100%',
                         width: `${completedPercentage}% `,

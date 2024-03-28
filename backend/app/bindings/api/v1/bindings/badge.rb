@@ -14,37 +14,22 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class LearningPath
-    # The learning path ID
+  class Badge
+    # Badge ID
     attr_accessor :id
 
-    # Learning path label
-    attr_accessor :label
+    # Badge name
+    attr_accessor :name
 
-    # Learning path description
-    attr_accessor :description
-
-    # Open badge factory badge_id value
-    attr_accessor :badge_id
-
-    attr_accessor :badge
-
-    # Has the user completed this learning path?
-    attr_accessor :completed
-
-    # Studies with this learning path
-    attr_accessor :studies
+    # Badge image
+    attr_accessor :image
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'id' => :'id',
-        :'label' => :'label',
-        :'description' => :'description',
-        :'badge_id' => :'badge_id',
-        :'badge' => :'badge',
-        :'completed' => :'completed',
-        :'studies' => :'studies'
+        :'name' => :'name',
+        :'image' => :'image'
       }
     end
 
@@ -56,13 +41,9 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'id' => :'Float',
-        :'label' => :'String',
-        :'description' => :'String',
-        :'badge_id' => :'String',
-        :'badge' => :'Badge',
-        :'completed' => :'Boolean',
-        :'studies' => :'Array<Study>'
+        :'id' => :'String',
+        :'name' => :'String',
+        :'image' => :'String'
       }
     end
 
@@ -76,13 +57,13 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::LearningPath` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::Badge` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::LearningPath`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::Badge`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
@@ -91,30 +72,12 @@ module Api::V1::Bindings
         self.id = attributes[:'id']
       end
 
-      if attributes.key?(:'label')
-        self.label = attributes[:'label']
+      if attributes.key?(:'name')
+        self.name = attributes[:'name']
       end
 
-      if attributes.key?(:'description')
-        self.description = attributes[:'description']
-      end
-
-      if attributes.key?(:'badge_id')
-        self.badge_id = attributes[:'badge_id']
-      end
-
-      if attributes.key?(:'badge')
-        self.badge = attributes[:'badge']
-      end
-
-      if attributes.key?(:'completed')
-        self.completed = attributes[:'completed']
-      end
-
-      if attributes.key?(:'studies')
-        if (value = attributes[:'studies']).is_a?(Array)
-          self.studies = value
-        end
+      if attributes.key?(:'image')
+        self.image = attributes[:'image']
       end
     end
 
@@ -122,22 +85,12 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @label.nil?
-        invalid_properties.push('invalid value for "label", label cannot be nil.')
-      end
-
-      if @description.nil?
-        invalid_properties.push('invalid value for "description", description cannot be nil.')
-      end
-
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @label.nil?
-      return false if @description.nil?
       true
     end
 
@@ -147,12 +100,8 @@ module Api::V1::Bindings
       return true if self.equal?(o)
       self.class == o.class &&
           id == o.id &&
-          label == o.label &&
-          description == o.description &&
-          badge_id == o.badge_id &&
-          badge == o.badge &&
-          completed == o.completed &&
-          studies == o.studies
+          name == o.name &&
+          image == o.image
     end
 
     # @see the `==` method
@@ -164,7 +113,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, label, description, badge_id, badge, completed, studies].hash
+      [id, name, image].hash
     end
 
     # Builds the object from hash

@@ -1,6 +1,6 @@
 FROM ruby:3.3.0
 ARG OPENAPI_VERSION=6.6.0
-ARG bundler_version=2.4.19
+ARG bundler_version=2.5.6
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \

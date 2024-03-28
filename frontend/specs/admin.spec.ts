@@ -8,6 +8,7 @@ test('creates a learning path', async ({ browser }) => {
 
     await adminPage.getByLabel('Label').fill(faker.word.adjective() + ' ' + faker.word.noun())
     await adminPage.getByLabel('Description').fill(faker.word.adverb() + ' ' + faker.word.interjection())
+    await adminPage.getByLabel('Badge ID').fill('SAJSINa7DGDaC4D')
 
     await adminPage.getByText('Create Learning Path').click()
 })
@@ -65,7 +66,7 @@ test('can add/update/delete banners', async ({ browser }) => {
     await adminPage.waitForLoadState('networkidle')
 
     // Deleting
-    await adminPage.getByText('Delete banner').click()
+    await adminPage.getByText('Delete banner').first().click()
     await adminPage.waitForLoadState('networkidle')
 })
 
