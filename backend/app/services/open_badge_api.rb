@@ -7,7 +7,7 @@ class OpenBadgeApi
   include Singleton
 
   def initialize
-    @client_id = ENV.fetch('OBF_CLIENT_ID', nil)
+    @client_id = 'SAJS8Va7DGDaC3D'
     @client_secret = ENV.fetch('OBF_CLIENT_SECRET', nil)
   end
 
@@ -30,7 +30,6 @@ class OpenBadgeApi
                    .authorization("Bearer #{token}")
                    .get("https://openbadgefactory.com/v1/badge/#{@client_id}/#{badge_id}")
       data = response.json
-
       return {} if data.blank?
 
       {

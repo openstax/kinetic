@@ -32,11 +32,23 @@ export interface Badge {
      */
     readonly name?: string;
     /**
+     * Badge description
+     * @type {string}
+     * @memberof Badge
+     */
+    readonly description?: string;
+    /**
      * Badge image
      * @type {string}
      * @memberof Badge
      */
     readonly image?: string;
+    /**
+     * Badge tags
+     * @type {Array<string>}
+     * @memberof Badge
+     */
+    tags?: Array<string>;
 }
 
 /**
@@ -60,7 +72,9 @@ export function BadgeFromJSONTyped(json: any, ignoreDiscriminator: boolean): Bad
         
         'id': !exists(json, 'id') ? undefined : json['id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
+        'description': !exists(json, 'description') ? undefined : json['description'],
         'image': !exists(json, 'image') ? undefined : json['image'],
+        'tags': !exists(json, 'tags') ? undefined : json['tags'],
     };
 }
 
@@ -73,6 +87,7 @@ export function BadgeToJSON(value?: Badge | null): any {
     }
     return {
         
+        'tags': value.tags,
     };
 }
 

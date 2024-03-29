@@ -21,15 +21,23 @@ module Api::V1::Bindings
     # Badge name
     attr_accessor :name
 
+    # Badge description
+    attr_accessor :description
+
     # Badge image
     attr_accessor :image
+
+    # Badge tags
+    attr_accessor :tags
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'id' => :'id',
         :'name' => :'name',
-        :'image' => :'image'
+        :'description' => :'description',
+        :'image' => :'image',
+        :'tags' => :'tags'
       }
     end
 
@@ -43,7 +51,9 @@ module Api::V1::Bindings
       {
         :'id' => :'String',
         :'name' => :'String',
-        :'image' => :'String'
+        :'description' => :'String',
+        :'image' => :'String',
+        :'tags' => :'Array<String>'
       }
     end
 
@@ -76,8 +86,18 @@ module Api::V1::Bindings
         self.name = attributes[:'name']
       end
 
+      if attributes.key?(:'description')
+        self.description = attributes[:'description']
+      end
+
       if attributes.key?(:'image')
         self.image = attributes[:'image']
+      end
+
+      if attributes.key?(:'tags')
+        if (value = attributes[:'tags']).is_a?(Array)
+          self.tags = value
+        end
       end
     end
 
@@ -101,7 +121,9 @@ module Api::V1::Bindings
       self.class == o.class &&
           id == o.id &&
           name == o.name &&
-          image == o.image
+          description == o.description &&
+          image == o.image &&
+          tags == o.tags
     end
 
     # @see the `==` method
@@ -113,7 +135,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, name, image].hash
+      [id, name, description, image, tags].hash
     end
 
     # Builds the object from hash

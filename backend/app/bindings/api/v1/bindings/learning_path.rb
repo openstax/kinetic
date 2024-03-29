@@ -24,6 +24,12 @@ module Api::V1::Bindings
     # Learning path description
     attr_accessor :description
 
+    # Level 1 metadata
+    attr_accessor :level_1_metadata
+
+    # Level 2 metadata
+    attr_accessor :level_2_metadata
+
     # Open badge factory badge_id value
     attr_accessor :badge_id
 
@@ -41,6 +47,8 @@ module Api::V1::Bindings
         :'id' => :'id',
         :'label' => :'label',
         :'description' => :'description',
+        :'level_1_metadata' => :'level_1_metadata',
+        :'level_2_metadata' => :'level_2_metadata',
         :'badge_id' => :'badge_id',
         :'badge' => :'badge',
         :'completed' => :'completed',
@@ -59,6 +67,8 @@ module Api::V1::Bindings
         :'id' => :'Float',
         :'label' => :'String',
         :'description' => :'String',
+        :'level_1_metadata' => :'String',
+        :'level_2_metadata' => :'String',
         :'badge_id' => :'String',
         :'badge' => :'Badge',
         :'completed' => :'Boolean',
@@ -97,6 +107,14 @@ module Api::V1::Bindings
 
       if attributes.key?(:'description')
         self.description = attributes[:'description']
+      end
+
+      if attributes.key?(:'level_1_metadata')
+        self.level_1_metadata = attributes[:'level_1_metadata']
+      end
+
+      if attributes.key?(:'level_2_metadata')
+        self.level_2_metadata = attributes[:'level_2_metadata']
       end
 
       if attributes.key?(:'badge_id')
@@ -149,6 +167,8 @@ module Api::V1::Bindings
           id == o.id &&
           label == o.label &&
           description == o.description &&
+          level_1_metadata == o.level_1_metadata &&
+          level_2_metadata == o.level_2_metadata &&
           badge_id == o.badge_id &&
           badge == o.badge &&
           completed == o.completed &&
@@ -164,7 +184,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, label, description, badge_id, badge, completed, studies].hash
+      [id, label, description, level_1_metadata, level_2_metadata, badge_id, badge, completed, studies].hash
     end
 
     # Builds the object from hash

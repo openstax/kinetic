@@ -35,6 +35,8 @@ RSpec.describe 'Participant Studies', :multi_stage, api: :v1 do
     user1_study2_launch_pad.launch_url
     user1_study3_launch_pad.launch_url
     user1_study3_launch_pad.land
+
+    stub_obf_api
   end
 
   describe 'GET participant/studies/{id}' do

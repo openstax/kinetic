@@ -19,6 +19,14 @@ class Api::V1::Admin::LearningPathsOpenApi
         key :type, :string
         key :description, 'Learning path description'
       end
+      property :level_1_metadata do
+        key :type, :string
+        key :description, 'Level 1 metadata'
+      end
+      property :level_2_metadata do
+        key :type, :string
+        key :description, 'Level 2 metadata'
+      end
       property :badge_id do
         key :type, :string
         key :description, 'Open badge factory badge_id value'

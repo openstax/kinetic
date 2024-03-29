@@ -5,13 +5,13 @@ require 'rails_helper'
 RSpec.describe 'Learning Paths', api: :v1 do
   let(:admin) { create(:admin) }
   let(:study) { create(:study) }
-  let(:learning_path) { create(:learning_path) }
+  let!(:learning_path) { create(:learning_path) }
 
   let(:valid_attributes) do
     {
       label: 'Cool Path',
       description: 'Cool description',
-      badge_id: ENV.fetch('OBF_EXAMPLE_BADGE_ID', nil)
+      badge_id: 'SAJSINa7DGDaC4D'
     }
   end
 
@@ -19,6 +19,10 @@ RSpec.describe 'Learning Paths', api: :v1 do
     {
       bad_prop: 'Bad'
     }
+  end
+
+  before do
+    stub_obf_api
   end
 
   def learning_path_url(learning_path=nil)
@@ -31,7 +35,7 @@ RSpec.describe 'Learning Paths', api: :v1 do
 
   describe 'GET learning paths' do
     it 'renders a successful response' do
-      api_get learning_path_ur
+      api_get learning_path_url
       expect(response).to have_http_status(:ok)
       expect(response_hash).to match(
         a_hash_including(

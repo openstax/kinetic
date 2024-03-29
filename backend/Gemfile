@@ -66,7 +66,7 @@ gem 'sssecrets' # for generating api keys
 gem 'image_processing'
 
 group :test do
-  # Code Climate integration
+  # Any test specific gems
 end
 
 group :development, :test do
