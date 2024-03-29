@@ -34,7 +34,6 @@ export const useParticipantStudies = () => {
         studies: [],
         highlightedStudies: [],
         demographicSurvey: null,
-        nonHighlightedStudies: [],
         allStudies: [],
         isLoading,
     }
@@ -52,13 +51,10 @@ export const useParticipantStudies = () => {
         allHighlightedStudies.length == FEATURED_COUNT ? [] : randomlyHighlighted
     )
 
-    // const nonHighlightedStudies = studies.filter(s => !highlightedStudies.includes(s))
-
     const demographicSurvey = studies.find(s => s.isDemographicSurvey) || null
 
     return {
         allStudies: studies,
-        // nonHighlightedStudies,
         highlightedStudies,
         demographicSurvey,
         isLoading,
