@@ -204,40 +204,7 @@ const CreateLearningPath: FC<{
 
     return (
         <form onSubmit={handleSubmit}>
-            <Stack>
-                <Group grow>
-                    <TextInput
-                        withAsterisk
-                        label="Label"
-                        error={form.errors['label']}
-                        {...form.getInputProps('label')}
-                    />
-
-                    <TextInput
-                        withAsterisk
-                        label="Badge ID"
-                        error={form.errors['badgeId']}
-                        {...form.getInputProps('badgeId')}
-                    />
-                </Group>
-
-                <Textarea
-                    withAsterisk
-                    label="Description"
-                    error={form.errors['description']}
-                    {...form.getInputProps('description')}
-                />
-
-                <TagsInput label='Level 1 Metadata'
-                    placeholder='Level 1 metadata'
-                    {...form.getInputProps('level1Metadata')}
-                />
-                <TagsInput label='Level 2 Metadata'
-                    placeholder='Level 2 metadata'
-                    {...form.getInputProps('level2Metadata')}
-                />
-
-            </Stack>
+            <LearningPathForm form={form} />
 
             <Group justify="flex-end" mt="md">
                 <Button type="submit" disabled={!form.isValid()}>
@@ -299,41 +266,7 @@ const EditLearningPath: FC<{
 
     return (
         <form onSubmit={handleSubmit}>
-            <Stack>
-                <Group grow>
-                    <TextInput
-                        withAsterisk
-                        label="Label"
-                        error={form.errors['label']}
-                        {...form.getInputProps('label')}
-                    />
-
-                    <TextInput
-                        withAsterisk
-                        label="Badge ID"
-                        error={form.errors['badgeId']}
-                        {...form.getInputProps('badgeId')}
-                    />
-                </Group>
-
-                <Textarea
-                    withAsterisk
-                    label="Description"
-                    error={form.errors['description']}
-                    {...form.getInputProps('description')}
-                />
-
-                <TagsInput label='Level 1 Metadata'
-                    placeholder='Level 1 metadata'
-                    {...form.getInputProps('level1Metadata')}
-                />
-                <TagsInput label='Level 2 Metadata'
-                    placeholder='Level 2 metadata'
-                    {...form.getInputProps('level2Metadata')}
-                />
-
-                <ManageLearningPathStudies form={form} learningPath={learningPath} />
-            </Stack>
+            <LearningPathForm form={form} learningPath={learningPath} />
 
             <Group justify="flex-end" mt="md">
                 <Button onClick={handleDelete} color={colors.red} disabled={!!learningPath?.studies?.length}>
@@ -344,5 +277,48 @@ const EditLearningPath: FC<{
                 </Button>
             </Group>
         </form>
+    )
+}
+
+const LearningPathForm: FC<{
+    form: UseFormReturnType<LearningPath>,
+    learningPath?: LearningPath
+}> = ({ form, learningPath }) => {
+    return (
+        <Stack>
+            <Group grow>
+                <TextInput
+                    withAsterisk
+                    label="Label"
+                    error={form.errors['label']}
+                    {...form.getInputProps('label')}
+                />
+
+                <TextInput
+                    withAsterisk
+                    label="Badge ID"
+                    error={form.errors['badgeId']}
+                    {...form.getInputProps('badgeId')}
+                />
+            </Group>
+
+            <Textarea
+                withAsterisk
+                label="Description"
+                error={form.errors['description']}
+                {...form.getInputProps('description')}
+            />
+
+            <TagsInput label='Level 1 Metadata'
+                placeholder='Level 1 metadata'
+                {...form.getInputProps('level1Metadata')}
+            />
+            <TagsInput label='Level 2 Metadata'
+                placeholder='Level 2 metadata'
+                {...form.getInputProps('level2Metadata')}
+            />
+
+            {learningPath && <ManageLearningPathStudies form={form} learningPath={learningPath} />}
+        </Stack>
     )
 }
