@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Learning Paths', api: :v1 do
   let(:admin) { create(:admin) }
   let(:study) { create(:study) }
+  let(:learning_path) { create(:learning_path) }
 
   let(:valid_attributes) do
     {
@@ -30,8 +31,7 @@ RSpec.describe 'Learning Paths', api: :v1 do
 
   describe 'GET learning paths' do
     it 'renders a successful response' do
-      learning_path = LearningPath.create! valid_attributes
-      api_get learning_path_url
+      api_get learning_path_ur
       expect(response).to have_http_status(:ok)
       expect(response_hash).to match(
         a_hash_including(

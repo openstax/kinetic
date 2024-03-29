@@ -30,12 +30,16 @@ class OpenBadgeApi
                    .authorization("Bearer #{token}")
                    .get("https://openbadgefactory.com/v1/badge/#{@client_id}/#{badge_id}")
       data = response.json
+
+      return {} if data.blank?
+
       {
         name: data['name'],
         id: data['id'],
-        image: data['image']
+        description: data['description'],
+        image: data['image'],
+        tags: data['tags']
       }
-
     end
   end
 

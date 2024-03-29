@@ -51,10 +51,20 @@ class Api::V1::Admin::LearningPathsOpenApi
         key :description, 'Badge name'
         key :readOnly, true
       end
+      property :description do
+        key :type, :string
+        key :description, 'Badge description'
+        key :readOnly, true
+      end
       property :image do
         key :type, :string
         key :description, 'Badge image'
         key :readOnly, true
+      end
+      property :tags do
+        key :type, :array
+        key :description, 'Badge tags'
+        key :items, { 'type' => 'string' }
       end
     end
 

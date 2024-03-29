@@ -432,6 +432,8 @@ CREATE TABLE public.learning_paths (
     label character varying NOT NULL,
     description character varying NOT NULL,
     badge_id character varying,
+    level_1_metadata text[] DEFAULT '{}'::text[],
+    level_2_metadata text[] DEFAULT '{}'::text[],
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL
 );
@@ -1476,7 +1478,6 @@ ALTER TABLE ONLY public.response_exports
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20240229135718'),
 ('20240222135611'),
 ('20231212191239'),
 ('20231120172017'),
