@@ -135,7 +135,7 @@ export const StudyDetailsPreview: FC<{
                     </Stack>
 
                     <Stack gap='lg' style={{ flex: 1, overflow: 'auto' }}>
-                        <StudyTopic study={study} />
+                        <StudyLearningPath study={study} />
 
                         <StudyTime study={study} />
 
@@ -175,7 +175,7 @@ const StudyDescription: FC<StudyDetailsProps> = ({ study }) => {
 }
 
 
-const StudyTopic: FC<StudyDetailsProps> = ({ study }) => {
+const StudyLearningPath: FC<StudyDetailsProps> = ({ study }) => {
     if (!study.learningPath) return null
 
     return (
