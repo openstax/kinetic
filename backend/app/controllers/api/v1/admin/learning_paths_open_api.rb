@@ -19,9 +19,21 @@ class Api::V1::Admin::LearningPathsOpenApi
         key :type, :string
         key :description, 'Learning path description'
       end
+      property :level_1_metadata do
+        key :type, :string
+        key :description, 'Level 1 metadata'
+      end
+      property :level_2_metadata do
+        key :type, :string
+        key :description, 'Level 2 metadata'
+      end
       property :badge_id do
         key :type, :string
         key :description, 'Open badge factory badge_id value'
+      end
+      property :badge do
+        key :$ref, :Badge
+        key :description, 'Open badge factory badge'
       end
       property :completed do
         key :type, :boolean
@@ -33,6 +45,34 @@ class Api::V1::Admin::LearningPathsOpenApi
         items do
           key :$ref, :Study
         end
+      end
+    end
+
+    schema :Badge do
+      property :id do
+        key :type, :string
+        key :description, 'Badge ID'
+        key :readOnly, true
+      end
+      property :name do
+        key :type, :string
+        key :description, 'Badge name'
+        key :readOnly, true
+      end
+      property :description do
+        key :type, :string
+        key :description, 'Badge description'
+        key :readOnly, true
+      end
+      property :image do
+        key :type, :string
+        key :description, 'Badge image'
+        key :readOnly, true
+      end
+      property :tags do
+        key :type, :array
+        key :description, 'Badge tags'
+        key :items, { 'type' => 'string' }
       end
     end
 

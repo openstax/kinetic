@@ -13,6 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Badge } from './Badge';
+import {
+    BadgeFromJSON,
+    BadgeFromJSONTyped,
+    BadgeToJSON,
+} from './Badge';
 import type { Study } from './Study';
 import {
     StudyFromJSON,
@@ -45,11 +51,29 @@ export interface LearningPath {
      */
     description: string;
     /**
+     * Level 1 metadata
+     * @type {string}
+     * @memberof LearningPath
+     */
+    level1Metadata?: string;
+    /**
+     * Level 2 metadata
+     * @type {string}
+     * @memberof LearningPath
+     */
+    level2Metadata?: string;
+    /**
      * Open badge factory badge_id value
      * @type {string}
      * @memberof LearningPath
      */
     badgeId?: string;
+    /**
+     * 
+     * @type {Badge}
+     * @memberof LearningPath
+     */
+    badge?: Badge;
     /**
      * Has the user completed this learning path?
      * @type {boolean}
@@ -88,7 +112,10 @@ export function LearningPathFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'id': !exists(json, 'id') ? undefined : json['id'],
         'label': json['label'],
         'description': json['description'],
+        'level1Metadata': !exists(json, 'level_1_metadata') ? undefined : json['level_1_metadata'],
+        'level2Metadata': !exists(json, 'level_2_metadata') ? undefined : json['level_2_metadata'],
         'badgeId': !exists(json, 'badge_id') ? undefined : json['badge_id'],
+        'badge': !exists(json, 'badge') ? undefined : BadgeFromJSON(json['badge']),
         'completed': !exists(json, 'completed') ? undefined : json['completed'],
         'studies': !exists(json, 'studies') ? undefined : ((json['studies'] as Array<any>).map(StudyFromJSON)),
     };
@@ -106,7 +133,10 @@ export function LearningPathToJSON(value?: LearningPath | null): any {
         'id': value.id,
         'label': value.label,
         'description': value.description,
+        'level_1_metadata': value.level1Metadata,
+        'level_2_metadata': value.level2Metadata,
         'badge_id': value.badgeId,
+        'badge': BadgeToJSON(value.badge),
         'completed': value.completed,
         'studies': value.studies === undefined ? undefined : ((value.studies as Array<any>).map(StudyToJSON)),
     };

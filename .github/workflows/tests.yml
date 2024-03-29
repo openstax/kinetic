@@ -55,17 +55,15 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
           working-directory: backend
-
-      - name: Build docker image and run specs within it
-        run: |
-          docker compose build api postgres postgres_test
-          docker compose run -T api /bin/bash -c "bundle exec rspec"
+      - name: Run docker containers
+        run: docker compose up api postgres_test -d
+      - name: Run Specs
+        run: docker compose exec api bundle exec rspec
       - name: Stop containers
         if: always()
         run: docker compose down

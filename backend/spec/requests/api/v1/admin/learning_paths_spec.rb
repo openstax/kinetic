@@ -5,11 +5,13 @@ require 'rails_helper'
 RSpec.describe 'Learning Paths', api: :v1 do
   let(:admin) { create(:admin) }
   let(:study) { create(:study) }
+  let!(:learning_path) { create(:learning_path) }
 
   let(:valid_attributes) do
     {
       label: 'Cool Path',
-      description: 'Cool description'
+      description: 'Cool description',
+      badge_id: 'SAJSINa7DGDaC4D'
     }
   end
 
@@ -17,6 +19,10 @@ RSpec.describe 'Learning Paths', api: :v1 do
     {
       bad_prop: 'Bad'
     }
+  end
+
+  before do
+    stub_obf_api
   end
 
   def learning_path_url(learning_path=nil)
@@ -29,7 +35,6 @@ RSpec.describe 'Learning Paths', api: :v1 do
 
   describe 'GET learning paths' do
     it 'renders a successful response' do
-      learning_path = LearningPath.create! valid_attributes
       api_get learning_path_url
       expect(response).to have_http_status(:ok)
       expect(response_hash).to match(
@@ -38,7 +43,12 @@ RSpec.describe 'Learning Paths', api: :v1 do
             a_hash_including(
               id: learning_path.id,
               label: learning_path.label,
-              description: learning_path.description
+              description: learning_path.description,
+              badge: a_hash_including(
+                name: a_kind_of(String),
+                id: a_kind_of(String),
+                image: a_kind_of(String)
+              )
             )
           )
         )

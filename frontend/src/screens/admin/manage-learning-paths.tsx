@@ -5,7 +5,18 @@ import {
     useGetLearningPaths,
     useUpdateLearningPath,
 } from '../../models/learning-path';
-import { Button, Group, LoadingOverlay, MultiSelect, Select, Stack, Textarea, TextInput, Title } from '@mantine/core';
+import {
+    Button,
+    Group,
+    LoadingOverlay,
+    MultiSelect,
+    Select,
+    Stack,
+    TagsInput,
+    Textarea,
+    TextInput,
+    Title,
+} from '@mantine/core';
 import { Main } from './grid';
 import { LearningPath, Study } from '@api';
 import * as yup from 'yup';
@@ -65,7 +76,7 @@ const ManageLearningPathStudies: FC<{
         <Stack>
             <MultiSelect
                 {...form.getInputProps('studies')}
-                label={`Featured studies for ${learningPath.label}`}
+                label={`Add studies to ${learningPath.label}`}
                 searchable
                 placeholder="Add studies to this learning path"
                 value={studies}
@@ -170,6 +181,7 @@ const CreateLearningPath: FC<{
         initialValues: {
             label: '',
             description: '',
+            badgeId: '',
         },
         validate: yupResolver(getLearningPathValidationSchema(learningPaths)),
         validateInputOnChange: true,
@@ -192,22 +204,7 @@ const CreateLearningPath: FC<{
 
     return (
         <form onSubmit={handleSubmit}>
-            <Stack>
-                <TextInput
-                    withAsterisk
-                    label="Label"
-                    error={form.errors['label']}
-                    {...form.getInputProps('label')}
-                />
-
-                <Textarea
-                    withAsterisk
-                    label="Description"
-                    error={form.errors['description']}
-                    {...form.getInputProps('description')}
-                />
-
-            </Stack>
+            <LearningPathForm form={form} />
 
             <Group justify="flex-end" mt="md">
                 <Button type="submit" disabled={!form.isValid()}>
@@ -227,6 +224,9 @@ const EditLearningPath: FC<{
         initialValues: {
             label: learningPath?.label || '',
             description: learningPath?.description || '',
+            badgeId: learningPath?.badgeId || '',
+            level1Metadata: learningPath?.level1Metadata,
+            level2Metadata: learningPath?.level2Metadata,
         },
         validate: yupResolver(getLearningPathValidationSchema(learningPaths?.filter(lp => lp.id !== learningPath?.id))),
         validateInputOnChange: true,
@@ -266,23 +266,7 @@ const EditLearningPath: FC<{
 
     return (
         <form onSubmit={handleSubmit}>
-            <Stack>
-                <TextInput
-                    withAsterisk
-                    label="Label"
-                    error={form.errors['label']}
-                    {...form.getInputProps('label')}
-                />
-
-                <Textarea
-                    withAsterisk
-                    label="Description"
-                    error={form.errors['description']}
-                    {...form.getInputProps('description')}
-                />
-
-                <ManageLearningPathStudies form={form} learningPath={learningPath} />
-            </Stack>
+            <LearningPathForm form={form} learningPath={learningPath} />
 
             <Group justify="flex-end" mt="md">
                 <Button onClick={handleDelete} color={colors.red} disabled={!!learningPath?.studies?.length}>
@@ -293,5 +277,48 @@ const EditLearningPath: FC<{
                 </Button>
             </Group>
         </form>
+    )
+}
+
+const LearningPathForm: FC<{
+    form: UseFormReturnType<LearningPath>,
+    learningPath?: LearningPath
+}> = ({ form, learningPath }) => {
+    return (
+        <Stack>
+            <Group grow>
+                <TextInput
+                    withAsterisk
+                    label="Label"
+                    error={form.errors['label']}
+                    {...form.getInputProps('label')}
+                />
+
+                <TextInput
+                    withAsterisk
+                    label="Badge ID"
+                    error={form.errors['badgeId']}
+                    {...form.getInputProps('badgeId')}
+                />
+            </Group>
+
+            <Textarea
+                withAsterisk
+                label="Description"
+                error={form.errors['description']}
+                {...form.getInputProps('description')}
+            />
+
+            <TagsInput label='Level 1 Metadata'
+                placeholder='Level 1 metadata'
+                {...form.getInputProps('level1Metadata')}
+            />
+            <TagsInput label='Level 2 Metadata'
+                placeholder='Level 2 metadata'
+                {...form.getInputProps('level2Metadata')}
+            />
+
+            {learningPath && <ManageLearningPathStudies form={form} learningPath={learningPath} />}
+        </Stack>
     )
 }

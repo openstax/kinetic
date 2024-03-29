@@ -34,7 +34,6 @@ export const useParticipantStudies = () => {
         studies: [],
         highlightedStudies: [],
         demographicSurvey: null,
-        nonHighlightedStudies: [],
         allStudies: [],
         isLoading,
     }
@@ -52,13 +51,10 @@ export const useParticipantStudies = () => {
         allHighlightedStudies.length == FEATURED_COUNT ? [] : randomlyHighlighted
     )
 
-    const nonHighlightedStudies = studies.filter(s => !highlightedStudies.includes(s))
-
     const demographicSurvey = studies.find(s => s.isDemographicSurvey) || null
 
     return {
         allStudies: studies,
-        nonHighlightedStudies,
         highlightedStudies,
         demographicSurvey,
         isLoading,
@@ -68,7 +64,7 @@ export const useParticipantStudies = () => {
 export const useSearchStudies = () => {
     const [search, setSearch] = useState('')
     const [filteredStudies, setFilteredStudies] = useState<ParticipantStudy[]>([])
-    const { isLoading, nonHighlightedStudies } = useParticipantStudies()
+    const { isLoading, allStudies } = useParticipantStudies()
 
     const fuseOptions = {
         isCaseSensitive: false,
@@ -82,14 +78,14 @@ export const useSearchStudies = () => {
         ],
     };
 
-    const fuse = new Fuse(nonHighlightedStudies, fuseOptions);
+    const fuse = new Fuse(allStudies, fuseOptions);
 
     useMemo(() => {
         if (search) {
             const mappedResults = fuse.search(search).map(result => result.item)
             setFilteredStudies(mappedResults)
         } else {
-            setFilteredStudies(nonHighlightedStudies)
+            setFilteredStudies(allStudies)
         }
     }, [search, isLoading])
 
