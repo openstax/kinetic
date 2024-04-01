@@ -217,13 +217,13 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                 return (
                     <Stack key={learningPath.label}>
                         <Group gap='sm'>
-                            <Title order={4}>
+                            <Title order={3}>
                                 {learningPath.label}
                             </Title>
                             <Text span>|</Text>
-                            <Title order={6}>
+                            <Text>
                                 {learningPath.description}
-                            </Title>
+                            </Text>
                             {learningPath.completed ? <Badge c={colors.text} color={colors.green}>Completed</Badge> : null}
                         </Group>
                         {isMobile ?
