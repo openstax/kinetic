@@ -95,10 +95,10 @@ export const StudyDetails: React.FC = () => {
     const studyId = Number(sid || '')
     const onHide = useCallback(() => nav('/studies'), [nav])
 
-    const { data: study, isLoading } = useFetchParticipantStudy(studyId)
+    const { data: study, isLoading, isFetching } = useFetchParticipantStudy(studyId)
 
     useEffect(() => {
-        if (study) {
+        if (study && !isFetching) {
             api.studyStats({
                 id: study.id,
                 view: true,
@@ -106,7 +106,7 @@ export const StudyDetails: React.FC = () => {
         }
     }, [study])
 
-    if (isLoading) return null
+    if (isLoading || isFetching) return null
 
     if (!study) return <Navigate to="/studies" />
 
