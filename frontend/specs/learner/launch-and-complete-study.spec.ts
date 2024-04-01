@@ -30,7 +30,7 @@ test('launching study and testing completion', async ({ browser }) => {
 
     await userPage.getByPlaceholder('Search by study title, researcher, or topic name').fill(studyName)
     await userPage.waitForLoadState('networkidle')
-    await userPage.getByText(studyName).isVisible()
+    await userPage.getByText(studyName).first().isVisible()
 
     // TODO Flaky on github action tests
     await userPage.waitForSelector(`[data-study-id="${studyId}"][data-is-completed="true"]`)
