@@ -8,7 +8,8 @@ namespace :report do
 
     table = CSV.read(args[:file], headers: true)
 
-    uuids = table.map { |row| row['user_uuid'] }
+    uuids = table.map { |row| row['user_uuid'] }.uniq.compact
+    puts 'no UUIDs found, is user_uuid column present?' and exit 1 if uuids.empty?
 
     userinfo = UserInfo.for_uuids(uuids) # .slice(0, 10))
 
