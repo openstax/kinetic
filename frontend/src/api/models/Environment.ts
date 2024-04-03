@@ -93,6 +93,12 @@ export interface Environment {
      */
     rewardsSchedule: Array<RewardsScheduleSegment>;
     /**
+     * 
+     * @type {boolean}
+     * @memberof Environment
+     */
+    readonly isFirstVisit?: boolean;
+    /**
      * Banners that should be displayed to the user
      * @type {Array<BannerMessage>}
      * @memberof Environment
@@ -132,6 +138,7 @@ export function EnvironmentFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'accountsEnvName': json['accounts_env_name'],
         'homepageUrl': json['homepage_url'],
         'rewardsSchedule': ((json['rewards_schedule'] as Array<any>).map(RewardsScheduleSegmentFromJSON)),
+        'isFirstVisit': !exists(json, 'is_first_visit') ? undefined : json['is_first_visit'],
         'bannersSchedule': ((json['banners_schedule'] as Array<any>).map(BannerMessageFromJSON)),
     };
 }

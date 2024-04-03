@@ -162,6 +162,10 @@ class Api::V1::EnvironmentOpenApi
         end
         key :description, 'The tags of the study object, used for grouping and filtering.'
       end
+      property :is_first_visit do
+        key :type, :boolean
+        key :readOnly, true
+      end
       property :banners_schedule do
         key :type, :array
         key :minLength, 1

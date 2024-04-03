@@ -10,6 +10,7 @@ import '@mantine/notifications/styles.css';
 import '@mantine/dropzone/styles.css';
 import '@mantine/dates/styles.css';
 import { mantineTheme } from '@theme'
+import { AnalyticsHelpers } from './lib/analytics-helpers'
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
@@ -28,6 +29,7 @@ const App = () => (
         <QueryClientProvider client={queryClient}>
             <MantineProvider theme={mantineTheme}>
                 <EnvironmentProvider>
+                    <AnalyticsHelpers />
                     <Notifications position='top-right' />
                     <ImpersonatingBanner />
                     <AppRoutes />
