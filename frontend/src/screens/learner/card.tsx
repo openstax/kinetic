@@ -1,6 +1,6 @@
-import { cx, React, useState } from '@common'
+import { cx, React, useState, useCallback } from '@common'
 import { Box, getImageUrl, Icon, MultiSessionBar } from '@components'
-import { useIsMobileDevice } from '@lib'
+import { useEnvironment, useIsMobileDevice } from '@lib'
 import { getStudyDuration, getStudyPoints, studyIsMultipart } from '@models'
 import { ParticipantStudy, Study } from '@api'
 import styled from '@emotion/styled'
@@ -8,7 +8,6 @@ import { colors, media } from '@theme'
 import { StudyDetailsPreview } from './details';
 import dayjs from 'dayjs';
 import { Button, Space } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
 
 interface StudyCardProps {
     study: ParticipantStudy
@@ -209,19 +208,24 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
     )
 }
 
-export const StudyCard: React.FC<StudyCardProps> = ({ study }) => {
-    const nav = useNavigate()
-    const onClick = () => nav(`/studies/details/${study.id}`)
-
+export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantStudy): void }> = ({
+    onSelect,
+    study,
+}) => {
+    const onClick = useCallback(() => onSelect(study), [onSelect]);
+    const env = useEnvironment()
     return (
         <Card
             as="a"
             role={'link'}
             className="col study"
             direction='column'
+            onClick={onClick}
             data-study-id={study.id}
             data-is-completed={!!study.completedAt}
-            onClick={onClick}
+            data-analytics-select-content
+            data-content-type="study"
+            data-content-tags={`,topic=${study.topic},is-new-user=${env.isFirstVisit},`}
         >
             <CardContent study={study} />
         </Card>
