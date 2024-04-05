@@ -162,7 +162,7 @@ class Api::V1::EnvironmentOpenApi
         end
         key :description, 'The tags of the study object, used for grouping and filtering.'
       end
-      property :is_first_visit do
+      property :is_new_user do
         key :type, :boolean
         key :readOnly, true
       end

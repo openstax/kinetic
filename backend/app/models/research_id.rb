@@ -10,8 +10,8 @@ class ResearchId < ApplicationRecord
     find_or_create_by(user_id:)
   end
 
-  def is_freshly_created?
-    created_at.is_within?(1.minute.ago)
+  def is_new_user?(date=Date.today)
+    created_at.after?(date - 1.day)
   end
 
 end

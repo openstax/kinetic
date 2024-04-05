@@ -97,7 +97,7 @@ export interface Environment {
      * @type {boolean}
      * @memberof Environment
      */
-    readonly isFirstVisit?: boolean;
+    readonly isNewUser?: boolean;
     /**
      * Banners that should be displayed to the user
      * @type {Array<BannerMessage>}
@@ -138,7 +138,7 @@ export function EnvironmentFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'accountsEnvName': json['accounts_env_name'],
         'homepageUrl': json['homepage_url'],
         'rewardsSchedule': ((json['rewards_schedule'] as Array<any>).map(RewardsScheduleSegmentFromJSON)),
-        'isFirstVisit': !exists(json, 'is_first_visit') ? undefined : json['is_first_visit'],
+        'isNewUser': !exists(json, 'is_new_user') ? undefined : json['is_new_user'],
         'bannersSchedule': ((json['banners_schedule'] as Array<any>).map(BannerMessageFromJSON)),
     };
 }
