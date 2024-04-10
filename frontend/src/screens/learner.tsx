@@ -1,13 +1,13 @@
 import { React } from '@common'
 import { ParticipantStudy } from '@api'
-import { Footer, RewardsProgressBar, TopNavBar } from '@components'
+import { Footer, TopNavBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
 import { useParticipantStudies, useSearchStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
 import { StudyDetails } from './learner/details'
 import { Route, Routes } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCards, FreeMode, Pagination } from 'swiper/modules';
+import { EffectCards, FreeMode, Navigation, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
 import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title } from '@mantine/core';
@@ -56,7 +56,8 @@ const LearnerDashboard = () => {
 
             <LearnerWelcomeModal />
 
-            <RewardsProgressBar />
+            {/* Temporarily removing this as well until reward system reworked */}
+            {/*<RewardsProgressBar />*/}
 
             {/* Temporarily disable syllabus contest due to legal, keep it just in case we re-enable in the future */}
             {/*<SyllabusContest studies={syllabusContestStudies} />*/}
@@ -182,8 +183,13 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
                 style={{
                     marginBottom: '1rem',
                     paddingBottom: '2rem',
+                    paddingLeft: '2rem',
+                    paddingRight: '2rem',
                 }}
-                modules={[FreeMode, Pagination]}
+                navigation={{
+                    enabled: true,
+                }}
+                modules={[FreeMode, Pagination, Navigation]}
             >
                 {studies.map(study => (
                     <SwiperSlide style={{ padding: '1rem' }} key={study.id}>
@@ -221,9 +227,9 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                                 {learningPath.label}
                             </Title>
                             <Text span>|</Text>
-                            <Text>
+                            <Title order={3} fw='300'>
                                 {learningPath.description}
-                            </Text>
+                            </Title>
                             {learningPath.completed ? <Badge c={colors.text} color={colors.green}>Completed</Badge> : null}
                         </Group>
                         {isMobile ?
