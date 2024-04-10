@@ -7,8 +7,8 @@ class OpenBadgeApi
   include Singleton
 
   def initialize
-    @client_id = Rails.application.secrets.dig(:obf, :client_id),
-    @client_secret = Rails.application.secrets.dig(:obf, :client_secret),
+    @client_id = Rails.application.secrets.dig(:obf, :client_id)
+    @client_secret = Rails.application.secrets.dig(:obf, :client_secret)
   end
 
   def token
