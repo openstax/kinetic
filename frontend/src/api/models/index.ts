@@ -65,3 +65,4 @@ export * from './UpdateReward';
 export * from './UpdateStage';
 export * from './UpdateStudy';
 export * from './UserPreferences';
+export * from './WelcomeStudyIds';

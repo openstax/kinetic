@@ -30,9 +30,9 @@ export default function AdminLinks() {
                     Manage learning paths
                 </Menu.Item>
             </StyledLink>
-            <StyledLink to="/admin/manage-highlighted-studies">
+            <StyledLink to="/admin/manage-studies">
                 <Menu.Item>
-                    Manage highlighted studies
+                    Manage studies
                 </Menu.Item>
             </StyledLink>
             <StyledLink to="/admin/workspaces">

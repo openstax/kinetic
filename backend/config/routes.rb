@@ -56,6 +56,7 @@ Rails.application.routes.draw do
         post 'studies/:id/approve', to: 'studies#approve'
         post 'studies/feature', to: 'studies#feature'
         post 'studies/highlight', to: 'studies#highlight'
+        post 'studies/welcome', to: 'studies#welcome'
         get 'study/:id/files', to: 'studies#files'
         get 'study/:id/responses', to: 'studies#responses'
         post 'stage/:stage_id/responses', to: 'studies#add_response'

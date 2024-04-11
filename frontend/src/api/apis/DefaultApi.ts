@@ -55,6 +55,7 @@ import type {
   UpdateStage,
   UpdateStudy,
   UserPreferences,
+  WelcomeStudyIds,
 } from '../models';
 import {
     AddAnalysisFromJSON,
@@ -137,6 +138,8 @@ import {
     UpdateStudyToJSON,
     UserPreferencesFromJSON,
     UserPreferencesToJSON,
+    WelcomeStudyIdsFromJSON,
+    WelcomeStudyIdsToJSON,
 } from '../models';
 
 export interface AddAnalysisRequest {
@@ -199,6 +202,10 @@ export interface AdminHighlightStudiesRequest {
 
 export interface AdminQueryStudiesRequest {
     status: string;
+}
+
+export interface AdminWelcomeStudiesRequest {
+    welcomeStudyIds: WelcomeStudyIds;
 }
 
 export interface CreateBannerRequest {
@@ -869,6 +876,38 @@ export class DefaultApi extends runtime.BaseAPI {
     async adminQueryStudies(requestParameters: AdminQueryStudiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Studies> {
         const response = await this.adminQueryStudiesRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Set welcome modal studies
+     */
+    async adminWelcomeStudiesRaw(requestParameters: AdminWelcomeStudiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.welcomeStudyIds === null || requestParameters.welcomeStudyIds === undefined) {
+            throw new runtime.RequiredError('welcomeStudyIds','Required parameter requestParameters.welcomeStudyIds was null or undefined when calling adminWelcomeStudies.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/admin/studies/welcome`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: WelcomeStudyIdsToJSON(requestParameters.welcomeStudyIds),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Set welcome modal studies
+     */
+    async adminWelcomeStudies(requestParameters: AdminWelcomeStudiesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.adminWelcomeStudiesRaw(requestParameters, initOverrides);
     }
 
     /**

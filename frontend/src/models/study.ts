@@ -13,6 +13,7 @@ import { dayjs, useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { showResearcherNotificationError } from '@components';
+import type { WelcomeStudyIds } from '../api/models';
 
 export enum StudyStatus {
     Launched = 'Launched',
@@ -126,14 +127,19 @@ export const useAdminGetStudies = (status: string = 'all') => {
 
 export const useUpdateHighlightedStudies = () => {
     const api = useApi()
-    const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (highlightedStudyIds: HighlightedStudyIds) => await api.adminHighlightStudies({
             highlightedStudyIds,
         }),
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['getLearningPaths'] })
-        },
+    })
+}
+
+export const useUpdateWelcomeStudies = () => {
+    const api = useApi()
+    return useMutation({
+        mutationFn: async (welcomeStudyIds: WelcomeStudyIds) => await api.adminWelcomeStudies({
+            welcomeStudyIds,
+        }),
     })
 }
 

@@ -28,6 +28,12 @@ class Api::V1::Admin::StudiesController < Api::V1::Admin::BaseController
     render status: :ok, json: { success: true }
   end
 
+  def welcome
+    Study.where(id: params[:welcome_ids]).update_all(is_welcome: true)
+    Study.where.not(id: params[:welcome_ids]).update_all(is_welcome: false)
+    render status: :ok, json: { success: true }
+  end
+
   def files
     render status: :ok, json: files_for_study(Study.find(params[:id]))
   end

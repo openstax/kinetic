@@ -4,12 +4,14 @@ import { useIsMobileDevice, useUpdateUserPreferences, useUserPreferences } from 
 import Greeting from '@images/welcome-banner/welcome-greeting.svg';
 import Success from '@images/welcome-banner/welcome-success.svg';
 import { colors } from '@theme';
+import { useParticipantStudies } from './studies';
+import { CompactStudyCard } from '../../components/study/compact-study-card';
 
 export const LearnerWelcomeModal: FC = () => {
     const [open, setOpen] = useState(true)
     const { data: preferences } = useUserPreferences()
     const updatePreferences = useUpdateUserPreferences()
-    const [step, setStep] = useState(0)
+    const [step, setStep] = useState(1)
     const isMobile = useIsMobileDevice()
 
     if (preferences?.hasViewedWelcomeMessage) {
@@ -27,7 +29,7 @@ export const LearnerWelcomeModal: FC = () => {
             closeOnEscape={false}
             opened={open}
             onClose={onClose}
-            size='80%'
+            size='70%'
             centered
             fullScreen={isMobile}
             withCloseButton={step == 1}
@@ -44,7 +46,7 @@ const WelcomeStep: FC<{
     const isMobile = useIsMobileDevice()
 
     return (
-        <Flex m='xl' gap='xl' direction={isMobile ? 'column-reverse' : 'row'}>
+        <Flex m='lg' gap='xl' direction={isMobile ? 'column-reverse' : 'row'}>
             <Box style={{ flex: 1 }}>
                 <Image src={Greeting} />
             </Box>
@@ -82,9 +84,11 @@ const WelcomeStep: FC<{
 }
 
 const EarnStep: FC = () => {
+    const { welcomeStudies } = useParticipantStudies()
+
     const isMobile = useIsMobileDevice()
     return (
-        <Flex direction={isMobile ? 'column' : 'row'} m='xl'>
+        <Flex direction={isMobile ? 'column' : 'row'} m='lg'>
             <Flex style={{ flex: 1 }} align='flex-end'>
                 <Image maw={300} src={Success} />
             </Flex>
@@ -98,7 +102,12 @@ const EarnStep: FC = () => {
                 </Title>
 
                 <Group gap='lg'>
-                    TODO: Studies here
+                    {welcomeStudies.map((study, index) => (
+                        <Group gap='lg'>
+                            <CompactStudyCard study={study} />
+                            {index == 0 && <Text>or</Text>}
+                        </Group>
+                    ))}
                 </Group>
             </Stack>
         </Flex>

@@ -51,6 +51,11 @@ class Api::V1::BaseStudiesOpenApi
         key :description, 'Is this study highlighted?'
         key :readOnly, true
       end
+      property :is_welcome do
+        key :type, :boolean
+        key :description, 'Is this a welcome study?'
+        key :readOnly, true
+      end
       property :is_hidden do
         key :type, :boolean
         key :description, 'Is the study hidden from participants'
