@@ -1,4 +1,4 @@
-import { cx, React, useState, useCallback } from '@common'
+import { cx, React, useState } from '@common'
 import { Box, getImageUrl, Icon, MultiSessionBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
 import { getStudyDuration, getStudyPoints, studyIsMultipart } from '@models'
@@ -8,6 +8,7 @@ import { colors, media } from '@theme'
 import { StudyDetailsPreview } from './details';
 import dayjs from 'dayjs';
 import { Button, Space } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
 interface StudyCardProps {
     study: ParticipantStudy
@@ -208,12 +209,11 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
     )
 }
 
-export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantStudy): void }> = ({
-    onSelect,
-    study,
-}) => {
-    const onClick = useCallback(() => onSelect(study), [onSelect]);
+export const StudyCard: React.FC<StudyCardProps> = ({ study }) => {
+    const nav = useNavigate()
+    const onClick = () => nav(`/studies/details/${study.id}`)
     const env = useEnvironment()
+
     return (
         <Card
             as="a"
