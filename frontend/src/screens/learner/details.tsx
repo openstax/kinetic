@@ -46,7 +46,7 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
             loading={isBusy}
             data-analytics-select-content
             data-content-type="study-launch"
-            data-content-tags={`,topic=${study.topic},is-new-user=${env.isNewUser},`}
+            data-content-tags={`,learning-path=${study.learningPath?.label},is-new-user=${env.isNewUser},`}
             disabled={!isStudyLaunchable(study)}
             data-testid="launch-study"
             onClick={onLaunch}

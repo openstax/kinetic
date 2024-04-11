@@ -81,7 +81,7 @@ export default function StudyLanding() {
                         data-analytics-view
                         data-analytics-nudge="study-complete"
                         data-nudge-placement="overlay"
-                        data-content-tags={`,topic=${study.topic},is-new-user=${env.isNewUser},`}
+                        data-content-tags={`,learning-path=${study.learningPath?.label},is-new-user=${env.isNewUser},`}
                     >
                         <NavLink to={'/studies'}
                             style={{ alignSelf: 'end', color: 'white', fontWeight: 'bolder' }}
