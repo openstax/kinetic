@@ -32,6 +32,8 @@ module Api::V1::Bindings
     # The tags of the study object, used for grouping and filtering.
     attr_accessor :rewards_schedule
 
+    attr_accessor :is_new_user
+
     # Banners that should be displayed to the user
     attr_accessor :banners_schedule
 
@@ -46,6 +48,7 @@ module Api::V1::Bindings
         :'accounts_env_name' => :'accounts_env_name',
         :'homepage_url' => :'homepage_url',
         :'rewards_schedule' => :'rewards_schedule',
+        :'is_new_user' => :'is_new_user',
         :'banners_schedule' => :'banners_schedule'
       }
     end
@@ -66,6 +69,7 @@ module Api::V1::Bindings
         :'accounts_env_name' => :'String',
         :'homepage_url' => :'String',
         :'rewards_schedule' => :'Array<RewardsScheduleSegment>',
+        :'is_new_user' => :'Boolean',
         :'banners_schedule' => :'Array<BannerMessage>'
       }
     end
@@ -123,6 +127,10 @@ module Api::V1::Bindings
         if (value = attributes[:'rewards_schedule']).is_a?(Array)
           self.rewards_schedule = value
         end
+      end
+
+      if attributes.key?(:'is_new_user')
+        self.is_new_user = attributes[:'is_new_user']
       end
 
       if attributes.key?(:'banners_schedule')
@@ -203,6 +211,7 @@ module Api::V1::Bindings
           accounts_env_name == o.accounts_env_name &&
           homepage_url == o.homepage_url &&
           rewards_schedule == o.rewards_schedule &&
+          is_new_user == o.is_new_user &&
           banners_schedule == o.banners_schedule
     end
 
@@ -215,7 +224,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [user, researcher, is_impersonating, impersonating_researcher, is_eligible, accounts_env_name, homepage_url, rewards_schedule, banners_schedule].hash
+      [user, researcher, is_impersonating, impersonating_researcher, is_eligible, accounts_env_name, homepage_url, rewards_schedule, is_new_user, banners_schedule].hash
     end
 
     # Builds the object from hash

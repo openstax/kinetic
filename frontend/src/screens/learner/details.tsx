@@ -11,7 +11,7 @@ import {
     studyIsMultipart,
     useFetchParticipantStudy,
 } from '@models'
-import { dayjs, useApi } from '@lib'
+import { dayjs, useApi, useEnvironment } from '@lib'
 import { Icon, MultiSessionBar } from '@components'
 import { colors } from '@theme'
 import { Button, Drawer, Group, Stack, Text } from '@mantine/core'
@@ -24,6 +24,7 @@ interface StudyDetailsProps {
 
 const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
     const api = useApi()
+    const env = useEnvironment()
     const [isBusy, setBusy] = useState(false)
 
     const onLaunch = async () => {
@@ -43,6 +44,9 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
         <Button
             color='purple'
             loading={isBusy}
+            data-analytics-select-content
+            data-content-type="study-launch"
+            data-content-tags={`,learning-path=${study.learningPath?.label},is-new-user=${env.isNewUser},`}
             disabled={!isStudyLaunchable(study)}
             data-testid="launch-study"
             onClick={onLaunch}

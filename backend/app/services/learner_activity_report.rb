@@ -26,8 +26,10 @@ class LearnerActivityReport
       'Stage Est Duration',
       'Started At',
       'Completed At',
+      'Participant Created At',
       'Participant Research ID',
       'Participant Name',
+      'New Participant Study?',
       'Test Account?'
     ]
   end
@@ -63,8 +65,10 @@ class LearnerActivityReport
         launch.stage.duration_minutes,
         launch.first_launched_at,
         launch.completed_at,
+        launch.research_id.created_at,
         launch.research_id.id,
         account['name'] || '',
+        launch.research_id.is_new_user?(launch.first_launched_at),
         account['is_test'] ? 'X' : nil
       ]
     end
