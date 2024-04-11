@@ -1,186 +1,45 @@
-import { cx, React, useCallback } from '@common'
+import { React } from '@common'
 import { ParticipantStudy } from '@api'
-import styled from '@emotion/styled'
-import { colors, media } from '@theme'
-import { Box, Footer, RewardsProgressBar, TopNavBar } from '@components'
+import { Footer, TopNavBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
-import { StudyTopic, studyTopics } from '@models'
-import { StudyByTopics, useLearnerStudies } from './learner/studies'
+import { useParticipantStudies, useSearchStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
 import { StudyDetails } from './learner/details'
-import { Route, Routes, useNavigate } from 'react-router-dom'
-import { chunk } from 'lodash-es'
+import { Route, Routes } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCards, Pagination } from 'swiper';
+import { EffectCards, FreeMode, Navigation, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
+import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title } from '@mantine/core';
+import { IconSearch, IconX } from '@tabler/icons-react';
+import { groupBy } from 'lodash';
+import { colors } from '@theme'
+import { useMemo } from 'react';
+import { orderBy, uniqBy } from 'lodash-es';
 
-interface StudyListProps {
-    studies: ParticipantStudy[],
-    title: string
-    className: string
-    onSelect(study: ParticipantStudy): void
-}
+const HighlightedStudies: FC = () => {
+    const { highlightedStudies } = useParticipantStudies()
+    const isMobile = useIsMobileDevice()
 
-const Grid = styled.div({
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, [col-start] minmax(100px, 1fr) [col-end])',
-    columnGap: 20,
-    rowGap: 20,
-    [media.tablet]: {
-        gridTemplateColumns: 'repeat(2, [col-start] minmax(100px, 1fr) [col-end])',
-    },
-})
-
-const StudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
-    return (
-        <div className={cx('container', 'studies', 'my-3', className)} >
-            <h3 css={{ margin: '2rem 0' }}>{title}</h3>
-            {children}
-            {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
-            <Grid css={{ overflow: 'auto', paddingBottom: '10px' }} data-testid="studies-listing">
-                {studies.map((s) => <StudyCard onSelect={onSelect} study={s} key={s.id} />)}
-            </Grid>
-        </div>
-    )
-}
-
-const MobileStudyList: FCWOC<StudyListProps> = ({ className, onSelect, title, studies, children }) => {
-    return (
-        <div className={cx('container-lg', 'studies', 'my-3', className)}>
-            <h3 className='py-2'>{title}</h3>
-            {children}
-            {!studies.length && <h3>Awesome, you completed all studies! Watch out for new studies coming up soon!</h3>}
-
-            {chunk(studies, 6).map((studyChunk, i) =>
-                <Swiper
-                    key={i}
-                    effect={'cards'}
-                    slidesPerView={'auto'}
-                    cardsEffect={{
-                        slideShadows: false,
-                        perSlideOffset: 14,
-                    }}
-                    centeredSlides={true}
-                    pagination
-                    modules={[EffectCards, Pagination]}
-                    className="pb-3 mb-2 overflow-hidden"
-                >
-                    {studyChunk.map((s) =>
-                        <SwiperSlide key={s.id} className="pb-1">
-                            <StudyCard onSelect={onSelect} study={s} />
-                        </SwiperSlide>
-                    )}
-                </Swiper>
-            )}
-        </div>
-    )
-}
-
-interface FiltersProps {
-    studies: StudyByTopics
-    filter: StudyTopic
-    setFilter(filter: StudyTopic): void
-}
-
-const TopicFilter: FC<{topic: StudyTopic, filter: StudyTopic, setFilter: (t: StudyTopic) => void}> = ({
-    topic, filter, setFilter,
-}) => {
-    return (
-        <span
-            className={topic == filter ? 'active' : ''}
-            data-testid={topic}
-            onClick={() => setFilter(topic)}
-            role="tab"
-        >
-            {topic}
-        </span>
-
-    )
-}
-
-const Filters: React.FC<FiltersProps> = ({ studies, filter, setFilter }) => {
-    if (useIsMobileDevice()) {
-        return null
-    }
+    if (!highlightedStudies.length) return null
 
     return (
-        <Box gap="large" data-testid="topic-tabs" wrap margin={{ bottom: 'large' }}
-            css={{
-                span: {
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    borderBottom: '3px solid transparent',
-                    color: colors.text,
-                    '&.active': {
-                        borderBottomColor: colors.purple,
-                        color: colors.purple,
-                    },
-                },
-            }}
-        >
-            {studyTopics.map((topic) => (
-                studies[topic]?.length && <TopicFilter topic={topic} key={topic} filter={filter} setFilter={setFilter} />
-            ))}
+        <Box bg={colors.navy} py='md'>
+            <Container>
+                <Stack>
+                    <Title c='white' order={2}>Highlighted Studies</Title>
+                    {isMobile ?
+                        <MobileStudyCards studies={highlightedStudies} /> :
+                        <DesktopStudyCards studies={highlightedStudies} />
+                    }
+                </Stack>
+            </Container>
         </Box>
     )
 }
 
-interface AllSubjectsProps extends FiltersProps {
-    onSelect(study: ParticipantStudy): void
-}
-
-const AllSubjects: FC<AllSubjectsProps> = ({
-    onSelect,
-    filter,
-    setFilter,
-    studies,
-}) => {
-    if (useIsMobileDevice()) {
-        return (
-            <>
-                {studyTopics
-                    .filter((topic) => !!studies[topic]?.length)
-                    .map((topic) => (
-                        <MobileStudyList key={topic} onSelect={onSelect} title={topic} className={topic} studies={studies[topic] || []} />
-                    ))
-                }
-            </>
-        )
-    }
-
-    return (
-        <StudyList onSelect={onSelect} title="View All Studies" className="filtered" studies={studies[filter] || []} >
-            <Filters studies={studies} filter={filter} setFilter={setFilter} />
-        </StudyList>
-    )
-}
-
-const HighlightedStudies: FCWOC<StudyListProps> = ({ onSelect, studies, title, className }) => {
-    if (useIsMobileDevice()) {
-        return (
-            <>
-                <MobileStudyList onSelect={onSelect} title={title} className={className} studies={studies} />
-            </>
-        )
-    }
-
-    return (
-        <StudyList onSelect={onSelect} title={title} className={className} studies={studies} />
-    )
-}
-
 const LearnerDashboard = () => {
-    const nav = useNavigate()
     const env = useEnvironment()
-    const onStudySelect = useCallback((s: ParticipantStudy) => nav(`/studies/details/${s.id}`), [nav])
-    const {
-        highlightedStudies,
-        allStudies,
-        filter,
-        setFilter,
-        studiesByTopic,
-    } = useLearnerStudies()
 
     if (!env.isEligible) {
         return <UnsupportedCountryModal />
@@ -191,17 +50,195 @@ const LearnerDashboard = () => {
             <Routes>
                 <Route path={'details/:studyId'} element={<StudyDetails />} />
             </Routes>
+
             <TopNavBar />
 
             <LearnerWelcomeModal />
-            <RewardsProgressBar studies={allStudies} />
 
-            <HighlightedStudies studies={highlightedStudies} title="Highlighted Studies on Kinetic" className="highlighted" onSelect={onStudySelect}/>
+            {/* Temporarily removing this as well until reward system reworked */}
+            {/*<RewardsProgressBar />*/}
 
-            <AllSubjects onSelect={onStudySelect} studies={studiesByTopic} filter={filter} setFilter={setFilter} />
+            {/* Temporarily disable syllabus contest due to legal, keep it just in case we re-enable in the future */}
+            {/*<SyllabusContest studies={syllabusContestStudies} />*/}
+
+            <HighlightedStudies />
+
+            <StudiesContainer />
 
             <Footer includeFunders />
         </div>
+    )
+}
+
+export const SearchBar: FC<{search: string, setSearch: (search: string) => void}> = ({ search, setSearch }) => {
+    const isMobile = useIsMobileDevice()
+
+    return (
+        <TextInput
+            w={isMobile ? '100%' : '400px'}
+            size='lg'
+            value={search}
+            onChange={(event) => setSearch(event.currentTarget.value)}
+            rightSection={search.length ?
+                <IconX onClick={() => setSearch('')} style={{ cursor: 'pointer' }}/> :
+                <IconSearch />
+            }
+            placeholder="Search by study title, researcher, or topic name"
+        />
+    )
+}
+
+export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = () => {
+    return (
+        <Title order={2}>All Studies</Title>
+    )
+}
+
+export const SearchResults: FC<{search: string, filteredStudies: ParticipantStudy[]}> = ({ search, filteredStudies }) => {
+    if (!search) {
+        return null
+    }
+
+    if (filteredStudies.length == 0) {
+        return (
+            <Title order={4}>
+                Sorry, no results found for '{search}'
+            </Title>
+        )
+    }
+
+    return (
+        <Title order={4}>
+            {filteredStudies.length} result{filteredStudies.length == 1 ? '' : 's'} for '{search}'
+        </Title>
+    )
+}
+
+export const StudiesContainer = () => {
+    const { search, setSearch, filteredStudies } = useSearchStudies()
+
+    return (
+        <Container my='lg'>
+            <Stack gap='lg'>
+                <Flex justify='space-between' wrap='wrap'>
+                    <StudiesTitle search={search} filteredStudies={filteredStudies} />
+
+                    <SearchBar search={search} setSearch={setSearch} />
+                </Flex>
+
+                <SearchResults search={search} filteredStudies={filteredStudies} />
+
+                <StudiesByLearningPath filteredStudies={filteredStudies} />
+            </Stack>
+        </Container>
+    )
+}
+
+export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }) => {
+    return (
+        <Box>
+            <Swiper
+                effect={'cards'}
+                slidesPerView={'auto'}
+                cardsEffect={{
+                    slideShadows: false,
+                    perSlideOffset: 14,
+                }}
+                centeredSlides={true}
+                pagination={{
+                    enabled: true,
+                    dynamicBullets: true,
+                    dynamicMainBullets: 5,
+                }}
+                modules={[EffectCards, Pagination]}
+                style={{
+                    paddingBottom: '2rem',
+                    marginBottom: '1rem',
+                }}
+            >
+                {studies.map((study) => (
+                    <SwiperSlide key={study.id} className="pb-1">
+                        <StudyCard study={study} />
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+        </Box>
+    )
+}
+
+export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }) => {
+    return (
+        <Box>
+            <Swiper
+                slidesPerView={3}
+                simulateTouch={true}
+                freeMode={true}
+                pagination={{
+                    enabled: true,
+                    dynamicBullets: true,
+                    dynamicMainBullets: 5,
+                    clickable: true,
+                }}
+                style={{
+                    marginBottom: '1rem',
+                    paddingBottom: '2rem',
+                    paddingLeft: '2rem',
+                    paddingRight: '2rem',
+                }}
+                navigation={{
+                    enabled: true,
+                }}
+                modules={[FreeMode, Pagination, Navigation]}
+            >
+                {studies.map(study => (
+                    <SwiperSlide style={{ padding: '1rem' }} key={study.id}>
+                        <StudyCard study={study} />
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+        </Box>
+    )
+}
+
+export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = ({ filteredStudies }) => {
+    const [learningPaths, studiesByLearningPath] = useMemo(() => {
+        return [
+            orderBy(
+                (uniqBy(filteredStudies.map(fs => fs.learningPath), (lp) => lp?.label)),
+                ['completed'],
+                ['asc']
+            ),
+            groupBy(filteredStudies, (study) => study.learningPath?.label),
+        ]
+    }, [filteredStudies])
+
+    const isMobile = useIsMobileDevice()
+
+    return (
+        <Stack gap='lg' data-testid='studies-listing'>
+            {learningPaths.map(learningPath => {
+                if (!learningPath) return null
+                const studies = studiesByLearningPath[learningPath.label]
+                return (
+                    <Stack key={learningPath.label}>
+                        <Group gap='sm'>
+                            <Title order={3}>
+                                {learningPath.label}
+                            </Title>
+                            <Text span>|</Text>
+                            <Title order={3} fw='300'>
+                                {learningPath.description}
+                            </Title>
+                            {learningPath.completed ? <Badge c={colors.text} color={colors.green}>Completed</Badge> : null}
+                        </Group>
+                        {isMobile ?
+                            <MobileStudyCards studies={studies} /> :
+                            <DesktopStudyCards studies={studies} />
+                        }
+                    </Stack>
+                )
+            })}
+        </Stack>
     )
 }
 

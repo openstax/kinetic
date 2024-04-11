@@ -12,6 +12,7 @@ Rails.application.config.to_prepare do
       attributes[:first_launched_at] = model.first_launched_study&.first_launched_at || nil
       attributes[:consented] = model.first_launched_study&.consent_granted || false
       attributes[:return_url] = frontend_returning_url(model.id)
+      attributes[:learning_path] = model.learning_path
 
       attributes[:researchers] = model.study_researchers.map do |study_researcher|
         researcher = study_researcher.researcher
@@ -30,10 +31,4 @@ Rails.application.config.to_prepare do
     end
   end
 
-  def self.admin_create_from_model(model)
-    attrs = create_from_model(model)
-    attrs[:stages] = model.stages.map do |stage_model|
-      Api::V1::Bindings::Stage.admin_create_from_model(stage_model)
-    end
-  end
 end

@@ -33,9 +33,8 @@ class LearnerActivityReport
   end
 
   def get_users(launches)
-    launches.each do |launch|
-      @user_uuids << launch.user_id
-    end
+    @user_uuids = launches.clone.pluck('user_id')
+
     UserInfo.for_uuids(@user_uuids)
   end
 
@@ -48,7 +47,7 @@ class LearnerActivityReport
   end
 
   def build_rows(csv, users, launches)
-    launches.each do |launch|
+    launches.includes(:stage, :research_id, study: :first_launched_study).find_each do |launch|
       next if launch.stage.study.first_launched_study.opted_out_at
 
       account = users[launch.user_id] || {}
@@ -73,7 +72,7 @@ class LearnerActivityReport
 
   def generate_report(csv)
     launches = LaunchedStage
-                 .joins(:research_id, stage: :study)
+                 .joins(stage: :study)
                  .where('first_launched_at >= ?', (@months_ago || 1).to_i.months.ago)
 
     users = get_users(launches)

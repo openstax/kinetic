@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Anchor, Box, Button, Checkbox, Flex, Group, Image, Modal, Stack, Text, Title } from '@mantine/core';
-import { useApi, useIsMobileDevice, useUpdateUserPreferences, useUserPreferences } from '@lib';
+import { useIsMobileDevice, useUpdateUserPreferences, useUserPreferences } from '@lib';
 import Greeting from '@images/welcome-banner/welcome-greeting.svg';
 import Success from '@images/welcome-banner/welcome-success.svg';
 import { colors } from '@theme';

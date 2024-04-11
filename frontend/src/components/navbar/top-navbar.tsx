@@ -2,7 +2,7 @@ import { cx, React, styled, useState } from '@common'
 import { Box } from 'boxible'
 import { Link, NavLink } from 'react-router-dom';
 import { useCurrentUser, useIsMobileDevice } from '@lib'
-import { Menu } from '@mantine/core';
+import { Container, Menu } from '@mantine/core';
 import { colors } from '@theme';
 import { BannersBar, Icon, NavbarLogoLink } from '@components';
 import { loadAsync } from '../async';
@@ -29,7 +29,7 @@ export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, className }) => {
     return (
         <nav className={cx('navbar', 'navbar-light', className)}>
             <div className="navbar-dark bg-dark py-1">
-                <div className="container-lg">
+                <Container>
                     <Box justify="between" align="center" gap padding={{ vertical: 'default' }}>
                         <NavbarLogoLink />
                         {children}
@@ -38,7 +38,7 @@ export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, className }) => {
                             <NavMenu />
                         </Box>
                     </Box>
-                </div>
+                </Container>
             </div>
             {!hideBanner && <BannersBar />}
         </nav>

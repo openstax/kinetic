@@ -1,8 +1,17 @@
-import { DefaultApi, ParticipantStudy, ResearcherRoleEnum, Stage, Study, StudyStatusEnum } from '@api'
+import {
+    DefaultApi,
+    FeaturedStudyIds,
+    HighlightedStudyIds,
+    ParticipantStudy,
+    ResearcherRoleEnum,
+    Stage,
+    Study,
+    StudyStatusEnum,
+} from '@api'
 import { useApi } from '@lib'
 import { dayjs, useEffect, useState } from '@common';
 import { first, sumBy } from 'lodash-es';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { showResearcherNotificationError } from '@components';
 
 export enum StudyStatus {
@@ -105,6 +114,41 @@ export function getStudyDuration(study: ParticipantStudy): number {
     if (!study.stages) return 0
 
     return sumBy(study.stages, (s) => +(s.durationMinutes || 0))
+}
+
+export const useAdminGetStudies = (status: string = 'all') => {
+    const api = useApi()
+    return useQuery('adminGetStudies', async () => {
+        const res = await api.adminQueryStudies({ status });
+        return res.data || [];
+    })
+}
+
+export const useUpdateHighlightedStudies = () => {
+    const api = useApi()
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (highlightedStudyIds: HighlightedStudyIds) => await api.adminHighlightStudies({
+            highlightedStudyIds,
+        }),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['getLearningPaths'] })
+        },
+    })
+}
+
+export const useUpdateFeaturedStudies = () => {
+    const api = useApi()
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (featuredStudyIds: FeaturedStudyIds) => await api.adminFeatureStudies({
+            featuredStudyIds,
+        }),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['getLearningPaths'] })
+        },
+    })
 }
 
 export const useFetchPublicStudies = () => {

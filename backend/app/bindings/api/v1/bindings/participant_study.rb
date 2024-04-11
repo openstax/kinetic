@@ -30,6 +30,9 @@ module Api::V1::Bindings
     # Is this study a part of the syllabus contest?
     attr_accessor :is_syllabus_contest_study
 
+    # When the study was aborted; null indicates stage was marked complete
+    attr_accessor :aborted_at
+
     # When the study was completed; null means not completed.
     attr_accessor :completed_at
 
@@ -62,6 +65,12 @@ module Api::V1::Bindings
 
     # Description of how the study benefits participants
     attr_accessor :benefits
+
+    # An integer that describes the sort order for this study
+    attr_accessor :featured_order
+
+    # Is this study highlighted?
+    attr_accessor :is_highlighted
 
     # Is the study hidden from participants
     attr_accessor :is_hidden
@@ -99,8 +108,7 @@ module Api::V1::Bindings
     # The category (type of) study
     attr_accessor :category
 
-    # The study topic
-    attr_accessor :topic
+    attr_accessor :learning_path
 
     # The study's subject
     attr_accessor :subject
@@ -144,6 +152,7 @@ module Api::V1::Bindings
         :'is_demographic_survey' => :'is_demographic_survey',
         :'is_featured' => :'is_featured',
         :'is_syllabus_contest_study' => :'is_syllabus_contest_study',
+        :'aborted_at' => :'aborted_at',
         :'completed_at' => :'completed_at',
         :'opted_out_at' => :'opted_out_at',
         :'total_points' => :'total_points',
@@ -155,6 +164,8 @@ module Api::V1::Bindings
         :'internal_description' => :'internal_description',
         :'image_id' => :'image_id',
         :'benefits' => :'benefits',
+        :'featured_order' => :'featured_order',
+        :'is_highlighted' => :'is_highlighted',
         :'is_hidden' => :'is_hidden',
         :'consented' => :'consented',
         :'first_launched_at' => :'first_launched_at',
@@ -167,7 +178,7 @@ module Api::V1::Bindings
         :'public_on' => :'public_on',
         :'completed_count' => :'completed_count',
         :'category' => :'category',
-        :'topic' => :'topic',
+        :'learning_path' => :'learning_path',
         :'subject' => :'subject',
         :'stages' => :'stages',
         :'launched_count' => :'launched_count',
@@ -188,6 +199,7 @@ module Api::V1::Bindings
         :'is_demographic_survey' => :'Boolean',
         :'is_featured' => :'Boolean',
         :'is_syllabus_contest_study' => :'Boolean',
+        :'aborted_at' => :'Time',
         :'completed_at' => :'Time',
         :'opted_out_at' => :'Time',
         :'total_points' => :'Integer',
@@ -199,6 +211,8 @@ module Api::V1::Bindings
         :'internal_description' => :'String',
         :'image_id' => :'String',
         :'benefits' => :'String',
+        :'featured_order' => :'Integer',
+        :'is_highlighted' => :'Boolean',
         :'is_hidden' => :'Boolean',
         :'consented' => :'Boolean',
         :'first_launched_at' => :'Time',
@@ -211,7 +225,7 @@ module Api::V1::Bindings
         :'public_on' => :'Time',
         :'completed_count' => :'Float',
         :'category' => :'String',
-        :'topic' => :'String',
+        :'learning_path' => :'LearningPath',
         :'subject' => :'String',
         :'stages' => :'Array<Stage>',
         :'launched_count' => :'Float',
@@ -271,6 +285,10 @@ module Api::V1::Bindings
         self.is_syllabus_contest_study = attributes[:'is_syllabus_contest_study']
       end
 
+      if attributes.key?(:'aborted_at')
+        self.aborted_at = attributes[:'aborted_at']
+      end
+
       if attributes.key?(:'completed_at')
         self.completed_at = attributes[:'completed_at']
       end
@@ -313,6 +331,14 @@ module Api::V1::Bindings
 
       if attributes.key?(:'benefits')
         self.benefits = attributes[:'benefits']
+      end
+
+      if attributes.key?(:'featured_order')
+        self.featured_order = attributes[:'featured_order']
+      end
+
+      if attributes.key?(:'is_highlighted')
+        self.is_highlighted = attributes[:'is_highlighted']
       end
 
       if attributes.key?(:'is_hidden')
@@ -365,8 +391,8 @@ module Api::V1::Bindings
         self.category = attributes[:'category']
       end
 
-      if attributes.key?(:'topic')
-        self.topic = attributes[:'topic']
+      if attributes.key?(:'learning_path')
+        self.learning_path = attributes[:'learning_path']
       end
 
       if attributes.key?(:'subject')
@@ -473,6 +499,7 @@ module Api::V1::Bindings
           is_demographic_survey == o.is_demographic_survey &&
           is_featured == o.is_featured &&
           is_syllabus_contest_study == o.is_syllabus_contest_study &&
+          aborted_at == o.aborted_at &&
           completed_at == o.completed_at &&
           opted_out_at == o.opted_out_at &&
           total_points == o.total_points &&
@@ -484,6 +511,8 @@ module Api::V1::Bindings
           internal_description == o.internal_description &&
           image_id == o.image_id &&
           benefits == o.benefits &&
+          featured_order == o.featured_order &&
+          is_highlighted == o.is_highlighted &&
           is_hidden == o.is_hidden &&
           consented == o.consented &&
           first_launched_at == o.first_launched_at &&
@@ -496,7 +525,7 @@ module Api::V1::Bindings
           public_on == o.public_on &&
           completed_count == o.completed_count &&
           category == o.category &&
-          topic == o.topic &&
+          learning_path == o.learning_path &&
           subject == o.subject &&
           stages == o.stages &&
           launched_count == o.launched_count &&
@@ -512,7 +541,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, popularity_rating, is_demographic_survey, is_featured, is_syllabus_contest_study, completed_at, opted_out_at, total_points, total_duration, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, topic, subject, stages, launched_count, return_url].hash
+      [id, popularity_rating, is_demographic_survey, is_featured, is_syllabus_contest_study, aborted_at, completed_at, opted_out_at, total_points, total_duration, title_for_participants, title_for_researchers, short_description, long_description, internal_description, image_id, benefits, featured_order, is_highlighted, is_hidden, consented, first_launched_at, opens_at, closes_at, target_sample_size, status, researchers, view_count, public_on, completed_count, category, learning_path, subject, stages, launched_count, return_url].hash
     end
 
     # Builds the object from hash

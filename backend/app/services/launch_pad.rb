@@ -33,7 +33,7 @@ class LaunchPad
   def land(consent: true, aborted: nil)
     if aborted
       self.abort(aborted)
-      return { aborted_at: Time.now }
+      return launched_study
     end
 
     stages = user.launched_stages(study:)
@@ -41,11 +41,8 @@ class LaunchPad
     # If they are landing, they must have one launched stage or we need to error.
     stage = stages.where(completed_at: nil).first
 
-    if stage.nil?
-      return {
-        completed_at: stages.where('completed_at is not null').last&.completed_at
-      }
-    end
+    # This means they have already completed the study
+    return launched_study if stage.nil?
 
     # Mark the launched records consented and completed as needed.
     Study.transaction do
@@ -58,7 +55,7 @@ class LaunchPad
       launched_study.completed! if stage.is_last?
     end
 
-    { completed_at: stage.is_last? ? stage.completed_at : nil }
+    launched_study
   end
 
   def abort(reason)

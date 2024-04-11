@@ -424,6 +424,41 @@ ALTER SEQUENCE public.launched_studies_id_seq OWNED BY public.launched_studies.i
 
 
 --
+-- Name: learning_paths; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.learning_paths (
+    id bigint NOT NULL,
+    label character varying NOT NULL,
+    description character varying NOT NULL,
+    badge_id character varying,
+    level_1_metadata text[] DEFAULT '{}'::text[],
+    level_2_metadata text[] DEFAULT '{}'::text[],
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
+);
+
+
+--
+-- Name: learning_paths_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.learning_paths_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: learning_paths_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.learning_paths_id_seq OWNED BY public.learning_paths.id;
+
+
+--
 -- Name: participant_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -644,12 +679,15 @@ CREATE TABLE public.studies (
     is_hidden boolean DEFAULT false NOT NULL,
     view_count integer DEFAULT 0,
     category character varying,
-    topic character varying,
     subject character varying,
     internal_description character varying,
     target_sample_size integer,
     public_on timestamp with time zone,
-    launched_studies_count integer
+    launched_studies_count integer,
+    learning_path_id bigint,
+    is_featured boolean DEFAULT false,
+    featured_order integer,
+    is_highlighted boolean DEFAULT false
 );
 
 
@@ -850,6 +888,13 @@ ALTER TABLE ONLY public.launched_studies ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- Name: learning_paths id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.learning_paths ALTER COLUMN id SET DEFAULT nextval('public.learning_paths_id_seq'::regclass);
+
+
+--
 -- Name: participant_metadata id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1006,6 +1051,14 @@ ALTER TABLE ONLY public.launched_stages
 
 ALTER TABLE ONLY public.launched_studies
     ADD CONSTRAINT launched_studies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: learning_paths learning_paths_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.learning_paths
+    ADD CONSTRAINT learning_paths_pkey PRIMARY KEY (id);
 
 
 --
@@ -1258,6 +1311,13 @@ CREATE INDEX index_stages_on_study_id ON public.stages USING btree (study_id);
 
 
 --
+-- Name: index_studies_on_learning_path_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_studies_on_learning_path_id ON public.studies USING btree (learning_path_id);
+
+
+--
 -- Name: index_study_analyses_on_analysis_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1297,6 +1357,14 @@ CREATE INDEX index_study_researchers_on_study_id ON public.study_researchers USI
 --
 
 CREATE INDEX index_user_preferences_on_user_id ON public.user_preferences USING btree (user_id);
+
+
+--
+-- Name: studies fk_rails_0a926dea61; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.studies
+    ADD CONSTRAINT fk_rails_0a926dea61 FOREIGN KEY (learning_path_id) REFERENCES public.learning_paths(id);
 
 
 --
@@ -1410,6 +1478,8 @@ ALTER TABLE ONLY public.response_exports
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240229135718'),
+('20240222135611'),
 ('20231212191239'),
 ('20231120172017'),
 ('20231113162430'),

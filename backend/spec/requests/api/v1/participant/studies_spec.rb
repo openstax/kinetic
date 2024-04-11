@@ -35,6 +35,8 @@ RSpec.describe 'Participant Studies', :multi_stage, api: :v1 do
     user1_study2_launch_pad.launch_url
     user1_study3_launch_pad.launch_url
     user1_study3_launch_pad.land
+
+    stub_obf_api
   end
 
   describe 'GET participant/studies/{id}' do
@@ -84,6 +86,28 @@ RSpec.describe 'Participant Studies', :multi_stage, api: :v1 do
         study1.update!(is_hidden: true)
         api_get "participant/studies/#{study1.id}"
         expect(response).to have_http_status(:not_found)
+      end
+
+      it 'marks learning path as complete' do
+        api_get "participant/studies/#{study3.id}"
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match a_hash_including(
+          id: study3.id,
+          learning_path: a_hash_including({
+            completed: true
+          })
+        )
+      end
+
+      it 'marks learning path as incomplete' do
+        api_get "participant/studies/#{study1.id}"
+        expect(response).to have_http_status(:success)
+        expect(response_hash).to match a_hash_including(
+          id: study1.id,
+          learning_path: a_hash_including({
+            completed: false
+          })
+        )
       end
     end
   end
@@ -207,7 +231,6 @@ RSpec.describe 'Participant Studies', :multi_stage, api: :v1 do
 
       it 'returns completion status for a multistage study' do
         stage1a.launch_by_user!(user1)
-        # expect_any_instance_of(LaunchPad).to receive(:land)
         api_put "participant/studies/#{study1.id}/land"
         expect(response_hash[:completed_at]).to be_nil
 
@@ -237,7 +260,6 @@ RSpec.describe 'Participant Studies', :multi_stage, api: :v1 do
       end
 
       it 'works for a launched study not yet landed' do
-        allow_any_instance_of(LaunchPad).to receive(:land).and_return({})
         expect {
           api_put "participant/studies/#{study2.id}/land?md[foo]=bar&md[bar]=baz"
         }.to change { ParticipantMetadatum.count }.by 1
