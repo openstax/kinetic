@@ -219,7 +219,7 @@ export const StudyCard: React.FC<StudyCardProps> = ({ study }) => {
             role={'link'}
             className="col study"
             direction='column'
-            data-study-id={studyw.id}
+            data-study-id={study.id}
             data-is-completed={!!study.completedAt}
             onClick={onClick}
         >
