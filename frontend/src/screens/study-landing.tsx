@@ -3,7 +3,7 @@ import { React, useEffect, useState } from '@common'
 import { colors } from '@theme'
 import { LandStudyAbortedEnum, LandStudyRequest, ParticipantStudy } from '@api'
 import { ErrorPage, LoadingAnimation } from '@components'
-import { useApi, useQueryParam } from '@lib'
+import { useApi, useEnvironment, useQueryParam } from '@lib'
 import { BackgroundImage, Box, Button, Container, Flex, Group, Modal, Space, Stack, Text, Title } from '@mantine/core';
 import Waves from '@images/waves.svg'
 import { launchStudy, RewardsSegment, useRewardsSchedule } from '@models';
@@ -26,6 +26,8 @@ const Points: React.FC<{ study: ParticipantStudy }> = ({ study }) => {
 export default function StudyLanding() {
     const { studyId } = useParams<string>();
     const [study, setStudy] = useState<ParticipantStudy | null>(null)
+    const env = useEnvironment()
+
     const [error, setError] = useState<any>(null)
     const consent = useQueryParam('consent') != 'false'
     const abort = useQueryParam('abort') == 'true'
@@ -72,8 +74,20 @@ export default function StudyLanding() {
                 },
             }}>
                 <BackgroundImage src={Waves}>
-                    <Stack gap='xl' p='xl' c='white'>
-                        <NavLink to={'/studies'} style={{ alignSelf: 'end', color: 'white', fontWeight: 'bolder' }} data-testid='view-studies'>
+                    <Stack
+                        gap='xl'
+                        p='xl'
+                        c='white'
+                        data-analytics-view
+                        data-analytics-nudge="study-complete"
+                        data-nudge-placement="overlay"
+                        data-content-tags={`,learning-path=${study.learningPath?.label},is-new-user=${env.isNewUser},`}
+                    >
+                        <NavLink to={'/studies'}
+                            style={{ alignSelf: 'end', color: 'white', fontWeight: 'bolder' }}
+                            data-testid='view-studies'
+                            data-nudge-action="interacted"
+                        >
                             Return to Dashboard
                         </NavLink>
                         <Stack gap='xl' w='75%'>

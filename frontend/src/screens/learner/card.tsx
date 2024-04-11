@@ -1,6 +1,6 @@
 import { cx, React, useState } from '@common'
 import { Box, getImageUrl, Icon, MultiSessionBar } from '@components'
-import { useIsMobileDevice } from '@lib'
+import { useEnvironment, useIsMobileDevice } from '@lib'
 import { getStudyDuration, getStudyPoints, studyIsMultipart } from '@models'
 import { ParticipantStudy, Study } from '@api'
 import styled from '@emotion/styled'
@@ -212,6 +212,7 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
 export const StudyCard: React.FC<StudyCardProps> = ({ study }) => {
     const nav = useNavigate()
     const onClick = () => nav(`/studies/details/${study.id}`)
+    const env = useEnvironment()
 
     return (
         <Card
@@ -219,9 +220,12 @@ export const StudyCard: React.FC<StudyCardProps> = ({ study }) => {
             role={'link'}
             className="col study"
             direction='column'
+            onClick={onClick}
             data-study-id={study.id}
             data-is-completed={!!study.completedAt}
-            onClick={onClick}
+            data-analytics-select-content
+            data-content-type="study-details"
+            data-content-tags={`,learning-path=${study.learningPath?.label},is-new-user=${env.isNewUser},`}
         >
             <CardContent study={study} />
         </Card>

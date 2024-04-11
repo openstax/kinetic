@@ -435,13 +435,13 @@
             <div>
               <span>Supported by</span>
               <div style='display: flex; gap: 1.5rem'>
-                <a class="text-decoration-none" target="_blank" href="https://ies.ed.gov/">
+                <a class="text-decoration-none" data-analytics-link="ies-logo" target="_blank" href="https://ies.ed.gov/">
                   <img class="supporter-image" alt="Institute of Education Sciences logo" src="https://assets.openstax.org/oscms-prodcms/media/images/ies-logo.original.webp">
                 </a>
                 <span>*</span>
 
                 <span class="vertical-line"></span>
-                <a class="text-decoration-none" target="_blank" href="https://www.nsf.org/gb/en">
+                <a class="text-decoration-none" target="_blank" data-analytics-link="nsf" href="https://www.nsf.org/gb/en">
                   <img class="supporter-image" alt="National Science Foundation logo" src="https://assets.openstax.org/oscms-prodcms/media/images/nsf-logo.original.webp">
                 </a>
               </div>
@@ -470,17 +470,27 @@
 
                   <p style="display: flex; flex-wrap: wrap; gap: 2rem; color: rgba(117, 148, 245, 1); font-size: 14px">
                     <span>Exclusive to US based participants 18 years old and over. </span>
-                    <a href="https://help.openstax.org/s/article/kinetic" target="_blank" style="color: rgba(117, 148, 245, 1)">Learn More ></a>
+                    <a data-analytics-link="learn-more" href="https://help.openstax.org/s/article/kinetic" target="_blank" style="color: rgba(117, 148, 245, 1)">Learn More ></a>
                   </p>
                 </div>
               </div>
               <div class="eligible">
                 <div class="actions-block login-signup" style="display: none;">
                   <div class="buttons">
-                    <a class="signup btn primary link" data-local="true" href="https://accounts.openstax.org/signup/?r=https%3A%2F%2Fkinetic.openstax.org%2F">
+                    <a
+                      class="signup btn primary link"
+                      data-local="true"
+                      data-analytics-link="signup"
+                      href="https://accounts.openstax.org/signup/?r=https%3A%2F%2Fkinetic.openstax.org%2F"
+                    >
                       Sign up
                     </a>
-                    <a class="login link" data-local="true" href="https://accounts.openstax.org/i/login/?r=https%3A%2F%2Fkinetic.openstax.org%2F">
+                    <a
+                      class="login link"
+                      data-local="true"
+                      data-analytics-link="login"
+                      href="https://accounts.openstax.org/i/login/?r=https%3A%2F%2Fkinetic.openstax.org%2F"
+                    >
                       Log in
                     </a>
                   </div>
@@ -489,6 +499,7 @@
                   <div class="buttons">
                     <a class="start link btn primary"
                        data-local="true"
+                       data-analytics-link="view-studies"
                        href="https://kinetic.openstax.org/"
                     >
                       View available studies
@@ -553,11 +564,11 @@
           Sample study: Do you thrive or survive?
         </h5>
 
-        <a class="link sample-study" href="">
+        <a class="link sample-study" href="" data-analytics-link="sample-study">
           <img alt="sample-study" src="https://assets.openstax.org/oscms-prodcms/media/images/kinetic-sample-study.original.webp">
         </a>
 
-        <a class="link sample-study btn primary">Take the sample study</a>
+        <a data-analytics-link="sample-study" class="link sample-study btn primary">Take the sample study</a>
 
         </div>
       </div>
@@ -566,7 +577,7 @@
         <div class="container">
           <div class="centering">
             <h2>About Us</h2>
-            <a class="learn-more" target="_blank"  href="https://help.openstax.org/s/article/kinetic">Learn More ></a>
+            <a class="learn-more" target="_blank" data-analytics-link="learn-more" href="https://help.openstax.org/s/article/kinetic">Learn More ></a>
           </div>
           <div class="columns">
             <div>
@@ -618,7 +629,7 @@
               </a>
             </div>
           </div>
-		  <a class="other-supporters" href="https://openstax.org/foundation">View Other Philanthropic Supporters</a>
+		  <a class="other-supporters" data-analytics-link="other-supporters" href="https://openstax.org/foundation">View Other Philanthropic Supporters</a>
 
 		  <p class="light x-small">
 			*The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
@@ -643,6 +654,7 @@
                 <a
                   class="signup btn primary link"
                   data-local="true"
+                  data-analytics-link="signup"
                   href="https://accounts.openstax.org/signup/?r=https%3A%2F%2Fkinetic.openstax.org%2F"
                   >
                   Sign up
@@ -650,6 +662,7 @@
                 <a
                   class="login link"
                   data-local="true"
+                  data-analytics-link="login"
                   href="https://accounts.openstax.org/i/login/?r=https%3A%2F%2Fkinetic.openstax.org%2F"
                   >
                   Log in
@@ -660,6 +673,7 @@
               <div class="buttons">
                 <a class="start link btn primary"
                    data-local="true"
+                   data-analytics-link="view-studies"
                    href="https://kinetic.openstax.org/"
                 >
                   View available studies
