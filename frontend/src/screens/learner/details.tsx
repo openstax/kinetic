@@ -95,10 +95,10 @@ export const StudyDetails: React.FC = () => {
     const studyId = Number(sid || '')
     const onHide = useCallback(() => nav('/studies'), [nav])
 
-    const { data: study, isLoading } = useFetchParticipantStudy(studyId)
+    const { data: study, isLoading, isFetching } = useFetchParticipantStudy(studyId)
 
     useEffect(() => {
-        if (study) {
+        if (study && !isFetching) {
             api.studyStats({
                 id: study.id,
                 view: true,
@@ -106,7 +106,7 @@ export const StudyDetails: React.FC = () => {
         }
     }, [study])
 
-    if (isLoading) return null
+    if (isLoading || isFetching) return null
 
     if (!study) return <Navigate to="/studies" />
 
@@ -135,7 +135,7 @@ export const StudyDetailsPreview: FC<{
                     </Stack>
 
                     <Stack gap='lg' style={{ flex: 1, overflow: 'auto' }}>
-                        <StudyTopic study={study} />
+                        <StudyLearningPath study={study} />
 
                         <StudyTime study={study} />
 
@@ -175,13 +175,14 @@ const StudyDescription: FC<StudyDetailsProps> = ({ study }) => {
 }
 
 
-const StudyTopic: FC<StudyDetailsProps> = ({ study }) => {
-    if (!study.topic) return null
+const StudyLearningPath: FC<StudyDetailsProps> = ({ study }) => {
+    if (!study.learningPath) return null
 
     return (
         <Group>
             <IconMessageExclamation size={16} color={colors.purple} />
-            <Text>{study.topic}</Text>
+            <Text>{study.learningPath.label}</Text>
+            <Text size='sm'>{study.learningPath.description}</Text>
         </Group>
     )
 }

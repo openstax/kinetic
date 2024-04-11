@@ -156,8 +156,8 @@ const StatusLabel: React.FC<{status: string}> = ({ status }) => {
 }
 
 const NoData: React.FC<{ filteredStudiesLength: number }> = ({ filteredStudiesLength }) => {
-    const { data: studies, isLoading } = useFetchStudies()
-    if (filteredStudiesLength || isLoading || !studies) return null
+    const { data: studies = [], isLoading } = useFetchStudies()
+    if (filteredStudiesLength || isLoading) return null
     return (
         <Stack align='center' justify='center' mt='xl' gap='large'>
             <h3 css={{ color: colors.gray50 }}>
@@ -203,7 +203,7 @@ export const StudiesTable: React.FC<{
     initialFilters,
     currentStatus,
 }) => {
-    const { data: studies, refetch } = useFetchStudies()
+    const { data: studies = [], refetch } = useFetchStudies()
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: 'opensAt',
         desc: false,
@@ -359,7 +359,7 @@ export const StudiesTable: React.FC<{
 
     const table: Table<Study> = useReactTable({
         filterFromLeafRows: true,
-        data: studies || [],
+        data: studies,
         columns,
         state: {
             columnVisibility,

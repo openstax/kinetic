@@ -25,7 +25,7 @@ jobs:
       - name: Generate bindings
         run: docker compose exec api bundle exec rake openstax_openapi:generate_model_bindings[1]
       - name: Check for changes in bindings
-        uses: tj-actions/verify-changed-files@v17
+        uses: tj-actions/verify-changed-files@v19
         id: verify-changed-files
         with:
           files: |
@@ -41,7 +41,7 @@ jobs:
           npx playwright install chromium --with-deps
           npx playwright test
       - name: Save test-results of failures
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: test-results
@@ -55,17 +55,15 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
           working-directory: backend
-
-      - name: Build docker image and run specs within it
-        run: |
-          docker compose build api postgres postgres_test
-          docker compose run -T api /bin/bash -c "bundle exec rspec"
+      - name: Run docker containers
+        run: docker compose up api postgres_test -d
+      - name: Run Specs
+        run: docker compose exec api bundle exec rspec
       - name: Stop containers
         if: always()
         run: docker compose down

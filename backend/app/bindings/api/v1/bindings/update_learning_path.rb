@@ -14,18 +14,13 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class ParticipantStudyCompletion
-    # When the stage was aborted; null indicates stage was marked complete
-    attr_accessor :aborted_at
-
-    # When the study was completed; null indicates study is not yet complete
-    attr_accessor :completed_at
+  class UpdateLearningPath
+    attr_accessor :learning_path
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'aborted_at' => :'aborted_at',
-        :'completed_at' => :'completed_at'
+        :'learning_path' => :'learning_path'
       }
     end
 
@@ -37,8 +32,7 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'aborted_at' => :'Time',
-        :'completed_at' => :'Time'
+        :'learning_path' => :'LearningPath'
       }
     end
 
@@ -52,23 +46,19 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::ParticipantStudyCompletion` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::UpdateLearningPath` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::ParticipantStudyCompletion`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::UpdateLearningPath`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'aborted_at')
-        self.aborted_at = attributes[:'aborted_at']
-      end
-
-      if attributes.key?(:'completed_at')
-        self.completed_at = attributes[:'completed_at']
+      if attributes.key?(:'learning_path')
+        self.learning_path = attributes[:'learning_path']
       end
     end
 
@@ -90,8 +80,7 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          aborted_at == o.aborted_at &&
-          completed_at == o.completed_at
+          learning_path == o.learning_path
     end
 
     # @see the `==` method
@@ -103,7 +92,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [aborted_at, completed_at].hash
+      [learning_path].hash
     end
 
     # Builds the object from hash

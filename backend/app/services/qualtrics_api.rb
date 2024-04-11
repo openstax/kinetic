@@ -6,7 +6,7 @@ require 'zip'
 class QualtricsApi
 
   def initialize
-    @http = HTTPX.plugin(:compression).with(
+    @http = HTTPX.with(
       headers: { 'X-API-TOKEN': Rails.application.secrets.qualtrics_api_key }
     ).plugin(:stream)
   end
@@ -74,7 +74,7 @@ class QualtricsApi
   def get_survey_definition(survey_id, format: nil)
     Rails.cache.fetch(
       "qualtrics-survey-definition/#{survey_id}",
-      expires_in: Rails.application.secrets.export_cache_hours
+      expires_in: Rails.env.production? ? 6 : 0
     ) do
       fqp = format ? "?format=#{format}" : ''
       request('GET', "survey-definitions/#{survey_id}#{fqp}")['result']

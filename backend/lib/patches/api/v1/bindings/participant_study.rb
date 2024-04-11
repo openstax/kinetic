@@ -31,6 +31,7 @@ Rails.application.config.to_prepare do
           model.attributes.with_indifferent_access.slice(
             :first_launched_at,
             :completed_at,
+            :aborted_at,
             :opted_out_at
           )
         )
@@ -39,11 +40,17 @@ Rails.application.config.to_prepare do
 
     def self.attributes_from_study_model(model, user)
       model.attributes_for_binding(self).tap do |attributes|
-        attributes[:is_featured] = model.is_featured?
         attributes[:is_syllabus_contest_study] = model.is_syllabus_contest_study?
         attributes[:is_demographic_survey] = model.is_demographic_survey?
         attributes[:total_points] = model.total_points
         attributes[:total_duration] = model.total_duration
+        unless model.learning_path.nil?
+          attributes[:learning_path] = Api::V1::Bindings::LearningPath.create_from_model(
+            model.learning_path,
+            user
+          )
+        end
+
         attributes[:stages] = model.stages.map do |stage_model|
           Api::V1::Bindings::ParticipantStudyStage.create_from_model(stage_model, user)
         end

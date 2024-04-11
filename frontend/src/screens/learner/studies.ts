@@ -1,115 +1,97 @@
-import { useCallback, useEffect, useMemo, useState } from '@common'
-import { useLocalstorageState } from 'rooks'
-import { StudyTopic } from '@models'
-import { ParticipantStudy } from '@api'
-import { groupBy, sortBy } from 'lodash'
 import { useApi } from '@lib'
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMemo, useState } from 'react';
+import Fuse from 'fuse.js'
+import { LandStudyRequest, ParticipantStudy } from '@api';
+import { orderBy } from 'lodash-es';
 
-
-export type StudyByTopics = Record<StudyTopic, ParticipantStudy[]>
-const MS_IN_MONTH = 1000 * 60 * 60 * 24 * 30
 const FEATURED_COUNT = 3
 
-interface StudySort {
-    lastCalculated: number
-    sort: Record<number, number>
-}
-
-interface StudyState {
-    allStudies: ParticipantStudy[]
-    highlightedStudies: ParticipantStudy[]
-    syllabusContestStudies: ParticipantStudy[]
-    studiesByTopic: StudyByTopics
-    demographicSurvey: ParticipantStudy | null
-}
-
-
-// The rules for featured studies are:
-//   * select all the non-completed studies
-//   * Sort the list.  See if we've sorted the above list in the last 30 days.
-//      * If we have, re-apply the sort
-//      * If not, sort it and remember how and when it was sorted
-//      * List is sorted randomly, but always moves completed studies to the end of the list
-//   * Find the first 3 studies that are marked as featured
-//   * If we didn't find 3, pick the remainder from the end of the sorted list
-
-export const useLearnerStudies = () => {
+export const useFetchParticipantStudies = () => {
     const api = useApi()
-    const [studySort, setStudySort] = useLocalstorageState<StudySort>('learner-studies-order', {
-        lastCalculated: Date.now(),
-        sort: {},
+    return useQuery('fetchParticipantStudies', async () => {
+        const res = await api.getParticipantStudies();
+        return orderBy((res.data || []), ['featuredOrder', 'isFeatured', 'completedAt'], ['asc', 'desc', 'desc'])
     })
-    studySort.sort = (studySort.sort || {}) // value from localStorage might not have "sort" key
-    const [filter, setFilter] = useState<StudyTopic>('Personality')
-    const [studies, setStudyState] = useState<StudyState>({
-        allStudies: [],
+}
+
+export const useLandStudy = () => {
+    const api = useApi()
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (params: LandStudyRequest) => await api.landStudy(params),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['fetchParticipantStudies'] })
+        },
+    })
+}
+
+export const useParticipantStudies = () => {
+    const { data: studies = [], isLoading } = useFetchParticipantStudies()
+
+    if (isLoading) return {
+        studies: [],
         highlightedStudies: [],
-        syllabusContestStudies: [],
-        studiesByTopic: {} as StudyByTopics,
         demographicSurvey: null,
-    })
+        allStudies: [],
+        isLoading,
+    }
 
-    const fetchStudies = useCallback(async () => {
-        const fetchedStudies = await api.getParticipantStudies()
+    const eligibleStudies = studies.filter(s => !s.completedAt)
 
-        if (studySort.lastCalculated < Date.now() - MS_IN_MONTH) {
-            studySort.lastCalculated = Date.now()
-            studySort.sort = {} // clear values
+    const allHighlightedStudies = eligibleStudies.filter(s => s.isHighlighted).slice(-1 * FEATURED_COUNT)
+
+    // If less than 3 are featured, grab and fill random studies until we have 3
+    const randomlyHighlighted = eligibleStudies
+        .filter(s => !s.isHighlighted)
+        .slice(-1 * (FEATURED_COUNT - allHighlightedStudies.length))
+
+    const highlightedStudies = allHighlightedStudies.concat(
+        allHighlightedStudies.length == FEATURED_COUNT ? [] : randomlyHighlighted
+    )
+
+    const demographicSurvey = studies.find(s => s.isDemographicSurvey) || null
+
+    return {
+        allStudies: studies,
+        highlightedStudies,
+        demographicSurvey,
+        isLoading,
+    }
+}
+
+export const useSearchStudies = () => {
+    const [search, setSearch] = useState('')
+    const [filteredStudies, setFilteredStudies] = useState<ParticipantStudy[]>([])
+    const { isLoading, allStudies } = useParticipantStudies()
+
+    const fuseOptions = {
+        isCaseSensitive: false,
+        shouldSort: true,
+        includeMatches: true,
+        threshold: 0.3,
+        keys: [
+            'titleForParticipants',
+            'researchers.firstName',
+            'researchers.lastName',
+        ],
+    };
+
+    const fuse = new Fuse(allStudies, fuseOptions);
+
+    useMemo(() => {
+        if (search) {
+            const mappedResults = fuse.search(search).map(result => result.item)
+            setFilteredStudies(mappedResults)
+        } else {
+            setFilteredStudies(allStudies)
         }
+    }, [search, isLoading])
 
-        const allStudies = sortBy(fetchedStudies.data || [], s => {
-            const rnd = studySort.sort[s.id] = (studySort.sort[s.id] || Math.random())
-            return rnd * (s.completedAt ? 1 : -1)
-        })
-
-        setStudySort({ ...studySort })
-
-        const demographicSurvey = allStudies.find(s => s.isDemographicSurvey) || null
-
-        // find all studies that are eligible to be featured
-        const eligibleStudies = allStudies.filter(s => !s.completedAt)
-
-        // select 3 that are marked as featured
-        const featuredStudies = eligibleStudies.filter(s => s.isFeatured).slice(-1 * FEATURED_COUNT)
-
-        // Get the syllabus contest studies
-        const syllabusContestStudies = sortBy(allStudies.filter(s => s.isSyllabusContestStudy), ['id'])
-
-        // If less than 3 are featured, grab and fill random studies until we have 3
-        const randomlyFeatured = eligibleStudies
-            .filter(s => !s.isFeatured)
-            .slice(-1 * (FEATURED_COUNT - featuredStudies.length))
-
-        const highlightedStudies = featuredStudies.concat(
-            featuredStudies.length == FEATURED_COUNT ? [] : randomlyFeatured
-        )
-
-        const nonHighlightedStudies = allStudies.filter(s => !highlightedStudies.includes(s))
-
-        const studiesByTopic = groupBy(nonHighlightedStudies, (s) => s.topic) as StudyByTopics
-
-        if (!studiesByTopic[filter]) {
-            setFilter((Object.keys(studiesByTopic) as Array<StudyTopic>)[0])
-        }
-
-        setStudyState({
-            allStudies,
-            highlightedStudies,
-            syllabusContestStudies,
-            studiesByTopic,
-            demographicSurvey,
-        })
-    }, [setStudyState])
-
-
-    useEffect(() => {
-        fetchStudies()
-    }, [])
-
-    return useMemo(() => ({
-        ...studies,
-        filter,
-        setFilter,
-    }), [studies, filter, setFilter])
-
+    return {
+        search,
+        setSearch,
+        filteredStudies,
+    }
 }

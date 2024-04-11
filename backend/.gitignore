@@ -1,10 +1,6 @@
 /vendor/bundle/*
 /public/cache/*
 
-# Ignore master key for decrypting credentials and more.
-/config/master.key
-/config/secrets.yml
-
 # Ignore bundler config.
 /.bundle
 

@@ -8,6 +8,7 @@ RSpec.describe 'Studies', api: :v1 do
   let(:researcher2) { create(:researcher) }
   let(:researcher3) { create(:researcher) }
   let(:researcher4) { create(:researcher) }
+  let(:learning_path) { create(:learning_path) }
 
   describe 'POST researcher/studies' do
     let(:valid_new_study_attributes) do
@@ -18,10 +19,10 @@ RSpec.describe 'Studies', api: :v1 do
         short_description: 'A short description',
         long_description: 'A longer description',
         category: 'Research',
-        topic: 'Learning',
         subject: 'Biology',
         benefits: 'Some benefit to society',
         image_id: 'Schoolfuturecareer_1',
+        learning_path:,
         stages: [
           {
             points: 10,
@@ -424,6 +425,7 @@ RSpec.describe 'Studies', api: :v1 do
         }.not_to change { study1.internal_description }
         expect(response).to have_http_status(:unprocessable_entity)
       end
+
     end
   end
 

@@ -11,4 +11,15 @@ module MockingHelpers
     json = user ? JSON.generate({ items: [user] }) : File.read(Rails.root.join('spec', 'support', 'accounts_users_response.json'))
     allow(UserInfo).to receive(:query_accounts).and_return(json)
   end
+
+  def stub_obf_api
+    allow_any_instance_of(OpenBadgeApi).to receive(:token).and_return('mock_token')
+    allow_any_instance_of(OpenBadgeApi).to receive(:badge_info).and_return({
+      name: 'mock name',
+      id: 'mock id',
+      description: 'mock description',
+      image: 'mock image',
+      tags: %w[mock tags]
+    })
+  end
 end

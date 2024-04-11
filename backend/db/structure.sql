@@ -152,8 +152,8 @@ ALTER SEQUENCE public.active_storage_variant_records_id_seq OWNED BY public.acti
 CREATE TABLE public.admins (
     id bigint NOT NULL,
     user_id uuid NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -186,8 +186,8 @@ CREATE TABLE public.analyses (
     description text NOT NULL,
     repository_url text,
     api_key text DEFAULT public.api_key('an'::text, 18),
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -314,8 +314,8 @@ ALTER SEQUENCE public.analysis_runs_id_seq OWNED BY public.analysis_runs.id;
 CREATE TABLE public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -328,8 +328,8 @@ CREATE TABLE public.banners (
     message text NOT NULL,
     start_at timestamp with time zone NOT NULL,
     end_at timestamp with time zone NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -362,8 +362,8 @@ CREATE TABLE public.launched_stages (
     user_id uuid,
     first_launched_at timestamp with time zone,
     completed_at timestamp with time zone,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -397,8 +397,8 @@ CREATE TABLE public.launched_studies (
     first_launched_at timestamp with time zone,
     completed_at timestamp with time zone,
     opted_out_at timestamp with time zone,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     aborted_at timestamp with time zone,
     consent_granted boolean
 );
@@ -421,6 +421,41 @@ CREATE SEQUENCE public.launched_studies_id_seq
 --
 
 ALTER SEQUENCE public.launched_studies_id_seq OWNED BY public.launched_studies.id;
+
+
+--
+-- Name: learning_paths; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.learning_paths (
+    id bigint NOT NULL,
+    label character varying NOT NULL,
+    description character varying NOT NULL,
+    badge_id character varying,
+    level_1_metadata text[] DEFAULT '{}'::text[],
+    level_2_metadata text[] DEFAULT '{}'::text[],
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
+);
+
+
+--
+-- Name: learning_paths_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.learning_paths_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: learning_paths_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.learning_paths_id_seq OWNED BY public.learning_paths.id;
 
 
 --
@@ -462,8 +497,8 @@ ALTER SEQUENCE public.participant_metadata_id_seq OWNED BY public.participant_me
 CREATE TABLE public.research_ids (
     id text NOT NULL,
     user_id uuid NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL
 );
 
 
@@ -476,8 +511,8 @@ CREATE TABLE public.researchers (
     user_id uuid NOT NULL,
     institution character varying,
     bio text,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     lab_page character varying,
     first_name character varying,
     last_name character varying,
@@ -516,8 +551,8 @@ CREATE TABLE public.response_exports (
     is_empty boolean DEFAULT false,
     is_testing boolean DEFAULT false,
     metadata jsonb DEFAULT '{}'::jsonb,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     cutoff_at timestamp with time zone,
     stage_id bigint NOT NULL
 );
@@ -552,8 +587,8 @@ CREATE TABLE public.rewards (
     points integer NOT NULL,
     start_at timestamp with time zone NOT NULL,
     end_at timestamp with time zone NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     description character varying
 );
 
@@ -595,8 +630,8 @@ CREATE TABLE public.stages (
     study_id bigint NOT NULL,
     "order" integer NOT NULL,
     config jsonb NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     available_after_days double precision DEFAULT 1.0 NOT NULL,
     duration_minutes integer DEFAULT 0 NOT NULL,
     points integer DEFAULT 0 NOT NULL,
@@ -636,20 +671,23 @@ CREATE TABLE public.studies (
     long_description character varying DEFAULT ''::character varying,
     opens_at timestamp with time zone,
     closes_at timestamp with time zone,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     benefits character varying,
     image_id character varying,
     completed_count integer DEFAULT 0 NOT NULL,
     is_hidden boolean DEFAULT false NOT NULL,
     view_count integer DEFAULT 0,
     category character varying,
-    topic character varying,
     subject character varying,
     internal_description character varying,
     target_sample_size integer,
     public_on timestamp with time zone,
-    launched_studies_count integer
+    launched_studies_count integer,
+    learning_path_id bigint,
+    is_featured boolean DEFAULT false,
+    featured_order integer,
+    is_highlighted boolean DEFAULT false
 );
 
 
@@ -710,8 +748,8 @@ CREATE TABLE public.study_researchers (
     id bigint NOT NULL,
     study_id bigint NOT NULL,
     researcher_id bigint NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     role integer DEFAULT 0
 );
 
@@ -746,8 +784,8 @@ CREATE TABLE public.user_preferences (
     prize_cycle_email boolean DEFAULT false NOT NULL,
     study_available_email boolean DEFAULT false NOT NULL,
     session_available_email boolean DEFAULT true NOT NULL,
-    created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL,
+    created_at timestamp(6) with time zone NOT NULL,
+    updated_at timestamp(6) with time zone NOT NULL,
     has_viewed_analysis_tutorial boolean DEFAULT false,
     has_viewed_welcome_message boolean DEFAULT false
 );
@@ -847,6 +885,13 @@ ALTER TABLE ONLY public.launched_stages ALTER COLUMN id SET DEFAULT nextval('pub
 --
 
 ALTER TABLE ONLY public.launched_studies ALTER COLUMN id SET DEFAULT nextval('public.launched_studies_id_seq'::regclass);
+
+
+--
+-- Name: learning_paths id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.learning_paths ALTER COLUMN id SET DEFAULT nextval('public.learning_paths_id_seq'::regclass);
 
 
 --
@@ -1006,6 +1051,14 @@ ALTER TABLE ONLY public.launched_stages
 
 ALTER TABLE ONLY public.launched_studies
     ADD CONSTRAINT launched_studies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: learning_paths learning_paths_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.learning_paths
+    ADD CONSTRAINT learning_paths_pkey PRIMARY KEY (id);
 
 
 --
@@ -1258,6 +1311,13 @@ CREATE INDEX index_stages_on_study_id ON public.stages USING btree (study_id);
 
 
 --
+-- Name: index_studies_on_learning_path_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_studies_on_learning_path_id ON public.studies USING btree (learning_path_id);
+
+
+--
 -- Name: index_study_analyses_on_analysis_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1297,6 +1357,14 @@ CREATE INDEX index_study_researchers_on_study_id ON public.study_researchers USI
 --
 
 CREATE INDEX index_user_preferences_on_user_id ON public.user_preferences USING btree (user_id);
+
+
+--
+-- Name: studies fk_rails_0a926dea61; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.studies
+    ADD CONSTRAINT fk_rails_0a926dea61 FOREIGN KEY (learning_path_id) REFERENCES public.learning_paths(id);
 
 
 --
@@ -1410,6 +1478,8 @@ ALTER TABLE ONLY public.response_exports
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240229135718'),
+('20240222135611'),
 ('20231212191239'),
 ('20231120172017'),
 ('20231113162430'),
@@ -1428,7 +1498,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221129224957'),
 ('20221129202926'),
 ('20221129161350'),
-('20221129153239'),
 ('20221020135148'),
 ('20220912181638'),
 ('20220831143454'),
