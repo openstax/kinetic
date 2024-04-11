@@ -50,9 +50,20 @@ class QualtricsTestData
     return nil unless question_is_recorded?(question)
 
     case question.QuestionType
-    when 'MC' then Faker::Base.sample(question['Choices'].values)['Display']
+    when 'MC' then choose_choice(question['Choices'])
     when 'TE' then text_response(question)
     end
+  end
+
+  def choose_choice(choices)
+    if (choices.is_a? Array) && choices.present?
+      return Faker::Base.sample(choices)['Display']
+    elsif choices.is_a? Hash
+      choices = Faker::Base.sample(choices.values)
+      return Faker::Base.sample(choices)['Display'] if choices.present?
+    end
+
+    'N/A'
   end
 
   def text_response(question)
