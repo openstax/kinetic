@@ -224,8 +224,8 @@ export const StudyCard: React.FC<StudyCardProps & { onSelect(study: ParticipantS
             data-study-id={study.id}
             data-is-completed={!!study.completedAt}
             data-analytics-select-content
-            data-content-type="study"
-            data-content-tags={`,topic=${study.topic},is-new-user=${env.isFirstVisit},`}
+            data-content-type="study-details"
+            data-content-tags={`,topic=${study.topic},is-new-user=${env.isNewUser},`}
         >
             <CardContent study={study} />
         </Card>
