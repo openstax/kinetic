@@ -6,7 +6,8 @@ Rails.application.config.to_prepare do
       new(
         model.attributes_for_binding(self).merge(
           is_launchable: model.launchable_by_user?(user),
-          is_completed: model.has_been_completed_by_user?(user)
+          is_completed: model.has_been_completed_by_user?(user),
+          completed_at: model.completed_at(user)
         )
       )
     end

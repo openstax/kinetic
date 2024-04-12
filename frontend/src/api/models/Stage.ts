@@ -56,6 +56,12 @@ export interface Stage {
      */
     readonly isCompleted?: boolean;
     /**
+     * When the stage was completed by the participant
+     * @type {Date}
+     * @memberof Stage
+     */
+    completedAt?: Date;
+    /**
      * Can the stage be launched
      * @type {boolean}
      * @memberof Stage
@@ -136,6 +142,7 @@ export function StageFromJSONTyped(json: any, ignoreDiscriminator: boolean): Sta
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
         'isCompleted': !exists(json, 'is_completed') ? undefined : json['is_completed'],
+        'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
         'isLaunchable': !exists(json, 'is_launchable') ? undefined : json['is_launchable'],
         'config': json['config'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
@@ -156,6 +163,7 @@ export function StageToJSON(value?: Stage | null): any {
         
         'description': value.description,
         'available_after_days': value.availableAfterDays,
+        'completed_at': value.completedAt === undefined ? undefined : (value.completedAt.toISOString()),
         'config': value.config,
         'duration_minutes': value.durationMinutes,
         'points': value.points,

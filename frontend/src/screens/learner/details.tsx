@@ -8,7 +8,7 @@ import {
     getStudyPoints,
     isStudyLaunchable,
     launchStudy,
-    studyIsMultipart,
+    isMultiSession,
     useFetchParticipantStudy,
 } from '@models'
 import { dayjs, useApi, useEnvironment } from '@lib'
@@ -61,7 +61,7 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
     const firstStage = getFirstStage(study)
     if (!firstStage?.durationMinutes || !firstStage.points) return null
 
-    if (studyIsMultipart(study)) {
+    if (isMultiSession(study)) {
         return (
             <Stack>
                 <Group>
@@ -254,7 +254,7 @@ const ResearcherSection: FC<StudyDetailsProps> = ({ study }) => {
 }
 
 const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
-    if (!study.stages || !studyIsMultipart(study)) return null
+    if (!study.stages || !isMultiSession(study)) return null
 
     return (
         <Stack>

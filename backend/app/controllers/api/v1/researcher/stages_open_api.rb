@@ -68,6 +68,11 @@ class Api::V1::Researcher::StagesOpenApi
       key :description, 'Has the stage been completed'
       key :readOnly, true
     end
+    property :completed_at do
+      key :type, :string
+      key :format, 'date-time'
+      key :description, 'When the stage was completed by the participant'
+    end
     property :is_launchable do
       key :type, :boolean
       key :description, 'Can the stage be launched'

@@ -50,6 +50,12 @@ export interface ParticipantStudyStage {
      */
     readonly isCompleted?: boolean;
     /**
+     * When the stage was completed by the participant
+     * @type {Date}
+     * @memberof ParticipantStudyStage
+     */
+    completedAt?: Date;
+    /**
      * Can the stage be launched
      * @type {boolean}
      * @memberof ParticipantStudyStage
@@ -127,6 +133,7 @@ export function ParticipantStudyStageFromJSONTyped(json: any, ignoreDiscriminato
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
         'isCompleted': !exists(json, 'is_completed') ? undefined : json['is_completed'],
+        'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
         'isLaunchable': !exists(json, 'is_launchable') ? undefined : json['is_launchable'],
         'durationMinutes': !exists(json, 'duration_minutes') ? undefined : json['duration_minutes'],
         'points': !exists(json, 'points') ? undefined : json['points'],
@@ -146,6 +153,7 @@ export function ParticipantStudyStageToJSON(value?: ParticipantStudyStage | null
     return {
         
         'title': value.title,
+        'completed_at': value.completedAt === undefined ? undefined : (value.completedAt.toISOString()),
         'closes_at': value.closesAt === undefined ? undefined : (value.closesAt === null ? null : value.closesAt.toISOString()),
         'feedback_types': value.feedbackTypes,
         'status': value.status,

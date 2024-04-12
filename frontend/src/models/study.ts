@@ -10,10 +10,10 @@ import {
 } from '@api'
 import { useApi } from '@lib'
 import { dayjs, useEffect, useState } from '@common';
-import { first, sumBy } from 'lodash-es';
+import { find, findLast, first, last, sumBy } from 'lodash-es';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { showResearcherNotificationError } from '@components';
-import type { WelcomeStudyIds } from '../api/models';
+import type { WelcomeStudyIds } from '@api';
 
 export enum StudyStatus {
     Launched = 'Launched',
@@ -53,6 +53,26 @@ export const getStudyEditUrl = (study: Study) => {
 export function getFirstStage(study: Study | ParticipantStudy): Stage | undefined {
     return first(study.stages)
 }
+
+export function getLastStage(study: Study | ParticipantStudy): Stage | undefined {
+    return last(study.stages)
+}
+
+export function getNextAvailableStage(study: ParticipantStudy): Stage | undefined {
+    return find(study.stages, (stage) => !stage.isCompleted) || getLastStage(study)
+}
+
+export function getLastCompletedStage(study: ParticipantStudy): Stage | undefined {
+    return findLast(study.stages, (stage) => !!stage.isCompleted);
+}
+
+// export function getNextStageOpensOn(study: ParticipantStudy): string | null {
+//     const nextStage = getNextAvailableStage(study)
+//     const lastCompletedStage = getLastCompletedStage(study)
+//     if (!nextStage) return null
+//
+//     // return dayjs().diff(dayjs(lastCompletedStage))
+// }
 
 export function isActive(study: Study) {
     return study.status === StudyStatusEnum.Active
@@ -94,15 +114,8 @@ export function getStudyLead(study: Study | ParticipantStudy) {
     return study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)
 }
 
-export function studyIsMultipart(study: ParticipantStudy | Study): boolean {
+export function isMultiSession(study: ParticipantStudy | Study): boolean {
     return Boolean(study.stages && study.stages.length > 1)
-}
-
-export function studyHasFeedback(study: ParticipantStudy): boolean {
-    if (!study.stages) {
-        return false
-    }
-    return study.stages.some(stage => stage.feedbackTypes && stage.feedbackTypes.length > 0)
 }
 
 export function getStudyPoints(study: ParticipantStudy): number {

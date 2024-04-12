@@ -43,7 +43,7 @@ const ManageHighlightedStudies: FC<{studies: Study[]}> = ({ studies }) => {
 
     return (
         <Stack>
-            <Title order={4}>Manage highlighted studies</Title>
+            <Title order={4}>Highlighted Studies</Title>
             <Stack>
                 <MultiSelect
                     label='Highlighted Studies'
@@ -89,10 +89,10 @@ export const ManageWelcomeStudies: FC<{studies: Study[]}> = ({ studies }) => {
 
     return (
         <Stack>
-            <Title order={4}>Manage welcome studies</Title>
+            <Title order={4}>Welcome Banner Studies</Title>
             <Stack>
                 <MultiSelect
-                    label='Welcome modal studies'
+                    label='Welcome banner studies'
                     searchable
                     placeholder="Select studies for the welcome modal (max 2)"
                     value={welcomeStudies}

@@ -59,6 +59,8 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
       aborted: params[:aborted]
     )
 
+    # TODO check if study path is completed here, trigger email if yes
+
     render json: Api::V1::Bindings::ParticipantStudy.create_from_model(launched_study, current_user)
   end
 

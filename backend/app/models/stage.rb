@@ -90,6 +90,21 @@ class Stage < ApplicationRecord
     !launched_stages.for_user(user)&.completed_at.nil?
   end
 
+  def completed_at(user)
+    launched_stages.for_user(user)&.completed_at
+  end
+
+  def available_to_user_on(user)
+    return nil if previous_stage.nil?
+
+    prev_launch = previous_stage.launched_stages.for_user(user)
+    if prev_launch.nil? || prev_launch.incomplete?
+      nil
+    end
+
+    Date(prev_launch.completed_at).add(available_after_days, days) + available_after_days
+  end
+
   def launchable_by_user?(user)
     return true if previous_stage.nil? # first stage is always valid
 
