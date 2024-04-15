@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 import { Anchor, Box, Button, Checkbox, Flex, Group, Image, Modal, Stack, Text, Title } from '@mantine/core';
-import { useApi, useIsMobileDevice, useUpdateUserPreferences, useUserPreferences } from '@lib';
+import { useIsMobileDevice, useUpdateUserPreferences, useUserPreferences } from '@lib';
 import Greeting from '@images/welcome-banner/welcome-greeting.svg';
 import Success from '@images/welcome-banner/welcome-success.svg';
 import { colors } from '@theme';
 import { useParticipantStudies } from './studies';
 import { CompactStudyCard } from '../../components/study/compact-study-card';
-import { launchStudy } from '@models';
-import { ParticipantStudy } from '@api';
 
 export const LearnerWelcomeModal: FC = () => {
     const [open, setOpen] = useState(true)
@@ -16,7 +14,7 @@ export const LearnerWelcomeModal: FC = () => {
     const [step, setStep] = useState(1)
     const isMobile = useIsMobileDevice()
 
-    if (!preferences?.hasViewedWelcomeMessage) {
+    if (preferences?.hasViewedWelcomeMessage) {
         return null
     }
 
@@ -90,17 +88,11 @@ const WelcomeStep: FC<{
 
 const EarnStep: FC<{onClose: () => void}> = ({ onClose }) => {
     const { welcomeStudies } = useParticipantStudies()
-    const api = useApi()
     const updatePreferences = useUpdateUserPreferences()
 
-    const onClick = async (study: ParticipantStudy) => {
-        if (study.completedAt) return null
+    const onClick = async () => {
         onClose()
-        updatePreferences.mutate({ updatePreferences: { preferences: { hasViewedWelcomeMessage: true } } }, {
-            onSuccess: async () => {
-                await launchStudy(api, study.id)
-            },
-        })
+        updatePreferences.mutate({ updatePreferences: { preferences: { hasViewedWelcomeMessage: true } } }, {})
     }
 
     const isMobile = useIsMobileDevice()
@@ -125,7 +117,7 @@ const EarnStep: FC<{onClose: () => void}> = ({ onClose }) => {
                             direction={{ md: 'row', base: 'column' }}
                             gap='xl'
                         >
-                            <CompactStudyCard study={study}/>
+                            <CompactStudyCard study={study} onClick={onClick}/>
                             {(index !== welcomeStudies.length - 1) && <Text fw='bolder' c={colors.gray70} size='xl'>OR</Text>}
                         </Flex>
                     ))}

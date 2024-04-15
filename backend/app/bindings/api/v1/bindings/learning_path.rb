@@ -18,6 +18,9 @@ module Api::V1::Bindings
     # The learning path ID
     attr_accessor :id
 
+    # The learning path rendering order
+    attr_accessor :order
+
     # Learning path label
     attr_accessor :label
 
@@ -45,6 +48,7 @@ module Api::V1::Bindings
     def self.attribute_map
       {
         :'id' => :'id',
+        :'order' => :'order',
         :'label' => :'label',
         :'description' => :'description',
         :'level_1_metadata' => :'level_1_metadata',
@@ -65,10 +69,11 @@ module Api::V1::Bindings
     def self.openapi_types
       {
         :'id' => :'Float',
+        :'order' => :'Float',
         :'label' => :'String',
         :'description' => :'String',
-        :'level_1_metadata' => :'String',
-        :'level_2_metadata' => :'String',
+        :'level_1_metadata' => :'Array<String>',
+        :'level_2_metadata' => :'Array<String>',
         :'badge_id' => :'String',
         :'badge' => :'Badge',
         :'completed' => :'Boolean',
@@ -101,6 +106,10 @@ module Api::V1::Bindings
         self.id = attributes[:'id']
       end
 
+      if attributes.key?(:'order')
+        self.order = attributes[:'order']
+      end
+
       if attributes.key?(:'label')
         self.label = attributes[:'label']
       end
@@ -110,11 +119,15 @@ module Api::V1::Bindings
       end
 
       if attributes.key?(:'level_1_metadata')
-        self.level_1_metadata = attributes[:'level_1_metadata']
+        if (value = attributes[:'level_1_metadata']).is_a?(Array)
+          self.level_1_metadata = value
+        end
       end
 
       if attributes.key?(:'level_2_metadata')
-        self.level_2_metadata = attributes[:'level_2_metadata']
+        if (value = attributes[:'level_2_metadata']).is_a?(Array)
+          self.level_2_metadata = value
+        end
       end
 
       if attributes.key?(:'badge_id')
@@ -159,12 +172,25 @@ module Api::V1::Bindings
       true
     end
 
+    # Custom attribute writer method with validation
+    # @param [Object] level_1_metadata Value to be assigned
+    def level_1_metadata=(level_1_metadata)
+      @level_1_metadata = level_1_metadata
+    end
+
+    # Custom attribute writer method with validation
+    # @param [Object] level_2_metadata Value to be assigned
+    def level_2_metadata=(level_2_metadata)
+      @level_2_metadata = level_2_metadata
+    end
+
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
           id == o.id &&
+          order == o.order &&
           label == o.label &&
           description == o.description &&
           level_1_metadata == o.level_1_metadata &&
@@ -184,7 +210,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, label, description, level_1_metadata, level_2_metadata, badge_id, badge, completed, studies].hash
+      [id, order, label, description, level_1_metadata, level_2_metadata, badge_id, badge, completed, studies].hash
     end
 
     # Builds the object from hash

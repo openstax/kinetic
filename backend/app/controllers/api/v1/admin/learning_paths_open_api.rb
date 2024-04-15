@@ -11,6 +11,10 @@ class Api::V1::Admin::LearningPathsOpenApi
         key :type, :number
         key :description, 'The learning path ID'
       end
+      property :order do
+        key :type, :number
+        key :description, 'The learning path rendering order'
+      end
       property :label do
         key :type, :string
         key :description, 'Learning path label'
@@ -20,11 +24,15 @@ class Api::V1::Admin::LearningPathsOpenApi
         key :description, 'Learning path description'
       end
       property :level_1_metadata do
-        key :type, :string
+        key :type, :array
+        key :minLength, 0
+        key :items, { 'type' => 'string' }
         key :description, 'Level 1 metadata'
       end
       property :level_2_metadata do
-        key :type, :string
+        key :type, :array
+        key :minLength, 0
+        key :items, { 'type' => 'string' }
         key :description, 'Level 2 metadata'
       end
       property :badge_id do

@@ -10,6 +10,7 @@ import {
     Group,
     LoadingOverlay,
     MultiSelect,
+    NumberInput,
     Select,
     Stack,
     TagsInput,
@@ -159,16 +160,7 @@ const getLearningPathValidationSchema = (learningPaths?: LearningPath[]) => {
     if (!learningPaths) return yup.object()
 
     return yup.object().shape({
-        label: yup.string().required().test(
-            'Unique',
-            'Label must be unique',
-            (value: string) => {
-                if (!learningPaths.length) {
-                    return true
-                }
-                return learningPaths.every(lp => lp.label?.toLowerCase().trim() !== value?.toLowerCase().trim())
-            }
-        ),
+        label: yup.string().required(),
         description: yup.string().required(),
     })
 }
@@ -220,6 +212,7 @@ const EditLearningPath: FC<{
     learningPaths?: LearningPath[],
     setSelectedLearningPath: (label: string | null) => void,
 }> = ({ learningPath, learningPaths, setSelectedLearningPath }) => {
+    console.log(learningPath)
     const form = useForm<LearningPath>({
         initialValues: {
             label: learningPath?.label || '',
@@ -227,10 +220,26 @@ const EditLearningPath: FC<{
             badgeId: learningPath?.badgeId || '',
             level1Metadata: learningPath?.level1Metadata,
             level2Metadata: learningPath?.level2Metadata,
+            order: learningPath?.order,
         },
         validate: yupResolver(getLearningPathValidationSchema(learningPaths?.filter(lp => lp.id !== learningPath?.id))),
         validateInputOnChange: true,
     })
+
+    useEffect(() => {
+        if (learningPath) {
+            form.reset()
+            form.setValues(learningPath)
+            // form.setValues({
+            //     label: learningPath?.label || '',
+            //     description: learningPath?.description || '',
+            //     badgeId: learningPath?.badgeId || '',
+            //     level1Metadata: learningPath?.level1Metadata,
+            //     level2Metadata: learningPath?.level2Metadata,
+            //     order: learningPath?.order,
+            // })
+        }
+    }, [learningPath])
 
     const updateLearningPath = useUpdateLearningPath()
     const deleteLearningPath = useDeleteLearningPath()
@@ -300,6 +309,12 @@ const LearningPathForm: FC<{
                     error={form.errors['badgeId']}
                     {...form.getInputProps('badgeId')}
                 />
+
+                <NumberInput
+                    withAsterisk
+                    label='Order'
+                    {...form.getInputProps('order')}
+                />
             </Group>
 
             <Textarea
@@ -308,15 +323,17 @@ const LearningPathForm: FC<{
                 error={form.errors['description']}
                 {...form.getInputProps('description')}
             />
+            <Group grow>
+                <TagsInput label='Level 1 Metadata'
+                    placeholder='Level 1 metadata'
+                    {...form.getInputProps('level1Metadata')}
+                />
+                <TagsInput label='Level 2 Metadata'
+                    placeholder='Level 2 metadata'
+                    {...form.getInputProps('level2Metadata')}
+                />
+            </Group>
 
-            <TagsInput label='Level 1 Metadata'
-                placeholder='Level 1 metadata'
-                {...form.getInputProps('level1Metadata')}
-            />
-            <TagsInput label='Level 2 Metadata'
-                placeholder='Level 2 metadata'
-                {...form.getInputProps('level2Metadata')}
-            />
 
             {learningPath && <ManageLearningPathStudies form={form} learningPath={learningPath} />}
         </Stack>

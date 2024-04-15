@@ -1,32 +1,24 @@
-import { Box, Group, Stack, Text, ThemeIcon, Title } from '@mantine/core';
+import { Group, Stack, Text, ThemeIcon, Title } from '@mantine/core';
 import React from 'react';
 import { ParticipantStudy } from '@api';
 import { colors } from '@theme';
-import {
-    getNextAvailableStage,
-    getStudyDuration,
-    getStudyPoints,
-    isStudyLaunchable,
-    launchStudy,
-    isMultiSession, getLastCompletedStage,
-} from '@models';
+import { getLastCompletedStage, getNextAvailableStage, isMultiSession, isStudyLaunchable, launchStudy } from '@models';
 import { IconCheck } from '@tabler/icons-react';
 import { useApi } from '@lib';
 import dayjs from 'dayjs';
 
 export const CompactStudyCard: FC<{
     study: ParticipantStudy,
-}> = ({ study }) => {
+    onClick?: () => void
+}> = ({ study, onClick }) => {
     const api = useApi()
     const canLaunch = isStudyLaunchable(study)
-    const nextStage = getNextAvailableStage(study)
     const multiSession = isMultiSession(study)
-    const onClick = async () => {
+    const launch = async () => {
         if (!canLaunch) return
+        onClick?.()
         await launchStudy(api, study.id)
     }
-
-    const disabled = !nextStage
 
     return (
         <Stack w={200}
@@ -34,7 +26,7 @@ export const CompactStudyCard: FC<{
             p='sm'
             justify='space-between'
             className={`compact-study-card ${canLaunch ? 'launchable' : ''}`}
-            onClick={onClick}
+            onClick={launch}
             style={{
                 position: 'relative',
                 border: `2px solid ${colors.purple}`,
@@ -52,9 +44,6 @@ export const CompactStudyCard: FC<{
                 </Title>
 
                 <Description study={study} />
-                {/*<Text size='sm' c={colors.gray70}>*/}
-                {/*    {study.shortDescription}*/}
-                {/*</Text>*/}
             </Stack>
 
             <Points study={study} />
@@ -84,8 +73,6 @@ const Points: FC<{study: ParticipantStudy}> = ({ study }) => {
 const Description: FC<{study: ParticipantStudy}> = ({ study }) => {
     const nextStage = getNextAvailableStage(study)
     const lastCompletedStage = getLastCompletedStage(study)
-    console.log(nextStage, lastCompletedStage)
-    // if (!nextStage) return null
 
     if (!isStudyLaunchable(study)) {
         const availableOn = dayjs(lastCompletedStage?.completedAt)

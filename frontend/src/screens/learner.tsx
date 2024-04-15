@@ -205,13 +205,14 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
         return [
             orderBy(
                 (uniqBy(filteredStudies.map(fs => fs.learningPath), (lp) => lp?.label)),
-                ['completed'],
-                ['asc']
+                ['order', 'completed'],
+                ['asc', 'asc']
             ),
             groupBy(filteredStudies, (study) => study.learningPath?.label),
         ]
     }, [filteredStudies])
 
+    console.log(learningPaths)
     const isMobile = useIsMobileDevice()
 
     return (
