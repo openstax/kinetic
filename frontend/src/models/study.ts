@@ -66,14 +66,6 @@ export function getLastCompletedStage(study: ParticipantStudy): Stage | undefine
     return findLast(study.stages, (stage) => !!stage.isCompleted);
 }
 
-// export function getNextStageOpensOn(study: ParticipantStudy): string | null {
-//     const nextStage = getNextAvailableStage(study)
-//     const lastCompletedStage = getLastCompletedStage(study)
-//     if (!nextStage) return null
-//
-//     // return dayjs().diff(dayjs(lastCompletedStage))
-// }
-
 export function isActive(study: Study) {
     return study.status === StudyStatusEnum.Active
 }
@@ -239,15 +231,6 @@ export const studyCategoryDescriptions = {
     'Product & Organizational Research': 'Surveys, assessments, and/or interventions related to understanding learner needs, such as product development and UX design',
     'Transfer of Learning': 'Interventions that assess learning or other outcomes across domains',
 }
-
-export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other' | string
-export const studyTopics: StudyTopic[] = [
-    'Learning',
-    'Memory',
-    'Personality',
-    'School & Career',
-    'Other',
-]
 
 export type StudySubject = 'Biology' | 'Business Ethics' | 'Chemistry' | 'Physics' | 'Psychology' | 'Sociology' | 'Statistics' | 'US History'
 

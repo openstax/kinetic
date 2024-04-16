@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::Admin::LearningPathsOpenApi
+class Api::V1::LearningPathsOpenApi
   include OpenStax::OpenApi::Blocks
 
   openapi_component do

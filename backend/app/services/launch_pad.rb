@@ -55,6 +55,13 @@ class LaunchPad
       launched_study.completed! if stage.is_last?
     end
 
+    if @study.learning_path.completed?(@user)
+      user_email = UserInfo.for_uuid(@user.id)['email_address']
+      if user_email.present? && @study.learning_path.badge_id.present?
+        OpenBadgeApi.instance.issue_badge(@study.learning_path.badge_id, ['chrissbendel@gmail.com'])
+      end
+    end
+
     launched_study
   end
 

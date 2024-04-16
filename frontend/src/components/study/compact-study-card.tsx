@@ -29,7 +29,7 @@ export const CompactStudyCard: FC<{
             onClick={launch}
             style={{
                 position: 'relative',
-                border: `2px solid ${colors.purple}`,
+                border: `1px solid ${colors.purple}`,
                 borderRadius: 4,
                 cursor: canLaunch ? 'pointer' : 'inherit',
                 backgroundColor: canLaunch ? 'inherit' : colors.gray30,
@@ -39,7 +39,7 @@ export const CompactStudyCard: FC<{
         >
             <Completed study={study} />
             <Stack gap='xs'>
-                <Title order={5} c='purple'>
+                <Title order={5} c='purple' textWrap='wrap'>
                     {study.titleForParticipants}
                 </Title>
 
@@ -74,7 +74,7 @@ const Description: FC<{study: ParticipantStudy}> = ({ study }) => {
     const nextStage = getNextAvailableStage(study)
     const lastCompletedStage = getLastCompletedStage(study)
 
-    if (!isStudyLaunchable(study)) {
+    if (!isStudyLaunchable(study) && !study.completedAt) {
         const availableOn = dayjs(lastCompletedStage?.completedAt)
             .add(nextStage?.availableAfterDays || 0, 'days')
             .format('MMMM D, YYYY')

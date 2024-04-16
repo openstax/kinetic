@@ -9,12 +9,12 @@ import { CompactStudyCard } from '../../components/study/compact-study-card';
 
 export const LearnerWelcomeModal: FC = () => {
     const [open, setOpen] = useState(true)
-    const { data: preferences } = useUserPreferences()
+    const { data: preferences, isLoading } = useUserPreferences()
     const updatePreferences = useUpdateUserPreferences()
     const [step, setStep] = useState(1)
     const isMobile = useIsMobileDevice()
 
-    if (preferences?.hasViewedWelcomeMessage) {
+    if (preferences?.hasViewedWelcomeMessage || isLoading) {
         return null
     }
 

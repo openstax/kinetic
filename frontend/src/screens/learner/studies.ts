@@ -2,8 +2,9 @@ import { useApi } from '@lib'
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useMemo, useState } from 'react';
 import Fuse from 'fuse.js'
-import { LandStudyRequest, ParticipantStudy } from '@api';
+import { LandStudyRequest, LearningPath, ParticipantStudy } from '@api';
 import { orderBy } from 'lodash-es';
+import { groupBy } from 'lodash';
 
 const FEATURED_COUNT = 3
 
@@ -25,6 +26,14 @@ export const useLandStudy = () => {
             await queryClient.invalidateQueries({ queryKey: ['fetchParticipantStudies'] })
         },
     })
+}
+
+export const useLearningPathStudies = (learningPath?: LearningPath) => {
+    const { data: studies = [] } = useFetchParticipantStudies()
+    if (!learningPath || !learningPath.id) return []
+
+    const studiesByLearningPath = groupBy(studies, (study) => study.learningPath?.id)
+    return studiesByLearningPath[learningPath.id]
 }
 
 export const useParticipantStudies = () => {

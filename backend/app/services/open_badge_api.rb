@@ -42,4 +42,11 @@ class OpenBadgeApi
     end
   end
 
+  def issue_badge(badge_id, emails)
+    HTTPX.accept('application/json')
+      .post("https://openbadgefactory.com/v1/badge/#{@client_id}/#{badge_id}", form: {
+              recipient: emails
+            })
+  end
+
 end

@@ -98,9 +98,7 @@ class Stage < ApplicationRecord
     return nil if previous_stage.nil?
 
     prev_launch = previous_stage.launched_stages.for_user(user)
-    if prev_launch.nil? || prev_launch.incomplete?
-      nil
-    end
+    nil if prev_launch.nil? || prev_launch.incomplete?
 
     Date(prev_launch.completed_at).add(available_after_days, days) + available_after_days
   end

@@ -41,6 +41,7 @@ export const ManageLearningPaths = () => {
             <Stack>
                 <Select data={[...new Set(options)]}
                     value={selectedLearningPath}
+                    searchable
                     clearable={true}
                     onChange={setSelectedLearningPath}
                     placeholder='Select a learning path, or create a new one below'

@@ -12,8 +12,8 @@ RSpec.describe 'Learning Paths', api: :v1 do
       label: 'Cool Path',
       description: 'Cool description',
       badge_id: 'SAJSINa7DGDaC4D',
-      level_1_metadata: ['Test', '123'],
-      level_2_metadata: ['Deeper', 'metadata']
+      level_1_metadata: %w[Test 123],
+      level_2_metadata: %w[Deeper metadata]
     }
   end
 
