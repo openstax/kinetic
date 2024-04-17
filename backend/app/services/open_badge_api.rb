@@ -35,6 +35,7 @@ class OpenBadgeApi
       {
         name: data['name'],
         id: data['id'],
+        criteria_html: data['criteria_html'],
         description: data['description'],
         image: data['image'],
         tags: data['tags']

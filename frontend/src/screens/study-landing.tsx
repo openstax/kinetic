@@ -4,7 +4,21 @@ import { colors } from '@theme'
 import { LandStudyAbortedEnum, LandStudyRequest, LearningPath, ParticipantStudy } from '@api'
 import { ErrorPage, LoadingAnimation, Page } from '@components'
 import { useCurrentUser, useEnvironment, useIsMobileDevice, useQueryParam } from '@lib'
-import { Anchor, Container, Flex, Grid, Group, Image, ScrollArea, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import {
+    Badge,
+    Container,
+    Flex,
+    Grid,
+    Group,
+    Image,
+    ScrollArea,
+    SimpleGrid,
+    Stack,
+    Text,
+    Title,
+    TypographyStylesProvider,
+} from '@mantine/core';
+import Markdown from 'react-markdown'
 import { useLandStudy, useLearningPathStudies } from './learner/studies';
 import { CompactStudyCard } from '../components/study/compact-study-card';
 
@@ -99,6 +113,9 @@ const LearningPathProgress: FC<{learningPath: LearningPath, studies: Participant
 const CompletedLearningPath: FC<{learningPath: LearningPath}> = ({ learningPath }) => {
     const user = useCurrentUser()
     const email = user.contactInfos?.find(e => e.type == 'EmailAddress')
+    const badge = learningPath.badge
+
+    if (!badge) return null
 
     return (
         <Grid justify='space-around' align='center'>
@@ -106,19 +123,37 @@ const CompletedLearningPath: FC<{learningPath: LearningPath}> = ({ learningPath 
                 <Image fit='contain' h={250} w={250} src={learningPath.badge?.image} />
             </Grid.Col>
             <Grid.Col span={6}>
-                <Stack>
+                <Stack gap='lg'>
                     <Title order={1} c='purple'>
                         Wow, effort really pays off!
                     </Title>
-                    <Title order={5} c={colors.text}>
-                        You’ve done an awesome job so far!
-                    </Title>
-                    <Text c={colors.gray70}>
-                        We recognize all that you’ve accomplished and we want to ensure others see it too. Your certificate is on its way and should be in your inbox soon. Know that your contributions have been crucial to help change the future of education.
-                    </Text>
+
+                    <Stack gap='xs'>
+                        <Title order={5} c='purple'>
+                        You’ve done awesome work so far!
+                        </Title>
+                        <Text c={colors.gray70}>
+                            {badge.description}
+                        </Text>
+                        <Group>
+                            {badge.tags?.map(tag => (
+                                <Badge>{tag.toUpperCase()}</Badge>
+                            ))}
+                        </Group>
+                    </Stack>
+
+                    <Stack gap='xs'>
+                        <Title order={6} c={colors.gray70}>
+                            Criteria
+                        </Title>
+                        <Markdown css={{ color: colors.gray70 }}>
+                            {badge.criteriaHtml}
+                        </Markdown>
+                    </Stack>
+
                     <Stack>
-                        <Title order={5} c={colors.text}>
-                            You’ve done an awesome job so far!
+                        <Title order={5} c='purple'>
+                            Your certificate is on its way and should be in your inbox soon.
                         </Title>
                         <Text c={colors.gray70}>
                             Mail sent to {email?.value} <NavLink to="/account">Change email</NavLink>

@@ -72,6 +72,11 @@ class Api::V1::LearningPathsOpenApi
         key :description, 'Badge description'
         key :readOnly, true
       end
+      property :criteria_html do
+        key :type, :string
+        key :description, 'Badge criteria HTML'
+        key :readOnly, true
+      end
       property :image do
         key :type, :string
         key :description, 'Badge image'

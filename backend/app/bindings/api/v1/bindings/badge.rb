@@ -24,6 +24,9 @@ module Api::V1::Bindings
     # Badge description
     attr_accessor :description
 
+    # Badge criteria HTML
+    attr_accessor :criteria_html
+
     # Badge image
     attr_accessor :image
 
@@ -36,6 +39,7 @@ module Api::V1::Bindings
         :'id' => :'id',
         :'name' => :'name',
         :'description' => :'description',
+        :'criteria_html' => :'criteria_html',
         :'image' => :'image',
         :'tags' => :'tags'
       }
@@ -52,6 +56,7 @@ module Api::V1::Bindings
         :'id' => :'String',
         :'name' => :'String',
         :'description' => :'String',
+        :'criteria_html' => :'String',
         :'image' => :'String',
         :'tags' => :'Array<String>'
       }
@@ -90,6 +95,10 @@ module Api::V1::Bindings
         self.description = attributes[:'description']
       end
 
+      if attributes.key?(:'criteria_html')
+        self.criteria_html = attributes[:'criteria_html']
+      end
+
       if attributes.key?(:'image')
         self.image = attributes[:'image']
       end
@@ -122,6 +131,7 @@ module Api::V1::Bindings
           id == o.id &&
           name == o.name &&
           description == o.description &&
+          criteria_html == o.criteria_html &&
           image == o.image &&
           tags == o.tags
     end
@@ -135,7 +145,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, name, description, image, tags].hash
+      [id, name, description, criteria_html, image, tags].hash
     end
 
     # Builds the object from hash

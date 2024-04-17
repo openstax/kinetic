@@ -38,6 +38,12 @@ export interface Badge {
      */
     readonly description?: string;
     /**
+     * Badge criteria HTML
+     * @type {string}
+     * @memberof Badge
+     */
+    readonly criteriaHtml?: string;
+    /**
      * Badge image
      * @type {string}
      * @memberof Badge
@@ -73,6 +79,7 @@ export function BadgeFromJSONTyped(json: any, ignoreDiscriminator: boolean): Bad
         'id': !exists(json, 'id') ? undefined : json['id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'description': !exists(json, 'description') ? undefined : json['description'],
+        'criteriaHtml': !exists(json, 'criteria_html') ? undefined : json['criteria_html'],
         'image': !exists(json, 'image') ? undefined : json['image'],
         'tags': !exists(json, 'tags') ? undefined : json['tags'],
     };
