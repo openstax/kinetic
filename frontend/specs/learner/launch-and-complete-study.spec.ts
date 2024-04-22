@@ -28,7 +28,7 @@ test('launching study and testing completion', async ({ browser }) => {
     await completeQualtricsStudy(userPage, firstStudyId)
 
     // Qualtrics redirected to study landing page
-    await userPage.getByText('You’re one step closer to earning a badge').isVisible()
+    await userPage.getByText('One step closer to earning your badge!').isVisible()
     await userPage.getByAltText('kinetic-logo').click()
 
     await userPage.getByPlaceholder('Search by study title, researcher, or topic name').fill(firstStudyName)

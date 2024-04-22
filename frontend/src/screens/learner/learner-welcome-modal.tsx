@@ -64,7 +64,7 @@ const WelcomeStep: FC<{
                     onChange={(event) => setAgreed(event.currentTarget.checked)}
                     label={
                         <Text c={colors.text} fw='500'>
-                            <Text span>I agree to Openstax Kinetic&apos;s </Text>
+                            <Text span>I agree to Openstax Kinetic </Text>
                             <Anchor href="https://openstax.org/accounts/terms/1" target="_blank" inherit>
                                 Terms of Use
                             </Anchor>

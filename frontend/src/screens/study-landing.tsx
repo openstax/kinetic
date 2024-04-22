@@ -1,7 +1,7 @@
 import { Navigate, NavLink, useLoaderData } from 'react-router-dom'
 import { React } from '@common'
 import { colors } from '@theme'
-import { LandStudyAbortedEnum, LandStudyRequest, LearningPath, ParticipantStudy } from '@api'
+import { LearningPath, ParticipantStudy } from '@api'
 import { Page } from '@components'
 import { useCurrentUser, useEnvironment, useIsMobileDevice } from '@lib'
 import { Badge, Container, Flex, Grid, Group, Image, ScrollArea, SimpleGrid, Stack, Text, Title } from '@mantine/core';
@@ -39,7 +39,7 @@ const LearningPathProgress: FC<{learningPath: LearningPath, studies: Participant
     return (
         <Stack gap='xl'>
             <Title order={1} c='purple'>
-                You’re one step closer to earning a badge
+                One step closer to earning your badge!
             </Title>
 
             {isMobile ?
