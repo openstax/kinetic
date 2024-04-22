@@ -33,7 +33,7 @@ export const useLearningPathStudies = (learningPath?: LearningPath) => {
     if (!learningPath || !learningPath.id) return []
 
     const studiesByLearningPath = groupBy(studies, (study) => study.learningPath?.id)
-    return studiesByLearningPath[learningPath.id]
+    return studiesByLearningPath[learningPath.id] || []
 }
 
 export const useParticipantStudies = () => {

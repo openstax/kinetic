@@ -1,37 +1,44 @@
-import { addReward, createStudy, expect, goToPage, test, useAdminPage, useResearcherPage, useUserPage } from '../test';
+import {
+    addReward,
+    completeQualtricsStudy,
+    createStudy,
+    expect,
+    test,
+    useAdminPage,
+    useResearcherPage,
+    useUserPage,
+} from '../test';
 import { faker } from '@faker-js/faker';
 
+// TODO: Rewrite with new landing page
 test('launching study and testing completion', async ({ browser }) => {
     const adminPage = await useAdminPage(browser)
     const researcherPage = await useResearcherPage(browser)
-    const studyName = faker.animal.insect() + ' ' + faker.datatype.string(10)
+    const firstStudyName = faker.animal.fish() + ' ' + faker.datatype.string(10)
+    const secondStudyName = faker.animal.fish() + ' ' + faker.datatype.string(10)
 
     await addReward({ adminPage })
 
-    const studyId = await createStudy({ researcherPage, adminPage, name: studyName })
+    const firstStudyId = await createStudy({ researcherPage, adminPage, name: firstStudyName })
+    const secondStudyId = await createStudy({ researcherPage, adminPage, name: secondStudyName })
 
     const userPage = await useUserPage(browser)
 
-    await goToPage({ page: userPage, path: '/studies' })
-    await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"]`)
-    await userPage.click(`[data-study-id="${studyId}"]`)
-
-    await userPage.click('testId=launch-study')
-
-    await userPage.getByText('I consent').click()
-    await userPage.getByText('18 or Older').click()
-    await userPage.click('#NextButton')
-    await userPage.click('#NextButton')
-    await userPage.waitForLoadState('networkidle')
+    // Complete first study
+    await completeQualtricsStudy(userPage, firstStudyId)
 
     // Qualtrics redirected to study landing page
-    await userPage.getByText('You just earned 10 points').isVisible()
-    await userPage.click('testId=view-studies')
+    await userPage.getByText('You’re one step closer to earning a badge').isVisible()
+    await userPage.getByAltText('kinetic-logo').click()
 
-    await userPage.getByPlaceholder('Search by study title, researcher, or topic name').fill(studyName)
+    await userPage.getByPlaceholder('Search by study title, researcher, or topic name').fill(firstStudyName)
     await userPage.waitForLoadState('networkidle')
 
-    await userPage.waitForSelector(`[data-study-id="${studyId}"]`)
-    await userPage.click(`[data-study-id="${studyId}"]`)
+    await userPage.waitForSelector(`[data-study-id="${firstStudyId}"]`)
+    await userPage.click(`[data-study-id="${firstStudyId}"]`)
     await expect(userPage).not.toHaveSelector('testId=launch-study')
+
+    await completeQualtricsStudy(userPage, secondStudyId)
+    await userPage.getByText('Wow, effort really pays off!').isVisible()
+
 })

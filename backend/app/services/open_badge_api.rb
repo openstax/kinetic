@@ -43,6 +43,8 @@ class OpenBadgeApi
     end
   end
 
+  # Can also use this format:
+  # "Firstname Lastname <email@example.com>"
   def issue_badge(badge_id, emails)
     HTTPX.accept('application/json')
       .post("https://openbadgefactory.com/v1/badge/#{@client_id}/#{badge_id}", form: {

@@ -1,66 +1,22 @@
-import { Navigate, NavLink, useParams } from 'react-router-dom'
-import { React, useEffect, useState } from '@common'
+import { Navigate, NavLink, useLoaderData } from 'react-router-dom'
+import { React } from '@common'
 import { colors } from '@theme'
 import { LandStudyAbortedEnum, LandStudyRequest, LearningPath, ParticipantStudy } from '@api'
-import { ErrorPage, LoadingAnimation, Page } from '@components'
-import { useCurrentUser, useEnvironment, useIsMobileDevice, useQueryParam } from '@lib'
-import {
-    Badge,
-    Container,
-    Flex,
-    Grid,
-    Group,
-    Image,
-    ScrollArea,
-    SimpleGrid,
-    Stack,
-    Text,
-    Title,
-    TypographyStylesProvider,
-} from '@mantine/core';
+import { Page } from '@components'
+import { useCurrentUser, useEnvironment, useIsMobileDevice } from '@lib'
+import { Badge, Container, Flex, Grid, Group, Image, ScrollArea, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import Markdown from 'react-markdown'
-import { useLandStudy, useLearningPathStudies } from './learner/studies';
+import { useLearningPathStudies } from './learner/studies';
 import { CompactStudyCard } from '../components/study/compact-study-card';
 
 export default function StudyLanding() {
-    const { studyId } = useParams<string>();
-    const [study, setStudy] = useState<ParticipantStudy | null>(null)
     const env = useEnvironment()
 
-    const [error, setError] = useState<any>(null)
-    const consent = useQueryParam('consent') != 'false'
-    const abort = useQueryParam('abort') == 'true'
-    const md = useQueryParam('md') || {}
-    const landStudy = useLandStudy()
+    const study = useLoaderData() as ParticipantStudy
     const learningPathStudies = useLearningPathStudies(study?.learningPath)
 
-    useEffect(() => {
-        const params: LandStudyRequest = {
-            id: Number(studyId),
-            md,
-            consent: consent,
-        }
-        if (abort) {
-            params['aborted'] = LandStudyAbortedEnum.Refusedconsent
-        }
-
-        landStudy.mutate(params, {
-            onSuccess: setStudy,
-            onError: setError,
-        })
-    }, [])
-
-    // Learners who don't consent won't earn points, so we'll just redirect them home
-    if (!consent) {
-        return <Navigate to='/studies' />
-    }
-
     if (!study || !study.learningPath) {
-        return  <LoadingAnimation message="Loading" />
-    }
-
-    if (error) {
-        return <ErrorPage error={error} />
+        return <Navigate to='/studies' />
     }
 
     return (
@@ -98,7 +54,7 @@ const LearningPathProgress: FC<{learningPath: LearningPath, studies: Participant
                     </Flex>
                 </ScrollArea>
                 : <Container>
-                    <SimpleGrid cols={{ base: 1, lg: 3  }} spacing='xl' verticalSpacing='xl'>
+                    <SimpleGrid cols={{ sm: 2, lg: 3  }} spacing='xl' verticalSpacing='xl'>
                         {studies.map(study => (
                             <CompactStudyCard study={study} key={study.titleForParticipants} />
                         ))}
@@ -137,7 +93,7 @@ const CompletedLearningPath: FC<{learningPath: LearningPath}> = ({ learningPath 
                         </Text>
                         <Group>
                             {badge.tags?.map(tag => (
-                                <Badge>{tag.toUpperCase()}</Badge>
+                                <Badge key={tag}>{tag.toUpperCase()}</Badge>
                             ))}
                         </Group>
                     </Stack>

@@ -238,6 +238,19 @@ export const removeOsanoFooter  = async (page:Page) => {
     await page.waitForSelector('.osano-cm-dialog', { state: 'detached' })
 }
 
+export const completeQualtricsStudy = async (userPage: Page, studyId) => {
+    await goToPage({ page: userPage, path: '/studies' })
+    await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"]`)
+    await userPage.click(`[data-study-id="${studyId}"]`)
+
+    await userPage.click('testId=launch-study')
+
+    await userPage.getByText('I consent').click()
+    await userPage.getByText('18 or Older').click()
+    await userPage.click('#NextButton')
+    await userPage.click('#NextButton')
+}
+
 // Helper methods for multi-context tests
 // https://playwright.dev/docs/browser-contexts#multiple-contexts-in-a-single-test
 export const useAdminPage = async (browser: Browser) => {

@@ -175,6 +175,7 @@ const CreateLearningPath: FC<{
             label: '',
             description: '',
             badgeId: '',
+            studies: [],
         },
         validate: yupResolver(getLearningPathValidationSchema(learningPaths)),
         validateInputOnChange: true,
@@ -213,7 +214,6 @@ const EditLearningPath: FC<{
     learningPaths?: LearningPath[],
     setSelectedLearningPath: (label: string | null) => void,
 }> = ({ learningPath, learningPaths, setSelectedLearningPath }) => {
-    console.log(learningPath)
     const form = useForm<LearningPath>({
         initialValues: {
             label: learningPath?.label || '',
@@ -231,14 +231,6 @@ const EditLearningPath: FC<{
         if (learningPath) {
             form.reset()
             form.setValues(learningPath)
-            // form.setValues({
-            //     label: learningPath?.label || '',
-            //     description: learningPath?.description || '',
-            //     badgeId: learningPath?.badgeId || '',
-            //     level1Metadata: learningPath?.level1Metadata,
-            //     level2Metadata: learningPath?.level2Metadata,
-            //     order: learningPath?.order,
-            // })
         }
     }, [learningPath])
 
@@ -259,6 +251,7 @@ const EditLearningPath: FC<{
 
     const handleSubmit = form.onSubmit((values) => {
         if (!learningPath?.id) return
+
         updateLearningPath.mutate({
             id: learningPath.id,
             updateLearningPath: { learningPath: {
