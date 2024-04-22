@@ -240,8 +240,8 @@ export const removeOsanoFooter  = async (page:Page) => {
 
 export const completeQualtricsStudy = async (userPage: Page, studyName: string) => {
     await goToPage({ page: userPage, path: '/studies' })
-    // await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"]`)
-    // await userPage.click(`[data-study-id="${studyId}"]`)
+    await userPage.waitForLoadState('networkidle')
+
     await userPage.getByText(studyName).first().click()
 
     await userPage.click('testId=launch-study')
