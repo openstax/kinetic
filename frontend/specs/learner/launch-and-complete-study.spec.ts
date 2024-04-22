@@ -19,13 +19,13 @@ test('launching study and testing completion', async ({ browser }) => {
 
     await addReward({ adminPage })
 
-    const firstStudyId = await createStudy({ researcherPage, adminPage, name: firstStudyName })
-    const secondStudyId = await createStudy({ researcherPage, adminPage, name: secondStudyName })
+    await createStudy({ researcherPage, adminPage, name: firstStudyName })
+    await createStudy({ researcherPage, adminPage, name: secondStudyName })
 
     const userPage = await useUserPage(browser)
 
     // Complete first study
-    await completeQualtricsStudy(userPage, firstStudyId)
+    await completeQualtricsStudy(userPage, firstStudyName)
 
     // Qualtrics redirected to study landing page
     await userPage.getByText('One step closer to earning your badge!').isVisible()
@@ -34,11 +34,10 @@ test('launching study and testing completion', async ({ browser }) => {
     await userPage.getByPlaceholder('Search by study title, researcher, or topic name').fill(firstStudyName)
     await userPage.waitForLoadState('networkidle')
 
-    await userPage.waitForSelector(`[data-study-id="${firstStudyId}"]`)
-    await userPage.click(`[data-study-id="${firstStudyId}"]`)
+    await userPage.getByText(firstStudyName).first().click()
     await expect(userPage).not.toHaveSelector('testId=launch-study')
 
-    await completeQualtricsStudy(userPage, secondStudyId)
+    await completeQualtricsStudy(userPage, secondStudyName)
     await userPage.getByText('Wow, effort really pays off!').isVisible()
 
 })
