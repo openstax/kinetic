@@ -14,8 +14,8 @@ import { faker } from '@faker-js/faker';
 test('launching study and testing completion', async ({ browser }) => {
     const adminPage = await useAdminPage(browser)
     const researcherPage = await useResearcherPage(browser)
-    const firstStudyName = faker.animal.fish() + ' ' + faker.datatype.string(10)
-    const secondStudyName = faker.animal.fish() + ' ' + faker.datatype.string(10)
+    const firstStudyName = faker.animal.fish() + ' ' + faker.address.city()
+    const secondStudyName = faker.animal.fish() + ' ' + faker.address.city()
 
     await addReward({ adminPage })
 
