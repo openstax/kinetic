@@ -185,7 +185,7 @@ export const createStudy = async ({
     await adminPage.getByRole('option').first().click()
     await adminPage.getByPlaceholder('Add studies to this learning path').click()
     await adminPage.getByText(name).click()
-    await adminPage.locator('body').click()
+    await adminPage.getByText('Manage learning paths').click()
     await adminPage.getByText('Update Learning Path').click()
 
     return studyId

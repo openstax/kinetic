@@ -10,7 +10,6 @@ import {
 } from '../test';
 import { faker } from '@faker-js/faker';
 
-// TODO: Rewrite with new landing page
 test('launching study and testing completion', async ({ browser }) => {
     const adminPage = await useAdminPage(browser)
     const researcherPage = await useResearcherPage(browser)
@@ -37,6 +36,7 @@ test('launching study and testing completion', async ({ browser }) => {
     await userPage.getByText(firstStudyName).first().click()
     await expect(userPage).not.toHaveSelector('testId=launch-study')
 
+    // Complete second study
     await completeQualtricsStudy(userPage, secondStudyName)
     await userPage.getByText('Wow, effort really pays off!').isVisible()
 
