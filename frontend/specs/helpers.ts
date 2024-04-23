@@ -4,8 +4,6 @@ import { faker } from './test';
 
 export { dayjs }
 
-export const testingLearningPath = faker.internet.httpMethod() + ' ' + faker.internet.color() + ' ' + faker.internet.domainSuffix()
-
 const hostPort = process.env.SERVER_PORT || 4000
 
 export const TC = {
@@ -184,7 +182,7 @@ export const createStudy = async ({
     // Add the study to a learning path
     await goToPage({ page: adminPage, path: '/admin/manage-learning-paths' })
     await adminPage.getByPlaceholder('Select a learning path, or create a new one below').click()
-    await adminPage.getByText(testingLearningPath).click()
+    await adminPage.getByRole('option').first().click()
 
     await adminPage.getByPlaceholder('Add studies to this learning path').click()
     await adminPage.getByText(name).click()
