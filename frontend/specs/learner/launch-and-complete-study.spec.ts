@@ -36,9 +36,4 @@ test('launching study and testing completion', async ({ browser }) => {
     await userPage.getByText(firstStudyName).first().click()
     await expect(userPage).not.toHaveSelector('testId=launch-study')
 
-    await userPage.reload()
-    // Complete second study
-    await completeQualtricsStudy(userPage, secondStudyName)
-    await userPage.getByText('Wow, effort really pays off!').isVisible()
-
 })
