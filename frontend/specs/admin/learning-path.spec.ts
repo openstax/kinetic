@@ -1,6 +1,6 @@
 import { faker, goToPage, test, useAdminPage } from '../test';
 
-export const learningPathName = faker.internet.httpMethod() + ' ' + faker.internet.color() + ' ' + faker.internet.userAgent()
+export const learningPathName = faker.internet.httpMethod() + ' ' + faker.internet.color() + ' ' + faker.internet.domainSuffix()
 
 test('creates a learning path', async ({ browser }) => {
     const adminPage = await useAdminPage(browser)
