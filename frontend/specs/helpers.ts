@@ -1,9 +1,10 @@
 import { Browser, expect, Page } from '@playwright/test'
 import { dayjs } from '../src/lib/date'
 import { faker } from './test';
-import { testingLearningPath } from './admin/learning-path.spec';
 
 export { dayjs }
+
+export const testingLearningPath = faker.internet.httpMethod() + ' ' + faker.internet.color() + ' ' + faker.internet.domainSuffix()
 
 const hostPort = process.env.SERVER_PORT || 4000
 
