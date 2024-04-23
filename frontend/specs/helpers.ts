@@ -241,6 +241,7 @@ export const removeOsanoFooter  = async (page:Page) => {
 export const completeQualtricsStudy = async (userPage: Page, studyName: string) => {
     await goToPage({ page: userPage, path: '/studies' })
 
+    await userPage.getByText('All Studies').isVisible()
     await userPage.getByText(studyName).click()
 
     await userPage.click('testId=launch-study')
