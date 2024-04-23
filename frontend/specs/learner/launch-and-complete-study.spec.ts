@@ -1,6 +1,5 @@
 import {
     addReward,
-    completeQualtricsStudy,
     createStudy,
     expect,
     test,
@@ -13,18 +12,23 @@ import { faker } from '@faker-js/faker';
 test('launching study and testing completion', async ({ browser }) => {
     const adminPage = await useAdminPage(browser)
     const researcherPage = await useResearcherPage(browser)
-    const firstStudyName = faker.animal.fish() + ' ' + faker.address.city()
-    const secondStudyName = faker.animal.fish() + ' ' + faker.address.city()
+    const studyName = faker.animal.fish() + ' ' + faker.address.city()
 
     await addReward({ adminPage })
 
     await createStudy({ researcherPage, adminPage, name: firstStudyName })
-    await createStudy({ researcherPage, adminPage, name: secondStudyName })
 
     const userPage = await useUserPage(browser)
 
-    // Complete first study
-    await completeQualtricsStudy(userPage, firstStudyName)
+    await userPage.getByText('All Studies').isVisible()
+    await userPage.getByText(studyName).click()
+
+    await userPage.click('testId=launch-study')
+
+    await userPage.getByText('I consent').click()
+    await userPage.getByText('18 or Older').click()
+    await userPage.click('#NextButton')
+    await userPage.click('#NextButton')
 
     // Qualtrics redirected to study landing page
     await userPage.getByText('One step closer to earning your badge!').isVisible()
@@ -33,7 +37,7 @@ test('launching study and testing completion', async ({ browser }) => {
     await userPage.getByPlaceholder('Search by study title, researcher, or topic name').fill(firstStudyName)
     await userPage.waitForLoadState('networkidle')
 
-    await userPage.getByText(firstStudyName).first().click()
+    await userPage.getByText(studyName).first().click()
     await expect(userPage).not.toHaveSelector('testId=launch-study')
 
 })
