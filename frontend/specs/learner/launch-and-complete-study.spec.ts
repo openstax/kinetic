@@ -16,7 +16,7 @@ test('launching study and testing completion', async ({ browser }) => {
 
     await addReward({ adminPage })
 
-    await createStudy({ researcherPage, adminPage, name: firstStudyName })
+    await createStudy({ researcherPage, adminPage, name: studyName })
 
     const userPage = await useUserPage(browser)
 
@@ -34,7 +34,7 @@ test('launching study and testing completion', async ({ browser }) => {
     await userPage.getByText('One step closer to earning your badge!').isVisible()
     await userPage.getByAltText('kinetic-logo').click()
 
-    await userPage.getByPlaceholder('Search by study title, researcher, or topic name').fill(firstStudyName)
+    await userPage.getByPlaceholder('Search by study title, researcher, or topic name').fill(studyName)
     await userPage.waitForLoadState('networkidle')
 
     await userPage.getByText(studyName).first().click()
