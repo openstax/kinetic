@@ -29,7 +29,7 @@ interface goToPageArgs {
 
 export const goToPage = async ({ page, path }: goToPageArgs) => {
     const url = TC.ORIGIN + path
-    await page.goto(url)
+    await page.goto(url, { waitUntil: 'networkidle' })
 }
 
 export const logout = async ({ page }: { page: Page }) => {
