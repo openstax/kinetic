@@ -48,7 +48,7 @@ export interface StageUpdate {
      * @type {Date}
      * @memberof StageUpdate
      */
-    completedAt?: Date;
+    readonly completedAt?: Date;
     /**
      * Can the stage be launched
      * @type {boolean}
@@ -148,7 +148,6 @@ export function StageUpdateToJSON(value?: StageUpdate | null): any {
         
         'description': value.description,
         'available_after_days': value.availableAfterDays,
-        'completed_at': value.completedAt === undefined ? undefined : (value.completedAt.toISOString()),
         'config': value.config,
         'duration_minutes': value.durationMinutes,
         'points': value.points,

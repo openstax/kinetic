@@ -67,6 +67,7 @@ class Api::V1::Researcher::StagesOpenApi
       key :type, :string
       key :format, 'date-time'
       key :description, 'When the stage was completed by the participant'
+      key :readOnly, true
     end
     property :is_launchable do
       key :type, :boolean
