@@ -26,7 +26,7 @@ class OpenBadgeApi
   def badge_info(badge_id)
     Rails.cache.fetch("obf-badge-#{badge_id}", expires_in: 86_400) do
       response = HTTPX.plugin(:auth)
-                   .with(headers: { 'content-type' => 'application/json' })
+                      # .with(headers: { 'content-type' => 'application/json' })
                    .authorization("Bearer #{token}")
                    .get("https://openbadgefactory.com/v1/badge/#{@client_id}/#{badge_id}")
       data = response.json

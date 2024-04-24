@@ -21,8 +21,8 @@ export const CompactStudyCard: FC<{
     }
 
     return (
-        <Stack w={200}
-            h={200}
+        <Stack w={225}
+            h={225}
             p='sm'
             justify='space-between'
             className={`compact-study-card ${canLaunch ? 'launchable' : ''}`}
