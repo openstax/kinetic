@@ -14,7 +14,9 @@ class Api::V1::Admin::StudiesController < Api::V1::Admin::BaseController
   end
 
   def feature
-    Study.where(is_featured: true).where.not(id: params[:featured_ids]).update_all(is_featured: false, featured_order: nil)
+    Study.where(is_featured: true)
+      .where.not(id: params[:featured_ids])
+      .update_all(is_featured: false, featured_order: nil)
 
     params[:featured_ids].each_with_index do |study_id, index|
       Study.find(study_id).update(is_featured: true, featured_order: index)
@@ -23,14 +25,18 @@ class Api::V1::Admin::StudiesController < Api::V1::Admin::BaseController
   end
 
   def highlight
-    Study.where(is_highlighted: true).where.not(id: params[:highlighted_ids]).update_all(is_highlighted: false)
+    Study.where(is_highlighted: true)
+      .where.not(id: params[:highlighted_ids])
+      .update_all(is_highlighted: false)
     Study.where(id: params[:highlighted_ids]).update_all(is_highlighted: true)
     render status: :ok, json: { success: true }
   end
 
   def welcome
     Study.where(id: params[:welcome_ids]).update_all(is_welcome: true)
-    Study.where(is_welcome: true).where.not(id: params[:welcome_ids]).update_all(is_welcome: false)
+    Study.where(is_welcome: true)
+      .where.not(id: params[:welcome_ids])
+      .update_all(is_welcome: false)
     render status: :ok, json: { success: true }
   end
 
