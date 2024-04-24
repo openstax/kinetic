@@ -18,14 +18,10 @@ module Api::V1::Bindings
     # Studies that are featured
     attr_accessor :featured_ids
 
-    # Studies that are not featured
-    attr_accessor :non_featured_ids
-
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'featured_ids' => :'featured_ids',
-        :'non_featured_ids' => :'non_featured_ids'
+        :'featured_ids' => :'featured_ids'
       }
     end
 
@@ -37,8 +33,7 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'featured_ids' => :'Array<Float>',
-        :'non_featured_ids' => :'Array<Float>'
+        :'featured_ids' => :'Array<Float>'
       }
     end
 
@@ -68,12 +63,6 @@ module Api::V1::Bindings
           self.featured_ids = value
         end
       end
-
-      if attributes.key?(:'non_featured_ids')
-        if (value = attributes[:'non_featured_ids']).is_a?(Array)
-          self.non_featured_ids = value
-        end
-      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -94,8 +83,7 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          featured_ids == o.featured_ids &&
-          non_featured_ids == o.non_featured_ids
+          featured_ids == o.featured_ids
     end
 
     # @see the `==` method
@@ -107,7 +95,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [featured_ids, non_featured_ids].hash
+      [featured_ids].hash
     end
 
     # Builds the object from hash

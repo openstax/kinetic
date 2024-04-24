@@ -124,15 +124,7 @@ const EditFeaturedStudies: FC<{learningPath: LearningPath}> = ({ learningPath })
             return study?.id!
         })
 
-        const nonFeaturedIds = learningPath.studies?.reduce<number[]>((prev, study) => {
-            if (study.titleForParticipants && !featuredStudies.includes(study.titleForParticipants)) prev.push(study.id)
-            return prev
-        }, [])
-
-        updateFeaturedStudies.mutate({
-            featuredIds: featuredIds,
-            nonFeaturedIds: nonFeaturedIds,
-        })
+        updateFeaturedStudies.mutate({ featuredIds: featuredIds })
     }
 
     if (!learningPath.studies) return <Title order={4}>Learning path has no studies</Title>

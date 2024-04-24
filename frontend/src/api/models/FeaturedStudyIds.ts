@@ -25,12 +25,6 @@ export interface FeaturedStudyIds {
      * @memberof FeaturedStudyIds
      */
     featuredIds?: Array<number>;
-    /**
-     * Studies that are not featured
-     * @type {Array<number>}
-     * @memberof FeaturedStudyIds
-     */
-    nonFeaturedIds?: Array<number>;
 }
 
 /**
@@ -53,7 +47,6 @@ export function FeaturedStudyIdsFromJSONTyped(json: any, ignoreDiscriminator: bo
     return {
         
         'featuredIds': !exists(json, 'featured_ids') ? undefined : json['featured_ids'],
-        'nonFeaturedIds': !exists(json, 'non_featured_ids') ? undefined : json['non_featured_ids'],
     };
 }
 
@@ -67,7 +60,6 @@ export function FeaturedStudyIdsToJSON(value?: FeaturedStudyIds | null): any {
     return {
         
         'featured_ids': value.featuredIds,
-        'non_featured_ids': value.nonFeaturedIds,
     };
 }
 
