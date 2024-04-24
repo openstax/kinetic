@@ -74,7 +74,7 @@ class LaunchPad
   attr_reader :user_id
 
   def notify_if_learning_path_completed
-    return unless @study.learning_path.completed?(@user)
+    return unless @study.learning_path&.completed?(@user)
 
     user_email = UserInfo.for_uuid(@user.id)['email_address']
     return unless user_email.present? && @study.learning_path.badge_id.present?
