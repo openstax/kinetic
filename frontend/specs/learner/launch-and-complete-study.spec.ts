@@ -29,6 +29,7 @@ test('launching study and testing completion', async ({ browser }) => {
     await userPage.getByText('18 or Older').click()
     await userPage.click('#NextButton')
     await userPage.click('#NextButton')
+    await userPage.waitForURL('**/study/land/**')
 
     // Qualtrics redirected to study landing page
     await userPage.getByText('One step closer to earning your badge!').isVisible()
