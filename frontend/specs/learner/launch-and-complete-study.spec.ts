@@ -39,5 +39,4 @@ test('launching study and testing completion', async ({ browser }) => {
 
     await userPage.getByText(studyName).first().click()
     await expect(userPage).not.toHaveSelector('testId=launch-study')
-
 })
