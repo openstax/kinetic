@@ -1,11 +1,12 @@
-class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
+class PopulateLearningPathData < ActiveRecord::Migration[7.1]
   def up
     personal_finance = LearningPath.create!(
       label: 'Personal Finance',
       description: 'Check your financial knowledge',
       level_1_metadata: ['21st-Century Themes', 'Life and Career Skills'],
       level_2_metadata: ['Financial Literacy', 'Initiative and self-direction'],
-      badge_id: 'SB001Ea7DGKaCKB'
+      badge_id: 'SB001Ea7DGKaCKB',
+      order: 0
     )
 
     growth_and_resilience = LearningPath.create!(
@@ -13,7 +14,8 @@ class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
       description: 'Persist through challenges',
       level_1_metadata: ['Life and Career Skills'],
       level_2_metadata: ['Flexibility and adaptability', 'Initiative and self-direction'],
-      badge_id: 'SB0222a7DGDaNSS'
+      badge_id: 'SB0222a7DGDaNSS',
+      order: 1
     )
 
     mental_agility = LearningPath.create!(
@@ -21,7 +23,8 @@ class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
       description: 'Explore how your memory works',
       level_1_metadata: ['Learning & Innovation Skills'],
       level_2_metadata: ['Critical Thinking and Problem Solving', 'Communication'],
-      badge_id: 'SB03EYa7DGDaNUL'
+      badge_id: 'SB03EYa7DGDaNUL',
+      order: 2
     )
 
     learning_persistence = LearningPath.create!(
@@ -29,7 +32,8 @@ class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
       description: 'Enhance your learning drive ',
       level_1_metadata: ['Life and Career Skills'],
       level_2_metadata: ['Productivity and accountability', 'Initiative and self-direction'],
-      badge_id: 'SB02M4a7DGKaCN9'
+      badge_id: 'SB02M4a7DGKaCN9',
+      order: 3
     )
 
     productivity = LearningPath.create!(
@@ -37,7 +41,8 @@ class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
       description: 'Improve your productivity',
       level_1_metadata: ['Life and Career Skills'],
       level_2_metadata: ['Productivity and Accountability'],
-      badge_id: 'SB03T0a7DGDaNV1'
+      badge_id: 'SB03T0a7DGDaNV1',
+      order: 4
     )
 
     interpersonal_skills = LearningPath.create!(
@@ -45,7 +50,8 @@ class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
       description: 'Strengthen social connections ',
       level_1_metadata: ['Life and Career Skills'],
       level_2_metadata: ['Social skills'],
-      badge_id: 'SB04RKa7DGKaCOW'
+      badge_id: 'SB04RKa7DGKaCOW',
+      order: 5
     )
 
     study_strategies = LearningPath.create!(
@@ -53,7 +59,8 @@ class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
       description: 'Improve the way you learn',
       level_1_metadata: ['Learning & Innovation Skills', 'Essential Subjects'],
       level_2_metadata: ['Science', 'History', 'Critical Thinking & Problem Solving'],
-      badge_id: 'SB0E56a7DGKaCVC'
+      badge_id: 'SB0E56a7DGKaCVC',
+      order: 6
     )
 
     stem_careers = LearningPath.create!(
@@ -61,7 +68,8 @@ class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
       description: 'Assess STEM interest',
       level_1_metadata: ['Learning & Innovation Skills', 'Essential Subjects'],
       level_2_metadata: ['Science', 'Mathematics', 'Critical Thinking and Problem Solving'],
-      badge_id: 'SB05K7a7DGKaCPE'
+      badge_id: 'SB05K7a7DGKaCPE',
+      order: 7
     )
 
     biology_learning = LearningPath.create!(
@@ -69,7 +77,8 @@ class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
       description: 'Improve how you study biology',
       level_1_metadata: ['Learning & Innovation Skills', 'Essential Subjects'],
       level_2_metadata: ['Critical Thinking and Problem Solving'],
-      badge_id: 'SB07A9a7DGKaCQV'
+      badge_id: 'SB07A9a7DGKaCQV',
+      order: 8
     )
 
     future_careers = LearningPath.create!(
@@ -77,7 +86,8 @@ class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
       description: 'Discover your career goals',
       level_1_metadata: ['Learning & Innovation Skills', 'Essential Subjects'],
       level_2_metadata: ['Social skills', 'Flexibility and adaptability', 'Science'],
-      badge_id: 'SB06FPa7DGDaO08'
+      badge_id: 'SB06FPa7DGDaO08',
+      order: 9
     )
 
     if Rails.env.production?
@@ -106,10 +116,6 @@ class MigrateStudyLearningPaths < ActiveRecord::Migration[6.1]
         study.update!(learning_path_id: random_path.id)
       end
     end
-  end
-
-  def down
-
   end
 
   def set_and_order_studies(path, all_study_ids, featured_study_ids)
