@@ -76,7 +76,7 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
                                                                  :learning_path)
                           .where.not(id: launched_studies.map(&:study_id))
 
-    available_studies + launched_studies
+    launched_studies + available_studies
   end
 
   def set_study

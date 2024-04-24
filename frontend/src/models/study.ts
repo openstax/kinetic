@@ -31,7 +31,7 @@ const areStudyStagesLaunchable = (study: ParticipantStudy) => {
     if (!study.stages) {
         return false
     }
-    return Boolean(study.stages.find(s => !s.isCompleted && s.isLaunchable))
+    return Boolean(study.stages.find(s => !s.completedAt && s.isLaunchable))
 }
 
 export const isStudyLaunchable = (study: ParticipantStudy) => {
@@ -59,11 +59,11 @@ export function getLastStage(study: Study | ParticipantStudy): Stage | undefined
 }
 
 export function getNextAvailableStage(study: ParticipantStudy): Stage | undefined {
-    return find(study.stages, (stage) => !stage.isCompleted) || getLastStage(study)
+    return find(study.stages, (stage) => !stage.completedAt) || getLastStage(study)
 }
 
 export function getLastCompletedStage(study: ParticipantStudy): Stage | undefined {
-    return findLast(study.stages, (stage) => !!stage.isCompleted);
+    return findLast(study.stages, (stage) => !!stage.completedAt);
 }
 
 export function isActive(study: Study) {

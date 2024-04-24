@@ -145,7 +145,7 @@ const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
 }
 
 const MultiSessionFlag: FC<StudyCardProps> = ({ study }) => {
-    if (!isMultiSession(study) || !study.stages?.[0].isCompleted || study.stages?.[1].isCompleted) return null
+    if (!isMultiSession(study) || !study.stages?.[0].completedAt || !!study.stages?.[1].completedAt) return null
 
     return (
         <div

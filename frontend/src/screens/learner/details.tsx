@@ -39,7 +39,7 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
             </Button>
         )
     }
-    const action = (study.stages?.length && !study.stages[0].isCompleted) ? 'Begin' : 'Continue'
+    const action = (study.stages?.length && !!study.stages[0].completedAt) ? 'Begin' : 'Continue'
     return (
         <Button
             color='purple'

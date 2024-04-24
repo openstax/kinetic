@@ -79,7 +79,7 @@ class LaunchPad
     user_email = UserInfo.for_uuid(@user.id)['email_address']
     return unless user_email.present? && @study.learning_path.badge_id.present?
 
-    OpenBadgeApi.instance.issue_badge(@study.learning_path.badge_id, ['chrissbendel@gmail.com'])
+    OpenBadgeApi.instance.issue_badge(@study.learning_path.badge_id, [user_email])
   end
 
   def study

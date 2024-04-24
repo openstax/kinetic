@@ -44,12 +44,6 @@ export interface StageUpdate {
      */
     availableAfterDays?: number;
     /**
-     * Has the stage been completed
-     * @type {boolean}
-     * @memberof StageUpdate
-     */
-    readonly isCompleted?: boolean;
-    /**
      * When the stage was completed by the participant
      * @type {Date}
      * @memberof StageUpdate
@@ -133,7 +127,6 @@ export function StageUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'title': !exists(json, 'title') ? undefined : json['title'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'availableAfterDays': !exists(json, 'available_after_days') ? undefined : json['available_after_days'],
-        'isCompleted': !exists(json, 'is_completed') ? undefined : json['is_completed'],
         'completedAt': !exists(json, 'completed_at') ? undefined : (new Date(json['completed_at'])),
         'isLaunchable': !exists(json, 'is_launchable') ? undefined : json['is_launchable'],
         'config': json['config'],
