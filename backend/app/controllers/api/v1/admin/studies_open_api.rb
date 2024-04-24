@@ -299,6 +299,11 @@ class Api::V1::Admin::StudiesOpenApi
               key :description, 'Studies that are featured'
               key :items, { 'type' => 'number' }
             end
+            property :non_featured_ids do
+              key :type, :array
+              key :description, 'Studies that are not featured'
+              key :items, { 'type' => 'number' }
+            end
           end
         end
       end
