@@ -11,7 +11,7 @@ export const LearnerWelcomeModal: FC = () => {
     const [open, setOpen] = useState(true)
     const { data: preferences, isLoading } = useUserPreferences()
     const updatePreferences = useUpdateUserPreferences()
-    const [step, setStep] = useState(1)
+    const [step, setStep] = useState(0)
     const isMobile = useIsMobileDevice()
 
     if (preferences?.hasViewedWelcomeMessage || isLoading) {
