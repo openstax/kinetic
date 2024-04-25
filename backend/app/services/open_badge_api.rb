@@ -24,6 +24,7 @@ class OpenBadgeApi
   end
 
   def badge_info(badge_id)
+    return if badge_id.blank?
     Rails.cache.fetch("obf-badge-#{badge_id}", expires_in: 86_400) do
       response = HTTPX.plugin(:auth)
                    .with(headers: { 'content-type' => 'application/json' })

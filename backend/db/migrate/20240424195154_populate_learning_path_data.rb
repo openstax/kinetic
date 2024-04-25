@@ -119,8 +119,11 @@ class PopulateLearningPathData < ActiveRecord::Migration[7.1]
   end
 
   def set_and_order_studies(path, all_study_ids, featured_study_ids)
-    # Will error out if any study IDs don't exist
-    raise "Invalid list of study IDs #{all_study_ids}" if all_study_ids.any? { |id| !Study.exists?(id) }
+    # Notify and skip if any study IDs don't exist
+    if all_study_ids.any? { |id| !Study.exists?(id) }
+      puts "Invalid list of study IDs #{all_study_ids}"
+      return
+    end
     path.study_ids = all_study_ids
     featured_study_ids.each_with_index do |study_id, index|
       Study.find(study_id).update(is_featured: true, featured_order: index)
