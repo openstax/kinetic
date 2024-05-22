@@ -41,20 +41,16 @@ class QualtricsApi
     request('GET', "surveys/#{survey_id}/export-responses/#{progress_id}")['result']
   end
 
-  def fetch_export_file(survey_id, file_id, &block)
-    resp = @http.get(path_to("surveys/#{survey_id}/export-responses/#{file_id}/file"), stream: true)
+  def fetch_export_file(survey_id, file_id)
+    resp = @http.get(path_to("surveys/#{survey_id}/export-responses/#{file_id}/file"))
 
     raise "request failed: #{resp.status}" unless resp.status == 200
+    tempfile = Tempfile.new([survey_id, '.zip'])
+    tempfile.binmode
+    tempfile.write(resp.body)
+    tempfile.rewind
 
-    Tempfile.create([survey_id, '.zip'], binmode: true) do |f|
-      resp.each { |chunk| f.write(chunk) }
-      f.flush
-
-      Zip::File.open(f) do |zip|
-        zip.each(&block)
-      end
-
-    end
+    tempfile
   end
 
   def delete_survey(survey_id)
