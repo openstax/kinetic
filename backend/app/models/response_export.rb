@@ -65,9 +65,11 @@ class ResponseExport < ApplicationRecord
   end
 
   def complete_response_fetch(api, retries, completion)
-    api.fetch_export_file(stage.config['survey_id'], completion['fileId']) do |entry|
-      files.attach({ io: StringIO.new(entry.get_input_stream.read), filename: entry.name })
-    end
+    file = api.fetch_export_file(stage.config['survey_id'], completion['fileId'])
+    files.attach(file)
+    # api.fetch_export_file(stage.config['survey_id'], completion['fileId']) do |entry|
+    #   files.attach({ io: StringIO.new(entry.get_input_stream.read), filename: entry.name })
+    # end
 
     update!(
       is_complete: true,
