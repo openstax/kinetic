@@ -62,7 +62,8 @@ export const useParticipantStudies = () => {
 
     const demographicSurvey = studies.find(s => s.isDemographicSurvey) || null
 
-    const welcomeStudies = studies.filter(s => s.isWelcome)
+    // const welcomeStudies = studies.filter(s => s.isWelcome)
+    const welcomeStudies = studies.slice(0, 2)
 
     return {
         studies,

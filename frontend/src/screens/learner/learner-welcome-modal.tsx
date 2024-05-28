@@ -29,7 +29,7 @@ export const LearnerWelcomeModal: FC = () => {
             closeOnEscape={false}
             opened={open}
             onClose={onClose}
-            size='80%'
+            size='85%'
             centered
             fullScreen={isMobile}
             withCloseButton={step == 1}
@@ -46,17 +46,17 @@ const WelcomeStep: FC<{
     const isMobile = useIsMobileDevice()
 
     return (
-        <Flex m='lg' gap='xl' direction={isMobile ? 'column-reverse' : 'row'}>
-            <Box style={{ flex: 1 }}>
+        <Flex m={isMobile ? '1rem' : '4rem'} gap='5rem' direction={isMobile ? 'column-reverse' : 'row'}>
+            <Box style={{ flex: 1, alignContent: 'center' }}>
                 <Image src={Greeting} />
             </Box>
 
             <Stack gap='xl' style={{ flex: 2 }}>
-                <Title order={2} c='purple'>
+                <Title order={1} c='purple'>
                     Welcome to OpenStax Kinetic
                 </Title>
 
-                <Title order={6} c={colors.text}>
+                <Title order={5} c={colors.text}>
                     Participate in educational research and be ahead of the game when it comes to understanding yourself and your learning techniques. Earn points, recognition badges, and the opportunity to connect with learning experts.
                 </Title>
 
@@ -96,11 +96,13 @@ const EarnStep: FC<{onClose: () => void}> = ({ onClose }) => {
     }
 
     const isMobile = useIsMobileDevice()
+
     return (
-        <Flex direction={isMobile ? 'column' : 'row'} m='lg' gap='xl'>
-            <Flex style={{ flex: 1 }} align='flex-end'>
+        <Flex m={isMobile ? '1rem' : '4rem'} gap='5rem' direction={isMobile ? 'column' : 'row'}>
+            <Box style={{ flex: 1, alignContent: 'center' }}>
                 <Image maw={300} src={Success} />
-            </Flex>
+            </Box>
+
             <Stack gap='xl' style={{ flex: 2 }} mb='xl'>
                 <Title order={1} c='purple'>
                     Earn your first 10 points!
@@ -110,12 +112,12 @@ const EarnStep: FC<{onClose: () => void}> = ({ onClose }) => {
                     Take a Kinetic study and discover its learning benefits. Plus, earn recognition badges and unlock access to additional learning rewards.
                 </Title>
 
-                <Group gap='xl'>
+                <Group>
                     {welcomeStudies.map((study, index) => (
                         <Flex key={study.titleForParticipants}
                             align='center'
                             direction={{ md: 'row', base: 'column' }}
-                            gap='xl'
+                            gap='md'
                         >
                             <CompactStudyCard study={study} onClick={onClick}/>
                             {(index !== welcomeStudies.length - 1) && <Text fw='bolder' c={colors.gray70} size='xl'>OR</Text>}

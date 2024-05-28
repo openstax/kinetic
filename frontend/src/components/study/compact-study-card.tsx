@@ -86,7 +86,7 @@ const Description: FC<{study: ParticipantStudy}> = ({ study }) => {
     }
 
     return (
-        <Text size='sm' c={colors.gray70}>
+        <Text size='sm' c={colors.text}>
             {study.shortDescription}
         </Text>
     )
