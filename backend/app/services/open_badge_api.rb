@@ -9,6 +9,7 @@ class OpenBadgeApi
   def initialize
     @client_id = Rails.application.secrets.dig(:obf, :client_id)
     @client_secret = Rails.application.secrets.dig(:obf, :client_secret)
+    @badges = fetch_badges
   end
 
   def token
@@ -20,6 +21,28 @@ class OpenBadgeApi
                            client_secret: @client_secret
                          })
       @token = response.json['access_token']
+    end
+  end
+
+  def fetch_badges
+    Rails.cache.fetch("obf-badges", expires_in: 86_400) do
+      response = HTTPX.plugin(:auth)
+                 .with(headers: { 'content-type' => 'application/json' })
+                 .authorization("Bearer #{token}")
+                 .get("https://openbadgefactory.com/v1/badge/#{@client_id}")
+
+      data = response.json
+      puts('BADGE LIST', data)
+      return {} if data.blank?
+
+      {
+        name: data['name'],
+        id: data['id'],
+        criteria_html: data['criteria_html'],
+        description: data['description'],
+        image: data['image'],
+        tags: data['tags']
+      }
     end
   end
 
