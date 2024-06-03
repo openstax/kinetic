@@ -4,7 +4,20 @@ import { colors } from '@theme'
 import { LearningPath, ParticipantStudy } from '@api'
 import { Page } from '@components'
 import { useCurrentUser, useEnvironment, useIsMobileDevice } from '@lib'
-import { Badge, Container, Flex, Grid, Group, Image, ScrollArea, SimpleGrid, Stack, Text, Title } from '@mantine/core';
+import {
+    Badge,
+    Card,
+    Container,
+    Flex,
+    Grid,
+    Group,
+    Image,
+    ScrollArea,
+    SimpleGrid,
+    Stack,
+    Text,
+    Title,
+} from '@mantine/core';
 import Markdown from 'react-markdown'
 import { useLearningPathStudies } from './learner/studies';
 import { CompactStudyCard } from '../components/study/compact-study-card';
@@ -25,17 +38,18 @@ export default function StudyLanding() {
             data-analytics-nudge="study-complete"
             data-content-tags={`,learning-path=${study.learningPath.label},is-new-user=${env.isNewUser},`}
         >
-            {study.learningPath?.completed ?
-                <CompletedLearningPath learningPath={study.learningPath} /> :
-                <LearningPathProgress learningPath={study.learningPath} studies={learningPathStudies} />
-            }
+            <Card p={{ lg: 'xl' }} m={{ lg: 'xl' }} shadow='md' radius='md'>
+                {study.learningPath?.completed ?
+                    <CompletedLearningPath learningPath={study.learningPath} /> :
+                    <LearningPathProgress learningPath={study.learningPath} studies={learningPathStudies} />
+                }
+            </Card>
         </Page>
     )
 }
 
 const LearningPathProgress: FC<{learningPath: LearningPath, studies: ParticipantStudy[]}> = ({ learningPath, studies }) => {
     const isMobile = useIsMobileDevice()
-
     return (
         <Stack gap='xl'>
             <Title order={1} c='purple'>

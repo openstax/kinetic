@@ -91,8 +91,8 @@ const EarnStep: FC<{onClose: () => void}> = ({ onClose }) => {
     const updatePreferences = useUpdateUserPreferences()
 
     const onClick = async () => {
-        onClose()
         updatePreferences.mutate({ updatePreferences: { preferences: { hasViewedWelcomeMessage: true } } }, {})
+        onClose()
     }
 
     const isMobile = useIsMobileDevice()
