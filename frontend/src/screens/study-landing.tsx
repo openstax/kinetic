@@ -92,15 +92,15 @@ const CompletedLearningPath: FC<{learningPath: LearningPath}> = ({ learningPath 
             <Grid.Col span={2}>
                 <Image fit='contain' h={250} w={250} src={learningPath.badge?.image} />
             </Grid.Col>
-            <Grid.Col span={6}>
-                <Stack gap='lg'>
+            <Grid.Col span={7}>
+                <Stack>
                     <Title order={1} c='purple'>
                         Wow, effort really pays off!
                     </Title>
 
-                    <Stack gap='xs'>
+                    <Stack gap='0'>
                         <Title order={5} c='purple'>
-                        You’ve done awesome work so far!
+                            You’ve done awesome work so far!
                         </Title>
                         <Text c={colors.gray70}>
                             {badge.description}
@@ -112,8 +112,8 @@ const CompletedLearningPath: FC<{learningPath: LearningPath}> = ({ learningPath 
                         </Group>
                     </Stack>
 
-                    <Stack gap='xs'>
-                        <Title order={6} c={colors.gray70}>
+                    <Stack gap='0'>
+                        <Title order={5} c='purple'>
                             Criteria
                         </Title>
                         <Markdown css={{ color: colors.gray70 }}>
@@ -121,7 +121,7 @@ const CompletedLearningPath: FC<{learningPath: LearningPath}> = ({ learningPath 
                         </Markdown>
                     </Stack>
 
-                    <Stack>
+                    <Stack gap='0'>
                         <Title order={5} c='purple'>
                             Your certificate is on its way and should be in your inbox soon.
                         </Title>
