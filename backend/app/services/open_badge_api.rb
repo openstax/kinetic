@@ -33,26 +33,29 @@ class OpenBadgeApi
 
       data = response.json
       puts('BADGE LIST', data)
-      return {} if data.blank?
-
-      {
-        name: data['name'],
-        id: data['id'],
-        criteria_html: data['criteria_html'],
-        description: data['description'],
-        image: data['image'],
-        tags: data['tags']
-      }
+      data
+      # return {} if data.blank?
+      #
+      # {
+      #   name: data['name'],
+      #   id: data['id'],
+      #   criteria_html: data['criteria_html'],
+      #   description: data['description'],
+      #   image: data['image'],
+      #   tags: data['tags']
+      # }
     end
   end
 
   def badge_info(badge_id)
     Rails.cache.fetch("obf-badge-#{badge_id}", expires_in: 86_400) do
-      response = HTTPX.plugin(:auth)
-                   .with(headers: { 'content-type' => 'application/json' })
-                   .authorization("Bearer #{token}")
-                   .get("https://openbadgefactory.com/v1/badge/#{@client_id}/#{badge_id}")
-      data = response.json
+      # response = HTTPX.plugin(:auth)
+      #              .with(headers: { 'content-type' => 'application/json' })
+      #              .authorization("Bearer #{token}")
+      #              .get("https://openbadgefactory.com/v1/badge/#{@client_id}/#{badge_id}")
+      puts(@badges)
+      data = @badges.find { |badge| badge['id'] == badge_id }
+
       return {} if data.blank?
 
       {
