@@ -24,22 +24,35 @@ class OpenBadgeApi
   end
 
   def badge_info(badge_id)
+    return if badge_id.blank?
+
     Rails.cache.fetch("obf-badge-#{badge_id}", expires_in: 86_400) do
       response = HTTPX.plugin(:auth)
                    .with(headers: { 'content-type' => 'application/json' })
                    .authorization("Bearer #{token}")
                    .get("https://openbadgefactory.com/v1/badge/#{@client_id}/#{badge_id}")
+
       data = response.json
       return {} if data.blank?
 
       {
         name: data['name'],
         id: data['id'],
+        criteria_html: data['criteria_html'],
         description: data['description'],
         image: data['image'],
         tags: data['tags']
       }
     end
+  end
+
+  # Can also use this format:
+  # "Firstname Lastname <email@example.com>"
+  def issue_badge(badge_id, emails)
+    HTTPX.accept('application/json')
+      .post("https://openbadgefactory.com/v1/badge/#{@client_id}/#{badge_id}", form: {
+              recipient: emails
+            })
   end
 
 end

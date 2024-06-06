@@ -348,4 +348,35 @@ class Api::V1::Admin::StudiesOpenApi
       extend Api::V1::OpenApiResponses::ServerError
     end
   end
+
+  openapi_path '/admin/studies/welcome' do
+    operation :post do
+      key :summary, 'Set welcome modal studies'
+      key :operationId, 'adminWelcomeStudies'
+
+      request_body do
+        key :description, 'The study IDs for welcome modal'
+        key :required, true
+        content 'application/json' do
+          schema do
+            key :type, :object
+            key :title, :welcomeStudyIds
+            property :welcome_ids do
+              key :type, :array
+              key :description, 'Studies for welcome modal'
+              key :items, { 'type' => 'number' }
+            end
+          end
+        end
+      end
+
+      response 200 do
+        key :description, 'Success'
+      end
+      extend Api::V1::OpenApiResponses::AuthenticationError
+      extend Api::V1::OpenApiResponses::ForbiddenError
+      extend Api::V1::OpenApiResponses::UnprocessableEntityError
+      extend Api::V1::OpenApiResponses::ServerError
+    end
+  end
 end

@@ -14,49 +14,14 @@ require 'date'
 require 'time'
 
 module Api::V1::Bindings
-  class LearningPath
-    # The learning path ID
-    attr_accessor :id
-
-    # The learning path rendering order
-    attr_accessor :order
-
-    # Learning path label
-    attr_accessor :label
-
-    # Learning path description
-    attr_accessor :description
-
-    # Level 1 metadata
-    attr_accessor :level_1_metadata
-
-    # Level 2 metadata
-    attr_accessor :level_2_metadata
-
-    # Open badge factory badge_id value
-    attr_accessor :badge_id
-
-    attr_accessor :badge
-
-    # Has the user completed this learning path?
-    attr_accessor :completed
-
-    # Studies with this learning path
-    attr_accessor :studies
+  class WelcomeStudyIds
+    # Studies for welcome modal
+    attr_accessor :welcome_ids
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'id' => :'id',
-        :'order' => :'order',
-        :'label' => :'label',
-        :'description' => :'description',
-        :'level_1_metadata' => :'level_1_metadata',
-        :'level_2_metadata' => :'level_2_metadata',
-        :'badge_id' => :'badge_id',
-        :'badge' => :'badge',
-        :'completed' => :'completed',
-        :'studies' => :'studies'
+        :'welcome_ids' => :'welcome_ids'
       }
     end
 
@@ -68,16 +33,7 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'id' => :'Float',
-        :'order' => :'Float',
-        :'label' => :'String',
-        :'description' => :'String',
-        :'level_1_metadata' => :'Array<String>',
-        :'level_2_metadata' => :'Array<String>',
-        :'badge_id' => :'String',
-        :'badge' => :'Badge',
-        :'completed' => :'Boolean',
-        :'studies' => :'Array<Study>'
+        :'welcome_ids' => :'Array<Float>'
       }
     end
 
@@ -91,60 +47,20 @@ module Api::V1::Bindings
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::LearningPath` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::V1::Bindings::WelcomeStudyIds` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::LearningPath`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::V1::Bindings::WelcomeStudyIds`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'id')
-        self.id = attributes[:'id']
-      end
-
-      if attributes.key?(:'order')
-        self.order = attributes[:'order']
-      end
-
-      if attributes.key?(:'label')
-        self.label = attributes[:'label']
-      end
-
-      if attributes.key?(:'description')
-        self.description = attributes[:'description']
-      end
-
-      if attributes.key?(:'level_1_metadata')
-        if (value = attributes[:'level_1_metadata']).is_a?(Array)
-          self.level_1_metadata = value
-        end
-      end
-
-      if attributes.key?(:'level_2_metadata')
-        if (value = attributes[:'level_2_metadata']).is_a?(Array)
-          self.level_2_metadata = value
-        end
-      end
-
-      if attributes.key?(:'badge_id')
-        self.badge_id = attributes[:'badge_id']
-      end
-
-      if attributes.key?(:'badge')
-        self.badge = attributes[:'badge']
-      end
-
-      if attributes.key?(:'completed')
-        self.completed = attributes[:'completed']
-      end
-
-      if attributes.key?(:'studies')
-        if (value = attributes[:'studies']).is_a?(Array)
-          self.studies = value
+      if attributes.key?(:'welcome_ids')
+        if (value = attributes[:'welcome_ids']).is_a?(Array)
+          self.welcome_ids = value
         end
       end
     end
@@ -153,35 +69,13 @@ module Api::V1::Bindings
     # @return Array for valid properties with the reasons
     def list_invalid_properties
       invalid_properties = Array.new
-      if @label.nil?
-        invalid_properties.push('invalid value for "label", label cannot be nil.')
-      end
-
-      if @description.nil?
-        invalid_properties.push('invalid value for "description", description cannot be nil.')
-      end
-
       invalid_properties
     end
 
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      return false if @label.nil?
-      return false if @description.nil?
       true
-    end
-
-    # Custom attribute writer method with validation
-    # @param [Object] level_1_metadata Value to be assigned
-    def level_1_metadata=(level_1_metadata)
-      @level_1_metadata = level_1_metadata
-    end
-
-    # Custom attribute writer method with validation
-    # @param [Object] level_2_metadata Value to be assigned
-    def level_2_metadata=(level_2_metadata)
-      @level_2_metadata = level_2_metadata
     end
 
     # Checks equality by comparing each attribute.
@@ -189,16 +83,7 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          id == o.id &&
-          order == o.order &&
-          label == o.label &&
-          description == o.description &&
-          level_1_metadata == o.level_1_metadata &&
-          level_2_metadata == o.level_2_metadata &&
-          badge_id == o.badge_id &&
-          badge == o.badge &&
-          completed == o.completed &&
-          studies == o.studies
+          welcome_ids == o.welcome_ids
     end
 
     # @see the `==` method
@@ -210,7 +95,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, order, label, description, level_1_metadata, level_2_metadata, badge_id, badge, completed, studies].hash
+      [welcome_ids].hash
     end
 
     # Builds the object from hash

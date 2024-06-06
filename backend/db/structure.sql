@@ -435,7 +435,8 @@ CREATE TABLE public.learning_paths (
     level_1_metadata text[] DEFAULT '{}'::text[],
     level_2_metadata text[] DEFAULT '{}'::text[],
     created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL
+    updated_at timestamp(6) with time zone NOT NULL,
+    "order" integer
 );
 
 
@@ -687,7 +688,8 @@ CREATE TABLE public.studies (
     learning_path_id bigint,
     is_featured boolean DEFAULT false,
     featured_order integer,
-    is_highlighted boolean DEFAULT false
+    is_highlighted boolean DEFAULT false,
+    is_welcome boolean DEFAULT false
 );
 
 
@@ -1478,6 +1480,9 @@ ALTER TABLE ONLY public.response_exports
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240424195154'),
+('20240415134102'),
+('20240411150309'),
 ('20240229135718'),
 ('20240222135611'),
 ('20231212191239'),

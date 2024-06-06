@@ -29,7 +29,7 @@ interface goToPageArgs {
 
 export const goToPage = async ({ page, path }: goToPageArgs) => {
     const url = TC.ORIGIN + path
-    await page.goto(url)
+    await page.goto(url, { waitUntil: 'domcontentloaded' })
 }
 
 export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin }) => {
@@ -173,9 +173,10 @@ export const createStudy = async ({
     await goToPage({ page: adminPage, path: '/admin/manage-learning-paths' })
     await adminPage.getByPlaceholder('Select a learning path, or create a new one below').click()
     await adminPage.getByRole('option').first().click()
+
     await adminPage.getByPlaceholder('Add studies to this learning path').click()
     await adminPage.getByText(name).click()
-    await adminPage.locator('body').click()
+    await adminPage.getByText('Manage learning paths').click()
     await adminPage.getByText('Update Learning Path').click()
 
     return studyId

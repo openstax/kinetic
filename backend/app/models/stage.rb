@@ -90,6 +90,10 @@ class Stage < ApplicationRecord
     !launched_stages.for_user(user)&.completed_at.nil?
   end
 
+  def completed_at(user)
+    launched_stages.for_user(user)&.completed_at
+  end
+
   def launchable_by_user?(user)
     return true if previous_stage.nil? # first stage is always valid
 

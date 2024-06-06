@@ -51,7 +51,7 @@ const calculatePoints = (segment: RewardsScheduleSegment, cycleStart: Date, stud
 
 export const useRewardsSchedule = () => {
     const env = useEnvironment()
-    const { allStudies } = useParticipantStudies()
+    const { studies } = useParticipantStudies()
 
     const rs = sortBy(env.rewardsSchedule, 'startAt')
     const firstSegment = rs[0]
@@ -61,14 +61,14 @@ export const useRewardsSchedule = () => {
 
     let previousSegment: RewardsSegment | null = null
 
-    const recentlyEarnedPoints = allStudies.find(s => (
+    const recentlyEarnedPoints = studies.find(s => (
         s.completedAt && dayjs(s.completedAt).isBetween(now.subtract(1, 'day'), now)
     ))?.totalPoints || 0
 
     const allEvents = rs.map((s, index) => {
         totalPoints += s.points
 
-        const pointsEarned = calculatePoints(s, firstSegment.startAt, allStudies)
+        const pointsEarned = calculatePoints(s, firstSegment.startAt, studies)
         const achieved = pointsEarned >= totalPoints
         const isCurrent = now.isBetween(s.startAt, s.endAt)
 
@@ -92,8 +92,8 @@ export const useRewardsSchedule = () => {
     // earned points cannot be greater than total points
     const pointsEarned = useMemo(() => Math.min(
         totalPoints,
-        rewardPointsEarned(rs, allStudies)
-    ), [rs, totalPoints, allStudies])
+        rewardPointsEarned(rs, studies)
+    ), [rs, totalPoints, studies])
 
     return {
         schedule: allEvents,
@@ -118,7 +118,6 @@ export const useCreateReward = () => {
     return useMutation({
         mutationFn: async (addReward: AddReward) => await api.createReward({ addReward }),
         onSuccess: async (data) => {
-            console.log(data)
             await queryClient.invalidateQueries({ queryKey: ['fetchRewards'] })
             return data
         },
