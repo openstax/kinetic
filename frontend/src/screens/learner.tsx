@@ -15,7 +15,7 @@ import { IconSearch, IconX } from '@tabler/icons-react';
 import { groupBy } from 'lodash';
 import { colors } from '@theme'
 import { useMemo } from 'react';
-import { orderBy, uniqBy } from 'lodash-es';
+import { orderBy, sortBy, uniqBy } from 'lodash-es';
 
 const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
@@ -40,7 +40,6 @@ const HighlightedStudies: FC = () => {
 
 const LearnerDashboard = () => {
     const env = useEnvironment()
-
 
     if (!env.isEligible) {
         return <UnsupportedCountryModal />
@@ -206,8 +205,8 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
         return [
             orderBy(
                 (uniqBy(filteredStudies.map(fs => fs.learningPath), (lp) => lp?.label)),
-                ['completed'],
-                ['asc']
+                ['completed', 'order'],
+                ['asc', 'asc']
             ),
             groupBy(filteredStudies, (study) => study.learningPath?.label),
         ]
@@ -219,7 +218,8 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
         <Stack gap='lg' data-testid='studies-listing'>
             {learningPaths.map(learningPath => {
                 if (!learningPath) return null
-                const studies = studiesByLearningPath[learningPath.label]
+                const studies = sortBy(studiesByLearningPath[learningPath.label], (study) => !!study.completedAt)
+
                 return (
                     <Stack key={learningPath.label}>
                         <Group gap='sm'>

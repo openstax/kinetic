@@ -63,9 +63,10 @@ class Api::V1::Researcher::StagesOpenApi
       key :type, :number
       key :description, 'How many days after previous stage will this become available'
     end
-    property :is_completed do
-      key :type, :boolean
-      key :description, 'Has the stage been completed'
+    property :completed_at do
+      key :type, :string
+      key :format, 'date-time'
+      key :description, 'When the stage was completed by the participant'
       key :readOnly, true
     end
     property :is_launchable do

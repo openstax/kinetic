@@ -34,7 +34,11 @@ export const TopNavBar: FCWOC<TopNavBarProps> = ({ children, className }) => {
                         <NavbarLogoLink />
                         {children}
                         <Box gap="xlarge" align="center">
+                            <Link to="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
+                                Dashboard
+                            </Link>
                             <DesktopResearcherLinks />
+
                             <NavMenu />
                         </Box>
                     </Box>
@@ -52,10 +56,6 @@ const DesktopResearcherLinks = () => {
 
     return (
         <>
-            <Link to="/studies" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>
-                Studies
-            </Link>
-
             {/* TODO Put this back in one day when enclaves are ready */}
             {/*<Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>*/}
             {/*    Analysis*/}

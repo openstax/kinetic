@@ -39,6 +39,12 @@ export interface LearningPath {
      */
     id?: number;
     /**
+     * The learning path rendering order
+     * @type {number}
+     * @memberof LearningPath
+     */
+    order?: number;
+    /**
      * Learning path label
      * @type {string}
      * @memberof LearningPath
@@ -52,16 +58,16 @@ export interface LearningPath {
     description: string;
     /**
      * Level 1 metadata
-     * @type {string}
+     * @type {Array<string>}
      * @memberof LearningPath
      */
-    level1Metadata?: string;
+    level1Metadata?: Array<string>;
     /**
      * Level 2 metadata
-     * @type {string}
+     * @type {Array<string>}
      * @memberof LearningPath
      */
-    level2Metadata?: string;
+    level2Metadata?: Array<string>;
     /**
      * Open badge factory badge_id value
      * @type {string}
@@ -110,6 +116,7 @@ export function LearningPathFromJSONTyped(json: any, ignoreDiscriminator: boolea
     return {
         
         'id': !exists(json, 'id') ? undefined : json['id'],
+        'order': !exists(json, 'order') ? undefined : json['order'],
         'label': json['label'],
         'description': json['description'],
         'level1Metadata': !exists(json, 'level_1_metadata') ? undefined : json['level_1_metadata'],
@@ -131,6 +138,7 @@ export function LearningPathToJSON(value?: LearningPath | null): any {
     return {
         
         'id': value.id,
+        'order': value.order,
         'label': value.label,
         'description': value.description,
         'level_1_metadata': value.level1Metadata,

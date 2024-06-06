@@ -27,8 +27,8 @@ module Api::V1::Bindings
     # How many days after previous stage will this become available
     attr_accessor :available_after_days
 
-    # Has the stage been completed
-    attr_accessor :is_completed
+    # When the stage was completed by the participant
+    attr_accessor :completed_at
 
     # Can the stage be launched
     attr_accessor :is_launchable
@@ -77,7 +77,7 @@ module Api::V1::Bindings
         :'title' => :'title',
         :'description' => :'description',
         :'available_after_days' => :'available_after_days',
-        :'is_completed' => :'is_completed',
+        :'completed_at' => :'completed_at',
         :'is_launchable' => :'is_launchable',
         :'config' => :'config',
         :'duration_minutes' => :'duration_minutes',
@@ -99,7 +99,7 @@ module Api::V1::Bindings
         :'title' => :'String',
         :'description' => :'String',
         :'available_after_days' => :'Float',
-        :'is_completed' => :'Boolean',
+        :'completed_at' => :'Time',
         :'is_launchable' => :'Boolean',
         :'config' => :'Object',
         :'duration_minutes' => :'Float',
@@ -146,8 +146,8 @@ module Api::V1::Bindings
         self.available_after_days = attributes[:'available_after_days']
       end
 
-      if attributes.key?(:'is_completed')
-        self.is_completed = attributes[:'is_completed']
+      if attributes.key?(:'completed_at')
+        self.completed_at = attributes[:'completed_at']
       end
 
       if attributes.key?(:'is_launchable')
@@ -222,7 +222,7 @@ module Api::V1::Bindings
           title == o.title &&
           description == o.description &&
           available_after_days == o.available_after_days &&
-          is_completed == o.is_completed &&
+          completed_at == o.completed_at &&
           is_launchable == o.is_launchable &&
           config == o.config &&
           duration_minutes == o.duration_minutes &&
@@ -240,7 +240,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [order, title, description, available_after_days, is_completed, is_launchable, config, duration_minutes, points, feedback_types, status].hash
+      [order, title, description, available_after_days, completed_at, is_launchable, config, duration_minutes, points, feedback_types, status].hash
     end
 
     # Builds the object from hash

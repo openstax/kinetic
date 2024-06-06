@@ -18,6 +18,7 @@ module MockingHelpers
       name: 'mock name',
       id: 'mock id',
       description: 'mock description',
+      criteria_html: 'mock criteria',
       image: 'mock image',
       tags: %w[mock tags]
     })

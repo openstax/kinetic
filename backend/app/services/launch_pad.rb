@@ -55,6 +55,8 @@ class LaunchPad
       launched_study.completed! if stage.is_last?
     end
 
+    notify_if_learning_path_completed
+
     launched_study
   end
 
@@ -70,6 +72,15 @@ class LaunchPad
 
   attr_reader :study_id
   attr_reader :user_id
+
+  def notify_if_learning_path_completed
+    return unless @study.learning_path&.completed?(@user)
+
+    user_email = UserInfo.for_uuid(@user.id)['email_address']
+    return unless user_email.present? && @study.learning_path.badge_id.present?
+
+    OpenBadgeApi.instance.issue_badge(@study.learning_path.badge_id, [user_email])
+  end
 
   def study
     @study ||= Study.find(study_id)
