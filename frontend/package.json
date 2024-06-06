@@ -9,7 +9,7 @@
     "build": "bin/env vite build",
     "testserver": "bin/env vite --strictPort",
     "serve": "bin/env vite preview",
-    "test": "bin/env playwright test",
+    "test": "playwright test",
     "test:watch": "chokidar 'specs/*.ts' --initial bin/env -c 'yarn run playwright test {path}'",
     "test:debug": "PWDEBUG=1 yarn run test --workers=1",
     "lint": "eslint src",
@@ -17,7 +17,6 @@
     "typecheck": "tsc --skipLibCheck --noEmit"
   },
   "dependencies": {
-    "@analytics/google-analytics": "^0.5.3",
     "@analytics/google-tag-manager": "^0.5.2",
     "@emotion/core": "^11.0.0",
     "@emotion/css": "^11.10.0",

@@ -32,16 +32,6 @@ export const goToPage = async ({ page, path }: goToPageArgs) => {
     await page.goto(url)
 }
 
-export const logout = async ({ page }: { page: Page }) => {
-    await page.goto(TC.ORIGIN)
-    await page.waitForFunction(() => (window as any)._TEST_METHODS)
-    await page.evaluate(() => {
-        return (window as any)._TEST_METHODS?.logout() || Promise.resolve()
-    })
-    await page.goto(TC.ORIGIN)
-    await page.waitForSelector('testId=login-link')
-}
-
 export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin }) => {
     await page.goto('http://localhost:4000/dev/user')
     await page.waitForSelector('.dev-console');
