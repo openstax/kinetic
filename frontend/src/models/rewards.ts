@@ -1,7 +1,6 @@
-import { AddReward, RewardsScheduleSegment, UpdateRewardRequest } from '@api'
+import { AddReward, ParticipantStudy, RewardsScheduleSegment, UpdateRewardRequest } from '@api'
 import { useApi } from '@lib'
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { useParticipantStudies } from '../screens/learner/studies';
 
 export interface RewardsSegment extends RewardsScheduleSegment {
     totalPoints: number
@@ -10,8 +9,7 @@ export interface RewardsSegment extends RewardsScheduleSegment {
     index: number
 }
 
-export const calculateTotalPoints = () => {
-    const { studies } = useParticipantStudies()
+export const calculateTotalPoints = (studies: ParticipantStudy[]) => {
 
     return studies.reduce((points, study) => {
         if (study.completedAt && 
