@@ -32,18 +32,6 @@ export interface RewardsScheduleSegment {
      */
     points: number;
     /**
-     * When the segment starts
-     * @type {Date}
-     * @memberof RewardsScheduleSegment
-     */
-    startAt: Date;
-    /**
-     * When the segment ends
-     * @type {Date}
-     * @memberof RewardsScheduleSegment
-     */
-    endAt: Date;
-    /**
      * A description of the reward
      * @type {string}
      * @memberof RewardsScheduleSegment
@@ -58,8 +46,6 @@ export function instanceOfRewardsScheduleSegment(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "prize" in value;
     isInstance = isInstance && "points" in value;
-    isInstance = isInstance && "startAt" in value;
-    isInstance = isInstance && "endAt" in value;
 
     return isInstance;
 }
@@ -76,8 +62,6 @@ export function RewardsScheduleSegmentFromJSONTyped(json: any, ignoreDiscriminat
         
         'prize': json['prize'],
         'points': json['points'],
-        'startAt': (new Date(json['start_at'])),
-        'endAt': (new Date(json['end_at'])),
         'description': !exists(json, 'description') ? undefined : json['description'],
     };
 }
@@ -93,8 +77,6 @@ export function RewardsScheduleSegmentToJSON(value?: RewardsScheduleSegment | nu
         
         'prize': value.prize,
         'points': value.points,
-        'start_at': (value.startAt.toISOString()),
-        'end_at': (value.endAt.toISOString()),
         'description': value.description,
     };
 }
