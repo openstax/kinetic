@@ -5,7 +5,7 @@ class Api::V1::Admin::RewardsController < Api::V1::Admin::BaseController
 
   def index
     render status: :ok, json: Api::V1::Bindings::RewardsListing.new(
-      data: Reward.order(start_at: 'asc').map do |reward|
+      data: Reward.order(id: 'asc').map do |reward|
               reward.to_api_binding(Api::V1::Bindings::Reward)
             end
     )

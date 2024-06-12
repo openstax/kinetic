@@ -15,11 +15,9 @@ import {
     TextInput,
     Title,
 } from '@mantine/core';
-import dayjs from 'dayjs';
 import { useForm, yupResolver } from '@mantine/form';
 import * as yup from 'yup';
 import React, { useEffect, useState } from 'react'
-import { DateInput } from '@mantine/dates';
 
 const EditReward: FC<{ reward?: Reward }> = ({ reward }) => {
     const updateReward = useUpdateReward()
@@ -29,34 +27,20 @@ const EditReward: FC<{ reward?: Reward }> = ({ reward }) => {
         initialValues: {
             prize: reward?.prize || '',
             points: reward?.points || 0,
-            description: reward?.description || '',
-            startAt: reward?.startAt ? new Date(reward.startAt) : '',
-            endAt: reward?.endAt ? new Date(reward.endAt) : '',
-        },
-
-        transformValues: (values) => {
-            return ({
-                ...values,
-                startAt: values.startAt?.toString(),
-                endAt: values.endAt?.toString(),
-            })
+            description: reward?.description || ''
         },
 
         validate: yupResolver(yup.object().shape({
             prize: yup.string().required(),
             points: yup.number().required().min(1),
-            description: yup.string().required(),
-            startAt: yup.date().required(),
-            endAt: yup.date().required(),
+            description: yup.string().required()
         })),
     });
 
     useEffect(() => {
         if (reward) {
             form.setValues({
-                ...reward,
-                startAt: reward?.startAt ? new Date(reward.startAt) : '',
-                endAt: reward?.endAt ? new Date(reward.endAt) : '',
+                ...reward
             })
             form.resetDirty()
         } else {
@@ -91,21 +75,6 @@ const EditReward: FC<{ reward?: Reward }> = ({ reward }) => {
                     <NumberInput placeholder='Points' label='Points' {...form.getInputProps('points')} />
                 </Group>
                 <Textarea placeholder='Description' label='Description' {...form.getInputProps('description')} />
-
-                <Group grow justify='space-between'>
-                    <DateInput placeholder='Starts at'
-                        maxDate={form.values.endAt ? new Date(form.values.endAt) : undefined}
-                        label='Starts at'
-                        clearable
-                        {...form.getInputProps('startAt')}
-                    />
-                    <DateInput placeholder='Ends at'
-                        minDate={form.values.startAt ? new Date(form.values.startAt) : undefined}
-                        label='Ends at'
-                        clearable
-                        {...form.getInputProps('endAt')}
-                    />
-                </Group>
                 <Group justify="flex-end">
                     <Button type="submit" disabled={!form.isDirty() || !form.isValid()}>
                         {reward?.id ? 'Update reward' : 'Create reward'}
@@ -145,10 +114,10 @@ const RewardCard: FC<{
                     <Card.Section>
                         <Group>
                             <Text>{reward.prize}</Text>
-                            <Text>
-                                {dayjs(reward.startAt).format('MMMM D, YYYY')} - {dayjs(reward.endAt).format('MMMM D, YYYY')}
-                            </Text>
                         </Group>
+                    </Card.Section>
+                    <Card.Section>
+                        <Text>Points Required: {reward.points} points</Text>
                     </Card.Section>
                     <Card.Section>
                         <Text>Description: {reward.description}</Text>
@@ -187,7 +156,7 @@ export function AdminRewards() {
                     </Button>
                     <Stack p='md' style={{ border: '1px solid black' }} data-testid='rewards-list'>
                         {rewards.map(reward => (
-                            <RewardCard reward={reward} active={currentReward?.id == reward.id} setCurrentReward={setCurrentReward} key={`${reward.prize}${reward.startAt}`} />
+                            <RewardCard reward={reward} active={currentReward?.id == reward.id} setCurrentReward={setCurrentReward} key={`${reward.prize}${reward.id}`} />
                         ))}
                     </Stack>
                 </Stack>

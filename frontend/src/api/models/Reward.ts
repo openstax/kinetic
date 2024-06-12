@@ -43,18 +43,6 @@ export interface Reward {
      * @memberof Reward
      */
     points?: number;
-    /**
-     * When the reward starts to be active
-     * @type {string}
-     * @memberof Reward
-     */
-    startAt?: string;
-    /**
-     * When the reward stops being active
-     * @type {string}
-     * @memberof Reward
-     */
-    endAt?: string;
 }
 
 /**
@@ -80,8 +68,6 @@ export function RewardFromJSONTyped(json: any, ignoreDiscriminator: boolean): Re
         'prize': !exists(json, 'prize') ? undefined : json['prize'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'points': !exists(json, 'points') ? undefined : json['points'],
-        'startAt': !exists(json, 'start_at') ? undefined : json['start_at'],
-        'endAt': !exists(json, 'end_at') ? undefined : json['end_at'],
     };
 }
 
@@ -98,8 +84,6 @@ export function RewardToJSON(value?: Reward | null): any {
         'prize': value.prize,
         'description': value.description,
         'points': value.points,
-        'start_at': value.startAt,
-        'end_at': value.endAt,
     };
 }
 
