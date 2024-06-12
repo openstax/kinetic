@@ -21,16 +21,6 @@ class Api::V1::Admin::RewardsOpenApi
         key :type, :number
         key :description, 'How many points are required to be eligible for the reward'
       end
-      property :start_at do
-        key :type, :string
-        key :format, 'datetime'
-        key :description, 'When the reward starts to be active'
-      end
-      property :end_at do
-        key :type, :string
-        key :format, 'datetime'
-        key :description, 'When the reward stops being active'
-      end
     end
     schema :RewardsListing do
       key :required, %w[data]

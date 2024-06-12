@@ -586,8 +586,6 @@ CREATE TABLE public.rewards (
     id bigint NOT NULL,
     prize text NOT NULL,
     points integer NOT NULL,
-    start_at timestamp with time zone NOT NULL,
-    end_at timestamp with time zone NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL,
     description character varying
@@ -1483,7 +1481,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240424195154'),
 ('20240415134102'),
 ('20240411150309'),
-('20240229135718'),
 ('20240222135611'),
 ('20231212191239'),
 ('20231120172017'),
