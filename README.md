@@ -81,6 +81,14 @@ Then you can run the following commands to bring up the database terminal:
 rails c
 ```
 
+### Running Tests
+
+Run the following command to execute the rspec tests:
+
+```bash
+docker compose exec api bundle exec rspec
+```
+
 ### Deploying Kinetic
 
 Kinetic is currently hosted on Heroku using the Docker integration.  To deploy the application you need to add a git remote per the [heroku  instructions](https://devcenter.heroku.com/articles/git)
