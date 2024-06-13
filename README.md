@@ -89,6 +89,12 @@ Run the following command to execute the rspec tests:
 docker compose exec api bundle exec rspec
 ```
 
+Run the following command in the backend terminal to execute the ruby lint tests:
+
+```bash
+bundle exec rubocop
+```
+
 ### Deploying Kinetic
 
 Kinetic is currently hosted on Heroku using the Docker integration.  To deploy the application you need to add a git remote per the [heroku  instructions](https://devcenter.heroku.com/articles/git)
