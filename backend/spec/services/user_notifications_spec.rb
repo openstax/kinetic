@@ -50,34 +50,6 @@ RSpec.describe UserNotifications, type: :mailer do
     end
   end
 
-  it 'delivers new prize cycle' do
-    Reward.create!(prize: 'A testing session', points: 1, start_at: Date.today, end_at: 1.month.from_now)
-    assert_emails 1 do
-      described_class.deliver_new_prize_cycle
-    end
-    email = ActionMailer::Base.deliveries.last
-    expect(email.subject).to match 'A new cycle of learning awaits'
-    body = Railgun.transform_for_mailgun(email)
-    expect(body).to include('v:full_name')
-    expect(body['v:full_name']).to eq user1_info.full_name
-  end
-
-  it 'delivers prize cycle deadline' do
-    Reward.create!(prize: 'A testing session', points: 1, start_at: Date.yesterday, end_at: 3.days.from_now + 6.hours)
-    assert_emails 1 do
-      described_class.deliver_prize_cycle_deadline
-      email = ActionMailer::Base.deliveries.last
-      expect(email.subject).to match "Don't miss out on an exciting prize!"
-    end
-    user1_study1_launch_pad.launch
-    user1_study1_launch_pad.land
-
-    assert_emails 0 do
-      described_class.deliver_prize_cycle_deadline
-    end
-
-  end
-
   it 'delivers new studies' do
     past_study # force at least one study to exist
     assert_emails 1 do

@@ -5,8 +5,6 @@ class UserNotifications
 
     def deliver!
       deliver_welcomes
-      deliver_new_prize_cycle
-      deliver_prize_cycle_deadline
       deliver_new_studies
       deliver_additional_session
     end
@@ -24,43 +22,6 @@ class UserNotifications
 
       UserInfo.for_uuids(uuids).each_value do |user|
         UserMailer.with(user:).welcome.deliver
-      end
-    end
-
-    # GIVEN the user has opted-in to receive new prize cycle emails
-    # WHEN a new reward milestone begins (for each milestone within an entire cycle)
-    def deliver_new_prize_cycle
-      users = users_with_emails_for('prize_cycle')
-      return unless users.any?
-
-      reward = Reward.find_by(start_at: yesterday)
-      return unless reward.present?
-
-      users.each_value do |user|
-        UserMailer.with(user:, reward:).new_prize_cycle.deliver
-      end
-    end
-
-    # GIVEN the user has opted-in to receive prize cycle deadline emails
-    # WHEN an upcoming deadline is due in 72h AND the user hasn't qualified for it yet
-    def deliver_prize_cycle_deadline
-      users = users_with_emails_for('prize_cycle')
-      return unless users.any?
-
-      reward = Reward.find_by(end_at: near_future)
-      return unless reward.present?
-
-      first_reward = Reward.order(:start_at).first
-      points_needed = Reward.where('end_at <= ?', reward.end_at).sum(:points)
-
-      users.each do |uuid, user|
-        points = LaunchedStudy
-                   .where('completed_at >= ? and user_id = ?', first_reward.start_at, uuid)
-                   .joins(study: :stages)
-                   .sum('stages.points')
-        if points < points_needed
-          UserMailer.with(user:, reward:).upcoming_prize_cycle_deadline.deliver
-        end
       end
     end
 

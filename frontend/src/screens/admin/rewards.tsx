@@ -27,20 +27,20 @@ const EditReward: FC<{ reward?: Reward }> = ({ reward }) => {
         initialValues: {
             prize: reward?.prize || '',
             points: reward?.points || 0,
-            description: reward?.description || ''
+            description: reward?.description || '',
         },
 
         validate: yupResolver(yup.object().shape({
             prize: yup.string().required(),
             points: yup.number().required().min(1),
-            description: yup.string().required()
+            description: yup.string().required(),
         })),
     });
 
     useEffect(() => {
         if (reward) {
             form.setValues({
-                ...reward
+                ...reward,
             })
             form.resetDirty()
         } else {
