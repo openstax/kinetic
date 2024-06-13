@@ -54,7 +54,7 @@ RSpec.describe 'Reward', api: :v1 do
         api_post path, params: {
           reward: {
             prize: 'a test',
-            points: 1
+            points: 1,
             description: 'Test description'
           }
         }
