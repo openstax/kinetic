@@ -210,9 +210,8 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                 return study.learningPath?.label
             }),
             groupBy(filter(filteredStudies, (study) => { study.completedAt !== null }), (study) => {
-                console.log(study)
                 return study.learningPath?.label
-            })
+            }),
         ]
     }, [filteredStudies])
 
@@ -237,8 +236,8 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
     }
 
     return (
-        <Container style={{ display: 'flex', flexDirection: 'row', width: '100%',}}>
-            <Box style={{ width:'25%' }}>
+        <Container style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+            <Box style={{ width: '25%' }}>
                 {learningPaths.map(learningPath => {
                     if (!learningPath) return null
                     return (
@@ -251,7 +250,7 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                             onClick={() => scrollToLearningPath(learningPath.label)}
                             onMouseEnter={() => handleMouseEnter(learningPath.label)}
                             onMouseLeave={handleMouseLeave}
-                            >
+                        >
                             <Text>{learningPath.label}</Text>
                             <Text>
                                 {completedStudiesByLearningPath[learningPath.label]? completedStudiesByLearningPath[learningPath.label].length : 0}
@@ -262,7 +261,7 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                     )
                 })}
             </Box>
-            <Box style={{ width: '75%', gap:'lg'}} data-testid='studies-listing'>
+            <Box style={{ width: '75%', gap: 'lg' }} data-testid='studies-listing'>
                 {learningPaths.map(learningPath => {
                     if (!learningPath) return null
                     const studies = sortBy(studiesByLearningPath[learningPath.label], (study) => !!study.completedAt)
@@ -271,7 +270,7 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                             style={{ width: '100%' }}
                             key={learningPath.label}
                             ref={(el) => learningPathRefs.current[learningPath.label] = el}
-                            >
+                        >
                             <Group gap='sm'>
                                 <Title order={3}>
                                     {learningPath.label}
