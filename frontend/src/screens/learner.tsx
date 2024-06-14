@@ -1,4 +1,4 @@
-import { React } from '@common'
+import { React, useRef, useState } from '@common'
 import { ParticipantStudy } from '@api'
 import { Footer, TopNavBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
@@ -12,7 +12,7 @@ import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
 import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title } from '@mantine/core';
 import { IconSearch, IconX } from '@tabler/icons-react';
-import { groupBy } from 'lodash';
+import { groupBy, filter } from 'lodash';
 import { colors } from '@theme'
 import { useMemo } from 'react';
 import { orderBy, sortBy, uniqBy } from 'lodash-es';
@@ -172,7 +172,6 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
             <Swiper
                 slidesPerView={3}
                 simulateTouch={true}
-                freeMode={true}
                 pagination={{
                     enabled: true,
                     dynamicBullets: true,
@@ -182,7 +181,6 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
                 style={{
                     marginBottom: '1rem',
                     paddingBottom: '2rem',
-                    paddingLeft: '2rem',
                     paddingRight: '2rem',
                 }}
                 navigation={{
@@ -201,45 +199,98 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
 }
 
 export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = ({ filteredStudies }) => {
-    const [learningPaths, studiesByLearningPath] = useMemo(() => {
+    const [learningPaths, studiesByLearningPath, completedStudiesByLearningPath] = useMemo(() => {
         return [
             orderBy(
                 (uniqBy(filteredStudies.map(fs => fs.learningPath), (lp) => lp?.label)),
                 ['completed', 'order'],
                 ['asc', 'asc']
             ),
-            groupBy(filteredStudies, (study) => study.learningPath?.label),
+            groupBy(filteredStudies, (study) => {
+                return study.learningPath?.label
+            }),
+            groupBy(filter(filteredStudies, (study) => { study.completedAt !== null }), (study) => {
+                console.log(study)
+                return study.learningPath?.label
+            })
         ]
     }, [filteredStudies])
 
     const isMobile = useIsMobileDevice()
 
-    return (
-        <Stack gap='lg' data-testid='studies-listing'>
-            {learningPaths.map(learningPath => {
-                if (!learningPath) return null
-                const studies = sortBy(studiesByLearningPath[learningPath.label], (study) => !!study.completedAt)
+    const learningPathRefs = useRef({})
 
-                return (
-                    <Stack key={learningPath.label}>
-                        <Group gap='sm'>
-                            <Title order={3}>
-                                {learningPath.label}
-                            </Title>
-                            <Text span>|</Text>
-                            <Title order={3} fw='300'>
-                                {learningPath.description}
-                            </Title>
-                            {learningPath.completed ? <Badge c={colors.text} color={colors.green}>Completed</Badge> : null}
+    const scrollToLearningPath = (learningPath: string) => {
+        if(learningPathRefs.current[learningPath]) {
+            learningPathRefs.current[learningPath].scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+    }
+
+    const [hoveredLearningPath, setHoveredLearningPath] = useState<string | null>(null)
+
+    const handleMouseEnter = (learningPath: string) => {
+        setHoveredLearningPath(learningPath)
+    }
+
+    const handleMouseLeave = () => {
+        setHoveredLearningPath(null)
+    }
+
+    return (
+        <Container style={{ display: 'flex', flexDirection: 'row', width: '100%',}}>
+            <Box style={{ width:'25%' }}>
+                {learningPaths.map(learningPath => {
+                    if (!learningPath) return null
+                    return (
+                        <Group 
+                            key={learningPath.label}
+                            style={{ cursor: 'pointer', 
+                                color: hoveredLearningPath === learningPath.label ? colors.blue : colors.gray70,
+                                padding: '0.5rem',
+                            }}
+                            onClick={() => scrollToLearningPath(learningPath.label)}
+                            onMouseEnter={() => handleMouseEnter(learningPath.label)}
+                            onMouseLeave={handleMouseLeave}
+                            >
+                            <Text>{learningPath.label}</Text>
+                            <Text>
+                                {completedStudiesByLearningPath[learningPath.label]? completedStudiesByLearningPath[learningPath.label].length : 0}
+                                /
+                                {studiesByLearningPath[learningPath.label].length}
+                            </Text>
                         </Group>
-                        {isMobile ?
-                            <MobileStudyCards studies={studies} /> :
-                            <DesktopStudyCards studies={studies} />
-                        }
-                    </Stack>
-                )
-            })}
-        </Stack>
+                    )
+                })}
+            </Box>
+            <Box style={{ width: '75%', gap:'lg'}} data-testid='studies-listing'>
+                {learningPaths.map(learningPath => {
+                    if (!learningPath) return null
+                    const studies = sortBy(studiesByLearningPath[learningPath.label], (study) => !!study.completedAt)
+                    return (
+                        <Stack 
+                            style={{ width: '100%' }}
+                            key={learningPath.label}
+                            ref={(el) => learningPathRefs.current[learningPath.label] = el}
+                            >
+                            <Group gap='sm'>
+                                <Title order={3}>
+                                    {learningPath.label}
+                                </Title>
+                                <Text span>|</Text>
+                                <Title order={3} fw='300'>
+                                    {learningPath.description}
+                                </Title>
+                                {learningPath.completed ? <Badge c={colors.text} color={colors.green}>Completed</Badge> : null}
+                            </Group>
+                            {isMobile ?
+                                <MobileStudyCards studies={studies} /> :
+                                <DesktopStudyCards studies={studies} />
+                            }
+                        </Stack>
+                    )
+                })}
+            </Box>
+        </Container>
     )
 }
 
