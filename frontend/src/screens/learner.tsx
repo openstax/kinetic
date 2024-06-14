@@ -224,9 +224,7 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
     const learningPathRefs = useRef<LearningPathRefs>({})
 
     const scrollToLearningPath = (learningPath: string) => {
-        if(learningPathRefs.current[learningPath]) {
-            learningPathRefs.current[learningPath].scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
+        learningPathRefs.current[learningPath]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
 
     const [hoveredLearningPath, setHoveredLearningPath] = useState<string | null>(null)
