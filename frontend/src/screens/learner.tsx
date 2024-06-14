@@ -209,7 +209,7 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
             groupBy(filteredStudies, (study) => {
                 return study.learningPath?.label
             }),
-            groupBy(filter(filteredStudies, (study) => { study.completedAt !== null }), (study) => {
+            groupBy(filter(filteredStudies, (study) => study.completedAt != null), (study) => {
                 return study.learningPath?.label
             }),
         ]
@@ -217,7 +217,11 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
 
     const isMobile = useIsMobileDevice()
 
-    const learningPathRefs = useRef({})
+    type LearningPathRefs = {
+        [key: string]: HTMLElement | null;
+    };
+
+    const learningPathRefs = useRef<LearningPathRefs>({})
 
     const scrollToLearningPath = (learningPath: string) => {
         if(learningPathRefs.current[learningPath]) {
