@@ -233,20 +233,25 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
     }
 
     return (
-        <Container style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-            <Box style={{ width: '25%' }}>
+        <Flex direction='row' w='100%'>
+            <Flex 
+                w='25%' 
+                p='1rem 1.5rem 1.5rem 2.5rem'
+                justify-content='center'
+                direction='column'
+            >
                 {learningPaths.map(learningPath => {
                     if (!learningPath) return null
                     return (
-                        <Group 
+                        <Flex 
                             key={learningPath.label}
-                            style={{ cursor: 'pointer', 
-                                color: hoveredLearningPath === learningPath.label ? colors.blue : colors.gray70,
-                                padding: '0.5rem',
-                            }}
+                            style={{ cursor: 'pointer' }}
+                            c={ hoveredLearningPath === learningPath.label ? colors.blue : colors.gray70 }
                             onClick={() => scrollToLearningPath(learningPath.label)}
                             onMouseEnter={() => handleMouseEnter(learningPath.label)}
                             onMouseLeave={handleMouseLeave}
+                            justify='space-between'
+                            mb='1rem'
                         >
                             <Text>{learningPath.label}</Text>
                             <Text>
@@ -254,17 +259,17 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                                 /
                                 {studiesByLearningPath[learningPath.label].length}
                             </Text>
-                        </Group>
+                        </Flex>
                     )
                 })}
-            </Box>
-            <Box style={{ width: '75%', gap: 'lg' }} data-testid='studies-listing'>
+            </Flex>
+            <Stack w='75%'  gap='lg' data-testid='studies-listing'>
                 {learningPaths.map(learningPath => {
                     if (!learningPath) return null
                     const studies = sortBy(studiesByLearningPath[learningPath.label], (study) => !!study.completedAt)
                     return (
                         <Stack 
-                            style={{ width: '100%' }}
+                            w='100%'
                             key={learningPath.label}
                             id={learningPath.label}
                         >
@@ -285,8 +290,8 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                         </Stack>
                     )
                 })}
-            </Box>
-        </Container>
+            </Stack>
+        </Flex>
     )
 }
 
