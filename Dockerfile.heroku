@@ -4,10 +4,8 @@ FROM node:20-slim as node
 # if any are added, they must also be present in frontend/build/env
 # These are set in heroku.yml, not via heroku config:set
 ARG SENTRY_DSN
-ARG PROD_GTAG_ID
-ARG PROD_GA_UA
-ARG TEST_GTAG_ID
-ARG TEST_GA_UA
+ARG GTAG_ID
+
 WORKDIR /code/frontend
 
 COPY frontend/package.json ./
@@ -35,8 +33,6 @@ COPY backend/Gemfile Gemfile
 COPY backend/Gemfile.lock Gemfile.lock
 RUN bundle install
 
-ARG SENTRY_DSN
-ARG MG_API_KEY
 ENV RUBY_ENV=production
 ENV RAILS_LOG_TO_STDOUT=true
 ENV SENTRY_DSN=$SENTRY_DSN

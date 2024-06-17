@@ -25,10 +25,7 @@ declare global {
             IS_LOCAL: boolean
             VITE_SENTRY_DSN: string
             VITE_API_ADDRESS: string
-            VITE_PROD_GTAG_ID?: string
-            VITE_PROD_GA_UA?: string
-            VITE_TEST_GTAG_ID?: string
-            VITE_TEST_GA_UA?: string
+            VITE_GTAG_ID?: string
         };
     }
 }

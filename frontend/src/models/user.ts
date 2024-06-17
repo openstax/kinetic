@@ -48,15 +48,6 @@ export class User {
             this.update(payload)
         }
     }
-
-    async logout() {
-        if (!ENV.IS_DEV_MODE) return
-        await fetch(`${ENV.API_ADDRESS}/development/users/log_out`, {
-            method: 'DELETE', credentials: 'include',
-        })
-        this.id = ''
-        this.isAdmin = this.isResearcher = false
-    }
 }
 
 export const logout =  async () => {
@@ -73,7 +64,5 @@ export const loginAsUser = async (id: string) => {
 }
 
 export const ANON_USER = new User()
-window._TEST_METHODS = {}
-window._TEST_METHODS.logout = logout
 window._MODELS = window._MODELS || {}
 window._MODELS.user = ANON_USER
