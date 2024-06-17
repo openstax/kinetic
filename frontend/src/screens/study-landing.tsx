@@ -1,28 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { Navigate, NavLink, useParams } from 'react-router-dom';
-import { Notification, MantineProvider, CloseButton } from '@mantine/core';
-import '@mantine/core/styles.css';
-import { colors } from '@theme';
-import { LandStudyAbortedEnum, LandStudyRequest, ParticipantStudy } from '@api';
-import { ErrorPage, LoadingAnimation } from '@components';
-import { useApi, useEnvironment, useQueryParam } from '@lib';
-import { BackgroundImage, Box, Button, Container, Flex, Group, Modal, Space, Stack, Text, Title } from '@mantine/core';
-import Waves from '@images/waves.svg';
-import { launchStudy, RewardsSegment, useRewardsSchedule } from '@models';
-import { useLandStudy, useParticipantStudies } from './learner/studies';
-import dayjs from 'dayjs';
-import { noop } from 'lodash-es';
+import React, { useState, useEffect } from "react";
+import { Navigate, NavLink, useParams } from "react-router-dom";
+import "@mantine/core/styles.css";
+import { colors } from "@theme";
+import { LandStudyAbortedEnum, LandStudyRequest, ParticipantStudy } from "@api";
+import { ErrorPage, LoadingAnimation } from "@components";
+import { useApi, useEnvironment, useQueryParam } from "@lib";
+import {
+    BackgroundImage,
+    Box,
+    Button,
+    Container,
+    Flex,
+    Group,
+    Modal,
+    Space,
+    Stack,
+    Text,
+    Title,
+} from "@mantine/core";
+import Waves from "@images/waves.svg";
+import { launchStudy, RewardsSegment, useRewardsSchedule } from "@models";
+import { useLandStudy, useParticipantStudies } from "./learner/studies";
+import dayjs from "dayjs";
+import { showResearcherNotification } from "../components/notifications/researcher-notification";
+import { noop } from "lodash-es";
 
 const Points: React.FC<{ study: ParticipantStudy }> = ({ study }) => {
-    const completed = study.stages?.find(stage => stage.isCompleted) || study.completedAt
-    if (!completed) return null
+    const completed =
+        study.stages?.find((stage) => stage.isCompleted) || study.completedAt;
+    if (!completed) return null;
 
     return (
-        <Title order={2} c='white'>
+        <Title order={2} c="white">
             You just earned {study.totalPoints} points!
         </Title>
-    )
-}
+    );
+};
 
 export default function StudyLanding() {
     const { studyId } = useParams<string>();
@@ -30,16 +43,15 @@ export default function StudyLanding() {
     const env = useEnvironment();
 
     const [error, setError] = useState<any>(null);
-    const consent = useQueryParam('consent') != 'false';
-    const abort = useQueryParam('abort') == 'true';
-    const md = useQueryParam('md') || {};
+    const consent = useQueryParam("consent") != "false";
+    const abort = useQueryParam("abort") == "true";
+    const md = useQueryParam("md") || {};
     const { demographicSurvey } = useParticipantStudies();
     const { schedule } = useRewardsSchedule();
-    const nextReward = schedule.find(rewardSegment => !rewardSegment.achieved && rewardSegment.isFuture);
+    const nextReward = schedule.find(
+        (rewardSegment) => !rewardSegment.achieved && rewardSegment.isFuture
+    );
     const landStudy = useLandStudy();
-
-    // State for controlling the alert visibility
-    const [showAlert, setShowAlert] = useState(false);
 
     useEffect(() => {
         const params: LandStudyRequest = {
@@ -48,27 +60,21 @@ export default function StudyLanding() {
             consent: consent,
         };
         if (abort) {
-            params['aborted'] = LandStudyAbortedEnum.Refusedconsent;
+            params["aborted"] = LandStudyAbortedEnum.Refusedconsent;
         }
 
         landStudy.mutate(params, {
-            onSuccess: setStudy,
-            onError: setError,
+            onSuccess: (data) => {
+                setStudy(data);
+                showResearcherNotification(
+                    `Way to go, you just earned ${data.totalPoints} points!`
+                );
+            },
         });
-
-        // Set a timer to show the notification after 1200 milli-seconds
-        const timer = setTimeout(() => {
-            setShowAlert(true);
-        }, 1200);
-
-        return () => {
-            clearTimeout(timer);
-        };
     }, []);
 
-    // Learners who don't consent won't earn points, so we'll just redirect them home
     if (!consent) {
-        return <Navigate to='/studies' />;
+        return <Navigate to="/studies" />;
     }
 
     if (!study) {
@@ -79,139 +85,85 @@ export default function StudyLanding() {
         return <ErrorPage error={error} />;
     }
 
-    const notificationStyles = {
-        position: 'fixed',
-        top: '20px',
-        right: '20px', 
-        zIndex: 9999,
-        borderRadius: '8px', // Rounded corners for a nice look
-        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Shadow for a raised effect
-        padding: '20px', // Add padding for better spacing
-        boxSizing: 'border-box',  
-        fontFamily: 'Arial, sans-serif', // Set custom font family
-        fontSize: '16px', // Set custom font size
-        fontWeight: 'bold', // Set font weight to bold
-        border: '2px solid rgba(60, 179, 113, 0.8)', // Add border with the same color as background
-    };
-
     return (
-        <MantineProvider>
-            <style>
-                {`
-                    @keyframes slideInRight {
-                        0% {
-                            opacity: 0;
-                            transform: translateX(100%);
-                        }
-                        100% {
-                            opacity: 1;
-                            transform: translateX(0);
-                        }
-                    }
-
-                    @keyframes slideOutRight {
-                        0% {
-                            opacity: 1;
-                            transform: translateX(0);
-                        }
-                        100% {
-                            opacity: 0;
-                            transform: translateX(100%);
-                        }
-                    }
-
-                    .notification-enter {
-                        animation: slideInRight 0.5s forwards;
-                        position: fixed;
-                        right: 20px;
-                        top: 20px;
-                        z-index: 1000;
-                        width:55%;
-                    }
-
-                    .notification-exit {
-                        animation: slideOutRight 0.5s forwards;
-                        position: fixed;
-                        right: 20px;
-                        top: 20px;
-                        z-index: 1000;
-                        width:55%;
-                    }
-                `}
-            </style>
-            <Container>
-                <Modal opened={true} onClose={noop} centered size='75%' closeOnClickOutside={false} closeOnEscape={false} withCloseButton={false} styles={{
+        <Container>
+            <Modal
+                opened={true}
+                onClose={noop}
+                centered
+                size="75%"
+                closeOnClickOutside={false}
+                closeOnEscape={false}
+                withCloseButton={false}
+                styles={{
                     body: {
                         padding: 0,
                     },
-                }}>
-                    <BackgroundImage src={Waves}>
-                        <Stack
-                            gap='xl'
-                            p='xl'
-                            c='white'
-                            data-analytics-view
-                            data-analytics-nudge="study-complete"
-                            data-nudge-placement="overlay"
-                            data-content-tags={`,learning-path=${study.learningPath?.label},is-new-user=${env.isNewUser},`}
-                        >
-                            <NavLink to={'/studies'}
-                                style={{ alignSelf: 'end', color: 'white', fontWeight: 'bolder' }}
-                                data-testid='view-studies'
-                                data-nudge-action="interacted"
-                            >
-                                Return to Dashboard
-                            </NavLink>
-                            <Stack gap='xl' w='75%'>
-                                <Points study={study} />
-                                <Text size='xl' pt='xl'>
-                                    You’re one step closer - don’t miss out on the chance to qualify for the next reward cycle!
-                                </Text>
-                                <NextPrizeCycle nextReward={nextReward} />
-                                <CompleteProfilePrompt demographicSurvey={demographicSurvey} />
-                                <Space h='xl' />
-                            </Stack>
-                        </Stack>
-                    </BackgroundImage>
-                </Modal>
-                
-                {showAlert && (
-                    <div className="notification-enter">
-                        <Notification
-                            color="teal"
-                            title={<span style={{ fontWeight: 'bold' }}>{`Way to go, you just earned ${study.totalPoints} points!`}</span>}
-                            onClose={() => setShowAlert(false)}
-                            classNames={{
-                                root: 'notification-enter',
-                                exit: 'notification-exit',
+                }}
+            >
+                <BackgroundImage src={Waves}>
+                    <Stack
+                        gap="xl"
+                        p="xl"
+                        c="white"
+                        data-analytics-view
+                        data-analytics-nudge="study-complete"
+                        data-nudge-placement="overlay"
+                        data-content-tags={`,learning-path=${study.learningPath?.label},is-new-user=${env.isNewUser},`}
+                    >
+                        <NavLink
+                            to={"/studies"}
+                            style={{
+                                alignSelf: "end",
+                                color: "white",
+                                fontWeight: "bolder",
                             }}
-                            
-                            style={notificationStyles}
+                            data-testid="view-studies"
+                            data-nudge-action="interacted"
                         >
-                             <Flex >
-                                <Text>Reach 200pts to unlock additional rewards</Text>
-                            </Flex>
-                        </Notification>
-                    </div>
-                )}
-
-            </Container>
-        </MantineProvider>
+                            Return to Dashboard
+                        </NavLink>
+                        <Stack gap="xl" w="75%">
+                            <Points study={study} />
+                            <Text size="xl" pt="xl">
+                                You’re one step closer - don’t miss out on the
+                                chance to qualify for the next reward cycle!
+                            </Text>
+                            <NextPrizeCycle nextReward={nextReward} />
+                            <CompleteProfilePrompt
+                                demographicSurvey={demographicSurvey}
+                            />
+                            <Space h="xl" />
+                        </Stack>
+                    </Stack>
+                </BackgroundImage>
+            </Modal>
+        </Container>
     );
 }
 
-const NextPrizeCycle: React.FC<{ nextReward: RewardsSegment | undefined } > = ({ nextReward }) => {
-    if (!nextReward) return null
+const NextPrizeCycle: React.FC<{ nextReward: RewardsSegment | undefined }> = ({
+    nextReward,
+}) => {
+    if (!nextReward) return null;
 
     return (
-        <Flex direction='column'>
-            <Text size='xl' fw='bolder'>Next Prize Cycle:</Text>
-            <Text size='xl'>Reach {nextReward?.points} points by {dayjs(nextReward.endAt).format('MMM D')} and be one of the lucky winners to earn {nextReward.prize}</Text>
+        <Flex direction="column">
+            <Text size="xl" fw="bolder">
+                Next Prize Cycle:
+            </Text>
+            <Text size="xl">
+                Reach {nextReward?.points} points by{" "}
+                {dayjs(nextReward.endAt).format("MMM D")} and be one of the
+                lucky winners to earn {nextReward.prize}
+            </Text>
         </Flex>
-    )
-}
+    );
+};
 
-const CompleteProfilePrompt: React.FC<{ demographicSurvey: ParticipantStudy | null }> = ({ demographicSurvey }) => {
+const CompleteProfilePrompt: React.FC<{
+    demographicSurvey: ParticipantStudy | null;
+}> = ({ demographicSurvey }) => {
     const api = useApi();
 
     if (!demographicSurvey || !!demographicSurvey.completedAt) return null;
@@ -221,13 +173,22 @@ const CompleteProfilePrompt: React.FC<{ demographicSurvey: ParticipantStudy | nu
     };
 
     return (
-        <Group bg={`${colors.gray10}10`} p='lg' justify='space-between' wrap='nowrap'>
+        <Group
+            bg={`${colors.gray10}10`}
+            p="lg"
+            justify="space-between"
+            wrap="nowrap"
+        >
             <Text>
                 <strong>Bonus: </strong>
-                <span>Get {demographicSurvey?.totalPoints} points now by simply taking {demographicSurvey?.totalDuration} minutes to complete your Kinetic Profile!</span>
+                <span>
+                    Get {demographicSurvey?.totalPoints} points now by simply
+                    taking {demographicSurvey?.totalDuration} minutes to
+                    complete your Kinetic Profile!
+                </span>
             </Text>
             <Box>
-                <Button color='blue' c='white' onClick={onClick}>
+                <Button color="blue" c="white" onClick={onClick}>
                     Finish Profile for 10 points
                 </Button>
             </Box>
