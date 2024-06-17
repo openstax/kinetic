@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useMemo, useCallback, useContext, useRef } from 'react'
+import React, { Component, useState, useEffect, useMemo, useCallback, useContext } from 'react'
 import ReactDOM from 'react-dom'
 import { Box } from 'boxible'
 import styled from '@emotion/styled'

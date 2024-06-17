@@ -1,4 +1,4 @@
-import { React, useRef, useState } from '@common'
+import { React, useState } from '@common'
 import { ParticipantStudy } from '@api'
 import { Footer, TopNavBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
@@ -140,6 +140,7 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
             <Swiper
                 effect={'cards'}
                 slidesPerView={'auto'}
+                freeMode={true}
                 cardsEffect={{
                     slideShadows: false,
                     perSlideOffset: 14,
@@ -217,14 +218,8 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
 
     const isMobile = useIsMobileDevice()
 
-    type LearningPathRefs = {
-        [key: string]: HTMLElement | null;
-    };
-
-    const learningPathRefs = useRef<LearningPathRefs>({})
-
     const scrollToLearningPath = (learningPath: string) => {
-        learningPathRefs.current[learningPath]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        document.getElementById(learningPath)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
 
     const [hoveredLearningPath, setHoveredLearningPath] = useState<string | null>(null)
@@ -271,7 +266,7 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                         <Stack 
                             style={{ width: '100%' }}
                             key={learningPath.label}
-                            ref={(el) => learningPathRefs.current[learningPath.label] = el}
+                            id={learningPath.label}
                         >
                             <Group gap='sm'>
                                 <Title order={3}>
