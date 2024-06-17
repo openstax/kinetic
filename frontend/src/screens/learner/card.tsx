@@ -15,8 +15,8 @@ interface StudyCardProps {
 }
 
 const Card = styled(Box)({
-    minWidth: 272,
-    maxWidth: 272,
+    minWidth: 264,
+    maxWidth: 264,
     backgroundColor: 'white',
     padding: '1rem',
     boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.1)',
@@ -24,8 +24,8 @@ const Card = styled(Box)({
     color: 'inherit',
     textDecoration: 'none',
     cursor: 'pointer',
-    minHeight: 358,
-    maxHeight: 358,
+    minHeight: 350,
+    maxHeight: 350,
     borderRadius: 8,
     overflow: 'hidden',
     '&:hover': {
