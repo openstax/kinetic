@@ -21,12 +21,6 @@ module Api::V1::Bindings
     # The number of points needed to be eligible
     attr_accessor :points
 
-    # When the segment starts
-    attr_accessor :start_at
-
-    # When the segment ends
-    attr_accessor :end_at
-
     # A description of the reward
     attr_accessor :description
 
@@ -35,8 +29,6 @@ module Api::V1::Bindings
       {
         :'prize' => :'prize',
         :'points' => :'points',
-        :'start_at' => :'start_at',
-        :'end_at' => :'end_at',
         :'description' => :'description'
       }
     end
@@ -51,8 +43,6 @@ module Api::V1::Bindings
       {
         :'prize' => :'String',
         :'points' => :'Float',
-        :'start_at' => :'Time',
-        :'end_at' => :'Time',
         :'description' => :'String'
       }
     end
@@ -86,14 +76,6 @@ module Api::V1::Bindings
         self.points = attributes[:'points']
       end
 
-      if attributes.key?(:'start_at')
-        self.start_at = attributes[:'start_at']
-      end
-
-      if attributes.key?(:'end_at')
-        self.end_at = attributes[:'end_at']
-      end
-
       if attributes.key?(:'description')
         self.description = attributes[:'description']
       end
@@ -111,14 +93,6 @@ module Api::V1::Bindings
         invalid_properties.push('invalid value for "points", points cannot be nil.')
       end
 
-      if @start_at.nil?
-        invalid_properties.push('invalid value for "start_at", start_at cannot be nil.')
-      end
-
-      if @end_at.nil?
-        invalid_properties.push('invalid value for "end_at", end_at cannot be nil.')
-      end
-
       invalid_properties
     end
 
@@ -127,8 +101,6 @@ module Api::V1::Bindings
     def valid?
       return false if @prize.nil?
       return false if @points.nil?
-      return false if @start_at.nil?
-      return false if @end_at.nil?
       true
     end
 
@@ -139,8 +111,6 @@ module Api::V1::Bindings
       self.class == o.class &&
           prize == o.prize &&
           points == o.points &&
-          start_at == o.start_at &&
-          end_at == o.end_at &&
           description == o.description
     end
 
@@ -153,7 +123,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [prize, points, start_at, end_at, description].hash
+      [prize, points, description].hash
     end
 
     # Builds the object from hash

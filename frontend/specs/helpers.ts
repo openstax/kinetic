@@ -207,23 +207,17 @@ export const addReward = async ({
     points = faker.random.numeric(2),
     prize = faker.random.words(3),
     description = faker.random.words(6),
-    startAt = dayjs().subtract(1, 'day').format('MMMM D, YYYY'),
-    endAt = dayjs().add(1, 'day').format('MMMM D, YYYY'),
 }: {
     adminPage: Page,
     points?: string,
-    prize?: string
+    prize?: string,
     description?: string,
-    startAt?: dayjs.Dayjs,
-    endAt?: dayjs.Dayjs,
 }) => {
     await goToPage({ page: adminPage, path: '/admin/rewards' })
 
     await adminPage.getByPlaceholder('Prize').fill(prize)
     await adminPage.getByPlaceholder('Points').fill(points)
     await adminPage.getByPlaceholder('Description').fill(description)
-    await adminPage.getByPlaceholder('Starts at').first().fill(startAt)
-    await adminPage.getByPlaceholder('Ends at').first().fill(endAt)
     await adminPage.getByText('Create reward').click()
 }
 

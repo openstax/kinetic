@@ -37,8 +37,6 @@ RSpec.describe 'Reward', api: :v1 do
                 id: a_kind_of(Integer),
                 points: a_kind_of(Integer),
                 prize: a_kind_of(String),
-                start_at: a_kind_of(String),
-                end_at: a_kind_of(String),
                 description: a_kind_of(String)
               )
             )
@@ -57,8 +55,6 @@ RSpec.describe 'Reward', api: :v1 do
           reward: {
             prize: 'a test',
             points: 1,
-            start_at: Time.now,
-            end_at: 3.days.from_now,
             description: 'Test description'
           }
         }

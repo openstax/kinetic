@@ -27,21 +27,13 @@ module Api::V1::Bindings
     # How many points are required to be eligible for the reward
     attr_accessor :points
 
-    # When the reward starts to be active
-    attr_accessor :start_at
-
-    # When the reward stops being active
-    attr_accessor :end_at
-
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'id' => :'id',
         :'prize' => :'prize',
         :'description' => :'description',
-        :'points' => :'points',
-        :'start_at' => :'start_at',
-        :'end_at' => :'end_at'
+        :'points' => :'points'
       }
     end
 
@@ -56,9 +48,7 @@ module Api::V1::Bindings
         :'id' => :'Float',
         :'prize' => :'String',
         :'description' => :'String',
-        :'points' => :'Float',
-        :'start_at' => :'String',
-        :'end_at' => :'String'
+        :'points' => :'Float'
       }
     end
 
@@ -98,14 +88,6 @@ module Api::V1::Bindings
       if attributes.key?(:'points')
         self.points = attributes[:'points']
       end
-
-      if attributes.key?(:'start_at')
-        self.start_at = attributes[:'start_at']
-      end
-
-      if attributes.key?(:'end_at')
-        self.end_at = attributes[:'end_at']
-      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -129,9 +111,7 @@ module Api::V1::Bindings
           id == o.id &&
           prize == o.prize &&
           description == o.description &&
-          points == o.points &&
-          start_at == o.start_at &&
-          end_at == o.end_at
+          points == o.points
     end
 
     # @see the `==` method
@@ -143,7 +123,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, prize, description, points, start_at, end_at].hash
+      [id, prize, description, points].hash
     end
 
     # Builds the object from hash

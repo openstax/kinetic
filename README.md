@@ -14,6 +14,12 @@ You may run into migration issues at first. To fix that go into the back-end ter
 $> docker compose exec api /bin/bash
 ```
 
+If you are having trouble with the above command, run the following command to get into the backend terminal:
+
+```bash
+$> docker compose run api /bin/bash
+```
+
 Then in that terminal run:
 
 ```bash
@@ -25,6 +31,16 @@ and try running the docker compose commands again to see if that fixes it.
 When run correctly the front-end may be at http://localhost:4000/.
 
 ## Backend
+
+You need to setup your local environment by creating a .env.local file in the backend directory and add the following variables:
+
+```
+ACCOUNTS_OAUTH_URL=https://dev.openstax.org/accounts/
+ACCOUNTS_OAUTH_CLIENT_ID=ENTER YOUR CLIENT ID
+ACCOUNTS_OAUTH_SECRET=ENTTER YOUR SECRET KEY
+QUALTRICS_API_KEY=ENTER YOUR API KEY
+OBF_CLIENT_SECRET=ENTER YOUR CLIENT SECRET
+```
 
 If you want your Git config and SSH keys available inside running docker containers,
 copy the `docker compose.override.yml.example` file to `docker compose.override.yml` and
@@ -47,6 +63,36 @@ Then you can run `rake db:migrate`, `rspec`, whatever.  Or you can run those dir
 
 ```bash
 $> docker compose exec api rake db:migrate
+```
+
+## Database
+
+To interact with the database, you would first need to go the backend terminal with the command:
+
+```bash
+$> docker compose exec api /bin/bash
+OR
+$> docker compose run api /bin/bash
+```
+
+Then you can run the following commands to bring up the database terminal:
+
+```bash
+rails c
+```
+
+### Running Tests
+
+Run the following command to execute the rspec tests:
+
+```bash
+docker compose exec api bundle exec rspec
+```
+
+Run the following command in the backend terminal to execute the ruby lint tests:
+
+```bash
+bundle exec rubocop
 ```
 
 ### Deploying Kinetic
@@ -152,5 +198,8 @@ Call this to see who you are logged in as.
 
 Be logged in as an admin, and go to `/admin`
 
+## Note
+
+You may have trouble in setting up the environment if you are using a windows machine. In order for it work on a windows machine, you need to changed the line endings of the bin files from CRLF to LF. 
 
 

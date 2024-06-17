@@ -188,16 +188,6 @@ class Api::V1::EnvironmentOpenApi
       key :type, :number
       key :description, 'The number of points needed to be eligible'
     end
-    property :start_at do
-      key :type, :string
-      key :format, 'date-time'
-      key :description, 'When the segment starts'
-    end
-    property :end_at do
-      key :type, :string
-      key :format, 'date-time'
-      key :description, 'When the segment ends'
-    end
     property :description do
       key :type, :string
       key :description, 'A description of the reward'
