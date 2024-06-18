@@ -73,7 +73,6 @@ type ExtendedCustomColors =
     'navy' |
     'white' |
     'ash' |
-    'green' |
     DefaultMantineColor
 
 declare module '@mantine/core' {
@@ -82,6 +81,8 @@ declare module '@mantine/core' {
     }
 }
 
+// https://10015.io/tools/color-shades-generator
+// use darken/lighten step 8%, step count 5+-
 // link to colors in figma:
 // https://www.figma.com/file/aoc0hf7t3uI7wu7ghxi625/LD-library--Desktop?type=design&node-id=1012-363&mode=design&t=vmlqtKSi8F2d0xrb-0
 export const mantineTheme = createTheme({
@@ -92,7 +93,6 @@ export const mantineTheme = createTheme({
         'navy': ['#5c72b1', '#4a5f9a', '#3d4e7f', '#2f3d63', '#151b2c', '#080a10', '#000000', '#000000', '#000000', '#000000'],
         'white': ['#FFF', '#FFF', '#FFF', '#FFF', '#FFF', '#FFF', '#FFF', '#FFF', '#FFF', '#FFF'],
         'ash': ['#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA', '#F7F8FA'],
-        'green': ['#D5F7EB', '#AFEAD8', '#89DDC5', '#62D0B2', '#0EE094', '#0CB07A', '#0A9060', '#087046', '#06502C', '#043012'],
     },
     primaryColor: 'blue',
     primaryShade: 4,

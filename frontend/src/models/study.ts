@@ -10,10 +10,9 @@ import {
 } from '@api'
 import { useApi } from '@lib'
 import { dayjs, useEffect, useState } from '@common';
-import { find, findLast, first, last, sumBy } from 'lodash-es';
+import { first, sumBy } from 'lodash-es';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { showResearcherNotificationError } from '@components';
-import type { WelcomeStudyIds } from '@api';
 
 export enum StudyStatus {
     Launched = 'Launched',
@@ -31,7 +30,7 @@ const areStudyStagesLaunchable = (study: ParticipantStudy) => {
     if (!study.stages) {
         return false
     }
-    return Boolean(study.stages.find(s => !s.completedAt && s.isLaunchable))
+    return Boolean(study.stages.find(s => !s.isCompleted && s.isLaunchable))
 }
 
 export const isStudyLaunchable = (study: ParticipantStudy) => {
@@ -52,18 +51,6 @@ export const getStudyEditUrl = (study: Study) => {
 
 export function getFirstStage(study: Study | ParticipantStudy): Stage | undefined {
     return first(study.stages)
-}
-
-export function getLastStage(study: Study | ParticipantStudy): Stage | undefined {
-    return last(study.stages)
-}
-
-export function getNextAvailableStage(study: ParticipantStudy): Stage | undefined {
-    return find(study.stages, (stage) => !stage.completedAt) || getLastStage(study)
-}
-
-export function getLastCompletedStage(study: ParticipantStudy): Stage | undefined {
-    return findLast(study.stages, (stage) => !!stage.completedAt);
 }
 
 export function isActive(study: Study) {
@@ -106,8 +93,15 @@ export function getStudyLead(study: Study | ParticipantStudy) {
     return study.researchers?.find(r => r.role === ResearcherRoleEnum.Lead)
 }
 
-export function isMultiSession(study: ParticipantStudy | Study): boolean {
+export function studyIsMultipart(study: ParticipantStudy | Study): boolean {
     return Boolean(study.stages && study.stages.length > 1)
+}
+
+export function studyHasFeedback(study: ParticipantStudy): boolean {
+    if (!study.stages) {
+        return false
+    }
+    return study.stages.some(stage => stage.feedbackTypes && stage.feedbackTypes.length > 0)
 }
 
 export function getStudyPoints(study: ParticipantStudy): number {
@@ -132,19 +126,14 @@ export const useAdminGetStudies = (status: string = 'all') => {
 
 export const useUpdateHighlightedStudies = () => {
     const api = useApi()
+    const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (highlightedStudyIds: HighlightedStudyIds) => await api.adminHighlightStudies({
             highlightedStudyIds,
         }),
-    })
-}
-
-export const useUpdateWelcomeStudies = () => {
-    const api = useApi()
-    return useMutation({
-        mutationFn: async (welcomeStudyIds: WelcomeStudyIds) => await api.adminWelcomeStudies({
-            welcomeStudyIds,
-        }),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['getLearningPaths'] })
+        },
     })
 }
 
@@ -231,6 +220,15 @@ export const studyCategoryDescriptions = {
     'Product & Organizational Research': 'Surveys, assessments, and/or interventions related to understanding learner needs, such as product development and UX design',
     'Transfer of Learning': 'Interventions that assess learning or other outcomes across domains',
 }
+
+export type StudyTopic = 'Learning' | 'Memory' | 'Personality' | 'School & Career' | 'Other' | string
+export const studyTopics: StudyTopic[] = [
+    'Learning',
+    'Memory',
+    'Personality',
+    'School & Career',
+    'Other',
+]
 
 export type StudySubject = 'Biology' | 'Business Ethics' | 'Chemistry' | 'Physics' | 'Psychology' | 'Sociology' | 'Statistics' | 'US History'
 

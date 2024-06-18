@@ -8,7 +8,7 @@ import {
     getStudyPoints,
     isStudyLaunchable,
     launchStudy,
-    isMultiSession,
+    studyIsMultipart,
     useFetchParticipantStudy,
 } from '@models'
 import { dayjs, useApi, useEnvironment } from '@lib'
@@ -39,7 +39,7 @@ const LaunchStudyButton: FC<StudyDetailsProps> = ({ study }) => {
             </Button>
         )
     }
-    const action = (study.stages?.length && !!study.stages[0].completedAt) ? 'Begin' : 'Continue'
+    const action = (study.stages?.length && !study.stages[0].isCompleted) ? 'Begin' : 'Continue'
     return (
         <Button
             color='purple'
@@ -61,7 +61,7 @@ const StudyTime: FC<StudyDetailsProps> = ({ study }) => {
     const firstStage = getFirstStage(study)
     if (!firstStage?.durationMinutes || !firstStage.points) return null
 
-    if (isMultiSession(study)) {
+    if (studyIsMultipart(study)) {
         return (
             <Stack>
                 <Group>
@@ -254,7 +254,7 @@ const ResearcherSection: FC<StudyDetailsProps> = ({ study }) => {
 }
 
 const MultiSession: FC<StudyDetailsProps> = ({ study }) => {
-    if (!study.stages || !isMultiSession(study)) return null
+    if (!study.stages || !studyIsMultipart(study)) return null
 
     return (
         <Stack>

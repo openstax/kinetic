@@ -31,7 +31,7 @@ export const MultiSessionBar: FC<{ study: ParticipantStudy }> = ({ study }) => {
                     alignItems: 'flex-start',
                 }}
             >
-                <SegmentCircle achieved={!!first.completedAt} />
+                <SegmentCircle achieved={first.isCompleted} />
                 <SegmentTitle>{first.title}</SegmentTitle>
             </Segment>
             <Segment key={2} percentage={20}
@@ -40,17 +40,17 @@ export const MultiSessionBar: FC<{ study: ParticipantStudy }> = ({ study }) => {
                 }}
             >
                 <SegmentCircle
-                    achieved={!!last.completedAt}
-                    current={!!first.completedAt}
-                    future={!first.completedAt}
-                    past={!!last.completedAt}
+                    achieved={last.isCompleted}
+                    current={first.isCompleted}
+                    future={!first.isCompleted}
+                    past={last.isCompleted}
                 >
                     <Icon icon="clockOutline" color={colors.purple} />
                 </SegmentCircle>
                 <SegmentTitle>{duration}</SegmentTitle>
             </Segment>
             <Segment key={3} percentage={40}>
-                <SegmentCircle achieved={!!last.completedAt} future={!last.isLaunchable} />
+                <SegmentCircle achieved={last.isCompleted} future={!last.isLaunchable} />
                 <SegmentTitle>{last.title}</SegmentTitle>
             </Segment>
         </SegmentedBar>

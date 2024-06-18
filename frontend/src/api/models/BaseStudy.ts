@@ -99,12 +99,6 @@ export interface BaseStudy {
      */
     readonly isHighlighted?: boolean;
     /**
-     * Is this a welcome study?
-     * @type {boolean}
-     * @memberof BaseStudy
-     */
-    readonly isWelcome?: boolean;
-    /**
      * Is the study hidden from participants
      * @type {boolean}
      * @memberof BaseStudy
@@ -253,7 +247,6 @@ export function BaseStudyFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'isFeatured': !exists(json, 'is_featured') ? undefined : json['is_featured'],
         'featuredOrder': !exists(json, 'featured_order') ? undefined : json['featured_order'],
         'isHighlighted': !exists(json, 'is_highlighted') ? undefined : json['is_highlighted'],
-        'isWelcome': !exists(json, 'is_welcome') ? undefined : json['is_welcome'],
         'isHidden': !exists(json, 'is_hidden') ? undefined : json['is_hidden'],
         'consented': !exists(json, 'consented') ? undefined : json['consented'],
         'firstLaunchedAt': !exists(json, 'first_launched_at') ? undefined : (new Date(json['first_launched_at'])),

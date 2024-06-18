@@ -2,8 +2,8 @@ import { React } from '@common'
 import { ErrorPage, IncorrectUser, LoadingAnimation } from '@components'
 import { ENV } from './env'
 import { useApi } from './api-config'
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Environment, UpdatePreferencesRequest } from '@api'
+import { useQuery } from 'react-query';
+import { Environment } from '@api'
 
 export const EnvironmentContext = React.createContext<Environment | null>(null)
 
@@ -60,21 +60,6 @@ export const useUserPreferences = () => {
     return useQuery('getPreferences', () => {
         return api.getPreferences()
     })
-}
-
-export const useUpdateUserPreferences = () => {
-    const api = useApi()
-    const queryClient = useQueryClient()
-
-    return useMutation({
-        mutationFn: async (updatePreferences: UpdatePreferencesRequest) => {
-            return await api.updatePreferences(updatePreferences)
-        },
-        onSuccess: async () => {
-            return await queryClient.invalidateQueries({ queryKey: ['getPreferences'] })
-        },
-    })
-
 }
 
 export const useLocationOrigin = () => {

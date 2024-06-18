@@ -1,27 +1,20 @@
-import {
-    addReward,
-    createStudy,
-    expect,
-    test,
-    useAdminPage,
-    useResearcherPage,
-    useUserPage,
-} from '../test';
+import { addReward, createStudy, expect, goToPage, test, useAdminPage, useResearcherPage, useUserPage } from '../test';
 import { faker } from '@faker-js/faker';
 
 test('launching study and testing completion', async ({ browser }) => {
     const adminPage = await useAdminPage(browser)
     const researcherPage = await useResearcherPage(browser)
-    const studyName = faker.animal.fish() + ' ' + faker.address.city()
+    const studyName = faker.animal.insect() + ' ' + faker.datatype.string(10)
 
     await addReward({ adminPage })
 
-    await createStudy({ researcherPage, adminPage, name: studyName })
+    const studyId = await createStudy({ researcherPage, adminPage, name: studyName })
 
     const userPage = await useUserPage(browser)
 
-    await userPage.getByText('All Studies').isVisible()
-    await userPage.getByText(studyName).first().click()
+    await goToPage({ page: userPage, path: '/studies' })
+    await expect(userPage).toHaveSelector(`[data-study-id="${studyId}"]`)
+    await userPage.click(`[data-study-id="${studyId}"]`)
 
     await userPage.click('testId=launch-study')
 
@@ -29,15 +22,16 @@ test('launching study and testing completion', async ({ browser }) => {
     await userPage.getByText('18 or Older').click()
     await userPage.click('#NextButton')
     await userPage.click('#NextButton')
-    await userPage.waitForURL('**/study/land/**')
+    await userPage.waitForLoadState('networkidle')
 
     // Qualtrics redirected to study landing page
-    await userPage.getByText('One step closer to earning your badge!').isVisible()
-    await userPage.getByAltText('kinetic-logo').click()
+    await userPage.getByText('You just earned 10 points').isVisible()
+    await userPage.click('testId=view-studies')
 
     await userPage.getByPlaceholder('Search by study title, researcher, or topic name').fill(studyName)
     await userPage.waitForLoadState('networkidle')
 
-    await userPage.getByText(studyName).first().click()
+    await userPage.waitForSelector(`[data-study-id="${studyId}"]`)
+    await userPage.click(`[data-study-id="${studyId}"]`)
     await expect(userPage).not.toHaveSelector('testId=launch-study')
 })

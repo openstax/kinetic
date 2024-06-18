@@ -1,7 +1,7 @@
 import { cx, React, useState } from '@common'
 import { Box, getImageUrl, Icon, MultiSessionBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
-import { getStudyDuration, getStudyPoints, isMultiSession } from '@models'
+import { getStudyDuration, getStudyPoints, studyIsMultipart } from '@models'
 import { ParticipantStudy, Study } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
@@ -85,7 +85,7 @@ const Researcher: React.FC<StudyCardProps> = ({ study }) => {
 }
 
 const MultiSession: React.FC<StudyCardProps> = ({ study }) => {
-    if (!isMultiSession(study)) return <span />
+    if (!studyIsMultipart(study)) return <span />
 
     return (
         <Box align='center' gap>
@@ -113,7 +113,7 @@ const CornerRibbon = styled.div({
 
 const NewStudyFlag: FC<{study: ParticipantStudy}> = ({ study }) => {
     if (!study.opensAt) return null
-    const isNew = dayjs(study.opensAt).isAfter(dayjs().subtract(7, 'days'))
+    const isNew = dayjs(study.opensAt).isAfter(dayjs().subtract(30, 'days'))
     if (!isNew) return null
     return (
         <CornerRibbon>
@@ -145,7 +145,7 @@ const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
 }
 
 const MultiSessionFlag: FC<StudyCardProps> = ({ study }) => {
-    if (!isMultiSession(study) || !study.stages?.[0].completedAt || !!study.stages?.[1].completedAt) return null
+    if (!studyIsMultipart(study) || !study.stages?.[0].isCompleted || study.stages?.[1].isCompleted) return null
 
     return (
         <div
@@ -174,7 +174,7 @@ const MultiSessionFlag: FC<StudyCardProps> = ({ study }) => {
 const FeedbackMultiSessionContainer: FC<StudyCardProps> = ({ study }) => {
     const isMobile = useIsMobileDevice();
 
-    if (!isMultiSession(study)) {
+    if (!studyIsMultipart(study)) {
         return <Space h='md' />
     }
 
@@ -200,7 +200,7 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
                 <Tag tag={study.subject} />
             </Box>
             <Box gap='small'>
-                {isMultiSession(study) && <span>*Total</span>}
+                {studyIsMultipart(study) && <span>*Total</span>}
                 <span>{getStudyDuration(study)} min</span>
                 &middot;
                 <span>{getStudyPoints(study)} pts</span>

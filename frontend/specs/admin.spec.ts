@@ -1,0 +1,91 @@
+import { addReward, useAdminPage, useResearcherPage } from './helpers'
+import { dayjs, expect, faker, goToPage, test } from './test'
+
+test('creates a learning path', async ({ browser }) => {
+    const adminPage = await useAdminPage(browser)
+
+    await goToPage({ page: adminPage, path: '/admin/manage-learning-paths' })
+
+    await adminPage.getByLabel('Label').fill(faker.word.adjective() + ' ' + faker.word.noun())
+    await adminPage.getByLabel('Description').fill(faker.word.adverb() + ' ' + faker.word.interjection())
+    await adminPage.getByLabel('Badge ID').fill('SAJSINa7DGDaC4D')
+
+    await adminPage.getByText('Create Learning Path').click()
+})
+
+test('edits a learning path', async ({ browser }) => {
+    const adminPage = await useAdminPage(browser)
+
+    await goToPage({ page: adminPage, path: '/admin/manage-learning-paths' })
+    await adminPage.getByPlaceholder('Select a learning path, or create a new one below').click()
+    await adminPage.getByRole('option').first().click()
+
+    await adminPage.getByLabel('Label').fill(faker.word.adjective() + ' ' + faker.word.noun())
+    await adminPage.getByLabel('Description').fill(faker.word.adverb() + ' ' + faker.word.interjection())
+    await adminPage.getByText('Update Learning Path').click()
+})
+
+test('displays panel only when allowed', async ({ browser }) => {
+    const adminPage = await useAdminPage(browser)
+    const researcherPage = await useResearcherPage(browser)
+
+    await goToPage({ page: adminPage, path: '/admin' })
+    await adminPage.waitForURL('**/admin/banners')
+
+
+    await goToPage({ page: researcherPage, path: '/admin' })
+    await researcherPage.waitForURL('**/studies')
+})
+
+test('can add/update/delete banners', async ({ browser }) => {
+    const adminPage = await useAdminPage(browser)
+    const today = dayjs().format('MMMM D, YYYY')
+    const message = faker.random.words(4)
+    const updatedMessage = faker.random.words(3)
+
+    await goToPage({ page: adminPage, path: '/admin/banners' })
+
+    // Adding
+    await expect(adminPage.getByText('Create banner')).toBeDisabled()
+    await adminPage.getByPlaceholder('Banner message').first().fill(message)
+    await adminPage.getByPlaceholder('Starts at').first().fill(today)
+    await adminPage.getByPlaceholder('Ends at').first().fill(today)
+    await expect(adminPage.getByText('Create banner')).toBeEnabled()
+    await adminPage.getByText('Create banner').click()
+
+    await expect(adminPage.getByPlaceholder('Banner message').first()).toHaveValue('')
+    await expect(adminPage.getByPlaceholder('Starts at').first()).toHaveValue('')
+    await expect(adminPage.getByPlaceholder('Ends at').first()).toHaveValue('')
+
+    await adminPage.waitForLoadState('networkidle')
+
+    // Updating
+    const bannerForm = adminPage.getByTestId(`${message}-form`)
+    await bannerForm.getByPlaceholder('Banner message').fill(updatedMessage)
+    await bannerForm.getByRole('button', { name: /Update banner/ }).click()
+    await adminPage.waitForLoadState('networkidle')
+
+    // Deleting
+    await adminPage.getByText('Delete banner').first().click()
+    await adminPage.waitForLoadState('networkidle')
+})
+
+test('can add/update/delete rewards', async ({ browser }) => {
+    const adminPage = await useAdminPage(browser)
+    const prize = faker.random.words(3)
+    const description = faker.random.words(6)
+    const points = faker.random.numeric(2)
+
+    await goToPage({ page: adminPage, path: '/admin/rewards' })
+
+    await addReward({ adminPage, prize, points, description })
+
+    // Update
+    const updatedPrize = faker.random.words(2)
+    await adminPage.getByText('Edit').first().click()
+    await adminPage.getByPlaceholder('Prize').fill(updatedPrize)
+    await adminPage.getByText('Update reward').click()
+
+    // Delete
+    await adminPage.getByText('Delete').first().click()
+})
