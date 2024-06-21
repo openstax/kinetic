@@ -118,7 +118,7 @@ export const StudiesContainer = () => {
     const { search, setSearch, filteredStudies } = useSearchStudies()
 
     return (
-        <Container my='lg'>
+        <Container pt='1.5rem' bg={colors.ash}>
             <Stack gap='lg'>
                 <Flex justify='space-between' wrap='wrap'>
                     <StudiesTitle search={search} filteredStudies={filteredStudies} />
@@ -157,7 +157,7 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
                 }}
             >
                 {studies.map((study) => (
-                    <SwiperSlide key={study.id} className="pb-1">
+                    <SwiperSlide key={study.id} className="pb-1" style={{paddingTop: '1rem'}}>
                         <StudyCard study={study} />
                     </SwiperSlide>
                 ))}

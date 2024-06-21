@@ -21,6 +21,7 @@ import search from '@iconify-icons/mdi/search'
 import trash from '@iconify-icons/mdi/delete'
 import checkCircle from '@iconify-icons/mdi/check-circle'
 import check from '@iconify-icons/mdi/check'
+import thickCheck from '@iconify-icons/mdi/check-thick'
 import circle from '@iconify-icons/mdi/circle-outline'
 import feedback from '@iconify-icons/mdi/feedback'
 import heart from '@iconify-icons/mdi/heart'
@@ -55,6 +56,7 @@ export const ICONS = {
     trash,
     checkCircle,
     check,
+    thickCheck,
     feedback,
     heart,
     warning,

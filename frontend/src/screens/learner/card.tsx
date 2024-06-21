@@ -7,34 +7,31 @@ import styled from '@emotion/styled'
 import { colors, media } from '@theme'
 import { StudyDetailsPreview } from './details';
 import dayjs from 'dayjs';
-import { Button, Space } from '@mantine/core';
+import { Button, Space, Flex } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
 interface StudyCardProps {
     study: ParticipantStudy
 }
 
-const Card = styled(Box)({
-    minWidth: 400,
-    maxWidth: 400,
-    backgroundColor: 'white',
+const Card = styled(Box)(({ studyCompleted, }) => ({
+    minWidth: 264,
+    maxWidth: 264,
+    backgroundColor: studyCompleted ? colors.gray50 : colors.white,
     padding: '1rem',
-    boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.1)',
     position: 'relative',
     color: 'inherit',
     textDecoration: 'none',
-    cursor: 'pointer',
-    minHeight: 500,
-    maxHeight: 500,
-    borderRadius: 8,
-    overflow: 'hidden',
+    cursor: studyCompleted ? 'not-allowed' : 'pointer',
+    minHeight: 350,
+    maxHeight: 350,
     '&:hover': {
-        boxShadow: '0px 8px 10px rgba(0, 0, 0, 0.4)',
+        boxShadow: '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
     },
     '.study-card-image': {
-        height: 200,
-        minHeight: 200,
-        maxHeight: 200,
+        height: 152,
+        minHeight: 152,
+        maxHeight: 152,
     },
     [media.tablet]: {
         minWidth: 275,
@@ -62,7 +59,7 @@ const Card = styled(Box)({
             height: '35%',
         },
     },
-})
+}))
 
 export const Tag: React.FC<{ tag?: string }> = ({ tag }) => {
     if (!tag) return null
@@ -126,21 +123,20 @@ const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
     if (!study.completedAt) return null
 
     return (
-        <Box gap
-            align="center"
-            padding="default"
-            css={{
-                backgroundColor: colors.green,
-                position: 'absolute',
-                borderBottomLeftRadius: 20,
-                borderTopLeftRadius: 20,
-                right: 0,
-                top: 16,
-            }}
-        >
-            <Icon icon="checkCircle" color='white' />
-            <span>Complete</span>
-        </Box>
+        <Flex justify='center' align='center' pos='absolute' top='-.5rem' right='-.5rem'
+        style={{}}>
+            <div style={{ width: '2rem', 
+                height: '2rem', 
+                backgroundColor: colors.pine, 
+                borderRadius: '50%',
+                boxShadow: '-2px 2px 10px rgba(0, 0, 0, 0.20)'
+                }}></div>
+            <Icon icon="thickCheck" color={colors.white} 
+                css={{
+                    position: 'absolute',
+                    fontSize: '1rem',
+                }}/>
+        </Flex>
     )
 }
 
@@ -195,15 +191,14 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
     const isMobile = useIsMobileDevice();
 
     return (
-        <Box className={cx({ 'small': !isMobile, 'xx-small': isMobile }, 'mt-auto', 'pt-1')} justify='between' align='center' wrap>
+        <Box className={cx({ 'small': !isMobile, 'xx-small': isMobile }, 'mt-auto', 'pt-1')} justify='between' align='center' wrap css={{color:colors.purple}}>
             <Box gap='small'>
-                <Tag tag={study.subject} />
+                <span>{getStudyDuration(study)} min </span>
+                |
+                <span>{getStudyPoints(study)} pts </span>
             </Box>
-            <Box gap='small'>
+            <Box>
                 {isMultiSession(study) && <span>*Total</span>}
-                <span>{getStudyDuration(study)} min</span>
-                &middot;
-                <span>{getStudyPoints(study)} pts</span>
             </Box>
         </Box>
     )
@@ -211,7 +206,10 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
 
 export const StudyCard: React.FC<StudyCardProps> = ({ study }) => {
     const nav = useNavigate()
-    const onClick = () => nav(`/studies/details/${study.id}`)
+    const onClick = () => {
+        if(study.completedAt) return
+        nav(`/studies/details/${study.id}`)
+    }
     const env = useEnvironment()
 
     return (
@@ -226,6 +224,7 @@ export const StudyCard: React.FC<StudyCardProps> = ({ study }) => {
             data-analytics-select-content
             data-content-type="study-details"
             data-content-tags={`,learning-path=${study.learningPath?.label},is-new-user=${env.isNewUser},`}
+            studyCompleted={!!study.completedAt}
         >
             <CardContent study={study} />
         </Card>
@@ -240,10 +239,6 @@ const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
             <img src={getImageUrl(study.imageId)}
                 alt={study.imageId}
                 className='study-card-image'
-                css={{
-                    border: `1px solid ${colors.gray50}`,
-                    borderRadius: 8,
-                }}
             />
             <NewStudyFlag study={study} />
             <CompleteFlag study={study} />
@@ -253,7 +248,7 @@ const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
             <Researcher study={study} />
             <small
                 className={cx({ 'x-small': isMobile })}
-                css={{ color: colors.text, overflowWrap: 'anywhere' }}
+                css={{ color: colors.gray70, overflowWrap: 'anywhere' }}
             >
                 {study.shortDescription}
             </small>
