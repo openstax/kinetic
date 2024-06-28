@@ -1,16 +1,16 @@
-import { React } from "@common";
-import { FC, useState } from "react";
-import { ParticipantStudy } from "@api";
-import { Footer, TopNavBar } from "@components";
-import { useEnvironment, useIsMobileDevice } from "@lib";
-import { useParticipantStudies, useSearchStudies } from "./learner/studies";
-import { StudyCard } from "./learner/card";
-import { StudyDetails } from "./learner/details";
-import { Route, Routes } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCards, FreeMode, Navigation } from "swiper/modules";
-import { LearnerWelcomeModal } from "./learner/learner-welcome-modal";
-import { UnsupportedCountryModal } from "./learner/unsupported-country-modal";
+import { React } from '@common';
+import { FC } from 'react';
+import { ParticipantStudy } from '@api';
+import { Footer, TopNavBar } from '@components';
+import { useEnvironment, useIsMobileDevice } from '@lib';
+import { useParticipantStudies, useSearchStudies } from './learner/studies';
+import { StudyCard } from './learner/card';
+import { StudyDetails } from './learner/details';
+import { Route, Routes } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCards, FreeMode, Navigation } from 'swiper/modules';
+import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
+import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
 import {
     Badge,
     Box,
@@ -21,17 +21,17 @@ import {
     Text,
     TextInput,
     Title,
-} from "@mantine/core";
-import { IconSearch, IconX } from "@tabler/icons-react";
-import { groupBy } from "lodash";
-import { colors } from "@theme";
-import { useMemo } from "react";
-import { orderBy, uniqBy } from "lodash-es";
-import ScrollToTopButton from "./researcher/ScrollToTopButton";
-import "swiper/css";
-import "swiper/css/effect-cards";
-import "swiper/css/free-mode";
-import "swiper/css/navigation";
+} from '@mantine/core';
+import { IconSearch, IconX } from '@tabler/icons-react';
+import { groupBy } from 'lodash';
+import { colors } from '@theme';
+import { useMemo } from 'react';
+import { orderBy, uniqBy } from 'lodash-es';
+import ScrollToTopButton from './researcher/ScrollToTopButton';
+import 'swiper/css';
+import 'swiper/css/effect-cards';
+import 'swiper/css/free-mode';
+import 'swiper/css/navigation';
 
 const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies();
@@ -67,7 +67,7 @@ const LearnerDashboard = () => {
     return (
         <div className="studies learner">
             <Routes>
-                <Route path={"details/:studyId"} element={<StudyDetails />} />
+                <Route path={'details/:studyId'} element={<StudyDetails />} />
             </Routes>
 
             <TopNavBar />
@@ -98,15 +98,15 @@ export const SearchBar: FC<{
 
     return (
         <TextInput
-            w={isMobile ? "100%" : "400px"}
+            w={isMobile ? '100%' : '400px'}
             size="lg"
             value={search}
             onChange={(event) => setSearch(event.currentTarget.value)}
             rightSection={
                 search.length ? (
                     <IconX
-                        onClick={() => setSearch("")}
-                        style={{ cursor: "pointer" }}
+                        onClick={() => setSearch('')}
+                        style={{ cursor: 'pointer' }}
                     />
                 ) : (
                     <IconSearch />
@@ -139,7 +139,7 @@ export const SearchResults: FC<{
     return (
         <Title order={4}>
             {filteredStudies.length} result
-            {filteredStudies.length == 1 ? "" : "s"} for '{search}'
+            {filteredStudies.length == 1 ? '' : 's'} for '{search}'
         </Title>
     );
 };
@@ -162,11 +162,11 @@ export const StudiesContainer = () => {
                 {/* Divider */}
                 <div
                     style={{
-                        width: "864px",
-                        height: "1px",
-                        backgroundColor: "#DBDBDB",
-                        margin: "16px 0",
-                        border: "1px solid #DBDBDB",
+                        width: '864px',
+                        height: '1px',
+                        backgroundColor: '#DBDBDB',
+                        margin: '16px 0',
+                        border: '1px solid #DBDBDB',
                     }}
                 />
 
@@ -187,15 +187,15 @@ export const MobileStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
     return (
         <Box
             sx={{
-                position: "relative",
-                "&:hover .swiper-button-next, &:hover .swiper-button-prev": {
+                position: 'relative',
+                '&:hover .swiper-button-next, &:hover .swiper-button-prev': {
                     opacity: 1,
                 },
             }}
         >
             <Swiper
-                effect={"cards"}
-                slidesPerView={"auto"}
+                effect={'cards'}
+                slidesPerView={'auto'}
                 cardsEffect={{
                     slideShadows: false,
                     perSlideOffset: 14,
@@ -203,8 +203,8 @@ export const MobileStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
                 centeredSlides={true}
                 modules={[EffectCards, Navigation]}
                 style={{
-                    paddingBottom: "2rem",
-                    marginBottom: "1rem",
+                    paddingBottom: '2rem',
+                    marginBottom: '1rem',
                 }}
                 pagination={false}
                 navigation={true}
@@ -240,8 +240,8 @@ export const DesktopStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
     return (
         <Box
             sx={{
-                position: "relative",
-                "&:hover .swiper-button-next, &:hover .swiper-button-prev": {
+                position: 'relative',
+                '&:hover .swiper-button-next, &:hover .swiper-button-prev': {
                     opacity: 1,
                 },
             }}
@@ -251,10 +251,10 @@ export const DesktopStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
                 simulateTouch={true}
                 freeMode={true}
                 style={{
-                    marginBottom: "1rem",
-                    paddingBottom: "2rem",
-                    paddingLeft: "2rem",
-                    paddingRight: "2rem",
+                    marginBottom: '1rem',
+                    paddingBottom: '2rem',
+                    paddingLeft: '2rem',
+                    paddingRight: '2rem',
                 }}
                 navigation={true}
                 modules={[FreeMode, Navigation]}
@@ -264,7 +264,7 @@ export const DesktopStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
                         a.completed === b.completed ? 0 : a.completed ? 1 : -1
                     )
                     .map((study) => (
-                        <SwiperSlide style={{ padding: "1rem" }} key={study.id}>
+                        <SwiperSlide style={{ padding: '1rem' }} key={study.id}>
                             <StudyCard study={study} />
                         </SwiperSlide>
                     ))}
@@ -294,8 +294,8 @@ export const StudiesByLearningPath: FC<{
                     filteredStudies.map((fs) => fs.learningPath),
                     (lp) => lp?.label
                 ),
-                ["completed"],
-                ["asc"]
+                ['completed'],
+                ['asc']
             ),
             groupBy(filteredStudies, (study) => study.learningPath?.label),
         ];

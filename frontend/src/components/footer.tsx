@@ -1,7 +1,7 @@
-import { React } from "@common";
-import { HelpLink, ResourceLinks } from "./resource-links";
-import { colors } from "@theme";
-import { useIsMobileDevice } from "@lib";
+import { React } from '@common';
+import { HelpLink, ResourceLinks } from './resource-links';
+import { colors } from '@theme';
+import { useIsMobileDevice } from '@lib';
 import {
     Divider,
     Anchor,
@@ -13,41 +13,41 @@ import {
     Stack,
     Text,
     Title,
-} from "@mantine/core";
+} from '@mantine/core';
 import {
     IconBrandFacebookFilled,
     IconBrandInstagram,
     IconBrandTwitterFilled,
-} from "@tabler/icons-react";
+} from '@tabler/icons-react';
 
 // @ts-ignore
-import NSFLogoURL from "../images/nsf-logo.webp";
+import NSFLogoURL from '../images/nsf-logo.webp';
 // @ts-ignore
-import IESLogoURL from "../images/ies-logo.webp";
+import IESLogoURL from '../images/ies-logo.webp';
 // @ts-ignore
-import RiceLogoURL from "../images/rice-logo.png";
+import RiceLogoURL from '../images/rice-logo.png';
 // @ts-ignore
-import OpenStaxURL from "../images/openstax-logo.png";
+import OpenStaxURL from '../images/openstax-logo.png';
 
 const Funders = () => {
     return (
         <Container
             style={{
-                backgroundColor: "white",
-                width: "100%",
-                padding: "16px 32px 40px 32px",
+                backgroundColor: 'white',
+                width: '100%',
+                padding: '16px 32px 40px 32px',
             }}
         >
             <Stack spacing="md">
                 <Title
                     order={2}
                     style={{
-                        fontFamily: "Helvetica Neue",
-                        fontSize: "36px",
+                        fontFamily: 'Helvetica Neue',
+                        fontSize: '36px',
                         fontWeight: 700,
-                        lineHeight: "42px",
-                        letterSpacing: "-0.04em",
-                        textAlign: "left",
+                        lineHeight: '42px',
+                        letterSpacing: '-0.04em',
+                        textAlign: 'left',
                     }}
                 >
                     Support from scientific agencies
@@ -55,12 +55,12 @@ const Funders = () => {
 
                 <Flex
                     style={{
-                        width: "100%",
-                        height: "256px",
-                        padding: "16px 0",
-                        gap: "0px",
-                        justifyContent: "space-between",
-                        alignItems: "center",
+                        width: '100%',
+                        height: '256px',
+                        padding: '16px 0',
+                        gap: '0px',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
                     }}
                 >
                     <Anchor target="_blank" href="https://www.nsf.org/gb/en">
@@ -69,16 +69,16 @@ const Funders = () => {
                             src={NSFLogoURL}
                             width={163.21}
                             height={120}
-                            style={{ objectFit: "cover", padding: "0px 32px" }}
+                            style={{ objectFit: 'cover', padding: '0px 32px' }}
                         />
                     </Anchor>
 
                     <Divider
                         orientation="vertical"
                         style={{
-                            height: "200px",
-                            width: "1px",
-                            borderWidth: "1px",
+                            height: '200px',
+                            width: '1px',
+                            borderWidth: '1px',
                         }}
                     />
 
@@ -87,10 +87,10 @@ const Funders = () => {
                             align="center"
                             spacing="sm"
                             style={{
-                                width: "462.66px",
-                                height: "186.76px",
-                                padding: "0px 32px",
-                                gap: "16px",
+                                width: '462.66px',
+                                height: '186.76px',
+                                padding: '0px 32px',
+                                gap: '16px',
                             }}
                         >
                             <Image
@@ -98,18 +98,18 @@ const Funders = () => {
                                 src={IESLogoURL}
                                 width={371.5}
                                 height={98.76}
-                                style={{ objectFit: "cover", gap: "0px" }}
+                                style={{ objectFit: 'cover', gap: '0px' }}
                             />
                             <Text
                                 size="xs"
                                 style={{
-                                    fontFamily: "Helvetica Neue",
+                                    fontFamily: 'Helvetica Neue',
                                     fontWeight: 400,
-                                    fontSize: "12px",
-                                    lineHeight: "18px",
-                                    textAlign: "center",
-                                    color: "black",
-                                    textDecoration: "none",
+                                    fontSize: '12px',
+                                    lineHeight: '18px',
+                                    textAlign: 'center',
+                                    color: 'black',
+                                    textDecoration: 'none',
                                 }}
                             >
                                 The research reported here was supported by the
@@ -125,9 +125,9 @@ const Funders = () => {
                     <Divider
                         orientation="vertical"
                         style={{
-                            height: "200px",
-                            width: "1px",
-                            borderWidth: "1px",
+                            height: '200px',
+                            width: '1px',
+                            borderWidth: '1px',
                         }}
                     />
 
@@ -135,7 +135,7 @@ const Funders = () => {
                         <Text
                             color="blue"
                             weight={500}
-                            style={{ textAlign: "center" }}
+                            style={{ textAlign: 'center' }}
                         >
                             View other Philanthropic supporters
                         </Text>
@@ -215,7 +215,7 @@ export const SocialLinks = () => {
 
 export const Logos = () => {
     return (
-        <Flex direction={{ sm: "row" }} gap="xl">
+        <Flex direction={{ sm: 'row' }} gap="xl">
             <Anchor target="_blank" href="https://www.rice.edu">
                 <Image
                     alt="Rice University logo"
