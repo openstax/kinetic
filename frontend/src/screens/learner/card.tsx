@@ -1,17 +1,17 @@
-import { cx, React, useState } from '@common';
-import { Box, getImageUrl, Icon, MultiSessionBar } from '@components';
-import { useEnvironment, useIsMobileDevice } from '@lib';
-import { getStudyDuration, getStudyPoints } from '@models';
-import { ParticipantStudy, Study } from '@api';
-import styled from '@emotion/styled';
-import { colors, media } from '@theme';
+import { cx, React, useState } from '@common'
+import { Box, getImageUrl, Icon, MultiSessionBar } from '@components'
+import { useEnvironment, useIsMobileDevice } from '@lib'
+import { getStudyDuration, getStudyPoints } from '@models'
+import { ParticipantStudy, Study } from '@api'
+import styled from '@emotion/styled'
+import { colors, media } from '@theme'
 import { StudyDetailsPreview } from './details';
 import dayjs from 'dayjs';
 import { Button, Space } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
 interface StudyCardProps {
-    study: ParticipantStudy;
+    study: ParticipantStudy
 }
 
 const Card = styled(Box)({
@@ -62,36 +62,33 @@ const Card = styled(Box)({
             height: '35%',
         },
     },
-});
+})
 
 export const Tag: React.FC<{ tag?: string }> = ({ tag }) => {
-    if (!tag) return null;
+    if (!tag) return null
     return (
-        <span
-            className="badge text-dark"
-            css={{ borderRadius: 8, background: colors.gray30 }}
-        >
+        <span className="badge text-dark" css={{ borderRadius: 8, background: colors.gray30 }}>
             {tag}
         </span>
-    );
-};
+    )
+}
 
 const Researcher: React.FC<StudyCardProps> = ({ study }) => {
-    const pi = study.researchers?.find((r) => r.role === 'pi');
-    if (!pi) return null;
+    const pi = study.researchers?.find(r => r.role === 'pi')
+    if (!pi) return null
 
     return (
-        <Box className="x-small" padding={{ bottom: 'small' }}>
+        <Box className='x-small' padding={{ bottom: 'small' }}>
             {pi.firstName} {pi.lastName}
         </Box>
-    );
-};
+    )
+}
 
 const MultiSession: React.FC<StudyCardProps> = ({ study }) => {
-    if (!studyIsMultipart(study)) return <span />;
+    if (!studyIsMultipart(study)) return <span />
 
     return (
-        <Box align="center" gap>
+        <Box align='center' gap>
             <Icon
                 height={15}
                 icon="cardMultiple"
@@ -100,8 +97,8 @@ const MultiSession: React.FC<StudyCardProps> = ({ study }) => {
             />
             <span>Multi-Session</span>
         </Box>
-    );
-};
+    )
+}
 
 const CornerRibbon = styled.div({
     position: 'absolute',
@@ -112,25 +109,24 @@ const CornerRibbon = styled.div({
     boxShadow: `0 0 0 999px ${colors.purple}`,
     clipPath: 'inset(0 -100%)',
     color: colors.white,
-});
+})
 
-const NewStudyFlag: FC<{ study: ParticipantStudy }> = ({ study }) => {
-    if (!study.opensAt) return null;
-    const isNew = dayjs(study.opensAt).isAfter(dayjs().subtract(30, 'days'));
-    if (!isNew) return null;
+const NewStudyFlag: FC<{study: ParticipantStudy}> = ({ study }) => {
+    if (!study.opensAt) return null
+    const isNew = dayjs(study.opensAt).isAfter(dayjs().subtract(30, 'days'))
+    if (!isNew) return null
     return (
         <CornerRibbon>
             <small>New Study</small>
         </CornerRibbon>
-    );
-};
+    )
+}
 
 const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
-    if (!study.completedAt) return null;
+    if (!study.completedAt) return null
 
     return (
-        <Box
-            gap
+        <Box gap
             align="center"
             padding="default"
             css={{
@@ -142,19 +138,14 @@ const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
                 top: 16,
             }}
         >
-            <Icon icon="checkCircle" color="white" />
+            <Icon icon="checkCircle" color='white' />
             <span>Complete</span>
         </Box>
-    );
-};
+    )
+}
 
 const MultiSessionFlag: FC<StudyCardProps> = ({ study }) => {
-    if (
-        !studyIsMultipart(study) ||
-        !study.stages?.[0].isCompleted ||
-        study.stages?.[1].isCompleted
-    )
-        return null;
+    if (!studyIsMultipart(study) || !study.stages?.[0].isCompleted || study.stages?.[1].isCompleted) return null
 
     return (
         <div
@@ -177,67 +168,58 @@ const MultiSessionFlag: FC<StudyCardProps> = ({ study }) => {
         >
             <MultiSessionBar study={study} />
         </div>
-    );
-};
+    )
+}
 
 const FeedbackMultiSessionContainer: FC<StudyCardProps> = ({ study }) => {
     const isMobile = useIsMobileDevice();
 
     if (!studyIsMultipart(study)) {
-        return <Space h="md" />;
+        return <Space h='md' />
     }
 
     return (
         <Box
             className={cx({ 'xx-small': isMobile })}
-            justify="between"
+            justify='between'
             wrap
             margin={{ top: 'default' }}
             css={{ minHeight: 35 }}
         >
             <MultiSession study={study} />
         </Box>
-    );
-};
+    )
+}
 
 const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
     const isMobile = useIsMobileDevice();
 
     return (
-        <Box
-            className={cx(
-                { small: !isMobile, 'xx-small': isMobile },
-                'mt-auto',
-                'pt-1'
-            )}
-            justify="between"
-            align="center"
-            wrap
-        >
-            <Box gap="small">
+        <Box className={cx({ 'small': !isMobile, 'xx-small': isMobile }, 'mt-auto', 'pt-1')} justify='between' align='center' wrap>
+            <Box gap='small'>
                 <Tag tag={study.subject} />
             </Box>
-            <Box gap="small">
+            <Box gap='small'>
                 {studyIsMultipart(study) && <span>*Total</span>}
                 <span>{getStudyDuration(study)} min</span>
                 &middot;
                 <span>{getStudyPoints(study)} pts</span>
             </Box>
         </Box>
-    );
-};
+    )
+}
 
 export const StudyCard: React.FC<StudyCardProps> = ({ study }) => {
-    const nav = useNavigate();
-    const onClick = () => nav(`/studies/details/${study.id}`);
-    const env = useEnvironment();
+    const nav = useNavigate()
+    const onClick = () => nav(`/studies/details/${study.id}`)
+    const env = useEnvironment()
 
     return (
         <Card
             as="a"
             role={'link'}
             className="col study"
-            direction="column"
+            direction='column'
             onClick={onClick}
             data-study-id={study.id}
             data-is-completed={!!study.completedAt}
@@ -247,18 +229,17 @@ export const StudyCard: React.FC<StudyCardProps> = ({ study }) => {
         >
             <CardContent study={study} />
         </Card>
-    );
-};
+    )
+}
 
-const CardContent: FC<{ study: ParticipantStudy }> = ({ study }) => {
+const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
     const isMobile = useIsMobileDevice();
 
     return (
         <>
-            <img
-                src={getImageUrl(study.imageId)}
+            <img src={getImageUrl(study.imageId)}
                 alt={study.imageId}
-                className="study-card-image"
+                className='study-card-image'
                 css={{
                     border: `1px solid ${colors.gray50}`,
                     borderRadius: 8,
@@ -278,20 +259,18 @@ const CardContent: FC<{ study: ParticipantStudy }> = ({ study }) => {
             </small>
             <PointsAndDuration study={study} />
         </>
-    );
-};
+    )
+}
 
-export const StudyCardPreview: FC<{ study: Study }> = ({ study }) => {
-    const [showDetails, setShowDetails] = useState<boolean>(false);
+export const StudyCardPreview: FC<{study: Study}> = ({ study }) => {
+    const [showDetails, setShowDetails] = useState<boolean>(false)
     return (
-        <Card className="col study" direction="column">
+        <Card className="col study" direction='column'>
             <CardContent study={study as ParticipantStudy} />
             <Button
-                variant="outline"
-                mt="auto"
-                onClick={() => {
-                    setShowDetails(true);
-                }}
+                variant='outline'
+                mt='auto'
+                onClick={() => {setShowDetails(true)}}
             >
                 Preview Study Details
             </Button>
@@ -302,5 +281,5 @@ export const StudyCardPreview: FC<{ study: Study }> = ({ study }) => {
                 preview={true}
             />
         </Card>
-    );
-};
+    )
+}

@@ -16,7 +16,18 @@ const Wrapper = styled.div({
     display: 'inline-block',
 });
 
+
 export const StyledLink = styled(NavLink)({
+    textDecoration: 'none',
+    color: 'white',
+    fontFamily: 'System-ui',
+    fontSize: '18px',
+    fontWeight: 700,
+    lineHeight: '28px',
+    textAlign: 'left',
+});
+
+const NavbarStyledLink = styled(NavLink)({
     textDecoration: 'none',
     color: 'white',
     fontFamily: 'System-ui',
@@ -41,7 +52,6 @@ export const StyledLink = styled(NavLink)({
 
 const AdminLinks = loadAsync('Admin Links', () => import('./admin-links'));
 const AccountLinks = loadAsync('Account Links', () => import('./account-links'));
-
 export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
     const user = useCurrentUser();
     const hideBanner = user.isResearcher;
@@ -61,12 +71,9 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                             opacity: 1,
                         }}
                     >
-                        {/* Left side content */}
                         <Box gap="medium" align="center">
                             <NavbarLogoLink /> 
                         </Box>
-
-                        {/* Right side content */}
                         <Box
                             justify="center"
                             align="center"
@@ -80,14 +87,14 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                             {!isMobile && !user.isAdministrator && !user.isResearcher && (
                                 <>
                                     <Wrapper>
-                                        <StyledLink to="/studies" className={({ isActive }) => isActive ? 'active' : ''}>
+                                        <NavbarStyledLink to="/studies" className={({ isActive }) => isActive ? 'active' : ''}>
                                             Dashboard
-                                        </StyledLink>
+                                        </NavbarStyledLink>
                                     </Wrapper>
                                     <Wrapper>
-                                        <StyledLink to="/achievements" className={({ isActive }) => isActive ? 'active' : ''}>
+                                        <NavbarStyledLink to="/achievements" className={({ isActive }) => isActive ? 'active' : ''}>
                                             Achievements
-                                        </StyledLink>
+                                        </NavbarStyledLink>
                                     </Wrapper>
                                 </>
                             )}

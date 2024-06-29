@@ -11,17 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, FreeMode, Navigation } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
-import {
-    Badge,
-    Box,
-    Container,
-    Flex,
-    Group,
-    Stack,
-    Text,
-    TextInput,
-    Title,
-} from '@mantine/core';
+import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title } from '@mantine/core';
 import { IconSearch, IconX } from '@tabler/icons-react';
 import { groupBy } from 'lodash';
 import { colors } from '@theme';
@@ -40,22 +30,19 @@ const HighlightedStudies: FC = () => {
     if (!highlightedStudies.length) return null;
 
     return (
-        <Box bg={colors.navy} py="md">
+        <Box bg={colors.navy} py='md'>
             <Container>
                 <Stack>
-                    <Title c="white" order={2}>
-                        Highlighted Studies
-                    </Title>
-                    {isMobile ? (
-                        <MobileStudyCards studies={highlightedStudies} />
-                    ) : (
+                    <Title c='white' order={2}>Highlighted Studies</Title>
+                    {isMobile ?
+                        <MobileStudyCards studies={highlightedStudies} /> :
                         <DesktopStudyCards studies={highlightedStudies} />
-                    )}
+                    }
                 </Stack>
             </Container>
         </Box>
     );
-};
+}
 
 const LearnerDashboard = () => {
     const env = useEnvironment();
@@ -88,73 +75,60 @@ const LearnerDashboard = () => {
             <Footer includeFunders />
         </div>
     );
-};
+}
 
-export const SearchBar: FC<{
-    search: string;
-    setSearch: (search: string) => void;
-}> = ({ search, setSearch }) => {
+export const SearchBar: FC<{ search: string, setSearch: (search: string) => void }> = ({ search, setSearch }) => {
     const isMobile = useIsMobileDevice();
 
     return (
         <TextInput
             w={isMobile ? '100%' : '400px'}
-            size="lg"
+            size='lg'
             value={search}
             onChange={(event) => setSearch(event.currentTarget.value)}
-            rightSection={
-                search.length ? (
-                    <IconX
-                        onClick={() => setSearch('')}
-                        style={{ cursor: 'pointer' }}
-                    />
-                ) : (
-                    <IconSearch />
-                )
+            rightSection={search.length ?
+                <IconX onClick={() => setSearch('')} style={{ cursor: 'pointer' }} /> :
+                <IconSearch />
             }
             placeholder="Search by study title, researcher, or topic name"
         />
     );
-};
+}
 
-export const StudiesTitle: FC<{
-    search: string;
-    filteredStudies: ParticipantStudy[];
-}> = () => {
-    return <Title order={2}>View all Studies</Title>;
-};
+export const StudiesTitle: FC<{ search: string, filteredStudies: ParticipantStudy[] }> = () => {
+    return (
+        <Title order={2}>View all Studies</Title>
+    );
+}
 
-export const SearchResults: FC<{
-    search: string;
-    filteredStudies: ParticipantStudy[];
-}> = ({ search, filteredStudies }) => {
+export const SearchResults: FC<{ search: string, filteredStudies: ParticipantStudy[] }> = ({ search, filteredStudies }) => {
     if (!search) {
         return null;
     }
 
     if (filteredStudies.length == 0) {
-        return <Title order={4}>Sorry, no results found for '{search}'</Title>;
+        return (
+            <Title order={4}>
+                Sorry, no results found for '{search}'
+            </Title>
+        );
     }
 
     return (
         <Title order={4}>
-            {filteredStudies.length} result
-            {filteredStudies.length == 1 ? '' : 's'} for '{search}'
+            {filteredStudies.length} result{filteredStudies.length == 1 ? '' : 's'} for '{search}'
         </Title>
     );
-};
+}
 
 export const StudiesContainer = () => {
     const { search, setSearch, filteredStudies } = useSearchStudies();
 
     return (
-        <Container my="lg">
-            <Stack gap="lg">
-                <Flex justify="space-between" wrap="wrap">
-                    <StudiesTitle
-                        search={search}
-                        filteredStudies={filteredStudies}
-                    />
+        <Container my='lg'>
+            <Stack gap='lg'>
+                <Flex justify='space-between' wrap='wrap'>
+                    <StudiesTitle search={search} filteredStudies={filteredStudies} />
 
                     <SearchBar search={search} setSearch={setSearch} />
                 </Flex>
@@ -166,33 +140,22 @@ export const StudiesContainer = () => {
                         height: '1px',
                         backgroundColor: '#DBDBDB',
                         margin: '16px 0',
-                        border: '1px solid #DBDBDB',
+                        border: '1px solid #DBDBDB', 
                     }}
                 />
 
-                <SearchResults
-                    search={search}
-                    filteredStudies={filteredStudies}
-                />
+                <SearchResults search={search} filteredStudies={filteredStudies} />
 
                 <StudiesByLearningPath filteredStudies={filteredStudies} />
             </Stack>
         </Container>
     );
-};
+}
 
-export const MobileStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
-    studies,
-}) => {
+
+export const MobileStudyCards: FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
     return (
-        <Box
-            sx={{
-                position: 'relative',
-                '&:hover .swiper-button-next, &:hover .swiper-button-prev': {
-                    opacity: 1,
-                },
-            }}
-        >
+        <Box sx={{ position: 'relative', '&:hover .swiper-button-next, &:hover .swiper-button-prev': { opacity: 1 } }}>
             <Swiper
                 effect={'cards'}
                 slidesPerView={'auto'}
@@ -209,15 +172,11 @@ export const MobileStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
                 pagination={false}
                 navigation={true}
             >
-                {studies
-                    .sort((a, b) =>
-                        a.completed === b.completed ? 0 : a.completed ? 1 : -1
-                    )
-                    .map((study) => (
-                        <SwiperSlide key={study.id} className="pb-1">
-                            <StudyCard study={study} />
-                        </SwiperSlide>
-                    ))}
+                {studies.sort((a, b) => (a.completed === b.completed) ? 0 : a.completed ? 1 : -1).map((study) => (
+                    <SwiperSlide key={study.id} className="pb-1">
+                        <StudyCard study={study} />
+                    </SwiperSlide>
+                ))}
             </Swiper>
             <style jsx>{`
                 .swiper-button-next,
@@ -234,18 +193,9 @@ export const MobileStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
     );
 };
 
-export const DesktopStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
-    studies,
-}) => {
+export const DesktopStudyCards: FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
     return (
-        <Box
-            sx={{
-                position: 'relative',
-                '&:hover .swiper-button-next, &:hover .swiper-button-prev': {
-                    opacity: 1,
-                },
-            }}
-        >
+        <Box sx={{ position: 'relative', '&:hover .swiper-button-next, &:hover .swiper-button-prev': { opacity: 1 } }}>
             <Swiper
                 slidesPerView={3}
                 simulateTouch={true}
@@ -259,15 +209,11 @@ export const DesktopStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
                 navigation={true}
                 modules={[FreeMode, Navigation]}
             >
-                {studies
-                    .sort((a, b) =>
-                        a.completed === b.completed ? 0 : a.completed ? 1 : -1
-                    )
-                    .map((study) => (
-                        <SwiperSlide style={{ padding: '1rem' }} key={study.id}>
-                            <StudyCard study={study} />
-                        </SwiperSlide>
-                    ))}
+                {studies.sort((a, b) => (a.completed === b.completed) ? 0 : a.completed ? 1 : -1).map((study) => (
+                    <SwiperSlide style={{ padding: '1rem' }} key={study.id}>
+                        <StudyCard study={study} />
+                    </SwiperSlide>
+                ))}
             </Swiper>
             <style jsx>{`
                 .swiper-button-next,
@@ -284,57 +230,46 @@ export const DesktopStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
     );
 };
 
-export const StudiesByLearningPath: FC<{
-    filteredStudies: ParticipantStudy[];
-}> = ({ filteredStudies }) => {
+export const StudiesByLearningPath: FC<{ filteredStudies: ParticipantStudy[] }> = ({ filteredStudies }) => {
     const [learningPaths, studiesByLearningPath] = useMemo(() => {
         return [
             orderBy(
-                uniqBy(
-                    filteredStudies.map((fs) => fs.learningPath),
-                    (lp) => lp?.label
-                ),
+                (uniqBy(filteredStudies.map(fs => fs.learningPath), (lp) => lp?.label)),
                 ['completed'],
                 ['asc']
             ),
             groupBy(filteredStudies, (study) => study.learningPath?.label),
-        ];
+        ]
     }, [filteredStudies]);
 
     const isMobile = useIsMobileDevice();
 
     return (
-        <Stack gap="lg" data-testid="studies-listing">
-            {learningPaths.map((learningPath) => {
+        <Stack gap='lg' data-testid='studies-listing'>
+            {learningPaths.map(learningPath => {
                 if (!learningPath) return null;
-                const studies = studiesByLearningPath[learningPath.label].sort(
-                    (a, b) =>
-                        a.completed === b.completed ? 0 : a.completed ? 1 : -1
-                );
+                const studies = studiesByLearningPath[learningPath.label].sort((a, b) => (a.completed === b.completed) ? 0 : a.completed ? 1 : -1);
                 return (
                     <Stack key={learningPath.label}>
-                        <Group gap="sm">
-                            <Title order={3}>{learningPath.label}</Title>
+                        <Group gap='sm'>
+                            <Title order={3}>
+                                {learningPath.label}
+                            </Title>
                             <Text span>|</Text>
-                            <Title order={3} fw="300">
+                            <Title order={3} fw='300'>
                                 {learningPath.description}
                             </Title>
-                            {learningPath.completed ? (
-                                <Badge c={colors.text} color={colors.green}>
-                                    Completed
-                                </Badge>
-                            ) : null}
+                            {learningPath.completed ? <Badge c={colors.text} color={colors.green}>Completed</Badge> : null}
                         </Group>
-                        {isMobile ? (
-                            <MobileStudyCards studies={studies} />
-                        ) : (
+                        {isMobile ?
+                            <MobileStudyCards studies={studies} /> :
                             <DesktopStudyCards studies={studies} />
-                        )}
+                        }
                     </Stack>
-                );
+                )
             })}
         </Stack>
-    );
-};
+    )
+}
 
 export default LearnerDashboard;
