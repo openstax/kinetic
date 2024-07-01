@@ -28,7 +28,6 @@ class LearnerActivityReport
       'Completed At',
       'Participant Created At',
       'Participant Research ID',
-      'Participant Name',
       'New Participant Study?',
       'Test Account?'
     ]
@@ -38,14 +37,6 @@ class LearnerActivityReport
     @user_uuids = launches.clone.pluck('user_id')
 
     UserInfo.for_uuids(@user_uuids)
-  end
-
-  def find_user_email(account)
-    account['contact_infos']&.find do |ci|
-      ci['type'] == 'EmailAddress' &&
-        ci['is_verified'] == true &&
-        ci['is_guessed_preferred'] == true
-    end || {}
   end
 
   def build_rows(csv, users, launches)
@@ -67,7 +58,6 @@ class LearnerActivityReport
         launch.completed_at,
         launch.research_id.created_at,
         launch.research_id.id,
-        account['name'] || '',
         launch.research_id.is_new_user?(launch.first_launched_at),
         account['is_test'] ? 'X' : nil
       ]
