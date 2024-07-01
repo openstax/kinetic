@@ -11,3 +11,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.swiper-container {
+    position: relative;
+}
+
+.swiper-container:hover .swiper-button-next,
+.swiper-container:hover .swiper-button-prev {
+    opacity: 1;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
