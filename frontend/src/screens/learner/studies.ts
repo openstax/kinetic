@@ -76,6 +76,7 @@ export const useParticipantStudies = () => {
 
 export const useSearchStudies = () => {
     const [search, setSearch] = useState('')
+    const [duration, setDuration] = useState(new Set<Number>([5, 15, 25]))
     const [filteredStudies, setFilteredStudies] = useState<ParticipantStudy[]>([])
     const { isLoading, studies } = useParticipantStudies()
 
@@ -96,15 +97,24 @@ export const useSearchStudies = () => {
     useMemo(() => {
         if (search) {
             const mappedResults = fuse.search(search).map(result => result.item)
-            setFilteredStudies(mappedResults)
+            const filteredResults = mappedResults.filter((study) => {
+                if(duration.has(study.totalDuration)) return study
+            })
+            setFilteredStudies(filteredResults)
         } else {
-            setFilteredStudies(studies)
+            
+            const filteredResults = studies.filter((study) => {
+                if(duration.has(study.totalDuration)) return study
+            })
+            setFilteredStudies(filteredResults)
         }
-    }, [search, isLoading])
+    }, [search, isLoading, duration])
 
     return {
         search,
         setSearch,
+        duration,
+        setDuration,
         filteredStudies,
     }
 }
