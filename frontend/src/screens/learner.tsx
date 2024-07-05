@@ -1,6 +1,6 @@
 import { React } from '@common'
 import { ParticipantStudy } from '@api'
-import { Footer, TopNavBar } from '@components'
+import { Footer, TopNavBar, Icon } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
 import { useParticipantStudies, useSearchStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
@@ -21,20 +21,48 @@ const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
     const isMobile = useIsMobileDevice()
 
+    const handleClick = () => {
+        const element = document.getElementById('all-studies-unique-id')
+        element?.scrollIntoView({ behavior: 'smooth' })
+    }
+
     if (!highlightedStudies.length) return null
 
     return (
         <Box bg={colors.navy} py='md'>
             <Container>
-                <Stack>
-                    <Title c='white' order={2}>Highlighted Studies</Title>
-                    {isMobile ?
-                        <MobileStudyCards studies={highlightedStudies} /> :
-                        <DesktopStudyCards studies={highlightedStudies} />
-                    }
-                </Stack>
+                <Flex direction='column'>
+                    <Flex justify='space-between'>
+                        <CuratedStudies />
+                        {isMobile ?
+                            <MobileStudyCards studies={highlightedStudies} /> :
+                            <DesktopStudyCards studies={highlightedStudies} />
+                        }
+                    </Flex>
+                    <Flex c={colors.green} justify='center' align='center'>
+                        <Flex direction='column' justify='center' align='center' style={{ cursor: 'pointer' }} onClick={()=> handleClick()}>
+                            <Text size='sm'>View all studies</Text>
+                            <Icon icon='arrowDown' width='.875rem'></Icon>
+                        </Flex>
+                    </Flex>
+                </Flex>
             </Container>
         </Box>
+    )
+}
+
+const CuratedStudies: FC = () => {
+
+    return (
+        <Flex c={colors.white} direction='column' w='280px' h='350px' pt='2.25rem' mt='1rem'>
+            <Title order={2}>Curated Studies</Title>
+            <Title order={5}>by our learning scientists</Title>
+
+            <Stack mt='1rem'>
+                <Text pr='1.5rem'>Deepen your understanding of learning habits with scientific studies currated by our team of education researchers.</Text>
+                <Text>Accelerate your growth and tailor your path to your own needs.</Text>
+            </Stack>
+        </Flex>
     )
 }
 
@@ -90,7 +118,7 @@ export const SearchBar: FC<{search: string, setSearch: (search: string) => void}
 
 export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = () => {
     return (
-        <Title order={2}>All Studies</Title>
+        <Title order={2} id='all-studies-unique-id'>All Studies</Title>
     )
 }
 
