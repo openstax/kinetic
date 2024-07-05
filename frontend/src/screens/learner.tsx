@@ -1,20 +1,20 @@
 import { React } from '@common'
 import { ParticipantStudy } from '@api'
-import { Footer, TopNavBar } from '@components'
+import { Footer, TopNavBar, Icon } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
 import { useParticipantStudies, useSearchStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
 import { StudyDetails } from './learner/details'
 import { Route, Routes } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCards, FreeMode, Navigation, Pagination } from 'swiper/modules';
+import { EffectCards, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
-import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title } from '@mantine/core';
+import { Box, Container, Flex, Group, Stack, TextInput, Title } from '@mantine/core';
 import { IconSearch, IconX } from '@tabler/icons-react';
 import { groupBy } from 'lodash';
 import { colors } from '@theme'
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { orderBy, sortBy, uniqBy } from 'lodash-es';
 
 const HighlightedStudies: FC = () => {
@@ -135,6 +135,8 @@ export const StudiesContainer = () => {
 }
 
 export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }) => {
+
+    const [hovered, setHovered] = useState<Number>(-1)
     return (
         <Box>
             <Swiper
@@ -156,9 +158,9 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
                     marginBottom: '1rem',
                 }}
             >
-                {studies.map((study) => (
-                    <SwiperSlide key={study.id} className="pb-1" style={{paddingTop: '1rem'}}>
-                        <StudyCard study={study} />
+                {studies.map((study, index) => (
+                    <SwiperSlide key={study.id} className="pb-1" style={{ paddingTop: '1rem' }}>
+                        <StudyCard study={study} index={index} hovered={hovered} setHovered={setHovered}/>
                     </SwiperSlide>
                 ))}
             </Swiper>
@@ -167,9 +169,34 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
 }
 
 export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }) => {
+
+    const [hovered, setHovered] = useState(-1)
+    const [displayArrows, setDisplayArrows] = useState<boolean>(false)
+    const [element, setElement] = useState<HTMLDivElement | null>(null)
+
+    const [isOverflowing, setIsOverflowing] = useState(false);
+
+    useEffect(() => {
+        const checkOverflow = () => {
+            if (element) {
+                const overflow = element.scrollWidth > element.clientWidth;
+                setIsOverflowing(overflow);
+            }
+        };
+
+        checkOverflow();
+
+        window.addEventListener('resize', checkOverflow);
+        return () => window.removeEventListener('resize', checkOverflow);
+    }, [studies, element]);
+
     return (
-        <Box>
-            <Swiper
+        <Box style={{ position: 'relative', paddingLeft: '3rem', paddingRight: '3rem' }} onMouseOver={() => {
+            setDisplayArrows(true)
+        }} onMouseLeave={() => {
+            setDisplayArrows(false)
+        }}>
+            {/* <Swiper
                 slidesPerView={3}
                 simulateTouch={true}
                 freeMode={true}
@@ -191,11 +218,48 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
                 modules={[FreeMode, Pagination, Navigation]}
             >
                 {studies.map(study => (
-                    <SwiperSlide style={{ padding: '1rem' }} key={study.id}>
+                    <SwiperSlide style={{ padding: '1rem', position: 'static'}} key={study.id}>
                         <StudyCard study={study} />
                     </SwiperSlide>
                 ))}
-            </Swiper>
+            </Swiper> */}
+            <Flex ref={(ele) => setElement(ele)} align='center' justify='flex-start' gap='lg' pt='1rem' pb='2rem' style={{ overflowX: 'auto', overflowY: 'hidden',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+            }} className='hide-scrollbar'>
+                <style>
+                    {`
+                        .hide-scrollbar::-webkit-scrollbar {
+                        display: none;
+                        }
+
+                        .hide-scrollbar {
+                        -ms-overflow-style: none;
+                        scrollbar-width: none;
+                        }
+                    `}
+                </style>
+                {studies.map((study, index) => (
+                    <StudyCard key={study.id} study={study} index={index} hovered={hovered} setHovered={setHovered}/>
+                ))}
+                
+                <div style={{ position: 'absolute', left: '0', cursor: 'pointer', display: isOverflowing && displayArrows ? 'block' : 'none' }}
+                    onClick={() => {
+                        if(element){
+                            element.scrollBy({ left: -200, behavior: 'smooth' })
+                        }
+                    }}>
+                    <Icon icon='arrowLeft' color={colors.purple} width='3rem'></Icon>
+                </div>
+                <div style={{ position: 'absolute', right: '0', cursor: 'pointer', display: isOverflowing && displayArrows ? 'block' : 'none' }}
+                    onClick={() => {
+                        if(element){
+                            element.scrollBy({ left: 200, behavior: 'smooth' })
+                        }
+                    }}>
+                    <Icon icon='arrowRight' color={colors.purple} width='3rem'></Icon>
+                </div>               
+            </Flex>
         </Box>
     )
 }
@@ -222,15 +286,14 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
 
                 return (
                     <Stack key={learningPath.label}>
-                        <Group gap='sm'>
+                        <Group gap='xs'>
                             <Title order={3}>
                                 {learningPath.label}
                             </Title>
-                            <Text span>|</Text>
+                            <Title style={{ color: colors.purple }} order={5}>|</Title>
                             <Title order={3} fw='300'>
                                 {learningPath.description}
                             </Title>
-                            {learningPath.completed ? <Badge c={colors.text} color={colors.green}>Completed</Badge> : null}
                         </Group>
                         {isMobile ?
                             <MobileStudyCards studies={studies} /> :

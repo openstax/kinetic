@@ -20,6 +20,7 @@ export const colors = {
     // Tertiary Colors
     pine: '#1A654E',
     violet: '#6B38A8',
+    lightGreen: '#B6DB93',
     blue30: '#7594F5',
     yellow50: '#FAF6D1',
     pine50: '#C9E9D3',
