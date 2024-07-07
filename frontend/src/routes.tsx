@@ -17,7 +17,7 @@ const ResearcherAccountPage = loadAsync('Researcher Account Page', () => import(
 const EditStudy = loadAsync('Edit Study Page', () => import('./screens/researcher/studies/create/edit-study'))
 const ResearcherStudyLanding = loadAsync('New Study Landing Page', () => import('./screens/researcher/studies/create/researcher-study-landing'))
 const StudyOverview = loadAsync('Study Overview', () => import('./screens/researcher/studies/overview/study-overview'))
-
+const Achievements = loadAsync('Achievements', () => import('./screens/achievements')) // Load the new Achievements component
 const StudiesHomepage = () => {
     const user = useCurrentUser()
     return user.isResearcher ? <ResearcherStudies /> : <LearnerDashboard />
@@ -90,6 +90,7 @@ export const AppRoutes = () => {
                 { path: 'analysis/*', element: <AnalysisHomepage /> },
                 { path: 'admin/*', element: <AdminHomepage /> },
                 { path: '*', element: <PageNotFound /> },
+                { path: 'achievements', element: <Achievements /> }, // New route for Achievements
             ],
         },
     ])

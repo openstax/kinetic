@@ -120,7 +120,7 @@ export const StudyDetails: React.FC = () => {
 }
 
 export const StudyDetailsPreview: FC<{
-    study: ParticipantStudy,
+    study: any,
     show: boolean,
     onHide: () => void,
     preview?: boolean
