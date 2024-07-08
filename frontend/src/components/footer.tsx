@@ -20,13 +20,13 @@ import {
 } from '@tabler/icons-react';
 
 // @ts-ignore
-import NSFLogoURL from '../images/nsf-logo.webp';
+import NSFLogoURL from '../images/nsf-logo.webp'
 // @ts-ignore
-import IESLogoURL from '../images/ies-logo.webp';
+import IESLogoURL from '../images/ies-logo.webp'
 // @ts-ignore
-import RiceLogoURL from '../images/rice-logo.png';
+import RiceLogoURL from '../images/rice-logo.png'
 // @ts-ignore
-import OpenStaxURL from '../images/openstax-logo.png';
+import OpenStaxURL from '../images/openstax-logo.png'
 
 const Funders = () => {
     return (
@@ -113,9 +113,9 @@ const Funders = () => {
 
 export const DesktopFooter: React.FC = () => {
     return (
-        <Box bg="navy" c="white">
-            <Container bg="navy">
-                <Group py="xl" align="start" justify="space-between">
+        <Box bg='navy' c='white'>
+            <Container bg='navy'>
+                <Group py='xl' align='start' justify='space-between'>
                     <HelpLink />
                     <ResourceLinks />
                     <SocialLinks />
@@ -181,8 +181,8 @@ export const Logos = () => {
                     src={RiceLogoURL}
                 />
             </Anchor>
-            <Anchor target="_blank" href="https://www.openstax.org">
-                <Image alt="Open Stax logo" h={30} src={OpenStaxURL} />
+            <Anchor target='_blank' href='https://www.openstax.org'>
+                <Image alt='Open Stax logo' h='30' src={OpenStaxURL} />
             </Anchor>
         </Flex>
     );
@@ -193,8 +193,8 @@ export const Footer: React.FC<{ includeFunders?: boolean }> = ({
 }) => {
     return (
         <div>
-            {includeFunders && <Funders />}
-            {useIsMobileDevice() ? <MobileFooter /> : <DesktopFooter />}
+            {includeFunders &&<Funders />}
+            {useIsMobileDevice() ? <MobileFooter/> : <DesktopFooter/>}
         </div>
     );
 };

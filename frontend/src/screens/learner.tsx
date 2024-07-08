@@ -39,7 +39,7 @@ const HighlightedStudies: FC = () => {
     if (!highlightedStudies.length) return null;
 
     return (
-        <Box bg={colors.navy} py="md">
+        <Box bg={colors.navy} py='md'>
             <Container>
                 <Stack>
                     <Title c="white" order={2}>
@@ -98,7 +98,7 @@ export const SearchBar: FC<{
     return (
         <TextInput
             width={isMobile ? '100%' : '400px'}
-            size="lg"
+            size='lg'
             value={search}
             onChange={(event) => setSearch(event.currentTarget.value)}
             rightSection={
@@ -141,8 +141,8 @@ export const StudiesContainer = () => {
     const { search, setSearch, filteredStudies } = useSearchStudies();
 
     return (
-        <Container my="lg">
-            <Stack gap="lg">
+        <Container my='lg'>
+            <Stack gap='lg'>
                 <Flex justify="space-between" wrap="wrap">
                     <StudiesTitle />
 
@@ -175,8 +175,8 @@ export const MobileStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
     return (
         <Box className="swiper-container">
             <Swiper
-                effect="cards"
-                slidesPerView="auto"
+                effect='cards'
+                slidesPerView='auto'
                 cardsEffect={{
                     slideShadows: false,
                     perSlideOffset: 14,
@@ -275,7 +275,7 @@ export const StudiesByLearningPath: FC<{
                         <Group gap="sm">
                             <Title order={3}>{learningPath.label}</Title>
                             <Text span>|</Text>
-                            <Title order={3} fw={300}>
+                            <Title order={3} fw='300'>
                                 {learningPath.description}
                             </Title>
                             {learningPath.completed ? (
