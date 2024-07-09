@@ -20,6 +20,8 @@ import PointsHistory from "./PointsHistory";
 
 import { useParticipantStudies } from "./learner/studies";
 
+import { useFetchRewards } from "../models/rewards";
+
 const activities = [
     {
         activity: "Points earned",
@@ -78,9 +80,51 @@ const activities = [
         balance: 40,
     },
 ];
+const dummyData = {
+    studies: [
+        {
+            id: 1,
+            titleForParticipants: "Study 1",
+            totalPoints: 20,
+            completedAt: new Date("2024-07-07T05:49:52.000Z"),
+        },
+        {
+            id: 3,
+            titleForParticipants: "Study 2",
+            totalPoints: 10,
+            completedAt: new Date("2024-07-07T06:02:05.000Z"),
+        },
+    ],
+    welcomeStudies: [
+        {
+            id: 2,
+            titleForParticipants: "Welcome Study 1",
+            totalPoints: 5,
+            completedAt: new Date("2024-07-06T15:30:00.000Z"),
+        },
+        {
+            id: 4,
+            titleForParticipants: "Welcome Study 2",
+            totalPoints: 5,
+            completedAt: new Date("2024-07-06T16:45:00.000Z"),
+        },
+    ],
+};
 
-const pointsEarned = 250;
-const totalPoints = 300;
+function getTotalPoints(data) {
+    const studyPoints = data.studies.reduce(
+        (sum, study) => sum + study.totalPoints,
+        0
+    );
+    const welcomeStudyPoints = data.welcomeStudies.reduce(
+        (sum, study) => sum + study.totalPoints,
+        0
+    );
+    return studyPoints + welcomeStudyPoints;
+}
+
+const pointsEarned = getTotalPoints(dummyData);
+const totalPoints = 100;
 
 const BadgeDetail = ({
     badge,
@@ -389,6 +433,12 @@ const Achievements = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const DATA = useParticipantStudies();
+
+    const { data: rewards = [] } = useFetchRewards();
+
+    console.log("Data", DATA);
+
+    console.log("Rewards", rewards);
 
     const handleTabClick = (tab: any) => setSelectedTab(tab);
 

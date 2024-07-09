@@ -1,7 +1,12 @@
-import { Reward } from '@api'
-import { Main, Sidebar } from './grid'
-import { colors } from '@theme';
-import { useCreateReward, useDeleteReward, useFetchRewards, useUpdateReward } from '@models';
+import { Reward } from "@api";
+import { Main, Sidebar } from "./grid";
+import { colors } from "@theme";
+import {
+    useCreateReward,
+    useDeleteReward,
+    useFetchRewards,
+    useUpdateReward,
+} from "@models";
 import {
     Button,
     Card,
@@ -14,37 +19,39 @@ import {
     Textarea,
     TextInput,
     Title,
-} from '@mantine/core';
-import { useForm, yupResolver } from '@mantine/form';
-import * as yup from 'yup';
-import React, { useEffect, useState } from 'react'
+} from "@mantine/core";
+import { useForm, yupResolver } from "@mantine/form";
+import * as yup from "yup";
+import React, { useEffect, useState } from "react";
 
 const EditReward: FC<{ reward?: Reward }> = ({ reward }) => {
-    const updateReward = useUpdateReward()
-    const createReward = useCreateReward()
+    const updateReward = useUpdateReward();
+    const createReward = useCreateReward();
 
     const form = useForm({
         initialValues: {
-            prize: reward?.prize || '',
+            prize: reward?.prize || "",
             points: reward?.points || 0,
-            description: reward?.description || '',
+            description: reward?.description || "",
         },
 
-        validate: yupResolver(yup.object().shape({
-            prize: yup.string().required(),
-            points: yup.number().required().min(1),
-            description: yup.string().required(),
-        })),
+        validate: yupResolver(
+            yup.object().shape({
+                prize: yup.string().required(),
+                points: yup.number().required().min(1),
+                description: yup.string().required(),
+            })
+        ),
     });
 
     useEffect(() => {
         if (reward) {
             form.setValues({
                 ...reward,
-            })
-            form.resetDirty()
+            });
+            form.resetDirty();
         } else {
-            form.reset()
+            form.reset();
         }
     }, [reward]);
 
@@ -55,61 +62,79 @@ const EditReward: FC<{ reward?: Reward }> = ({ reward }) => {
                 updateReward: {
                     reward: values,
                 },
-            })
+            });
         } else {
-            createReward.mutate({
-                reward: values,
-            }, {
-                onSuccess: () => {
-                    form.reset()
+            createReward.mutate(
+                {
+                    reward: values,
                 },
-            })
+                {
+                    onSuccess: () => {
+                        form.reset();
+                    },
+                }
+            );
         }
-    })
+    });
 
     return (
         <form onSubmit={handleSubmit}>
             <Stack>
                 <Group grow>
-                    <TextInput placeholder='Prize' label='Prize' {...form.getInputProps('prize')} />
-                    <NumberInput placeholder='Points' label='Points' {...form.getInputProps('points')} />
+                    <TextInput
+                        placeholder="Prize"
+                        label="Prize"
+                        {...form.getInputProps("prize")}
+                    />
+                    <NumberInput
+                        placeholder="Points"
+                        label="Points"
+                        {...form.getInputProps("points")}
+                    />
                 </Group>
-                <Textarea placeholder='Description' label='Description' {...form.getInputProps('description')} />
+                <Textarea
+                    placeholder="Description"
+                    label="Description"
+                    {...form.getInputProps("description")}
+                />
                 <Group justify="flex-end">
-                    <Button type="submit" disabled={!form.isDirty() || !form.isValid()}>
-                        {reward?.id ? 'Update reward' : 'Create reward'}
+                    <Button
+                        type="submit"
+                        disabled={!form.isDirty() || !form.isValid()}
+                    >
+                        {reward?.id ? "Update reward" : "Create reward"}
                     </Button>
                 </Group>
             </Stack>
         </form>
-    )
-}
+    );
+};
 
 const RewardCard: FC<{
-    reward: Reward,
-    setCurrentReward: (reward?: Reward) => void,
-    active: boolean
+    reward: Reward;
+    setCurrentReward: (reward?: Reward) => void;
+    active: boolean;
 }> = ({ reward, setCurrentReward, active }) => {
-    const { mutate, isLoading: isDeleting } = useDeleteReward()
+    const { mutate, isLoading: isDeleting } = useDeleteReward();
 
-    if (!reward) return null
-    if (isDeleting) return <Loader />
+    if (!reward) return null;
+    if (isDeleting) return <Loader />;
 
     const onDelete = () => {
         if (reward.id) {
             mutate(reward.id, {
                 onSuccess: () => {
                     if (active) {
-                        setCurrentReward(undefined)
+                        setCurrentReward(undefined);
                     }
                 },
-            })
+            });
         }
-    }
+    };
 
     return (
-        <Stack key={(reward.description || '') + ' ' + reward.prize}>
-            <Card withBorder={active} p='lg'>
+        <Stack key={(reward.description || "") + " " + reward.prize}>
+            <Card withBorder={active} p="lg">
                 <Stack>
                     <Card.Section>
                         <Group>
@@ -123,7 +148,7 @@ const RewardCard: FC<{
                         <Text>Description: {reward.description}</Text>
                     </Card.Section>
                     <Card.Section>
-                        <Group justify='flex-end'>
+                        <Group justify="flex-end">
                             <Button onClick={() => setCurrentReward(reward)}>
                                 Edit
                             </Button>
@@ -134,29 +159,40 @@ const RewardCard: FC<{
                     </Card.Section>
                 </Stack>
             </Card>
-            <hr/>
+            <hr />
         </Stack>
-    )
-}
+    );
+};
 
 export function AdminRewards() {
-    const [currentReward, setCurrentReward] = useState<Reward | undefined>()
+    const [currentReward, setCurrentReward] = useState<Reward | undefined>();
 
-    const { data: rewards = [], isLoading } = useFetchRewards()
+    const { data: rewards = [], isLoading } = useFetchRewards();
 
-    if (isLoading) return <LoadingOverlay />
+    console.log("Rewards", rewards);
+
+    if (isLoading) return <LoadingOverlay />;
 
     return (
         <>
             <Sidebar>
-                <Stack p='sm'>
+                <Stack p="sm">
                     <Title order={3}>Scheduled Rewards</Title>
                     <Button onClick={() => setCurrentReward(undefined)}>
                         + Create new reward
                     </Button>
-                    <Stack p='md' style={{ border: '1px solid black' }} data-testid='rewards-list'>
-                        {rewards.map(reward => (
-                            <RewardCard reward={reward} active={currentReward?.id == reward.id} setCurrentReward={setCurrentReward} key={`${reward.prize}${reward.id}`} />
+                    <Stack
+                        p="md"
+                        style={{ border: "1px solid black" }}
+                        data-testid="rewards-list"
+                    >
+                        {rewards.map((reward) => (
+                            <RewardCard
+                                reward={reward}
+                                active={currentReward?.id == reward.id}
+                                setCurrentReward={setCurrentReward}
+                                key={`${reward.prize}${reward.id}`}
+                            />
                         ))}
                     </Stack>
                 </Stack>
@@ -165,5 +201,5 @@ export function AdminRewards() {
                 <EditReward reward={currentReward} />
             </Main>
         </>
-    )
+    );
 }
