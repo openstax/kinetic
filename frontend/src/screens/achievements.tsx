@@ -19,8 +19,7 @@ import RewardsSection from "./RewardSection";
 import PointsHistory from "./PointsHistory";
 
 import { useParticipantStudies } from "./learner/studies";
-
-import { useFetchRewards } from "../models/rewards";
+import { useEnvironment } from "@lib";
 
 const activities = [
     {
@@ -111,20 +110,23 @@ const dummyData = {
     ],
 };
 
-function getTotalPoints(data) {
+interface Study {
+    totalPoints: number;
+}
+
+interface Data {
+    studies: Study[];
+}
+
+function getTotalPoints(data: Data): number {
     const studyPoints = data.studies.reduce(
         (sum, study) => sum + study.totalPoints,
         0
     );
-    const welcomeStudyPoints = data.welcomeStudies.reduce(
-        (sum, study) => sum + study.totalPoints,
-        0
-    );
-    return studyPoints + welcomeStudyPoints;
+    return studyPoints;
 }
-
 const pointsEarned = getTotalPoints(dummyData);
-const totalPoints = 100;
+const totalPoints = 300;
 
 const BadgeDetail = ({
     badge,
@@ -434,11 +436,10 @@ const Achievements = () => {
 
     const DATA = useParticipantStudies();
 
-    const { data: rewards = [] } = useFetchRewards();
+    const env = useEnvironment();
+    console.log("Env", env);
 
     console.log("Data", DATA);
-
-    console.log("Rewards", rewards);
 
     const handleTabClick = (tab: any) => setSelectedTab(tab);
 
@@ -504,7 +505,7 @@ const Achievements = () => {
                         <PointsProgressBar
                             pointsEarned={pointsEarned}
                             totalPoints={totalPoints}
-                            nextRewardPoints={200}
+                            nextRewardPoints={300}
                         />
                         <RewardsSection />
                         <PointsHistory activities={activities} />
