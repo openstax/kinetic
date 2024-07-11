@@ -1,6 +1,6 @@
 import { React, useState } from '@common'
 import { ParticipantStudy } from '@api'
-import { Footer, TopNavBar, Icon } from '@components'
+import { Footer, TopNavBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
 import { useParticipantStudies, useSearchStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
@@ -11,7 +11,7 @@ import { EffectCards, FreeMode, Navigation, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
 import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title } from '@mantine/core';
-import { IconSearch, IconX } from '@tabler/icons-react';
+import { IconSearch, IconX, IconChevronDown } from '@tabler/icons-react';
 import { groupBy, filter } from 'lodash';
 import { colors } from '@theme'
 import { useMemo } from 'react';
@@ -42,7 +42,7 @@ const HighlightedStudies: FC = () => {
                     <Flex c={colors.green} justify='center' align='center'>
                         <Flex direction='column' justify='center' align='center' style={{ cursor: 'pointer' }} onClick={()=> handleClick()}>
                             <Text size='sm'>View all studies</Text>
-                            <Icon icon='arrowDown' width='.875rem'></Icon>
+                            <IconChevronDown size='.875rem'/>
                         </Flex>
                     </Flex>
                 </Flex>

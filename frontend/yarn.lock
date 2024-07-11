@@ -554,13 +554,6 @@
   dependencies:
     "@iconify/types" "*"
 
-"@iconify-icons/ep@^1.2.12":
-  version "1.2.12"
-  resolved "https://registry.yarnpkg.com/@iconify-icons/ep/-/ep-1.2.12.tgz#c89a7e5e03416299cdddf047015f1d5bda7f040a"
-  integrity sha512-8EJULn048sQq3fvytpQ5j40omnVOdBKpo+sXdYM35NRrqCe1BihxBesMcCOLWaocqkWia6uTQ3cnRHff4ZA11w==
-  dependencies:
-    "@iconify/types" "*"
-
 "@iconify-icons/mdi@^1.2.47":
   version "1.2.47"
   resolved "https://registry.npmjs.org/@iconify-icons/mdi/-/mdi-1.2.47.tgz"
