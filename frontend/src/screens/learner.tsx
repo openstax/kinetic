@@ -266,7 +266,7 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                 p='1rem 1.5rem 1.5rem 2.5rem'
                 justify-content='center'
                 direction='column'
-                display={isMobile? 'none' : 'flex'}
+                display={ isMobile? 'none' : 'flex' }
             >
                 {learningPaths.map(learningPath => {
                     if (!learningPath) return null
