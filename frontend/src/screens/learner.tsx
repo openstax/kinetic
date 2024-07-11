@@ -1,5 +1,5 @@
 import { React } from '@common';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, ReactNode } from 'react';
 import { ParticipantStudy } from '@api';
 import { Footer, TopNavBar } from '@components';
 import { useEnvironment, useIsMobileDevice } from '@lib';
