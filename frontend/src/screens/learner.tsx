@@ -11,9 +11,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
-import { Box, Container, Flex, Group, Stack, TextInput, Title, ScrollArea } from '@mantine/core';
+import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title, ScrollArea } from '@mantine/core';
 import { IconChevronLeft, IconChevronRight, IconSearch, IconX } from '@tabler/icons-react';
-import { groupBy } from 'lodash';
+import { groupBy, filter } from 'lodash';
 import { colors } from '@theme'
 import { useMemo, useState, useEffect } from 'react';
 import { orderBy, sortBy, uniqBy } from 'lodash-es';
@@ -142,6 +142,7 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
             <Swiper
                 effect={'cards'}
                 slidesPerView={'auto'}
+                freeMode={true}
                 cardsEffect={{
                     slideShadows: false,
                     perSlideOffset: 14,
@@ -189,7 +190,7 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
     }, [studies]);
 
     return (
-        <Stack justify='center' style={{ position: 'relative', paddingLeft: '3rem', paddingRight: '3rem' }} 
+        <Stack justify='center' style={{ position: 'relative' }} 
             onMouseOver={() => {
                 setDisplayArrows(true)
             }} onMouseLeave={() => {
@@ -226,44 +227,99 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
 }
 
 export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = ({ filteredStudies }) => {
-    const [learningPaths, studiesByLearningPath] = useMemo(() => {
+    const [learningPaths, studiesByLearningPath, completedStudiesByLearningPath] = useMemo(() => {
         return [
             orderBy(
                 (uniqBy(filteredStudies.map(fs => fs.learningPath), (lp) => lp?.label)),
                 ['completed', 'order'],
                 ['asc', 'asc']
             ),
-            groupBy(filteredStudies, (study) => study.learningPath?.label),
+            groupBy(filteredStudies, (study) => {
+                return study.learningPath?.label
+            }),
+            groupBy(filter(filteredStudies, (study) => study.completedAt != null), (study) => {
+                return study.learningPath?.label
+            }),
         ]
     }, [filteredStudies])
 
     const isMobile = useIsMobileDevice()
 
-    return (
-        <Stack gap='lg' data-testid='studies-listing'>
-            {learningPaths.map(learningPath => {
-                if (!learningPath) return null
-                const studies = sortBy(studiesByLearningPath[learningPath.label], (study) => !!study.completedAt)
+    const scrollToLearningPath = (learningPath: string) => {
+        document.getElementById(learningPath)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
 
-                return (
-                    <Stack key={learningPath.label}>
-                        <Group gap='xs'>
-                            <Title order={3}>
-                                {learningPath.label}
-                            </Title>
-                            <Title style={{ color: colors.purple }} order={5}>|</Title>
-                            <Title order={3} fw='300'>
-                                {learningPath.description}
-                            </Title>
-                        </Group>
-                        {isMobile ?
-                            <MobileStudyCards studies={studies} /> :
-                            <DesktopStudyCards studies={studies} />
-                        }
-                    </Stack>
-                )
-            })}
-        </Stack>
+    const [hoveredLearningPath, setHoveredLearningPath] = useState<string | null>(null)
+
+    const handleMouseEnter = (learningPath: string) => {
+        setHoveredLearningPath(learningPath)
+    }
+
+    const handleMouseLeave = () => {
+        setHoveredLearningPath(null)
+    }
+
+    return (
+        <Flex direction='row' w='100%' gap='2.25rem'>
+            <Flex 
+                w='25%' 
+                p='1rem 1.5rem 1.5rem 2.5rem'
+                justify-content='center'
+                direction='column'
+                display={isMobile? 'none' : 'flex'}
+            >
+                {learningPaths.map(learningPath => {
+                    if (!learningPath) return null
+                    return (
+                        <Flex 
+                            key={learningPath.label}
+                            style={{ cursor: 'pointer' }}
+                            c={ hoveredLearningPath === learningPath.label ? colors.blue : colors.gray70 }
+                            onClick={() => scrollToLearningPath(learningPath.label)}
+                            onMouseEnter={() => handleMouseEnter(learningPath.label)}
+                            onMouseLeave={handleMouseLeave}
+                            justify='space-between'
+                            mb='1rem'
+                        >
+                            <Text>{learningPath.label}</Text>
+                            <Text>
+                                {completedStudiesByLearningPath[learningPath.label]? completedStudiesByLearningPath[learningPath.label].length : 0}
+                                /
+                                {studiesByLearningPath[learningPath.label].length}
+                            </Text>
+                        </Flex>
+                    )
+                })}
+            </Flex>
+            <Stack w='75%'  gap='lg' data-testid='studies-listing'>
+                {learningPaths.map(learningPath => {
+                    if (!learningPath) return null
+                    const studies = sortBy(studiesByLearningPath[learningPath.label], (study) => !!study.completedAt)
+                    return (
+                        <Stack 
+                            w='100%'
+                            key={learningPath.label}
+                            id={learningPath.label}
+                        >
+                            <Group gap='sm'>
+                                <Title order={3}>
+                                    {learningPath.label}
+                                </Title>
+                                <Text span>|</Text>
+                                <Title order={3} fw='300'>
+                                    {learningPath.description}
+                                </Title>
+                                {learningPath.completed ? <Badge c={colors.text} color={colors.green}>Completed</Badge> : null}
+                            </Group>
+                            {isMobile ?
+                                <MobileStudyCards studies={studies} /> :
+                                <DesktopStudyCards studies={studies} />
+                            }
+                        </Stack>
+                    )
+                })}
+            </Stack>
+        </Flex>
     )
 }
 
