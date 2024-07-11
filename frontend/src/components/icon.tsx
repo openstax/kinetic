@@ -7,8 +7,6 @@ import {
     setSundryIcons,
 } from '@nathanstitt/sundry/ui'
 
-import arrowLeft from '@iconify-icons/ep/arrow-left-bold'
-import arrowRight from '@iconify-icons/ep/arrow-right-bold'
 import clockOutline from '@iconify-icons/mdi/clock-outline'
 import plusCircleOutline from '@iconify-icons/mdi/plus-circle-outline'
 import plus from '@iconify-icons/mdi/plus'
@@ -50,8 +48,6 @@ import instagram from '@iconify-icons/mdi/instagram'
 import twitter from '@iconify-icons/mdi/twitter'
 
 export const ICONS = {
-    arrowLeft,
-    arrowRight,
     clockOutline,
     plusCircleOutline,
     plus,
