@@ -1,24 +1,8 @@
 import { React } from '@common';
 import { HelpLink, ResourceLinks } from './resource-links';
 import { useIsMobileDevice } from '@lib';
-import {
-    Divider,
-    Anchor,
-    Box,
-    Container,
-    Flex,
-    Group,
-    Image,
-    Stack,
-    Text,
-    Title,
-} from '@mantine/core';
-import {
-    IconBrandFacebookFilled,
-    IconBrandInstagram,
-    IconBrandTwitterFilled,
-} from '@tabler/icons-react';
-
+import { Anchor, Box, Container, Flex, Group, Image, Stack, Text, Title, Divider } from '@mantine/core';
+import { IconBrandFacebookFilled, IconBrandInstagram, IconBrandTwitterFilled } from '@tabler/icons-react';
 // @ts-ignore
 import NSFLogoURL from '../images/nsf-logo.webp'
 // @ts-ignore
@@ -93,8 +77,8 @@ const Funders = () => {
                 </Flex>
             </Stack>
         </Container>
-    );
-};
+    )
+}
 
 export const DesktopFooter: React.FC = () => {
     return (
@@ -121,8 +105,8 @@ export const MobileFooter: React.FC = () => {
                 <Logos />
             </Stack>
         </Container>
-    );
-};
+    )
+}
 
 export const SocialLinks = () => {
     return (
@@ -152,8 +136,8 @@ export const SocialLinks = () => {
                 </Anchor>
             </Group>
         </Stack>
-    );
-};
+    )
+}
 
 export const Logos = () => {
     return (
@@ -167,7 +151,7 @@ export const Logos = () => {
                 />
             </Anchor>
             <Anchor target='_blank' href='https://www.openstax.org'>
-                <Image alt='Open Stax logo' h='30' src={OpenStaxURL} />
+                <Image alt="Open Stax logo" h="30" src={OpenStaxURL} />
             </Anchor>
         </Flex>
     );
@@ -181,5 +165,5 @@ export const Footer: React.FC<{ includeFunders?: boolean }> = ({
             {includeFunders && < Funders />}
             {useIsMobileDevice() ? <MobileFooter/> : <DesktopFooter/>}
         </div>
-    );
-};
+    )
+}
