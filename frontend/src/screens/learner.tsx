@@ -1,6 +1,6 @@
 import { React, styled } from '@common'
 import { ParticipantStudy } from '@api'
-import { Footer, TopNavBar, Icon } from '@components'
+import { Footer, TopNavBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
 import { useParticipantStudies, useSearchStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
@@ -11,7 +11,7 @@ import { EffectCards, FreeMode, Navigation, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
 import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title } from '@mantine/core';
-import { IconSearch, IconX } from '@tabler/icons-react';
+import { IconSearch, IconX, IconPlus, IconMinus } from '@tabler/icons-react';
 import { groupBy, filter } from 'lodash';
 import { colors } from '@theme'
 import { useEffect, useMemo, useState } from 'react';
@@ -153,12 +153,12 @@ const StudyDuration: FC<{duration: Set<Number>, setDuration: Function, durationT
         <Flex justify='center' align='center' gap='.5rem' 
             pt='.25rem' pb='.25rem' pl='.625rem' pr='.625rem'
             bg={ active? colors.blue: colors.white }
-            style={{ border: `1px solid ${colors.blue}`, borderRadius: '50rem', transition: 'all .1s ease-in' }} 
+            style={{ border: `1px solid ${colors.blue}`, borderRadius: '50rem', transition: 'all .1s ease-in', cursor: 'pointer' }} 
             onClick={() => {
                 handleDurationChange(durationText)
             }}>
             <Text size='sm' c={ active? colors.white: colors.blue }>~{String(durationText)} min</Text> 
-            <Circle><Icon height={10} color={colors.blue} icon={active? 'minus': 'plus'}></Icon></Circle> 
+            <Circle>{active? <IconMinus size={10} color={colors.blue} stroke={3}/>: <IconPlus size={10} color={colors.blue} stroke={3}/>}</Circle>
         </Flex>
     )
 }
@@ -169,14 +169,14 @@ export const StudiesContainer = () => {
         <Container my='lg'>
             <Stack gap='lg'>
                 <StudiesTitle search={search} filteredStudies={filteredStudies} />
-                <Flex justify='space-between' wrap='wrap' >
+                <Group justify='space-between' wrap='wrap' >
                     <Flex justify='center' align='center' gap='md'>
                         <StudyDuration duration={duration} durationText={5} setDuration={setDuration}></StudyDuration>
                         <StudyDuration duration={duration} durationText={15} setDuration={setDuration}></StudyDuration>
                         <StudyDuration duration={duration} durationText={25} setDuration={setDuration}></StudyDuration>
                     </Flex>
                     <SearchBar search={search} setSearch={setSearch} />
-                </Flex>
+                </Group>
 
                 <SearchResults search={search} filteredStudies={filteredStudies} />
 
