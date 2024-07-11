@@ -1,8 +1,7 @@
 import { cx, React, styled, useState } from '@common';
-import { Box } from 'boxible';
 import { Link, NavLink } from 'react-router-dom';
 import { useCurrentUser, useIsMobileDevice } from '@lib';
-import { Container, Menu } from '@mantine/core';
+import { Container, Menu, Group, Text, Flex } from '@mantine/core';
 import { colors } from '@theme';
 import { BannersBar, Icon, NavbarLogoLink } from '@components';
 import { loadAsync } from '../async';
@@ -10,6 +9,15 @@ import { loadAsync } from '../async';
 interface TopNavBarProps {
     className?: string;
 }
+
+const menuToggleStyles = {
+    width: 85,
+    height: 28,
+    opacity: 0.7,
+    cursor: 'pointer',
+    whiteSpace: 'nowrap' as const,
+    userSelect: 'none' as const,
+};
 
 const Wrapper = styled.div({
     position: 'relative',
@@ -59,46 +67,43 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
         <nav className={cx('navbar', 'navbar-light', className)} style={{ backgroundColor: colors.navy, color: 'white', height: '80px' }}>
             <div style={{ height: '80px', backgroundColor: colors.navy }}>
                 <Container style={{ height: '80px' }}>
-                    <Box 
-                        justify="between"
+                    <Group 
+                        justify="space-between"
                         align="center"
-                        gap="0px"
-                        css={{
+                        style={{
                             width: '100%',
                             height: '80px',
-                            opacity: 1,
                         }}
                     >
-                        <Box gap="medium" align="center">
+                        <Group>
                             <NavbarLogoLink /> 
-                        </Box>
-                        <Box
+                        </Group>
+                        <Group
                             justify="center"
                             align="center"
                             gap="40px"
-                            css={{
+                            style={{
                                 height: '80px',
                                 padding: '26px 0px 26px 0px',
-                                opacity: 1,
                             }}
                         >
                             {!isMobile && !user.isAdministrator && !user.isResearcher && (
                                 <>
                                     <Wrapper>
                                         <NavbarStyledLink to="/studies" className={({ isActive }) => isActive ? 'active' : ''}>
-                                            Dashboard
+                            Dashboard
                                         </NavbarStyledLink>
                                     </Wrapper>
                                     <Wrapper>
                                         <NavbarStyledLink to="/achievements" className={({ isActive }) => isActive ? 'active' : ''}>
-                                            Achievements
+                            Achievements
                                         </NavbarStyledLink>
                                     </Wrapper>
                                 </>
                             )}
                             <NavMenu />
-                        </Box>
-                    </Box>
+                        </Group>
+                    </Group>
                 </Container>
             </div>
             {!hideBanner && <BannersBar />}
@@ -114,29 +119,23 @@ const NavMenu: React.FC = () => {
     const menuToggle = isMobile ? (
         <Icon icon="menu" height={30} color="white" />
     ) : (
-        <Box 
-            justify="center"
+        <Flex 
             align="center"
-            gap="0px"
-            css={{
-                width: '85px',
-                height: '28px',
-                opacity: 0.7,
-                fontFamily: 'system-ui',
-                fontSize: '18px',
-                fontWeight: 700,
-                lineHeight: '28px',
-                textAlign: 'right',
-                cursor: 'pointer', 
-                whiteSpace: 'nowrap', 
-                userSelect: 'none', 
-                color: 'white',
-            }}
             onClick={() => setOpened(!opened)}
+            style={menuToggleStyles}
         >
-            <span>Hi, {user.firstName}</span>
+            <Text
+                c="white"
+                fz={18}
+                fw={700}
+                lh="28px"
+                ff="system-ui"
+                mr={5} 
+            >
+            Hi, {user.firstName}
+            </Text>
             <Icon icon={opened ? 'chevronUp' : 'chevronDown'} />
-        </Box>
+        </Flex>
     );
 
     return (

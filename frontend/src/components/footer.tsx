@@ -30,63 +30,47 @@ import OpenStaxURL from '../images/openstax-logo.png'
 
 const Funders = () => {
     return (
-        <Container bg="white" w="100%" p="md">
+        <Container bg="white" p="md">
             <Stack gap="md">
-                <Title
-                    order={2}
-                    fz={36}
-                    fw={700}
-                    lh="42px"
-                    ta="left"
-                    ff="Helvetica Neue"
-                    lts="-0.04em"
-                >
-                    Support from scientific agencies
+                <Title order={2}>
+                Support from scientific agencies
                 </Title>
 
                 <Flex
-                    w="100%"
-                    h={256}
-                    py="md"
+                    direction={{ base: 'column', sm: 'row' }}
                     justify="space-between"
                     align="center"
+                    gap="md"
                 >
                     <Anchor target="_blank" href="https://www.nsf.org/gb/en">
                         <Image
                             alt="National Science Foundation logo"
                             src={NSFLogoURL}
-                            w={163.21}
-                            h={120}
-                            fit="cover"
-                            px="md"
+                            maw={160}
+                            h="auto"
+                            fit="contain"
                         />
                     </Anchor>
 
-                    <Divider orientation="vertical" h={200} w={1} />
+                    <Divider orientation="horizontal" hiddenFrom="sm" my="md" />
+                    <Divider orientation="vertical" visibleFrom="sm" h={200} />
 
                     <Anchor target="_blank" href="https://ies.ed.gov/">
                         <Stack
                             align="center"
                             gap="sm"
-                            w={462.66}
-                            h={186.76}
-                            px="md"
+                            maw={400}
                         >
                             <Image
                                 alt="Institute of Education Sciences logo"
                                 src={IESLogoURL}
-                                w={371.5}
-                                h={98.76}
-                                fit="cover"
+                                maw={300}
+                                h="auto"
+                                fit="contain"
                             />
                             <Text
                                 size="xs"
-                                ff="Helvetica Neue"
-                                fw={400}
-                                fz={12}
-                                lh="18px"
                                 ta="center"
-                                c="black"
                             >
                                 The research reported here was supported by the
                                 Institute of Education Sciences, U.S. Department
@@ -98,7 +82,8 @@ const Funders = () => {
                         </Stack>
                     </Anchor>
 
-                    <Divider orientation="vertical" h={200} w={1} />
+                    <Divider orientation="horizontal" hiddenFrom="sm" my="md" />
+                    <Divider orientation="vertical" visibleFrom="sm" h={200} />
 
                     <Anchor href="https://openstax.org/foundation">
                         <Text c="blue" fw={500} ta="center">
@@ -193,7 +178,7 @@ export const Footer: React.FC<{ includeFunders?: boolean }> = ({
 }) => {
     return (
         <div>
-            {includeFunders &&<Funders />}
+            {includeFunders && < Funders />}
             {useIsMobileDevice() ? <MobileFooter/> : <DesktopFooter/>}
         </div>
     );

@@ -25,12 +25,31 @@ import {
 } from '@mantine/core';
 import { IconSearch, IconX } from '@tabler/icons-react';
 import { groupBy, orderBy, uniqBy } from 'lodash-es';
-import ScrollToTopButton from './researcher/ScrollToTopButton';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import { colors } from '@theme';
+import { useWindowScroll } from '@mantine/hooks';
+import { Button, Box } from '@mantine/core';
+import { IconArrowUp } from '@tabler/icons-react';
+
+
+const sortAndMapStudies = (
+    studies: ParticipantStudy[],
+    renderStudy: (study: ParticipantStudy) => ReactNode
+) => {
+    return studies
+        .sort((a, b) =>
+            a.completedAt === b.completedAt
+                ? 0
+                : a.completedAt
+                    ? 1
+                    : -1
+        )
+        .map((study) => renderStudy(study));
+};
+
 
 const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies();
@@ -58,10 +77,12 @@ const HighlightedStudies: FC = () => {
 
 const LearnerDashboard = () => {
     const env = useEnvironment();
+    const [scroll, scrollTo] = useWindowScroll();
 
     if (!env.isEligible) {
         return <UnsupportedCountryModal />;
     }
+    const isVisible = scroll.y > window.innerHeight * 0.25;
 
     return (
         <div className="studies learner">
@@ -82,7 +103,33 @@ const LearnerDashboard = () => {
             <HighlightedStudies />
 
             <StudiesContainer />
-            <ScrollToTopButton />
+            {isVisible && (
+                <Box
+                    style={{
+                        position: 'fixed',
+                        left: '1rem',
+                        bottom: '1rem',
+                        zIndex: 1000,
+                    }}
+                >
+                    <Button
+                        onClick={() => scrollTo({ y: 0 })}
+                        style={{
+                            backgroundColor: '#007bff',
+                            color: '#fff',
+                            borderRadius: '50%',
+                            width: '3rem',
+                            height: '3rem',
+                            padding: 0,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <IconArrowUp />
+                    </Button>
+                </Box>
+            )}
 
             <Footer includeFunders />
         </div>
@@ -97,7 +144,7 @@ export const SearchBar: FC<{
 
     return (
         <TextInput
-            width={isMobile ? '100%' : '400px'}
+            w={isMobile ? '100%' : '400px'}
             size='lg'
             value={search}
             onChange={(event) => setSearch(event.currentTarget.value)}
@@ -186,19 +233,11 @@ export const MobileStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
                 style={{ paddingBottom: '2rem', marginBottom: '1rem' }}
                 pagination={false}
             >
-                {studies
-                    .sort((a, b) =>
-                        a.completedAt === b.completedAt
-                            ? 0
-                            : a.completedAt
-                                ? 1
-                                : -1
-                    )
-                    .map((study) => (
-                        <SwiperSlide key={study.id} className="pb-1">
-                            <StudyCard study={study} />
-                        </SwiperSlide>
-                    ))}
+                {sortAndMapStudies(studies, (study) => (
+                    <SwiperSlide key={study.id} className="pb-1">
+                        <StudyCard study={study} />
+                    </SwiperSlide>
+                ))}
             </Swiper>
         </Box>
     );
@@ -221,19 +260,11 @@ export const DesktopStudyCards: FC<{ studies: ParticipantStudy[] }> = ({
                 }}
                 modules={[FreeMode]}
             >
-                {studies
-                    .sort((a, b) =>
-                        a.completedAt === b.completedAt
-                            ? 0
-                            : a.completedAt
-                                ? 1
-                                : -1
-                    )
-                    .map((study) => (
-                        <SwiperSlide style={{ padding: '1rem' }} key={study.id}>
-                            <StudyCard study={study} />
-                        </SwiperSlide>
-                    ))}
+                {sortAndMapStudies(studies, (study) => (
+                    <SwiperSlide style={{ padding: '1rem' }} key={study.id}>
+                        <StudyCard study={study} />
+                    </SwiperSlide>
+                ))}
             </Swiper>
         </Box>
     );
