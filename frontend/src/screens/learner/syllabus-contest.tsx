@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
     BackgroundImage,
     Badge,
@@ -118,11 +118,10 @@ const CompletedCountBadge: FC<{ studies: ParticipantStudy[] }> = ({ studies }) =
 }
 
 export const ContestCards: FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
-    const [hovered, setHovered] = useState<Number>(-1)
     return (
         <Group>
-            {studies.map((study, index) => (
-                <StudyCard key={study.id} study={study} index={index} hovered={hovered} setHovered={setHovered}/>
+            {studies.map(study => (
+                <StudyCard key={study.id} study={study}/>
             ))}
         </Group>
     )

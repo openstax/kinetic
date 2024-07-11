@@ -23,8 +23,6 @@ test('launching study and testing completion', async ({ browser }) => {
     await userPage.getByText('All Studies').isVisible()
     await userPage.getByText(studyName).first().click()
 
-    // await userPage.click('testId=launch-study')
-
     await userPage.getByText('I consent').click()
     await userPage.getByText('18 or Older').click()
     await userPage.click('#NextButton')

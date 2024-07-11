@@ -1,15 +1,14 @@
-import { cx, React, useState, useEffect } from '@common'
-import { Box, getImageUrl, Icon } from '@components'
-import { useEnvironment, useIsMobileDevice, useIsTabletDevice, useApi } from '@lib'
+import { cx, React, useState } from '@common'
+import { Box, getImageUrl } from '@components'
+import { useEnvironment, useIsMobileDevice, useApi } from '@lib'
 import { getStudyDuration, getStudyPoints, isMultiSession, getStudyPi, getStudyLead, launchStudy, isStudyLaunchable } from '@models'
 import { ParticipantStudy, Study } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
 import { StudyDetailsPreview } from './details';
-import dayjs from 'dayjs';
-import { Button, Flex, Text } from '@mantine/core';
+import { Button, Flex, Text, HoverCard, Title, Group, Stack, Overlay } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import { IconSpec } from 'components/icon'
+import { IconBoxMultiple, IconCheck, IconHeartFilled, IconInfoCircleFilled, IconBaselineDensityMedium, IconUserFilled } from '@tabler/icons-react'
 
 interface StudyCardProps {
     study: ParticipantStudy
@@ -81,98 +80,60 @@ export const Tag: React.FC<{ tag?: string }> = ({ tag }) => {
     )
 }
 
-const Researcher: React.FC<StudyCardProps> = ({ study }) => {
-    const pi = study.researchers?.find(r => r.role === 'pi')
-    if (!pi) return null
-
-    return (
-        <Box className='x-small' padding={{ bottom: 'small' }}>
-            {pi.firstName} {pi.lastName}
-        </Box>
-    )
-}
-
-const CornerRibbon = styled.div({
-    position: 'absolute',
-    inset: '0 auto auto 0',
-    background: colors.purple,
-    transformOrigin: '100% 0',
-    transform: 'translate(-29.3%) rotate(-45deg)',
-    boxShadow: `0 0 0 999px ${colors.purple}`,
-    clipPath: 'inset(0 -100%)',
-    color: colors.white,
-})
-
-const NewStudyFlag: FC<{study: ParticipantStudy}> = ({ study }) => {
-    if (!study.opensAt) return null
-    const isNew = dayjs(study.opensAt).isAfter(dayjs().subtract(7, 'days'))
-    if (!isNew) return null
-    return (
-        <CornerRibbon>
-            <small>New Study</small>
-        </CornerRibbon>
-    )
-}
-
 const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
     if (!study.completedAt) return null
 
     return (
-        <Flex justify='center' align='center' pos='absolute' top='-.5rem' right='-.5rem' style={{ zIndex: 2 }}>
+        <Group justify='center' align='center' pos='absolute' top='-.5rem' right='-.5rem' style={{ zIndex: 300 }}>
             <div style={{ width: '2rem', 
                 height: '2rem', 
                 backgroundColor: colors.purple, 
                 borderRadius: '50%',
                 boxShadow: '-2px 2px 10px rgba(0, 0, 0, 0.20)',
             }}></div>
-            <Icon icon='thickCheck' color={colors.white} 
-                css={{
-                    position: 'absolute',
-                    fontSize: '1rem',
-                }}/>
-        </Flex>
+            <IconCheck size='1rem' color={ colors.white } stroke={5} style={{ position: 'absolute' }}/>
+        </Group>
     )
 }
 
 const MultiSessionBar: FC<StudyCardProps> = ({ study }) => {
     if (!study.stages || study.stages.length < 2) return null
     return (
-        <Flex justify='center' align='flex-start' direction='column' w='100%'>
-            <StudyDetailsItem icon='cardMultiple' title='Multi-Session' desc=''/>
-            <Flex justify='center' pos='relative' w="100%" direction='column' gap='xs'>
-                <Flex justify='center' align='center' pos='absolute' w='100%' top='.5rem'>
+        <Stack justify='center' align='flex-start' gap='xs' w='100%'>
+            <StudyDetailsItem Icon={IconBoxMultiple} title='Multi-Session' desc=''/>
+            <Stack justify='center' pos='relative' w="100%" gap='xs'>
+                <Group justify='center' align='center' pos='absolute' w='100%' top='.5rem'>
                     <div css={{ width: '85%', height: '.1rem', 
                         backgroundColor: colors.gray70 }}>
                     </div>
-                </Flex>
-                <Flex justify='center' align='center'>
-                    <Flex justify='space-between' w="90%">
+                </Group>
+                <Group justify='center' align='center'>
+                    <Group justify='space-between' w="90%">
                         {study.stages.map((stage, index) => {
-                            return <Flex justify='center' align='center' pos='relative' key={index}>
+                            return <Group justify='center' align='center' pos='relative' key={index}>
                                 <div style={{ width: '1rem', 
                                     height: '1rem', 
                                     backgroundColor: colors.white, 
                                     borderRadius: '50%',
                                     border: `2px solid ${colors.purple}`,
                                 }}></div>
-                                {stage.completedAt? <Icon icon="thickCheck" color={colors.purple} 
-                                    css={{
+                                {stage.completedAt? <IconCheck color={colors.purple} stroke={5} size="0.5rem"
+                                    style={{
                                         position: 'absolute',
-                                        fontSize: '.5rem',
                                     }}/> : null}
-                            </Flex>
+                            </Group>
                         })}
-                    </Flex>
-                </Flex>
-                <Flex justify='center' align='center'>
-                    <Flex justify='space-between' w="90%" c={colors.gray70}>
+                    </Group>
+                </Group>
+                <Group justify='center' align='center'>
+                    <Group justify='space-between' w="90%" c={colors.gray70}>
                         {study.stages.map((stage, index) => {
                             return <Text key={index} size='xs'>Session {index+1}/{study.stages?.length}</Text>
                         })}
-                    </Flex>
-                </Flex>
-            </Flex>
-        </Flex>
+                    </Group>
+                </Group>
+            </Stack>
+        </Stack>
     )
 }
 
@@ -195,25 +156,6 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
     )
 }
 
-const StudyOverlay = styled(Box) ({
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    pointerEvents: 'none',
-    zIndex: '1', 
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    width: '264px',
-    height: '350px',
-    [media.tablet]: {
-        width: '275px',
-        height: '360px',
-    },
-    [media.mobile]: {
-        width: '275px',
-        height: '360px',
-    }, 
-})
-
 const MultiSessionBack = styled(Box)<{ createshadow: boolean }> (({ createshadow }) => ({
     position: 'absolute',
     top: 8,
@@ -234,7 +176,7 @@ const MultiSessionBack = styled(Box)<{ createshadow: boolean }> (({ createshadow
     boxShadow: createshadow? '0px 4px 10px 0px rgba(0, 0, 0, 0.25)' : 'none',
 }))
 
-const StudyDetails: React.FC<{study: ParticipantStudy, hovered: Number, index: Number, position: { top: Number, left: Number }, setHovered: Function }> = ({ study, hovered, index, position, setHovered }) => {
+const StudyDetails: React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     
     const api = useApi()
     const env = useEnvironment()
@@ -248,36 +190,37 @@ const StudyDetails: React.FC<{study: ParticipantStudy, hovered: Number, index: N
         await launchStudy(api, study.id)
     }
 
-    return (
-        <Flex pos='absolute' bg={colors.white} direction='column' align='flex-start' justify='flex-start' gap='lg'
-            display={hovered == index ? 'flex' : 'none'} w='548px' top={ position.top+'px' } left={ position.left+'px' } p='1.5rem'
-            style={{ zIndex: '5', boxShadow: '0px 4px 30px 0px rgba(0, 0, 0, 0.10)' }}>
-            <Flex display='flex' justify='space-between' w="100%">
-                <Text span fw='bolder' size='xl'>{study.titleForParticipants}</Text>
-                <Icon icon='close' color={colors.gray70} onClick={() => {
-                    setHovered(-1)
-                }}/>
-            </Flex>
+    const getFeedbackDescription = () => {
+        if(study.stages?.length && study.stages[0].feedbackTypes?.length) {
+            return study.stages[0].feedbackTypes?.reduce((acc, feedbackType, index) => {
+                if(study.stages?.length && study.stages[0].feedbackTypes?.length && index != study.stages[0].feedbackTypes?.length - 1) return acc + feedbackType + ', '
+                return acc + feedbackType
+            }, '')
+        }
+        return ''
+    }
 
-            <Text size='sm' c={colors.gray70}>{study.totalDuration} mins | {study.totalPoints} pts</Text>
+    return (
+        <Stack align='flex-start' justify='flex-start' gap='lg' p='1rem' pos='relative'>
+
+            <Stack gap='0.25rem'>
+                <Title order={4}>{study.titleForParticipants}</Title>
+                <Text size='sm' c={colors.gray70}>{study.totalDuration} mins | {study.totalPoints} pts</Text>
+            </Stack>
 
             <MultiSessionBar study={study} />
 
-            <StudyDetailsItem icon='info' title='About' desc={study.longDescription} />
+            <StudyDetailsItem Icon={IconInfoCircleFilled} title='About' desc={study.longDescription} />
 
-            <StudyDetailsItem icon='heart' title="What's in it for you?" desc={study.benefits} />
+            <StudyDetailsItem Icon={IconHeartFilled} title="What's in it for you?" desc={study.benefits} />
 
-            <StudyDetailsItem icon='feedback' title='Feedback' 
-                desc={`Feedback: ${study.stages?.length && study.stages[0].feedbackTypes?.reduce((acc, feedbackType, index) => {
-                    if(study.stages?.length && study.stages[0].feedbackTypes?.length && index != study.stages[0].feedbackTypes?.length - 1) return acc + feedbackType + ', '
-                    return acc + feedbackType + '.'
-                }, '')}`} />
+            <StudyDetailsItem Icon={IconBaselineDensityMedium} title='Feedback' 
+                desc={`Feedback: ${getFeedbackDescription()}`} />
 
-
-            <StudyDetailsItem icon='person' title='Principal Investigator' 
+            <StudyDetailsItem Icon={IconUserFilled} title='Principal Investigator' 
                 desc={ pi?.firstName + ' ' + pi?.lastName + ' | Institution: ' + pi?.institution } />
 
-            <StudyDetailsItem icon='person' title='Study Lead' 
+            <StudyDetailsItem Icon={IconUserFilled} title='Study Lead' 
                 desc={lead?.firstName + ' ' + lead?.lastName + ' | Institution: ' + lead?.institution } />
 
             <Button
@@ -289,82 +232,44 @@ const StudyDetails: React.FC<{study: ParticipantStudy, hovered: Number, index: N
                 disabled={!isStudyLaunchable(study)}
                 data-testid='launch-study'
                 onClick={onLaunch}
+                style={{ marginLeft: '1.5rem' }}
             >
                 {action} study
             </Button>
-        </Flex>
+        </Stack>
     )
 }
 
-const StudyDetailsItem: React.FC<{icon: IconSpec, title: string, desc: string | undefined}> = ({ icon, title, desc = '' }) => {
+const StudyDetailsItem: React.FC<{Icon: React.ElementType, title: string, desc: string | undefined}> = ({ Icon, title, desc = '' }) => {
     return (
-        <Flex align='flex-start' gap='sm' direction='column'>
-            <Flex align='center' gap='sm'>
-                <Icon icon={icon} color={colors.purple} />
-                <Text fw='bold' size='sm'>{title}</Text>
+        <Flex align='flex-start' justify='center' gap='0.5rem'>
+            <Flex align='flex-start' justify='flex-start'>
+                <Icon style={{ color: colors.purple }} size='1rem' />
             </Flex>
-            <Text size='sm'>
-                {desc}
-            </Text>
+            <Stack gap='0.25rem'>
+                <Text fw='bold' lh='.9rem' size='sm'>{title}</Text>
+                <Text size='sm'>
+                    {desc}
+                </Text>
+            </Stack>
         </Flex>
     )
 }
 
-export const StudyCard: React.FC<{study: ParticipantStudy, index: Number, hovered: Number, setHovered: Function}> = ({ study, index, hovered, setHovered }) => {
+export const StudyCard: React.FC<{study: ParticipantStudy }> = ({ study }) => {
     const nav = useNavigate()
     const api = useApi()
     const isMobile = useIsMobileDevice()
-    const isTablet = useIsTabletDevice()
 
-    const [timer, setTimer] = useState<number | null>(null)
-    const [element, setElement] = useState<HTMLDivElement | null>(null)
     const [multiSessionShadow, setMultiSessionShadow] = useState<boolean>(false)
-    const [position, setPosition] = useState<{top: Number, left: Number}>({ top: 0, left: 0 })
-
-    useEffect(() => {
-
-        const buffer = { top: isTablet? -150: -150, left0: isTablet? 255: 18, leftRest: isTablet? -560: -790 }
-        if (element){
-            const updatePosition = () => {
-                const rect = element.getBoundingClientRect();
-                index == 0 ? setPosition({ top: buffer.top, left: rect.left + buffer.left0 }) : setPosition({ top: buffer.top, left: rect.left + buffer.leftRest });
-            };
-            updatePosition();
-            const parentWindow = element.parentElement;
-            parentWindow?.addEventListener('scroll', updatePosition);
-            parentWindow?.addEventListener('resize', updatePosition);
-            window.addEventListener('resize', updatePosition);
-            return () => {
-                parentWindow?.removeEventListener('scroll', updatePosition);
-                parentWindow?.removeEventListener('resize', updatePosition);
-                window.removeEventListener('resize', updatePosition);
-            };
-        }
-    }, [element, index, isTablet])
 
     const cardMouseOver = () => {
         setMultiSessionShadow(true)
-        if(study.completedAt) return
-        const newTimer = setTimeout(() => {
-            setHovered(index)
-        }, 2000)
-        setTimer(newTimer);
     }
 
     const cardMouseOut = () => {
         setMultiSessionShadow(false)
-        setHovered(-1)
-        if(timer) {
-            clearTimeout(timer)
-            setTimer(null)
-        }
     }
-
-    useEffect(() => {
-        return () => {
-            if (timer) clearTimeout(timer);
-        };
-    }, [timer]);
 
     const onClick = () => {
         if(study.completedAt) return
@@ -378,29 +283,38 @@ export const StudyCard: React.FC<{study: ParticipantStudy, index: Number, hovere
     const env = useEnvironment()
 
     return (
-        <div  ref={(ele) => { setElement(ele) }} 
+        <div
             onMouseOver={()=> cardMouseOver()} 
             onMouseLeave={() => cardMouseOut()}>
-            
-            <Card
-                as="a"
-                role={'link'}
-                className="col study"
-                direction='column'
-                onClick={onClick}
-                data-study-id={study.id}
-                data-is-completed={!!study.completedAt}
-                data-analytics-select-content
-                data-content-type="study-details"
-                data-content-tags={`,learning-path=${study.learningPath?.label},is-new-user=${env.isNewUser},`}
-                studycompleted={!!study.completedAt}
-                multisession={isMultiSession(study)}
-            >
-                {study.completedAt ? <StudyOverlay /> : null}
-                {isMultiSession(study)? <MultiSessionBack createshadow={multiSessionShadow}/> : null}
-                <CardContent study={study} />
-            </Card>
-            <StudyDetails study={study} hovered={hovered} index={index} position={position} setHovered={setHovered}/>
+            <HoverCard shadow="md" width={548} withArrow openDelay={2000} closeDelay={200} position='right' 
+                disabled={isMobile || !!study.completedAt}>
+                <HoverCard.Target>
+                    <Card
+                        as="a"
+                        role={'link'}
+                        className="col study"
+                        direction='column'
+                        onClick={onClick}
+                        data-study-id={study.id}
+                        data-is-completed={!!study.completedAt}
+                        data-analytics-select-content
+                        data-content-type="study-details"
+                        data-content-tags={`,learning-path=${study.learningPath?.label},is-new-user=${env.isNewUser},`}
+                        studycompleted={!!study.completedAt}
+                        multisession={isMultiSession(study)}
+                    >
+                        {study.completedAt ? <Overlay color="#000" backgroundOpacity={0.2} /> : null}
+                        {isMultiSession(study)? 
+                            <MultiSessionBack createshadow={multiSessionShadow}>
+                                {study.completedAt ? <Overlay color="#000" backgroundOpacity={0.2} /> : null}
+                            </ MultiSessionBack>: null}
+                        <CardContent study={study} />
+                    </Card>
+                </HoverCard.Target>
+                <HoverCard.Dropdown>
+                    <StudyDetails study={study}/>
+                </HoverCard.Dropdown>
+            </HoverCard>
         </div>
     )
 }
@@ -414,10 +328,8 @@ const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
                 alt={study.imageId}
                 className='study-card-image'
             />
-            <NewStudyFlag study={study} />
             <CompleteFlag study={study} />
             <h6 style={{ marginTop: '.5rem' }}>{study.titleForParticipants}</h6>
-            <Researcher study={study} />
             <small
                 className={cx({ 'x-small': isMobile })}
                 css={{ color: colors.gray70, overflowWrap: 'anywhere' }}

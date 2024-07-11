@@ -1,6 +1,7 @@
 import { React } from '@common'
+import { useRef } from 'react'
 import { ParticipantStudy } from '@api'
-import { Footer, TopNavBar, Icon } from '@components'
+import { Footer, TopNavBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
 import { useParticipantStudies, useSearchStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
@@ -10,8 +11,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
-import { Box, Container, Flex, Group, Stack, TextInput, Title } from '@mantine/core';
-import { IconSearch, IconX } from '@tabler/icons-react';
+import { Box, Container, Flex, Group, Stack, TextInput, Title, ScrollArea } from '@mantine/core';
+import { IconChevronLeft, IconChevronRight, IconSearch, IconX } from '@tabler/icons-react';
 import { groupBy } from 'lodash';
 import { colors } from '@theme'
 import { useMemo, useState, useEffect } from 'react';
@@ -136,7 +137,6 @@ export const StudiesContainer = () => {
 
 export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }) => {
 
-    const [hovered, setHovered] = useState<Number>(-1)
     return (
         <Box>
             <Swiper
@@ -158,9 +158,9 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
                     marginBottom: '1rem',
                 }}
             >
-                {studies.map((study, index) => (
+                {studies.map(study => (
                     <SwiperSlide key={study.id} className="pb-1" style={{ paddingTop: '1rem' }}>
-                        <StudyCard study={study} index={index} hovered={hovered} setHovered={setHovered}/>
+                        <StudyCard study={study}/>
                     </SwiperSlide>
                 ))}
             </Swiper>
@@ -170,16 +170,14 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
 
 export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }) => {
 
-    const [hovered, setHovered] = useState(-1)
     const [displayArrows, setDisplayArrows] = useState<boolean>(false)
-    const [element, setElement] = useState<HTMLDivElement | null>(null)
-
     const [isOverflowing, setIsOverflowing] = useState(false);
+    const viewport = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const checkOverflow = () => {
-            if (element) {
-                const overflow = element.scrollWidth > element.clientWidth;
+            if (viewport.current) {
+                const overflow = viewport.current.scrollWidth > viewport.current.clientWidth;
                 setIsOverflowing(overflow);
             }
         };
@@ -188,79 +186,42 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
 
         window.addEventListener('resize', checkOverflow);
         return () => window.removeEventListener('resize', checkOverflow);
-    }, [studies, element]);
+    }, [studies]);
 
     return (
-        <Box style={{ position: 'relative', paddingLeft: '3rem', paddingRight: '3rem' }} onMouseOver={() => {
-            setDisplayArrows(true)
-        }} onMouseLeave={() => {
-            setDisplayArrows(false)
-        }}>
-            {/* <Swiper
-                slidesPerView={3}
-                simulateTouch={true}
-                freeMode={true}
-                pagination={{
-                    enabled: true,
-                    dynamicBullets: true,
-                    dynamicMainBullets: 5,
-                    clickable: true,
-                }}
-                style={{
-                    marginBottom: '1rem',
-                    paddingBottom: '2rem',
-                    paddingLeft: '2rem',
-                    paddingRight: '2rem',
-                }}
-                navigation={{
-                    enabled: true,
-                }}
-                modules={[FreeMode, Pagination, Navigation]}
-            >
-                {studies.map(study => (
-                    <SwiperSlide style={{ padding: '1rem', position: 'static'}} key={study.id}>
-                        <StudyCard study={study} />
-                    </SwiperSlide>
-                ))}
-            </Swiper> */}
-            <Flex ref={(ele) => setElement(ele)} align='center' justify='flex-start' gap='lg' pt='1rem' pb='2rem' style={{ overflowX: 'auto', overflowY: 'hidden',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-            }} className='hide-scrollbar'>
-                <style>
-                    {`
-                        .hide-scrollbar::-webkit-scrollbar {
-                        display: none;
-                        }
+        <Stack justify='center' style={{ position: 'relative', paddingLeft: '3rem', paddingRight: '3rem' }} 
+            onMouseOver={() => {
+                setDisplayArrows(true)
+            }} onMouseLeave={() => {
+                setDisplayArrows(false)
+            }}>
+            <ScrollArea viewportRef={viewport} type='never'>
+                <Flex align='center' justify='flex-start' gap='lg' pt='1rem' pb='2rem'>
 
-                        .hide-scrollbar {
-                        -ms-overflow-style: none;
-                        scrollbar-width: none;
-                        }
-                    `}
-                </style>
-                {studies.map((study, index) => (
-                    <StudyCard key={study.id} study={study} index={index} hovered={hovered} setHovered={setHovered}/>
-                ))}
-                
-                <div style={{ position: 'absolute', left: '0', cursor: 'pointer', display: isOverflowing && displayArrows ? 'block' : 'none' }}
-                    onClick={() => {
-                        if(element){
-                            element.scrollBy({ left: -200, behavior: 'smooth' })
-                        }
-                    }}>
-                    <Icon icon='arrowLeft' color={colors.purple} width='3rem'></Icon>
-                </div>
-                <div style={{ position: 'absolute', right: '0', cursor: 'pointer', display: isOverflowing && displayArrows ? 'block' : 'none' }}
-                    onClick={() => {
-                        if(element){
-                            element.scrollBy({ left: 200, behavior: 'smooth' })
-                        }
-                    }}>
-                    <Icon icon='arrowRight' color={colors.purple} width='3rem'></Icon>
-                </div>               
-            </Flex>
-        </Box>
+                    {studies.map(study => (
+                        <StudyCard key={study.id} study={study}/>
+                    ))}
+                                
+                </Flex>
+            </ScrollArea>
+
+            <div style={{ position: 'absolute', left: -10, cursor: 'pointer', marginTop: '-1rem', display: isOverflowing && displayArrows ? 'block' : 'none' }}
+                onClick={() => {
+                    if(viewport.current){
+                        viewport.current.scrollBy({ left: -200, behavior: 'smooth' })
+                    }
+                }}>
+                <IconChevronLeft color={colors.purple} size='3.5rem'></IconChevronLeft>
+            </div>
+            <div style={{ position: 'absolute', right: -10, cursor: 'pointer', marginTop: '-1rem', display: isOverflowing && displayArrows ? 'block' : 'none' }}
+                onClick={() => {
+                    if(viewport.current){
+                        viewport.current.scrollBy({ left: 200, behavior: 'smooth' })
+                    }
+                }}>
+                <IconChevronRight color={colors.purple} size='3.5rem'></IconChevronRight>
+            </div>   
+        </Stack>
     )
 }
 
