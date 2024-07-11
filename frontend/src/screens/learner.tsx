@@ -31,7 +31,7 @@ import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import { colors } from '@theme';
 import { useWindowScroll } from '@mantine/hooks';
-import { Button, Box } from '@mantine/core';
+import { Button } from '@mantine/core';
 import { IconArrowUp } from '@tabler/icons-react';
 
 
