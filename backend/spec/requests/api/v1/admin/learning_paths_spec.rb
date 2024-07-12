@@ -13,7 +13,7 @@ RSpec.describe 'Learning Paths', api: :v1 do
       description: 'Cool description',
       badge_id: 'SAJSINa7DGDaC4D',
       level_1_metadata: %w[Test 123],
-      level_2_metadata: %w[Deeper metadata]
+      level_2_metadata: %w[Deeper metadata],
       color: '#B6DB93'
     }
   end
@@ -51,7 +51,7 @@ RSpec.describe 'Learning Paths', api: :v1 do
                 name: a_kind_of(String),
                 id: a_kind_of(String),
                 image: a_kind_of(String)
-              )
+              ),
               color: learning_path.color
             )
           )
