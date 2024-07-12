@@ -1,9 +1,25 @@
-import { React } from '@common'
-import { HelpLink, ResourceLinks } from './resource-links'
-import { colors } from '@theme'
+import { React } from '@common';
+import { HelpLink, ResourceLinks } from './resource-links';
 import { useIsMobileDevice } from '@lib';
-import { Anchor, Box, Container, Flex, Group, Image, Stack, Text, Title } from '@mantine/core';
-import { IconBrandFacebookFilled, IconBrandInstagram, IconBrandTwitterFilled } from '@tabler/icons-react';
+import { useMediaQuery } from '@mantine/hooks';
+import {
+    Anchor,
+    Box,
+    Container,
+    Flex,
+    Group,
+    Image,
+    Stack,
+    Text,
+    Title,
+} from '@mantine/core';
+import {
+    IconBrandFacebookFilled,
+    IconBrandInstagram,
+    IconBrandTwitterFilled,
+} from '@tabler/icons-react';
+import { colors } from '@theme';
+
 
 // @ts-ignore
 import NSFLogoURL from '../images/nsf-logo.webp'
@@ -15,32 +31,82 @@ import RiceLogoURL from '../images/rice-logo.png'
 import OpenStaxURL from '../images/openstax-logo.png'
 
 const Funders = () => {
+    const isMobile = useMediaQuery('(max-width: 768px)');
+    const isTablet = useMediaQuery('(max-width: 1024px)');
+
     return (
-        <Container bg='white'>
-            <Stack>
-                <Title order={4} className="fw-bold">Support from Scientific Agencies</Title>
-                <Flex justify='center' align='center' mx='auto'>
-                    <Anchor target="_blank" href="https://ies.ed.gov/">
-                        <Image alt="Institute of Education Sciences logo" src={IESLogoURL}/>
+        <Container bg="white" px={isMobile ? 16 : 32} pt={16} pb={40}>
+            <Stack gap={isMobile ? 16 : 24}>
+                <Title
+                    order={2}
+                    w={700}
+                    style={{
+                        fontFamily: 'Helvetica Neue',
+                        fontSize: isMobile
+                            ? '24px'
+                            : isTablet
+                                ? '30px'
+                                : '36px',
+                        lineHeight: isMobile
+                            ? '28px'
+                            : isTablet
+                                ? '36px'
+                                : '42px',
+                        letterSpacing: '-0.04em',
+                        textAlign: 'left',
+                    }}
+                >
+                    Support from scientific agencies
+                </Title>
+                <Flex
+                    direction={isMobile ? 'column' : 'row'}
+                    justify={isMobile ? 'flex-start' : 'space-between'}
+                    align={isMobile ? 'center' : 'flex-start'}
+                    gap={isMobile ? '24px' : '16px'}
+                >
+                    <Anchor
+                        target="_blank"
+                        href="https://www.nsf.org/gb/en"
+                        pl={isMobile ? 0 : isTablet ? 75 : 150}
+                        pt={isMobile ? 0 : isTablet ? 25 : 50}
+                    >
+                        <Image
+                            width={isMobile ? 120 : isTablet ? 140 : 163}
+                            height={isMobile ? 88 : isTablet ? 103 : 120}
+                            alt="National Science Foundation logo"
+                            src={NSFLogoURL}
+                        />
                     </Anchor>
-                    <Anchor target="_blank" href="https://www.nsf.org/gb/en">
-                        <Image alt="National Science Foundation logo" src={NSFLogoURL} />
+                    <Box maw={isMobile ? '100%' : 400}>
+                        <Anchor target="_blank" href="https://ies.ed.gov/">
+                            <Image
+                                width={isMobile ? '100%' : 250}
+                                alt="Institute of Education Sciences logo"
+                                src={IESLogoURL}
+                            />
+                        </Anchor>
+                        <Text size={isMobile ? 'sm' : 'md'} mt="xs">
+                            The research reported here was supported by the
+                            Institute of Education Sciences, U.S. Department of
+                            Education, through Grant R305N210064 to Rice
+                            University. The opinions expressed are those of the
+                            authors and do not represent views of the Institute
+                            or the U.S. Department of Education.
+                        </Text>
+                    </Box>
+                    <Anchor
+                        href="https://openstax.org/foundation"
+                        c="blue"
+                        size={isMobile ? 'md' : 'lg'}
+                        pt={isMobile ? 0 : isTablet ? 50 : 100}
+                    >
+                        View other Philanthropic supporters
                     </Anchor>
                 </Flex>
-
-                <Stack gap='md' mb='md'>
-                    <Anchor href="https://openstax.org/foundation">
-                        View Other Philanthropic Supporters
-                    </Anchor>
-
-                    <Text size='xs' c={colors.text}>
-                        *The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
-                    </Text>
-                </Stack>
             </Stack>
         </Container>
-    )
-}
+    );
+};
 
 export const DesktopFooter: React.FC = () => {
     return (
@@ -54,64 +120,86 @@ export const DesktopFooter: React.FC = () => {
                 </Group>
             </Container>
         </Box>
-    )
-}
+    );
+};
 
 export const MobileFooter: React.FC = () => {
     return (
-        <Container bg='navy' c='white' style={{
-            'a': {
-                color: colors.white,
-            },
-        }}>
-            <Stack py='lg'>
+        <Container
+            bg="navy"
+            c="white"
+            style={{
+                a: {
+                    color: colors.white,
+                },
+            }}
+        >
+            <Stack py="lg">
                 <HelpLink />
                 <ResourceLinks />
                 <SocialLinks />
                 <Logos />
             </Stack>
         </Container>
-    )
-}
+    );
+};
 
 export const SocialLinks = () => {
     return (
         <Stack>
             <Title order={4}>Follow us</Title>
             <Group>
-                <Anchor c='white' target="_blank" href="https://www.facebook.com/openstax">
+                <Anchor
+                    c="white"
+                    target="_blank"
+                    href="https://www.facebook.com/openstax"
+                >
                     <IconBrandFacebookFilled />
                 </Anchor>
-                <Anchor c='white' target="_blank" href="https://www.instagram.com/openstax/">
+                <Anchor
+                    c="white"
+                    target="_blank"
+                    href="https://www.instagram.com/openstax/"
+                >
                     <IconBrandInstagram />
                 </Anchor>
-                <Anchor c='white' target="_blank" href="https://twitter.com/OpenStax">
+                <Anchor
+                    c="white"
+                    target="_blank"
+                    href="https://twitter.com/OpenStax"
+                >
                     <IconBrandTwitterFilled />
                 </Anchor>
             </Group>
         </Stack>
-    )
-}
+    );
+};
 
 export const Logos = () => {
     return (
-        <Flex direction={{ sm: 'column' }} gap='xl'>
-            <Anchor target='_blank' href='https://www.rice.edu'>
-                <Image alt="Rice University logo" h="30" w='auto' src={RiceLogoURL} />
+        <Flex direction={{ sm: 'column' }} gap="xl">
+            <Anchor target="_blank" href="https://www.rice.edu">
+                <Image
+                    alt="Rice University logo"
+                    h={30}
+                    w="auto"
+                    src={RiceLogoURL}
+                />
             </Anchor>
             <Anchor target='_blank' href='https://www.openstax.org'>
-                <Image alt="Open Stax logo" h="30" src={OpenStaxURL} />
+                <Image alt='Open Stax logo' h='30' src={OpenStaxURL} />
             </Anchor>
         </Flex>
-    )
-}
+    );
+};
 
-
-export const Footer: React.FC<{ includeFunders?: boolean }> = ({ includeFunders }) => {
+export const Footer: React.FC<{ includeFunders?: boolean }> = ({
+    includeFunders,
+}) => {
     return (
         <div>
             {includeFunders && < Funders />}
             {useIsMobileDevice() ? <MobileFooter/> : <DesktopFooter/>}
         </div>
-    )
-}
+    );
+};

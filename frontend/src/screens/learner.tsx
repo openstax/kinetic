@@ -6,16 +6,17 @@ import { useParticipantStudies, useSearchStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
 import { StudyDetails } from './learner/details'
 import { Route, Routes } from 'react-router-dom'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCards, FreeMode, Navigation, Pagination } from 'swiper/modules';
-import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
-import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
-import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title } from '@mantine/core';
-import { IconSearch, IconX, IconPlus, IconMinus } from '@tabler/icons-react';
-import { groupBy, filter } from 'lodash';
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { EffectCards, FreeMode, Navigation, Pagination } from 'swiper/modules'
+import { LearnerWelcomeModal } from './learner/learner-welcome-modal'
+import { UnsupportedCountryModal } from './learner/unsupported-country-modal'
+import { Badge, Affix, Button, Transition, Box, Container, Divider, Flex, Group, ActionIcon, Stack, Text, TextInput, Title } from '@mantine/core'
+import { IconSearch, IconX, IconPlus, IconMinus, IconArrowUp } from '@tabler/icons-react'
+import { groupBy, orderBy, uniqBy, sortBy, filter } from 'lodash-es'
 import { colors } from '@theme'
-import { useEffect, useMemo, useState } from 'react';
-import { orderBy, sortBy, uniqBy } from 'lodash-es';
+import { FC, useMemo, useState, useEffect } from 'react'
+import { useWindowScroll } from '@mantine/hooks'
+
 
 const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
@@ -39,11 +40,13 @@ const HighlightedStudies: FC = () => {
 }
 
 const LearnerDashboard = () => {
-    const env = useEnvironment()
+    const env = useEnvironment();
+    const [scroll, scrollTo] = useWindowScroll();
 
     if (!env.isEligible) {
-        return <UnsupportedCountryModal />
+        return <UnsupportedCountryModal />;
     }
+    const isVisible = scroll.y > window.innerHeight * 0.25;
 
     return (
         <div className="studies learner">
@@ -54,8 +57,7 @@ const LearnerDashboard = () => {
             <TopNavBar />
 
             <LearnerWelcomeModal />
-
-            {/* Temporarily removing this as well until reward system reworked */}
+             {/* Temporarily removing this as well until reward system reworked */}
             {/*<RewardsProgressBar />*/}
 
             {/* Temporarily disable syllabus contest due to legal, keep it just in case we re-enable in the future */}
@@ -64,33 +66,74 @@ const LearnerDashboard = () => {
             <HighlightedStudies />
 
             <StudiesContainer />
-
+            <Affix position={{ bottom: 20, left: 20 }}>
+                <Transition transition="slide-up" mounted={isVisible}>
+                    {(transitionStyles) => (
+                        <Button
+                            onClick={() => scrollTo({ y: 0 })}
+                            style={transitionStyles}
+                            radius="xl"
+                            p={0}
+                            w={48}
+                            h={48}
+                            bg="#007bff"
+                        >
+                            <IconArrowUp size="1.5rem" color="#fff" />
+                        </Button>
+                    )}
+                </Transition>
+            </Affix>
             <Footer includeFunders />
         </div>
-    )
-}
+    );
+};
 
-export const SearchBar: FC<{search: string, setSearch: (search: string) => void}> = ({ search, setSearch }) => {
-    const isMobile = useIsMobileDevice()
+export const SearchBar: FC<{
+    search: string;
+    setSearch: (search: string) => void;
+}> = ({ search, setSearch }) => {
+    const isMobile = useIsMobileDevice();
 
     return (
         <TextInput
-            w={isMobile ? '100%' : '400px'}
-            size='lg'
+            w={isMobile ? '100%' : '600px'}
+            size='md'
             value={search}
             onChange={(event) => setSearch(event.currentTarget.value)}
-            rightSection={search.length ?
-                <IconX onClick={() => setSearch('')} style={{ cursor: 'pointer' }}/> :
-                <IconSearch />
+            rightSection={
+                search.length ? (
+                    <IconX onClick={() => setSearch('')} style={{ cursor: 'pointer' }}/>
+                ) : (
+                    <ActionIcon variant="subtle" color="#848484">
+                        <IconSearch size="1.1rem" stroke={1.5} />
+                </ActionIcon>
+                )
             }
             placeholder="Search by study title, researcher, or topic name"
+            rightSectionWidth={40}
+            styles={(theme) => ({
+                root: {
+                    maxWidth: '400px',
+                },
+                input: {
+                    borderRadius: '50px',
+                    border: '1px solid #848484',
+                    paddingLeft: '20px',
+                    '&:focus': {
+                        borderColor: theme.colors.blue[6],
+                    },
+                },
+                rightSection: {
+                    pointerEvents: 'none',
+                },
+            })}
         />
     )
 }
 
 export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = () => {
     return (
-        <Title order={2}>All Studies</Title>
+        <Title order={2}>View All Studies</Title>
     )
 }
 
@@ -101,18 +144,18 @@ export const SearchResults: FC<{search: string, filteredStudies: ParticipantStud
 
     if (filteredStudies.length == 0) {
         return (
-            <Title order={4}>
-                Sorry, no results found for '{search}'
-            </Title>
-        )
+        <Title order={4}>
+            Sorry, no results found for '{search}'
+        </Title>
+)
     }
 
     return (
         <Title order={4}>
             {filteredStudies.length} result{filteredStudies.length == 1 ? '' : 's'} for '{search}'
         </Title>
-    )
-}
+    );
+};
 
 const Circle = styled.div({
     borderRadius: '50%',
@@ -124,6 +167,7 @@ const Circle = styled.div({
     justifyContent: 'center',
     alignItems: 'center',
 })
+
 
 const StudyDuration: FC<{duration: Set<Number>, setDuration: Function, durationText: Number}> = ({ duration, setDuration, durationText }) => {
 
@@ -323,7 +367,7 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                         <Stack 
                             w='100%'
                             key={learningPath.label}
-                            id={learningPath.label}
+                            id={learningPath.label} 
                         >
                             <Group gap='sm'>
                                 <Title order={3}>
