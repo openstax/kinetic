@@ -27,6 +27,9 @@ module Api::V1::Bindings
     # Learning path description
     attr_accessor :description
 
+    # Learning path color
+    attr_accessor :color
+
     # Level 1 metadata
     attr_accessor :level_1_metadata
 
@@ -51,6 +54,7 @@ module Api::V1::Bindings
         :'order' => :'order',
         :'label' => :'label',
         :'description' => :'description',
+        :'color' => :'color',
         :'level_1_metadata' => :'level_1_metadata',
         :'level_2_metadata' => :'level_2_metadata',
         :'badge_id' => :'badge_id',
@@ -72,6 +76,7 @@ module Api::V1::Bindings
         :'order' => :'Float',
         :'label' => :'String',
         :'description' => :'String',
+        :'color' => :'String',
         :'level_1_metadata' => :'Array<String>',
         :'level_2_metadata' => :'Array<String>',
         :'badge_id' => :'String',
@@ -116,6 +121,10 @@ module Api::V1::Bindings
 
       if attributes.key?(:'description')
         self.description = attributes[:'description']
+      end
+
+      if attributes.key?(:'color')
+        self.color = attributes[:'color']
       end
 
       if attributes.key?(:'level_1_metadata')
@@ -193,6 +202,7 @@ module Api::V1::Bindings
           order == o.order &&
           label == o.label &&
           description == o.description &&
+          color == o.color &&
           level_1_metadata == o.level_1_metadata &&
           level_2_metadata == o.level_2_metadata &&
           badge_id == o.badge_id &&
@@ -210,7 +220,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, order, label, description, level_1_metadata, level_2_metadata, badge_id, badge, completed, studies].hash
+      [id, order, label, description, color, level_1_metadata, level_2_metadata, badge_id, badge, completed, studies].hash
     end
 
     # Builds the object from hash

@@ -6,6 +6,7 @@ class PopulateLearningPathData < ActiveRecord::Migration[7.1]
       level_1_metadata: ['21st-Century Themes', 'Life and Career Skills'],
       level_2_metadata: ['Financial Literacy', 'Initiative and self-direction'],
       badge_id: 'SB001Ea7DGKaCKB',
+      color: '#B6DB93',
       order: 0
     )
 
@@ -15,6 +16,7 @@ class PopulateLearningPathData < ActiveRecord::Migration[7.1]
       level_1_metadata: ['Life and Career Skills'],
       level_2_metadata: ['Flexibility and adaptability', 'Initiative and self-direction'],
       badge_id: 'SB0222a7DGDaNSS',
+      color: '#E69ECE',
       order: 1
     )
 
@@ -24,6 +26,7 @@ class PopulateLearningPathData < ActiveRecord::Migration[7.1]
       level_1_metadata: ['Learning & Innovation Skills'],
       level_2_metadata: ['Critical Thinking and Problem Solving', 'Communication'],
       badge_id: 'SB03EYa7DGDaNUL',
+      color: '#FFC25B',
       order: 2
     )
 
@@ -33,6 +36,7 @@ class PopulateLearningPathData < ActiveRecord::Migration[7.1]
       level_1_metadata: ['Life and Career Skills'],
       level_2_metadata: ['Productivity and accountability', 'Initiative and self-direction'],
       badge_id: 'SB02M4a7DGKaCN9',
+      color: '#72D4A8',
       order: 3
     )
 
@@ -42,6 +46,7 @@ class PopulateLearningPathData < ActiveRecord::Migration[7.1]
       level_1_metadata: ['Life and Career Skills'],
       level_2_metadata: ['Productivity and Accountability'],
       badge_id: 'SB03T0a7DGDaNV1',
+      color: '#A8E5F8',
       order: 4
     )
 
@@ -51,6 +56,7 @@ class PopulateLearningPathData < ActiveRecord::Migration[7.1]
       level_1_metadata: ['Life and Career Skills'],
       level_2_metadata: ['Social skills'],
       badge_id: 'SB04RKa7DGKaCOW',
+      color: '#70A4FF',
       order: 5
     )
 
@@ -60,6 +66,7 @@ class PopulateLearningPathData < ActiveRecord::Migration[7.1]
       level_1_metadata: ['Learning & Innovation Skills', 'Essential Subjects'],
       level_2_metadata: ['Science', 'History', 'Critical Thinking & Problem Solving'],
       badge_id: 'SB0E56a7DGKaCVC',
+      color: '#FFE65C',
       order: 6
     )
 
@@ -69,6 +76,7 @@ class PopulateLearningPathData < ActiveRecord::Migration[7.1]
       level_1_metadata: ['Learning & Innovation Skills', 'Essential Subjects'],
       level_2_metadata: ['Science', 'Mathematics', 'Critical Thinking and Problem Solving'],
       badge_id: 'SB05K7a7DGKaCPE',
+      color: '#6DD6DA',
       order: 7
     )
 
@@ -78,6 +86,7 @@ class PopulateLearningPathData < ActiveRecord::Migration[7.1]
       level_1_metadata: ['Learning & Innovation Skills', 'Essential Subjects'],
       level_2_metadata: ['Critical Thinking and Problem Solving'],
       badge_id: 'SB07A9a7DGKaCQV',
+      color: '#F1A65E',
       order: 8
     )
 
@@ -87,6 +96,7 @@ class PopulateLearningPathData < ActiveRecord::Migration[7.1]
       level_1_metadata: ['Learning & Innovation Skills', 'Essential Subjects'],
       level_2_metadata: ['Social skills', 'Flexibility and adaptability', 'Science'],
       badge_id: 'SB06FPa7DGDaO08',
+      color: '#FA8A8A',
       order: 9
     )
 

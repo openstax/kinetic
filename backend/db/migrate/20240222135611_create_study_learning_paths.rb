@@ -4,6 +4,7 @@ class CreateStudyLearningPaths < ActiveRecord::Migration[6.1]
       t.string :label, null: false
       t.string :description, null: false
       t.string :badge_id
+      t.string :color, null: false
       t.text :level_1_metadata, array: true, default: []
       t.text :level_2_metadata, array: true, default: []
       t.timestamps

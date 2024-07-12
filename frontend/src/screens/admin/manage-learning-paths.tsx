@@ -17,6 +17,9 @@ import {
     Textarea,
     TextInput,
     Title,
+    Combobox,
+    useCombobox,
+    InputBase,
 } from '@mantine/core';
 import { Main } from './grid';
 import { LearningPath, Study } from '@api';
@@ -176,6 +179,7 @@ const CreateLearningPath: FC<{
             description: '',
             badgeId: '',
             studies: [],
+            color: '',
         },
         validate: yupResolver(getLearningPathValidationSchema(learningPaths)),
         validateInputOnChange: true,
@@ -222,6 +226,7 @@ const EditLearningPath: FC<{
             level1Metadata: learningPath?.level1Metadata,
             level2Metadata: learningPath?.level2Metadata,
             order: learningPath?.order,
+            color: learningPath?.color,
         },
         validate: yupResolver(getLearningPathValidationSchema(learningPaths?.filter(lp => lp.id !== learningPath?.id))),
         validateInputOnChange: true,
@@ -287,6 +292,11 @@ const LearningPathForm: FC<{
     form: UseFormReturnType<LearningPath>,
     learningPath?: LearningPath
 }> = ({ form, learningPath }) => {
+
+    const combobox = useCombobox({
+        onDropdownClose: () => combobox.resetSelectedOption(),
+    });
+
     return (
         <Stack>
             <Group grow>
@@ -309,6 +319,41 @@ const LearningPathForm: FC<{
                     label='Order'
                     {...form.getInputProps('order')}
                 />
+
+                <Combobox store={combobox} onOptionSubmit={(val) => {
+                    form.setFieldValue('color', val);
+                    combobox.closeDropdown();
+                }}>
+                    <Combobox.Target>
+                        <InputBase
+                            withAsterisk
+                            label='Color'
+                            component="button"
+                            type="button"
+                            pointer
+                            rightSection={<Combobox.Chevron />}
+                            rightSectionPointerEvents="none"
+                            onClick={() => combobox.toggleDropdown()}
+                            error={form.errors['color']}
+                            {...form.getInputProps('color')}
+                            styles={{
+                                input: {
+                                    backgroundColor: form.values.color? form.values.color : 'white',
+                                },
+                            }}>
+                            {form.values.color}
+                        </InputBase>
+                    </Combobox.Target>
+                    <Combobox.Dropdown>
+                        <Combobox.Options>
+                            {colors.learningPathColors.map((color) => (
+                                <Combobox.Option key={color} value={color}>
+                                    <div style={{ backgroundColor: color, width: '100%', height: 20 }}></div>
+                                </Combobox.Option>
+                            ))}
+                        </Combobox.Options>
+                    </Combobox.Dropdown>
+                </Combobox>
             </Group>
 
             <Textarea
