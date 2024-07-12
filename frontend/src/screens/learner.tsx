@@ -21,7 +21,7 @@ const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
     const isMobile = useIsMobileDevice()
 
-    const handleClick = () => {
+    const scrollToStudies = () => {
         const element = document.getElementById('all-studies-unique-id')
         element?.scrollIntoView({ behavior: 'smooth' })
     }
@@ -31,21 +31,23 @@ const HighlightedStudies: FC = () => {
     return (
         <Box bg={colors.navy} py='md'>
             <Container>
-                <Flex direction='column'>
-                    <Flex justify='space-between'>
-                        <CuratedStudies />
+                <Stack>
+                    <Group align='center' justify='space-between'>
                         {isMobile ?
                             <MobileStudyCards studies={highlightedStudies} /> :
-                            <DesktopStudyCards studies={highlightedStudies} />
+                            <>
+                                <CuratedStudies /> 
+                                <div style={{ width: '70%' }}><DesktopStudyCards studies={highlightedStudies} /></div>
+                            </>
                         }
-                    </Flex>
-                    <Flex c={colors.green} justify='center' align='center'>
-                        <Flex direction='column' justify='center' align='center' style={{ cursor: 'pointer' }} onClick={()=> handleClick()}>
+                    </Group>
+                    <Group c={colors.green} justify='center' align='center'>
+                        <Stack justify='center' align='center' style={{ cursor: 'pointer' }} onClick={()=> scrollToStudies()}>
                             <Text size='sm'>View all studies</Text>
                             <IconChevronDown size='.875rem'/>
-                        </Flex>
-                    </Flex>
-                </Flex>
+                        </Stack>
+                    </Group>
+                </Stack>
             </Container>
         </Box>
     )
@@ -54,15 +56,15 @@ const HighlightedStudies: FC = () => {
 const CuratedStudies: FC = () => {
 
     return (
-        <Flex c={colors.white} direction='column' w='280px' h='350px' pt='2.25rem' mt='1rem'>
+        <Stack c={colors.white} w='23%'>
             <Title order={2}>Curated Studies</Title>
-            <Title order={5}>by our learning scientists</Title>
+            <Title order={5} mt='-1.2rem'>by our learning scientists</Title>
 
-            <Stack mt='1rem'>
+            <Stack>
                 <Text pr='1.5rem'>Deepen your understanding of learning habits with scientific studies currated by our team of education researchers.</Text>
                 <Text>Accelerate your growth and tailor your path to your own needs.</Text>
             </Stack>
-        </Flex>
+        </Stack>
     )
 }
 
