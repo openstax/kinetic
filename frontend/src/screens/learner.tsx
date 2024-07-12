@@ -1,4 +1,4 @@
-import { React, useState } from '@common'
+import { React, styled } from '@common'
 import { ParticipantStudy } from '@api'
 import { Footer, TopNavBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
@@ -11,10 +11,10 @@ import { EffectCards, FreeMode, Navigation, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
 import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title } from '@mantine/core';
-import { IconSearch, IconX } from '@tabler/icons-react';
+import { IconSearch, IconX, IconPlus, IconMinus } from '@tabler/icons-react';
 import { groupBy, filter } from 'lodash';
 import { colors } from '@theme'
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { orderBy, sortBy, uniqBy } from 'lodash-es';
 
 const HighlightedStudies: FC = () => {
@@ -114,17 +114,69 @@ export const SearchResults: FC<{search: string, filteredStudies: ParticipantStud
     )
 }
 
+const Circle = styled.div({
+    borderRadius: '50%',
+    border: `1px solid ${colors.blue}`,
+    backgroundColor: colors.white,
+    width: '.875rem',
+    height: '.875rem',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+})
+
+const StudyDuration: FC<{duration: Set<Number>, setDuration: Function, durationText: Number}> = ({ duration, setDuration, durationText }) => {
+
+    const handleDurationChange = (duration:Number) => {
+        setDuration((prev:Set<Number>) => {
+            const newDuration = new Set<Number>(prev)
+            if(newDuration.has(duration)){
+                newDuration.delete(duration)
+            }else{
+                newDuration.add(duration)
+            }
+            return newDuration
+        })
+    }
+
+    const [active, setActive] = useState<Boolean>(() => {
+        return duration.has(durationText)
+    })
+
+    useEffect(() => {
+        setActive(() => {
+            return duration.has(durationText)
+        })
+    }, [duration, durationText])
+
+    return (
+        <Flex justify='center' align='center' gap='.5rem' 
+            pt='.25rem' pb='.25rem' pl='.625rem' pr='.625rem'
+            bg={ active? colors.blue: colors.white }
+            style={{ border: `1px solid ${colors.blue}`, borderRadius: '50rem', transition: 'all .1s ease-in', cursor: 'pointer' }} 
+            onClick={() => {
+                handleDurationChange(durationText)
+            }}>
+            <Text size='sm' c={ active? colors.white: colors.blue }>~{String(durationText)} min</Text> 
+            <Circle>{active? <IconMinus size={10} color={colors.blue} stroke={3}/>: <IconPlus size={10} color={colors.blue} stroke={3}/>}</Circle>
+        </Flex>
+    )
+}
 export const StudiesContainer = () => {
-    const { search, setSearch, filteredStudies } = useSearchStudies()
+    const { search, setSearch, duration, setDuration, filteredStudies } = useSearchStudies()
 
     return (
         <Container my='lg'>
             <Stack gap='lg'>
-                <Flex justify='space-between' wrap='wrap'>
-                    <StudiesTitle search={search} filteredStudies={filteredStudies} />
-
+                <StudiesTitle search={search} filteredStudies={filteredStudies} />
+                <Group justify='space-between' wrap='wrap' >
+                    <Flex justify='center' align='center' gap='md'>
+                        <StudyDuration duration={duration} durationText={5} setDuration={setDuration}></StudyDuration>
+                        <StudyDuration duration={duration} durationText={15} setDuration={setDuration}></StudyDuration>
+                        <StudyDuration duration={duration} durationText={25} setDuration={setDuration}></StudyDuration>
+                    </Flex>
                     <SearchBar search={search} setSearch={setSearch} />
-                </Flex>
+                </Group>
 
                 <SearchResults search={search} filteredStudies={filteredStudies} />
 
