@@ -5,6 +5,6 @@ FactoryBot.define do
     label { Faker::Hobby.activity }
     description { Faker::Hobby.activity }
     badge_id { 'SAJSINa7DGDaC4D' }
-    color { '#B6DB93'}
+    color { '#B6DB93' }
   end
 end
