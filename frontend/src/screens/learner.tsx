@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { EffectCards, FreeMode, Navigation, Pagination } from 'swiper/modules'
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal'
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal'
-import { Badge, Affix, Button, Transition, Box, Container, Divider, Flex, Group, ActionIcon, Stack, Text, TextInput, Title } from '@mantine/core'
+import { Badge, Affix, Button, Transition, Box, Container, Flex, Group, ActionIcon, Stack, Text, TextInput, Title } from '@mantine/core'
 import { IconSearch, IconX, IconPlus, IconMinus, IconArrowUp } from '@tabler/icons-react'
 import { groupBy, orderBy, uniqBy, sortBy, filter } from 'lodash-es'
 import { colors } from '@theme'
@@ -57,7 +57,7 @@ const LearnerDashboard = () => {
             <TopNavBar />
 
             <LearnerWelcomeModal />
-             {/* Temporarily removing this as well until reward system reworked */}
+            {/* Temporarily removing this as well until reward system reworked */}
             {/*<RewardsProgressBar />*/}
 
             {/* Temporarily disable syllabus contest due to legal, keep it just in case we re-enable in the future */}
@@ -106,7 +106,7 @@ export const SearchBar: FC<{
                 ) : (
                     <ActionIcon variant="subtle" color="#848484">
                         <IconSearch size="1.1rem" stroke={1.5} />
-                </ActionIcon>
+                    </ActionIcon>
                 )
             }
             placeholder="Search by study title, researcher, or topic name"
@@ -144,10 +144,10 @@ export const SearchResults: FC<{search: string, filteredStudies: ParticipantStud
 
     if (filteredStudies.length == 0) {
         return (
-        <Title order={4}>
+            <Title order={4}>
             Sorry, no results found for '{search}'
-        </Title>
-)
+            </Title>
+        )
     }
 
     return (
