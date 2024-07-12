@@ -432,6 +432,7 @@ CREATE TABLE public.learning_paths (
     label character varying NOT NULL,
     description character varying NOT NULL,
     badge_id character varying,
+    color character varying NOT NULL,
     level_1_metadata text[] DEFAULT '{}'::text[],
     level_2_metadata text[] DEFAULT '{}'::text[],
     created_at timestamp(6) with time zone NOT NULL,
