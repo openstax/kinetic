@@ -1,6 +1,7 @@
 import { useApi } from '@lib'
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useMemo, useState } from 'react';
+import { isMultiSession, getNextAvailableStage } from '@models';
 import Fuse from 'fuse.js'
 import { LandStudyRequest, LearningPath, ParticipantStudy } from '@api';
 import { orderBy } from 'lodash-es';
@@ -76,6 +77,7 @@ export const useParticipantStudies = () => {
 
 export const useSearchStudies = () => {
     const [search, setSearch] = useState('')
+    const [duration, setDuration] = useState(new Set<Number>([5, 15, 25]))
     const [filteredStudies, setFilteredStudies] = useState<ParticipantStudy[]>([])
     const { isLoading, studies } = useParticipantStudies()
 
@@ -93,18 +95,33 @@ export const useSearchStudies = () => {
 
     const fuse = new Fuse(studies, fuseOptions);
 
+    const filterStudiesBasedOnDuration = (studies: ParticipantStudy[]) => {
+        return studies.filter((study) => {
+            if(!isMultiSession(study) && duration.has(study.totalDuration)) return study
+
+            if(isMultiSession(study)) {
+                const availableStage = getNextAvailableStage(study)
+                if (availableStage && availableStage.durationMinutes && duration.has(availableStage.durationMinutes)) return study
+            }
+        })
+    }
+
     useMemo(() => {
         if (search) {
             const mappedResults = fuse.search(search).map(result => result.item)
-            setFilteredStudies(mappedResults)
+            const filteredResults = filterStudiesBasedOnDuration(mappedResults)
+            setFilteredStudies(filteredResults)
         } else {
-            setFilteredStudies(studies)
+            const filteredResults = filterStudiesBasedOnDuration(studies)
+            setFilteredStudies(filteredResults)
         }
-    }, [search, isLoading])
+    }, [search, isLoading, duration])
 
     return {
         search,
         setSearch,
+        duration,
+        setDuration,
         filteredStudies,
     }
 }
