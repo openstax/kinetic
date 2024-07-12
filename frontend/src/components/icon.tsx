@@ -50,7 +50,6 @@ export const ICONS = {
     clockOutline,
     plusCircleOutline,
     plus,
-    minus,
     close,
     search,
     trash,
