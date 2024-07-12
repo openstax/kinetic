@@ -166,6 +166,7 @@ const getLearningPathValidationSchema = (learningPaths?: LearningPath[]) => {
     return yup.object().shape({
         label: yup.string().required(),
         description: yup.string().required(),
+        color: yup.string().required(),
     })
 }
 
