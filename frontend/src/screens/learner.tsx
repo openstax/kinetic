@@ -224,27 +224,22 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
 export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }) => {
 
     const [displayArrows, setDisplayArrows] = useState<boolean>(false)
-    const [isOverflowing, setIsOverflowing] = useState(false);
     const viewport = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const checkOverflow = () => {
-            if (viewport.current) {
-                const overflow = viewport.current.scrollWidth > viewport.current.clientWidth;
-                setIsOverflowing(overflow);
-            }
-        };
-
-        checkOverflow();
-
-        window.addEventListener('resize', checkOverflow);
-        return () => window.removeEventListener('resize', checkOverflow);
-    }, [studies]);
+    const checkOverflow = () => {
+        if (viewport.current) {
+            const overflow = viewport.current.scrollWidth > viewport.current.clientWidth;
+            return overflow
+        }
+        return false
+    };
 
     return (
         <Stack justify='center' style={{ position: 'relative' }} 
             onMouseOver={() => {
-                setDisplayArrows(true)
+                if(checkOverflow()){
+                    setDisplayArrows(true)
+                }
             }} onMouseLeave={() => {
                 setDisplayArrows(false)
             }}>
@@ -258,7 +253,7 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
                 </Flex>
             </ScrollArea>
 
-            <div style={{ position: 'absolute', left: -10, cursor: 'pointer', marginTop: '-1rem', display: isOverflowing && displayArrows ? 'block' : 'none' }}
+            <div style={{ position: 'absolute', left: -10, cursor: 'pointer', marginTop: '-1rem', display: displayArrows ? 'block' : 'none' }}
                 onClick={() => {
                     if(viewport.current){
                         viewport.current.scrollBy({ left: -200, behavior: 'smooth' })
@@ -266,7 +261,7 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
                 }}>
                 <IconChevronLeft color={colors.purple} size='3.5rem'></IconChevronLeft>
             </div>
-            <div style={{ position: 'absolute', right: -10, cursor: 'pointer', marginTop: '-1rem', display: isOverflowing && displayArrows ? 'block' : 'none' }}
+            <div style={{ position: 'absolute', right: -10, cursor: 'pointer', marginTop: '-1rem', display: displayArrows ? 'block' : 'none' }}
                 onClick={() => {
                     if(viewport.current){
                         viewport.current.scrollBy({ left: 200, behavior: 'smooth' })
@@ -312,7 +307,7 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
     }
 
     return (
-        <Flex direction='row' w='100%' gap='2.25rem'>
+        <Flex direction='row' gap='xl'>
             <Flex 
                 w='25%' 
                 p='1rem 1.5rem 1.5rem 2.5rem'

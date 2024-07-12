@@ -145,14 +145,14 @@ const getTotalCompletedSessions = (study: ParticipantStudy) => {
 const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
 
     return (
-        <Flex className={cx('mt-auto', 'pt-1')} justify='space-between' align='center' w='100%' c={colors.purple}>
+        <Group mt='auto' justify='space-between' align='center' w='100%' c={colors.purple}>
             <Text size='xs'>
                 <span>{getStudyDuration(study)} min | {getStudyPoints(study)} pts </span>
             </Text>
             <Text size='xs'>
                 {isMultiSession(study) && <span>Session {getTotalCompletedSessions(study)}/{study.stages?.length} </span>}
             </Text>
-        </Flex>
+        </Group>
     )
 }
 
