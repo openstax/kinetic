@@ -43,7 +43,7 @@ const LearnerDashboard = () => {
     const env = useEnvironment();
     const [scroll, scrollTo] = useWindowScroll();
 
-    if (!env.isEligi
+    if (!env.isEligible) {
         return <UnsupportedCountryModal />;
     }
     const isVisible = scroll.y > window.innerHeight * 0.25;
