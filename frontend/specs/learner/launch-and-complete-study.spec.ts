@@ -20,7 +20,7 @@ test('launching study and testing completion', async ({ browser }) => {
 
     const userPage = await useUserPage(browser)
 
-    await userPage.getByText('All Studies').isVisible()
+    await userPage.getByText('View All Studies').isVisible()
     await userPage.getByText(studyName).first().click()
 
     await userPage.click('testId=launch-study')
