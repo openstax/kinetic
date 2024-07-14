@@ -12,7 +12,7 @@ import { LearnerWelcomeModal } from './learner/learner-welcome-modal'
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal'
 import { Badge, Affix, Button, Transition, Box, Container, Flex, Group, ActionIcon, Stack, Text, TextInput, Title } from '@mantine/core'
 import { IconSearch, IconX, IconPlus, IconMinus, IconArrowUp } from '@tabler/icons-react'
-import { groupBy, orderBy, uniqBy, sortBy, filter } from 'lodash-es'
+import { groupBy, orderBy, uniqBy, sortBy, filter } from 'lodash'
 import { colors } from '@theme'
 import { FC, useMemo, useState, useEffect } from 'react'
 import { useWindowScroll } from '@mantine/hooks'
@@ -40,7 +40,7 @@ const HighlightedStudies: FC = () => {
 }
 
 const LearnerDashboard = () => {
-    const env = useEnvironment();
+    const env = useEnvironment()
     const [scroll, scrollTo] = useWindowScroll();
 
     if (!env.isEligible) {
@@ -85,8 +85,8 @@ const LearnerDashboard = () => {
             </Affix>
             <Footer includeFunders />
         </div>
-    );
-};
+    )
+}
 
 export const SearchBar: FC<{
     search: string;
@@ -145,7 +145,7 @@ export const SearchResults: FC<{search: string, filteredStudies: ParticipantStud
     if (filteredStudies.length == 0) {
         return (
             <Title order={4}>
-            Sorry, no results found for '{search}'
+                Sorry, no results found for '{search}'
             </Title>
         )
     }
@@ -154,8 +154,8 @@ export const SearchResults: FC<{search: string, filteredStudies: ParticipantStud
         <Title order={4}>
             {filteredStudies.length} result{filteredStudies.length == 1 ? '' : 's'} for '{search}'
         </Title>
-    );
-};
+    )
+}
 
 const Circle = styled.div({
     borderRadius: '50%',
@@ -367,7 +367,7 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                         <Stack 
                             w='100%'
                             key={learningPath.label}
-                            id={learningPath.label} 
+                            id={learningPath.label}
                         >
                             <Group gap='sm'>
                                 <Title order={3}>
@@ -390,6 +390,5 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
         </Flex>
     )
 }
-
 
 export default LearnerDashboard

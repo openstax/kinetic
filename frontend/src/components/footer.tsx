@@ -2,22 +2,8 @@ import { React } from '@common';
 import { HelpLink, ResourceLinks } from './resource-links';
 import { useIsMobileDevice } from '@lib';
 import { useMediaQuery } from '@mantine/hooks';
-import {
-    Anchor,
-    Box,
-    Container,
-    Flex,
-    Group,
-    Image,
-    Stack,
-    Text,
-    Title,
-} from '@mantine/core';
-import {
-    IconBrandFacebookFilled,
-    IconBrandInstagram,
-    IconBrandTwitterFilled,
-} from '@tabler/icons-react';
+import { Anchor, Box, Container, Flex, Group, Image, Stack, Text, Title } from '@mantine/core';
+import { IconBrandFacebookFilled, IconBrandInstagram, IconBrandTwitterFilled } from '@tabler/icons-react';
 import { colors } from '@theme';
 
 
@@ -105,8 +91,8 @@ const Funders = () => {
                 </Flex>
             </Stack>
         </Container>
-    );
-};
+    )
+}
 
 export const DesktopFooter: React.FC = () => {
     return (
@@ -120,8 +106,8 @@ export const DesktopFooter: React.FC = () => {
                 </Group>
             </Container>
         </Box>
-    );
-};
+    )
+}
 
 export const MobileFooter: React.FC = () => {
     return (
@@ -149,25 +135,13 @@ export const SocialLinks = () => {
         <Stack>
             <Title order={4}>Follow us</Title>
             <Group>
-                <Anchor
-                    c="white"
-                    target="_blank"
-                    href="https://www.facebook.com/openstax"
-                >
+                <Anchor c='white' target="_blank" href="https://www.facebook.com/openstax">
                     <IconBrandFacebookFilled />
                 </Anchor>
-                <Anchor
-                    c="white"
-                    target="_blank"
-                    href="https://www.instagram.com/openstax/"
-                >
+                <Anchor c='white' target="_blank" href="https://www.instagram.com/openstax/">
                     <IconBrandInstagram />
                 </Anchor>
-                <Anchor
-                    c="white"
-                    target="_blank"
-                    href="https://twitter.com/OpenStax"
-                >
+                <Anchor c='white' target="_blank" href="https://twitter.com/OpenStax">
                     <IconBrandTwitterFilled />
                 </Anchor>
             </Group>
@@ -177,29 +151,22 @@ export const SocialLinks = () => {
 
 export const Logos = () => {
     return (
-        <Flex direction={{ sm: 'column' }} gap="xl">
-            <Anchor target="_blank" href="https://www.rice.edu">
-                <Image
-                    alt="Rice University logo"
-                    h={30}
-                    w="auto"
-                    src={RiceLogoURL}
-                />
+        <Flex direction={{ sm: 'column' }} gap='xl'>
+            <Anchor target='_blank' href='https://www.rice.edu'>
+                <Image alt="Rice University logo" h="30" w='auto' src={RiceLogoURL} />
             </Anchor>
             <Anchor target='_blank' href='https://www.openstax.org'>
-                <Image alt='Open Stax logo' h='30' src={OpenStaxURL} />
+                <Image alt="Open Stax logo" h="30" src={OpenStaxURL} />
             </Anchor>
         </Flex>
     );
 };
 
-export const Footer: React.FC<{ includeFunders?: boolean }> = ({
-    includeFunders,
-}) => {
+export const Footer: React.FC<{ includeFunders?: boolean }> = ({ includeFunders }) => {
     return (
         <div>
             {includeFunders && < Funders />}
             {useIsMobileDevice() ? <MobileFooter/> : <DesktopFooter/>}
         </div>
-    );
-};
+    )
+}

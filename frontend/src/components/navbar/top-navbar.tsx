@@ -7,7 +7,7 @@ import { BannersBar, Icon, NavbarLogoLink } from '@components';
 import { loadAsync } from '../async';
 
 interface TopNavBarProps {
-    className?: string;
+    className?: string
 }
 
 const menuToggleStyles = {
@@ -140,17 +140,17 @@ const DesktopResearcherLinks = () => {
     return (
         <>
             {/* TODO Put this back in one day when enclaves are ready */}
-            {/*<NavbarLink to="/analysis">*/}
+            {/*<Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>*/}
             {/*    Analysis*/}
-            {/*</NavbarLink>*/}
+            {/*</Link>*/}
         </>
     );
 };
 
 const NavMenu: React.FC = () => {
     const [opened, setOpened] = useState(false);
-    const user = useCurrentUser();
-    const isMobile = useIsMobileDevice();
+    const user = useCurrentUser()
+    const isMobile = useIsMobileDevice()
 
     const menuToggle = isMobile ? (
         <Icon icon="menu" height={24} width={24} color="white" />
@@ -186,4 +186,4 @@ const NavMenu: React.FC = () => {
             </Menu.Dropdown>
         </Menu>
     );
-};
+}
