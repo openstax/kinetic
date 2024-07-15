@@ -12,7 +12,7 @@ import { EffectCards, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
 import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title, ScrollArea } from '@mantine/core';
-import { IconChevronLeft, IconChevronRight, IconSearch, IconX, IconPlus, IconMinus } from '@tabler/icons-react';
+import { IconChevronLeft, IconChevronRight, IconChevronDown, IconSearch, IconX, IconPlus, IconMinus } from '@tabler/icons-react';
 import { groupBy, filter } from 'lodash';
 import { colors } from '@theme'
 import { useMemo, useState, useEffect } from 'react';
@@ -22,20 +22,50 @@ const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
     const isMobile = useIsMobileDevice()
 
+    const scrollToStudies = () => {
+        const element = document.getElementById('all-studies-unique-id')
+        element?.scrollIntoView({ behavior: 'smooth' })
+    }
+
     if (!highlightedStudies.length) return null
 
     return (
         <Box bg={colors.navy} py='md'>
             <Container>
                 <Stack>
-                    <Title c='white' order={2}>Highlighted Studies</Title>
-                    {isMobile ?
-                        <MobileStudyCards studies={highlightedStudies} /> :
-                        <DesktopStudyCards studies={highlightedStudies} />
-                    }
+                    <Group align='center' justify='space-between'>
+                        {isMobile ?
+                            <MobileStudyCards studies={highlightedStudies} /> :
+                            <>
+                                <CuratedStudies /> 
+                                <div style={{ width: '70%' }}><DesktopStudyCards studies={highlightedStudies} /></div>
+                            </>
+                        }
+                    </Group>
+                    <Group c={colors.green} justify='center' align='center'>
+                        <Stack justify='center' align='center' gap='0' style={{ cursor: 'pointer' }} onClick={()=> scrollToStudies()}>
+                            <Text size='sm'>View all studies</Text>
+                            <IconChevronDown size='1.5rem'/>
+                        </Stack>
+                    </Group>
                 </Stack>
             </Container>
         </Box>
+    )
+}
+
+const CuratedStudies: FC = () => {
+
+    return (
+        <Stack c={colors.white} w='23%'>
+            <Title order={2}>Curated Studies</Title>
+            <Title order={5} mt='-1.2rem'>by our learning scientists</Title>
+
+            <Stack>
+                <Text pr='1.5rem'>Deepen your understanding of learning habits with scientific studies currated by our team of education researchers.</Text>
+                <Text>Accelerate your growth and tailor your path to your own needs.</Text>
+            </Stack>
+        </Stack>
     )
 }
 
@@ -91,7 +121,7 @@ export const SearchBar: FC<{search: string, setSearch: (search: string) => void}
 
 export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = () => {
     return (
-        <Title order={2}>All Studies</Title>
+        <Title order={2} id='all-studies-unique-id'>All Studies</Title>
     )
 }
 
