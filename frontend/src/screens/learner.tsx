@@ -368,7 +368,7 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                     )
                 })}
             </Flex>
-            <Stack w='75%'  gap='lg' data-testid='studies-listing'>
+            <Stack w='75%'  gap='lg' data-testid='studies-listing' c={colors.text}>
                 {learningPaths.map(learningPath => {
                     if (!learningPath) return null
                     const studies = sortBy(studiesByLearningPath[learningPath.label], (study) => !!study.completedAt)

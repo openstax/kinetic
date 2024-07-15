@@ -41,20 +41,6 @@ const Card = styled(Box)<{ studycompleted: boolean, multisession: boolean }>(({ 
         minHeight: 152,
         maxHeight: 152,
     },
-    [media.tablet]: {
-        minWidth: 275,
-        maxWidth: 275,
-        lineHeight: 1.2,
-        margin: '0 auto',
-        padding: '1rem',
-        minHeight: 360,
-        maxHeight: 360,
-        '.study-card-image': {
-            minHeight: '35%',
-            maxHeight: '35%',
-            height: '35%',
-        },
-    },
     [media.mobile]: {
         minWidth: 275,
         maxWidth: 275,
@@ -263,6 +249,9 @@ export const StudyCard: React.FC<{study: ParticipantStudy }> = ({ study }) => {
 
     const [multiSessionShadow, setMultiSessionShadow] = useState<boolean>(false)
 
+    if(!isMultiSession(study)){
+        console.log(study)
+    }
     const cardMouseOver = () => {
         setMultiSessionShadow(true)
     }
@@ -329,7 +318,7 @@ const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
                 className='study-card-image'
             />
             <CompleteFlag study={study} />
-            <h6 style={{ marginTop: '.5rem' }}>{study.titleForParticipants}</h6>
+            <Title order={6} >{study.titleForParticipants}</Title>
             <small
                 className={cx({ 'x-small': isMobile })}
                 css={{ color: colors.gray70, overflowWrap: 'anywhere' }}
