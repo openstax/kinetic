@@ -42,9 +42,9 @@ const HighlightedStudies: FC = () => {
                         }
                     </Group>
                     <Group c={colors.green} justify='center' align='center'>
-                        <Stack justify='center' align='center' style={{ cursor: 'pointer' }} onClick={()=> scrollToStudies()}>
+                        <Stack justify='center' align='center' gap='0' style={{ cursor: 'pointer' }} onClick={()=> scrollToStudies()}>
                             <Text size='sm'>View all studies</Text>
-                            <IconChevronDown size='.875rem'/>
+                            <IconChevronDown size='1.5rem'/>
                         </Stack>
                     </Group>
                 </Stack>
