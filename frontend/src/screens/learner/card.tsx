@@ -201,7 +201,7 @@ const StudyDetails: React.FC<{ study: ParticipantStudy }> = ({ study }) => {
     }
 
     return (
-        <Stack align='flex-start' justify='flex-start' gap='lg' p='1rem' pos='relative'>
+        <Stack align='flex-start' justify='flex-start' gap='lg' p='1rem' pos='relative' c={colors.text}>
 
             <Stack gap='0.25rem'>
                 <Title order={4}>{study.titleForParticipants}</Title>
