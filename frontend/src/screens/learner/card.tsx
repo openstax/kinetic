@@ -1,7 +1,7 @@
 import { cx, React, useState } from '@common'
 import { Box, getImageUrl } from '@components'
 import { useEnvironment, useIsMobileDevice, useApi } from '@lib'
-import { getStudyDuration, getStudyPoints, isMultiSession, getStudyPi, getStudyLead, launchStudy, isStudyLaunchable } from '@models'
+import { getStudyDuration, getStudyPoints, isMultiSession, getStudyPi, getStudyLead, launchStudy, isStudyLaunchable, getPointsForCurrentStage, getCurrentStudyDuration } from '@models'
 import { ParticipantStudy, Study } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
@@ -24,7 +24,7 @@ const Card = styled(Box)<{ studycompleted: boolean, multisession: boolean }>(({ 
     lineHeight: 1.3,
     padding: '1rem',
     position: 'relative',
-    color: 'inherit',
+    color: colors.text,
     textDecoration: 'none',
     transformStyle: 'preserve-3d',
     border: multisession? `1px solid ${colors.lightGreen}` : 'none',
@@ -133,7 +133,7 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
     return (
         <Group mt='auto' justify='space-between' align='center' w='100%' c={colors.purple}>
             <Text size='xs'>
-                <span>{getStudyDuration(study)} min | {getStudyPoints(study)} pts </span>
+                <span>{getCurrentStudyDuration(study)} min | {getPointsForCurrentStage(study)} pts </span>
             </Text>
             <Text size='xs'>
                 {isMultiSession(study) && <span>Session {getTotalCompletedSessions(study)}/{study.stages?.length} </span>}

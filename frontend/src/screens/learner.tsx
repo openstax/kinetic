@@ -379,14 +379,13 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                             id={learningPath.label}
                         >
                             <Group gap='sm'>
-                                <Title order={3}>
+                                <Title order={3} c={colors.gray90}>
                                     {learningPath.label}
                                 </Title>
                                 <Text span>|</Text>
                                 <Title order={3} fw='300'>
                                     {learningPath.description}
                                 </Title>
-                                {learningPath.completed ? <Badge c={colors.text} color={colors.green}>Completed</Badge> : null}
                             </Group>
                             {isMobile ?
                                 <MobileStudyCards studies={studies} /> :
