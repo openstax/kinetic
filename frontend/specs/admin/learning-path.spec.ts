@@ -1,5 +1,4 @@
 import { faker, goToPage, test, useAdminPage } from '../test';
-
 export const testingLearningPath = faker.internet.httpMethod() + ' ' + faker.internet.color() + ' ' + faker.internet.domainSuffix()
 
 test('creates a learning path', async ({ browser }) => {
@@ -10,8 +9,7 @@ test('creates a learning path', async ({ browser }) => {
     await adminPage.getByLabel('Label').fill(testingLearningPath)
     await adminPage.getByLabel('Description').fill(faker.word.adverb() + ' ' + faker.word.interjection())
     await adminPage.getByLabel('Badge ID').fill('SAJSINa7DGDaC4D')
-    await adminPage.getByLabel('Color').click()
-    await adminPage.locator('.mantine-Combobox-options > div:first-child').click()
+    await adminPage.getByLabel('Color').fill('#948AE3')
 
     await adminPage.getByText('Create Learning Path').click()
 })
@@ -24,7 +22,6 @@ test('edits a learning path', async ({ browser }) => {
     await adminPage.getByText(testingLearningPath).click()
 
     await adminPage.getByLabel('Description').fill(faker.word.adverb() + ' ' + faker.word.interjection())
-    await adminPage.getByLabel('Color').click()
-    await adminPage.locator('.mantine-Combobox-options > div:nth-child(2)').click()
+    await adminPage.getByLabel('Color').fill('#E69ECE')
     await adminPage.getByText('Update Learning Path').click()
 })
