@@ -1,7 +1,7 @@
 import { cx, React, useState } from '@common'
 import { Box, getImageUrl } from '@components'
 import { useEnvironment, useIsMobileDevice, useApi } from '@lib'
-import { getStudyDuration, getStudyPoints, isMultiSession, getStudyPi, getStudyLead, launchStudy, isStudyLaunchable, getPointsForCurrentStage, getCurrentStudyDuration } from '@models'
+import { isMultiSession, getStudyPi, getStudyLead, launchStudy, isStudyLaunchable, getPointsForCurrentStage, getCurrentStudyDuration } from '@models'
 import { ParticipantStudy, Study } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
@@ -249,9 +249,6 @@ export const StudyCard: React.FC<{study: ParticipantStudy }> = ({ study }) => {
 
     const [multiSessionShadow, setMultiSessionShadow] = useState<boolean>(false)
 
-    if(!isMultiSession(study)){
-        console.log(study)
-    }
     const cardMouseOver = () => {
         setMultiSessionShadow(true)
     }

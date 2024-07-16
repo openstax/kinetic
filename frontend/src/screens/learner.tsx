@@ -11,7 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
-import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title, ScrollArea } from '@mantine/core';
+import { Box, Container, Flex, Group, Stack, Text, TextInput, Title, ScrollArea } from '@mantine/core';
 import { IconChevronLeft, IconChevronRight, IconChevronDown, IconSearch, IconX, IconPlus, IconMinus } from '@tabler/icons-react';
 import { groupBy, filter } from 'lodash';
 import { colors } from '@theme'
