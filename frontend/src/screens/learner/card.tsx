@@ -1,7 +1,7 @@
 import { cx, React, useState } from '@common'
 import { Box, getImageUrl } from '@components'
 import { useEnvironment, useIsMobileDevice, useApi } from '@lib'
-import { isMultiSession, getStudyPi, getStudyLead, launchStudy, isStudyLaunchable, getPointsForCurrentStage, getCurrentStudyDuration, getNextAvailableStage, getFirstStage } from '@models'
+import { isMultiSession, getStudyPi, getStudyLead, launchStudy, isStudyLaunchable, getPointsForCurrentStage, getCurrentStudyDuration, getNextAvailableStage } from '@models'
 import { ParticipantStudy, Study } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
@@ -85,7 +85,6 @@ const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
 const MultiSessionBar: FC<StudyCardProps> = ({ study }) => {
     if (!study.stages || study.stages.length < 2) return null
     const nextAvailableStage = getNextAvailableStage(study)
-    const firstStage = getFirstStage(study)
 
     return (
         <Stack justify='center' align='flex-start' gap='xs' w='100%'>
@@ -120,16 +119,16 @@ const MultiSessionBar: FC<StudyCardProps> = ({ study }) => {
 
                         <Group>
                             {study.stages.map((stage, index) => {
-                                    return (!stage.completedAt && index != 0? <Stack gap='xs' justify='center' align='flex-start' pos='relative' key={index}>
-                                        <div style={{ width: '1rem', 
-                                            height: '1rem', 
-                                            backgroundColor: colors.white, 
-                                            borderRadius: '50%',
-                                            border: `2px solid ${colors.purple}`,
-                                        }}></div>
-                                        <Text key={index} size='xs'>{index+1}/{study.stages?.length}</Text>
-                                    </Stack> : null)
-                                })}
+                                return (!stage.completedAt && index != 0? <Stack gap='xs' justify='center' align='flex-start' pos='relative' key={index}>
+                                    <div style={{ width: '1rem', 
+                                        height: '1rem', 
+                                        backgroundColor: colors.white, 
+                                        borderRadius: '50%',
+                                        border: `2px solid ${colors.purple}`,
+                                    }}></div>
+                                    <Text key={index} size='xs'>{index+1}/{study.stages?.length}</Text>
+                                </Stack> : null)
+                            })}
                         </Group>
                     </Group>
                 </Group>
