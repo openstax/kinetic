@@ -109,9 +109,11 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                                 !user.isResearcher && (
                                 <NavbarStyledLink to="/studies">
                                     <Box
-                                        display='flex'
-                                        alignItems={{ alignItems: 'center' }}
-                                        sx = {{ gap: '5px' }}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '5px',
+                                        }}
                                     >
                                             All Studies
                                     </Box>
@@ -128,9 +130,11 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                                     }
                                 >
                                     <Box
-                                        display='flex'
-                                        alignItems={{ alignItems: 'center' }}
-                                        sx = {{ gap: '5px' }}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '5px',
+                                        }}
                                     >
                                             Achievements
                                     </Box>
