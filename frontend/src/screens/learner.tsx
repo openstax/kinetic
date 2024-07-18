@@ -8,17 +8,15 @@ import { StudyCard } from './learner/card'
 import { StudyDetails } from './learner/details'
 import { Route, Routes } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { EffectCards, FreeMode, Navigation, Pagination } from 'swiper/modules'
+import { EffectCards, Pagination } from 'swiper/modules'
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal'
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal'
-import { Badge, Affix, Button, Transition, Box, Container, Flex, Divider, Group, ActionIcon, Stack, Text, TextInput, Title } from '@mantine/core'
+import { Affix, Button, Transition, Box, Container, Flex, Divider, Group, ActionIcon, Stack, Text, TextInput, Title } from '@mantine/core'
 import { IconSearch, IconX, IconPlus, IconMinus, IconArrowUp } from '@tabler/icons-react'
 import { groupBy, orderBy, uniqBy, sortBy, filter } from 'lodash'
 import { colors } from '@theme'
 import { FC, useMemo, useState, useEffect } from 'react'
 import { useWindowScroll } from '@mantine/hooks'
-
-
 
 const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
