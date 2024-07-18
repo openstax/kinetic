@@ -111,7 +111,7 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                                     <Box
                                         display='flex'
                                         alignItems={{ alignItems: 'center' }}
-                                        gap="5px"
+                                        sx = {{gap: '5px'}}
                                     >
                                             All Studies
                                     </Box>
@@ -130,7 +130,7 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                                     <Box
                                         display='flex'
                                         alignItems={{ alignItems: 'center' }}
-                                        gap="5px"
+                                        sx = {{gap: '5px'}}
                                     >
                                             Achievements
                                     </Box>
