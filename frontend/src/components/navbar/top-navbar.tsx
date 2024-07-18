@@ -109,8 +109,8 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                                 !user.isResearcher && (
                                 <NavbarStyledLink to="/studies">
                                     <Box
-                                        display="flex"
-                                        alignItems="center"
+                                        display='flex'
+                                        alignItems={{ alignItems: 'center' }}
                                         gap="5px"
                                     >
                                             All Studies
