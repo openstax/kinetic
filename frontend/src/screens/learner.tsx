@@ -162,7 +162,7 @@ export const SearchBar: FC<{
 
 export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = () => {
     return (
-        <Title order={2} id='all-studies-unique-id'>All Studies</Title>
+        <Title order={2} id='all-studies-unique-id'>View All Studies</Title>
     )
 }
 
@@ -233,6 +233,74 @@ const StudyDuration: FC<{duration: Set<Number>, setDuration: Function, durationT
         </Flex>
     )
 }
+
+const QuickLinks: FC<{filteredStudies: ParticipantStudy[]}> = ({ filteredStudies }) => {
+
+    const [learningPaths, studiesByLearningPath, completedStudiesByLearningPath] = useMemo(() => {
+        return [
+            orderBy(
+                (uniqBy(filteredStudies.map(fs => fs.learningPath), (lp) => lp?.label)),
+                ['completed', 'order'],
+                ['asc', 'asc']
+            ),
+            groupBy(filteredStudies, (study) => {
+                return study.learningPath?.label
+            }),
+            groupBy(filter(filteredStudies, (study) => study.completedAt != null), (study) => {
+                return study.learningPath?.label
+            }),
+        ]
+    }, [filteredStudies])
+
+    const isMobile = useIsMobileDevice()
+
+    const scrollToLearningPath = (learningPath: string) => {
+        document.getElementById(learningPath)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+
+    const [hoveredLearningPath, setHoveredLearningPath] = useState<string | null>(null)
+
+    const handleMouseEnter = (learningPath: string) => {
+        setHoveredLearningPath(learningPath)
+    }
+
+    const handleMouseLeave = () => {
+        setHoveredLearningPath(null)
+    }
+
+    return (
+        <Stack 
+            w='25%' 
+            p='1rem 1.5rem 1.5rem 2.5rem'
+            justify='flex-start'
+            gap='lg'
+            display={ isMobile? 'none' : 'flex' }
+        >
+            {learningPaths.map(learningPath => {
+                if (!learningPath) return null
+                return (
+                    <Group 
+                        key={learningPath.label}
+                        style={{ cursor: 'pointer' }}
+                        c={ hoveredLearningPath === learningPath.label ? colors.blue : colors.gray70 }
+                        onClick={() => scrollToLearningPath(learningPath.label)}
+                        onMouseEnter={() => handleMouseEnter(learningPath.label)}
+                        onMouseLeave={handleMouseLeave}
+                        justify='space-between'
+                    >
+                        <Text>{learningPath.label}</Text>
+                        <Text>
+                            {completedStudiesByLearningPath[learningPath.label]? completedStudiesByLearningPath[learningPath.label].length : 0}
+                        /
+                            {studiesByLearningPath[learningPath.label].length}
+                        </Text>
+                    </Group>
+                )
+            })}
+        </Stack>
+    )
+}
+
 
 export const StudiesContainer = () => {
     const { search, setSearch, duration, setDuration, filteredStudies } = useSearchStudies()
