@@ -17,6 +17,7 @@ import {
     Textarea,
     TextInput,
     Title,
+    ColorInput,
 } from '@mantine/core';
 import { Main } from './grid';
 import { LearningPath, Study } from '@api';
@@ -163,6 +164,7 @@ const getLearningPathValidationSchema = (learningPaths?: LearningPath[]) => {
     return yup.object().shape({
         label: yup.string().required(),
         description: yup.string().required(),
+        color: yup.string().required(),
     })
 }
 
@@ -176,6 +178,7 @@ const CreateLearningPath: FC<{
             description: '',
             badgeId: '',
             studies: [],
+            color: '',
         },
         validate: yupResolver(getLearningPathValidationSchema(learningPaths)),
         validateInputOnChange: true,
@@ -222,6 +225,7 @@ const EditLearningPath: FC<{
             level1Metadata: learningPath?.level1Metadata,
             level2Metadata: learningPath?.level2Metadata,
             order: learningPath?.order,
+            color: learningPath?.color,
         },
         validate: yupResolver(getLearningPathValidationSchema(learningPaths?.filter(lp => lp.id !== learningPath?.id))),
         validateInputOnChange: true,
@@ -287,6 +291,7 @@ const LearningPathForm: FC<{
     form: UseFormReturnType<LearningPath>,
     learningPath?: LearningPath
 }> = ({ form, learningPath }) => {
+
     return (
         <Stack>
             <Group grow>
@@ -308,6 +313,14 @@ const LearningPathForm: FC<{
                     withAsterisk
                     label='Order'
                     {...form.getInputProps('order')}
+                />
+                <ColorInput format='hex'
+                    withAsterisk
+                    withPicker={false}
+                    label="Color"
+                    error={form.errors['color']}
+                    {...form.getInputProps('color')}
+                    swatches={colors.learningPathColors}
                 />
             </Group>
 

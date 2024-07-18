@@ -4,7 +4,7 @@ class CreateRewards < ActiveRecord::Migration[6.1]
       t.text :prize, null: false
       t.text :info_url, null: true
       t.integer :points, null: false
-      t.timestamps
+      t.timestamp :start_at, :end_at, null: false
     end
   end
 end
