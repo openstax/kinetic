@@ -14,7 +14,7 @@ interface StudyCardProps {
     study: ParticipantStudy
 }
 
-const Card = styled(Box)<{ studycompleted: boolean, multisession: boolean }>(({ studycompleted, multisession }) => ({
+const Card = styled(Box)<{ studycompleted: boolean, multisession: boolean, color: string }>(({ studycompleted, multisession, color }) => ({
     minWidth: 264,
     maxWidth: 264,
     backgroundColor: colors.white,
@@ -27,7 +27,7 @@ const Card = styled(Box)<{ studycompleted: boolean, multisession: boolean }>(({ 
     color: colors.text,
     textDecoration: 'none',
     transformStyle: 'preserve-3d',
-    border: multisession? `1px solid ${colors.lightGreen}` : 'none',
+    border: multisession? `1px solid ${color}` : 'none',
     cursor: studycompleted ? 'not-allowed' : 'pointer',
     height: 350,
     maxHeight: 400,
@@ -156,7 +156,7 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
     )
 }
 
-const MultiSessionBack = styled(Box)<{ createshadow: boolean }> (({ createshadow }) => ({
+const MultiSessionBack = styled(Box)<{ createshadow: boolean, color: string }> (({ createshadow, color }) => ({
     position: 'absolute',
     top: 8,
     left: 8,
@@ -169,7 +169,7 @@ const MultiSessionBack = styled(Box)<{ createshadow: boolean }> (({ createshadow
         height: '360px',
     },
     transform: 'translateZ(-8px)',
-    border: `1px solid ${colors.lightGreen}`,
+    border: `1px solid ${color}`,
     boxShadow: createshadow? '0px 4px 10px 0px rgba(0, 0, 0, 0.25)' : 'none',
 }))
 
@@ -298,10 +298,11 @@ export const StudyCard: React.FC<{study: ParticipantStudy }> = ({ study }) => {
                         data-content-tags={`,learning-path=${study.learningPath?.label},is-new-user=${env.isNewUser},`}
                         studycompleted={!!study.completedAt}
                         multisession={isMultiSession(study)}
+                        color={study.learningPath?.color || colors.white}
                     >
                         {study.completedAt ? <Overlay color="#000" backgroundOpacity={0.2} /> : null}
                         {isMultiSession(study) && !isMobile ? 
-                            <MultiSessionBack createshadow={multiSessionShadow}>
+                            <MultiSessionBack createshadow={multiSessionShadow} color={study.learningPath?.color || colors.white}>
                                 {study.completedAt ? <Overlay color="#000" backgroundOpacity={0.2} /> : null}
                             </ MultiSessionBack>: null}
                         <CardContent study={study} />
@@ -340,7 +341,8 @@ const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
 export const StudyCardPreview: FC<{study: Study}> = ({ study }) => {
     const [showDetails, setShowDetails] = useState<boolean>(false)
     return (
-        <Card className="col study" direction='column' studycompleted={false} multisession={isMultiSession(study)}>
+        <Card className="col study" direction='column' studycompleted={false} multisession={isMultiSession(study)} 
+            color={study.learningPath?.color || colors.white}>
             <CardContent study={study as ParticipantStudy} />
             <Button
                 variant='outline'
