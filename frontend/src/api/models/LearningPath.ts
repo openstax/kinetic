@@ -57,6 +57,12 @@ export interface LearningPath {
      */
     description: string;
     /**
+     * Learning path color
+     * @type {string}
+     * @memberof LearningPath
+     */
+    color?: string;
+    /**
      * Level 1 metadata
      * @type {Array<string>}
      * @memberof LearningPath
@@ -119,6 +125,7 @@ export function LearningPathFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'order': !exists(json, 'order') ? undefined : json['order'],
         'label': json['label'],
         'description': json['description'],
+        'color': !exists(json, 'color') ? undefined : json['color'],
         'level1Metadata': !exists(json, 'level_1_metadata') ? undefined : json['level_1_metadata'],
         'level2Metadata': !exists(json, 'level_2_metadata') ? undefined : json['level_2_metadata'],
         'badgeId': !exists(json, 'badge_id') ? undefined : json['badge_id'],
@@ -141,6 +148,7 @@ export function LearningPathToJSON(value?: LearningPath | null): any {
         'order': value.order,
         'label': value.label,
         'description': value.description,
+        'color': value.color,
         'level_1_metadata': value.level1Metadata,
         'level_2_metadata': value.level2Metadata,
         'badge_id': value.badgeId,

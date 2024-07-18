@@ -436,7 +436,8 @@ CREATE TABLE public.learning_paths (
     level_2_metadata text[] DEFAULT '{}'::text[],
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL,
-    "order" integer
+    "order" integer,
+    color character varying DEFAULT '#000000'::character varying NOT NULL
 );
 
 
@@ -586,8 +587,6 @@ CREATE TABLE public.rewards (
     id bigint NOT NULL,
     prize text NOT NULL,
     points integer NOT NULL,
-    created_at timestamp(6) with time zone NOT NULL,
-    updated_at timestamp(6) with time zone NOT NULL,
     description character varying
 );
 
@@ -1478,6 +1477,9 @@ ALTER TABLE ONLY public.response_exports
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240712192733'),
+('20240712192124'),
+('20240712191554'),
 ('20240424195154'),
 ('20240415134102'),
 ('20240411150309'),
