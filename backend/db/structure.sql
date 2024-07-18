@@ -1477,7 +1477,10 @@ ALTER TABLE ONLY public.response_exports
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240718193802'),
 ('20240718103317'),
+('20240718094704'),
+('20240718093303'),
 ('20240712192733'),
 ('20240712192124'),
 ('20240712191554'),
