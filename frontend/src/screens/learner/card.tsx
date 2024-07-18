@@ -1,7 +1,7 @@
 import { cx, React, useState } from '@common'
 import { Box, getImageUrl } from '@components'
 import { useEnvironment, useIsMobileDevice, useApi } from '@lib'
-import { isMultiSession, getStudyPi, getStudyLead, launchStudy, isStudyLaunchable, getPointsForCurrentStage, getCurrentStudyDuration } from '@models'
+import { isMultiSession, getStudyPi, getStudyLead, launchStudy, isStudyLaunchable, getPointsForCurrentStage, getCurrentStudyDuration, getNextAvailableStage, getFirstStage } from '@models'
 import { ParticipantStudy, Study } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'
@@ -84,6 +84,9 @@ const CompleteFlag: React.FC<StudyCardProps> = ({ study }) => {
 
 const MultiSessionBar: FC<StudyCardProps> = ({ study }) => {
     if (!study.stages || study.stages.length < 2) return null
+    const nextAvailableStage = getNextAvailableStage(study)
+    const firstStage = getFirstStage(study)
+
     return (
         <Stack justify='center' align='flex-start' gap='xs' w='100%'>
             <StudyDetailsItem Icon={IconBoxMultiple} title='Multi-Session' desc=''/>
@@ -95,27 +98,39 @@ const MultiSessionBar: FC<StudyCardProps> = ({ study }) => {
                 </Group>
                 <Group justify='center' align='center'>
                     <Group justify='space-between' w="90%">
-                        {study.stages.map((stage, index) => {
-                            return <Group justify='center' align='center' pos='relative' key={index}>
-                                <div style={{ width: '1rem', 
-                                    height: '1rem', 
-                                    backgroundColor: colors.white, 
-                                    borderRadius: '50%',
-                                    border: `2px solid ${colors.purple}`,
-                                }}></div>
-                                {stage.completedAt? <IconCheck color={colors.purple} stroke={5} size="0.5rem"
-                                    style={{
-                                        position: 'absolute',
-                                    }}/> : null}
-                            </Group>
-                        })}
-                    </Group>
-                </Group>
-                <Group justify='center' align='center'>
-                    <Group justify='space-between' w="90%" c={colors.gray70}>
-                        {study.stages.map((stage, index) => {
-                            return <Text key={index} size='xs'>Session {index+1}/{study.stages?.length}</Text>
-                        })}
+                        <Group>
+                            {study.stages.map((stage, index) => {
+                                return (stage.completedAt || index == 0 ? <Stack gap='xs' justify='center' align='flex-start' pos='relative' key={index}>
+                                    <div style={{ width: '1rem', 
+                                        height: '1rem', 
+                                        backgroundColor: stage.completedAt ? colors.purple : colors.white,
+                                        borderRadius: '50%',
+                                        border: `2px solid ${colors.purple}`,
+                                    }}></div>
+                                    <Text key={index} size='xs'>{index+1}/{study.stages?.length}</Text>
+                                </Stack> : null)
+                            })}
+                        </Group>
+
+                        <Group mt='1.5rem'>
+                            <Text size='xs' c={ colors.purple }>
+                                {nextAvailableStage?.availableAfterDays} {nextAvailableStage?.availableAfterDays && nextAvailableStage.availableAfterDays > 1? 'days' : 'day'}
+                            </Text>
+                        </Group>
+
+                        <Group>
+                            {study.stages.map((stage, index) => {
+                                    return (!stage.completedAt && index != 0? <Stack gap='xs' justify='center' align='flex-start' pos='relative' key={index}>
+                                        <div style={{ width: '1rem', 
+                                            height: '1rem', 
+                                            backgroundColor: colors.white, 
+                                            borderRadius: '50%',
+                                            border: `2px solid ${colors.purple}`,
+                                        }}></div>
+                                        <Text key={index} size='xs'>{index+1}/{study.stages?.length}</Text>
+                                    </Stack> : null)
+                                })}
+                        </Group>
                     </Group>
                 </Group>
             </Stack>
@@ -150,10 +165,7 @@ const MultiSessionBack = styled(Box)<{ createshadow: boolean }> (({ createshadow
     backgroundColor: colors.white,
     width: '264px',
     height: '350px',
-    [media.tablet]: {
-        width: '275px',
-        height: '360px',
-    },[media.mobile]: {
+    [media.mobile]: {
         width: '275px',
         height: '360px',
     },
@@ -289,7 +301,7 @@ export const StudyCard: React.FC<{study: ParticipantStudy }> = ({ study }) => {
                         multisession={isMultiSession(study)}
                     >
                         {study.completedAt ? <Overlay color="#000" backgroundOpacity={0.2} /> : null}
-                        {isMultiSession(study)? 
+                        {isMultiSession(study) && !isMobile ? 
                             <MultiSessionBack createshadow={multiSessionShadow}>
                                 {study.completedAt ? <Overlay color="#000" backgroundOpacity={0.2} /> : null}
                             </ MultiSessionBack>: null}
