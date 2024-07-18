@@ -301,7 +301,6 @@ const QuickLinks: FC<{filteredStudies: ParticipantStudy[]}> = ({ filteredStudies
     )
 }
 
-
 export const StudiesContainer = () => {
     const { search, setSearch, duration, setDuration, filteredStudies } = useSearchStudies()
 
@@ -309,19 +308,24 @@ export const StudiesContainer = () => {
         <Container pt='1.5rem' bg={colors.ash}>
             <Stack gap='lg'>
                 <StudiesTitle search={search} filteredStudies={filteredStudies} />
-                <Group justify='space-between' wrap='wrap' >
-                    <Flex justify='center' align='center' gap='md'>
-                        <StudyDuration duration={duration} durationText={5} setDuration={setDuration}></StudyDuration>
-                        <StudyDuration duration={duration} durationText={15} setDuration={setDuration}></StudyDuration>
-                        <StudyDuration duration={duration} durationText={25} setDuration={setDuration}></StudyDuration>
-                    </Flex>
-                    <SearchBar search={search} setSearch={setSearch} />
-                </Group>
+                <Flex gap='xl'>
+                    <QuickLinks filteredStudies={filteredStudies} />
+                    <Stack w='75%' pl='1rem'>
+                        <Group justify='space-between' wrap='wrap' pt='.5rem' pb='1.5rem'>
+                            <Flex justify='center' align='center' gap='md'>
+                                <StudyDuration duration={duration} durationText={5} setDuration={setDuration}></StudyDuration>
+                                <StudyDuration duration={duration} durationText={15} setDuration={setDuration}></StudyDuration>
+                                <StudyDuration duration={duration} durationText={25} setDuration={setDuration}></StudyDuration>
+                            </Flex>
+                            <SearchBar search={search} setSearch={setSearch} />
+                        </Group>
 
-                <SearchResults search={search} filteredStudies={filteredStudies} />
+                        <SearchResults search={search} filteredStudies={filteredStudies} />
                 <Divider my="sm" />
 
-                <StudiesByLearningPath filteredStudies={filteredStudies} />
+                        <StudiesByLearningPath filteredStudies={filteredStudies} />  
+                    </Stack> 
+                </Flex>
             </Stack>
         </Container>
     )
@@ -410,7 +414,7 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
 }
 
 export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = ({ filteredStudies }) => {
-    const [learningPaths, studiesByLearningPath, completedStudiesByLearningPath] = useMemo(() => {
+    const [learningPaths, studiesByLearningPath] = useMemo(() => {
         return [
             orderBy(
                 (uniqBy(filteredStudies.map(fs => fs.learningPath), (lp) => lp?.label)),
@@ -420,88 +424,39 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
             groupBy(filteredStudies, (study) => {
                 return study.learningPath?.label
             }),
-            groupBy(filter(filteredStudies, (study) => study.completedAt != null), (study) => {
-                return study.learningPath?.label
-            }),
         ]
     }, [filteredStudies])
 
     const isMobile = useIsMobileDevice()
 
-    const scrollToLearningPath = (learningPath: string) => {
-        document.getElementById(learningPath)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-
-    const [hoveredLearningPath, setHoveredLearningPath] = useState<string | null>(null)
-
-    const handleMouseEnter = (learningPath: string) => {
-        setHoveredLearningPath(learningPath)
-    }
-
-    const handleMouseLeave = () => {
-        setHoveredLearningPath(null)
-    }
-
     return (
-        <Flex direction='row' gap='xl'>
-            <Flex 
-                w='25%' 
-                p='1rem 1.5rem 1.5rem 2.5rem'
-                justify-content='center'
-                direction='column'
-                display={ isMobile? 'none' : 'flex' }
-            >
-                {learningPaths.map((learningPath) => {
-                    if (!learningPath) return null
-                    return (<Flex
+        <Stack gap='lg' data-testid='studies-listing' c={colors.text}>
+            {learningPaths.map(learningPath => {
+                if (!learningPath) return null
+                const studies = sortBy(studiesByLearningPath[learningPath.label], (study) => !!study.completedAt)
+                return (
+                    <Stack 
+                        w='100%'
                         key={learningPath.label}
-                        style={{ cursor: 'pointer' }}
-                        c={ hoveredLearningPath === learningPath.label ? colors.blue : colors.gray70 }
-                        onClick={() => scrollToLearningPath(learningPath.label)}
-                        onMouseEnter={() => handleMouseEnter(learningPath.label)}
-                        onMouseLeave={handleMouseLeave}
-                        justify='space-between'
-                        mb='1rem'
+                        id={learningPath.label}
                     >
-                        <Text>{learningPath.label}</Text>
-                        <Text>
-                            {completedStudiesByLearningPath[learningPath.label]? completedStudiesByLearningPath[learningPath.label].length : 0}
-                            /
-                            {studiesByLearningPath[learningPath.label].length}
-                        </Text>
-                    </Flex>
-                    )
-                })}
-            </Flex>
-            <Stack w='75%'  gap='lg' data-testid='studies-listing' c={colors.text}>
-                {learningPaths.map(learningPath => {
-                    if (!learningPath) return null
-                    const studies = sortBy(studiesByLearningPath[learningPath.label], (study) => !!study.completedAt)
-                    return (
-                        <Stack
-                            w='100%'
-                            key={learningPath.label}
-                            id={learningPath.label}
-                        >
-                            <Group gap='sm'>
-                                <Title order={3} c={colors.gray90}>
-                                    {learningPath.label}
-                                </Title>
-                                <Text span>|</Text>
-                                <Title order={3} fw='300'>
-                                    {learningPath.description}
-                                </Title>
-                                {learningPath.completed ? <Badge c={colors.text} color={colors.green}>Completed</Badge> : null}
-                            </Group>
-                            {isMobile ?
-                                <MobileStudyCards studies={studies} /> :
-                                <DesktopStudyCards studies={studies} />
-                            }
-                        </Stack>
-                    )
-                })}
-            </Stack>
-        </Flex>
+                        <Group gap='sm'>
+                            <Title order={3} c={colors.gray90}>
+                                {learningPath.label}
+                            </Title>
+                            <Text span>|</Text>
+                            <Title order={3} fw='300'>
+                                {learningPath.description}
+                            </Title>
+                        </Group>
+                        {isMobile ?
+                            <MobileStudyCards studies={studies} /> :
+                            <DesktopStudyCards studies={studies} />
+                        }
+                    </Stack>
+                )
+            })}
+        </Stack>
     )
 }
 
