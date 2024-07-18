@@ -246,7 +246,6 @@ export const StudyCard: React.FC<{study: ParticipantStudy }> = ({ study }) => {
     const nav = useNavigate()
     const api = useApi()
     const isMobile = useIsMobileDevice()
-
     const [multiSessionShadow, setMultiSessionShadow] = useState<boolean>(false)
 
     const cardMouseOver = () => {
