@@ -22,23 +22,19 @@ const Funders = () => {
 
     return (
         <Container bg="white" px={isMobile ? 16 : 32} pt={16} pb={40}>
-            <Stack gap={isMobile ? 16 : 24}>
+            <Stack gap={isMobile ? 'md' : 'lg'}>
                 <Title
                     order={2}
                     w={700}
                     style={{
                         fontFamily: 'Helvetica Neue',
-                        fontSize: isMobile
-                            ? '24px'
-                            : isTablet
-                                ? '30px'
-                                : '36px',
+                        fontSize: '32px',
                         lineHeight: isMobile
                             ? '28px'
                             : isTablet
                                 ? '36px'
                                 : '42px',
-                        letterSpacing: '-0.04em',
+
                         textAlign: 'left',
                     }}
                 >
@@ -48,7 +44,7 @@ const Funders = () => {
                     direction={isMobile ? 'column' : 'row'}
                     justify={isMobile ? 'flex-start' : 'space-between'}
                     align={isMobile ? 'center' : 'flex-start'}
-                    gap={isMobile ? '24px' : '16px'}
+                    gap={isMobile ? 'md' : 'sm'}
                 >
                     <Anchor
                         target="_blank"

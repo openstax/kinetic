@@ -1,13 +1,13 @@
 import { cx, React, styled, useState } from '@common';
-import { Link, NavLink } from 'react-router-dom';
-import { useCurrentUser, useIsMobileDevice } from '@lib';
-import { Container, Menu, Group, Text, Flex } from '@mantine/core';
-import { colors } from '@theme';
 import { BannersBar, Icon, NavbarLogoLink } from '@components';
+import { useCurrentUser, useIsMobileDevice } from '@lib';
+import { Box, Container, Flex, Group, Menu, Text } from '@mantine/core';
+import { colors } from '@theme';
+import { NavLink } from 'react-router-dom';
 import { loadAsync } from '../async';
 
 interface TopNavBarProps {
-    className?: string
+    className?: string;
 }
 
 const menuToggleStyles = {
@@ -18,11 +18,6 @@ const menuToggleStyles = {
     whiteSpace: 'nowrap' as const,
     userSelect: 'none' as const,
 };
-
-const Wrapper = styled.div({
-    position: 'relative',
-    display: 'inline-block',
-});
 
 export const StyledLink = styled(NavLink)({
     textDecoration: 'none',
@@ -49,25 +44,30 @@ const NavbarStyledLink = styled(NavLink)({
     '&.active::after': {
         content: '""',
         position: 'absolute',
-        bottom: '-6px',
+        bottom: '-8px',
         left: 0,
         width: '100%',
         height: '3px',
-        backgroundColor: '#0EE094',
+        backgroundColor: `${colors.green}`,
     },
     '&:hover::after': {
         content: '""',
         position: 'absolute',
-        bottom: '-6x',
+        bottom: '-8px',
         left: 0,
         width: '100%',
         height: '3px',
-        backgroundColor: '#0ee094',
+        backgroundColor: `${colors.green}`,
     },
 });
 
+
 const AdminLinks = loadAsync('Admin Links', () => import('./admin-links'));
-const AccountLinks = loadAsync('Account Links', () => import('./account-links'));
+const AccountLinks = loadAsync(
+    'Account Links',
+    () => import('./account-links')
+);
+
 export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
     const user = useCurrentUser();
     const hideBanner = user.isResearcher;
@@ -104,21 +104,37 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                                 padding: '26px 0px 26px 0px',
                             }}
                         >
-                            <NavbarStyledLink to="/studies">
-                                <Flex align="center" gap="5px">
-                                    All Studies
-                                </Flex>
-                            </NavbarStyledLink>
                             {!isMobile &&
                                 !user.isAdministrator &&
                                 !user.isResearcher && (
-                                <Wrapper> 
-                                    <NavbarStyledLink to="/achievements" className={({ isActive }) => isActive ? 'active' : ''}>
-                                        <Flex align="center" gap="5px">
-                                                Achievements
-                                        </Flex>
-                                    </NavbarStyledLink>
-                                </Wrapper>
+                                <NavbarStyledLink to="/studies">
+                                    <Box
+                                        display="flex"
+                                        alignItems="center"
+                                        gap="5px"
+                                    >
+                                            All Studies
+                                    </Box>
+                                </NavbarStyledLink>
+                            )}
+
+                            {!isMobile &&
+                                !user.isAdministrator &&
+                                !user.isResearcher && (
+                                <NavbarStyledLink
+                                    to="/achievements"
+                                    className={({ isActive }) =>
+                                        isActive ? 'active' : ''
+                                    }
+                                >
+                                    <Box
+                                        display="flex"
+                                        alignItems="center"
+                                        gap="5px"
+                                    >
+                                            Achievements
+                                    </Box>
+                                </NavbarStyledLink>
                             )}
 
                             <DesktopResearcherLinks />
@@ -140,17 +156,17 @@ const DesktopResearcherLinks = () => {
     return (
         <>
             {/* TODO Put this back in one day when enclaves are ready */}
-            {/*<Link to="/analysis" css={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>*/}
+            {/*<NavbarLink to="/analysis">*/}
             {/*    Analysis*/}
-            {/*</Link>*/}
+            {/*</NavbarLink>*/}
         </>
     );
 };
 
 const NavMenu: React.FC = () => {
     const [opened, setOpened] = useState(false);
-    const user = useCurrentUser()
-    const isMobile = useIsMobileDevice()
+    const user = useCurrentUser();
+    const isMobile = useIsMobileDevice();
 
     const menuToggle = isMobile ? (
         <Icon icon="menu" height={24} width={24} color="white" />
@@ -177,13 +193,18 @@ const NavMenu: React.FC = () => {
 
             <Menu.Dropdown>
                 {isMobile && (
-                    <Menu.Item>
-                        <Link to="/studies">Studies</Link>
-                    </Menu.Item>
+                    <>
+                        <StyledLink to="/studies">
+                            <Menu.Item>All studies</Menu.Item>
+                        </StyledLink>
+                        <StyledLink to="/achievements">
+                            <Menu.Item>Achievements</Menu.Item>
+                        </StyledLink>
+                    </>
                 )}
                 {user.isAdministrator && <AdminLinks />}
                 <AccountLinks />
             </Menu.Dropdown>
         </Menu>
     );
-}
+};

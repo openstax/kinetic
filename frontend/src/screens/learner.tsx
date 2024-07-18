@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { EffectCards, FreeMode, Navigation, Pagination } from 'swiper/modules'
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal'
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal'
-import { Badge, Affix, Button, Transition, Box, Container, Flex, Group, ActionIcon, Stack, Text, TextInput, Title } from '@mantine/core'
+import { Badge, Affix, Button, Transition, Box, Container, Flex, Divider, Group, ActionIcon, Stack, Text, TextInput, Title } from '@mantine/core'
 import { IconSearch, IconX, IconPlus, IconMinus, IconArrowUp } from '@tabler/icons-react'
 import { groupBy, orderBy, uniqBy, sortBy, filter } from 'lodash'
 import { colors } from '@theme'
@@ -132,8 +132,15 @@ export const SearchBar: FC<{
 }
 
 export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = () => {
+
     return (
-        <Title order={2}>View All Studies</Title>
+        <Title order={2}
+            style={{
+                paddingLeft: '40px',
+                paddingRight: '40px',
+            }}>
+            View All Studies
+        </Title>
     )
 }
 
@@ -197,7 +204,7 @@ const StudyDuration: FC<{duration: Set<Number>, setDuration: Function, durationT
         <Flex justify='center' align='center' gap='.5rem' 
             pt='.25rem' pb='.25rem' pl='.625rem' pr='.625rem'
             bg={ active? colors.blue: colors.white }
-            style={{ border: `1px solid ${colors.blue}`, borderRadius: '50rem', transition: 'all .1s ease-in', cursor: 'pointer' }} 
+            style={{ border: `1px solid ${colors.blue}`, borderRadius: '50rem', transition: 'all .1s ease-in', cursor: 'pointer' }}
             onClick={() => {
                 handleDurationChange(durationText)
             }}>
@@ -223,6 +230,7 @@ export const StudiesContainer = () => {
                 </Group>
 
                 <SearchResults search={search} filteredStudies={filteredStudies} />
+                <Divider my="sm" />
 
                 <StudiesByLearningPath filteredStudies={filteredStudies} />
             </Stack>
@@ -336,10 +344,10 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                 justify-content='center'
                 direction='column'
             >
-                {learningPaths.map(learningPath => {
+                {learningPaths.map((learningPath) => {
                     if (!learningPath) return null
                     return (
-                        <Flex 
+                        <Flex
                             key={learningPath.label}
                             style={{ cursor: 'pointer' }}
                             c={ hoveredLearningPath === learningPath.label ? colors.blue : colors.gray70 }
@@ -364,7 +372,7 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                     if (!learningPath) return null
                     const studies = sortBy(studiesByLearningPath[learningPath.label], (study) => !!study.completedAt)
                     return (
-                        <Stack 
+                        <Stack
                             w='100%'
                             key={learningPath.label}
                             id={learningPath.label}
