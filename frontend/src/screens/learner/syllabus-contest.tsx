@@ -120,8 +120,8 @@ const CompletedCountBadge: FC<{ studies: ParticipantStudy[] }> = ({ studies }) =
 export const ContestCards: FC<{ studies: ParticipantStudy[] }> = ({ studies }) => {
     return (
         <Group>
-            {studies.map((study) => (
-                <StudyCard key={study.id} study={study} />
+            {studies.map(study => (
+                <StudyCard key={study.id} study={study}/>
             ))}
         </Group>
     )

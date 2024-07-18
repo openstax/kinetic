@@ -145,7 +145,7 @@ export const createStudy = async ({
 
     await researcherPage.click('testId=image-picker')
     await expect(researcherPage.locator('testId=image-library-modal')).toBeVisible()
-    await researcherPage.locator('testId=card-image').first().click()
+    await researcherPage.locator('testId=card-image').nth(1).click()
     await researcherPage.click('testId=select-card-image')
     await expect(researcherPage.locator('testId=image-library-modal')).toBeHidden()
     await expect(researcherPage.locator('testId=study-primary-action')).toBeEnabled()

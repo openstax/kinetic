@@ -1,4 +1,5 @@
 import { React, styled } from '@common'
+import { useRef } from 'react'
 import { ParticipantStudy } from '@api'
 import { Footer, TopNavBar } from '@components'
 import { useEnvironment, useIsMobileDevice } from '@lib'
@@ -7,14 +8,14 @@ import { StudyCard } from './learner/card'
 import { StudyDetails } from './learner/details'
 import { Route, Routes } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCards, FreeMode, Navigation, Pagination } from 'swiper/modules';
+import { EffectCards, Pagination } from 'swiper/modules';
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
-import { Badge, Box, Container, Flex, Group, Stack, Text, TextInput, Title } from '@mantine/core';
-import { IconSearch, IconX, IconChevronDown, IconPlus, IconMinus } from '@tabler/icons-react';
+import { Box, Container, Flex, Group, Stack, Text, TextInput, Title, ScrollArea } from '@mantine/core';
+import { IconChevronLeft, IconChevronRight, IconChevronDown, IconSearch, IconX, IconPlus, IconMinus } from '@tabler/icons-react';
 import { groupBy, filter } from 'lodash';
 import { colors } from '@theme'
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { orderBy, sortBy, uniqBy } from 'lodash-es';
 
 const HighlightedStudies: FC = () => {
@@ -196,7 +197,7 @@ export const StudiesContainer = () => {
     const { search, setSearch, duration, setDuration, filteredStudies } = useSearchStudies()
 
     return (
-        <Container my='lg'>
+        <Container pt='1.5rem' bg={colors.ash}>
             <Stack gap='lg'>
                 <StudiesTitle search={search} filteredStudies={filteredStudies} />
                 <Group justify='space-between' wrap='wrap' >
@@ -217,6 +218,7 @@ export const StudiesContainer = () => {
 }
 
 export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }) => {
+
     return (
         <Box>
             <Swiper
@@ -239,9 +241,9 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
                     marginBottom: '1rem',
                 }}
             >
-                {studies.map((study) => (
-                    <SwiperSlide key={study.id} className="pb-1">
-                        <StudyCard study={study} />
+                {studies.map(study => (
+                    <SwiperSlide key={study.id} className="pb-1" style={{ paddingTop: '1rem' }}>
+                        <StudyCard study={study}/>
                     </SwiperSlide>
                 ))}
             </Swiper>
@@ -250,34 +252,54 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
 }
 
 export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }) => {
+
+    const [displayArrows, setDisplayArrows] = useState<boolean>(false)
+    const viewport = useRef<HTMLDivElement>(null);
+
+    const checkOverflow = () => {
+        if (viewport.current) {
+            const overflow = viewport.current.scrollWidth > viewport.current.clientWidth;
+            return overflow
+        }
+        return false
+    };
+
     return (
-        <Box>
-            <Swiper
-                slidesPerView={3}
-                simulateTouch={true}
-                pagination={{
-                    enabled: true,
-                    dynamicBullets: true,
-                    dynamicMainBullets: 5,
-                    clickable: true,
-                }}
-                style={{
-                    marginBottom: '1rem',
-                    paddingBottom: '2rem',
-                    paddingRight: '2rem',
-                }}
-                navigation={{
-                    enabled: true,
-                }}
-                modules={[FreeMode, Pagination, Navigation]}
-            >
-                {studies.map(study => (
-                    <SwiperSlide style={{ padding: '1rem' }} key={study.id}>
-                        <StudyCard study={study} />
-                    </SwiperSlide>
-                ))}
-            </Swiper>
-        </Box>
+        <Stack justify='center' style={{ position: 'relative' }} 
+            onMouseOver={() => {
+                if(checkOverflow()){
+                    setDisplayArrows(true)
+                }
+            }} onMouseLeave={() => {
+                setDisplayArrows(false)
+            }}>
+            <ScrollArea viewportRef={viewport} type='never'>
+                <Flex align='center' justify='flex-start' gap='lg' pt='1rem' pb='2rem'>
+
+                    {studies.map(study => (
+                        <StudyCard key={study.id} study={study}/>
+                    ))}
+                                
+                </Flex>
+            </ScrollArea>
+
+            <div style={{ position: 'absolute', left: -10, cursor: 'pointer', marginTop: '-1rem', display: displayArrows ? 'block' : 'none' }}
+                onClick={() => {
+                    if(viewport.current){
+                        viewport.current.scrollBy({ left: -200, behavior: 'smooth' })
+                    }
+                }}>
+                <IconChevronLeft color={colors.purple} size='3.5rem'></IconChevronLeft>
+            </div>
+            <div style={{ position: 'absolute', right: -10, cursor: 'pointer', marginTop: '-1rem', display: displayArrows ? 'block' : 'none' }}
+                onClick={() => {
+                    if(viewport.current){
+                        viewport.current.scrollBy({ left: 200, behavior: 'smooth' })
+                    }
+                }}>
+                <IconChevronRight color={colors.purple} size='3.5rem'></IconChevronRight>
+            </div>   
+        </Stack>
     )
 }
 
@@ -315,12 +337,13 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
     }
 
     return (
-        <Flex direction='row' w='100%'>
+        <Flex direction='row' gap='xl'>
             <Flex 
                 w='25%' 
                 p='1rem 1.5rem 1.5rem 2.5rem'
                 justify-content='center'
                 direction='column'
+                display={ isMobile? 'none' : 'flex' }
             >
                 {learningPaths.map(learningPath => {
                     if (!learningPath) return null
@@ -345,7 +368,7 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                     )
                 })}
             </Flex>
-            <Stack w='75%'  gap='lg' data-testid='studies-listing'>
+            <Stack w='75%'  gap='lg' data-testid='studies-listing' c={colors.text}>
                 {learningPaths.map(learningPath => {
                     if (!learningPath) return null
                     const studies = sortBy(studiesByLearningPath[learningPath.label], (study) => !!study.completedAt)
@@ -356,14 +379,13 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
                             id={learningPath.label}
                         >
                             <Group gap='sm'>
-                                <Title order={3}>
+                                <Title order={3} c={colors.gray90}>
                                     {learningPath.label}
                                 </Title>
                                 <Text span>|</Text>
                                 <Title order={3} fw='300'>
                                     {learningPath.description}
                                 </Title>
-                                {learningPath.completed ? <Badge c={colors.text} color={colors.green}>Completed</Badge> : null}
                             </Group>
                             {isMobile ?
                                 <MobileStudyCards studies={studies} /> :
