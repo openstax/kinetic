@@ -6,5 +6,6 @@ docker-compose.override.dev.yml
 backend/clients
 frontend/test-results
 backend/data
+test-results/.last-run.json
 .env*
 .idea

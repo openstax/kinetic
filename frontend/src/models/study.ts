@@ -66,6 +66,16 @@ export function getLastCompletedStage(study: ParticipantStudy): Stage | undefine
     return findLast(study.stages, (stage) => !!stage.completedAt);
 }
 
+export function getPointsForCurrentStage(study: ParticipantStudy): String {
+    const currentStage = getNextAvailableStage(study)
+    return currentStage ? String(currentStage.points) : String(0)
+}
+
+export function getCurrentStudyDuration(study: ParticipantStudy): String {
+    const currentStage = getNextAvailableStage(study)
+    return currentStage ? String(currentStage.durationMinutes) : String(0)
+}
+
 export function isActive(study: Study) {
     return study.status === StudyStatusEnum.Active
 }

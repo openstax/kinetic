@@ -69,8 +69,8 @@ export const ImageLibrary: FC<{
     onSelect: (imageId: string) => void,
     currentImage?: string
 }> = ({ show, onHide, onSelect, currentImage }) => {
-    const initialCategory = cardImages.find(image => image.imageId == currentImage)?.category[0] || 'Learning'
-    const [selectedImage, setSelectedImage] = useState<string>(currentImage || 'Schoolfuturecareer_1')
+    const initialCategory = cardImages.find(image => image.imageId == currentImage)?.category || 'Biology Learning'
+    const [selectedImage, setSelectedImage] = useState<string>(currentImage || 'Biologist-2--Streamline-Bangalore.png')
 
     return (
         <Modal

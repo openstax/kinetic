@@ -23,6 +23,10 @@ class Api::V1::LearningPathsOpenApi
         key :type, :string
         key :description, 'Learning path description'
       end
+      property :color do
+        key :type, :string
+        key :description, 'Learning path color'
+      end
       property :level_1_metadata do
         key :type, :array
         key :minLength, 0

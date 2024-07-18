@@ -20,6 +20,7 @@ export const colors = {
     // Tertiary Colors
     pine: '#1A654E',
     violet: '#6B38A8',
+    lightGreen: '#B6DB93',
     blue30: '#7594F5',
     yellow50: '#FAF6D1',
     pine50: '#C9E9D3',
@@ -42,6 +43,30 @@ export const colors = {
     osRed: '#D4450C',
     osTeal: '#0DC0DC',
     osYellow: '#F4D019',
+
+    learningPathColors: [
+        '#948AE3',
+        '#E69ECE',
+        '#72D4A8',
+        '#B6DB93',
+        '#A8E5F8',
+        '#6DD6DA',
+        '#70A4FF',
+        '#FFC25B',
+        '#FFE65C',
+        '#FA8A8A',
+        '#F1A65E',
+        '#FFA983',
+        '#FF94B5',
+        '#65E0E5',
+        '#8BE59D',
+        '#BEC0E9',
+        '#84CB8B',
+        '#FA7F6E',
+        '#80FCED',
+        '#FC7BEF',
+        '#83B5FF',
+    ]
 }
 
 export const screenSizes = {
