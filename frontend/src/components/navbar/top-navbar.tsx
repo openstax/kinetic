@@ -128,8 +128,8 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                                     }
                                 >
                                     <Box
-                                        display="flex"
-                                        alignItems="center"
+                                        display='flex'
+                                        alignItems={{ alignItems: 'center' }}
                                         gap="5px"
                                     >
                                             Achievements
