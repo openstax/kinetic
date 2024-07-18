@@ -97,6 +97,8 @@ export const cardImages: CardImage[] = [
     { imageId: 'Success-2--Streamline-Bangalore.svg',category: 'Learning Persistence', altText: 'A Person Holding a winning trophy' },
     { imageId: 'Users-People-Trophy-Awards-01--Streamline-Bangalore.svg',category: 'Learning Persistence', altText: 'A Person winning an award' },
 
+    { imageId: 'Brain-01--Streamline-Bangalore.png',category: 'Mental Agility', altText: "Brain and it's functions" },
+    { imageId: 'Brain-2--Streamline-Bangalore 1.png',category: 'Mental Agility', altText: "Head and it's brain" },
     { imageId: 'Documents-4--Streamline-Bangalore.svg',category: 'Mental Agility', altText: 'Documents' },
     { imageId: 'Product-Bring-Solutions-To-Problems-01--Streamline-Bangalore.svg',category: 'Mental Agility', altText: 'A Product bringing solution to problems' },
     { imageId: 'Work-Being-Creative-01--Streamline-Bangalore.svg',category: 'Mental Agility', altText: 'A Person sitting on a light bulb and flying' },
