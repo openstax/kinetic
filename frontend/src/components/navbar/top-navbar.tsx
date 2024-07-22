@@ -1,9 +1,9 @@
 import { cx, React, styled, useState } from '@common';
-import { BannersBar, Icon, NavbarLogoLink } from '@components';
-import { useCurrentUser, useIsMobileDevice } from '@lib';
-import { Box, Container, Flex, Group, Menu, Text } from '@mantine/core';
-import { colors } from '@theme';
 import { NavLink } from 'react-router-dom';
+import { useCurrentUser, useIsMobileDevice } from '@lib';
+import { Container, Menu, Group, Text, Flex } from '@mantine/core';
+import { colors } from '@theme';
+import { BannersBar, Icon, NavbarLogoLink } from '@components';
 import { loadAsync } from '../async';
 
 interface TopNavBarProps {
@@ -41,23 +41,20 @@ const NavbarStyledLink = styled(NavLink)({
     '&.active': {
         color: 'white',
     },
-    '&.active::after': {
+    '&::after': {
         content: '""',
         position: 'absolute',
-        bottom: '-8px',
+        bottom: '-5px',
         left: 0,
         width: '100%',
         height: '3px',
-        backgroundColor: `${colors.green}`,
+        transition: 'background-color 0.3s ease',
+    },
+    '&.active::after': {
+        backgroundColor: colors.green,
     },
     '&:hover::after': {
-        content: '""',
-        position: 'absolute',
-        bottom: '-8px',
-        left: 0,
-        width: '100%',
-        height: '3px',
-        backgroundColor: `${colors.green}`,
+        backgroundColor: colors.green,
     },
 });
 
@@ -85,8 +82,8 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
             <div style={{ height: '80px', backgroundColor: colors.navy }}>
                 <Container style={{ height: '80px' }}>
                     <Group
-                        justify="space-between"
-                        align="center"
+                        justify='space-between'
+                        align='center'
                         style={{
                             width: '100%',
                             height: '80px',
@@ -96,9 +93,9 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                             <NavbarLogoLink />
                         </Group>
                         <Group
-                            justify="center"
-                            align="center"
-                            gap="40px"
+                            justify='center'
+                            align='center'
+                            gap='40px'
                             style={{
                                 height: '80px',
                                 padding: '26px 0px 26px 0px',
@@ -107,16 +104,14 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                             {!isMobile &&
                                 !user.isAdministrator &&
                                 !user.isResearcher && (
-                                <NavbarStyledLink to="/studies">
-                                    <Box
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '5px',
-                                        }}
+                                <NavbarStyledLink to='/studies'>
+                                    <Flex
+                                        display='flex'
+                                        align='center'
+                                        gap='5px'
                                     >
                                             All Studies
-                                    </Box>
+                                    </Flex>
                                 </NavbarStyledLink>
                             )}
 
@@ -124,20 +119,18 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                                 !user.isAdministrator &&
                                 !user.isResearcher && (
                                 <NavbarStyledLink
-                                    to="/achievements"
+                                    to='/achievements'
                                     className={({ isActive }) =>
                                         isActive ? 'active' : ''
                                     }
                                 >
-                                    <Box
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '5px',
-                                        }}
+                                    <Flex
+                                        display='flex'
+                                        align='center'
+                                        gap='5px'
                                     >
                                             Achievements
-                                    </Box>
+                                    </Flex>
                                 </NavbarStyledLink>
                             )}
 
@@ -160,9 +153,9 @@ const DesktopResearcherLinks = () => {
     return (
         <>
             {/* TODO Put this back in one day when enclaves are ready */}
-            {/*<NavbarLink to="/analysis">*/}
+            {/* {/<NavbarLink to="/analysis">/} */}
             {/*    Analysis*/}
-            {/*</NavbarLink>*/}
+            {/* {/</NavbarLink>/} */}
         </>
     );
 };
@@ -173,14 +166,14 @@ const NavMenu: React.FC = () => {
     const isMobile = useIsMobileDevice();
 
     const menuToggle = isMobile ? (
-        <Icon icon="menu" height={24} width={24} color="white" />
+        <Icon icon='menu' height={24} width={24} color='white' />
     ) : (
         <Flex
-            align="center"
+            align='center'
             onClick={() => setOpened(!opened)}
             style={menuToggleStyles}
         >
-            <Text c="white" fz={18} fw={700} lh="28px" ff="system-ui" mr={5}>
+            <Text c='white' fz={18} fw={700} lh='28px' ff='system-ui' mr={5}>
                 Hi, {user.firstName}
             </Text>
             <Icon
@@ -192,16 +185,16 @@ const NavMenu: React.FC = () => {
     );
 
     return (
-        <Menu shadow="md" opened={opened} onChange={setOpened} width={175}>
+        <Menu shadow='md' opened={opened} onChange={setOpened} width={175}>
             <Menu.Target>{menuToggle}</Menu.Target>
 
             <Menu.Dropdown>
                 {isMobile && (
                     <>
-                        <StyledLink to="/studies">
+                        <StyledLink to='/studies'>
                             <Menu.Item>All studies</Menu.Item>
                         </StyledLink>
-                        <StyledLink to="/achievements">
+                        <StyledLink to='/achievements'>
                             <Menu.Item>Achievements</Menu.Item>
                         </StyledLink>
                     </>
@@ -211,4 +204,4 @@ const NavMenu: React.FC = () => {
             </Menu.Dropdown>
         </Menu>
     );
-};
+}

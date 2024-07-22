@@ -8,11 +8,11 @@ import { StudyCard } from './learner/card'
 import { StudyDetails } from './learner/details'
 import { Route, Routes } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { EffectCards, FreeMode, Navigation, Pagination } from 'swiper/modules'
+import { EffectCards,Pagination } from 'swiper/modules'
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal'
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal'
-import { Badge, Affix, Button, Transition, Box, Container, Flex, Divider, Group, ActionIcon, Stack, Text, TextInput, Title, ScrollArea } from '@mantine/core'
-import { IconSearch, IconX, IconPlus, IconMinus, IconArrowUp, IconChevronLeft, IconChevronRight, IconChevronDown } from '@tabler/icons-react'
+import { Affix, Button, Transition, Box, Container, Flex, Divider, Group, ActionIcon, Stack, Text, TextInput, Title, ScrollArea } from '@mantine/core'
+import { IconSearch, IconX, IconPlus, IconMinus, IconChevronLeft, IconChevronRight, IconChevronDown,IconArrowUp } from '@tabler/icons-react'
 import { groupBy, orderBy, uniqBy, sortBy, filter } from 'lodash'
 import { colors } from '@theme'
 import { FC, useMemo, useState, useEffect } from 'react'
@@ -78,7 +78,7 @@ const LearnerDashboard = () => {
     const isVisible = scroll.y > window.innerHeight * 0.25;
 
     return (
-        <div className="studies learner">
+        <div className='studies learner'>
             <Routes>
                 <Route path={'details/:studyId'} element={<StudyDetails />} />
             </Routes>
@@ -87,10 +87,10 @@ const LearnerDashboard = () => {
 
             <LearnerWelcomeModal />
             {/* Temporarily removing this as well until reward system reworked */}
-            {/*<RewardsProgressBar />*/}
+            {/* {/<RewardsProgressBar />/} */}
 
             {/* Temporarily disable syllabus contest due to legal, keep it just in case we re-enable in the future */}
-            {/*<SyllabusContest studies={syllabusContestStudies} />*/}
+            {/* {/<SyllabusContest studies={syllabusContestStudies} />/} */}
 
             <HighlightedStudies />
 
@@ -100,14 +100,14 @@ const LearnerDashboard = () => {
                     {(transitionStyles) => (
                         <Button
                             onClick={() => scrollTo({ y: 0 })}
+                            radius={'xl'}
                             style={transitionStyles}
-                            radius="xl"
                             p={0}
                             w={48}
                             h={48}
-                            bg="#007bff"
+                            bg={colors.blue}
                         >
-                            <IconArrowUp size="1.5rem" color="#fff" />
+                            <IconArrowUp size='1.5rem' color={colors.white}/>
                         </Button>
                     )}
                 </Transition>
@@ -133,12 +133,12 @@ export const SearchBar: FC<{
                 search.length ? (
                     <IconX onClick={() => setSearch('')} style={{ cursor: 'pointer' }}/>
                 ) : (
-                    <ActionIcon variant="subtle" color="#848484">
-                        <IconSearch size="1.1rem" stroke={1.5} />
+                    <ActionIcon variant='subtle' color={colors.text}>
+                        <IconSearch size='1.1rem' stroke={1.5} />
                     </ActionIcon>
                 )
             }
-            placeholder="Search by study title, researcher, or topic name"
+            placeholder='Search by study title, researcher, or topic name'
             rightSectionWidth={40}
             styles={(theme) => ({
                 root: {
@@ -146,7 +146,7 @@ export const SearchBar: FC<{
                 },
                 input: {
                     borderRadius: '50px',
-                    border: '1px solid #848484',
+                    border: '1px solid ' + theme.colors.gray[70],
                     paddingLeft: '20px',
                     '&:focus': {
                         borderColor: theme.colors.blue[6],
@@ -162,7 +162,7 @@ export const SearchBar: FC<{
 
 export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = () => {
     return (
-        <Title order={2} id='all-studies-unique-id'>View All Studies</Title>
+        <Title order={2} id='all-studies-unique-id' style={{ paddingLeft: '2.5rem',paddingRight: '2.5rem' }}>View All Studies</Title>
     )
 }
 
@@ -198,6 +198,7 @@ const Circle = styled.div({
 })
 
 const StudyDuration: FC<{duration: Set<Number>, setDuration: Function, durationText: Number}> = ({ duration, setDuration, durationText }) => {
+
     const handleDurationChange = (duration:Number) => {
         setDuration((prev:Set<Number>) => {
             const newDuration = new Set<Number>(prev)
@@ -321,7 +322,7 @@ export const StudiesContainer = () => {
                         </Group>
 
                         <SearchResults search={search} filteredStudies={filteredStudies} />
-                <Divider my="sm" />
+                        <Divider my="-5"  />
 
                         <StudiesByLearningPath filteredStudies={filteredStudies} />  
                     </Stack> 
@@ -332,6 +333,7 @@ export const StudiesContainer = () => {
 }
 
 export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }) => {
+
     return (
         <Box>
             <Swiper
@@ -354,9 +356,9 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
                     marginBottom: '1rem',
                 }}
             >
-                {studies.map((study) => (
+                {studies.map(study => (
                     <SwiperSlide key={study.id} className="pb-1" style={{ paddingTop: '1rem' }}>
-                        <StudyCard study={study} />
+                        <StudyCard study={study}/>
                     </SwiperSlide>
                 ))}
             </Swiper>
@@ -365,6 +367,7 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
 }
 
 export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }) => {
+    
     const [displayArrows, setDisplayArrows] = useState<boolean>(false)
     const viewport = useRef<HTMLDivElement>(null);
 
@@ -387,9 +390,11 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
             }}>
             <ScrollArea viewportRef={viewport} type='never'>
                 <Flex align='center' justify='flex-start' gap='lg' pt='1rem' pb='2rem'>
+
                     {studies.map(study => (
                         <StudyCard key={study.id} study={study}/>
                     ))}
+                
                 </Flex>
             </ScrollArea>
 
@@ -459,5 +464,6 @@ export const StudiesByLearningPath: FC<{filteredStudies: ParticipantStudy[]}> = 
         </Stack>
     )
 }
+
 
 export default LearnerDashboard
