@@ -7,7 +7,7 @@ import { BannersBar, Icon, NavbarLogoLink } from '@components';
 import { loadAsync } from '../async';
 
 interface TopNavBarProps {
-    className?: string;
+    className?: string
 }
 
 const menuToggleStyles = {
@@ -24,7 +24,6 @@ export const StyledLink = styled(NavLink)({
     color: 'white',
     fontFamily: 'System-ui',
     fontSize: '18px',
-    fontWeight: 700,
     lineHeight: '28px',
     textAlign: 'left',
 });
