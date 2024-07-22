@@ -105,7 +105,7 @@ const LearnerDashboard = () => {
                             p={0}
                             w={48}
                             h={48}
-                            bg={colors.blue}
+                            bg={colors.purple}
                         >
                             <IconArrowUp size='1.5rem' color={colors.white}/>
                         </Button>
