@@ -12,10 +12,20 @@ test('can add/update/delete rewards', async ({ browser }) => {
 
     // Update
     const updatedPrize = faker.random.words(2)
+    
+    await adminPage.waitForSelector('text=Edit', { state: 'visible' });
     await adminPage.getByText('Edit').first().click()
+    await adminPage.waitForLoadState('networkidle');
+
+    await adminPage.waitForSelector('input[placeholder="Prize"]', { state: 'visible' });
     await adminPage.getByPlaceholder('Prize').fill(updatedPrize)
+    
+    await adminPage.waitForSelector('text=Update reward', { state: 'visible' });
     await adminPage.getByText('Update reward').click()
+    await adminPage.waitForLoadState('networkidle');
 
     // Delete
+    await adminPage.waitForSelector('text=Delete', { state: 'visible' });
     await adminPage.getByText('Delete').first().click()
+    await adminPage.waitForLoadState('networkidle');
 })
