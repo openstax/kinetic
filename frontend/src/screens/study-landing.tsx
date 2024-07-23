@@ -1,5 +1,5 @@
 import { Navigate, NavLink, useLoaderData } from 'react-router-dom'
-import { React, useState, useEffect } from '@common'
+import { React, useRef, useEffect } from '@common'
 import { colors } from '@theme'
 import { LearningPath, ParticipantStudy } from '@api'
 import { Page } from '@components'
@@ -17,38 +17,44 @@ import {
     Stack,
     Text,
     Title,
-    Notification,
 } from '@mantine/core';
 import { IconCheck } from '@tabler/icons-react'
 import Markdown from 'react-markdown'
 import { useLearningPathStudies } from './learner/studies';
 import { CompactStudyCard } from '../components/study/compact-study-card';
+import { notifications } from '@mantine/notifications';
 
 export default function StudyLanding() {
     const env = useEnvironment()
     const study = useLoaderData() as ParticipantStudy
     const learningPathStudies = useLearningPathStudies(study?.learningPath)
-    const [showNotification, setShowNotification] = useState(false)
+    const notificationShown = useRef(false)
+
+
+    const showEarnedPointsNotification = (points: number) => {
+        notifications.show({
+            title: `You just earned ${points} points!`,
+            message: 'The longer the study, the more points you earn. Reach 200 points to unlock additional rewards.',
+            icon: <IconCheck size="1.1rem" />,
+            color: 'teal',
+            autoClose: 5000, 
+            styles: () => ({
+                description: { fontSize: '12px' },
+            }),
+        });
+    };
 
     useEffect(() => {
-        if (study.totalPoints > 0) {
-            setShowNotification(true)
+        if (study.totalPoints > 0 && !notificationShown.current) {
+            showEarnedPointsNotification(study.totalPoints);
+            notificationShown.current = true;
         }
-    }, [study.totalPoints])
-
-    useEffect(() => {
-        if (showNotification) {
-            const timer = setTimeout(() => {
-                setShowNotification(false)
-            }, 2000) 
-
-            return () => clearTimeout(timer)
-        }
-    }, [showNotification])
+    }, [study.totalPoints]);
 
     if (!study || !study.learningPath) {
         return <Navigate to='/studies' />
     }
+
 
     return (
         <Page hideFooter
@@ -62,25 +68,7 @@ export default function StudyLanding() {
                     <LearningPathProgress learningPath={study.learningPath} studies={learningPathStudies} />
                 }
             </Card>
-            {showNotification && (
-                <Notification
-                    icon={<IconCheck size="1.1rem" />}
-                    color="teal"
-                    onClose={() => setShowNotification(false)}
-                    style={{
-                        position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
-                        zIndex: 1000,
-                        maxWidth: '400px',
-                    }}
-                >
-                    <Title order={6} mb={5}>You just earned {study.totalPoints} points!</Title>
-                    <Text size="xs" lineClamp={2} c={colors.gray70}>
-                    The longer the study, the more points you earn. Reach 200 points to unlock additional rewards.
-                    </Text>
-                </Notification>
-            )}
+
         </Page>
     )
 }
@@ -137,7 +125,7 @@ const CompletedLearningPath: FC<{learningPath: LearningPath}> = ({ learningPath 
 
                     <Stack gap='0'>
                         <Title order={5} c='purple'>
-                        You’ve done awesome work so far!
+                            You’ve done awesome work so far!
                         </Title>
                         <Text c={colors.gray70}>
                             {badge.description}
