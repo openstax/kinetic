@@ -24,7 +24,6 @@ export const StyledLink = styled(NavLink)({
     color: 'white',
     fontFamily: 'System-ui',
     fontSize: '18px',
-    fontWeight: 700,
     lineHeight: '28px',
     textAlign: 'left',
 });
@@ -38,23 +37,16 @@ const NavbarStyledLink = styled(NavLink)({
     lineHeight: '28px',
     textAlign: 'left',
     position: 'relative',
+    paddingBottom: '0.6px',  
+    borderBottom: '3px solid transparent',  
+    transition: 'border-bottom-color 0.3s ease',
+
     '&.active': {
         color: 'white',
+        borderBottomColor: colors.green,  
     },
-    '&::after': {
-        content: '""',
-        position: 'absolute',
-        bottom: '-5px',
-        left: 0,
-        width: '100%',
-        height: '3px',
-        transition: 'background-color 0.3s ease',
-    },
-    '&.active::after': {
-        backgroundColor: colors.green,
-    },
-    '&:hover::after': {
-        backgroundColor: colors.green,
+    '&:hover': {
+        borderBottomColor: colors.green, 
     },
 });
 
@@ -120,9 +112,6 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                                 !user.isResearcher && (
                                 <NavbarStyledLink
                                     to='/achievements'
-                                    className={({ isActive }) =>
-                                        isActive ? 'active' : ''
-                                    }
                                 >
                                     <Flex
                                         display='flex'
