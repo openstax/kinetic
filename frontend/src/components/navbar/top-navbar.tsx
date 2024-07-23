@@ -38,7 +38,7 @@ const NavbarStyledLink = styled(NavLink)({
     textAlign: 'left',
     position: 'relative',
     paddingBottom: '0.6px',  
-    borderBottom: '3px solid transparent',  
+    borderBottom: '2px solid transparent',  
     transition: 'border-bottom-color 0.3s ease',
 
     '&.active': {
@@ -75,7 +75,7 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                 <Container style={{ height: '80px' }}>
                     <Group
                         justify='space-between'
-                        align='center'
+                        align='center'   
                         style={{
                             width: '100%',
                             height: '80px',
@@ -86,11 +86,10 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                         </Group>
                         <Group
                             justify='center'
-                            align='center'
+                            align='center'   
                             gap='40px'
                             style={{
                                 height: '80px',
-                                padding: '26px 0px 26px 0px',
                             }}
                         >
                             {!isMobile &&

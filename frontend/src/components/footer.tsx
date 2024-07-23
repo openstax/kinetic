@@ -1,6 +1,5 @@
 import { React } from '@common'
 import { HelpLink, ResourceLinks } from './resource-links'
-import { colors } from '@theme'
 import { useIsMobileDevice } from '@lib'
 import { Anchor, Box, Container, Flex, Group, Image, Stack, Text, Title, Divider } from '@mantine/core';
 import { IconBrandFacebookFilled, IconBrandInstagram, IconBrandTwitterFilled } from '@tabler/icons-react';
@@ -13,6 +12,12 @@ import IESLogoURL from '../images/ies-logo.png'
 import RiceLogoURL from '../images/rice-logo.png'
 // @ts-ignore
 import OpenStaxURL from '../images/openstax-logo.png'
+
+
+interface PhilanthropicSupportersLinkProps {
+    isMobile: boolean;
+}
+
 
 const FunderTitle = () => (
     <Title
@@ -30,18 +35,13 @@ const FunderTitle = () => (
 );
 
 const NSFLogo = () => (
-    <Anchor
-        target='_blank'
-        href='https://www.nsf.org/gb/en'
-        pl={{ base: 0, sm: 75, md: 150 }}
-        pt={{ base: 0, sm: 25, md: 50 }}
-        style={{ display: 'flex', alignItems: 'center' }}
-    >
+    <Anchor target='_blank' href='https://www.nsf.org/gb/en'>
         <Image
             w={{ base: 120, sm: 140, md: 163 }}
             h={{ base: 88, sm: 103, md: 120 }}
             alt='National Science Foundation logo'
             src={NSFLogoURL}
+            fit="contain"
         />
     </Anchor>
 );
@@ -51,12 +51,10 @@ const IESSection = () => (
         display: 'flex', 
         flexDirection: 'column', 
         alignItems: 'center', 
-        justifyContent: 'space-between',
-        h: { base: 'auto', sm: '200px' },
-        padding: '10px 0',
-        w: { base: '100%', sm: 'auto' },
+        justifyContent: 'center',
+        height: '100%',
     }}>
-        <Anchor target='_blank' href='https://ies.ed.gov/' style={{ marginBottom: 16 }}>
+        <Anchor target='_blank' href='https://ies.ed.gov/'>
             <Image
                 width={371}
                 height={99}
@@ -78,27 +76,25 @@ const IESSection = () => (
                 display: '-webkit-box',
                 WebkitLineClamp: 4,
                 WebkitBoxOrient: 'vertical',
+                marginTop: '16px',
             }}
         >
-      The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
+            The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305N210064 to Rice University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
         </Text>
     </Box>
 );
-
-interface PhilanthropicSupportersLinkProps {
-    isMobile: boolean;
-}
 
 const PhilanthropicSupportersLink: React.FC<PhilanthropicSupportersLinkProps> = ({ isMobile }) => (
     <Anchor
         href='https://openstax.org/foundation'
         c='blue'
         size={{ base: 'md', sm: 'lg' } as any}
-        pt={{ base: 0, sm: 50, md: 100 }}
         style={{ 
             textAlign: 'center', 
             display: 'flex', 
             alignItems: 'center', 
+            justifyContent: 'center',
+            height: '100%',
             lineHeight: 1.2,
         }}
     >
@@ -106,9 +102,9 @@ const PhilanthropicSupportersLink: React.FC<PhilanthropicSupportersLinkProps> = 
             'View other Philanthropic supporters'
         ) : (
             <>
-        View other<br/>
-        Philanthropic<br/>
-        supporters
+                View other<br/>
+                Philanthropic<br/>
+                supporters
             </>
         )}
     </Anchor>
@@ -129,14 +125,21 @@ const Funders = () => {
                 <Flex
                     direction={{ base: 'column', sm: 'row' }}
                     justify="space-between"
-                    align={{ base: 'center', sm: 'flex-start' }}
-                    gap={{ base: 'md', sm: 'sm' }}
+                    align="stretch"
+                    gap={{ base: 'md', sm: 'xl' }}
+                    style={{ minHeight: 200 }}
                 >
-                    <NSFLogo />
-                    {!isMobile && <Divider orientation="vertical" h={200} />}
-                    <IESSection />
-                    {!isMobile && <Divider orientation="vertical" h={200} />}
-                    <PhilanthropicSupportersLink isMobile={isMobile} />
+                    <Box style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <NSFLogo />
+                    </Box>
+                    {!isMobile && <Divider orientation="vertical" />}
+                    <Box style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <IESSection />
+                    </Box>
+                    {!isMobile && <Divider orientation="vertical" />}
+                    <Box style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <PhilanthropicSupportersLink isMobile={isMobile} />
+                    </Box>
                 </Flex>
             </Stack>
         </Container>
