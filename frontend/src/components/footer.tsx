@@ -1,6 +1,5 @@
 import { React } from '@common'
 import { HelpLink, ResourceLinks } from './resource-links'
-import { colors } from '@theme'
 import { useIsMobileDevice } from '@lib'
 import { Anchor, Box, Container, Flex, Group, Image, Stack, Text, Title, Divider } from '@mantine/core';
 import { IconBrandFacebookFilled, IconBrandInstagram, IconBrandTwitterFilled } from '@tabler/icons-react';
