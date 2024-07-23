@@ -1,18 +1,33 @@
-import { React } from '@common';
-import { useIsMobileDevice } from '@lib';
-import { Anchor, Box, Container, Divider, Flex, Group, Image, Stack, Text, Title } from '@mantine/core';
+import { React } from '@common'
+import { HelpLink, ResourceLinks } from './resource-links'
+import { colors } from '@theme'
+import { useIsMobileDevice } from '@lib'
+import { Anchor, Box, Container, Flex, Group, Image, Stack, Text, Title, Divider } from '@mantine/core';
 import { IconBrandFacebookFilled, IconBrandInstagram, IconBrandTwitterFilled } from '@tabler/icons-react';
-import { colors } from '@theme';
-import { HelpLink, ResourceLinks } from './resource-links';
 
 // @ts-ignore
-import IESLogoURL from '../images/ies-logo.png';
+import NSFLogoURL from '../images/nsf-logo.webp'
 // @ts-ignore
-import NSFLogoURL from '../images/nsf-logo.webp';
+import IESLogoURL from '../images/ies-logo.png'
 // @ts-ignore
-import OpenStaxURL from '../images/openstax-logo.png';
+import RiceLogoURL from '../images/rice-logo.png'
 // @ts-ignore
-import RiceLogoURL from '../images/rice-logo.png';
+import OpenStaxURL from '../images/openstax-logo.png'
+
+const FunderTitle = () => (
+    <Title
+        order={2}
+        w={700}
+        style={{
+            fontFamily: 'Helvetica Neue',
+            fontSize: '32px',
+            lineHeight: '1.75rem',
+            textAlign: 'left',
+        }}
+    >
+    Support from scientific agencies
+    </Title>
+);
 
 const NSFLogo = () => (
     <Anchor
@@ -31,15 +46,15 @@ const NSFLogo = () => (
     </Anchor>
 );
 
-const IESLogo = () => (
-    <Box style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
+const IESSection = () => (
+    <Box style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
         justifyContent: 'space-between',
-        height: { base: 'auto', sm: '200px' },
+        h: { base: 'auto', sm: '200px' },
         padding: '10px 0',
-        width: { base: '100%', sm: 'auto' },
+        w: { base: '100%', sm: 'auto' },
     }}>
         <Anchor target='_blank' href='https://ies.ed.gov/' style={{ marginBottom: 16 }}>
             <Image
@@ -50,10 +65,10 @@ const IESLogo = () => (
                 fit="contain"
             />
         </Anchor>
-        <Text
+        <Text 
             size={{ base: 'sm', sm: 'md' } as any}
-            color='dimmed'
-            style={{
+            color='dimmed' 
+            style={{ 
                 lineHeight: 1.2,
                 textAlign: 'center',
                 fontSize: '11px',
@@ -70,20 +85,26 @@ const IESLogo = () => (
     </Box>
 );
 
-const PhilanthropicLink = ({ isMobile }: { isMobile: boolean }) => (
+interface PhilanthropicSupportersLinkProps {
+    isMobile: boolean;
+}
+
+const PhilanthropicSupportersLink: React.FC<PhilanthropicSupportersLinkProps> = ({ isMobile }) => (
     <Anchor
         href='https://openstax.org/foundation'
         c='blue'
         size={{ base: 'md', sm: 'lg' } as any}
         pt={{ base: 0, sm: 50, md: 100 }}
-        style={{
-            textAlign: 'center',
-            display: 'flex',
-            alignItems: 'center',
+        style={{ 
+            textAlign: 'center', 
+            display: 'flex', 
+            alignItems: 'center', 
             lineHeight: 1.2,
         }}
     >
-        {isMobile ? 'View other Philanthropic supporters' : (
+        {isMobile ? (
+            'View other Philanthropic supporters'
+        ) : (
             <>
         View other<br/>
         Philanthropic<br/>
@@ -97,16 +118,14 @@ const Funders = () => {
     const isMobile = useIsMobileDevice();
 
     return (
-        <Container bg='white' px={{ base: 16, sm: 32 }} pt={16} pb={40}>
+        <Container
+            bg='white'
+            px={{ base: 16, sm: 32 }}
+            pt={16}
+            pb={40}
+        >
             <Stack gap="md">
-                <Title order={2} w={700} style={{
-                    fontFamily: 'Helvetica Neue',
-                    fontSize: '32px',
-                    lineHeight: '1.75rem',
-                    textAlign: 'left',
-                }}>
-          Support from scientific agencies
-                </Title>
+                <FunderTitle />
                 <Flex
                     direction={{ base: 'column', sm: 'row' }}
                     justify="space-between"
@@ -115,73 +134,91 @@ const Funders = () => {
                 >
                     <NSFLogo />
                     {!isMobile && <Divider orientation="vertical" h={200} />}
-                    <IESLogo />
+                    <IESSection />
                     {!isMobile && <Divider orientation="vertical" h={200} />}
-                    <PhilanthropicLink isMobile={isMobile} />
+                    <PhilanthropicSupportersLink isMobile={isMobile} />
                 </Flex>
             </Stack>
         </Container>
     );
 };
 
-const SocialLinks = () => (
-    <Stack>
-        <Title order={4}>Follow us</Title>
-        <Group>
-            <Anchor c='white' target='_blank' href='https://www.facebook.com/openstax'>
-                <IconBrandFacebookFilled />
-            </Anchor>
-            <Anchor c='white' target='_blank' href='https://www.instagram.com/openstax/'>
-                <IconBrandInstagram />
-            </Anchor>
-            <Anchor c='white' target='_blank' href='https://twitter.com/OpenStax'>
-                <IconBrandTwitterFilled />
-            </Anchor>
-        </Group>
-    </Stack>
-);
-
-const Logos = () => (
-    <Flex direction={{ sm: 'column' }} gap='xl'>
-        <Anchor target='_blank' href='https://www.rice.edu'>
-            <Image alt='Rice University logo' h='30' w='auto' src={RiceLogoURL} />
-        </Anchor>
-        <Anchor target='_blank' href='https://www.openstax.org'>
-            <Image alt='Open Stax logo' h='30' src={OpenStaxURL} />
-        </Anchor>
-    </Flex>
-);
-
-const DesktopFooter: React.FC = () => (
-    <Box bg='navy' c='white'>
-        <Container bg='navy'>
-            <Group py='xl' align='start' justify='space-between'>
-                <HelpLink />
-                <ResourceLinks />
-                <SocialLinks />
-                <Logos />
+export const SocialLinks = () => {
+    return (
+        <Stack>
+            <Title order={4}>Follow us</Title>
+            <Group>
+                <Anchor
+                    c='white'
+                    target='_blank'
+                    href='https://www.facebook.com/openstax'
+                >
+                    <IconBrandFacebookFilled />
+                </Anchor>
+                <Anchor
+                    c='white'
+                    target='_blank'
+                    href='https://www.instagram.com/openstax/'
+                >
+                    <IconBrandInstagram />
+                </Anchor>
+                <Anchor
+                    c='white'
+                    target='_blank'
+                    href='https://twitter.com/OpenStax'
+                >
+                    <IconBrandTwitterFilled />
+                </Anchor>
             </Group>
-        </Container>
-    </Box>
-);
-
-const MobileFooter: React.FC = () => (
-    <Container bg='navy' c='white' style={{ a: { color: colors.white } }}>
-        <Stack py='lg'>
-            <HelpLink />
-            <ResourceLinks />
-            <SocialLinks />
-            <Logos />
         </Stack>
-    </Container>
-);
+    );
+};
 
-export const Footer: React.FC<{ includeFunders?: boolean }> = ({ includeFunders }) => {
+export const Logos = () => {
+    return (
+        <Flex direction={{ sm: 'column' }} gap='xl'>
+            <Anchor target='_blank' href='https://www.rice.edu'>
+                <Image
+                    alt='Rice University logo'
+                    h='30'
+                    w='auto'
+                    src={RiceLogoURL}
+                />
+            </Anchor>
+            <Anchor target='_blank' href='https://www.openstax.org'>
+                <Image alt='Open Stax logo' h='30' src={OpenStaxURL} />
+            </Anchor>
+        </Flex>
+    );
+};
+
+export const Footer: React.FC<{ includeFunders?: boolean }> = ({
+    includeFunders,
+}) => {
     const isMobile = useIsMobileDevice();
+
     return (
         <div>
             {includeFunders && <Funders />}
-            {isMobile ? <MobileFooter /> : <DesktopFooter />}
+            <Box bg='navy' c='white'>
+                <Container bg='navy'>
+                    {isMobile ? (
+                        <Stack py='lg'>
+                            <HelpLink />
+                            <ResourceLinks />
+                            <SocialLinks />
+                            <Logos />
+                        </Stack>
+                    ) : (
+                        <Group py='xl' align='start' justify='space-between'>
+                            <HelpLink />
+                            <ResourceLinks />
+                            <SocialLinks />
+                            <Logos />
+                        </Group>
+                    )}
+                </Container>
+            </Box>
         </div>
     );
 };
