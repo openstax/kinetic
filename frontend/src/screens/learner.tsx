@@ -11,12 +11,11 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { EffectCards,Pagination } from 'swiper/modules'
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal'
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal'
-import { Affix, Button, Transition, Box, Container, Flex, Divider, Group, ActionIcon, Stack, Text, TextInput, Title, ScrollArea } from '@mantine/core'
-import { IconSearch, IconX, IconPlus, IconMinus, IconChevronLeft, IconChevronRight, IconChevronDown,IconArrowUp } from '@tabler/icons-react'
+import { Affix, Box, Container, Flex, Divider, Group, ActionIcon, Stack, Text, TextInput, Title, ScrollArea } from '@mantine/core'
+import { IconSearch, IconX, IconPlus, IconMinus, IconChevronLeft, IconChevronRight, IconChevronDown,IconCircleArrowUpFilled } from '@tabler/icons-react'
 import { groupBy, orderBy, uniqBy, sortBy, filter } from 'lodash'
 import { colors } from '@theme'
 import { FC, useMemo, useState, useEffect } from 'react'
-import { useWindowScroll } from '@mantine/hooks'
 
 const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
@@ -70,12 +69,30 @@ const CuratedStudies: FC = () => {
 
 const LearnerDashboard = () => {
     const env = useEnvironment()
-    const [scroll, scrollTo] = useWindowScroll();
+    const scrollButtonRef = useRef<SVGSVGElement>(null);
+
+    const scrollToTop = () => {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    };
+    useEffect(() => {
+        const handleScroll = () => {
+            if (scrollButtonRef.current) {
+                if (window.scrollY > window.innerHeight * 0.25) {
+                    scrollButtonRef.current.style.display = 'block';
+                } else {
+                    scrollButtonRef.current.style.display = 'none';
+                }
+            }
+        };
+      
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
 
     if (!env.isEligible) {
         return <UnsupportedCountryModal />;
     }
-    const isVisible = scroll.y > window.innerHeight * 0.25;
 
     return (
         <div className='studies learner'>
@@ -86,31 +103,24 @@ const LearnerDashboard = () => {
             <TopNavBar />
 
             <LearnerWelcomeModal />
-            {/* Temporarily removing this as well until reward system reworked */}
-            {/* {/<RewardsProgressBar />/} */}
-
-            {/* Temporarily disable syllabus contest due to legal, keep it just in case we re-enable in the future */}
-            {/* {/<SyllabusContest studies={syllabusContestStudies} />/} */}
 
             <HighlightedStudies />
 
             <StudiesContainer />
             <Affix position={{ bottom: 20, left: 20 }}>
-                <Transition transition="slide-up" mounted={isVisible}>
-                    {(transitionStyles) => (
-                        <Button
-                            onClick={() => scrollTo({ y: 0 })}
-                            radius={'xl'}
-                            style={transitionStyles}
-                            p={0}
-                            w={48}
-                            h={48}
-                            bg={colors.purple}
-                        >
-                            <IconArrowUp size='1.5rem' color={colors.white}/>
-                        </Button>
-                    )}
-                </Transition>
+                <IconCircleArrowUpFilled
+                    ref={scrollButtonRef}
+                    size='2rem'
+                    onClick={scrollToTop}
+                    style={{
+                        display: 'none',
+                        width: '30px', 
+                        height: '30px',
+                        color: colors.purple,
+                        cursor: 'pointer',
+                        filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1))',
+                    }}
+                />
             </Affix>
             <Footer includeFunders />
         </div>
@@ -312,7 +322,7 @@ export const StudiesContainer = () => {
                 <Flex gap='xl'>
                     <QuickLinks filteredStudies={filteredStudies} />
                     <Stack w='75%' pl='1rem'>
-                        <Group justify='space-between' wrap='wrap' pt='.5rem' pb='1.5rem'>
+                        <Group justify='space-between' wrap='wrap' pt='.5rem' pb='0.1rem'>
                             <Flex justify='center' align='center' gap='md'>
                                 <StudyDuration duration={duration} durationText={5} setDuration={setDuration}></StudyDuration>
                                 <StudyDuration duration={duration} durationText={15} setDuration={setDuration}></StudyDuration>
@@ -322,7 +332,7 @@ export const StudiesContainer = () => {
                         </Group>
 
                         <SearchResults search={search} filteredStudies={filteredStudies} />
-                        <Divider my="-5"  />
+                        <Divider size={'xs'}  />
 
                         <StudiesByLearningPath filteredStudies={filteredStudies} />  
                     </Stack> 
