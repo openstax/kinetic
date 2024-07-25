@@ -1,5 +1,5 @@
 import { Navigate, NavLink, useLoaderData } from 'react-router-dom'
-import { React, useRef, useEffect } from '@common'
+import { React, useEffect } from '@common'
 import { colors } from '@theme'
 import { LearningPath, ParticipantStudy } from '@api'
 import { Page } from '@components'
@@ -24,14 +24,16 @@ import { useLearningPathStudies } from './learner/studies';
 import { CompactStudyCard } from '../components/study/compact-study-card';
 import { notifications } from '@mantine/notifications';
 
+let notificationShownThisSession = false;
+
 export default function StudyLanding() {
     const env = useEnvironment()
     const study = useLoaderData() as ParticipantStudy
     const learningPathStudies = useLearningPathStudies(study?.learningPath)
-    const notificationShown = useRef(false)
-
 
     const showEarnedPointsNotification = (points: number) => {
+        if (notificationShownThisSession) return;
+        
         notifications.show({
             title: `You just earned ${points} points!`,
             message: 'The longer the study, the more points you earn. Reach 200 points to unlock additional rewards.',
@@ -42,14 +44,27 @@ export default function StudyLanding() {
                 description: { fontSize: '12px' },
             }),
         });
+        
+        notificationShownThisSession = true;
     };
 
     useEffect(() => {
-        if (study.totalPoints > 0 && !notificationShown.current) {
-            showEarnedPointsNotification(study.totalPoints);
-            notificationShown.current = true;
+        if (study.totalPoints > 0) {
+            // Delay to ensure it runs after any potential double renders
+            const timer = setTimeout(() => {
+                showEarnedPointsNotification(study.totalPoints);
+            }, 100);
+            
+            return () => clearTimeout(timer);
         }
     }, [study.totalPoints]);
+
+    // Reset the flag when the component unmounts
+    useEffect(() => {
+        return () => {
+            notificationShownThisSession = false;
+        };
+    }, []);
 
     if (!study || !study.learningPath) {
         return <Navigate to='/studies' />
