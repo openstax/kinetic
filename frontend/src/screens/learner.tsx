@@ -7,16 +7,15 @@ import { useParticipantStudies, useSearchStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
 import { StudyDetails } from './learner/details'
 import { Route, Routes } from 'react-router-dom'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCards, Pagination } from 'swiper/modules';
-import { LearnerWelcomeModal } from './learner/learner-welcome-modal';
-import { UnsupportedCountryModal } from './learner/unsupported-country-modal';
-import { Box, Container, Flex, Group, Stack, Text, TextInput, Title, ScrollArea } from '@mantine/core';
-import { IconChevronLeft, IconChevronRight, IconChevronDown, IconSearch, IconX, IconPlus, IconMinus } from '@tabler/icons-react';
-import { groupBy, filter } from 'lodash';
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { EffectCards,Pagination } from 'swiper/modules'
+import { LearnerWelcomeModal } from './learner/learner-welcome-modal'
+import { UnsupportedCountryModal } from './learner/unsupported-country-modal'
+import { Affix, Box, Container, Flex, Divider, Group, ActionIcon, Stack, Text, TextInput, Title, ScrollArea } from '@mantine/core'
+import { IconSearch, IconX, IconPlus, IconMinus, IconChevronLeft, IconChevronRight, IconChevronDown,IconCircleArrowUpFilled } from '@tabler/icons-react'
+import { groupBy, orderBy, uniqBy, sortBy, filter } from 'lodash'
 import { colors } from '@theme'
-import { useMemo, useState, useEffect } from 'react';
-import { orderBy, sortBy, uniqBy } from 'lodash-es';
+import { FC, useMemo, useState, useEffect } from 'react'
 
 const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
@@ -55,7 +54,6 @@ const HighlightedStudies: FC = () => {
 }
 
 const CuratedStudies: FC = () => {
-
     return (
         <Stack c={colors.white} w='23%'>
             <Title order={2}>Curated Studies</Title>
@@ -71,13 +69,33 @@ const CuratedStudies: FC = () => {
 
 const LearnerDashboard = () => {
     const env = useEnvironment()
+    const scrollButtonRef = useRef<SVGSVGElement>(null);
+
+    const scrollToTop = () => {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    };
+    useEffect(() => {
+        const handleScroll = () => {
+            if (scrollButtonRef.current) {
+                if (window.scrollY > window.innerHeight * 0.25) {
+                    scrollButtonRef.current.style.display = 'block';
+                } else {
+                    scrollButtonRef.current.style.display = 'none';
+                }
+            }
+        };
+      
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
 
     if (!env.isEligible) {
-        return <UnsupportedCountryModal />
+        return <UnsupportedCountryModal />;
     }
 
     return (
-        <div className="studies learner">
+        <div className='studies learner'>
             <Routes>
                 <Route path={'details/:studyId'} element={<StudyDetails />} />
             </Routes>
@@ -86,42 +104,75 @@ const LearnerDashboard = () => {
 
             <LearnerWelcomeModal />
 
-            {/* Temporarily removing this as well until reward system reworked */}
-            {/*<RewardsProgressBar />*/}
-
-            {/* Temporarily disable syllabus contest due to legal, keep it just in case we re-enable in the future */}
-            {/*<SyllabusContest studies={syllabusContestStudies} />*/}
-
             <HighlightedStudies />
 
             <StudiesContainer />
-
+            <Affix position={{ bottom: 20, left: 20 }}>
+                <IconCircleArrowUpFilled
+                    ref={scrollButtonRef}
+                    size='2rem'
+                    onClick={scrollToTop}
+                    style={{
+                        display: 'none',
+                        width: '30px', 
+                        height: '30px',
+                        color: colors.purple,
+                        cursor: 'pointer',
+                        filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1))',
+                    }}
+                />
+            </Affix>
             <Footer includeFunders />
         </div>
     )
 }
 
-export const SearchBar: FC<{search: string, setSearch: (search: string) => void}> = ({ search, setSearch }) => {
-    const isMobile = useIsMobileDevice()
+export const SearchBar: FC<{
+    search: string;
+    setSearch: (search: string) => void;
+}> = ({ search, setSearch }) => {
+    const isMobile = useIsMobileDevice();
 
     return (
         <TextInput
-            w={isMobile ? '100%' : '400px'}
-            size='lg'
+            w={isMobile ? '100%' : '600px'}
+            size='md'
             value={search}
             onChange={(event) => setSearch(event.currentTarget.value)}
-            rightSection={search.length ?
-                <IconX onClick={() => setSearch('')} style={{ cursor: 'pointer' }}/> :
-                <IconSearch />
+            rightSection={
+                search.length ? (
+                    <IconX onClick={() => setSearch('')} style={{ cursor: 'pointer' }}/>
+                ) : (
+                    <ActionIcon variant='subtle' color={colors.text}>
+                        <IconSearch size='1.1rem' stroke={1.5} />
+                    </ActionIcon>
+                )
             }
-            placeholder="Search by study title, researcher, or topic name"
+            placeholder='Search by study title, researcher, or topic name'
+            rightSectionWidth={40}
+            styles={(theme) => ({
+                root: {
+                    maxWidth: '400px',
+                },
+                input: {
+                    borderRadius: '50px',
+                    border: '1px solid ' + theme.colors.gray[70],
+                    paddingLeft: '20px',
+                    '&:focus': {
+                        borderColor: theme.colors.blue[6],
+                    },
+                },
+                rightSection: {
+                    pointerEvents: 'none',
+                },
+            })}
         />
     )
 }
 
 export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = () => {
     return (
-        <Title order={2} id='all-studies-unique-id'>All Studies</Title>
+        <Title order={2} id='all-studies-unique-id' style={{ paddingLeft: '2.5rem',paddingRight: '2.5rem' }}>View All Studies</Title>
     )
 }
 
@@ -184,7 +235,7 @@ const StudyDuration: FC<{duration: Set<Number>, setDuration: Function, durationT
         <Flex justify='center' align='center' gap='.5rem' 
             pt='.25rem' pb='.25rem' pl='.625rem' pr='.625rem'
             bg={ active? colors.blue: colors.white }
-            style={{ border: `1px solid ${colors.blue}`, borderRadius: '50rem', transition: 'all .1s ease-in', cursor: 'pointer' }} 
+            style={{ border: `1px solid ${colors.blue}`, borderRadius: '50rem', transition: 'all .1s ease-in', cursor: 'pointer' }}
             onClick={() => {
                 handleDurationChange(durationText)
             }}>
@@ -271,7 +322,7 @@ export const StudiesContainer = () => {
                 <Flex gap='xl'>
                     <QuickLinks filteredStudies={filteredStudies} />
                     <Stack w='75%' pl='1rem'>
-                        <Group justify='space-between' wrap='wrap' pt='.5rem' pb='1.5rem'>
+                        <Group justify='space-between' wrap='wrap' pt='.5rem' pb='0.1rem'>
                             <Flex justify='center' align='center' gap='md'>
                                 <StudyDuration duration={duration} durationText={5} setDuration={setDuration}></StudyDuration>
                                 <StudyDuration duration={duration} durationText={15} setDuration={setDuration}></StudyDuration>
@@ -281,6 +332,7 @@ export const StudiesContainer = () => {
                         </Group>
 
                         <SearchResults search={search} filteredStudies={filteredStudies} />
+                        <Divider size={'xs'}  />
 
                         <StudiesByLearningPath filteredStudies={filteredStudies} />  
                     </Stack> 
@@ -325,7 +377,7 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
 }
 
 export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }) => {
-
+    
     const [displayArrows, setDisplayArrows] = useState<boolean>(false)
     const viewport = useRef<HTMLDivElement>(null);
 
@@ -352,7 +404,7 @@ export const DesktopStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }
                     {studies.map(study => (
                         <StudyCard key={study.id} study={study}/>
                     ))}
-                                
+                
                 </Flex>
             </ScrollArea>
 
