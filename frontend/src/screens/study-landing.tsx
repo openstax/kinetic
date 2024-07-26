@@ -1,5 +1,5 @@
 import { Navigate, NavLink, useLoaderData } from 'react-router-dom'
-import { React, useEffect } from '@common'
+import { React, useEffect, useState } from '@common'
 import { colors } from '@theme'
 import { LearningPath, ParticipantStudy } from '@api'
 import { Page } from '@components'
@@ -24,15 +24,14 @@ import { useLearningPathStudies } from './learner/studies';
 import { CompactStudyCard } from '../components/study/compact-study-card';
 import { notifications } from '@mantine/notifications';
 
-let notificationShownThisSession = false;
-
 export default function StudyLanding() {
     const env = useEnvironment()
     const study = useLoaderData() as ParticipantStudy
     const learningPathStudies = useLearningPathStudies(study?.learningPath)
+    const [notificationShown, setNotificationShown] = useState(false);
 
     const showEarnedPointsNotification = (points: number) => {
-        if (notificationShownThisSession) return;
+        if (notificationShown) return;
         
         notifications.show({
             title: `You just earned ${points} points!`,
@@ -45,26 +44,19 @@ export default function StudyLanding() {
             }),
         });
         
-        notificationShownThisSession = true;
+        setNotificationShown(true);
     };
 
     useEffect(() => {
-        if (study.totalPoints > 0) {
-            // Delay to ensure it runs after any potential double renders
+        if (!notificationShown && study.totalPoints > 0) {
             const timer = setTimeout(() => {
                 showEarnedPointsNotification(study.totalPoints);
             }, 100);
             
             return () => clearTimeout(timer);
         }
-    }, [study.totalPoints]);
+    }, [notificationShown, study.totalPoints]);
 
-    // Reset the flag when the component unmounts
-    useEffect(() => {
-        return () => {
-            notificationShownThisSession = false;
-        };
-    }, []);
 
     if (!study || !study.learningPath) {
         return <Navigate to='/studies' />
