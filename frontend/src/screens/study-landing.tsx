@@ -1,5 +1,5 @@
 import { Navigate, NavLink, useLoaderData } from 'react-router-dom'
-import { React, useEffect, useState } from '@common'
+import { React, useEffect } from '@common'
 import { colors } from '@theme'
 import { LearningPath, ParticipantStudy } from '@api'
 import { Page } from '@components'
@@ -28,11 +28,8 @@ export default function StudyLanding() {
     const env = useEnvironment()
     const study = useLoaderData() as ParticipantStudy
     const learningPathStudies = useLearningPathStudies(study?.learningPath)
-    const [notificationShown, setNotificationShown] = useState(false);
 
     const showEarnedPointsNotification = (points: number) => {
-        if (notificationShown) return;
-        
         notifications.show({
             title: `You just earned ${points} points!`,
             message: 'The longer the study, the more points you earn. Reach 200 points to unlock additional rewards.',
@@ -43,25 +40,21 @@ export default function StudyLanding() {
                 description: { fontSize: '12px' },
             }),
         });
-        
-        setNotificationShown(true);
     };
 
     useEffect(() => {
-        if (!notificationShown && study.totalPoints > 0) {
+        if (study.totalPoints > 0) {
             const timer = setTimeout(() => {
                 showEarnedPointsNotification(study.totalPoints);
             }, 100);
             
             return () => clearTimeout(timer);
         }
-    }, [notificationShown, study.totalPoints]);
-
+    }, [study.totalPoints]);
 
     if (!study || !study.learningPath) {
         return <Navigate to='/studies' />
     }
-
 
     return (
         <Page hideFooter
