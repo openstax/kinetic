@@ -282,7 +282,7 @@ export const StudyCard: React.FC<{study: ParticipantStudy }> = ({ study }) => {
         <div
             onMouseOver={()=> cardMouseOver()} 
             onMouseLeave={() => cardMouseOut()}>
-            <HoverCard shadow="md" width={548} withArrow openDelay={2000} closeDelay={200} position='right' 
+            <HoverCard shadow="md" width={548} withArrow openDelay={500} closeDelay={200} position='right' 
                 disabled={isMobile || !!study.completedAt}>
                 <HoverCard.Target>
                     <Card

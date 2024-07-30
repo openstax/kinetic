@@ -115,7 +115,6 @@ const Funders = () => {
 
     return (
         <Container
-            bg='white'
             px={{ base: 16, sm: 32 }}
             pt={16}
             pb={40}
