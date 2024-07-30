@@ -95,7 +95,7 @@ const LearnerDashboard = () => {
     }
 
     return (
-        <div className='studies learner' style={{backgroundColor: colors.ash}}>
+        <div className='studies learner' style={{ backgroundColor: colors.ash }}>
             <Routes>
                 <Route path={'details/:studyId'} element={<StudyDetails />} />
             </Routes>
