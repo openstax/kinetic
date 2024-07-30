@@ -16,6 +16,8 @@ import { IconSearch, IconX, IconPlus, IconMinus, IconChevronLeft, IconChevronRig
 import { groupBy, orderBy, uniqBy, sortBy, filter } from 'lodash'
 import { colors } from '@theme'
 import { FC, useMemo, useState, useEffect } from 'react'
+import StudyBanner from './StudyBanner'
+
 
 const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
@@ -101,6 +103,8 @@ const LearnerDashboard = () => {
             </Routes>
 
             <TopNavBar />
+            < StudyBanner />
+
 
             <LearnerWelcomeModal />
 
