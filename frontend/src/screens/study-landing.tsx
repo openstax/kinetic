@@ -1,5 +1,5 @@
 import { Navigate, NavLink, useLoaderData } from 'react-router-dom'
-import { React } from '@common'
+import { React, useEffect } from '@common'
 import { colors } from '@theme'
 import { LearningPath, ParticipantStudy } from '@api'
 import { Page } from '@components'
@@ -18,15 +18,39 @@ import {
     Text,
     Title,
 } from '@mantine/core';
+import { IconCheck } from '@tabler/icons-react'
 import Markdown from 'react-markdown'
 import { useLearningPathStudies } from './learner/studies';
 import { CompactStudyCard } from '../components/study/compact-study-card';
+import { notifications } from '@mantine/notifications';
 
 export default function StudyLanding() {
     const env = useEnvironment()
-
     const study = useLoaderData() as ParticipantStudy
     const learningPathStudies = useLearningPathStudies(study?.learningPath)
+
+    const showEarnedPointsNotification = (points: number) => {
+        notifications.show({
+            title: `You just earned ${points} points!`,
+            message: 'The longer the study, the more points you earn. Reach 200 points to unlock additional rewards.',
+            icon: <IconCheck size="1.1rem" />,
+            color: 'teal',
+            autoClose: 5000, 
+            styles: () => ({
+                description: { fontSize: '12px' },
+            }),
+        });
+    };
+
+    useEffect(() => {
+        if (study.totalPoints > 0) {
+            const timer = setTimeout(() => {
+                showEarnedPointsNotification(study.totalPoints);
+            }, 100);
+            
+            return () => clearTimeout(timer);
+        }
+    }, [study.totalPoints]);
 
     if (!study || !study.learningPath) {
         return <Navigate to='/studies' />
@@ -44,6 +68,7 @@ export default function StudyLanding() {
                     <LearningPathProgress learningPath={study.learningPath} studies={learningPathStudies} />
                 }
             </Card>
+
         </Page>
     )
 }
