@@ -83,6 +83,7 @@ class UserInfo
               full_name: u[:name],
               first_name: u[:first_name],
               last_name: u[:last_name],
+              'email_address' => "#{u[:first_name]}-#{u[:last_name]}@test.openstax.org",
               contact_infos: [{
                 type: 'EmailAddress', value: "#{u[:first_name]}-#{u[:last_name]}@test.openstax.org"
               }]
