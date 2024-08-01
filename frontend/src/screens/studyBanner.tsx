@@ -5,7 +5,6 @@ import { useSearchStudies, useParticipantStudies } from './learner/studies';
 import { IconArrowRight } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
-
 const AchievementsContainer = styled.div({
     display: 'flex',
     justifyContent: 'space-between',
@@ -67,14 +66,17 @@ const HighlightedLink = styled.a({
     },
 });
 
+
 const NumberContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   height: 50px;
   flex: 1;
+  margin-left : 36px ; 
 `;
 
+// Styling for the number text
 const NumberText = styled.div`
   color: ${colors.blue};
   font-family: 'Helvetica Neue', sans-serif;
@@ -83,26 +85,31 @@ const NumberText = styled.div`
   text-align: center;
 `;
 
+
 const StudyBanner = () => {
     const { filteredStudies } = useSearchStudies();
-    const { studies } = useParticipantStudies();
+    const { studies } = useParticipantStudies(); // Fetch participant studies data
     const navigate = useNavigate();
 
+    // Calculate total completedCount from studies
     const totalCompletedCount = studies.reduce(
         (sum, study) => sum + (study.completedCount || 0),
         0
     );
 
+    // Calculate badges earned
     const badgesEarned = studies.reduce(
         (count, study) => count + (study.learningPath?.completed ? 1 : 0),
         0
     );
 
+    // Calculate total points earned only if learningPath.completed is true
     const totalPointsEarned = studies.reduce(
         (sum, study) => sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0),
         0
     );
 
+    // Determine if any studies are completed
     const hasCompletedStudies = filteredStudies.some(study => study.completedAt);
 
     const fiveMinuteStudies = filteredStudies.filter(study => study.stages[0]?.durationMinutes === 5);
@@ -115,10 +122,7 @@ const StudyBanner = () => {
         }
     }, [fiveMinuteStudies, navigate]);
 
-    // Use the `isLoaded` variable to conditionally render content within the component's return statement.
-    const isLoaded = studies.length > 0 && filteredStudies.length > 0;
-
-    return isLoaded ? (
+    return (
         <AchievementsContainer>
             <Achievement>
                 <AchievementTitle>Achievements</AchievementTitle>
@@ -175,7 +179,7 @@ const StudyBanner = () => {
                 </AchievementText>
             </Achievement>
         </AchievementsContainer>
-    ) : null;
+    );
 };
 
 export default StudyBanner;
