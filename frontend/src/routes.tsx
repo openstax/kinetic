@@ -91,7 +91,7 @@ export const AppRoutes = () => {
                 { path: 'analysis/*', element: <AnalysisHomepage /> },
                 { path: 'admin/*', element: <AdminHomepage /> },
                 { path: '*', element: <PageNotFound /> },
-                {path: 'achievements', element: <Achievements />},
+                { path: 'achievements', element: <Achievements /> },
             ],
         },
     ])
