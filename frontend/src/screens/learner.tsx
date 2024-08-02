@@ -19,6 +19,7 @@ import { FC, useMemo, useState, useEffect } from 'react'
 import StudyBanner from './StudyBanner'
 
 
+
 const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
     const isMobile = useIsMobileDevice()
@@ -109,7 +110,6 @@ const LearnerDashboard = () => {
             <LearnerWelcomeModal />
 
             <HighlightedStudies />
-
             <StudiesContainer />
             <Affix position={{ bottom: 20, left: 20 }}>
                 <IconCircleArrowUpFilled
