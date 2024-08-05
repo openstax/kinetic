@@ -198,7 +198,7 @@ const AchievementBadge = ({
                     fw={400}
                     mb={4}
                     style={{
-                        fontFamily: 'System-ui',
+                        fontFamily: 'Helvetica Neue',
                         fontSize: 16,
                         lineHeight: '24px',
                         textAlign: 'center',
