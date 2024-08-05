@@ -80,7 +80,16 @@ const NumberText = styled.div`
   text-align: center;
 `;
 
-const StudyBanner = () => {
+interface Study {
+    completedCount?: number;
+    learningPath?: { completed: boolean };
+    totalPoints?: number;
+    stages?: { durationMinutes?: number }[];
+    id: string;
+    completedAt?: string;
+}
+
+const StudyBanner: React.FC = () => {
     const { filteredStudies } = useSearchStudies();
     const { studies } = useParticipantStudies();
     const navigate = useNavigate();
@@ -90,22 +99,13 @@ const StudyBanner = () => {
         setHasStartedStudy(studies.length > 0);
     }, [studies]);
 
-    const totalCompletedCount = studies.reduce(
-        (sum, study) => sum + (study.completedCount || 0),
-        0
-    );
+    const totalCompletedCount = studies.reduce((sum: number, study: Study) => sum + (study.completedCount || 0), 0);
 
-    const badgesEarned = studies.reduce(
-        (count, study) => count + (study.learningPath?.completed ? 1 : 0),
-        0
-    );
+    const badgesEarned = studies.reduce((count: number, study: Study) => count + (study.learningPath?.completed ? 1 : 0), 0);
 
-    const totalPointsEarned = studies.reduce(
-        (sum, study) => sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0),
-        0
-    );
+    const totalPointsEarned = studies.reduce((sum: number, study: Study) => sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0), 0);
 
-    const fiveMinuteStudies = filteredStudies.filter(study => study.stages[0]?.durationMinutes === 5);
+    const fiveMinuteStudies = filteredStudies.filter((study: Study) => study.stages && study.stages[0]?.durationMinutes === 5);
 
     const startRandomFiveMinuteStudy = useCallback(() => {
         if (fiveMinuteStudies.length > 0) {
