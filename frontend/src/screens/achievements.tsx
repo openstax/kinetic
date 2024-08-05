@@ -220,7 +220,7 @@ const AchievementBadge = ({
                 </Text>
                 <Text
                     size="xs"
-                    color="dimmed"
+                     color="dimmed"
                     mb={10}
                     style={{
                         fontFamily: 'System-ui',
