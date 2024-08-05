@@ -69,29 +69,28 @@ const NumberContainer = styled.div`
   align-items: center;
   height: 90px;
   flex: 1;
-  margin-bottom: 5px;
 `;
 
 const NumberText = styled.div`
   color: ${colors.purple};
-  font-family: sans-serif;
+  font-family: Helvetica Neue;
   font-weight: lighter;
   font-size: 60px;
   text-align: center;
 `;
 
-interface Study {
+interface ParticipantStudy {
+    id: number;
     completedCount?: number;
     learningPath?: { completed: boolean };
     totalPoints?: number;
     stages?: { durationMinutes?: number }[];
-    id: string;
     completedAt?: string;
 }
 
 const StudyBanner: React.FC = () => {
     const { filteredStudies } = useSearchStudies();
-    const { studies } = useParticipantStudies();
+    const { studies } = useParticipantStudies() as { studies: ParticipantStudy[] };
     const navigate = useNavigate();
     const [hasStartedStudy, setHasStartedStudy] = useState(false);
 
@@ -99,13 +98,13 @@ const StudyBanner: React.FC = () => {
         setHasStartedStudy(studies.length > 0);
     }, [studies]);
 
-    const totalCompletedCount = studies.reduce((sum: number, study: Study) => sum + (study.completedCount || 0), 0);
+    const totalCompletedCount = studies.reduce((sum, study) => sum + (study.completedCount || 0), 0);
 
-    const badgesEarned = studies.reduce((count: number, study: Study) => count + (study.learningPath?.completed ? 1 : 0), 0);
+    const badgesEarned = studies.reduce((count, study) => count + (study.learningPath?.completed ? 1 : 0), 0);
 
-    const totalPointsEarned = studies.reduce((sum: number, study: Study) => sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0), 0);
+    const totalPointsEarned = studies.reduce((sum, study) => sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0), 0);
 
-    const fiveMinuteStudies = filteredStudies.filter((study: Study) => study.stages && study.stages[0]?.durationMinutes === 5);
+    const fiveMinuteStudies = filteredStudies.filter((study) => study.stages && study.stages[0]?.durationMinutes === 5);
 
     const startRandomFiveMinuteStudy = useCallback(() => {
         if (fiveMinuteStudies.length > 0) {
