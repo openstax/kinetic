@@ -11,12 +11,77 @@ import {
     Progress,
     RingProgress,
     Image,
+    Divider,
 } from "@mantine/core";
 import { TopNavBar, Footer } from "@components";
 import { colors } from "@theme";
 import { StudyDetailsPreview } from "../screens/learner/details";
+import RewardsSection from "./RewardSection";
+import PointsHistory from "./PointsHistory";
+import { pdf } from "@react-pdf/renderer";
+import PdfDoc from "./PdfDoc";
+
 import { useParticipantStudies } from "./learner/studies";
 import { useEnvironment } from "@lib";
+
+const activities = [
+    {
+        activity: "Points earned",
+        studyName: "So what is financial aid, anyway?",
+        feedback: "Available",
+        date: "03/03/2024",
+        balance: 150,
+    },
+    {
+        activity: "Points earned",
+        studyName: "How many letters can you remember?",
+        feedback: "Available",
+        date: "02/28/2024",
+        balance: 100,
+    },
+    {
+        activity: "Points Redeemed",
+        studyName: "Essay feedback session, Dr. Debshilla Basu",
+        feedback: "N/A",
+        date: "01/12/2024",
+        balance: -200,
+    },
+    {
+        activity: "Points earned",
+        studyName: "Uncover your achievement & learning goals",
+        feedback: "Available",
+        date: "12/17/2024",
+        balance: 250,
+    },
+    {
+        activity: "Points earned",
+        studyName: "What are your ability beliefs?",
+        feedback: "Available",
+        date: "10/09/2023",
+        balance: 180,
+    },
+    {
+        activity: "Points earned",
+        studyName: "Do you procrastinate?",
+        feedback: "Available",
+        date: "09/18/2023",
+        balance: 100,
+    },
+    {
+        activity: "Points earned",
+        studyName: "Does creating personal connections help you...?",
+        feedback: "Available",
+        date: "08/15/2023",
+        balance: 60,
+    },
+    {
+        activity: "Points earned",
+        studyName: "What are your core personality traits?",
+        feedback: "Available",
+        date: "06/24/2023",
+        balance: 40,
+    },
+];
 
 interface Study {
     totalPoints: number;
@@ -125,59 +190,22 @@ const AchievementBadge = ({
             ? "Continue"
             : "Start";
 
-            const handleButtonClick = async (e) => {
-                e.stopPropagation();
-                if (isCompleted) {
-                    try {
-                        // Fetch the access token from your backend
-                        const tokenResponse = await fetch("/api/v1/certificates/get_access_token", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                        });
-            
-                        if (!tokenResponse.ok) {
-                            throw new Error("Failed to fetch access token");
-                        }
-            
-                        const tokenData = await tokenResponse.json();
-                        const accessToken = tokenData.access_token;
-            
-                        // Use the access token to download the certificate
-                        const certResponse = await fetch(`https://openbadgefactory.com/v1/event/{client_id}/{event_id}/assertion`, {
-                            method: "GET",
-                            headers: {
-                                "Authorization": `Bearer ${accessToken}`,
-                            },
-                        });
-            
-                        if (!certResponse.ok) {
-                            throw new Error("Failed to download certificate");
-                        }
-            
-                        const certBlob = await certResponse.blob();
-                        const certUrl = URL.createObjectURL(certBlob);
-            
-                        // Trigger the download
-                        const a = document.createElement("a");
-                        a.href = certUrl;
-                        a.download = "certificate.pdf";
-                        a.click();
-                        URL.revokeObjectURL(certUrl);
-                    } catch (error) {
-                        console.error("Error downloading certificate:", error);
-                    }
-                } else {
-                    const nextStudy = study?.learningPath?.studies.find(
-                        (s) => s.completedCount === 0
-                    );
-                    if (nextStudy) {
-                        onStudySelect(study);
-                    }
-                }
-            };
-            
+    const handleButtonClick = async (
+        e: React.MouseEvent<HTMLButtonElement>
+    ) => {
+        e.stopPropagation();
+        console.log("Study", study);
+        if (isCompleted) {
+            console.log("Download Certificate");
+        } else {
+            const nextStudy = study?.learningPath?.studies.find(
+                (s: any) => s.completedCount === 0
+            );
+            if (nextStudy) {
+                onStudySelect(study);
+            }
+        }
+    };
 
     return (
         <Box
