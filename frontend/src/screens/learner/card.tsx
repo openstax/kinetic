@@ -1,5 +1,5 @@
 import { cx, React, useState } from '@common'
-import { Box, getImageUrl } from '@components'
+import { Box, StudyCardImage } from '@components'
 import { useEnvironment, useIsMobileDevice, useApi } from '@lib'
 import { isMultiSession, getStudyPi, getStudyLead, launchStudy, isStudyLaunchable, getPointsForCurrentStage, getCurrentStudyDuration, getNextAvailableStage } from '@models'
 import { ParticipantStudy, Study } from '@api'
@@ -321,10 +321,7 @@ const CardContent: FC<{study: ParticipantStudy}> = ({ study }) => {
 
     return (
         <Flex justify='center' align='flex-start' direction='column' h="100%">
-            <img src={getImageUrl(study.imageId)}
-                alt={study.imageId}
-                className='study-card-image'
-            />
+            <StudyCardImage study={study} />
             <CompleteFlag study={study} />
             <Title order={6} >{study.titleForParticipants}</Title>
             <small

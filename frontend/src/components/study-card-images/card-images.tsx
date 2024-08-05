@@ -33,12 +33,12 @@ interface CardImage {
 
 export const getImageUrl = (imageId: string | undefined) => {
     if (!imageId) {
-        return `https://kinetic-app-assets.s3.amazonaws.com/assets/card-images/placeholder.svg`
+        return '/Other/placeholder.svg'
     }
     const image = cardImages.find(image => image.imageId === imageId)
 
     if (!image) {
-        return `https://kinetic-app-assets.s3.amazonaws.com/assets/card-images/placeholder.svg`
+        return '/Other/placeholder.svg'
     }
 
     return `/${image.category}/${image.imageId}`;
