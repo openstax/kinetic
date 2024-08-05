@@ -95,7 +95,7 @@ const LearnerDashboard = () => {
     }
 
     return (
-        <div className='studies learner'>
+        <div className='studies learner' style={{ backgroundColor: colors.ash }}>
             <Routes>
                 <Route path={'details/:studyId'} element={<StudyDetails />} />
             </Routes>
@@ -316,7 +316,7 @@ export const StudiesContainer = () => {
     const { search, setSearch, duration, setDuration, filteredStudies } = useSearchStudies()
 
     return (
-        <Container pt='1.5rem' bg={colors.ash}>
+        <Container pt='1.5rem'>
             <Stack gap='lg'>
                 <StudiesTitle search={search} filteredStudies={filteredStudies} />
                 <Flex gap='xl'>
