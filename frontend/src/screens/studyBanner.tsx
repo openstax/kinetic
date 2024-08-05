@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { styled } from '@common';
 import { colors } from '@theme';
 import { useSearchStudies, useParticipantStudies } from './learner/studies';
@@ -23,15 +23,10 @@ const AchievementsContainer = styled.div({
 const Achievement = styled.div({
     flex: '1',
     margin: '0 15px',
-    textAlign: 'start',
     '@media screen and (max-width: 768px)': {
         flex: '1 1 100%',
         margin: '10px 0',
     },
-});
-
-const DoubleSpacedAchievement = styled(Achievement)({
-    marginLeft: '173px',
 });
 
 const AchievementTitle = styled.h2({
@@ -47,12 +42,14 @@ const AchievementSubtitle = styled.h3({
     fontWeight: 'bold',
     fontSize: '16px',
     marginBottom: '5px',
+    textAlign: 'center',
 });
 
 const AchievementText = styled.p({
     marginBottom: '10px',
     fontSize: '14px',
     whiteSpace: 'pre-line',
+    textAlign: 'left',
 });
 
 const HighlightedLink = styled.a({
@@ -66,51 +63,47 @@ const HighlightedLink = styled.a({
     },
 });
 
-
 const NumberContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  height: 50px;
+  height: 90px;
   flex: 1;
-  margin-left : 36px ; 
+  margin-bottom: 5px;
 `;
 
-// Styling for the number text
 const NumberText = styled.div`
-  color: ${colors.blue};
-  font-family: 'Helvetica Neue', sans-serif;
-  font-weight: thin;
-  font-size: 50px;
+  color: ${colors.purple};
+  font-family: sans-serif;
+  font-weight: lighter;
+  font-size: 60px;
   text-align: center;
 `;
 
-
 const StudyBanner = () => {
     const { filteredStudies } = useSearchStudies();
-    const { studies } = useParticipantStudies(); // Fetch participant studies data
+    const { studies } = useParticipantStudies();
     const navigate = useNavigate();
+    const [hasStartedStudy, setHasStartedStudy] = useState(false);
 
-    // Calculate total completedCount from studies
+    useEffect(() => {
+        setHasStartedStudy(studies.length > 0);
+    }, [studies]);
+
     const totalCompletedCount = studies.reduce(
         (sum, study) => sum + (study.completedCount || 0),
         0
     );
 
-    // Calculate badges earned
     const badgesEarned = studies.reduce(
         (count, study) => count + (study.learningPath?.completed ? 1 : 0),
         0
     );
 
-    // Calculate total points earned only if learningPath.completed is true
     const totalPointsEarned = studies.reduce(
         (sum, study) => sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0),
         0
     );
-
-    // Determine if any studies are completed
-    const hasCompletedStudies = filteredStudies.some(study => study.completedAt);
 
     const fiveMinuteStudies = filteredStudies.filter(study => study.stages[0]?.durationMinutes === 5);
 
@@ -128,55 +121,49 @@ const StudyBanner = () => {
                 <AchievementTitle>Achievements</AchievementTitle>
                 <AchievementText>Earn digital badges and additional{'\n'}rewards with OpenStax Kinetic!</AchievementText>
             </Achievement>
-            <DoubleSpacedAchievement>
+            <Achievement>
                 <AchievementSubtitle>Studies completed</AchievementSubtitle>
-                <AchievementText>
-                    {hasCompletedStudies ? (
-                        <NumberContainer>
-                            <NumberText>{totalCompletedCount}</NumberText>
-                        </NumberContainer>
-                    ) : (
-                        <>
-                            You haven't completed any studies yet.
-                            {'\n'}
-                            <HighlightedLink onClick={startRandomFiveMinuteStudy}>
-                                Start your first study <IconArrowRight />
-                            </HighlightedLink>
-                        </>
-                    )}
-                </AchievementText>
-            </DoubleSpacedAchievement>
+                {hasStartedStudy ? (
+                    <NumberContainer>
+                        <NumberText>{totalCompletedCount}</NumberText>
+                    </NumberContainer>
+                ) : (
+                    <AchievementText style={{ display: 'none' }}>
+                        You haven't completed any studies yet.
+                        {'\n'}
+                        <HighlightedLink onClick={startRandomFiveMinuteStudy}>
+                            Start your first study <IconArrowRight />
+                        </HighlightedLink>
+                    </AchievementText>
+                )}
+            </Achievement>
             <Achievement>
                 <AchievementSubtitle>Badges earned</AchievementSubtitle>
-                <AchievementText>
-                    {hasCompletedStudies ? (
-                        <NumberContainer>
-                            <NumberText>{badgesEarned}</NumberText>
-                        </NumberContainer>
-                    ) : (
-                        <>
-                            Complete all studies in a{'\n'}
-                            category to earn your{'\n'}
-                            first digital badge.
-                        </>
-                    )}
-                </AchievementText>
+                {hasStartedStudy ? (
+                    <NumberContainer>
+                        <NumberText>{badgesEarned}</NumberText>
+                    </NumberContainer>
+                ) : (
+                    <AchievementText style={{ display: 'none' }}>
+                        Complete all studies in a{'\n'}
+                        category to earn your{'\n'}
+                        first digital badge.
+                    </AchievementText>
+                )}
             </Achievement>
             <Achievement>
                 <AchievementSubtitle>Total points earned</AchievementSubtitle>
-                <AchievementText>
-                    {hasCompletedStudies ? (
-                        <NumberContainer>
-                            <NumberText>{totalPointsEarned}</NumberText>
-                        </NumberContainer>
-                    ) : (
-                        <>
-                            Reach 200 points to{'\n'}
-                            unlock additional{'\n'}
-                            educational rewards.
-                        </>
-                    )}
-                </AchievementText>
+                {hasStartedStudy ? (
+                    <NumberContainer>
+                        <NumberText>{totalPointsEarned}</NumberText>
+                    </NumberContainer>
+                ) : (
+                    <AchievementText style={{ display: 'none' }}>
+                        Reach 200 points to{'\n'}
+                        unlock additional{'\n'}
+                        educational rewards.
+                    </AchievementText>
+                )}
             </Achievement>
         </AchievementsContainer>
     );

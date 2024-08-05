@@ -19,7 +19,6 @@ import { FC, useMemo, useState, useEffect } from 'react'
 import StudyBanner from './StudyBanner'
 
 
-
 const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
     const isMobile = useIsMobileDevice()
