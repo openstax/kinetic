@@ -1,56 +1,35 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { Box, Title, Text, Anchor, Group, useMantineTheme } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { colors } from '@theme';
 import { useSearchStudies, useParticipantStudies } from './learner/studies';
 
-interface Study {
-    id: string;
-    completedCount?: number;
-    learningPath?: {
-        completed: boolean;
-    };
-    totalPoints?: number;
-    stages?: { durationMinutes: number }[];
-    completedAt?: string;
-}
-
 const StudyBanner: React.FC = () => {
     const { filteredStudies } = useSearchStudies();
     const { studies } = useParticipantStudies();
     const navigate = useNavigate();
     const theme = useMantineTheme();
-    const [isRendered, setIsRendered] = useState(false);
-
-    useEffect(() => {
-    // Simulate learner.tsx being fully rendered
-        const timer = setTimeout(() => {
-            setIsRendered(true);
-        }, 0);
-
-        return () => clearTimeout(timer);
-    }, []);
 
     const totalCompletedCount = studies.reduce(
-        (sum: number, study: Study) => sum + (study.completedCount || 0),
+        (sum, study) => sum + (study.completedCount || 0),
         0
     );
 
     const badgesEarned = studies.reduce(
-        (count: number, study: Study) => count + (study.learningPath?.completed ? 1 : 0),
+        (count, study) => count + (study.learningPath?.completed ? 1 : 0),
         0
     );
 
     const totalPointsEarned = studies.reduce(
-        (sum: number, study: Study) => sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0),
+        (sum, study) => sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0),
         0
     );
 
-    const hasCompletedStudies = filteredStudies.some((study: Study) => study.completedAt);
+    const hasCompletedStudies = filteredStudies.some((study) => study.completedAt);
 
     const fiveMinuteStudies = filteredStudies.filter(
-        (study: Study) => study.stages && study.stages[0]?.durationMinutes === 5
+        (study) => study.stages && study.stages[0]?.durationMinutes === 5
     );
 
     const startRandomFiveMinuteStudy = useCallback(() => {
@@ -80,7 +59,7 @@ const StudyBanner: React.FC = () => {
 
     const achievementStyle = (isLeft: boolean): React.CSSProperties => ({
         flex: 1,
-        marginRight: isLeft ? '134px' : '0', // 2 * 67px for the "Achievements" component
+        marginRight: isLeft ? '134px' : '0',
         marginLeft: '0',
         [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
             flex: '1 1 100%',
@@ -134,10 +113,6 @@ const StudyBanner: React.FC = () => {
         fontSize: '70px',
         textAlign: 'center',
     };
-
-    if (!isRendered) {
-        return null;
-    }
 
     return (
         <Group align="flex-start" style={containerStyle}>
