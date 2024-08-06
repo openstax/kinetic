@@ -4,12 +4,21 @@ import { IconArrowRight } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { colors } from '@theme';
 import { useSearchStudies, useParticipantStudies } from './learner/studies';
-import { ParticipantStudy } from '@api';
 
+interface ParticipantStudy {
+    id: string;
+    completedCount?: number;
+    learningPath?: {
+        completed?: boolean;
+    };
+    totalPoints?: number;
+    stages?: { durationMinutes: number }[];
+    completedAt?: string;
+}
 
 const StudyBanner: React.FC = () => {
     const { filteredStudies } = useSearchStudies();
-    const { studies } = useParticipantStudies();
+    const { studies = [] } = useParticipantStudies() as { studies: ParticipantStudy[] };
     const navigate = useNavigate();
     const theme = useMantineTheme();
 
@@ -122,12 +131,12 @@ const StudyBanner: React.FC = () => {
             <Box style={achievementStyle(true)}>
                 <Title order={2} style={titleStyle}>Achievements</Title>
                 <Text style={textStyle}>
-          Earn digital badges and additional{'\n'}rewards with OpenStax Kinetic!
+                    Earn digital badges and additional{'\n'}rewards with OpenStax Kinetic!
                 </Text>
             </Box>
             <Box style={achievementStyle(false)}>
                 <Title order={3} style={subtitleStyle}>
-          Studies completed
+                    Studies completed
                 </Title>
                 {hasCompletedStudies ? (
                     <Box style={numberContainerStyle}>
@@ -135,17 +144,17 @@ const StudyBanner: React.FC = () => {
                     </Box>
                 ) : (
                     <Text style={textStyle}>
-            You haven't completed{'\n'}
-            any studies yet.{'\n'}
+                        You haven't completed{'\n'}
+                        any studies yet.{'\n'}
                         <Anchor style={linkStyle} onClick={startRandomFiveMinuteStudy}>
-              Start your first study <IconArrowRight />
+                            Start your first study <IconArrowRight />
                         </Anchor>
                     </Text>
                 )}
             </Box>
             <Box style={achievementStyle(false)}>
                 <Title order={3} style={subtitleStyle}>
-          Badges earned
+                    Badges earned
                 </Title>
                 {hasCompletedStudies ? (
                     <Box style={numberContainerStyle}>
@@ -153,15 +162,15 @@ const StudyBanner: React.FC = () => {
                     </Box>
                 ) : (
                     <Text style={textStyle}>
-            Complete all studies in a{'\n'}
-            category to earn your{'\n'}
-            first digital badge.
+                        Complete all studies in a{'\n'}
+                        category to earn your{'\n'}
+                        first digital badge.
                     </Text>
                 )}
             </Box>
             <Box style={achievementStyle(false)}>
                 <Title order={3} style={subtitleStyle}>
-          Total points earned
+                    Total points earned
                 </Title>
                 {hasCompletedStudies ? (
                     <Box style={numberContainerStyle}>
@@ -169,9 +178,9 @@ const StudyBanner: React.FC = () => {
                     </Box>
                 ) : (
                     <Text style={textStyle}>
-            Reach 200 points to{'\n'}
-            unlock additional{'\n'}
-            educational rewards.
+                        Reach 200 points to{'\n'}
+                        unlock additional{'\n'}
+                        educational rewards.
                     </Text>
                 )}
             </Box>
