@@ -4,6 +4,8 @@ import { IconArrowRight } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { colors } from '@theme';
 import { useSearchStudies, useParticipantStudies } from './learner/studies';
+import { ParticipantStudy } from '@api';
+
 
 const StudyBanner: React.FC = () => {
     const { filteredStudies } = useSearchStudies();
@@ -12,17 +14,18 @@ const StudyBanner: React.FC = () => {
     const theme = useMantineTheme();
 
     const totalCompletedCount = studies.reduce(
-        (sum, study) => sum + (study.completedCount || 0),
+        (sum: number, study: ParticipantStudy) => sum + (study.completedCount || 0),
         0
     );
 
     const badgesEarned = studies.reduce(
-        (count, study) => count + (study.learningPath?.completed ? 1 : 0),
+        (count: number, study: ParticipantStudy) => count + (study.learningPath?.completed ? 1 : 0),
         0
     );
 
     const totalPointsEarned = studies.reduce(
-        (sum, study) => sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0),
+        (sum: number, study: ParticipantStudy) =>
+            sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0),
         0
     );
 
@@ -134,7 +137,6 @@ const StudyBanner: React.FC = () => {
                     <Text style={textStyle}>
             You haven't completed{'\n'}
             any studies yet.{'\n'}
-
                         <Anchor style={linkStyle} onClick={startRandomFiveMinuteStudy}>
               Start your first study <IconArrowRight />
                         </Anchor>
