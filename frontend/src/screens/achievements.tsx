@@ -10,6 +10,7 @@ import {
     RingProgress,
     Image,
 } from '@mantine/core';
+import { useApi } from '@lib'
 import { TopNavBar, Footer } from '@components';
 import { colors } from '@theme';
 import { StudyDetailsPreview } from '../screens/learner/details';
@@ -85,6 +86,18 @@ const BadgeDetail = ({
     );
 };
 
+const convertBase64ToPdf = (base64PDF: string) => {
+    const byteCharacters = atob(base64PDF);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    return url
+}
+
 const AchievementBadge = ({
     study,
     onBadgeClick,
@@ -107,12 +120,20 @@ const AchievementBadge = ({
             : 'Start';
 
     // event block statement to download pdf        
-
+    const api = useApi()
     const handleButtonClick = async (
         e: React.MouseEvent<HTMLButtonElement>
     ) => {
         e.stopPropagation();
         if (isCompleted) {
+            try{
+                const response = await api.getBadgeCertificate({badgeId: 'SAJSINa7DGDaC4D', email: 'srinivas.babu364@gmail.com'})
+                console.log(response.pdf)
+                const pdfUrl = convertBase64ToPdf(response.pdf || '')
+                window.open(pdfUrl, '_blank');
+            } catch (error) {
+              console.error('Error fetching PDF:', error);
+            }
         } else {
             const nextStudy = study?.learningPath?.studies.find(
                 (s: any) => s.completedCount === 0
