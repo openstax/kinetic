@@ -7,6 +7,10 @@ const SVGManipulator: React.FC<{src: string, fillColor: string, altText: string}
     const [imgSrc, setImgSrc] = useState('');
 
     useEffect(() => {
+        if(src.includes('.png')){
+            setImgSrc(src)
+            return;
+        }
         fetch(src)
         .then((response) => response.text())
         .then((data) => {
