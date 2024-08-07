@@ -61,7 +61,6 @@ export const cardImages: CardImage[] = [
     { imageId: 'Education-Online-Learning-02--Streamline-Bangalore.svg', category: 'Curated Studies', altText: 'A hat placed on top of a screen which is displaying books' },
     { imageId: 'Job-Interview--Streamline-Bangalore.svg',category: 'Curated Studies', altText: 'A Job interview' },
     { imageId: 'Leave-A-Review--Streamline-Bangalore.svg',category: 'Curated Studies', altText: 'Leave a Review' },
-    { imageId: 'Leave-A-Review--Streamline-Bangalore.svg',category: 'Curated Studies', altText: 'Leave a Review' },
     { imageId: 'Marketing-Filling-Survey-01--Streamline-Bangalore-Curated.svg',category: 'Curated Studies', altText: 'Marketting Filling Survey' },
     { imageId: 'Task-List--Streamline-Bangalore.svg',category: 'Curated Studies', altText: 'A Task List' },
 
