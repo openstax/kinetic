@@ -150,7 +150,6 @@ const DesktopResearcherLinks = () => {
 const NavMenu: React.FC = () => {
     const [opened, setOpened] = useState(false);
     const user = useCurrentUser();
-    console.log(user)
 
     const isMobile = useIsMobileDevice();
 
