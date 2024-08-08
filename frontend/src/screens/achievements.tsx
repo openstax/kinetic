@@ -6,7 +6,7 @@ import {
     SimpleGrid,
     Container,
     Title,
-    Group,
+    Tabs,
     RingProgress,
     Image,
 } from '@mantine/core';
@@ -302,43 +302,13 @@ const AchievementBadge = ({
     );
 };
 
-const TabButton = ({
-    label,
-    isActive,
-    onClick,
-}: {
-    label: string;
-    isActive: boolean;
-    onClick: () => void;
-}) => (
-    <Button
-        variant="subtle"
-        color={isActive ? colors.blue : 'black'}
-        onClick={onClick}
-        style={{
-            padding: '8px 16px',
-            fontWeight: 500,
-            fontSize: '16px',
-            textTransform: 'uppercase',
-            borderBottom: isActive ? `2px solid ${colors.purple}` : 'none',
-            borderRadius: 0,
-        }}
-    >
-        {label}
-    </Button>
-);
-
 const Achievements = () => {
-    const [selectedTab, setSelectedTab] = useState<'Badges' | 'Points'>(
-        'Badges'
-    );
+    const [selectedTab, setSelectedTab] = useState<'Badges'>('Badges');
     const [selectedStudy, setSelectedStudy] = useState(null);
     const [badgeDetail, setBadgeDetail] = useState(null);
 
-    const DATA = useParticipantStudies();
-    const studies = DATA.studies;
+    const { studies } = useParticipantStudies();
 
-    const handleTabClick = (tab: any) => setSelectedTab(tab);
     const handleBadgeClick = (study: any) => {
         setBadgeDetail(study);
     };
@@ -350,44 +320,6 @@ const Achievements = () => {
     };
     const handleStudySelect = (study: any) => setSelectedStudy(study);
 
-    const renderContent = () => {
-        switch (selectedTab) {
-            case 'Badges':
-                return (
-                    <Box>
-                        <Text
-                            style={{ marginBottom: '60px', fontSize: '20px' }}
-                        >
-                            Explore the study paths, track your progress, and
-                            access your digital badges.
-                        </Text>
-                        <SimpleGrid
-                            cols={{ base: 1, sm: 2, md: 3 }}
-                            spacing={{ base: 40, sm: 60, md: 110 }}
-                            style={{ marginTop: '100px' }}
-                        >
-                            {studies.map((study) => (
-                                <AchievementBadge
-                                    key={study.id}
-                                    study={study}
-                                    onBadgeClick={handleBadgeClick}
-                                    onStudySelect={handleStudySelect}
-                                />
-                            ))}
-                        </SimpleGrid>
-                        {badgeDetail && (
-                            <BadgeDetail
-                                badge={badgeDetail}
-                                onClose={handleCloseDetail}
-                            />
-                        )}
-                    </Box>
-                );
-            default:
-                return null;
-        }
-    };
-
     return (
         <Box>
             <TopNavBar />
@@ -395,14 +327,50 @@ const Achievements = () => {
                 <Title mb="xl" mt="lg" order={2}>
                     Achievements
                 </Title>
-                <Group mb="lg">
-                    <TabButton
-                        label="Badges"
-                        isActive={selectedTab === 'Badges'}
-                        onClick={() => handleTabClick('Badges')}
-                    />
-                </Group>
-                {renderContent()} {/* Always render content without loading check */}
+                <Tabs value={selectedTab} onChange={(value) => setSelectedTab(value as 'Badges')} variant="unstyled">
+                    <Tabs.List style={{ display: 'inline-flex', alignItems: 'center' }}>
+                        <Tabs.Tab
+                            value="Badges"
+                            style={{
+                                color: colors.blue,
+                                fontSize: '20px',
+                                fontWeight: 400,
+                                textTransform: 'uppercase',
+                                borderBottom: 'none',
+                                padding: 0,
+                                marginBottom: '10px',
+                                marginRight: '20px',
+                            }}
+                        >
+                            BADGES
+                        </Tabs.Tab>
+                    </Tabs.List>
+
+                    <Tabs.Panel value="Badges">
+                        <Box>
+                            <Text style={{ marginBottom: '30px', fontSize: '16px', color: colors.text }}>
+                                Explore the study paths, track your progress, and access your digital badges.
+                            </Text>
+                            <SimpleGrid
+                                cols={{ base: 1, sm: 2, md: 3 }}
+                                spacing={{ base: 40, sm: 60, md: 110 }}
+                                style={{ marginTop: '100px' }}
+                            >
+                                {studies.map((study) => (
+                                    <AchievementBadge
+                                        key={study.id}
+                                        study={study}
+                                        onBadgeClick={handleBadgeClick}
+                                        onStudySelect={handleStudySelect}
+                                    />
+                                ))}
+                            </SimpleGrid>
+                            {badgeDetail && (
+                                <BadgeDetail badge={badgeDetail} onClose={handleCloseDetail} />
+                            )}
+                        </Box>
+                    </Tabs.Panel>
+                </Tabs>
             </Container>
             <Footer />
             {selectedStudy && (
