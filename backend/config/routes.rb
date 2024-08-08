@@ -72,6 +72,8 @@ Rails.application.routes.draw do
 
       get :openapi, to: 'open_api#json', constraints: { format: :json }
 
+      get 'badge_certificate', to: 'badge_certificate#show'
+
       get :environment, to: 'environment#index'
 
       resources :eligibility, only: [:index]

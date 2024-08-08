@@ -16,6 +16,7 @@ export * from './AnalysisRun';
 export * from './AnalysisRunMessage';
 export * from './AnalysisUpdate';
 export * from './Badge';
+export * from './BadgeCertificateResponse';
 export * from './BannerMessage';
 export * from './BannerNotice';
 export * from './BannersListing';

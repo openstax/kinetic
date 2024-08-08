@@ -65,6 +65,7 @@ class Api::V1::OpenApiController < ApplicationController
     Api::V1::Researcher::AnalysisRunOpenApi,
     Api::V1::LearningPathsOpenApi,
     Api::V1::ResearchersOpenApi,
+    Api::V1::BadgeCertificateOpenApi,
     self
   ].freeze
 

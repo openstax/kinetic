@@ -105,7 +105,6 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                                     </Flex>
                                 </NavbarStyledLink>
                             )}
-
                             {!isMobile &&
                                 !user.isAdministrator &&
                                 !user.isResearcher && (
@@ -151,6 +150,7 @@ const DesktopResearcherLinks = () => {
 const NavMenu: React.FC = () => {
     const [opened, setOpened] = useState(false);
     const user = useCurrentUser();
+
     const isMobile = useIsMobileDevice();
 
     const menuToggle = isMobile ? (
@@ -173,6 +173,7 @@ const NavMenu: React.FC = () => {
     );
 
     return (
+        
         <Menu shadow='md' opened={opened} onChange={setOpened} width={175}>
             <Menu.Target>{menuToggle}</Menu.Target>
 
@@ -185,6 +186,7 @@ const NavMenu: React.FC = () => {
                         <StyledLink to='/achievements'>
                             <Menu.Item>Achievements</Menu.Item>
                         </StyledLink>
+
                     </>
                 )}
                 {user.isAdministrator && <AdminLinks />}
