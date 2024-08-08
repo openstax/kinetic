@@ -58,14 +58,13 @@ class OpenBadgeApi
   end
 
   def get_pdf(badge_id, email)
-
     # Response is an octet-stream
     # Fetching the event id
     event_response = HTTPX.plugin(:auth)
-      .with(headers: { 'content-type' => 'application/json' })
-      .authorization("Bearer #{token}")
-      .get("https://openbadgefactory.com/v1/event/#{@client_id}?email=#{email}")
- 
+                       .with(headers: { 'content-type' => 'application/json' })
+                       .authorization("Bearer #{token}")
+                       .get("https://openbadgefactory.com/v1/event/#{@client_id}?email=#{email}")
+
     response_body = event_response.body.to_s
     json_objects = response_body.split("\n").map(&:strip).reject(&:empty?)
 
@@ -78,19 +77,19 @@ class OpenBadgeApi
 
     # Fetching the pdf link
     pdf_response = HTTPX.plugin(:auth)
-    .with(headers: { 'content-type' => 'application/json' })
-    .authorization("Bearer #{token}")
-    .get("https://openbadgefactory.com/v1/event/#{@client_id}/#{event_id}/assertion")
+                     .with(headers: { 'content-type' => 'application/json' })
+                     .authorization("Bearer #{token}")
+                     .get("https://openbadgefactory.com/v1/event/#{@client_id}/#{event_id}/assertion")
 
     data = JSON.parse(pdf_response)
     pdf_link = data['pdf']['en']
 
     # Fetching the pdf from pdf_link
     pdf_response = HTTPX.plugin(:auth)
-    .authorization("Bearer #{token}")
-    .get(pdf_link)
+                     .authorization("Bearer #{token}")
+                     .get(pdf_link)
 
-    {pdf: pdf_response.body}
+    { pdf: pdf_response.body }
   end
- 
+
 end

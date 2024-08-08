@@ -10,11 +10,12 @@ import {
     RingProgress,
     Image,
 } from '@mantine/core';
-import { useApi } from '@lib'
+import { useApi } from '@lib';
 import { TopNavBar, Footer } from '@components';
 import { colors } from '@theme';
 import { StudyDetailsPreview } from '../screens/learner/details';
 import { useParticipantStudies } from './learner/studies';
+import { useCurrentUser } from '@lib';
 
 const BadgeDetail = ({
     badge,
@@ -95,8 +96,8 @@ const convertBase64ToPdf = (base64PDF: string) => {
     const byteArray = new Uint8Array(byteNumbers);
     const blob = new Blob([byteArray], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
-    return url
-}
+    return url;
+};
 
 const AchievementBadge = ({
     study,
@@ -107,6 +108,7 @@ const AchievementBadge = ({
     onBadgeClick: (study: any) => void;
     onStudySelect: (study: any) => void;
 }) => {
+    const [errorMessage, setErrorMessage] = useState('');
     const completedStudies = study?.learningPath?.studies.filter(
         (s: any) => s.completedCount !== 0
     ).length;
@@ -119,20 +121,35 @@ const AchievementBadge = ({
             ? 'Continue'
             : 'Start';
 
-    // event block statement to download pdf        
-    const api = useApi()
+    const api = useApi();
+    const currentUser = useCurrentUser();
+
     const handleButtonClick = async (
-        e: React.MouseEvent<HTMLButtonElement>
+        e: React.MouseEvent<HTMLButtonElement>,
+        badgeId: string
     ) => {
         e.stopPropagation();
         if (isCompleted) {
-            try{
-                const response = await api.getBadgeCertificate({badgeId: 'SAJSINa7DGDaC4D', email: 'srinivas.babu364@gmail.com'})
-                console.log(response.pdf)
-                const pdfUrl = convertBase64ToPdf(response.pdf || '')
+            try {
+                let userEmail = '';
+
+                if (currentUser && currentUser.contactInfos) {
+                    const emailInfo = currentUser.contactInfos.find(
+                        (info) => info.type === 'EmailAddress'
+                    );
+                    if (emailInfo && emailInfo.value) {
+                        userEmail = emailInfo.value;
+                    }
+                }
+
+                const response = await api.getBadgeCertificate({
+                    badgeId,
+                    email: userEmail,
+                });
+                const pdfUrl = convertBase64ToPdf(response.pdf || '');
                 window.open(pdfUrl, '_blank');
             } catch (error) {
-              console.error('Error fetching PDF:', error);
+                setErrorMessage('Error fetching PDF. Please try again later.');
             }
         } else {
             const nextStudy = study?.learningPath?.studies.find(
@@ -160,6 +177,12 @@ const AchievementBadge = ({
             }}
             onClick={() => onBadgeClick(study)}
         >
+            {errorMessage && (
+                <Box style={{ color: 'red', marginBottom: '10px' }}>
+                    {errorMessage}
+                </Box>
+            )}
+
             <Box
                 style={{
                     width: '100%',
@@ -186,12 +209,13 @@ const AchievementBadge = ({
                         width: '250px',
                         height: '250px',
                         clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)',
-                        background: study.learningPath?.badge.image ? 'none' : colors.white,
+                        background: study.learningPath?.badge.image
+                            ? 'none'
+                            : colors.white,
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}
-
                 >
                     <Image
                         src={study.learningPath?.badge.image}
@@ -241,7 +265,7 @@ const AchievementBadge = ({
                 </Text>
                 <Text
                     size="xs"
-                     color="dimmed"
+                    color="dimmed"
                     mb={10}
                     style={{
                         fontFamily: 'System-ui',
@@ -254,7 +278,7 @@ const AchievementBadge = ({
                     {`${completedStudies} of ${study?.learningPath?.studies.length}`}
                 </Text>
                 <Button
-                    onClick={handleButtonClick}
+                    onClick={(e) => handleButtonClick(e, study.learningPath.badgeId)}
                     style={{
                         width: '200px',
                         height: '30px',
@@ -304,7 +328,6 @@ const TabButton = ({
     </Button>
 );
 
-
 const Achievements = () => {
     const [selectedTab, setSelectedTab] = useState<'Badges' | 'Points'>(
         'Badges'
@@ -312,7 +335,9 @@ const Achievements = () => {
     const [selectedStudy, setSelectedStudy] = useState(null);
     const [badgeDetail, setBadgeDetail] = useState(null);
 
-    const DATA = useParticipantStudies();  
+    const DATA = useParticipantStudies();
+    const studies = DATA.studies;
+
     const handleTabClick = (tab: any) => setSelectedTab(tab);
     const handleBadgeClick = (study: any) => {
         setBadgeDetail(study);
@@ -339,16 +364,9 @@ const Achievements = () => {
                         <SimpleGrid
                             cols={{ base: 1, sm: 2, md: 3 }}
                             spacing={{ base: 40, sm: 60, md: 110 }}
-                            style={{
-                                marginTop: '100px',
-                                padding: {
-                                    base: '330px',
-                                    sm: '40px',
-                                    md: '50px',
-                                },
-                            }}
+                            style={{ marginTop: '100px' }}
                         >
-                            {DATA.studies.map((study) => (
+                            {studies.map((study) => (
                                 <AchievementBadge
                                     key={study.id}
                                     study={study}
@@ -384,7 +402,7 @@ const Achievements = () => {
                         onClick={() => handleTabClick('Badges')}
                     />
                 </Group>
-                {renderContent()}  {/* Always render content without loading check */}
+                {renderContent()} {/* Always render content without loading check */}
             </Container>
             <Footer />
             {selectedStudy && (

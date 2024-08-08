@@ -105,7 +105,6 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                                     </Flex>
                                 </NavbarStyledLink>
                             )}
-                                // achievements page
                             {!isMobile &&
                                 !user.isAdministrator &&
                                 !user.isResearcher && (
