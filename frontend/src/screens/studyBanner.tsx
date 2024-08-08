@@ -1,20 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Title, Text, Anchor, Group, useMantineTheme } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { colors } from '@theme';
 import { useSearchStudies, useParticipantStudies } from './learner/studies';
+import { ParticipantStudy } from '@api';
 
-interface ParticipantStudy {
-    id: string;
-    completedCount?: number;
-    learningPath?: {
-        completed?: boolean;
-    };
-    totalPoints?: number;
-    stages?: { durationMinutes: number }[];
-    completedAt?: string;
-}
 
 const StudyBanner: React.FC = () => {
     const { filteredStudies } = useSearchStudies();
@@ -22,27 +13,19 @@ const StudyBanner: React.FC = () => {
     const navigate = useNavigate();
     const theme = useMantineTheme();
 
-    const totalCompletedCount = studies.reduce(
-        (sum: number, study: ParticipantStudy) => sum + (study.completedCount || 0),
-        0
-    );
+    const [totalCompletedCount, setTotalCompletedCount] = useState<number>(0);
+    const [badgesEarned, setBadgesEarned] = useState<number>(0);
+    const [totalPointsEarned, setTotalPointsEarned] = useState<number>(0);
+    const [hasCompletedStudies, setHasCompletedStudies] = useState<boolean>(false);
+    const [fiveMinuteStudies, setFiveMinuteStudies] = useState<ParticipantStudy[]>([]);
 
-    const badgesEarned = studies.reduce(
-        (count: number, study: ParticipantStudy) => count + (study.learningPath?.completed ? 1 : 0),
-        0
-    );
-
-    const totalPointsEarned = studies.reduce(
-        (sum: number, study: ParticipantStudy) =>
-            sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0),
-        0
-    );
-
-    const hasCompletedStudies = filteredStudies.some((study) => study.completedAt);
-
-    const fiveMinuteStudies = filteredStudies.filter(
-        (study) => study.stages && study.stages[0]?.durationMinutes === 5
-    );
+    useEffect(() => {
+        setTotalCompletedCount(studies.reduce((sum, study) => sum + (study.completedCount || 0), 0));
+        setBadgesEarned(studies.reduce((count, study) => count + (study.learningPath?.completed ? 1 : 0), 0));
+        setTotalPointsEarned(studies.reduce((sum, study) => sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0), 0));
+        setHasCompletedStudies(filteredStudies.some((study) => study.completedAt !== undefined));
+        setFiveMinuteStudies(filteredStudies.filter((study) => study.stages && study.stages[0]?.durationMinutes === 5));
+    }, [studies, filteredStudies]);
 
     const startRandomFiveMinuteStudy = useCallback(() => {
         if (fiveMinuteStudies.length > 0) {
@@ -54,130 +37,119 @@ const StudyBanner: React.FC = () => {
 
     const formatValue = (value: number) => (value < 10 ? `0${value}` : value);
 
-    const containerStyle: React.CSSProperties = {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '30px',
-        borderRadius: '8px',
-        margin: '0 auto',
-        maxWidth: '1200px',
-        [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-            flexDirection: 'column',
-            padding: '20px',
-            margin: '0 1%',
-        },
-    };
-
-    const achievementStyle = (isLeft: boolean): React.CSSProperties => ({
-        flex: 1,
-        marginRight: isLeft ? '134px' : '0',
-        marginLeft: '0',
-        [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-            flex: '1 1 100%',
-            margin: '10px 0',
-        },
-    });
-
-    const titleStyle: React.CSSProperties = {
-        fontWeight: 'bold',
-        fontSize: '24px',
-        marginBottom: '10px',
-        [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-            fontSize: '1.3em',
-        },
-    };
-
-    const subtitleStyle: React.CSSProperties = {
-        fontWeight: 'bold',
-        fontSize: '16px',
-        marginBottom: '5px',
-        textAlign: hasCompletedStudies ? 'center' : 'left',
-    };
-
-    const textStyle: React.CSSProperties = {
-        marginBottom: '10px',
-        fontSize: '14px',
-        whiteSpace: 'pre-line',
-    };
-
-    const linkStyle: React.CSSProperties = {
-        color: colors.blue,
-        textDecoration: 'none',
-        fontWeight: 'bold',
-        cursor: 'pointer',
-        fontSize: '14px',
-    };
-
-    const numberContainerStyle: React.CSSProperties = {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '80px',
-        flex: 1,
-        marginBottom: '10px',
-    };
-
-    const numberTextStyle: React.CSSProperties = {
-        color: colors.purple,
-        fontFamily: 'Helvetica Neue, sans-serif',
-        fontWeight: 200,
-        fontSize: '70px',
-        textAlign: 'center',
-    };
-
     return (
-        <Group align="flex-start" style={containerStyle}>
-            <Box style={achievementStyle(true)}>
-                <Title order={2} style={titleStyle}>Achievements</Title>
-                <Text style={textStyle}>
+        <Group
+            align="flex-start"
+            style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '30px',
+                borderRadius: '8px',
+                margin: '0 auto',
+                maxWidth: '1200px',
+                [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+                    flexDirection: 'column',
+                    padding: '20px',
+                    margin: '0 1%',
+                },
+            }}
+        >
+            <Box
+                style={{
+                    flex: 1,
+                    marginRight: '134px',
+                    marginLeft: '0',
+                    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+                        flex: '1 1 100%',
+                        margin: '10px 0',
+                    },
+                }}
+            >
+                <Title order={2} style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '10px', [`@media (max-width: ${theme.breakpoints.sm}px)`]: { fontSize: '1.3em' } }}>
+                    Achievements
+                </Title>
+                <Text style={{ marginBottom: '10px', fontSize: '14px', whiteSpace: 'pre-line' }}>
                     Earn digital badges and additional{'\n'}rewards with OpenStax Kinetic!
                 </Text>
             </Box>
-            <Box style={achievementStyle(false)}>
-                <Title order={3} style={subtitleStyle}>
+            <Box
+                style={{
+                    flex: 1,
+                    marginLeft: '0',
+                    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+                        flex: '1 1 100%',
+                        margin: '10px 0',
+                    },
+                }}
+            >
+                <Title order={3} style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '5px', textAlign: hasCompletedStudies ? 'center' : 'left' }}>
                     Studies completed
                 </Title>
                 {hasCompletedStudies ? (
-                    <Box style={numberContainerStyle}>
-                        <Text style={numberTextStyle}>{formatValue(totalCompletedCount)}</Text>
+                    <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80px', flex: 1, marginBottom: '10px' }}>
+                        <Text style={{ color: colors.purple, fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 200, fontSize: '70px', textAlign: 'center' }}>
+                            {formatValue(totalCompletedCount)}
+                        </Text>
                     </Box>
                 ) : (
-                    <Text style={textStyle}>
+                    <Text style={{ marginBottom: '10px', fontSize: '14px', whiteSpace: 'pre-line' }}>
                         You haven't completed{'\n'}
                         any studies yet.{'\n'}
-                        <Anchor style={linkStyle} onClick={startRandomFiveMinuteStudy}>
+                        <Anchor style={{ color: colors.blue, textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer', fontSize: '14px' }} onClick={startRandomFiveMinuteStudy}>
                             Start your first study <IconArrowRight />
                         </Anchor>
                     </Text>
                 )}
             </Box>
-            <Box style={achievementStyle(false)}>
-                <Title order={3} style={subtitleStyle}>
+            <Box
+                style={{
+                    flex: 1,
+                    marginLeft: '0',
+                    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+                        flex: '1 1 100%',
+                        margin: '10px 0',
+                    },
+                }}
+            >
+                <Title order={3} style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '5px', textAlign: hasCompletedStudies ? 'center' : 'left' }}>
                     Badges earned
                 </Title>
                 {hasCompletedStudies ? (
-                    <Box style={numberContainerStyle}>
-                        <Text style={numberTextStyle}>{formatValue(badgesEarned)}</Text>
+                    <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80px', flex: 1, marginBottom: '10px' }}>
+                        <Text style={{ color: colors.purple, fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 200, fontSize: '70px', textAlign: 'center' }}>
+                            {formatValue(badgesEarned)}
+                        </Text>
                     </Box>
                 ) : (
-                    <Text style={textStyle}>
+                    <Text style={{ marginBottom: '10px', fontSize: '14px', whiteSpace: 'pre-line' }}>
                         Complete all studies in a{'\n'}
                         category to earn your{'\n'}
                         first digital badge.
                     </Text>
                 )}
             </Box>
-            <Box style={achievementStyle(false)}>
-                <Title order={3} style={subtitleStyle}>
+            <Box
+                style={{
+                    flex: 1,
+                    marginLeft: '0',
+                    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+                        flex: '1 1 100%',
+                        margin: '10px 0',
+                    },
+                }}
+            >
+                <Title order={3} style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '5px', textAlign: hasCompletedStudies ? 'center' : 'left' }}>
                     Total points earned
                 </Title>
                 {hasCompletedStudies ? (
-                    <Box style={numberContainerStyle}>
-                        <Text style={numberTextStyle}>{formatValue(totalPointsEarned)}</Text>
+                    <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80px', flex: 1, marginBottom: '10px' }}>
+                        <Text style={{ color: colors.purple, fontFamily: 'Helvetica Neue, sans-serif', fontWeight: 200, fontSize: '70px', textAlign: 'center' }}>
+                            {formatValue(totalPointsEarned)}
+                        </Text>
                     </Box>
                 ) : (
-                    <Text style={textStyle}>
+                    <Text style={{ marginBottom: '10px', fontSize: '14px', whiteSpace: 'pre-line' }}>
                         Reach 200 points to{'\n'}
                         unlock additional{'\n'}
                         educational rewards.
