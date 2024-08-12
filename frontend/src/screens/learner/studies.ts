@@ -37,6 +37,15 @@ export const useLearningPathStudies = (learningPath?: LearningPath) => {
     return studiesByLearningPath[learningPath.id] || []
 }
 
+export const useFetchLearningPaths = () => {
+    const api = useApi()
+
+    return useQuery('fetchLearningPaths', async () => {
+        const res = await api.getLearningPaths()
+        return res.data
+    })
+}
+
 export const useParticipantStudies = () => {
     const { data: studies = [], isLoading } = useFetchParticipantStudies()
 
