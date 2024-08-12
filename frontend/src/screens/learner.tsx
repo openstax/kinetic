@@ -102,7 +102,7 @@ const LearnerDashboard = () => {
             </Routes>
 
             <TopNavBar />
-            < StudyBanner />
+            <StudyBanner />
 
 
             <LearnerWelcomeModal />
