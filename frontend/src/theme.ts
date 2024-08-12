@@ -30,6 +30,8 @@ export const colors = {
     pink50: '#F6DBED',
     lavender: '#6153bd',
     btnPurple: '#6922EA',
+    grayDisabled: '#D9D9D9',
+
 
     // Neutral colors
     gray90: '#2F2F2F', // Example: tooltip background color
