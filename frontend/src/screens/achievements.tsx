@@ -1,347 +1,117 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Text,
     Button,
-    SimpleGrid,
     Container,
     Title,
     Tabs,
     RingProgress,
     Image,
+    Group,
+    Stack,
+    Flex,
+    Modal
 } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { useApi } from '@lib';
+import { launchStudy } from '@models';
 import { TopNavBar, Footer } from '@components';
 import { colors } from '@theme';
 import { StudyDetailsPreview } from '../screens/learner/details';
-import { useFetchLearningPaths, useLearningPathStudies } from './learner/studies';
+import { useFetchLearningPaths } from './learner/studies';
 import { useCurrentUser } from '@lib';
+import { ParticipantStudy } from '@api';
 
-const useStyles = () => ({
-    badgeDetailContainer: {
-        position: 'fixed' as const,
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        backgroundColor: 'white',
-        borderRadius: '8px',
-        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
-        zIndex: 1001,
-        maxWidth: '400px',
-        width: '100%',
-        padding: 'md',
-    },
-    closeButton: {
-        position: 'absolute' as const,
-        top: '10px',
-        right: '10px',
-    },
-    achievementBadgeContainer: {
-        width: 280,
-        height: 400,
-        display: 'flex',
-        flexDirection: 'column' as const,
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative' as const,
-        margin: '0 20px',
-        cursor: 'pointer',
-        borderRadius: '8px',
-    },
-    errorMessage: {
-        color: 'red',
-        marginBottom: '10px',
-    },
-    ringProgressContainer: {
-        width: '100%',
-        height: '280px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'relative' as const,
-    },
-    badgeImageContainer: {
-        width: '250px',
-        height: '250px',
-        clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    badgeImage: {
-        width: '95%',
-        height: '95%',
-        objectFit: 'contain' as const,
-    },
-    badgeDetails: {
-        marginTop: '20px',
-        display: 'flex',
-        flexDirection: 'column' as const,
-        alignItems: 'center',
-        padding: '10px',
-        paddingTop: '30px',
-    },
-    learningText: {
-        fontFamily: 'Helvetica Neue',
-        fontSize: 16,
-        lineHeight: '24px',
-        textAlign: 'center' as const,
-    },
-    badgeLabel: {
-        fontFamily: 'System-ui',
-        fontSize: 18,
-        fontWeight: 700,
-        lineHeight: '28px',
-        textAlign: 'center' as const,
-    },
-    badgeCompletionText: {
-        fontFamily: 'System-ui',
-        fontSize: 12,
-        lineHeight: '18px',
-        textAlign: 'center' as const,
-        color: colors.gray70,
-    },
-    button: {
-        width: '200px',
-        height: '30px',
-        padding: '8px 20px',
-        gap: '30px',
-        borderRadius: '4px',
-        border: `1px solid ${colors.purple}`,
-        backgroundColor: 'white',
-        color: colors.purple,
-        fontSize: '14px',
-        fontWeight: 'bold' as const,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    tabsList: {
-        display: 'inline-flex',
-        alignItems: 'center',
-    },
-    tab: {
-        color: colors.blue,
-        fontSize: '20px',
-        fontWeight: 400,
-        textTransform: 'uppercase' as const,
-        borderBottom: 'none',
-        padding: 0,
-        marginBottom: '10px',
-        marginRight: '20px',
-    },
-    tabsPanelText: {
-        marginBottom: '30px',
-        fontSize: '16px',
-        color: colors.text,
-    },
-    simpleGrid: {
-        marginTop: '100px',
-    },
-});
 
-const BadgeDetail = ({
-    badge,
-    onClose,
-}: {
-    badge: any;
-    onClose: () => void;
-}) => {
-    const detailRef = useRef<HTMLDivElement | null>(null);
-    const styles = useStyles();
+const BadgeDetails:FC<{opened: boolean}> = ({opened}) => {
+    return(
+        <Modal opened={opened} onClose={close} title="Authentication" centered>
+
+        </Modal>
+    )
+}
+const AchievementBadge:FC<{learningPath: string; studies: ParticipantStudy[]}> = ({learningPath, studies}) => {
+
+    console.log(studies[0].learningPath?.badge)
+    const api = useApi()
+    const [progress, setProgress] = useState(0)
+    const [isComplete, setIsComplete] = useState(false)
+    const [completedStudies, setCompletedStudies] = useState<ParticipantStudy[]>([])
+    const [btnText, setBtnText] = useState("Start")
+    const [opened, { open, close }] = useDisclosure(false);
 
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (
-                detailRef.current &&
-                !detailRef.current.contains(event.target as Node)
-            ) {
-                onClose();
+        setCompletedStudies(studies.filter((study: ParticipantStudy) => study.completedAt))
+    }, [studies])
+
+    useEffect(() => {
+        setProgress((completedStudies.length / studies.length) * 100)
+        setIsComplete(completedStudies.length == studies.length)
+    }, [completedStudies, isComplete])
+
+    useEffect(() => {
+        setBtnText(() => {
+            if(isComplete){
+                return "Download Certificate"
             }
-        };
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [onClose]);
+            if(completedStudies.length > 0){
+                return "Continue"
+            }
 
-    if (!badge) return null;
-    return (
-        <Box ref={detailRef} style={styles.badgeDetailContainer}>
-            <Button onClick={onClose} style={styles.closeButton}>
-                X
-            </Button>
-            <Title order={3} mb="md">
-                {badge?.learningPath?.label}
-            </Title>
-            <Text mb="md">{badge?.learningPath?.description}</Text>
-            <Text size="sm" color="dimmed" mb="md">
-                {badge?.learningPath?.level2Metadata
-                    .map((item: string) => `#${item}`)
-                    .join(', ')}
-            </Text>
-            {badge?.learningPath?.level2Metadata.map(
-                (item: any, index: number) => (
-                    <Box key={index} mb="md">
-                        <Text fw={600}>{item}</Text>
-                        <Text>{item.description}</Text>
-                    </Box>
-                )
-            )}
-            <Button fullWidth>Start next study</Button>
-        </Box>
-    );
-};
+            return "Start"
+        })
+    }, [completedStudies, isComplete])
 
-const convertBase64ToPdf = (base64PDF: string) => {
-    const byteCharacters = atob(base64PDF);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    const handleButtonClick = () => {
+        if(!isComplete){
+            const incompleteStudy = studies.find((study) => !study.completedAt)
+            if(incompleteStudy){
+                launchStudy(api, incompleteStudy.id)
+            }
+        }       
     }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-    return url;
-};
-
-const AchievementBadge = ({
-    study,
-    onBadgeClick,
-    onStudySelect,
-}: {
-    study: any;
-    onBadgeClick: (study: any) => void;
-    onStudySelect: (study: any) => void;
-}) => {
-    const [errorMessage, setErrorMessage] = useState('');
-    const completedStudies = study?.learningPath?.studies.filter(
-        (s: any) => s.completedCount !== 0
-    ).length;
-    const progress =
-        (completedStudies / study?.learningPath?.studies.length) * 100 || 0;
-    const isCompleted = progress === 100;
-    const buttonText = isCompleted
-        ? 'Download Certificate'
-        : progress > 0
-            ? 'Continue'
-            : 'Start';
-
-    const api = useApi();
-    const currentUser = useCurrentUser();
-    const styles = useStyles();
-
-    const handleButtonClick = async (
-        e: React.MouseEvent<HTMLButtonElement>,
-        badgeId: string
-    ) => {
-        e.stopPropagation();
-        if (isCompleted) {
-            try {
-                let userEmail = '';
-
-                if (currentUser && currentUser.contactInfos) {
-                    const emailInfo = currentUser.contactInfos.find(
-                        (info) => info.type === 'EmailAddress'
-                    );
-                    if (emailInfo && emailInfo.value) {
-                        userEmail = emailInfo.value;
-                    }
+    return(
+        <Stack>
+            <Modal opened={opened} onClose={close} title="Authentication" centered>
+            </Modal>
+            <RingProgress
+                size={350}
+                thickness={20}
+                sections={[{ value: progress, color: isComplete ? colors.purple : colors.green }]}
+                label={
+                    <Group justify='center' align='center'>
+                        <Group justify='center' align='center' w={230} h={230} style={{overflow: 'hidden', borderRadius: '100%'}}>
+                            <Image src={studies[0].learningPath?.badge?.image} w={230} h="auto"/>
+                        </Group>
+                    </Group>
                 }
+                onClick={open}
+                style={{ cursor: 'pointer' }}
+            />
+            <Stack justify='center' align='center' mt={-30} pb={40}>
+                <Flex justify='center' align='center' gap="0" direction='column'>
+                    <Text size='md'>Learning</Text>
+                    <Text size='lg' fw={700}>{learningPath}</Text>
+                    <Text size='xs' c={colors.gray70}>{completedStudies.length} of {studies.length}</Text>
+                </Flex>
+                
+                <Button onClick={() => handleButtonClick()} variant='outline' c={colors.btnPurple} pl={35} pr={35} style={{ border: `1px solid ${colors.purple}`}}>{btnText}</Button>
+            </Stack>
+        </Stack>
+    )
+}
 
-            } catch (error) {
-                setErrorMessage('Error fetching PDF. Please try again later.');
-            }
-        } else {
-            const nextStudy = study?.learningPath?.studies.find(
-                (s: any) => s.completedCount === 0
-            );
-            if (nextStudy) {
-                onStudySelect(study);
-            }
-        }
-    };
-
-    return (
-        <Box style={styles.achievementBadgeContainer} onClick={() => onBadgeClick(study)}>
-            {errorMessage && (
-                <Box style={styles.errorMessage}>
-                    {errorMessage}
-                </Box>
-            )}
-            <Box style={styles.ringProgressContainer}>
-                <RingProgress
-                    size={370}
-                    thickness={14}
-                    sections={[
-                        {
-                            value: progress,
-                            color: isCompleted ? colors.purple : colors.green,
-                        },
-                    ]}
-                    style={{ position: 'absolute' }}
-                />
-                <Box
-                    style={{
-                        ...styles.badgeImageContainer,
-                        background: study.learningPath?.badge.image
-                            ? 'none'
-                            : colors.white,
-                    }}
-                >
-                    <Image
-                        src={study.learningPath?.badge.image}
-                        alt={`Badge for ${study?.learningPath?.label}`}
-                        style={styles.badgeImage}
-                    />
-                </Box>
-            </Box>
-            <Box style={styles.badgeDetails}>
-                <Text
-                    size="sm"
-                    fw={400}
-                    mb={4}
-                    style={styles.learningText}
-                >
-                    Learning
-                </Text>
-                <Text
-                    mb={5}
-                    style={styles.badgeLabel}
-                >
-                    {study?.learningPath?.label}
-                </Text>
-                <Text
-                    size="xs"
-                    color="dimmed"
-                    mb={10}
-                    style={styles.badgeCompletionText}
-                >
-                    {`${completedStudies} of ${study?.learningPath?.studies.length}`}
-                </Text>
-                <Button
-                    onClick={(e) => handleButtonClick(e, study.learningPath.badgeId)}
-                    style={styles.button}
-                >
-                    {buttonText}
-                </Button>
-            </Box>
-        </Box>
-    );
-};
-
-const Achievements = () => {
+const Achievements:FC = () => {
     const [selectedTab, setSelectedTab] = useState('Badges');
-    const learningPaths = useLearningPathStudies()
-
-    console.log(learningPaths)
+    const learningPaths = useFetchLearningPaths()
 
     return (
         <Box>
             <TopNavBar />
             <Container size="lg" my="xl">
-                <Title mb="xl" mt="lg" order={2}>
+                <Title mb="lg" mt="lg" order={2}>
                     Achievements
                 </Title>
                 <Tabs
@@ -349,13 +119,21 @@ const Achievements = () => {
                     onChange={(value) => setSelectedTab(value as 'Badges')}
                     variant="unstyled"
                 >
-                    <Tabs.List>
+                    <Tabs.List c={ colors.blue } ml={-16}>
                         <Tabs.Tab value="Badges">
-                            BADGES
+                            <Text size='xl'>BADGES</Text>
                         </Tabs.Tab>
                     </Tabs.List>
                     <Tabs.Panel value="Badges">
-                        <div>Hello</div>
+                        <Stack c={colors.text} >
+                            <Text>Explore the study paths, track your progress, and access your digital badges.</Text>
+                            <Group gap="xs" justify='flex-start' align='center'>
+                                {Object.entries(learningPaths).map(([learningPath, studies]) => {
+                                    console.log(studies)
+                                    return <AchievementBadge key={learningPath} learningPath={learningPath} studies={studies}/>
+                                })}
+                            </Group>
+                        </Stack>
                     </Tabs.Panel>
                 </Tabs>
             </Container>

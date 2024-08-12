@@ -38,12 +38,11 @@ export const useLearningPathStudies = (learningPath?: LearningPath) => {
 }
 
 export const useFetchLearningPaths = () => {
-    const api = useApi()
+    const { data: studies = [] } = useFetchParticipantStudies()
+    const filteredStudiesByLearningPath = studies.filter((study) => study.learningPath !== undefined)
+    const studiesByLearningPath = groupBy(filteredStudiesByLearningPath, (study) => study.learningPath?.label)
 
-    return useQuery('fetchLearningPaths', async () => {
-        const res = await api.getLearningPaths()
-        return res.data
-    })
+    return studiesByLearningPath
 }
 
 export const useParticipantStudies = () => {
