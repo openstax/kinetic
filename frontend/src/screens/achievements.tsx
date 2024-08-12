@@ -17,6 +17,129 @@ import { StudyDetailsPreview } from '../screens/learner/details';
 import { useParticipantStudies } from './learner/studies';
 import { useCurrentUser } from '@lib';
 
+const useStyles = () => ({
+    badgeDetailContainer: {
+        position: 'fixed' as const,
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+        zIndex: 1001,
+        maxWidth: '400px',
+        width: '100%',
+        padding: 'md',
+    },
+    closeButton: {
+        position: 'absolute' as const,
+        top: '10px',
+        right: '10px',
+    },
+    achievementBadgeContainer: {
+        width: 280,
+        height: 400,
+        display: 'flex',
+        flexDirection: 'column' as const,
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative' as const,
+        margin: '0 20px',
+        cursor: 'pointer',
+        borderRadius: '8px',
+    },
+    errorMessage: {
+        color: 'red',
+        marginBottom: '10px',
+    },
+    ringProgressContainer: {
+        width: '100%',
+        height: '280px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative' as const,
+    },
+    badgeImageContainer: {
+        width: '250px',
+        height: '250px',
+        clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    badgeImage: {
+        width: '95%',
+        height: '95%',
+        objectFit: 'contain' as const,
+    },
+    badgeDetails: {
+        marginTop: '20px',
+        display: 'flex',
+        flexDirection: 'column' as const,
+        alignItems: 'center',
+        padding: '10px',
+        paddingTop: '30px',
+    },
+    learningText: {
+        fontFamily: 'Helvetica Neue',
+        fontSize: 16,
+        lineHeight: '24px',
+        textAlign: 'center' as const,
+    },
+    badgeLabel: {
+        fontFamily: 'System-ui',
+        fontSize: 18,
+        fontWeight: 700,
+        lineHeight: '28px',
+        textAlign: 'center' as const,
+    },
+    badgeCompletionText: {
+        fontFamily: 'System-ui',
+        fontSize: 12,
+        lineHeight: '18px',
+        textAlign: 'center' as const,
+        color: colors.gray70,
+    },
+    button: {
+        width: '200px',
+        height: '30px',
+        padding: '8px 20px',
+        gap: '30px',
+        borderRadius: '4px',
+        border: `1px solid ${colors.purple}`,
+        backgroundColor: 'white',
+        color: colors.purple,
+        fontSize: '14px',
+        fontWeight: 'bold' as const,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    tabsList: {
+        display: 'inline-flex',
+        alignItems: 'center',
+    },
+    tab: {
+        color: colors.blue,
+        fontSize: '20px',
+        fontWeight: 400,
+        textTransform: 'uppercase' as const,
+        borderBottom: 'none',
+        padding: 0,
+        marginBottom: '10px',
+        marginRight: '20px',
+    },
+    tabsPanelText: {
+        marginBottom: '30px',
+        fontSize: '16px',
+        color: colors.text,
+    },
+    simpleGrid: {
+        marginTop: '100px',
+    },
+});
+
 const BadgeDetail = ({
     badge,
     onClose,
@@ -25,6 +148,8 @@ const BadgeDetail = ({
     onClose: () => void;
 }) => {
     const detailRef = useRef<HTMLDivElement | null>(null);
+    const styles = useStyles();
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (
@@ -43,26 +168,8 @@ const BadgeDetail = ({
 
     if (!badge) return null;
     return (
-        <Box
-            ref={detailRef}
-            p="md"
-            style={{
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
-                zIndex: 1001,
-                maxWidth: '400px',
-                width: '100%',
-            }}
-        >
-            <Button
-                onClick={onClose}
-                style={{ position: 'absolute', top: '10px', right: '10px' }}
-            >
+        <Box ref={detailRef} style={styles.badgeDetailContainer}>
+            <Button onClick={onClose} style={styles.closeButton}>
                 X
             </Button>
             <Title order={3} mb="md">
@@ -123,6 +230,7 @@ const AchievementBadge = ({
 
     const api = useApi();
     const currentUser = useCurrentUser();
+    const styles = useStyles();
 
     const handleButtonClick = async (
         e: React.MouseEvent<HTMLButtonElement>,
@@ -162,37 +270,13 @@ const AchievementBadge = ({
     };
 
     return (
-        <Box
-            style={{
-                width: 280,
-                height: 400,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative',
-                margin: '0 20px',
-                cursor: 'pointer',
-                borderRadius: '8px',
-            }}
-            onClick={() => onBadgeClick(study)}
-        >
+        <Box style={styles.achievementBadgeContainer} onClick={() => onBadgeClick(study)}>
             {errorMessage && (
-                <Box style={{ color: 'red', marginBottom: '10px' }}>
+                <Box style={styles.errorMessage}>
                     {errorMessage}
                 </Box>
             )}
-
-            <Box
-                style={{
-                    width: '100%',
-                    height: '280px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    position: 'relative',
-                }}
-            >
+            <Box style={styles.ringProgressContainer}>
                 <RingProgress
                     size={370}
                     thickness={14}
@@ -206,60 +290,31 @@ const AchievementBadge = ({
                 />
                 <Box
                     style={{
-                        width: '250px',
-                        height: '250px',
-                        clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)',
+                        ...styles.badgeImageContainer,
                         background: study.learningPath?.badge.image
                             ? 'none'
                             : colors.white,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
                     }}
                 >
                     <Image
                         src={study.learningPath?.badge.image}
                         alt={`Badge for ${study?.learningPath?.label}`}
-                        style={{
-                            width: '95%',
-                            height: '95%',
-                            objectFit: 'contain',
-                        }}
+                        style={styles.badgeImage}
                     />
                 </Box>
             </Box>
-            <Box
-                style={{
-                    marginTop: '20px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    padding: '10px',
-                    paddingTop: '30px',
-                }}
-            >
+            <Box style={styles.badgeDetails}>
                 <Text
                     size="sm"
                     fw={400}
                     mb={4}
-                    style={{
-                        fontFamily: 'Helvetica Neue',
-                        fontSize: 16,
-                        lineHeight: '24px',
-                        textAlign: 'center',
-                    }}
+                    style={styles.learningText}
                 >
                     Learning
                 </Text>
                 <Text
                     mb={5}
-                    style={{
-                        fontFamily: 'System-ui',
-                        fontSize: 18,
-                        fontWeight: 700,
-                        lineHeight: '28px',
-                        textAlign: 'center',
-                    }}
+                    style={styles.badgeLabel}
                 >
                     {study?.learningPath?.label}
                 </Text>
@@ -267,33 +322,13 @@ const AchievementBadge = ({
                     size="xs"
                     color="dimmed"
                     mb={10}
-                    style={{
-                        fontFamily: 'System-ui',
-                        fontSize: 12,
-                        lineHeight: '18px',
-                        textAlign: 'center',
-                        color: colors.gray70,
-                    }}
+                    style={styles.badgeCompletionText}
                 >
                     {`${completedStudies} of ${study?.learningPath?.studies.length}`}
                 </Text>
                 <Button
                     onClick={(e) => handleButtonClick(e, study.learningPath.badgeId)}
-                    style={{
-                        width: '200px',
-                        height: '30px',
-                        padding: '8px 20px',
-                        gap: '30px',
-                        borderRadius: '4px',
-                        border: `1px solid ${colors.purple}`,
-                        backgroundColor: 'white',
-                        color: colors.purple,
-                        fontSize: '14px',
-                        fontWeight: 'bold',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
+                    style={styles.button}
                 >
                     {buttonText}
                 </Button>
@@ -303,11 +338,12 @@ const AchievementBadge = ({
 };
 
 const Achievements = () => {
-    const [selectedTab, setSelectedTab] = useState<'Badges'>('Badges');
+    const [selectedTab, setSelectedTab] = useState('Badges');
     const [selectedStudy, setSelectedStudy] = useState(null);
     const [badgeDetail, setBadgeDetail] = useState(null);
 
     const { studies } = useParticipantStudies();
+    const styles = useStyles();
 
     const handleBadgeClick = (study: any) => {
         setBadgeDetail(study);
@@ -327,34 +363,25 @@ const Achievements = () => {
                 <Title mb="xl" mt="lg" order={2}>
                     Achievements
                 </Title>
-                <Tabs value={selectedTab} onChange={(value) => setSelectedTab(value as 'Badges')} variant="unstyled">
-                    <Tabs.List style={{ display: 'inline-flex', alignItems: 'center' }}>
-                        <Tabs.Tab
-                            value="Badges"
-                            style={{
-                                color: colors.blue,
-                                fontSize: '20px',
-                                fontWeight: 400,
-                                textTransform: 'uppercase',
-                                borderBottom: 'none',
-                                padding: 0,
-                                marginBottom: '10px',
-                                marginRight: '20px',
-                            }}
-                        >
+                <Tabs
+                    value={selectedTab}
+                    onChange={(value) => setSelectedTab(value as 'Badges')}
+                    variant="unstyled"
+                >
+                    <Tabs.List style={styles.tabsList}>
+                        <Tabs.Tab value="Badges" style={styles.tab}>
                             BADGES
                         </Tabs.Tab>
                     </Tabs.List>
-
                     <Tabs.Panel value="Badges">
                         <Box>
-                            <Text style={{ marginBottom: '30px', fontSize: '16px', color: colors.text }}>
+                            <Text style={styles.tabsPanelText}>
                                 Explore the study paths, track your progress, and access your digital badges.
                             </Text>
                             <SimpleGrid
                                 cols={{ base: 1, sm: 2, md: 3 }}
                                 spacing={{ base: 40, sm: 60, md: 110 }}
-                                style={{ marginTop: '100px' }}
+                                style={styles.simpleGrid}
                             >
                                 {studies.map((study) => (
                                     <AchievementBadge
