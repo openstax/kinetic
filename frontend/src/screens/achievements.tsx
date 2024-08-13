@@ -110,13 +110,13 @@ const SecondaryBadgeTag:FC<{learningPath: string}> = ({ learningPath }) => {
     const categories: Record<string, string> = {
         'Personal Finance': 'Understanding',
         'Growth & Resilience': 'Understanding',
-        'Memory & Retention': 'Exploring',
+        'Mental Agility': 'Exploring',
         'Learning Persistence': 'Understanding',
         'Productivity': 'Understanding',
         'Interpersonal Skills': 'Exploring',
         'Study Strategies': 'Exploring',
         'STEM Careers': 'Exploring',
-        'Biology': 'Study Strategies',
+        'Biology Learning': 'Study Strategies',
         'Future Careers': 'Exploring',
     }
 
