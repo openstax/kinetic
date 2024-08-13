@@ -84,7 +84,7 @@ export const AppRoutes = () => {
                 { path: 'study/create', element: <ResearcherStudyLanding /> },
                 { path: 'study/overview/:id', element: <StudyOverview /> },
                 { path: 'study/edit/:id', element: <EditStudy /> },
-                { path: '/achievements', element: <Achievements /> },
+                { path: 'achievements', element: <Achievements /> },
                 { path: 'account', element: <AccountDetails /> },
                 { path: 'researcher-account', element: <ResearcherAccountPage /> },
                 { path: 'studies/status/:studyStatus', element: <StudiesHomepage /> },

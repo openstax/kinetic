@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Button, Container, Title, Tabs, RingProgress, Image, Group, Stack, Flex, Modal, Overlay, Alert } from '@mantine/core';
+import { Box, Text, Button, Container, Title, Tabs, RingProgress, Image, Group, Stack, Flex, Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useApi } from '@lib';
 import { launchStudy } from '@models';
@@ -8,57 +8,21 @@ import { colors } from '@theme';
 import { useFetchLearningPaths } from './learner/studies';
 import { ParticipantStudy } from '@api';
 import { useCurrentUser } from '@lib';
+import { notifications } from '@mantine/notifications';
+import Markdown from 'react-markdown';
 
-const AchievementBadge:FC<{learningPath: string; studies: ParticipantStudy[]}> = ({ learningPath, studies }) => {
-
-    interface Criteria{
-        title: string,
-        text: string
-    }
+const AchievementsButton: FC<{isComplete: boolean, studies: ParticipantStudy[], isNew: boolean}> = ({ isComplete, studies, isNew }) => {
 
     const api = useApi()
     const user = useCurrentUser()
-    const [progress, setProgress] = useState(0)
-    const [isComplete, setIsComplete] = useState(false)
-    const [criteria, setCriteria] = useState<Criteria[]>([] || undefined)
-    const [completedStudies, setCompletedStudies] = useState<ParticipantStudy[]>([])
-    const [btnText, setBtnText] = useState('Start')
-    const [error, setError] = useState(false)
-    const [opened, { open, close }] = useDisclosure(false)
 
-    useEffect(() => {
-        setCompletedStudies(studies.filter((study: ParticipantStudy) => study.completedAt))
-        setCriteria(() => {
-            return studies[0].learningPath?.badge?.criteriaHtml?.split('**')
-                .slice(1)
-                .reduce<Criteria[]>((acc: Criteria[], item, index, array) => {
-                if (index % 2 === 0) {
-                    acc.push({ title: item.trim(), text: array[index + 1].trim() });
-                }
-                return acc;
-            }, []) || []; 
+    const sendErrorNotification = () => {
+        notifications.show({
+            color: 'red',
+            title: 'Error',
+            message: 'Failed to download PDF. Please try again.',
         })
-        
-    }, [studies])
-
-    useEffect(() => {
-        setProgress((completedStudies.length / studies.length) * 100)
-        setIsComplete(completedStudies.length == studies.length)
-    }, [completedStudies, isComplete])
-
-    useEffect(() => {
-        setBtnText(() => {
-            if(isComplete){
-                return 'Download Certificate'
-            }
-
-            if(completedStudies.length > 0){
-                return 'Continue'
-            }
-
-            return 'Start'
-        })
-    }, [completedStudies, isComplete])
+    }
 
     const convertBase64ToPdf = (base64PDF: string) => {
         const byteCharacters = atob(base64PDF);
@@ -82,7 +46,7 @@ const AchievementBadge:FC<{learningPath: string; studies: ParticipantStudy[]}> =
             try{
                 const email = user.contactInfos?.find(e => e.type == 'EmailAddress')?.value
                 if(!email){
-                    setError(true)
+                    sendErrorNotification()
                     return
                 }
 
@@ -93,38 +57,93 @@ const AchievementBadge:FC<{learningPath: string; studies: ParticipantStudy[]}> =
                 const pdfUrl = convertBase64ToPdf(response.pdf || '');
                 window.open(pdfUrl, '_blank');
             }catch(error){
-                setError(true)
+                sendErrorNotification()
             }
         }       
     }
 
-    return(
-        <Stack>
-            {error? <Alert title="Error" color="red" withCloseButton onClose={() => setError(false)}>Fail to download the PDF. Please try again later.</Alert> : ''}
-            <Modal c={colors.text} opened={opened} onClose={close} title={<Text size="lg" pl={20} pt={10} fw={700}>{learningPath}</Text>} centered>
+    return (
+        <Button onClick={() => handleButtonClick()} variant='outline' c={colors.btnPurple} pl={35} pr={35} style={{ border: `1px solid ${colors.purple}` }}>
+            {isComplete? 'Download Certificate' : isNew? 'Start' : 'Continue'}
+        </Button>
+    )
+}
+
+const BadgeTags:FC<{tags: string[]}> = ({ tags }) => {
+    return (
+        <Group gap={5}>{tags?.map((tag) => {
+            return <Text key={tag} p={0} size='sm'>#{tag}</Text>
+        })}</Group>
+    )
+}
+
+const BadgeDetails:FC<{
+    studies: ParticipantStudy[], 
+    opened: boolean, 
+    isComplete: boolean, 
+    isNew: boolean, 
+    close: () => void }> 
+    = ({ studies, opened, isComplete, isNew, close }) => {
+
+        return (
+            <Modal c={colors.text} opened={opened} onClose={close} title={<Text size="lg" pl={20} pt={10} fw={700}>{studies[0].learningPath?.label + ''}</Text>} centered>
                 <Stack pl={20} pr={20} pb={20}>
-                    <Stack>
+                    <Stack gap='xs'>
                         <Text size="sm">
-                            <span>{studies[0].learningPath?.badge?.description}</span><br/>
-                            <div style={{ marginTop: '.5rem' }}>{studies[0].learningPath?.badge?.tags?.map((tag) => {
-                                return '#'+tag+' ' 
-                            })}</div>
+                            {studies[0].learningPath?.badge?.description}
                         </Text>
+                        <BadgeTags tags={studies[0].learningPath?.badge?.tags || []} />
                     </Stack>
-                    <Stack>
-                        {criteria.map((cr) => {
-                            return (
-                                <Group key={cr.title}>
-                                    <Text size="sm"><span style={{ fontWeight: '700' }}>{cr.title}</span>{cr.text}</Text>
-                                </Group>
-                            )
-                        })}
+                    <Stack style={{ fontSize: '.875rem' }}>
+                        <Markdown>{studies[0].learningPath?.badge?.criteriaHtml}</Markdown>
                     </Stack>
                     <Group>
-                        <Button onClick={() => handleButtonClick()} variant='filled' color={colors.purple}>{btnText}</Button>
+                        <AchievementsButton isComplete={isComplete} isNew={isNew} studies={studies}/>
                     </Group>
                 </Stack>
             </Modal>
+        )
+    }
+
+const SecondaryBadgeTag:FC<{learningPath: string}> = ({ learningPath }) => {
+
+    const categories: Record<string, string> = {
+        'Personal Finance': 'Understanding',
+        'Growth & Resilience': 'Understanding',
+        'Memory & Retention': 'Exploring',
+        'Learning Persistence': 'Understanding',
+        'Productivity': 'Understanding',
+        'Interpersonal Skills': 'Exploring',
+        'Study Strategies': 'Exploring',
+        'STEM Careers': 'Exploring',
+        'Biology': 'Study Strategies',
+        'Future Careers': 'Exploring',
+    }
+
+    return(
+        <Text size='md'>{categories[learningPath] || 'Other'}</Text>
+    )
+}
+const AchievementBadge:FC<{learningPath: string; studies: ParticipantStudy[]}> = ({ learningPath, studies }) => {
+
+    const [progress, setProgress] = useState(0)
+    const [isComplete, setIsComplete] = useState(false)
+    
+    const [completedStudies, setCompletedStudies] = useState<ParticipantStudy[]>([])
+    const [opened, { open, close }] = useDisclosure(false)
+
+    useEffect(() => {
+        setCompletedStudies(studies.filter((study: ParticipantStudy) => study.completedAt))
+    }, [studies])
+
+    useEffect(() => {
+        setProgress((completedStudies.length / studies.length) * 100)
+        setIsComplete(completedStudies.length == studies.length)
+    }, [completedStudies, isComplete])
+
+    return(
+        <Stack>
+            <BadgeDetails studies={studies} opened={opened} close={close} isComplete={isComplete} isNew={completedStudies.length == 0}/>
             <Group>
                 <RingProgress
                     size={350}
@@ -134,23 +153,20 @@ const AchievementBadge:FC<{learningPath: string; studies: ParticipantStudy[]}> =
                         <Group justify='center' align='center'>
                             <Group pos='relative' justify='center' align='center' w={230} h={230} style={{ overflow: 'hidden', borderRadius: '100%' }}>
                                 <Image src={ studies[0].learningPath?.badge?.image } w={230} h="auto"/>
-                                {completedStudies.length == 0? <Overlay color="#000" backgroundOpacity={0.25} /> : ''}
                             </Group>
                         </Group>
                     }
                     onClick={open}
                     style={{ cursor: 'pointer' }}
-                />
-                 
+                />   
             </Group>
             <Stack justify='center' align='center' mt={-30} pb={40}>
                 <Flex justify='center' align='center' gap="0" direction='column'>
-                    <Text size='md'>Learning</Text>
+                    <SecondaryBadgeTag learningPath={learningPath}/>
                     <Text size='lg' fw={700}>{learningPath}</Text>
                     <Text size='xs' c={colors.gray70}>{completedStudies.length} of {studies.length}</Text>
                 </Flex>
-                
-                <Button onClick={() => handleButtonClick()} variant='outline' c={colors.btnPurple} pl={35} pr={35} style={{ border: `1px solid ${colors.purple}` }}>{btnText}</Button>
+                <AchievementsButton isComplete={isComplete} studies={studies} isNew={completedStudies.length == 0}/>
             </Stack>
         </Stack>
     )
