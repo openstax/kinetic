@@ -16,7 +16,7 @@ interface BannerSectionProps {
 
 const BannerSection: React.FC<BannerSectionProps> = ({ title, mainText, subText, value, hasValue, onClick }) => {
     return (
-        <Box p="xl" style={{ flex: 1 }} miw='200px' fz='lg'>
+        <Box p="xl" style={{ flex: 1, minWidth: '200px', maxWidth: '300px' }} fz='lg'>
             <Title order={3} size='1rem' style={{ textAlign: hasValue ? 'center' : 'left' }}>
                 {title}
             </Title>
@@ -92,10 +92,10 @@ const StudyBanner: React.FC = () => {
             align='center'
             wrap='wrap'
             gap='1rem'
-            w='65%'
             mx='auto'
+            style={{ maxWidth: '1200px', width: '100%' }}
         >
-            <Box p="xl" style={{ flex: 1, marginRight: '8rem' }} miw='200px' fz='lg'>
+            <Box p="xl" style={{ flex: 1, minWidth: '250px', maxWidth: '400px' }} fz='lg'>
                 <Title order={2} mb="sm" style={{ fontSize: '24px', fontWeight: 700 }}>
                     Achievements
                 </Title>
