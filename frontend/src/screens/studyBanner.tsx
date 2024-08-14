@@ -1,12 +1,54 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Title, Text, Anchor, Group, useMantineTheme } from '@mantine/core';
+import { Box, Title, Text, Anchor, Center, Flex } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useSearchStudies, useParticipantStudies } from './learner/studies';
 import { ParticipantStudy } from '@api';
 
+interface BannerSectionProps {
+    title: string;
+    mainText: string;
+    subText?: string;
+    value?: string | number;
+    hasValue: boolean;
+    onClick?: () => void;
+}
+
+const BannerSection: React.FC<BannerSectionProps> = ({ title, mainText, subText, value, hasValue, onClick }) => {
+    return (
+        <Box p="xl" style={{ flex: 1 }} miw='200px' fz='lg'>
+            <Title order={3} size='1rem' style={{ textAlign: hasValue ? 'center' : 'left' }}>
+                {title}
+            </Title>
+            {hasValue ? (
+                <Center style={{ height: '80px', marginBottom: '10px' }}>
+                    <Text color="purple" size="70px" style={{ textAlign: 'center', fontWeight: 200 }}>
+                        {value}
+                    </Text>
+                </Center>
+            ) : (
+                <>
+                    <Text mt="md" size="sm" style={{ textAlign: 'start' }}>
+                        {mainText}
+                    </Text>
+                    {subText && (
+                        <Text size="sm" style={{ textAlign: 'start' }}>
+                            {subText}
+                        </Text>
+                    )}
+                    {onClick && (
+                        <Anchor color="blue" onClick={onClick} style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
+                            <Text size="sm" style={{ fontSize: '14px', fontWeight: 700 }}> Start your first study </Text>
+                            <IconArrowRight style={{ marginLeft: '5px' }} />
+                        </Anchor>
+                    )}
+                </>
+            )}
+        </Box>
+    );
+};
+
 const StudyBanner: React.FC = () => {
-    const theme = useMantineTheme();
     const { filteredStudies } = useSearchStudies();
     const { studies = [] } = useParticipantStudies() as { studies: ParticipantStudy[] };
     const navigate = useNavigate();
@@ -16,13 +58,17 @@ const StudyBanner: React.FC = () => {
     const [totalPointsEarned, setTotalPointsEarned] = useState<number>(0);
     const [hasCompletedStudies, setHasCompletedStudies] = useState<boolean>(false);
     const [fiveMinuteStudies, setFiveMinuteStudies] = useState<ParticipantStudy[]>([]);
+    const [dataFetched, setDataFetched] = useState<boolean>(false);
 
     useEffect(() => {
-        setTotalCompletedCount(studies.reduce((sum, study) => sum + (study.completedCount || 0), 0));
-        setBadgesEarned(studies.reduce((count, study) => count + (study.learningPath?.completed ? 1 : 0), 0));
-        setTotalPointsEarned(studies.reduce((sum, study) => sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0), 0));
-        setHasCompletedStudies(filteredStudies.some((study) => study.completedAt !== undefined));
-        setFiveMinuteStudies(filteredStudies.filter((study) => study.stages && study.stages[0]?.durationMinutes === 5));
+        if (studies.length > 0 || filteredStudies.length > 0) {
+            setTotalCompletedCount(studies.reduce((sum, study) => sum + (study.completedCount || 0), 0));
+            setBadgesEarned(studies.reduce((count, study) => count + (study.learningPath?.completed ? 1 : 0), 0));
+            setTotalPointsEarned(studies.reduce((sum, study) => sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0), 0));
+            setHasCompletedStudies(filteredStudies.some((study) => study.completedAt !== undefined));
+            setFiveMinuteStudies(filteredStudies.filter((study) => study.stages && study.stages[0]?.durationMinutes === 5));
+            setDataFetched(true);
+        }
     }, [studies, filteredStudies]);
 
     const startRandomFiveMinuteStudy = useCallback(() => {
@@ -35,114 +81,55 @@ const StudyBanner: React.FC = () => {
 
     const formatValue = (value: number) => (value < 10 ? `0${value}` : value);
 
-    const containerStyle = {
-        padding: '30px',
-        borderRadius: theme.radius.md,
-        margin: '0 auto',
-        maxWidth: '1200px',
-        display: 'flex',
-        flexWrap: 'wrap' as const,  // Adding 'as const' to resolve the typing issue
-    };
-
-    const boxStyle = {
-        flex: 1,
-        marginRight: Number(theme.spacing.xl) * 2,  // Casting to number to avoid the type error
-        marginBottom: '5px',
-        display: 'flex',
-        flexDirection: 'column' as const,  // Adding 'as const' to resolve the typing issue
-    };
-
-    const titleStyle = {
-        fontWeight: 700,
-        fontSize: theme.fontSizes.lg,
-        marginBottom: theme.spacing.sm,
-    };
-
-    const textStyle = {
-        marginBottom: theme.spacing.sm,
-        fontSize: theme.fontSizes.sm,
-        whiteSpace: 'pre-line' as const,  // Adding 'as const' to resolve the typing issue
-    };
-
-    const valueTextStyle = {
-        color: theme.colors.purple[5],
-        fontFamily: 'Helvetica Neue, sans-serif',
-        fontWeight: 200,
-        fontSize: '70px',
-        textAlign: 'center' as const,  // Adding 'as const' to resolve the typing issue
-    };
-
-    const centerTextStyle = {
-        textAlign: 'center' as const,  // Adding 'as const' to resolve the typing issue
-    };
+    if (!dataFetched) {
+        return null;
+    }
 
     return (
-        <Group align="flex-start" style={containerStyle}>
-            <Box style={boxStyle}>
-                <Title order={2} style={titleStyle}>
-          Achievements
+        <Flex
+            mt='0.5rem'
+            justify='center'
+            align='center'
+            wrap='wrap'
+            gap='1rem'
+            w='65%'
+            mx='auto'
+        >
+            <Box p="xl" style={{ flex: 1, marginRight: '8rem' }} miw='200px' fz='lg'>
+                <Title order={2} mb="sm" style={{ fontSize: '24px', fontWeight: 700 }}>
+                    Achievements
                 </Title>
-                <Text style={textStyle}>
-          Earn digital badges and additional{'\n'}rewards with OpenStax Kinetic!
+                <Text mb="sm" size="sm" style={{ whiteSpace: 'pre-line' }}>
+                    Earn digital badges and additional {'\n'}
+                    rewards with OpenStax Kinetic!
                 </Text>
             </Box>
-            <Box style={boxStyle}>
-                <Title order={3} style={{ ...titleStyle, ...(hasCompletedStudies ? centerTextStyle : {}) }}>
-          Studies completed
-                </Title>
-                {hasCompletedStudies ? (
-                    <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80px',marginBottom: '10px' }}>
-                        <Text style={valueTextStyle}>
-                            {formatValue(totalCompletedCount)}
-                        </Text>
-                    </Box>
-                ) : (
-                    <Text style={textStyle}>
-            You haven't completed{'\n'}
-            any studies yet.{'\n'}
-                        <Anchor style={{ color: theme.colors.blue[5], textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer', fontSize: '14px' }} onClick={startRandomFiveMinuteStudy}>
-              Start your first study <IconArrowRight />
-                        </Anchor>
-                    </Text>
-                )}
-            </Box>
-            <Box style={boxStyle}>
-                <Title order={3} style={{ ...titleStyle, ...(hasCompletedStudies ? centerTextStyle : {}) }}>
-          Badges earned
-                </Title>
-                {hasCompletedStudies ? (
-                    <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80px',  marginBottom: '10px' }}>
-                        <Text style={valueTextStyle}>
-                            {formatValue(badgesEarned)}
-                        </Text>
-                    </Box>
-                ) : (
-                    <Text style={textStyle}>
-            Complete all studies in a{'\n'}
-            category to earn your{'\n'}
-            first digital badge.
-                    </Text>
-                )}
-            </Box>
-            <Box>
-                <Title order={3} style={{ ...titleStyle, ...(hasCompletedStudies ? centerTextStyle : {}) }}>
-          Total points earned
-                </Title>
-                {hasCompletedStudies ? (
-                    <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80px', marginBottom: '10px' }}>
-                        <Text style={valueTextStyle}>
-                            {formatValue(totalPointsEarned)}
-                        </Text>
-                    </Box>
-                ) : (
-                    <Text style={textStyle}>
-            Reach 200 points to{'\n'}
-            unlock additional{'\n'}
-            educational rewards.
-                    </Text>
-                )}
-            </Box>
-        </Group>
+
+            <BannerSection
+                title="Studies completed"
+                mainText="You haven't completed"
+                subText="any studies yet."
+                value={formatValue(totalCompletedCount)}
+                hasValue={hasCompletedStudies}
+                onClick={startRandomFiveMinuteStudy}
+            />
+
+            <BannerSection
+                title="Badges earned"
+                mainText="Complete all studies in a"
+                subText="category to earn your first digital badge."
+                value={formatValue(badgesEarned)}
+                hasValue={hasCompletedStudies}
+            />
+
+            <BannerSection
+                title="Total points earned"
+                mainText="Reach 200 points to"
+                subText="unlock additional educational rewards."
+                value={formatValue(totalPointsEarned)}
+                hasValue={hasCompletedStudies}
+            />
+        </Flex>
     );
 };
 
