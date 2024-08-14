@@ -57,26 +57,21 @@ class OpenBadgeApi
             })
   end
 
-  def get_pdf(badge_id, email)
-    # Response is an octet-stream
-    # Fetching the event id
-    event_response = HTTPX.plugin(:auth)
-                       .with(headers: { 'content-type' => 'application/json' })
-                       .authorization("Bearer #{token}")
-                       .get("https://openbadgefactory.com/v1/event/#{@client_id}?email=#{email}")
-
-    response_body = event_response.body.to_s
-    json_objects = response_body.split("\n").map(&:strip).reject(&:empty?)
-
-    data = json_objects.map do |json_str|
-      JSON.parse(json_str)
-    end
+  def get_event_id(badge_id, email, called: false)
+    data = fetch_event_response(email)
 
     matching_item = data.find { |item| item['badge_id'] == badge_id }
 
-    return if matching_item.nil? || matching_item.empty?
+    if matching_item.nil? || matching_item.empty?
+      issue_badge(badge_id, [email]) unless called
+      return get_event_id(badge_id, email, called: true)
+    end
 
-    event_id = matching_item['id']
+    matching_item['id']
+  end
+
+  def get_pdf(badge_id, email)
+    event_id = get_event_id(badge_id, email)
 
     # Fetching the pdf link
     pdf_response = HTTPX.plugin(:auth)
@@ -93,5 +88,18 @@ class OpenBadgeApi
                      .get(pdf_link)
 
     { pdf: pdf_response.body }
+  end
+
+  private
+
+  def fetch_event_response(email)
+    # Response is an octet stream
+    response = HTTPX.plugin(:auth)
+                 .with(headers: { 'content-type' => 'application/json' })
+                 .authorization("Bearer #{token}")
+                 .get("https://openbadgefactory.com/v1/event/#{@client_id}?email=#{email}")
+
+    json_objects = response.body.to_s.split("\n").map(&:strip).reject(&:empty?)
+    json_objects.map { |json_str| JSON.parse(json_str) }
   end
 end
