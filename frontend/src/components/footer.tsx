@@ -5,7 +5,7 @@ import { Anchor, Box, Container, Flex, Group, Image, Stack, Text, Title, Divider
 import { IconBrandFacebookFilled, IconBrandInstagram, IconBrandTwitterFilled } from '@tabler/icons-react';
 
 // @ts-ignore
-import NSFLogoURL from '../images/nsf-logo.webp'
+import NSFLogoURL from '../images/nsf-logo.png'
 // @ts-ignore
 import IESLogoURL from '../images/ies-logo.png'
 // @ts-ignore
