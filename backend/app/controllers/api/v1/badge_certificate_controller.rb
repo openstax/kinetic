@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V1::BadgeCertificateController < Api::V1::BaseController
+  before_action :render_unauthorized_unless_signed_in!
+
   def show
     badge_id = params[:badge_id]
     email = params[:email]
