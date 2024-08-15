@@ -17,6 +17,7 @@ export * from './segment-bar'
 export * from './multi-session-bar'
 export * from './form-select'
 export * from './study-card-images/card-images'
+export * from './study-card-images/study-image'
 
 export * from './form/character-count'
 export * from './form/field-error-message'

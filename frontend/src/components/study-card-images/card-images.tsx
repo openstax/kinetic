@@ -33,12 +33,12 @@ interface CardImage {
 
 export const getImageUrl = (imageId: string | undefined) => {
     if (!imageId) {
-        return `https://kinetic-app-assets.s3.amazonaws.com/assets/card-images/placeholder.svg`
+        return '/Other/placeholder.svg'
     }
     const image = cardImages.find(image => image.imageId === imageId)
 
     if (!image) {
-        return `https://kinetic-app-assets.s3.amazonaws.com/assets/card-images/placeholder.svg`
+        return '/Other/placeholder.svg'
     }
 
     return `/${image.category}/${image.imageId}`;
@@ -60,7 +60,6 @@ export const cardImages: CardImage[] = [
     { imageId: 'Education-Online-Learning-01--Streamline-Bangalore.svg', category: 'Curated Studies', altText: 'A lady listenning to an online lecture' },
     { imageId: 'Education-Online-Learning-02--Streamline-Bangalore.svg', category: 'Curated Studies', altText: 'A hat placed on top of a screen which is displaying books' },
     { imageId: 'Job-Interview--Streamline-Bangalore.svg',category: 'Curated Studies', altText: 'A Job interview' },
-    { imageId: 'Leave-A-Review--Streamline-Bangalore.svg',category: 'Curated Studies', altText: 'Leave a Review' },
     { imageId: 'Leave-A-Review--Streamline-Bangalore.svg',category: 'Curated Studies', altText: 'Leave a Review' },
     { imageId: 'Marketing-Filling-Survey-01--Streamline-Bangalore-Curated.svg',category: 'Curated Studies', altText: 'Marketting Filling Survey' },
     { imageId: 'Task-List--Streamline-Bangalore.svg',category: 'Curated Studies', altText: 'A Task List' },

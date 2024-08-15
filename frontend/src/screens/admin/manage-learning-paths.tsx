@@ -317,6 +317,7 @@ const LearningPathForm: FC<{
                 <ColorInput format='hex'
                     withAsterisk
                     withPicker={false}
+                    withEyeDropper={false}
                     label="Color"
                     error={form.errors['color']}
                     {...form.getInputProps('color')}
