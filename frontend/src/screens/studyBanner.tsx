@@ -23,13 +23,13 @@ interface CustomTextProps extends TextProps {
 }
 
 const BannerSectionValue: React.FC<CustomTextProps> = ({ children }) => (
-    <Text color="purple" size="4.375rem" fw={200} ta={'center'} lh={1.1} mt={'0.125rem'} >
+    <Text color="purple" size="4.375rem" fw={200} ta={'center'} lh={1.1} mt={'0.125rem'}>
         {children}
     </Text>
 );
 
 const BannerSectionText: React.FC<CustomTextProps> = ({ children, ...props }) => (
-    <Text c={colors.text} size="sm" mt={'0.5rem'} lh={1.2} maw={'12.5rem'} style={{  whiteSpace: 'pre-line' }} {...props}>
+    <Text c={colors.text} size="sm" mt={'0.5rem'} lh={1.2} maw={'12.5rem'} style={{ whiteSpace: 'pre-line' }} {...props}>
         {children}
     </Text>
 );
@@ -41,21 +41,21 @@ interface CustomAnchorProps extends AnchorProps {
 
 const BannerSectionLink: React.FC<CustomAnchorProps> = ({ children, ...props }) => (
     <Anchor c={colors.blue} style={{ display: 'flex', alignItems: 'center', marginTop: '0.3125rem' }} {...props}>
-        <Text size="sm" fw={700} >{children}</Text>
+        <Text size="sm" fw={700}>{children}</Text>
         <IconArrowRight style={{ marginLeft: '0.3125rem' }} />
     </Anchor>
 );
 
 interface BannerSectionProps {
     title: string;
-    mainText: string;
+    mainText: ReactNode;
     subText?: string;
     value?: string | number;
     onClick?: () => void;
 }
 
 const BannerSection: React.FC<BannerSectionProps> = ({ title, mainText, subText, value, onClick }) => {
-    const hasValue = value !== undefined && Number(value) > 0;
+    const hasValue = value !== undefined;
 
     return (
         <Stack
@@ -70,7 +70,7 @@ const BannerSection: React.FC<BannerSectionProps> = ({ title, mainText, subText,
         >
             <BannerSectionTitle hasValue={hasValue}>{title}</BannerSectionTitle>
             {hasValue ? (
-                <Center h={'5rem'} mb={'0.625rem'} >
+                <Center h={'5rem'} mb={'0.625rem'}>
                     <BannerSectionValue>{value}</BannerSectionValue>
                 </Center>
             ) : (
@@ -93,6 +93,7 @@ const StudyBanner: React.FC = () => {
     const [badgesEarned, setBadgesEarned] = useState<number>(0);
     const [totalPointsEarned, setTotalPointsEarned] = useState<number>(0);
     const [fiveMinuteStudies, setFiveMinuteStudies] = useState<ParticipantStudy[]>([]);
+    const [shouldRender, setShouldRender] = useState<boolean>(false);
 
     useEffect(() => {
         if (studies.length > 0 || filteredStudies.length > 0) {
@@ -114,6 +115,7 @@ const StudyBanner: React.FC = () => {
                 (!isMultiSession(study) && study.totalDuration === 5) ||
                 (isMultiSession(study) && getNextAvailableStage(study)?.durationMinutes === 5)
             ));
+            setShouldRender(true);
         }
     }, [studies, filteredStudies]);
 
@@ -129,9 +131,9 @@ const StudyBanner: React.FC = () => {
 
     const formatValue = (value: number) => value.toString().padStart(2, '0');
 
-    const shouldRenderBanner = totalCompletedCount > 0 || badgesEarned > 0 || totalPointsEarned > 0;
+    const hasData = totalCompletedCount > 0 || badgesEarned > 0 || totalPointsEarned > 0;
 
-    if (!shouldRenderBanner) {
+    if (!shouldRender) {
         return null;
     }
 
@@ -147,8 +149,8 @@ const StudyBanner: React.FC = () => {
             h={'10.5rem'}
             maw={'75rem'}
         >
-            <Stack 
-                p="xl" 
+            <Stack
+                p="xl"
                 mt={'-1.25rem'}
                 justify='center'
                 flex={1}
@@ -166,20 +168,25 @@ const StudyBanner: React.FC = () => {
             <BannerSection
                 title="Studies completed"
                 mainText={"You haven't completed\nany studies yet."}
-                value={formatValue(totalCompletedCount)}
+                value={hasData ? formatValue(totalCompletedCount) : undefined}
                 onClick={totalPointsEarned === 0 ? startRandomFiveMinuteStudy : undefined}
             />
 
             <BannerSection
                 title="Badges earned"
                 mainText={'Complete all studies in a\ncategory to earn your\nfirst digital badge.'}
-                value={formatValue(badgesEarned)}
+                value={hasData ? formatValue(badgesEarned) : undefined}
             />
 
             <BannerSection
                 title="Total points earned"
-                mainText={'Reach 200 points to\nunlock additional\neducational rewards.'}
-                value={formatValue(totalPointsEarned)}
+                mainText={
+                    <>
+                        {'Reach 200 points to\nunlock additional\neducational rewards\n'}
+                        <Text fw={700} fs='italic'>{'(coming soon)'}</Text>
+                    </>
+                }
+                value={hasData ? formatValue(totalPointsEarned) : undefined}
             />
         </Group>
     );
