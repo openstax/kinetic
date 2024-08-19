@@ -129,6 +129,12 @@ const StudyBanner: React.FC = () => {
 
     const formatValue = (value: number) => value.toString().padStart(2, '0');
 
+    const shouldRenderBanner = totalCompletedCount > 0 || badgesEarned > 0 || totalPointsEarned > 0;
+
+    if (!shouldRenderBanner) {
+        return null;
+    }
+
     return (
         <Group
             mt='0.1rem'
