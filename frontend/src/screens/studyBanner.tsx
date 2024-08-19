@@ -1,135 +1,181 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Title, Text, Anchor, Center, Flex } from '@mantine/core';
+import React, { useCallback, useEffect, useState, ReactNode } from 'react';
+import { Stack, Title, Text, Anchor, Center, Group, TitleProps, TextProps, AnchorProps } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
 import { useSearchStudies, useParticipantStudies } from './learner/studies';
 import { ParticipantStudy } from '@api';
+import { launchStudy, isMultiSession, getNextAvailableStage } from '@models';
+import { useApi } from '@lib';
+import { colors } from '@theme';
+
+interface BannerSectionTitleProps extends TitleProps {
+    hasValue?: boolean;
+    children: ReactNode;
+}
+
+const BannerSectionTitle: React.FC<BannerSectionTitleProps> = ({ hasValue, children, ...props }) => (
+    <Title c={colors.text} order={3} size='1rem' mb='-0.25rem' ta={hasValue ? 'center' : 'left'} {...props}>
+        {children}
+    </Title>
+);
+
+interface CustomTextProps extends TextProps {
+    children: ReactNode;
+}
+
+const BannerSectionValue: React.FC<CustomTextProps> = ({ children }) => (
+    <Text color="purple" size="4.375rem" fw={200} ta={'center'} lh={1.1} mt={'0.125rem'} >
+        {children}
+    </Text>
+);
+
+const BannerSectionText: React.FC<CustomTextProps> = ({ children, ...props }) => (
+    <Text c={colors.text} size="sm" mt={'0.5rem'} lh={1.2} maw={'12.5rem'} style={{  whiteSpace: 'pre-line' }} {...props}>
+        {children}
+    </Text>
+);
+
+interface CustomAnchorProps extends AnchorProps {
+    children: ReactNode;
+    onClick?: () => void;
+}
+
+const BannerSectionLink: React.FC<CustomAnchorProps> = ({ children, ...props }) => (
+    <Anchor c={colors.blue} style={{ display: 'flex', alignItems: 'center', marginTop: '0.3125rem' }} {...props}>
+        <Text size="sm" fw={700} >{children}</Text>
+        <IconArrowRight style={{ marginLeft: '0.3125rem' }} />
+    </Anchor>
+);
 
 interface BannerSectionProps {
     title: string;
     mainText: string;
     subText?: string;
     value?: string | number;
-    hasValue: boolean;
     onClick?: () => void;
 }
 
-const BannerSection: React.FC<BannerSectionProps> = ({ title, mainText, subText, value, hasValue, onClick }) => {
+const BannerSection: React.FC<BannerSectionProps> = ({ title, mainText, subText, value, onClick }) => {
+    const hasValue = value !== undefined && Number(value) > 0;
+
     return (
-        <Box p="xl" style={{ flex: 1, minWidth: '200px', maxWidth: '300px' }} fz='lg'>
-            <Title order={3} size='1rem' style={{ textAlign: hasValue ? 'center' : 'left' }}>
-                {title}
-            </Title>
+        <Stack
+            gap={0}
+            justify={hasValue ? 'center' : 'start'}
+            align={hasValue ? 'center' : 'start'}
+            miw={'12.5rem'}
+            maw={'18.75rem'}
+            ta={'start'}
+            ml={'1rem'}
+            h={'6.875rem'}
+        >
+            <BannerSectionTitle hasValue={hasValue}>{title}</BannerSectionTitle>
             {hasValue ? (
-                <Center style={{ height: '80px', marginBottom: '10px' }}>
-                    <Text color="purple" size="70px" style={{ textAlign: 'center', fontWeight: 200 }}>
-                        {value}
-                    </Text>
+                <Center h={'5rem'} mb={'0.625rem'} >
+                    <BannerSectionValue>{value}</BannerSectionValue>
                 </Center>
             ) : (
                 <>
-                    <Text mt="md" size="sm" style={{ textAlign: 'start' }}>
-                        {mainText}
-                    </Text>
-                    {subText && (
-                        <Text size="sm" style={{ textAlign: 'start' }}>
-                            {subText}
-                        </Text>
-                    )}
-                    {onClick && (
-                        <Anchor color="blue" onClick={onClick} style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
-                            <Text size="sm" style={{ fontSize: '14px', fontWeight: 700 }}> Start your first study </Text>
-                            <IconArrowRight style={{ marginLeft: '5px' }} />
-                        </Anchor>
-                    )}
+                    <BannerSectionText>{mainText}</BannerSectionText>
+                    {subText && <BannerSectionText>{subText}</BannerSectionText>}
+                    {onClick && <BannerSectionLink onClick={onClick}>Start your first study</BannerSectionLink>}
                 </>
             )}
-        </Box>
+        </Stack>
     );
 };
 
 const StudyBanner: React.FC = () => {
     const { filteredStudies } = useSearchStudies();
     const { studies = [] } = useParticipantStudies() as { studies: ParticipantStudy[] };
-    const navigate = useNavigate();
+    const api = useApi();
 
     const [totalCompletedCount, setTotalCompletedCount] = useState<number>(0);
     const [badgesEarned, setBadgesEarned] = useState<number>(0);
     const [totalPointsEarned, setTotalPointsEarned] = useState<number>(0);
-    const [hasCompletedStudies, setHasCompletedStudies] = useState<boolean>(false);
     const [fiveMinuteStudies, setFiveMinuteStudies] = useState<ParticipantStudy[]>([]);
-    const [dataFetched, setDataFetched] = useState<boolean>(false);
 
     useEffect(() => {
         if (studies.length > 0 || filteredStudies.length > 0) {
-            setTotalCompletedCount(studies.reduce((sum, study) => sum + (study.completedCount || 0), 0));
-            setBadgesEarned(studies.reduce((count, study) => count + (study.learningPath?.completed ? 1 : 0), 0));
-            setTotalPointsEarned(studies.reduce((sum, study) => sum + (study.learningPath?.completed ? (study.totalPoints || 0) : 0), 0));
-            setHasCompletedStudies(filteredStudies.some((study) => study.completedAt !== undefined));
-            setFiveMinuteStudies(filteredStudies.filter((study) => study.stages && study.stages[0]?.durationMinutes === 5));
-            setDataFetched(true);
+            setTotalCompletedCount(studies.filter(study => study.completedAt).length);
+
+            const uniqueCompletedPaths = new Set(
+                studies
+                    .filter(study => study.learningPath?.completed && study.learningPath.id)
+                    .map(study => study.learningPath!.id!.toString())
+            );
+            setBadgesEarned(uniqueCompletedPaths.size);
+
+            setTotalPointsEarned(
+                studies.reduce((sum, study) => sum + (study.completedAt ? (study.totalPoints || 0) : 0), 0)
+            );
+
+            setFiveMinuteStudies(filteredStudies.filter(study =>
+                (study.stages && study.stages[0]?.durationMinutes === 5) ||
+                (!isMultiSession(study) && study.totalDuration === 5) ||
+                (isMultiSession(study) && getNextAvailableStage(study)?.durationMinutes === 5)
+            ));
         }
     }, [studies, filteredStudies]);
 
-    const startRandomFiveMinuteStudy = useCallback(() => {
+    const startRandomFiveMinuteStudy = useCallback(async () => {
         if (fiveMinuteStudies.length > 0) {
-            const randomIndex = Math.floor(Math.random() * fiveMinuteStudies.length);
-            const randomStudy = fiveMinuteStudies[randomIndex];
-            navigate(`/studies/details/${randomStudy.id}`);
+            const randomStudy = fiveMinuteStudies[Math.floor(Math.random() * fiveMinuteStudies.length)];
+            try {
+                await launchStudy(api, randomStudy.id);
+            } catch (error) {
+            }
         }
-    }, [fiveMinuteStudies, navigate]);
+    }, [fiveMinuteStudies, api]);
 
-    const formatValue = (value: number) => (value < 10 ? `0${value}` : value);
-
-    if (!dataFetched) {
-        return null;
-    }
+    const formatValue = (value: number) => value.toString().padStart(2, '0');
 
     return (
-        <Flex
-            mt='0.5rem'
+        <Group
+            mt='0.1rem'
             justify='center'
             align='center'
             wrap='wrap'
             gap='1rem'
             mx='auto'
-            style={{ maxWidth: '1200px', width: '100%' }}
+            w={'100%'}
+            h={'10.5rem'}
+            maw={'75rem'}
         >
-            <Box p="xl" style={{ flex: 1, minWidth: '250px', maxWidth: '400px' }} fz='lg'>
-                <Title order={2} mb="sm" style={{ fontSize: '24px', fontWeight: 700 }}>
-                    Achievements
-                </Title>
-                <Text mb="sm" size="sm" style={{ whiteSpace: 'pre-line' }}>
+            <Stack 
+                p="xl" 
+                mt={'-1.25rem'}
+                justify='center'
+                flex={1}
+                miw={'15.625rem'}
+                maw={'25rem'}
+                fz='lg'
+            >
+                <Title order={2} style={{ fontSize: '1.5rem' }}>Achievements</Title>
+                <Text c={colors.text} size="sm" style={{ whiteSpace: 'pre-line', marginTop: '-0.9375rem' }}>
                     Earn digital badges and additional {'\n'}
                     rewards with OpenStax Kinetic!
                 </Text>
-            </Box>
+            </Stack>
 
             <BannerSection
                 title="Studies completed"
-                mainText="You haven't completed"
-                subText="any studies yet."
+                mainText={"You haven't completed\nany studies yet."}
                 value={formatValue(totalCompletedCount)}
-                hasValue={hasCompletedStudies}
-                onClick={startRandomFiveMinuteStudy}
+                onClick={totalPointsEarned === 0 ? startRandomFiveMinuteStudy : undefined}
             />
 
             <BannerSection
                 title="Badges earned"
-                mainText="Complete all studies in a"
-                subText="category to earn your first digital badge."
+                mainText={'Complete all studies in a\ncategory to earn your\nfirst digital badge.'}
                 value={formatValue(badgesEarned)}
-                hasValue={hasCompletedStudies}
             />
 
             <BannerSection
                 title="Total points earned"
-                mainText="Reach 200 points to"
-                subText="unlock additional educational rewards."
+                mainText={'Reach 200 points to\nunlock additional\neducational rewards.'}
                 value={formatValue(totalPointsEarned)}
-                hasValue={hasCompletedStudies}
             />
-        </Flex>
+        </Group>
     );
 };
 
