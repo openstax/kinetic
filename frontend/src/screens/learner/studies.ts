@@ -37,6 +37,14 @@ export const useLearningPathStudies = (learningPath?: LearningPath) => {
     return studiesByLearningPath[learningPath.id] || []
 }
 
+export const useFetchLearningPaths = () => {
+    const { data: studies = [] } = useFetchParticipantStudies()
+    const filteredStudiesByLearningPath = studies.filter((study) => study.learningPath !== undefined)
+    const studiesByLearningPath = groupBy(filteredStudiesByLearningPath, (study) => study.learningPath?.label)
+
+    return studiesByLearningPath
+}
+
 export const useParticipantStudies = () => {
     const { data: studies = [], isLoading } = useFetchParticipantStudies()
 

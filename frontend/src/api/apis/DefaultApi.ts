@@ -24,6 +24,7 @@ import type {
   AdminStudyFilesListing,
   Analysis,
   AnalysisListing,
+  BadgeCertificateResponse,
   BannerNotice,
   BannersListing,
   Environment,
@@ -76,6 +77,8 @@ import {
     AnalysisToJSON,
     AnalysisListingFromJSON,
     AnalysisListingToJSON,
+    BadgeCertificateResponseFromJSON,
+    BadgeCertificateResponseToJSON,
     BannerNoticeFromJSON,
     BannerNoticeToJSON,
     BannersListingFromJSON,
@@ -250,6 +253,11 @@ export interface DeleteStudyRequest {
 
 export interface GetAnalysisRequest {
     id: number;
+}
+
+export interface GetBadgeCertificateRequest {
+    badgeId: string;
+    email: string;
 }
 
 export interface GetLearnerActivityReportRequest {
@@ -1247,6 +1255,50 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getAnalysis(requestParameters: GetAnalysisRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Analysis> {
         const response = await this.getAnalysisRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Fetches a PDF link associated with a badge for a given email
+     * Retrieve a PDF link for a badge
+     */
+    async getBadgeCertificateRaw(requestParameters: GetBadgeCertificateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BadgeCertificateResponse>> {
+        if (requestParameters.badgeId === null || requestParameters.badgeId === undefined) {
+            throw new runtime.RequiredError('badgeId','Required parameter requestParameters.badgeId was null or undefined when calling getBadgeCertificate.');
+        }
+
+        if (requestParameters.email === null || requestParameters.email === undefined) {
+            throw new runtime.RequiredError('email','Required parameter requestParameters.email was null or undefined when calling getBadgeCertificate.');
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters.badgeId !== undefined) {
+            queryParameters['badge_id'] = requestParameters.badgeId;
+        }
+
+        if (requestParameters.email !== undefined) {
+            queryParameters['email'] = requestParameters.email;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/badge_certificate`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BadgeCertificateResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Fetches a PDF link associated with a badge for a given email
+     * Retrieve a PDF link for a badge
+     */
+    async getBadgeCertificate(requestParameters: GetBadgeCertificateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BadgeCertificateResponse> {
+        const response = await this.getBadgeCertificateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
