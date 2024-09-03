@@ -17,6 +17,7 @@ const ResearcherAccountPage = loadAsync('Researcher Account Page', () => import(
 const EditStudy = loadAsync('Edit Study Page', () => import('./screens/researcher/studies/create/edit-study'))
 const ResearcherStudyLanding = loadAsync('New Study Landing Page', () => import('./screens/researcher/studies/create/researcher-study-landing'))
 const StudyOverview = loadAsync('Study Overview', () => import('./screens/researcher/studies/overview/study-overview'))
+const Achievements = loadAsync('Achievements', () => import('./screens/achievements'))
 
 const StudiesHomepage = () => {
     const user = useCurrentUser()
@@ -83,6 +84,7 @@ export const AppRoutes = () => {
                 { path: 'study/create', element: <ResearcherStudyLanding /> },
                 { path: 'study/overview/:id', element: <StudyOverview /> },
                 { path: 'study/edit/:id', element: <EditStudy /> },
+                { path: 'achievements', element: <Achievements /> },
                 { path: 'account', element: <AccountDetails /> },
                 { path: 'researcher-account', element: <ResearcherAccountPage /> },
                 { path: 'studies/status/:studyStatus', element: <StudiesHomepage /> },

@@ -57,4 +57,49 @@ class OpenBadgeApi
             })
   end
 
+  def get_event_id(badge_id, email, called: false)
+    data = fetch_event_response(email)
+
+    matching_item = data.find { |item| item['badge_id'] == badge_id }
+
+    if matching_item.nil? || matching_item.empty?
+      issue_badge(badge_id, [email]) unless called
+      return get_event_id(badge_id, email, called: true)
+    end
+
+    matching_item['id']
+  end
+
+  def get_pdf(badge_id, email)
+    event_id = get_event_id(badge_id, email)
+
+    # Fetching the pdf link
+    pdf_response = HTTPX.plugin(:auth)
+                     .with(headers: { 'content-type' => 'application/json' })
+                     .authorization("Bearer #{token}")
+                     .get("https://openbadgefactory.com/v1/event/#{@client_id}/#{event_id}/assertion")
+
+    data = JSON.parse(pdf_response)
+    pdf_link = data['pdf']['en']
+
+    # Fetching the pdf from pdf_link
+    pdf_response = HTTPX.plugin(:auth)
+                     .authorization("Bearer #{token}")
+                     .get(pdf_link)
+
+    { pdf: pdf_response.body }
+  end
+
+  private
+
+  def fetch_event_response(email)
+    # Response is an octet stream
+    response = HTTPX.plugin(:auth)
+                 .with(headers: { 'content-type' => 'application/json' })
+                 .authorization("Bearer #{token}")
+                 .get("https://openbadgefactory.com/v1/event/#{@client_id}?email=#{email}")
+
+    json_objects = response.body.to_s.split("\n").map(&:strip).reject(&:empty?)
+    json_objects.map { |json_str| JSON.parse(json_str) }
+  end
 end
