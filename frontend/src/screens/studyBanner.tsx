@@ -1,78 +1,54 @@
-import React, { useCallback, useEffect, useState, ReactNode } from 'react';
-import { Stack, Title, Text, Anchor, Center, Group, TitleProps, TextProps, AnchorProps } from '@mantine/core';
+import React, { useEffect, useState, ReactNode } from 'react';
+import { Stack, Title, Text, Anchor, Group, Container } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconArrowRight } from '@tabler/icons-react';
-import { useSearchStudies, useParticipantStudies } from './learner/studies';
+import { useParticipantStudies, filterStudiesBasedOnDuration } from './learner/studies';
 import { ParticipantStudy } from '@api';
-import { launchStudy, isMultiSession, getNextAvailableStage } from '@models';
+import { launchStudy } from '@models';
 import { useApi } from '@lib';
 import { colors } from '@theme';
 
-interface BannerSectionTitleProps extends TitleProps {
-    hasValue?: boolean;
-    children: ReactNode;
-}
-
-const BannerSectionTitle: React.FC<BannerSectionTitleProps> = ({ hasValue, children, ...props }) => (
-    <Title c={colors.text} order={3} size='1rem' mb='-0.25rem' ta={hasValue ? 'center' : 'left'} {...props}>
+const BannerSectionTitle: FC<{children: ReactNode}> = ({ children }) => (
+    <Title c={colors.text} order={6}>
         {children}
     </Title>
 );
 
-interface CustomTextProps extends TextProps {
-    children: ReactNode;
-}
-
-const BannerSectionValue: React.FC<CustomTextProps> = ({ children }) => (
-    <Text color="purple" size="4.375rem" fw={200} ta={'center'} lh={1.1} mt={'0.125rem'}>
+const BannerSectionValue: FC<{children: ReactNode}> = ({ children }) => (
+    <Text c={colors.purple} size="4.375rem" fw={200}>
         {children}
     </Text>
 );
 
-const BannerSectionText: React.FC<CustomTextProps> = ({ children, ...props }) => (
-    <Text c={colors.text} size="sm" mt={'0.5rem'} lh={1.2} maw={'12.5rem'} style={{ whiteSpace: 'pre-line' }} {...props}>
+const BannerSectionText: FC<{children: ReactNode}> = ({ children }) => (
+    <Text c={colors.text} size="sm" w="80%">
         {children}
     </Text>
 );
 
-interface CustomAnchorProps extends AnchorProps {
-    children: ReactNode;
-    onClick?: () => void;
-}
-
-const BannerSectionLink: React.FC<CustomAnchorProps> = ({ children, ...props }) => (
-    <Anchor c={colors.blue} style={{ display: 'flex', alignItems: 'center', marginTop: '0.3125rem' }} {...props}>
-        <Text size="sm" fw={700}>{children}</Text>
-        <IconArrowRight style={{ marginLeft: '0.3125rem' }} />
+const BannerSectionLink: FC<{children: ReactNode, onClick: () => void}> = ({ children, ...props }) => (
+    <Anchor c={colors.blue} {...props}>
+        <Group gap="xs" justify='center' align='center'>
+            <Text size="sm" fw={700}>{children}</Text>
+            <IconArrowRight size="1.2rem"/>
+        </Group>
     </Anchor>
 );
 
-interface BannerSectionProps {
-    title: string;
-    mainText: ReactNode;
-    subText?: string;
-    value?: string | number;
-    onClick?: () => void;
-}
-
-const BannerSection: React.FC<BannerSectionProps> = ({ title, mainText, subText, value, onClick }) => {
+const BannerSection: FC<{title: string, mainText: ReactNode, subText?: string, value?: string | number, onClick?: () => void}> = ({ title, mainText, subText, value, onClick }) => {
     const hasValue = value !== undefined;
 
     return (
         <Stack
             gap={0}
-            justify={hasValue ? 'center' : 'start'}
-            align={hasValue ? 'center' : 'start'}
-            miw={'12.5rem'}
-            maw={'18.75rem'}
-            ta={'start'}
-            ml={'1rem'}
-            h={'6.875rem'}
+            justify='start'
+            align={hasValue? 'center' : 'start'}
+            w="30%"
+            h="6rem"
         >
-            <BannerSectionTitle hasValue={hasValue}>{title}</BannerSectionTitle>
+            <BannerSectionTitle>{title}</BannerSectionTitle>
             {hasValue ? (
-                <Center h={'5rem'} mb={'0.625rem'}>
-                    <BannerSectionValue>{value}</BannerSectionValue>
-                </Center>
+                <BannerSectionValue>{value}</BannerSectionValue>
             ) : (
                 <>
                     <BannerSectionText>{mainText}</BannerSectionText>
@@ -85,18 +61,15 @@ const BannerSection: React.FC<BannerSectionProps> = ({ title, mainText, subText,
 };
 
 const StudyBanner: React.FC = () => {
-    const { filteredStudies } = useSearchStudies();
     const { studies = [] } = useParticipantStudies() as { studies: ParticipantStudy[] };
     const api = useApi();
 
     const [totalCompletedCount, setTotalCompletedCount] = useState<number>(0);
     const [badgesEarned, setBadgesEarned] = useState<number>(0);
     const [totalPointsEarned, setTotalPointsEarned] = useState<number>(0);
-    const [fiveMinuteStudies, setFiveMinuteStudies] = useState<ParticipantStudy[]>([]);
-    const [shouldRender, setShouldRender] = useState<boolean>(false);
 
     useEffect(() => {
-        if (studies.length > 0 || filteredStudies.length > 0) {
+        if (studies.length > 0) {
             setTotalCompletedCount(studies.filter(study => study.completedAt).length);
 
             const uniqueCompletedPaths = new Set(
@@ -110,85 +83,91 @@ const StudyBanner: React.FC = () => {
                 studies.reduce((sum, study) => sum + (study.completedAt ? (study.totalPoints || 0) : 0), 0)
             );
 
-            setFiveMinuteStudies(filteredStudies.filter(study =>
-                (study.stages && study.stages[0]?.durationMinutes === 5) ||
-                (!isMultiSession(study) && study.totalDuration === 5) ||
-                (isMultiSession(study) && getNextAvailableStage(study)?.durationMinutes === 5)
-            ));
-            setShouldRender(true);
         }
-    }, [studies, filteredStudies]);
+    }, [studies]);
 
-    const startRandomFiveMinuteStudy = useCallback(async () => {
+    const startRandomFiveMinuteStudy = () => {
+        const fiveMinuteStudies = filterStudiesBasedOnDuration(studies, new Set<Number>([5]))
         if (fiveMinuteStudies.length > 0) {
             const randomStudy = fiveMinuteStudies[Math.floor(Math.random() * fiveMinuteStudies.length)];
             try {
-                await launchStudy(api, randomStudy.id);
+                launchStudy(api, randomStudy.id);
             } catch (error) {
+                if (error instanceof Error) {
+                    notifications.show({
+                        title: 'Failed to launch study',
+                        message: error.message,
+                        color: 'red',
+                    })
+                } else {
+                    notifications.show({
+                        title: 'Failed to launch study',
+                        message: 'Unknown Error',
+                        color: 'red',
+                    })
+                }
             }
         }
-    }, [fiveMinuteStudies, api]);
+    }
 
     const formatValue = (value: number) => value.toString().padStart(2, '0');
 
     const hasData = totalCompletedCount > 0 || badgesEarned > 0 || totalPointsEarned > 0;
 
-    if (!shouldRender) {
+    if(studies.length <= 0){
         return null;
     }
 
     return (
-        <Group
-            mt='0.1rem'
-            justify='center'
-            align='center'
-            wrap='wrap'
-            gap='1rem'
-            mx='auto'
-            w={'100%'}
-            h={'10.5rem'}
-            maw={'75rem'}
-        >
-            <Stack
-                p="xl"
-                mt={'-1.25rem'}
-                justify='center'
-                flex={1}
-                miw={'15.625rem'}
-                maw={'25rem'}
-                fz='lg'
+        <Container pb="2rem" pt="2rem">
+            <Group
+                justify='space-evenly'
+                align='center'
+                wrap='wrap'
             >
-                <Title order={2} style={{ fontSize: '1.5rem' }}>Achievements</Title>
-                <Text c={colors.text} size="sm" style={{ whiteSpace: 'pre-line', marginTop: '-0.9375rem' }}>
-                    Earn digital badges and additional {'\n'}
+                <Stack
+                    justify='center'
+                    w="20%"
+                    gap={0}
+                >
+                    <Title order={3}>Achievements</Title>
+                    <Text c={colors.text} size="sm">
+                    Earn digital badges and additional
                     rewards with OpenStax Kinetic!
-                </Text>
-            </Stack>
+                    </Text>
+                </Stack>
 
-            <BannerSection
-                title="Studies completed"
-                mainText={"You haven't completed\nany studies yet."}
-                value={hasData ? formatValue(totalCompletedCount) : undefined}
-                onClick={totalPointsEarned === 0 ? startRandomFiveMinuteStudy : undefined}
-            />
+                <Group gap="md" w="60%" justify='center'>
+                    <BannerSection
+                        title="Studies completed"
+                        mainText={"You haven't completed any studies yet."}
+                        value={hasData ? formatValue(totalCompletedCount) : undefined}
+                        onClick={totalPointsEarned === 0 ? startRandomFiveMinuteStudy : () => {}}
+                    />
 
-            <BannerSection
-                title="Badges earned"
-                mainText={'Complete all studies in a\ncategory to earn your\nfirst digital badge.'}
-                value={hasData ? formatValue(badgesEarned) : undefined}
-            />
+                    <BannerSection
+                        title="Badges earned"
+                        mainText={'Complete all studies in a category to earn your first digital badge.'}
+                        value={hasData ? formatValue(badgesEarned) : undefined}
+                    />
 
-            <BannerSection
-                title="Total points earned"
-                mainText={
-                    <>
-                        {'Reach 200 points to\nunlock additional\neducational rewards\n'}
-                        <Text fw={700} fs='italic'>{'(coming soon)'}</Text>
-                    </>
-                }
-                value={hasData ? formatValue(totalPointsEarned) : undefined}
-            />
-        </Group>
+                    <BannerSection
+                        title="Total points earned"
+                        mainText={
+                            <>
+                                {'Reach 200 points to unlock additional educational rewards'}
+                                <br/>
+                                <span style={{
+                                    fontWeight: 700,
+                                    fontStyle: 'italic',
+                                }}>{'(coming soon)'}</span>
+                            </>
+                        }
+                        value={hasData ? formatValue(totalPointsEarned) : undefined}
+                    />
+                </Group>
+            </Group>
+        </Container>
     );
 };
 
