@@ -87,7 +87,7 @@ const StudyBanner: React.FC = () => {
     }, [studies]);
 
     const startRandomFiveMinuteStudy = () => {
-        const fiveMinuteStudies = filterStudiesBasedOnDuration(studies, new Set<Number>([5]))
+        const fiveMinuteStudies = filterStudiesBasedOnDuration(studies, new Set<Number>([5])).filter((study) => !study.completedAt)
         if (fiveMinuteStudies.length > 0) {
             const randomStudy = fiveMinuteStudies[Math.floor(Math.random() * fiveMinuteStudies.length)];
             try {
