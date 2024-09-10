@@ -1,7 +1,7 @@
 import { React, styled } from '@common'
 import { useRef } from 'react'
 import { ParticipantStudy } from '@api'
-import { Footer, TopNavBar } from '@components'
+import { Footer, TopNavBar, LoadingAnimation } from '@components'
 import { useEnvironment, useIsMobileDevice, useIsTabletDevice } from '@lib'
 import { useParticipantStudies, useSearchStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
@@ -88,41 +88,43 @@ const LearnerDashboard = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const { studies } = useParticipantStudies();
+
 
     if (!env.isEligible) {
         return <UnsupportedCountryModal />;
     }
 
     return (
-        <div className='studies learner' style={{ backgroundColor: colors.ash }}>
+        <div className='studies learner' style={{ backgroundColor: colors.ash, minHeight: '100vh' }}>
             <Routes>
                 <Route path={'details/:studyId'} element={<StudyDetails />} />
             </Routes>
 
             <TopNavBar />
-            <StudyBanner />
+            {studies.length > 0 ? <><StudyBanner />
 
 
-            <LearnerWelcomeModal />
+                <LearnerWelcomeModal />
 
-            <HighlightedStudies />
-            <StudiesContainer />
-            <Affix position={{ bottom: 20, left: 20 }}>
-                <IconCircleArrowUpFilled
-                    ref={scrollButtonRef}
-                    size='2rem'
-                    onClick={scrollToTop}
-                    style={{
-                        display: 'none',
-                        width: '30px', 
-                        height: '30px',
-                        color: colors.purple,
-                        cursor: 'pointer',
-                        filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1))',
-                    }}
-                />
-            </Affix>
-            <Footer includeFunders />
+                <HighlightedStudies />
+                <StudiesContainer />
+                <Affix position={{ bottom: 20, left: 20 }}>
+                    <IconCircleArrowUpFilled
+                        ref={scrollButtonRef}
+                        size='2rem'
+                        onClick={scrollToTop}
+                        style={{
+                            display: 'none',
+                            width: '30px', 
+                            height: '30px',
+                            color: colors.purple,
+                            cursor: 'pointer',
+                            filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1))',
+                        }}
+                    />
+                </Affix>
+                <Footer includeFunders /></> : <LoadingAnimation />}
         </div>
     )
 }
