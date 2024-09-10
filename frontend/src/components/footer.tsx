@@ -22,13 +22,6 @@ interface PhilanthropicSupportersLinkProps {
 const FunderTitle = () => (
     <Title
         order={2}
-        w={700}
-        style={{
-            fontFamily: 'Helvetica Neue',
-            fontSize: '32px',
-            lineHeight: '1.75rem',
-            textAlign: 'left',
-        }}
     >
     Support from scientific agencies
     </Title>
@@ -131,11 +124,11 @@ const Funders = () => {
                     <Box style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <NSFLogo />
                     </Box>
-                    {!isMobile && <Divider orientation="vertical" />}
+                    <Divider orientation={isMobile? 'horizontal' : 'vertical'} />
                     <Box style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <IESSection />
                     </Box>
-                    {!isMobile && <Divider orientation="vertical" />}
+                    <Divider orientation={isMobile? 'horizontal' : 'vertical'} />
                     <Box style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <PhilanthropicSupportersLink isMobile={isMobile} />
                     </Box>

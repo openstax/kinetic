@@ -2,6 +2,7 @@ import React, { useEffect, useState, ReactNode } from 'react';
 import { Stack, Title, Text, Anchor, Group, Container } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconArrowRight } from '@tabler/icons-react';
+import { useIsMobileDevice, useIsTabletDevice } from '@lib';
 import { useParticipantStudies, filterStudiesBasedOnDuration } from './learner/studies';
 import { ParticipantStudy } from '@api';
 import { launchStudy } from '@models';
@@ -21,30 +22,31 @@ const BannerSectionValue: FC<{children: ReactNode}> = ({ children }) => (
 );
 
 const BannerSectionText: FC<{children: ReactNode}> = ({ children }) => (
-    <Text c={colors.text} size="sm" w="80%">
+    <Text c={colors.text} size="sm">
         {children}
     </Text>
 );
 
 const BannerSectionLink: FC<{children: ReactNode, onClick: () => void}> = ({ children, ...props }) => (
     <Anchor c={colors.blue} {...props}>
-        <Group gap="xs" justify='center' align='center'>
+        <Group gap={0} justify='center' align='center'>
             <Text size="sm" fw={700}>{children}</Text>
-            <IconArrowRight size="1.2rem"/>
+            <IconArrowRight size="1.1rem"/>
         </Group>
     </Anchor>
 );
 
 const BannerSection: FC<{title: string, mainText: ReactNode, subText?: string, value?: string | number, onClick?: () => void}> = ({ title, mainText, subText, value, onClick }) => {
     const hasValue = value !== undefined;
+    const isMobile = useIsMobileDevice()
 
     return (
         <Stack
             gap={0}
             justify='start'
             align={hasValue? 'center' : 'start'}
-            w="30%"
-            h="6rem"
+            w={isMobile ? '12rem' : '10rem'}
+            h="5.75rem"
         >
             <BannerSectionTitle>{title}</BannerSectionTitle>
             {hasValue ? (
@@ -113,10 +115,8 @@ const StudyBanner: React.FC = () => {
     const formatValue = (value: number) => value.toString().padStart(2, '0');
 
     const hasData = totalCompletedCount > 0 || badgesEarned > 0 || totalPointsEarned > 0;
-
-    if(studies.length <= 0){
-        return null;
-    }
+    const isMobile = useIsMobileDevice()
+    const isTablet = useIsTabletDevice()
 
     return (
         <Container pb="2rem" pt="2rem">
@@ -126,8 +126,10 @@ const StudyBanner: React.FC = () => {
                 wrap='wrap'
             >
                 <Stack
-                    justify='center'
-                    w="20%"
+                    justify='start'
+                    align={hasData && isMobile? 'center' : 'start'}
+                    ta={hasData && isMobile? 'center': 'left'}
+                    w={isMobile ? '12rem' : isTablet ? '10rem' : '16.5rem'}
                     gap={0}
                 >
                     <Title order={3}>Achievements</Title>
@@ -137,7 +139,7 @@ const StudyBanner: React.FC = () => {
                     </Text>
                 </Stack>
 
-                <Group gap="md" w="60%" justify='center'>
+                <Group gap={isMobile? 'md' : 'xl'} justify='center' align='start'>
                     <BannerSection
                         title="Studies completed"
                         mainText={"You haven't completed any studies yet."}

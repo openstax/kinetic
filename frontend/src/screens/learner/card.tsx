@@ -42,18 +42,9 @@ const Card = styled(Box)<{ studycompleted: boolean, multisession: boolean, color
         maxHeight: 152,
     },
     [media.mobile]: {
-        minWidth: 275,
-        maxWidth: 275,
-        lineHeight: 1.2,
         margin: '0 auto',
-        padding: '1rem',
-        minHeight: 360,
-        maxHeight: 360,
-        '.study-card-image': {
-            minHeight: '35%',
-            maxHeight: '35%',
-            height: '35%',
-        },
+        border: 'none',
+        boxShadow: '0px 4px 10px 0px rgba(0, 0, 0, 0.25)',
     },
 }))
 

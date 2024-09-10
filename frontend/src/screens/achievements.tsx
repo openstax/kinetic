@@ -196,7 +196,7 @@ const Achievements:FC = () => {
                     <Tabs.Panel value="Badges">
                         <Stack c={colors.text} >
                             <Text>Explore the study paths, track your progress, and access your digital badges.</Text>
-                            <Group gap="xs" justify='flex-start' align='center'>
+                            <Group gap="md" justify='center' align='center'>
                                 {Object.entries(learningPaths).map(([learningPath, studies]) => {
                                     return <AchievementBadge key={learningPath} learningPath={learningPath} studies={studies}/>
                                 })}

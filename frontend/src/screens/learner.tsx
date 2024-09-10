@@ -2,7 +2,7 @@ import { React, styled } from '@common'
 import { useRef } from 'react'
 import { ParticipantStudy } from '@api'
 import { Footer, TopNavBar } from '@components'
-import { useEnvironment, useIsMobileDevice } from '@lib'
+import { useEnvironment, useIsMobileDevice, useIsTabletDevice } from '@lib'
 import { useParticipantStudies, useSearchStudies } from './learner/studies'
 import { StudyCard } from './learner/card'
 import { StudyDetails } from './learner/details'
@@ -21,6 +21,7 @@ import StudyBanner from './studyBanner'
 const HighlightedStudies: FC = () => {
     const { highlightedStudies } = useParticipantStudies()
     const isMobile = useIsMobileDevice()
+    const isTablet = useIsTabletDevice()
 
     const scrollToStudies = () => {
         const element = document.getElementById('all-studies-unique-id')
@@ -31,16 +32,13 @@ const HighlightedStudies: FC = () => {
 
     return (
         <Box bg={colors.navy} py='md'>
-            <Container>
+            <Container px={{ base: 16, sm: 32 }}>
                 <Stack>
-                    <Group align='center' justify='space-between'>
-                        {isMobile ?
-                            <MobileStudyCards studies={highlightedStudies} /> :
-                            <>
-                                <CuratedStudies /> 
-                                <div style={{ width: '70%' }}><DesktopStudyCards studies={highlightedStudies} /></div>
-                            </>
-                        }
+                    <Group align='center' justify={isMobile? 'center' : isTablet? 'space-evenly' : 'space-between'}>
+                        <CuratedStudies /> 
+                        <Box w={isTablet || isMobile? '22.5rem' : '70%'}>
+                            {isMobile || isTablet? <MobileStudyCards studies={highlightedStudies} /> : <DesktopStudyCards studies={highlightedStudies} />}
+                        </Box>
                     </Group>
                     <Group c={colors.green} justify='center' align='center'>
                         <Stack justify='center' align='center' gap='0' style={{ cursor: 'pointer' }} onClick={()=> scrollToStudies()}>
@@ -56,12 +54,12 @@ const HighlightedStudies: FC = () => {
 
 const CuratedStudies: FC = () => {
     return (
-        <Stack c={colors.white} w='23%'>
+        <Stack c={colors.white} w="15rem" ta="left" style={{ hyphens: 'auto', wordBreak: 'break-word' }}>
             <Title order={2}>Curated Studies</Title>
             <Title order={5} mt='-1.2rem'>by our learning scientists</Title>
 
             <Stack>
-                <Text pr='1.5rem'>Deepen your understanding of learning habits with scientific studies currated by our team of education researchers.</Text>
+                <Text>Deepen your understanding of learning habits with scientific studies currated by our team of education researchers.</Text>
                 <Text>Accelerate your growth and tailor your path to your own needs.</Text>
             </Stack>
         </Stack>
@@ -174,7 +172,7 @@ export const SearchBar: FC<{
 
 export const StudiesTitle: FC<{search: string, filteredStudies: ParticipantStudy[]}> = () => {
     return (
-        <Title order={2} id='all-studies-unique-id' style={{ paddingLeft: '2.5rem',paddingRight: '2.5rem' }}>View All Studies</Title>
+        <Title order={2} id='all-studies-unique-id'>View All Studies</Title>
     )
 }
 
@@ -284,8 +282,9 @@ const QuickLinks: FC<{filteredStudies: ParticipantStudy[]}> = ({ filteredStudies
     return (
         <Stack 
             w='25%' 
-            p='1rem 1.5rem 1.5rem 2.5rem'
             justify='flex-start'
+            pt="1rem"
+            pr="2.5rem"
             gap='lg'
             display={ isMobile? 'none' : 'flex' }
         >
@@ -316,14 +315,16 @@ const QuickLinks: FC<{filteredStudies: ParticipantStudy[]}> = ({ filteredStudies
 
 export const StudiesContainer = () => {
     const { search, setSearch, duration, setDuration, filteredStudies } = useSearchStudies()
+    const isMobile = useIsMobileDevice()
+    const isTablet = useIsTabletDevice()
 
     return (
-        <Container pt='1.5rem'>
+        <Container px={{ base: 16, sm: 32 }} pt='1.5rem'>
             <Stack gap='lg'>
                 <StudiesTitle search={search} filteredStudies={filteredStudies} />
                 <Flex gap='xl'>
-                    <QuickLinks filteredStudies={filteredStudies} />
-                    <Stack w='75%' pl='1rem'>
+                    {!isMobile && !isTablet ? <QuickLinks filteredStudies={filteredStudies} /> : ''}
+                    <Stack w={!isMobile && !isTablet? '75%' : '100%'}>
                         <Group justify='space-between' wrap='wrap' pt='.5rem' pb='0.1rem'>
                             <Flex justify='center' align='center' gap='md'>
                                 <StudyDuration duration={duration} durationText={5} setDuration={setDuration}></StudyDuration>
@@ -347,7 +348,18 @@ export const StudiesContainer = () => {
 export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies }) => {
 
     return (
-        <Box>
+        <Box style={{ overflow: 'hidden' }}>
+            <style>
+                {`
+                    .swiper-pagination-bullet {
+                        background-color: ${colors.blue} !important;
+                    }
+                    
+                    .swiper-pagination-bullet-active {
+                        background-color: ${colors.purple} !important;
+                    }
+                `}
+            </style>
             <Swiper
                 effect={'cards'}
                 slidesPerView={'auto'}
@@ -369,7 +381,7 @@ export const MobileStudyCards: FC<{studies: ParticipantStudy[]}> = ({ studies })
                 }}
             >
                 {studies.map(study => (
-                    <SwiperSlide key={study.id} className="pb-1" style={{ paddingTop: '1rem' }}>
+                    <SwiperSlide key={study.id} className="pb-1" style={{ paddingTop: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <StudyCard study={study}/>
                     </SwiperSlide>
                 ))}
