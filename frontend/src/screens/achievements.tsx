@@ -3,7 +3,7 @@ import { Box, Text, Button, Container, Title, Tabs, RingProgress, Image, Group, 
 import { useDisclosure } from '@mantine/hooks';
 import { useApi } from '@lib';
 import { launchStudy } from '@models';
-import { TopNavBar, Footer } from '@components';
+import { TopNavBar, Footer, LoadingAnimation } from '@components';
 import { colors } from '@theme';
 import { useFetchLearningPaths } from './learner/studies';
 import { ParticipantStudy } from '@api';
@@ -179,7 +179,7 @@ const Achievements:FC = () => {
     return (
         <Box>
             <TopNavBar />
-            <Container size="lg" my="xl">
+            { Object.keys(learningPaths).length > 0 ? <><Container size="lg" my="xl">
                 <Title mb="lg" mt="lg" order={2}>
                     Achievements
                 </Title>
@@ -196,7 +196,7 @@ const Achievements:FC = () => {
                     <Tabs.Panel value="Badges">
                         <Stack c={colors.text} >
                             <Text>Explore the study paths, track your progress, and access your digital badges.</Text>
-                            <Group gap="xs" justify='flex-start' align='center'>
+                            <Group gap="md" justify='center' align='center'>
                                 {Object.entries(learningPaths).map(([learningPath, studies]) => {
                                     return <AchievementBadge key={learningPath} learningPath={learningPath} studies={studies}/>
                                 })}
@@ -205,7 +205,7 @@ const Achievements:FC = () => {
                     </Tabs.Panel>
                 </Tabs>
             </Container>
-            <Footer />
+            <Footer /> </> : <LoadingAnimation />}
         </Box>
     );
 };
