@@ -23,6 +23,16 @@ class OpenBadgeApi
     end
   end
 
+  def fetch_badges
+    response = HTTPX.plugin(:auth)
+                 .with(headers: { 'content-type' => 'application/json' })
+                 .authorization("Bearer #{token}")
+                 .get("https://openbadgefactory.com/v1/badge/#{@client_id}")
+
+    json_objects = response.body.to_s.split("\n").map(&:strip).reject(&:empty?)
+    json_objects.map { |json_str| JSON.parse(json_str) }
+  end
+
   def badge_info(badge_id)
     return if badge_id.blank?
 
