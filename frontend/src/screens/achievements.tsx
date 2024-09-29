@@ -24,6 +24,8 @@ const AchievementsButton: FC<{isComplete: boolean, studies: ParticipantStudy[], 
         })
     }
 
+    const [disabled, setDisabled] = useState(false)
+
     const convertBase64ToPdf = (base64PDF: string) => {
         const byteCharacters = atob(base64PDF);
         const byteNumbers = new Array(byteCharacters.length);
@@ -50,20 +52,28 @@ const AchievementsButton: FC<{isComplete: boolean, studies: ParticipantStudy[], 
                     return
                 }
 
+                notifications.show({
+                    color: 'green',
+                    title: 'Fecthing Certificate',
+                    message: 'Please wait, while we retrieve your certificate'
+                })
+                setDisabled(true)
                 const response = await api.getBadgeCertificate({
                     badgeId: studies[0].learningPath?.badgeId || '',
                     email: email,
                 });
                 const pdfUrl = convertBase64ToPdf(response.pdf || '');
+                setDisabled(false)
                 window.open(pdfUrl, '_blank');
             }catch(error){
                 sendErrorNotification()
+                setDisabled(false)
             }
         }       
     }
 
     return (
-        <Button onClick={() => handleButtonClick()} variant='outline' c={colors.btnPurple} pl={35} pr={35} style={{ border: `1px solid ${colors.purple}` }}>
+        <Button disabled={disabled} onClick={() => handleButtonClick()} variant='outline' c={colors.btnPurple} pl={35} pr={35} style={{ border: `1px solid ${colors.purple}` }}>
             {isComplete? 'Download Certificate' : isNew? 'Start' : 'Continue'}
         </Button>
     )
@@ -176,10 +186,13 @@ const Achievements:FC = () => {
     const [selectedTab, setSelectedTab] = useState('Badges');
     const learningPaths = useFetchLearningPaths()
 
+    if (!Object.keys(learningPaths).length) {
+        return <LoadingAnimation />
+    }
     return (
         <Box>
             <TopNavBar />
-            { Object.keys(learningPaths).length > 0 ? <><Container size="lg" my="xl">
+            <Container size="lg" my="xl">
                 <Title mb="lg" mt="lg" order={2}>
                     Achievements
                 </Title>
@@ -205,7 +218,7 @@ const Achievements:FC = () => {
                     </Tabs.Panel>
                 </Tabs>
             </Container>
-            <Footer /> </> : <LoadingAnimation />}
+            <Footer /> 
         </Box>
     );
 };
