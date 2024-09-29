@@ -55,7 +55,7 @@ const AchievementsButton: FC<{isComplete: boolean, studies: ParticipantStudy[], 
                 notifications.show({
                     color: 'green',
                     title: 'Fecthing Certificate',
-                    message: 'Please wait, while we retrieve your certificate'
+                    message: 'Please wait, while we retrieve your certificate',
                 })
                 setDisabled(true)
                 const response = await api.getBadgeCertificate({
