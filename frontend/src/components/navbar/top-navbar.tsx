@@ -93,7 +93,6 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                             }}
                         >
                             {!isMobile &&
-                                !user.isAdministrator &&
                                 !user.isResearcher && (
                                 <NavbarStyledLink to='/studies'>
                                     <Flex
@@ -107,7 +106,6 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({ className }) => {
                             )}
 
                             {!isMobile &&
-                                !user.isAdministrator &&
                                 !user.isResearcher && (
                                 <NavbarStyledLink
                                     to='/achievements'
