@@ -134,8 +134,7 @@ const StudyBanner: React.FC = () => {
                 >
                     <Title order={3}>Achievements</Title>
                     <Text c={colors.text} size="sm">
-                    Earn digital badges and additional
-                    rewards with OpenStax Kinetic!
+                    Showcase your accomplishments with OpenStax Kinetic digital badges!
                     </Text>
                 </Stack>
 
@@ -153,6 +152,8 @@ const StudyBanner: React.FC = () => {
                         value={hasData ? formatValue(badgesEarned) : undefined}
                     />
 
+                    {/* 
+                    TODO: Uncomment it when points are ready
                     <BannerSection
                         title="Total points earned"
                         mainText={
@@ -166,7 +167,9 @@ const StudyBanner: React.FC = () => {
                             </>
                         }
                         value={hasData ? formatValue(totalPointsEarned) : undefined}
-                    />
+                    /> 
+                    
+                    */}
                 </Group>
             </Group>
         </Container>

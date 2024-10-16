@@ -11,7 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { EffectCards,Pagination } from 'swiper/modules'
 import { LearnerWelcomeModal } from './learner/learner-welcome-modal'
 import { UnsupportedCountryModal } from './learner/unsupported-country-modal'
-import { Affix, Box, Container, Flex, Divider, Group, ActionIcon, Stack, Text, TextInput, Title, ScrollArea } from '@mantine/core'
+import { Box, Container, Flex, Divider, Group, ActionIcon, Stack, Text, TextInput, Title, ScrollArea } from '@mantine/core'
 import { IconSearch, IconX, IconPlus, IconMinus, IconChevronLeft, IconChevronRight, IconChevronDown,IconCircleArrowUpFilled } from '@tabler/icons-react'
 import { groupBy, orderBy, uniqBy, sortBy, filter } from 'lodash'
 import { colors } from '@theme'
@@ -59,7 +59,7 @@ const CuratedStudies: FC = () => {
             <Title order={5} mt='-1.2rem'>by our learning scientists</Title>
 
             <Stack>
-                <Text>Deepen your understanding of learning habits with scientific studies currated by our team of education researchers.</Text>
+                <Text>Deepen your understanding of how you learn with expert curated scientific studies.</Text>
                 <Text>Accelerate your growth and tailor your path to your own needs.</Text>
             </Stack>
         </Stack>
@@ -68,28 +68,7 @@ const CuratedStudies: FC = () => {
 
 const LearnerDashboard = () => {
     const env = useEnvironment()
-    const scrollButtonRef = useRef<SVGSVGElement>(null);
-
-    const scrollToTop = () => {
-        window.scroll({ top: 0, behavior: 'smooth' });
-    };
-    useEffect(() => {
-        const handleScroll = () => {
-            if (scrollButtonRef.current) {
-                if (window.scrollY > window.innerHeight * 0.25) {
-                    scrollButtonRef.current.style.display = 'block';
-                } else {
-                    scrollButtonRef.current.style.display = 'none';
-                }
-            }
-        };
-      
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
     const { studies } = useParticipantStudies();
-
 
     if (!env.isEligible) {
         return <UnsupportedCountryModal />;
@@ -109,21 +88,6 @@ const LearnerDashboard = () => {
 
                 <HighlightedStudies />
                 <StudiesContainer />
-                <Affix position={{ bottom: 20, left: 20 }}>
-                    <IconCircleArrowUpFilled
-                        ref={scrollButtonRef}
-                        size='2rem'
-                        onClick={scrollToTop}
-                        style={{
-                            display: 'none',
-                            width: '30px', 
-                            height: '30px',
-                            color: colors.purple,
-                            cursor: 'pointer',
-                            filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1))',
-                        }}
-                    />
-                </Affix>
                 <Footer includeFunders /></> : <LoadingAnimation />}
         </div>
     )
@@ -319,9 +283,48 @@ export const StudiesContainer = () => {
     const { search, setSearch, duration, setDuration, filteredStudies } = useSearchStudies()
     const isMobile = useIsMobileDevice()
     const isTablet = useIsTabletDevice()
+    const scrollButtonRef = useRef<SVGSVGElement>(null);
+
+    const scrollToTop = () => {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (scrollButtonRef.current) {
+                if (window.scrollY > window.innerHeight * 0.25) {
+                    scrollButtonRef.current.style.display = 'block';
+                } else {
+                    scrollButtonRef.current.style.display = 'none';
+                }
+            }
+        };
+      
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     return (
-        <Container px={{ base: 16, sm: 32 }} pt='1.5rem'>
+
+        
+        <Container px={{ base: 16, sm: 32 }} pt='1.5rem' pos="relative">
+            <IconCircleArrowUpFilled
+                        size='2rem'
+                        ref={scrollButtonRef}
+                        onClick={scrollToTop}
+                        
+                        style={{
+                            display: 'none',
+                            position: 'fixed',
+                            bottom: 20,
+                            marginLeft: -60,
+                            width: '30px', 
+                            height: '30px',
+                            color: colors.purple,
+                            cursor: 'pointer',
+                            filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1))',
+                        }}
+            />
             <Stack gap='lg'>
                 <StudiesTitle search={search} filteredStudies={filteredStudies} />
                 <Flex gap='xl'>

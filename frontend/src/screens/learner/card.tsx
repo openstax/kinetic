@@ -138,7 +138,13 @@ const PointsAndDuration: FC<StudyCardProps> = ({ study }) => {
     return (
         <Group mt='auto' justify='space-between' align='center' w='100%' c={colors.purple}>
             <Text size='xs'>
-                <span>{getCurrentStudyDuration(study)} min | {getPointsForCurrentStage(study)} pts </span>
+                {/* 
+                TODO: Uncomment it when points are ready
+                <span>{getCurrentStudyDuration(study)} min | {getPointsForCurrentStage(study)} pts </span> 
+                */}
+
+                {/* TODO: Remove the below field when points are ready */}
+                <span>{getCurrentStudyDuration(study)} min </span>
             </Text>
             <Text size='xs'>
                 {isMultiSession(study) && <span>Session {getTotalCompletedSessions(study)}/{study.stages?.length} </span>}
@@ -193,7 +199,8 @@ const StudyDetails: React.FC<{ study: ParticipantStudy }> = ({ study }) => {
 
             <Stack gap='0.25rem'>
                 <Title order={4}>{study.titleForParticipants}</Title>
-                <Text size='sm' c={colors.gray70}>{study.totalDuration} mins | {study.totalPoints} pts</Text>
+                {/* <Text size='sm' c={colors.gray70}>{study.totalDuration} mins | {study.totalPoints} pts</Text> */}
+                <Text size='sm' c={colors.gray70}>{study.totalDuration} mins </Text>
             </Stack>
 
             <MultiSessionBar study={study} />
