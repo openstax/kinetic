@@ -309,21 +309,21 @@ export const StudiesContainer = () => {
         
         <Container px={{ base: 16, sm: 32 }} pt='1.5rem' pos="relative">
             <IconCircleArrowUpFilled
-                        size='2rem'
-                        ref={scrollButtonRef}
-                        onClick={scrollToTop}
+                size='2rem'
+                ref={scrollButtonRef}
+                onClick={scrollToTop}
                         
-                        style={{
-                            display: 'none',
-                            position: 'fixed',
-                            bottom: 20,
-                            marginLeft: -60,
-                            width: '30px', 
-                            height: '30px',
-                            color: colors.purple,
-                            cursor: 'pointer',
-                            filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1))',
-                        }}
+                style={{
+                    display: 'none',
+                    position: 'fixed',
+                    bottom: 20,
+                    marginLeft: -60,
+                    width: '30px', 
+                    height: '30px',
+                    color: colors.purple,
+                    cursor: 'pointer',
+                    filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1))',
+                }}
             />
             <Stack gap='lg'>
                 <StudiesTitle search={search} filteredStudies={filteredStudies} />

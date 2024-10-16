@@ -123,7 +123,7 @@ const AdditionalSession: FC<{
                 </Box>
 
                 {/* TODO: Remove display: none when points are ready */}
-                <Box gap='xlarge' style={{display: "none"}}>
+                <Box gap='xlarge' style={{ display: 'none' }}>
                     <Col sm={4} direction='column' gap>
                         <FieldTitle>Session Points</FieldTitle>
                         <small>Each additional session observes a 5pt increment from previous session points to support learner engagement.</small>

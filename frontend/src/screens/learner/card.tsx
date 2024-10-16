@@ -1,7 +1,7 @@
 import { cx, React, useState } from '@common'
 import { Box, StudyCardImage } from '@components'
 import { useEnvironment, useIsMobileDevice, useApi } from '@lib'
-import { isMultiSession, getStudyPi, getStudyLead, launchStudy, isStudyLaunchable, getPointsForCurrentStage, getCurrentStudyDuration, getNextAvailableStage } from '@models'
+import { isMultiSession, getStudyPi, getStudyLead, launchStudy, isStudyLaunchable, getCurrentStudyDuration, getNextAvailableStage } from '@models'
 import { ParticipantStudy, Study } from '@api'
 import styled from '@emotion/styled'
 import { colors, media } from '@theme'

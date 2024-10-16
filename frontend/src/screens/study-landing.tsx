@@ -43,6 +43,9 @@ export default function StudyLanding() {
             }),
         });
         */
+
+        // Dummy return
+        return points;
     };
 
     useEffect(() => {
