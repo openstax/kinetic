@@ -65,6 +65,8 @@ gem 'sssecrets' # for generating api keys
 
 gem 'image_processing'
 
+gem 'rufus-scheduler'
+
 group :test do
   # Any test specific gems
 end
