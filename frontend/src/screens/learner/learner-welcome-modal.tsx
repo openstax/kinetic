@@ -56,8 +56,17 @@ const WelcomeStep: FC<{
                     Welcome to OpenStax Kinetic
                 </Title>
 
+                {/* 
+                TODO: Uncomment this when points are ready
                 <Title order={5} c={colors.text}>
                     Participate in educational research and be ahead of the game when it comes to understanding yourself and your learning techniques. Earn points, recognition badges, and the opportunity to connect with learning experts.
+                </Title> 
+                
+                */}
+
+                {/* TODO: Remove the below filed when points are ready */}
+                <Title order={5} c={colors.text}>
+                    Participate in educational research and be ahead of the game when it comes to understanding yourself and your learning techniques.
                 </Title>
 
                 <Checkbox color='purple'
@@ -104,9 +113,15 @@ const EarnStep: FC<{onClose: () => void}> = ({ onClose }) => {
             </Box>
 
             <Stack gap='xl' style={{ flex: 2 }} mb='xl'>
+
+                {/*   
+                TODO: Uncomment it when points are ready
+
                 <Title order={1} c='purple'>
                     Earn your first 10 points!
-                </Title>
+                </Title> 
+                
+                */}
 
                 <Title order={5} c={colors.text}>
                     Take a Kinetic study and discover its learning benefits. Plus, earn recognition badges and unlock access to additional learning rewards.

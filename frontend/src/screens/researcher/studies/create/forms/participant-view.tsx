@@ -194,29 +194,39 @@ export const ParticipantView: FC<{study: Study}> = ({ study }) => {
 
                     <Box gap='xlarge'>
                         <Col sm={4} direction='column' gap>
+                            {/* 
+                            TODO: Uncomment it when points are ready
+
                             <FieldTitle required>Duration & points</FieldTitle>
-                            <small>Select the option that best describes your estimated study duration. Study points are based on duration.</small>
+                            <small>Select the option that best describes your estimated study duration. Study points are based on duration.</small> 
+                            
+                            */}
+
+                            {/* Remove the 2 fields below when points are ready */}
+                            <FieldTitle required>Duration</FieldTitle>
+                            <small>Select the option that best describes your estimated study duration.</small>
                         </Col>
 
                         <Col sm={6} direction='column'>
                             <Stack>
+                                {/*TODO: Bring back points into label when points are ready */}
                                 <Radio
                                     name='stages.0.points'
-                                    label='~5 minutes: 10 pts'
+                                    label='~5 minutes'
                                     value={10}
                                     defaultChecked={firstSession?.points === 10}
                                     onChange={setDurationAndPoints}
                                 />
                                 <Radio
                                     name='stages.0.points'
-                                    label='~15 minutes: 20 pts'
+                                    label='~15 minutes'
                                     value={20}
                                     defaultChecked={firstSession?.points === 20}
                                     onChange={setDurationAndPoints}
                                 />
                                 <Radio
                                     name='stages.0.points'
-                                    label='~25 minutes: 30 pts'
+                                    label='~25 minutes'
                                     value={30}
                                     defaultChecked={firstSession?.points === 30}
                                     onChange={setDurationAndPoints}

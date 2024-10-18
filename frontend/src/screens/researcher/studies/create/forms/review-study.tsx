@@ -157,8 +157,18 @@ const AdditionalSessionsOverview: FC<{ study: Study }> = ({ study }) => {
                         if (index === 0) return null
                         return (
                             <Col key={stage.order}>
+                                {/* 
+                                TODO: Uncomment it when points are ready
+
                                 <small>
                                     Session {index + 1}: {stage.durationMinutes} minutes, {stage.points} points
+                                </small> 
+                                
+                                */}
+
+                                {/* Remove the below field when points are readt */}
+                                <small>
+                                    Session {index + 1}: {stage.durationMinutes} minutes
                                 </small>
                                 <small>
                                     Participant Feedback: {stage.feedbackTypes?.map(capitalize).join(', ')}

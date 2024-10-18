@@ -18,11 +18,11 @@ import {
     Text,
     Title,
 } from '@mantine/core';
-import { IconCheck } from '@tabler/icons-react'
+// import { IconCheck } from '@tabler/icons-react'
 import Markdown from 'react-markdown'
 import { useLearningPathStudies } from './learner/studies';
 import { CompactStudyCard } from '../components/study/compact-study-card';
-import { notifications } from '@mantine/notifications';
+// import { notifications } from '@mantine/notifications';
 
 export default function StudyLanding() {
     const env = useEnvironment()
@@ -30,6 +30,8 @@ export default function StudyLanding() {
     const learningPathStudies = useLearningPathStudies(study?.learningPath)
 
     const showEarnedPointsNotification = (points: number) => {
+
+        /* TODO: Uncomment it when points are ready
         notifications.show({
             title: `You just earned ${points} points!`,
             message: 'The longer the study, the more points you earn. Reach 200 points to unlock additional rewards.',
@@ -40,6 +42,10 @@ export default function StudyLanding() {
                 description: { fontSize: '12px' },
             }),
         });
+        */
+
+        // Dummy return
+        return points;
     };
 
     useEffect(() => {
