@@ -19,10 +19,11 @@ class LearnerActivityReport
       'Study ID',
       'Participant Title',
       'Researcher Title',
+      'Study Path Title',
+      'Completed Study Path',
       'Study Category',
       'Stage ID',
       'Stage Order',
-      'Stage Points',
       'Stage Est Duration',
       'Started At',
       'Completed At',
@@ -35,7 +36,6 @@ class LearnerActivityReport
 
   def get_users(launches)
     @user_uuids = launches.clone.pluck('user_id')
-
     UserInfo.for_uuids(@user_uuids)
   end
 
@@ -45,14 +45,38 @@ class LearnerActivityReport
 
       account = users[launch.user_id] || {}
 
+      learning_path = launch.stage.study.learning_path
+      learning_path_title = ''
+      total_studies = 0
+      completed_studies = 0
+      current_study_led_to_completion = false
+
+      if learning_path
+        total_studies = learning_path.studies.count
+        learning_path_title = learning_path.label
+        completed_studies = learning_path.studies
+                                        .joins(:launched_stages)
+                                        .where(launched_stages: { user_id: launch.user_id })
+                                        .where.not(launched_stages: { completed_at: nil })
+
+        completed_studies_count = completed_studies.count
+        latest_completed_study = completed_studies.order('launched_stages.completed_at DESC').first
+
+        if latest_completed_study && latest_completed_study.id == launch.stage.study.id &&
+          completed_studies_count == total_studies
+          current_study_led_to_completion = true
+        end
+      end
+
       csv << [
         launch.stage.study.id,
         launch.stage.study.title_for_participants,
         launch.stage.study.title_for_researchers,
+        learning_path_title,
+        current_study_led_to_completion,
         launch.stage.study.category,
         launch.stage.id,
         launch.stage.order,
-        launch.stage.points,
         launch.stage.duration_minutes,
         launch.first_launched_at,
         launch.completed_at,
