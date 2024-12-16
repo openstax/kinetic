@@ -115,4 +115,11 @@ class UserMailer < ApplicationMailer
     end
   end
 
+  def send_report
+    attachments['admin_report.csv'] = params[:csv]
+    mail(
+      to: params[:email], 
+      subject: 'Requested Admin Report'
+    ) { |format| format.text { render plain: 'Attached is the requested admin report.' } }
+  end
 end
