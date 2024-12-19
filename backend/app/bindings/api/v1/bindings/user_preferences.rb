@@ -15,11 +15,8 @@ require 'time'
 
 module Api::V1::Bindings
   class UserPreferences
-    # User wishes to receive email about cycle deadlines
-    attr_accessor :cycle_deadlines_email
-
-    # User wishes to receive email about price deadlines
-    attr_accessor :prize_cycle_email
+    # User wishes to receive email when new digital badge becomes available
+    attr_accessor :digital_badge_available_email
 
     # User wishes to receive email about study availibility
     attr_accessor :study_available_email
@@ -36,8 +33,7 @@ module Api::V1::Bindings
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'cycle_deadlines_email' => :'cycle_deadlines_email',
-        :'prize_cycle_email' => :'prize_cycle_email',
+        :'digital_badge_available_email' => :'digital_badge_available_email',
         :'study_available_email' => :'study_available_email',
         :'session_available_email' => :'session_available_email',
         :'has_viewed_analysis_tutorial' => :'has_viewed_analysis_tutorial',
@@ -53,8 +49,7 @@ module Api::V1::Bindings
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'cycle_deadlines_email' => :'Boolean',
-        :'prize_cycle_email' => :'Boolean',
+        :'digital_badge_available_email' => :'Boolean',
         :'study_available_email' => :'Boolean',
         :'session_available_email' => :'Boolean',
         :'has_viewed_analysis_tutorial' => :'Boolean',
@@ -83,12 +78,8 @@ module Api::V1::Bindings
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'cycle_deadlines_email')
-        self.cycle_deadlines_email = attributes[:'cycle_deadlines_email']
-      end
-
-      if attributes.key?(:'prize_cycle_email')
-        self.prize_cycle_email = attributes[:'prize_cycle_email']
+      if attributes.key?(:'digital_badge_available_email')
+        self.digital_badge_available_email = attributes[:'digital_badge_available_email']
       end
 
       if attributes.key?(:'study_available_email')
@@ -126,8 +117,7 @@ module Api::V1::Bindings
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          cycle_deadlines_email == o.cycle_deadlines_email &&
-          prize_cycle_email == o.prize_cycle_email &&
+          digital_badge_available_email == o.digital_badge_available_email &&
           study_available_email == o.study_available_email &&
           session_available_email == o.session_available_email &&
           has_viewed_analysis_tutorial == o.has_viewed_analysis_tutorial &&
@@ -143,7 +133,7 @@ module Api::V1::Bindings
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [cycle_deadlines_email, prize_cycle_email, study_available_email, session_available_email, has_viewed_analysis_tutorial, has_viewed_welcome_message].hash
+      [digital_badge_available_email, study_available_email, session_available_email, has_viewed_analysis_tutorial, has_viewed_welcome_message].hash
     end
 
     # Builds the object from hash
