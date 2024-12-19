@@ -123,16 +123,9 @@ export default function AccountDetails() {
 
                         <InputField
                             type="checkbox"
-                            name="cycleDeadlinesEmail"
-                            className="prizeCycleDeadlineEmail"
-                            label="Notify me of upcoming prize cycle deadlines"
-                        />
-
-                        <InputField
-                            type="checkbox"
-                            name="prizeCycleEmail"
-                            className="newPrizeCycleEmail"
-                            label="Notify me of the start of a new prize cycle"
+                            name="digitalBadgeAvailableEmail"
+                            className="newDigitalBadgeAvailableEmail"
+                            label="Notify me of when a new digital badge is available"
                         />
 
                         <InputField

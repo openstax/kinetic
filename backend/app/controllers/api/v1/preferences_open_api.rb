@@ -6,13 +6,9 @@ class Api::V1::PreferencesOpenApi
   openapi_component do
 
     schema :UserPreferences do
-      property :cycle_deadlines_email do
+      property :digital_badge_available_email do
         key :type, :boolean
-        key :description, 'User wishes to receive email about cycle deadlines'
-      end
-      property :prize_cycle_email do
-        key :type, :boolean
-        key :description, 'User wishes to receive email about price deadlines'
+        key :description, 'User wishes to receive email when new digital badge becomes available'
       end
       property :study_available_email do
         key :type, :boolean

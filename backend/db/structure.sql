@@ -779,14 +779,13 @@ ALTER SEQUENCE public.study_researchers_id_seq OWNED BY public.study_researchers
 CREATE TABLE public.user_preferences (
     id bigint NOT NULL,
     user_id uuid NOT NULL,
-    cycle_deadlines_email boolean DEFAULT false NOT NULL,
-    prize_cycle_email boolean DEFAULT false NOT NULL,
     study_available_email boolean DEFAULT false NOT NULL,
     session_available_email boolean DEFAULT true NOT NULL,
     created_at timestamp(6) with time zone NOT NULL,
     updated_at timestamp(6) with time zone NOT NULL,
     has_viewed_analysis_tutorial boolean DEFAULT false,
-    has_viewed_welcome_message boolean DEFAULT false
+    has_viewed_welcome_message boolean DEFAULT false,
+    digital_badge_available_email boolean DEFAULT false NOT NULL
 );
 
 
@@ -1477,6 +1476,7 @@ ALTER TABLE ONLY public.response_exports
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20241219132405'),
 ('20240718193802'),
 ('20240718103317'),
 ('20240712192733'),

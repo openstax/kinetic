@@ -24,8 +24,7 @@ RSpec.describe 'Environment', api: :v1 do
         expect(response).to have_http_status(:ok)
         expect(response_hash).to match(
           a_hash_including(
-            cycle_deadlines_email: false,
-            prize_cycle_email: false,
+            digital_badge_available_email: false,
             session_available_email: true,
             study_available_email: false
           )
@@ -37,13 +36,12 @@ RSpec.describe 'Environment', api: :v1 do
       before { stub_current_user(user_id) }
 
       it 'returns their saved preferences' do
-        UserPreferences.create!(user_id:, cycle_deadlines_email: true)
+        UserPreferences.create!(user_id:, digital_badge_available_email: true)
         get '/api/v1/preferences'
         expect(response).to have_http_status(:ok)
         expect(response_hash).to match(
           a_hash_including(
-            cycle_deadlines_email: true,
-            prize_cycle_email: false,
+            digital_badge_available_email: true,
             session_available_email: true,
             study_available_email: false
           )
@@ -56,7 +54,7 @@ RSpec.describe 'Environment', api: :v1 do
   describe 'update' do
     context 'when no user is logged in' do
       it 'rejects the request' do
-        post '/api/v1/preferences', params: { preferences: { cycle_deadlines_email: false } }
+        post '/api/v1/preferences', params: { preferences: { digital_badge_available_email: true } }
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -66,13 +64,13 @@ RSpec.describe 'Environment', api: :v1 do
 
       it 'updates' do
         expect {
-          post '/api/v1/preferences', params: { preferences: { cycle_deadlines_email: false } }
+          post '/api/v1/preferences', params: { preferences: { digital_badge_available_email: true } }
           expect(response).to have_http_status(:accepted)
         }.to change { UserPreferences.count }.by(1)
-        expect(UserPreferences.for_user_id(user_id).cycle_deadlines_email).to be false
+        expect(UserPreferences.for_user_id(user_id).digital_badge_available_email).to be true
 
-        post '/api/v1/preferences', params: { preferences: { cycle_deadlines_email: true } }
-        expect(UserPreferences.for_user_id(user_id).cycle_deadlines_email).to be true
+        post '/api/v1/preferences', params: { preferences: { digital_badge_available_email: false } }
+        expect(UserPreferences.for_user_id(user_id).digital_badge_available_email).to be false
       end
 
       it 'updates the settings' do
