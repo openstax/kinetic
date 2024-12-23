@@ -2,6 +2,7 @@
 
 require 'json'
 require 'singleton'
+require 'uri'
 
 class OpenBadgeApi
   include Singleton
@@ -104,10 +105,16 @@ class OpenBadgeApi
 
   def fetch_event_response(email)
     # Response is an octet stream
+    
+    base_url = "https://openbadgefactory.com/v1/event/#{@client_id}"
+    query_params = URI.encode_www_form(email: email)
+
+    url = "#{base_url}?#{query_params}"
+
     response = HTTPX.plugin(:auth)
-                 .with(headers: { 'content-type' => 'application/json' })
-                 .authorization("Bearer #{token}")
-                 .get("https://openbadgefactory.com/v1/event/#{@client_id}?email=#{email}")
+                    .with(headers: { 'content-type' => 'application/json' })
+                    .authorization("Bearer #{token}")
+                    .get(url)
 
     json_objects = response.body.to_s.split("\n").map(&:strip).reject(&:empty?)
     json_objects.map { |json_str| JSON.parse(json_str) }
