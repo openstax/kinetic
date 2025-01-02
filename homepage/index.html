@@ -107,7 +107,7 @@
 
       .title-sub {
         font-size: 1.8rem;
-        width: 70vw;
+        width: 80rem;
       }
 
       .hero-title {
@@ -127,6 +127,14 @@
         padding: 2rem 4rem;
       }
 
+      .login {
+        text-decoration: none;
+        cursor: pointer;
+        border-bottom: 2px solid white;
+        color: #dbdbdb;
+        font-size: 1.6rem;
+      }
+
       .button {
         font-size: 1.6rem;
         font-weight: 700;
@@ -136,6 +144,7 @@
         border: none;
         box-sizing: border-box;
         text-decoration: none;
+        text-align: center;
       }
 
       .button-green-filled {
@@ -341,7 +350,31 @@
         gap: 1rem;
       }
 
+      .footer-social-icons {
+        margin-left: -2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem
+      }
+
+      .social-icon {
+        color: #dbdbdb;
+        width: 3rem;
+      }
+
+      .txt-block {
+        display: flex;
+        flex-direction: column;
+        padding: 0 5rem;
+      }
+
       @media screen and (max-device-width: 1050px) {
+
+        .title-sub {
+          width: 60rem;
+        }
+        
         .about-image-container {
           align-items: center;
           padding: 0 5rem;
@@ -358,6 +391,14 @@
       @media screen and (max-device-width: 568px) {
         #kinetic-homepage .participate .txt-block {
           margin-left: 0;
+        }
+
+        .supporter-image-1 {
+          width: 16rem;
+        }
+
+        .supporter-image-2 {
+          width: 5rem;
         }
 
         .hero-block {
@@ -455,15 +496,15 @@
 
           <div class="title-container-2">
             <div class="title-buttons">
-              <button class="button button-green-filled signup">Sign Up</button>
-              <button class="button button-green-outline sample-study">
+              <a class="button button-green-filled signup" href="https://openstax.org/accounts/i/signup">Sign Up</a>
+              <a class="button button-green-outline sample-study" href="https://riceuniversity.co1.qualtrics.com/jfe/form/SV_8vUOQo2nx2s79NI">
                 Take a sample study
-              </button>
+              </a>
             </div>
             <div>
-              <div>
+              <div style="display: flex; justify-content: flex-start; align-items: center; gap: 1rem;">
                 Already have an account?
-                <b style="cursor: pointer" class="login"><u>Log in</u></b>
+                <a class="login" style="font-size: 1.4rem;" href="https://openstax.org/accounts/i/login"><b>Log in</b></a>
               </div>
               <div class="small-text">
                 *Exclusive to US based participants 18 years old and over.
@@ -536,12 +577,13 @@
             <div style="font-size:1.6rem; font-weight: 700; width: 21rem; color: white">
               Interested in learning more about how Kinetic works?
             </div>
-            <button
+            <a
               class="button button-green-filled sample-study"
               style="font-size: 1.6rem"
+              href="https://riceuniversity.co1.qualtrics.com/jfe/form/SV_8vUOQo2nx2s79NI"
             >
               Try a sample study
-            </button>
+          </a>
           </div>
         </div>
 
@@ -619,7 +661,7 @@
               class="about-sub-content-text supporters"
               style="cursor: pointer"
             >
-              <u>View all Philanthropic Supporters -></u>
+              <a style="text-decoration: none; color: #424242;" href="https://openstax.org/foundation"><u>View all Philanthropic Supporters -></u></a>
             </div>
           </div>
         </div>
@@ -642,17 +684,19 @@
 
             <div class="actions-block login-signup">
               <div class="buttons">
-                <button
+                <a
                   class="button button-green-filled signup"
                   data-local="true"
                   data-analytics-link="signup"
+                  href="https://openstax.org/accounts/i/signup"
                 >
                   Sign up
-                </button>
+              </a>
                 <a
-                  class="login link"
+                  class="login"
                   data-local="true"
                   data-analytics-link="login"
+                  href="https://openstax.org/accounts/i/login"
                 >
                   Log in
                 </a>
@@ -676,14 +720,25 @@
           <div class="footer-block">
             <div class="footer-block-title">Resource</div>
             <div>
-              <a class="footer-block-text faq"> FAQ </a>
+              <a class="footer-block-text" href="https://openstax.org/privacy/"> FAQ </a>
             </div>
             <div>
-              <a class="footer-block-text privacy"> Privacy Policy </a>
+              <a class="footer-block-text" href="https://openstax.org/faq/"> Privacy Policy </a>
             </div>
           </div>
           <div class="footer-block">
             <div class="footer-block-title">Follow Us</div>
+            <div class="footer-social-icons">
+              <a class="social-icon" href="https://www.facebook.com/openstax/">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path fill="currentColor" d="M182.594 0C81.445 0 0 81.445 0 182.594v634.813c0 101.149 81.445 182.594 182.594 182.594h344.063V609.063H423.282v-140.75h103.375v-120.25c0-94.475 61.079-181.219 201.781-181.219c56.968 0 99.094 5.469 99.094 5.469l-3.313 131.438s-42.963-.406-89.844-.406c-50.739 0-58.875 23.378-58.875 62.188v102.781h152.75l-6.656 140.75H675.5v390.938h141.906c101.149 0 182.594-81.445 182.594-182.594V182.595C1000 81.446 918.555.001 817.406.001H182.593z"/></svg>
+              </a>
+              <a class="social-icon" href="https://www.instagram.com/openstax/">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15"><path fill="currentColor" d="M7.5 5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5"/><path fill="currentColor" fill-rule="evenodd" d="M4.5 0A4.5 4.5 0 0 0 0 4.5v6A4.5 4.5 0 0 0 4.5 15h6a4.5 4.5 0 0 0 4.5-4.5v-6A4.5 4.5 0 0 0 10.5 0zM4 7.5a3.5 3.5 0 1 1 7 0a3.5 3.5 0 0 1-7 0M11 4h1V3h-1z" clip-rule="evenodd"/></svg>
+              </a>
+              <a class="social-icon" href="https://x.com/OpenStax/">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="currentColor" d="m60 16l-6 1l4-5l-7 2c-9-10-23 1-19 10C16 24 8 12 8 12s-6 9 4 16l-6-2c0 6 4 10 11 12h-7c4 8 11 8 11 8s-6 5-17 5c33 16 53-14 50-30Z"/></svg>
+              </a>
+            </div>
           </div>
           <div class="footer-block footer-images">
             <img
@@ -702,45 +757,6 @@
     <script type="application/javascript">
       window.KINETIC = window.KINETIC || {};
       document.title = "OpenStax Kinetic";
-
-      var URLS = {
-          SAMPLE_STUDY:
-            "https://riceuniversity.co1.qualtrics.com/jfe/form/SV_8vUOQo2nx2s79NI",
-          LOGIN: "https://openstax.org/accounts/i/login",
-          SIGNUP: "https://openstax.org/accounts/i/signup",
-          FAQ: "https://openstax.org/faq/",
-          PRIVACY: "https://openstax.org/privacy/",
-          SUPPORTERS: "https://openstax.org/foundation",
-        };
-        if (window.location.host === "openstax.org") {
-          Object.assign(URLS, {
-            KINETIC: "https://kinetic.openstax.org/",
-          });
-        } else {
-          Object.assign(URLS, {
-            KINETIC: "https://staging.kinetic.openstax.org/",
-          });
-        }
-
-        const assignLink = (className, link) => {
-          const elements = document.querySelectorAll("." + className);
-
-          elements.forEach((element) => {
-            element.onclick = () => {
-              console.log("Clicked");
-              window.location.href = link;
-            };
-          });
-        };
-      document.addEventListener('DOMContentLoaded', () => {
-        assignLink("login", URLS.LOGIN);
-        assignLink("signup", URLS.SIGNUP);
-        assignLink("sample-study", URLS.SAMPLE_STUDY);
-        assignLink("faq", URLS.FAQ);
-        assignLink("privacy", URLS.PRIVACY);
-        assignLink("supporters", URLS.SUPPORTERS);
-      })
-
     </script>
   </body>
 </html>
