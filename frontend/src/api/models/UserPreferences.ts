@@ -20,17 +20,11 @@ import { exists, mapValues } from '../runtime';
  */
 export interface UserPreferences {
     /**
-     * User wishes to receive email about cycle deadlines
+     * User wishes to receive email when new digital badge becomes available
      * @type {boolean}
      * @memberof UserPreferences
      */
-    cycleDeadlinesEmail?: boolean;
-    /**
-     * User wishes to receive email about price deadlines
-     * @type {boolean}
-     * @memberof UserPreferences
-     */
-    prizeCycleEmail?: boolean;
+    digitalBadgeAvailableEmail?: boolean;
     /**
      * User wishes to receive email about study availibility
      * @type {boolean}
@@ -76,8 +70,7 @@ export function UserPreferencesFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'cycleDeadlinesEmail': !exists(json, 'cycle_deadlines_email') ? undefined : json['cycle_deadlines_email'],
-        'prizeCycleEmail': !exists(json, 'prize_cycle_email') ? undefined : json['prize_cycle_email'],
+        'digitalBadgeAvailableEmail': !exists(json, 'digital_badge_available_email') ? undefined : json['digital_badge_available_email'],
         'studyAvailableEmail': !exists(json, 'study_available_email') ? undefined : json['study_available_email'],
         'sessionAvailableEmail': !exists(json, 'session_available_email') ? undefined : json['session_available_email'],
         'hasViewedAnalysisTutorial': !exists(json, 'has_viewed_analysis_tutorial') ? undefined : json['has_viewed_analysis_tutorial'],
@@ -94,8 +87,7 @@ export function UserPreferencesToJSON(value?: UserPreferences | null): any {
     }
     return {
         
-        'cycle_deadlines_email': value.cycleDeadlinesEmail,
-        'prize_cycle_email': value.prizeCycleEmail,
+        'digital_badge_available_email': value.digitalBadgeAvailableEmail,
         'study_available_email': value.studyAvailableEmail,
         'session_available_email': value.sessionAvailableEmail,
         'has_viewed_analysis_tutorial': value.hasViewedAnalysisTutorial,
