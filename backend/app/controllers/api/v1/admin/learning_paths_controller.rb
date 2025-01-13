@@ -28,9 +28,8 @@ class Api::V1::Admin::LearningPathsController < Api::V1::Admin::BaseController
 
     user_uuids.each do |uuid|
       user_info = UserInfo.for_uuid(uuid)
-      
       recipient = Struct.new(:email_address, :first_name).new(
-        user_info['email_address'],
+        user_info['email_address'] || 'Admin-Uno@test.openstax.org',
         user_info[:first_name]
       )
 

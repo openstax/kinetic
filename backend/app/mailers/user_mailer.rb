@@ -50,7 +50,11 @@ class UserMailer < ApplicationMailer
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
         'first_name' => params[:user].first_name,
-        'studyPathTitle' => params[:initiated_learning_path] ? params[:initiated_learning_path].label : params[:not_initiated_learning_path].label,
+        'studyPathTitle' => if params[:initiated_learning_path]
+                              params[:initiated_learning_path].label
+                            else
+                              params[:not_initiated_learning_path].label
+                            end
       }
     end
   end
