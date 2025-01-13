@@ -23,6 +23,25 @@ class Api::V1::Admin::LearningPathsController < Api::V1::Admin::BaseController
       render json: { errors: learning_path.errors.full_messages },
              status: 500
     end
+
+    user_uuids = UserPreferences.where(digital_badge_available_email: true).pluck(:user_id)
+
+    user_uuids.each do |uuid|
+      user_info = UserInfo.for_uuid(uuid)
+      
+      recipient = Struct.new(:email_address, :first_name).new(
+        user_info['email_address'],
+        user_info[:first_name]
+      )
+
+      learning_path_info = Struct.new(:title).new(
+        learning_path.label
+      )
+      UserMailer
+        .with(user: recipient, learning_path: learning_path_info)
+        .new_learning_path
+        .deliver_now
+    end
     render json: learning_path, status: :created
   end
 

@@ -30,6 +30,19 @@ class LaunchedStudy < ApplicationRecord
     update!(completed_at: Time.now)
     completed = LaunchedStudy.where(study_id:).complete.count
     Study.update(study_id, completed_count: completed)
+  
+    total_completed_for_user = LaunchedStudy.where(user_id:).count
+
+    user_info = UserInfo.for_uuid(user_id)
+  
+    recipient = Struct.new(:email_address, :full_name).new(
+      user_info['email_address'],
+      user_info[:full_name]
+    )
+
+    if total_completed_for_user == 1
+      UserMailer.with(user: recipient).welcome.deliver_now
+    end
   end
 
   def aborted!
