@@ -30,6 +30,8 @@ class LearnerActivityReport
       'Participant Created At',
       'Participant Research ID',
       'New Participant Study?',
+      'Participant UUID',
+      'Participant Name',
       'Test Account?'
     ]
   end
@@ -86,6 +88,8 @@ class LearnerActivityReport
         launch.research_id.created_at,
         launch.research_id.id,
         launch.research_id.is_new_user?(launch.first_launched_at),
+        launch.user_id,
+        account['name'] || '',
         account['is_test'] ? 'X' : nil
       ]
     end
