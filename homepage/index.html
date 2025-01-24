@@ -114,29 +114,30 @@
       }
 
       .learn-more {
+        padding-bottom: 2rem;
         display: inline-flex;
         flex-direction: column;
         align-items: center;
         font-family: Arial, sans-serif;
-        font-size: 16px;
+        font-size: 2rem;
         font-weight: bold;
         color: #00d084;
         text-decoration: none;
         cursor: pointer;
       }
 
-      .learn-more .arrow {
+      .learn-more .caret {
         margin-top: 4px;
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-top: 6px solid #00d084;
+        width: 16px;
+        height: 16px;
+        border-bottom: 4px solid #00d084; /* Teal color */
+        border-right: 4px solid #00d084;
+        transform: rotate(45deg); /* Creates the caret (V shape) */
         transition: transform 0.2s ease;
       }
 
-      .learn-more:hover .arrow {
-        transform: translateY(2px);
+      .learn-more:hover .caret {
+        transform: rotate(45deg) translateY(2px); /* Moves down slightly on hover */
       }
 
       .logo-img {
@@ -508,12 +509,10 @@
             </div>
           </div>
         </div>
-        <div class="hero-container hero-learn-more">
-          <a href="#main-content" class="learn-more">
-            <span>Learn more</span>
-            <div class="arrow"></div>
-          </a>
-        </div>
+        <a href="#main-content" class="learn-more">
+          <span>Learn more</span>
+          <div class="caret"></div>
+        </a>
       </div>
 
       <div class="main container" id="main-content">
