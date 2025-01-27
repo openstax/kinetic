@@ -109,10 +109,6 @@
         flex: 1;
       }
 
-      .hero-learn-more {
-        align-self: center;
-      }
-
       .learn-more {
         padding-bottom: 3rem;
         display: inline-flex;
@@ -509,7 +505,8 @@
             </div>
           </div>
         </div>
-        <a href="#main-content" class="learn-more">
+        <!-- Would prefer to do href="#main-content" but os-web has a weird href override -->
+        <a onclick="learnMore()" class="learn-more">
           <span>Learn more</span>
           <div class="caret"></div>
         </a>
@@ -737,6 +734,10 @@
       document.title = "OpenStax Kinetic";
 
       if (!window.KINETIC.postScriptRan) {
+        function learnMore() {
+          document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
+        }
+
         function revealElements(klass) {
           var links = document.querySelectorAll('.' + klass);
           for (var i = 0; i < links.length; i++) {
