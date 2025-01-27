@@ -382,6 +382,10 @@
       }
 
       @media screen and (max-device-width: 568px) {
+        .main-item-1, .main-item-2 {
+          width: 100%;
+        }
+
         .hero-block {
           gap: 5rem;
           padding-bottom: 5rem;
@@ -506,7 +510,7 @@
           </div>
         </div>
         <!-- Would prefer to do href="#main-content" but os-web has a weird href override -->
-        <a onclick="learnMore()" class="learn-more">
+        <a href="#main-content" onclick="learnMore()" class="learn-more">
           <span>Learn more</span>
           <div class="caret"></div>
         </a>
