@@ -23,6 +23,7 @@ disallowed_books:
   - química-2ed
   - química-comenzando-átomos-2ed
   - statistics
+  - algebra-1
 allowed_country_codes:
   - US
   - UM
