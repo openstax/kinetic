@@ -69,7 +69,26 @@ class Api::V1::Researcher::StudiesController < Api::V1::Researcher::BaseControll
 
     @study.update_status!(params[:status_action], params[:stage_index])
 
+    notify_users_of_new_studies if params[:status_action] == 'launch'
+
     render json: Api::V1::Bindings::Study.create_from_model(@study), status: :ok
+  end
+
+  def notify_users_of_new_studies
+    user_uuids = UserPreferences.where(study_available_email: true).pluck(:user_id)
+    user_uuids.each do |uuid|
+      user_info = UserInfo.for_uuid(uuid)
+
+      recipient = Struct.new(:email_address, :full_name).new(
+        user_info['email_address'] || 'Admin-Uno@test.openstax.org',
+        user_info[:full_name]
+      )
+
+      UserMailer
+        .with(user: recipient, study: @study)
+        .new_studies
+        .deliver_now
+    end
   end
 
   def destroy

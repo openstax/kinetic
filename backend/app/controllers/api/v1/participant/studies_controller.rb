@@ -5,6 +5,9 @@ class Api::V1::Participant::StudiesController < Api::V1::BaseController
   before_action :set_study, only: [:launch, :land, :stats]
 
   def index
+    current_user_preference = UserPreferences.find_or_initialize_by(user_id: current_user.id)
+    current_user_preference.update!(last_visited_at: Time.current, nurturing_email_sent: false)
+
     studies = participant_studies
 
     response_binding = Api::V1::Bindings::ParticipantStudies.new(

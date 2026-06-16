@@ -42,6 +42,23 @@ class UserMailer < ApplicationMailer
     end
   end
 
+  def nurturing_email
+    mail(
+      to: params[:user].email_address,
+      subject: 'We miss you. Exciting Study Paths Await You!',
+      template: 'nurturing email'
+    ) { |format| format.text { render plain: '' } }.tap do |message|
+      message.mailgun_variables = {
+        'first_name' => params[:user].first_name,
+        'studyPathTitle' => if params[:initiated_learning_path]
+                              params[:initiated_learning_path].label
+                            else
+                              params[:not_initiated_learning_path].label
+                            end
+      }
+    end
+  end
+
   def upcoming_prize_cycle_deadline
     mail(
       to: params[:user].email_address,
@@ -63,8 +80,20 @@ class UserMailer < ApplicationMailer
     ) { |format| format.text { render plain: '' } }.tap do |message|
       message.mailgun_variables = {
         'full_name' => params[:user].full_name,
-        'study_one_title' => params[:studies].first.title_for_participants,
-        'study_two_title' => params[:studies].last.title_for_participants
+        'newStudyTitle' => params[:study].title_for_participants
+      }
+    end
+  end
+
+  def new_learning_path
+    mail(
+      to: params[:user].email_address,
+      subject: 'A new study path awaits you!',
+      template: 'new_study_path'
+    ) { |format| format.text { render plain: '' } }.tap do |message|
+      message.mailgun_variables = {
+        'first_name' => params[:user].first_name,
+        'new_studyPathTitle' => params[:learning_path].title
       }
     end
   end
