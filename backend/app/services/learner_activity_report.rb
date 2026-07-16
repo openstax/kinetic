@@ -24,7 +24,7 @@ class LearnerActivityReport
     raise ArgumentError, "expected a month or a range of months, got: #{@months_ago.inspect}" unless match
 
     newest, oldest = match.captures.compact.map(&:to_i)
-    oldest ? [[newest, oldest].min, [newest, oldest].max] : [newest, nil]
+    oldest ? [newest, oldest].minmax : [newest, nil]
   end
 
   def as_csv_string
