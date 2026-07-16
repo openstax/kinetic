@@ -16,12 +16,13 @@ class LearnerActivityReport
   # range ("12-24" => the window between 12 and 24 months ago).  Range bounds may
   # be given in either order.  Reporting over a bounded window keeps the account
   # lookup small enough for Accounts to accept the request.
+  #
+  # Unparseable input falls back to the default rather than raising: months_ago
+  # arrives straight from params in Api::V1::Admin::ReportsController, which has
+  # always leaned on to_i's leniency here.
   def month_bounds
-    raw = @months_ago.to_s
-    return [DEFAULT_MONTHS_AGO, nil] if raw.strip.empty?
-
-    match = MONTHS_AGO_FORMAT.match(raw)
-    raise ArgumentError, "expected a month or a range of months, got: #{@months_ago.inspect}" unless match
+    match = MONTHS_AGO_FORMAT.match(@months_ago.to_s)
+    return [DEFAULT_MONTHS_AGO, nil] unless match
 
     newest, oldest = match.captures.compact.map(&:to_i)
     oldest ? [newest, oldest].minmax : [newest, nil]

@@ -4,7 +4,13 @@ require 'rails_helper'
 
 RSpec.describe LearnerActivityReport do
 
-  let(:study) { create(:study, num_stages: 1) }
+  # Launches are frozen years into the past, so studies have to have been open
+  # back then for LaunchPad to accept them.
+  def create_study
+    create(:study, num_stages: 1, opens_at: 10.years.ago, closes_at: 10.years.from_now)
+  end
+
+  let(:study) { create_study }
   let(:user_id) { SecureRandom.uuid }
   let(:accounts_user) do
     {
@@ -55,7 +61,7 @@ RSpec.describe LearnerActivityReport do
       inside = rows_for(months_ago: '12-24')
       expect(inside.count).to eq 0
 
-      launch_at(18.months.ago, study_for_launch: create(:study, num_stages: 1))
+      launch_at(18.months.ago, study_for_launch: create_study)
       expect(rows_for(months_ago: '12-24').count).to eq 1
     end
 
@@ -82,7 +88,7 @@ RSpec.describe LearnerActivityReport do
 
   describe 'account lookups' do
     it 'asks accounts for each uuid only once regardless of launch count' do
-      other_study = create(:study, num_stages: 1)
+      other_study = create_study
       launch_at(2.months.ago, study_for_launch: study)
       launch_at(2.months.ago, study_for_launch: other_study)
 
