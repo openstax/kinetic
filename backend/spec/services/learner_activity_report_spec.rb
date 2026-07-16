@@ -87,20 +87,18 @@ RSpec.describe LearnerActivityReport do
       launch_at(2.months.ago, study_for_launch: other_study)
 
       allow(UserInfo).to receive(:for_uuids).and_return({})
+      expect(UserInfo).to receive(:for_uuids).with([user_id])
 
       described_class.new(months_ago: '6').as_csv_string
-
-      expect(UserInfo).to have_received(:for_uuids).with([user_id])
     end
 
     it 'does not look up users whose launches fall outside the range' do
       launch_at(2.months.ago)
 
       allow(UserInfo).to receive(:for_uuids).and_return({})
+      expect(UserInfo).to receive(:for_uuids).with([])
 
       described_class.new(months_ago: '12-24').as_csv_string
-
-      expect(UserInfo).to have_received(:for_uuids).with([])
     end
   end
 end
