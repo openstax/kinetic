@@ -3,9 +3,28 @@
 require 'csv'
 
 class LearnerActivityReport
+  DEFAULT_MONTHS_AGO = 1
+
   def initialize(months_ago:)
     @months_ago = months_ago
     @user_uuids = []
+  end
+
+  MONTHS_AGO_FORMAT = /\A\s*(\d+)\s*(?:-\s*(\d+)\s*)?\z/
+
+  # Accepts either a single bound ("72" => everything since 72 months ago) or a
+  # range ("12-24" => the window between 12 and 24 months ago).  Range bounds may
+  # be given in either order.  Reporting over a bounded window keeps the account
+  # lookup small enough for Accounts to accept the request.
+  def month_bounds
+    raw = @months_ago.to_s
+    return [DEFAULT_MONTHS_AGO, nil] if raw.strip.empty?
+
+    match = MONTHS_AGO_FORMAT.match(raw)
+    raise ArgumentError, "expected a month or a range of months, got: #{@months_ago.inspect}" unless match
+
+    newest, oldest = match.captures.compact.map(&:to_i)
+    oldest ? [[newest, oldest].min, [newest, oldest].max] : [newest, nil]
   end
 
   def as_csv_string
@@ -36,8 +55,10 @@ class LearnerActivityReport
     ]
   end
 
+  # A participant appears once per launched stage, so plucking without de-duping
+  # sends the same uuid to Accounts many times over and can overflow the request.
   def get_users(launches)
-    @user_uuids = launches.clone.pluck('user_id')
+    @user_uuids = launches.clone.distinct.pluck('launched_stages.user_id')
     UserInfo.for_uuids(@user_uuids)
   end
 
@@ -95,10 +116,19 @@ class LearnerActivityReport
     end
   end
 
+  def launches
+    newest, oldest = month_bounds
+
+    scope = LaunchedStage
+              .joins(stage: :study)
+              .where('first_launched_at >= ?', (oldest || newest).months.ago)
+
+    scope = scope.where('first_launched_at < ?', newest.months.ago) if oldest
+    scope
+  end
+
   def generate_report(csv)
-    launches = LaunchedStage
-                 .joins(stage: :study)
-                 .where('first_launched_at >= ?', (@months_ago || 1).to_i.months.ago)
+    launches = self.launches
 
     users = get_users(launches)
     build_headers(csv)
