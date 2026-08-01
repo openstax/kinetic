@@ -37,7 +37,9 @@ class UserNotifications
       return unless users.any?
 
       users.each_value do |user|
-        UserMailer.with(user:, studies:).new_studies.deliver
+        studies.each do |study|
+          UserMailer.with(user:, study:).new_studies.deliver
+        end
       end
     end
 

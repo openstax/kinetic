@@ -785,7 +785,9 @@ CREATE TABLE public.user_preferences (
     updated_at timestamp(6) with time zone NOT NULL,
     has_viewed_analysis_tutorial boolean DEFAULT false,
     has_viewed_welcome_message boolean DEFAULT false,
-    digital_badge_available_email boolean DEFAULT false NOT NULL
+    digital_badge_available_email boolean DEFAULT false NOT NULL,
+    last_visited_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    nurturing_email_sent boolean DEFAULT false NOT NULL
 );
 
 
@@ -1476,6 +1478,8 @@ ALTER TABLE ONLY public.response_exports
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250108011015'),
+('20250108005613'),
 ('20241219132405'),
 ('20240718193802'),
 ('20240718103317'),
