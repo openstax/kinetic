@@ -11,6 +11,11 @@ $link-color: #0d6efd;
     --swiper-theme-color: #3d2dcb;
 }
 
+// Manage Cookies in the account menu replaces CookieYes's floating revisit button
+.cky-btn-revisit-wrapper {
+    display: none;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
