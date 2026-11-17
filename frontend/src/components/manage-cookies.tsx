@@ -1,20 +1,25 @@
 import React from 'react';
 
-// documentation for this at https://docs.osano.com/hiding-the-cookie-widget
-export const ManageCookiesLink = () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const osano = typeof window === 'undefined' ? undefined : (window as any).Osano
+// CookieYes (loaded by GTM) opens its preferences when anything with the cky-banner-element class is clicked.
+// The account menu mounts after CookieYes may have loaded, so check for it on mount as well as on its load event.
+const isCookieYesLoaded = () => typeof window !== 'undefined' && 'getCkyConsent' in window
 
-    if (osano === undefined || osano.cm.mode === 'debug') {
+export const ManageCookiesLink = () => {
+    const [cookieYesLoaded, setCookieYesLoaded] = React.useState(isCookieYesLoaded)
+
+    React.useEffect(() => {
+        if (cookieYesLoaded) return
+
+        const onLoad = () => setCookieYesLoaded(isCookieYesLoaded())
+        document.addEventListener('cookieyes_banner_load', onLoad)
+        return () => document.removeEventListener('cookieyes_banner_load', onLoad)
+    }, [cookieYesLoaded])
+
+    if (!cookieYesLoaded) {
         return null;
     }
 
-    const showOsano = (ev: React.MouseEvent) => {
-        ev.preventDefault()
-        osano.cm.showDrawer('osano-cm-dom-info-dialog-open')
-    }
-
     return (
-        <span onClick={showOsano}>Manage Cookies</span>
+        <span className="cky-banner-element">Manage Cookies</span>
     )
 };

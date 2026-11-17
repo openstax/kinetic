@@ -46,7 +46,6 @@ export const loginAs = async ({ page, login }: { page: Page, login: TestingLogin
     await page.goto('http://localhost:4000/dev/user')
     await page.waitForSelector('.dev-console');
     await page.click(`[data-user-id="${TC.USERS[login]}"]`)
-    await removeOsanoFooter(page)
     return await page.waitForSelector('.studies')
 }
 
@@ -221,25 +220,12 @@ export const addReward = async ({
     await adminPage.getByText('Create reward').click()
 }
 
-export const removeOsanoFooter  = async (page:Page) => {
-    // For some reason, the osano footer is different when running in CI environment?
-    if (await page.getByRole('button', { name: /Accept/i }).isVisible({ timeout: 500 })) {
-        await page.getByRole('button', { name: /Accept/i }).click();
-    }
-
-    await page.evaluate(async () => {
-        document.querySelector('.osano-cm-dialog')?.remove()
-    });
-    await page.waitForSelector('.osano-cm-dialog', { state: 'detached' })
-}
-
 // Helper methods for multi-context tests
 // https://playwright.dev/docs/browser-contexts#multiple-contexts-in-a-single-test
 export const useAdminPage = async (browser: Browser) => {
     const adminContext = await browser.newContext()
     const adminPage = await adminContext.newPage()
     await loginAs({ page: adminPage, login: 'admin' })
-    await removeOsanoFooter(adminPage)
     return adminPage
 }
 
@@ -247,7 +233,6 @@ export const useResearcherPage = async (browser: Browser) => {
     const researcherContext = await browser.newContext()
     const researcherPage = await researcherContext.newPage()
     await loginAs({ page: researcherPage, login: 'researcher' })
-    await removeOsanoFooter(researcherPage)
     return researcherPage
 }
 
@@ -255,6 +240,5 @@ export const useUserPage = async (browser: Browser) => {
     const userContext = await browser.newContext()
     const userPage = await userContext.newPage()
     await loginAs({ page: userPage, login: 'user' })
-    await removeOsanoFooter(userPage)
     return userPage
 }

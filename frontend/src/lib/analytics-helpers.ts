@@ -9,7 +9,6 @@ export const AnalyticsHelpers = () => {
         if (!ENV.IS_PRODUCTION) return
 
         window.dataLayer?.push({
-            app: 'Kinetic',
             user_tags: `,role=${env.user.selfReportedRole},faculty=${env.user.facultyStatus},`,
         });
 
