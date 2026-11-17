@@ -12,6 +12,8 @@ export const ManageCookiesLink = () => {
 
         const onLoad = () => setCookieYesLoaded(isCookieYesLoaded())
         document.addEventListener('cookieyes_banner_load', onLoad)
+        // CookieYes may have loaded between render and this effect
+        onLoad()
         return () => document.removeEventListener('cookieyes_banner_load', onLoad)
     }, [cookieYesLoaded])
 
@@ -20,6 +22,7 @@ export const ManageCookiesLink = () => {
     }
 
     return (
-        <span className="cky-banner-element">Manage Cookies</span>
+        // Stop the surrounding link from navigating; the click still bubbles to CookieYes's body listener
+        <span className="cky-banner-element" onClick={(ev) => ev.preventDefault()}>Manage Cookies</span>
     )
 };
