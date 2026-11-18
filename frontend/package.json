@@ -17,7 +17,6 @@
     "typecheck": "tsc --skipLibCheck --noEmit"
   },
   "dependencies": {
-    "@analytics/google-analytics": "^0.5.3",
     "@analytics/google-tag-manager": "^0.5.2",
     "@emotion/core": "^11.0.0",
     "@emotion/css": "^11.10.0",

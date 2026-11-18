@@ -5,9 +5,7 @@ FROM node:20-slim as node
 # These are set in heroku.yml, not via heroku config:set
 ARG SENTRY_DSN
 ARG PROD_GTAG_ID
-ARG PROD_GA_UA
 ARG TEST_GTAG_ID
-ARG TEST_GA_UA
 WORKDIR /code/frontend
 
 COPY frontend/package.json ./
